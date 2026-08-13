@@ -9,17 +9,6 @@ import (
 	"testing"
 )
 
-// knownUnsupportedFixtures documents corpus files that the extracted parser
-// does not parse yet. Keep these fixtures as regression targets and remove an
-// entry as soon as support is implemented.
-var knownUnsupportedFixtures = map[string]struct{}{
-	"testdata/gp5/Measure Header.gp5":                  {},
-	"testdata/gp5/alternate-endings-section-error.gp5": {},
-	"testdata/gp5/canon.gp5":                           {},
-	"testdata/gp5/serenade.gp5":                        {},
-	"testdata/gp5/time-signatures.gp5":                 {},
-}
-
 func TestParseFixtures(t *testing.T) {
 	err := filepath.WalkDir("testdata", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -31,13 +20,6 @@ func TestParseFixtures(t *testing.T) {
 
 		t.Run(path, func(t *testing.T) {
 			song, err := ParseFile(path)
-			_, unsupported := knownUnsupportedFixtures[path]
-			if unsupported {
-				if err == nil {
-					t.Error("fixture now parses; remove it from knownUnsupportedFixtures")
-				}
-				return
-			}
 			if err != nil {
 				t.Fatalf("ParseFile() error = %v", err)
 			}

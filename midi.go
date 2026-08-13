@@ -89,7 +89,7 @@ func (s *Song) readMidiChannel(c *cursor, channel uint8) (MidiChannel, error) {
 }
 
 // readChannel reads a MIDI channel reference from a track.
-func (s *Song) readChannel(c *cursor) error {
+func (s *Song) readChannel(c *cursor, track *Track) error {
 	index, err := c.readInt()
 	if err != nil {
 		return err
@@ -102,10 +102,13 @@ func (s *Song) readChannel(c *cursor) error {
 	effectChannel--
 	idx := int(index)
 	if index >= 0 && idx < len(s.Channels) {
+		track.ChannelIndex = idx
 		if s.Channels[idx].Instrument < 0 {
 			s.Channels[idx].Instrument = 0
 		}
-		if !s.Channels[idx].isPercussionChannel() {
+		if s.Channels[idx].isPercussionChannel() {
+			track.PercussionTrack = true
+		} else {
 			s.Channels[idx].EffectChannel = uint8(effectChannel)
 		}
 	}

@@ -32,20 +32,28 @@ func gpxReadFiles(data []byte) (map[string][]byte, error) {
 	}
 }
 
+const maxGPXDecompressedSize = 256 << 20
+
+const initialGPXDecompressCapacity = 1 << 20
+
 // gpxDecompress decompresses BCFZ data using GPX's custom bit-based compression.
 func gpxDecompress(data []byte) ([]byte, error) {
 	if len(data) < 4 {
 		return nil, fmt.Errorf("compressed data too short")
 	}
-	expectedLength := int(binary.LittleEndian.Uint32(data[:4]))
-	return gpxDecompressPayload(data, expectedLength), nil
+	expectedLength := int64(binary.LittleEndian.Uint32(data[:4]))
+	if expectedLength > maxGPXDecompressedSize {
+		return nil, fmt.Errorf("BCFZ claims to decompress to %d bytes, over the %d byte limit",
+			expectedLength, maxGPXDecompressedSize)
+	}
+	return gpxDecompressPayload(data, int(expectedLength)), nil
 }
 
 // gpxDecompressPayload decodes as much payload as is available. Valid GPX
 // files can end with incomplete padding bits, so EOF terminates decoding.
 func gpxDecompressPayload(data []byte, expectedLength int) []byte {
 	br := &bitReader{data: data, pos: 4, bitPos: 0}
-	result := make([]byte, 0, expectedLength)
+	result := make([]byte, 0, min(expectedLength, initialGPXDecompressCapacity))
 
 	for len(result) < expectedLength {
 		flag, err := br.readBits(1)

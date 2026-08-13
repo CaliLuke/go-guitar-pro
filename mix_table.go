@@ -3,8 +3,9 @@
 package goguitarpro
 
 // MixTableItem describes a mix parameter change.
+// Value uses int32 because Guitar Pro stores tempo values as int32.
 type MixTableItem struct {
-	Value     uint8
+	Value     int32
 	Duration  uint8
 	AllTracks bool
 }
@@ -67,7 +68,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Instrument = &MixTableItem{Value: uint8(b)}
+		mtc.Instrument = &MixTableItem{Value: int32(b)}
 	}
 	// RSE instrument GP5
 	if s.Version.Number[0] == 5 {
@@ -88,7 +89,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Volume = &MixTableItem{Value: uint8(b)}
+		mtc.Volume = &MixTableItem{Value: int32(b)}
 	}
 	// balance
 	b, err = c.readSignedByte()
@@ -96,7 +97,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Balance = &MixTableItem{Value: uint8(b)}
+		mtc.Balance = &MixTableItem{Value: int32(b)}
 	}
 	// chorus
 	b, err = c.readSignedByte()
@@ -104,7 +105,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Chorus = &MixTableItem{Value: uint8(b)}
+		mtc.Chorus = &MixTableItem{Value: int32(b)}
 	}
 	// reverb
 	b, err = c.readSignedByte()
@@ -112,7 +113,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Reverb = &MixTableItem{Value: uint8(b)}
+		mtc.Reverb = &MixTableItem{Value: int32(b)}
 	}
 	// phaser
 	b, err = c.readSignedByte()
@@ -120,7 +121,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Phaser = &MixTableItem{Value: uint8(b)}
+		mtc.Phaser = &MixTableItem{Value: int32(b)}
 	}
 	// tremolo
 	b, err = c.readSignedByte()
@@ -128,7 +129,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if b >= 0 {
-		mtc.Tremolo = &MixTableItem{Value: uint8(b)}
+		mtc.Tremolo = &MixTableItem{Value: int32(b)}
 	}
 	// tempo
 	if versionGTE(s.Version.Number, [3]byte{5, 0, 0}) {
@@ -143,7 +144,7 @@ func (s *Song) readMixTableChangeValues(c *cursor, mtc *MixTableChange) error {
 		return err
 	}
 	if tempo >= 0 {
-		mtc.Tempo = &MixTableItem{Value: uint8(tempo)}
+		mtc.Tempo = &MixTableItem{Value: tempo}
 	}
 	return nil
 }

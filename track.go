@@ -19,10 +19,12 @@ type TrackSettings struct {
 
 // Track represents a track.
 type Track struct {
-	Name                      string
-	Measures                  []Measure
-	Strings                   []GuitarString
-	Rse                       TrackRse
+	Name     string
+	Measures []Measure
+	Strings  []GuitarString
+	Rse      TrackRse
+	// ChannelIndex is the index of the track channel in Song.Channels.
+	// A value of -1 means that the file does not bind the track to a channel.
 	ChannelIndex              int
 	Offset                    int32
 	Number                    int32
@@ -48,12 +50,13 @@ type GuitarString struct {
 
 func defaultTrack() Track {
 	return Track{
-		Number:    1,
-		Visible:   true,
-		Name:      "Track 1",
-		FretCount: 24,
-		Color:     0xff0000,
-		Port:      1,
+		Number:       1,
+		Visible:      true,
+		Name:         "Track 1",
+		FretCount:    24,
+		Color:        0xff0000,
+		Port:         1,
+		ChannelIndex: -1,
 		Strings: []GuitarString{
 			{1, 64}, {2, 59}, {3, 55}, {4, 50}, {5, 45}, {6, 40},
 		},
@@ -113,11 +116,8 @@ func (s *Song) readTrack(c *cursor, number int) error {
 	}
 	track.Port = uint8(port)
 
-	if channelErr := s.readChannel(c); channelErr != nil {
+	if channelErr := s.readChannel(c, &track); channelErr != nil {
 		return channelErr
-	}
-	if number < len(s.Channels) && s.Channels[number].Channel == 9 {
-		track.PercussionTrack = true
 	}
 
 	fretCount, err := c.readInt()
@@ -204,11 +204,8 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 	}
 	track.Port = uint8(port)
 
-	if channelErr := s.readChannel(c); channelErr != nil {
+	if channelErr := s.readChannel(c, &track); channelErr != nil {
 		return channelErr
-	}
-	if number < len(s.Channels) && s.Channels[number].Channel == 9 {
-		track.PercussionTrack = true
 	}
 
 	fretCount, err := c.readInt()
@@ -251,16 +248,12 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 	}
 	track.Rse.AutoAccentuation = Accentuation(accentByte)
 
-	if number < len(s.Channels) {
-		bankByte, err := c.readByte()
-		if err != nil {
-			return err
-		}
-		s.Channels[number].Bank = bankByte
-	} else {
-		if _, err := c.readByte(); err != nil {
-			return err
-		}
+	bankByte, err := c.readByte()
+	if err != nil {
+		return err
+	}
+	if track.ChannelIndex >= 0 && track.ChannelIndex < len(s.Channels) {
+		s.Channels[track.ChannelIndex].Bank = bankByte
 	}
 
 	if err := s.readTrackRse(c, &track); err != nil {

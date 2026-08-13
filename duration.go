@@ -33,13 +33,22 @@ func defaultDuration() Duration {
 }
 
 func (d *Duration) convertTime(time uint32) uint32 {
-	return time * uint32(d.TupletEnters) / uint32(d.TupletTimes)
+	if d.TupletEnters == 0 || d.TupletTimes == 0 {
+		return time
+	}
+	return time * uint32(d.TupletTimes) / uint32(d.TupletEnters)
 }
 
 func (d *Duration) time() uint32 {
+	if d.Value == 0 {
+		return 0
+	}
 	result := math.Trunc(float64(DurationQuarterTime) * 4.0 / float64(d.Value))
-	if d.Dotted {
+	switch {
+	case d.Dotted:
 		result += math.Trunc(result / 2.0)
+	case d.DoubleDotted:
+		result += math.Trunc(result/4.0) * 3.0
 	}
 	return d.convertTime(uint32(result))
 }

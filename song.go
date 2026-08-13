@@ -26,13 +26,25 @@ type Song struct {
 	Channels       []MidiChannel
 	MeasureHeaders []MeasureHeader
 	Tracks         []Track
-	Lyrics         Lyrics
-	MasterEffect   RseMasterEffect
-	PageSetup      PageSetup
-	Tempo          int16
-	Key            KeySignature
-	HideTempo      bool
-	TripletFeel    TripletFeel
+	// TempoAutomations contains each tempo change in a GPIF file.
+	TempoAutomations []TempoAutomation
+	Lyrics           Lyrics
+	MasterEffect     RseMasterEffect
+	PageSetup        PageSetup
+	Tempo            int16
+	Key              KeySignature
+	HideTempo        bool
+	TripletFeel      TripletFeel
+}
+
+// TempoAutomation describes one tempo change in a GPIF file.
+type TempoAutomation struct {
+	// Bar is the zero-based bar index.
+	Bar int
+	// Position is the change position as a fraction of the bar length.
+	Position float64
+	// Tempo is the number of beats per minute after the change.
+	Tempo float64
 }
 
 func (s *Song) readBinary(c *cursor) error {
@@ -139,33 +151,37 @@ func (s *Song) readBinary(c *cursor) error {
 		s.MasterEffect.Reverb = float32(reverb)
 	}
 
-	measureCount, err := c.readInt()
-	if err != nil {
-		return fmt.Errorf("reading measure count: %w", err)
+	minHeaderBytes := 1
+	if major >= 5 {
+		minHeaderBytes = 4
 	}
-	trackCount, err := c.readInt()
+	measureCount, err := c.readCount(minHeaderBytes, "measure count")
 	if err != nil {
-		return fmt.Errorf("reading track count: %w", err)
+		return err
+	}
+	trackCount, err := c.readCount(98, "track count")
+	if err != nil {
+		return err
 	}
 
 	// Measure headers
 	if major >= 5 {
-		if err := s.readMeasureHeadersV5(c, int(measureCount), signs, fromSigns); err != nil {
+		if err := s.readMeasureHeadersV5(c, measureCount, signs, fromSigns); err != nil {
 			return fmt.Errorf("reading measure headers: %w", err)
 		}
 	} else {
-		if err := s.readMeasureHeaders(c, int(measureCount)); err != nil {
+		if err := s.readMeasureHeaders(c, measureCount); err != nil {
 			return fmt.Errorf("reading measure headers: %w", err)
 		}
 	}
 
 	// Tracks
 	if major >= 5 {
-		if err := s.readTracksV5(c, int(trackCount)); err != nil {
+		if err := s.readTracksV5(c, trackCount); err != nil {
 			return fmt.Errorf("reading tracks: %w", err)
 		}
 	} else {
-		if err := s.readTracks(c, int(trackCount)); err != nil {
+		if err := s.readTracks(c, trackCount); err != nil {
 			return fmt.Errorf("reading tracks: %w", err)
 		}
 	}
@@ -219,11 +235,11 @@ func (s *Song) readInfo(c *cursor) error {
 	if err != nil {
 		return err
 	}
-	noticeCount, err := c.readInt()
+	noticeCount, err := c.readCount(5, "notice line count")
 	if err != nil {
 		return err
 	}
-	for i := int32(0); i < noticeCount; i++ {
+	for i := 0; i < noticeCount; i++ {
 		n, err := c.readIntByteSizeString()
 		if err != nil {
 			return err

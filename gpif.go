@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"encoding/xml"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -263,20 +264,7 @@ func parseGPIF(data []byte) (*Song, error) {
 	song.Transcriber = doc.Score.Tabber
 	song.Instructions = doc.Score.Instructions
 
-	// Tempo from master track automations
-	for _, auto := range doc.MasterTrack.Automations.Automations {
-		if auto.Type == "Tempo" {
-			parts := strings.Fields(auto.Value)
-			if len(parts) >= 1 {
-				if v, err := strconv.Atoi(parts[0]); err == nil {
-					song.Tempo = int16(v)
-				}
-			}
-			if auto.Text != "" {
-				song.TempoName = auto.Text
-			}
-		}
-	}
+	gpifReadTempoAutomations(doc.MasterTrack.Automations.Automations, song)
 
 	// Build rhythm lookup
 	rhythmMap := make(map[string]*gpifRhythm)
@@ -498,6 +486,39 @@ func parseGPIF(data []byte) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
+	earliest := -1
+	for _, auto := range automations {
+		if auto.Type != "Tempo" {
+			continue
+		}
+		parts := strings.Fields(auto.Value)
+		if len(parts) == 0 {
+			continue
+		}
+		tempo, err := strconv.ParseFloat(parts[0], 64)
+		if err != nil || tempo <= 0 {
+			continue
+		}
+		change := TempoAutomation{Bar: auto.Bar, Position: auto.Position, Tempo: tempo}
+		song.TempoAutomations = append(song.TempoAutomations, change)
+		if earliest < 0 || gpifAutomationIsBefore(change, song.TempoAutomations[earliest]) {
+			earliest = len(song.TempoAutomations) - 1
+			song.Tempo = int16(math.Round(tempo))
+			if auto.Text != "" {
+				song.TempoName = auto.Text
+			}
+		}
+	}
+}
+
+func gpifAutomationIsBefore(a, b TempoAutomation) bool {
+	if a.Bar != b.Bar {
+		return a.Bar < b.Bar
+	}
+	return a.Position < b.Position
 }
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {

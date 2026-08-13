@@ -87,12 +87,12 @@ func (s *Song) readMeasureV5(c *cursor, measure *Measure, trackIndex int) error 
 }
 
 func (s *Song) readVoice(c *cursor, voice *Voice, start *int64, trackIndex int) error {
-	beatCount, err := c.readInt()
+	beatCount, err := c.readCount(2, "beat count")
 	if err != nil {
 		return err
 	}
-	beatPositions := make([]int, 0, beatCount)
-	for i := int32(0); i < beatCount; i++ {
+	var beatPositions []int
+	for i := 0; i < beatCount; i++ {
 		beatPositions = append(beatPositions, c.pos)
 		var duration int64
 		if versionLessThan(s.Version.Number, [3]byte{5, 0, 0}) {

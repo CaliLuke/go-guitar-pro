@@ -78,6 +78,21 @@ func (c *cursor) skip(n int) error {
 	return nil
 }
 
+func (c *cursor) readCount(minBytesPerElement int, label string) (int, error) {
+	n, err := c.readInt()
+	if err != nil {
+		return 0, fmt.Errorf("reading %s: %w", label, err)
+	}
+	if n < 0 {
+		return 0, fmt.Errorf("negative %s %d at offset %d", label, n, c.pos)
+	}
+	if minBytesPerElement > 0 && int64(n)*int64(minBytesPerElement) > int64(c.remaining()) {
+		return 0, fmt.Errorf("%s %d needs at least %d bytes but only %d remain at offset %d",
+			label, n, int64(n)*int64(minBytesPerElement), c.remaining(), c.pos)
+	}
+	return int(n), nil
+}
+
 // readString reads a string of 'size' bytes, using only 'length' of them.
 func (c *cursor) readString(size int, length int) (string, error) {
 	if c.pos+size > len(c.data) {

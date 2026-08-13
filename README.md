@@ -16,6 +16,7 @@ Parse data that is already in memory:
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -30,6 +31,11 @@ func main() {
 
 	song, err := guitarpro.Parse(data)
 	if err != nil {
+		var parseErr *guitarpro.ParseError
+		if errors.As(err, &parseErr) {
+			fmt.Println("The file is not a supported Guitar Pro file.")
+			return
+		}
 		panic(err)
 	}
 
@@ -47,7 +53,9 @@ If the parser must read the file, use `guitarpro.ParseFile(path)`.
 | 6 | `.gpx` | BCFZ or BCFS |
 | 7–8 | `.gp` | ZIP with GPIF XML |
 
-The test suite reads the compatibility corpus in `testdata/`. Known unsupported fixtures remain in the corpus as regression targets.
+The test suite reads every supported file in the compatibility corpus under `testdata/`.
+
+For GP6, GP7, and GP8 files, `Song.TempoAutomations` contains the complete tempo map.
 
 ## Develop
 

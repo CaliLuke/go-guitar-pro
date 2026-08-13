@@ -190,20 +190,12 @@ func (s *Song) readMeasureHeaderBody(c *cursor, flag byte, number int, previous 
 		}
 		mh.RepeatClose = rc
 	}
-	if (flag & 0x10) == 0x10 {
-		if s.Version.Number[0] == 5 {
-			ra, err := c.readByte()
-			if err != nil {
-				return mh, err
-			}
-			mh.RepeatAlternative = ra
-		} else {
-			ra, err := s.readRepeatAlternative(c)
-			if err != nil {
-				return mh, err
-			}
-			mh.RepeatAlternative = ra
+	if (flag&0x10) == 0x10 && s.Version.Number[0] < 5 {
+		ra, err := s.readRepeatAlternative(c)
+		if err != nil {
+			return mh, err
 		}
+		mh.RepeatAlternative = ra
 	}
 	if (flag & 0x20) == 0x20 {
 		m, err := readMarker(c)
@@ -243,7 +235,7 @@ func (s *Song) readMeasureHeaderV5(c *cursor, number int, previous *MeasureHeade
 	if mh.RepeatClose > -1 {
 		mh.RepeatClose--
 	}
-	if (flags & 0x03) == 0x03 {
+	if (flags & 0x03) != 0 {
 		for i := 0; i < 4; i++ {
 			b, beamErr := c.readByte()
 			if beamErr != nil {
@@ -254,11 +246,11 @@ func (s *Song) readMeasureHeaderV5(c *cursor, number int, previous *MeasureHeade
 	} else if previous != nil {
 		mh.TimeSignature.Beams = previous.TimeSignature.Beams
 	}
-	if (flags & 0x10) == 0 {
-		if skipErr := c.skip(1); skipErr != nil {
-			return mh, skipErr
-		}
+	alternative, err := c.readByte()
+	if err != nil {
+		return mh, err
 	}
+	mh.RepeatAlternative = alternative
 	tfByte, err := c.readByte()
 	if err != nil {
 		return mh, err
@@ -268,7 +260,7 @@ func (s *Song) readMeasureHeaderV5(c *cursor, number int, previous *MeasureHeade
 }
 
 func readMarker(c *cursor) (Marker, error) {
-	title, err := c.readIntSizeString()
+	title, err := c.readIntByteSizeString()
 	if err != nil {
 		return Marker{}, err
 	}

@@ -7,16 +7,39 @@ import (
 	"fmt"
 )
 
-// Parse detects the file format. Then Parse parses any supported Guitar Pro file.
+// ParseError reports an unsupported or damaged Guitar Pro file.
+type ParseError struct {
+	Err error
+}
+
+// Error returns the parser error message.
+func (e *ParseError) Error() string {
+	return "unparseable Guitar Pro file: " + e.Err.Error()
+}
+
+// Unwrap returns the underlying parser error.
+func (e *ParseError) Unwrap() error {
+	return e.Err
+}
+
+// Parse detects the file format. Then Parse parses a supported Guitar Pro file.
 // Parse supports GP3, GP4, GP5 (binary), GP6/GPX, GP7, and GP8.
+// Parse returns a [ParseError] for unsupported or damaged input.
 func Parse(data []byte) (song *Song, err error) {
 	defer func() {
 		if recovered := recover(); recovered != nil {
-			song = nil
-			err = fmt.Errorf("invalid Guitar Pro data: %v", recovered)
+			song, err = nil, &ParseError{Err: fmt.Errorf("reader failed on malformed input: %v", recovered)}
 		}
 	}()
 
+	song, err = parse(data)
+	if err != nil {
+		return nil, &ParseError{Err: err}
+	}
+	return song, nil
+}
+
+func parse(data []byte) (*Song, error) {
 	if len(data) < 4 {
 		return nil, fmt.Errorf("data too short to detect format")
 	}
