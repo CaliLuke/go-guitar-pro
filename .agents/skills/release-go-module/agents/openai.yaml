@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Go Module"
+  short_description: "Publish safe go-guitar-pro releases"
+  default_prompt: "Use $release-go-module to publish the next go-guitar-pro version."
