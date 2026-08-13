@@ -64,10 +64,20 @@ type gpifTrack struct {
 	ID            string            `xml:"id,attr"`
 	Name          string            `xml:"Name"`
 	Color         string            `xml:"Color"`
+	Instrument    gpifInstrument    `xml:"Instrument"`
 	InstrumentSet gpifInstrumentSet `xml:"InstrumentSet"`
+	GeneralMidi   *gpifGeneralMidi  `xml:"GeneralMidi"`
 	Staves        gpifStaves        `xml:"Staves"`
 	Sounds        gpifSounds        `xml:"Sounds"`
 	Transpose     gpifTranspose     `xml:"Transpose"`
+}
+
+type gpifInstrument struct {
+	Ref string `xml:"ref,attr"`
+}
+
+type gpifGeneralMidi struct {
+	PrimaryChannel int `xml:"PrimaryChannel"`
 }
 
 type gpifStaves struct {
@@ -89,6 +99,17 @@ type gpifTuning struct {
 
 type gpifInstrumentSet struct {
 	Type string `xml:"Type"`
+}
+
+func (t *gpifTrack) isPercussionTrack() bool {
+	if t.InstrumentSet.Type == "drums" || t.InstrumentSet.Type == "percussion" || t.Instrument.Ref == "drmkt" {
+		return true
+	}
+	if t.GeneralMidi == nil || t.GeneralMidi.PrimaryChannel < 0 || t.GeneralMidi.PrimaryChannel > math.MaxUint8 {
+		return false
+	}
+	channel := MidiChannel{Channel: uint8(t.GeneralMidi.PrimaryChannel)}
+	return channel.isPercussionChannel()
 }
 
 type gpifTranspose struct {
@@ -309,9 +330,7 @@ func parseGPIF(data []byte) (*Song, error) {
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
 				track.Name = t.Name
-				if t.InstrumentSet.Type == "drums" || t.InstrumentSet.Type == "percussion" {
-					track.PercussionTrack = true
-				}
+				track.PercussionTrack = t.isPercussionTrack()
 				// Parse string tuning from staves
 				for _, staff := range t.Staves.Staff {
 					for _, prop := range staff.Properties {

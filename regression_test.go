@@ -104,6 +104,40 @@ func TestPercussionUsesTrackChannel(t *testing.T) {
 	}
 }
 
+func TestGP6PercussionTrack(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp6/full-song.gpx")
+	if len(song.Tracks) != 11 {
+		t.Fatalf("tracks = %d, want 11", len(song.Tracks))
+	}
+	drums := song.Tracks[10]
+	if drums.Name != "Jukka" {
+		t.Fatalf("track 10 name = %q, want %q", drums.Name, "Jukka")
+	}
+	if !drums.PercussionTrack {
+		t.Error("GP6 drumkit track is not marked as percussion")
+	}
+}
+
+func TestGPIFPercussionSignals(t *testing.T) {
+	tests := []struct {
+		name  string
+		track gpifTrack
+		want  bool
+	}{
+		{name: "instrument set", track: gpifTrack{InstrumentSet: gpifInstrumentSet{Type: "drums"}}, want: true},
+		{name: "GP6 instrument", track: gpifTrack{Instrument: gpifInstrument{Ref: "drmkt"}}, want: true},
+		{name: "percussion channel", track: gpifTrack{GeneralMidi: &gpifGeneralMidi{PrimaryChannel: 9}}, want: true},
+		{name: "melodic channel", track: gpifTrack{GeneralMidi: &gpifGeneralMidi{PrimaryChannel: 8}}},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := test.track.isPercussionTrack(); got != test.want {
+				t.Errorf("isPercussionTrack() = %t, want %t", got, test.want)
+			}
+		})
+	}
+}
+
 func TestGPIFTempoAutomations(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp8/beat-tempo-change.gp")
 	if song.Tempo != 120 {
