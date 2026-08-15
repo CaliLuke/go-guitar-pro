@@ -104,6 +104,46 @@ func TestPercussionUsesTrackChannel(t *testing.T) {
 	}
 }
 
+func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp5/motherload-percussion-grace.gp5")
+	var track *Track
+	for index := range song.Tracks {
+		if song.Tracks[index].Name == "Percussion" {
+			track = &song.Tracks[index]
+			break
+		}
+	}
+	if track == nil {
+		t.Fatal("Percussion track not found")
+	}
+	if !track.PercussionTrack {
+		t.Fatal("Percussion track is not marked as percussion")
+	}
+
+	graceCount := 0
+	for measureIndex, measure := range track.Measures {
+		for _, voice := range measure.Voices {
+			for _, beat := range voice.Beats {
+				for _, note := range beat.Notes {
+					if note.Effect.Grace == nil {
+						continue
+					}
+					graceCount++
+					if note.Value != 38 {
+						t.Errorf("bar %d grace parent articulation = %d, want 38", measureIndex+1, note.Value)
+					}
+					if got := note.Effect.Grace.Fret; got != int8(note.Value) {
+						t.Errorf("bar %d grace articulation = %d, want parent articulation %d", measureIndex+1, got, note.Value)
+					}
+				}
+			}
+		}
+	}
+	if graceCount != 8 {
+		t.Errorf("percussion grace notes = %d, want 8", graceCount)
+	}
+}
+
 func TestGP6PercussionTrack(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp6/full-song.gpx")
 	if len(song.Tracks) != 11 {

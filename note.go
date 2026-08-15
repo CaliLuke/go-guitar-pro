@@ -190,6 +190,10 @@ func (s *Song) readNoteV5(c *cursor, note *Note, guitarString GuitarString, trac
 			return effectErr
 		}
 	}
+	// GP5 stores this as a fret even for drums; expose the semantic articulation.
+	if s.Tracks[trackIndex].PercussionTrack && note.Effect.Grace != nil {
+		note.Effect.Grace.Fret = int8(note.Value)
+	}
 	return nil
 }
 
