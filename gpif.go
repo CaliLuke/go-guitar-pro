@@ -501,7 +501,11 @@ func parseGPIF(data []byte) (*Song, error) {
 											continue
 										}
 										if n, ok := noteMap[noteID]; ok {
-											note := gpifNoteToNote(n)
+											note := gpifNoteToNote(
+												n,
+												len(song.Tracks[trackIdx].Strings),
+												song.Tracks[trackIdx].PercussionTrack,
+											)
 											note.Velocity = velocity
 											if graceEffect != nil {
 												ge := *graceEffect
@@ -761,9 +765,10 @@ func gpifRhythmToDuration(r *gpifRhythm) Duration {
 	return d
 }
 
-func gpifNoteToNote(n *gpifNote) Note {
+func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
+	hasFret := false
 
 	// Parse properties
 	for _, p := range n.Properties.Properties {
@@ -771,13 +776,21 @@ func gpifNoteToNote(n *gpifNote) Note {
 		case "Fret":
 			if p.Fret != nil {
 				note.Value = int16(*p.Fret)
+				hasFret = true
 			}
 		case "String":
 			if p.String != nil {
-				note.String = int8(int(*p.String) + 1) // GPIF is 0-based, our model is 1-based
+				sourceString := int(*p.String)
+				if !percussion && sourceString >= 0 && sourceString < stringCount {
+					// GPIF counts from the lowest string while the parser model,
+					// like GP3-5, counts from the highest string.
+					note.String = int8(stringCount - sourceString)
+				} else {
+					note.String = int8(sourceString + 1)
+				}
 			}
 		case "Midi":
-			if p.Number != nil && note.Value == 0 {
+			if p.Number != nil && !hasFret {
 				note.Value = int16(*p.Number)
 			}
 		case "Muted":

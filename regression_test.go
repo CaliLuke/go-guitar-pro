@@ -241,6 +241,23 @@ func TestGPIFTrackTunings(t *testing.T) {
 	}
 }
 
+func TestGPIFNormalizesStringNumbersAndOpenFrets(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/brush.gp")
+	notes := song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes
+	if len(notes) < 3 {
+		t.Fatalf("opening chord notes = %d, want at least 3", len(notes))
+	}
+	if got := notes[0]; got.String != 1 || got.Value != 0 {
+		t.Errorf("highest open string = string %d fret %d, want string 1 fret 0", got.String, got.Value)
+	}
+	if got := notes[1]; got.String != 2 || got.Value != 1 {
+		t.Errorf("second string note = string %d fret %d, want string 2 fret 1", got.String, got.Value)
+	}
+	if got := notes[2]; got.String != 3 || got.Value != 0 {
+		t.Errorf("third open string = string %d fret %d, want string 3 fret 0", got.String, got.Value)
+	}
+}
+
 func TestGPIFTrackMuteState(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp7/dead-slap.gp")
 	muted := 0
