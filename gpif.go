@@ -49,6 +49,7 @@ type gpifAutomations struct {
 
 type gpifAutomation struct {
 	Type     string  `xml:"Type"`
+	Linear   bool    `xml:"Linear"`
 	Value    string  `xml:"Value"`
 	Visible  string  `xml:"Visible"`
 	Text     string  `xml:"Text"`
@@ -61,15 +62,33 @@ type gpifTracks struct {
 }
 
 type gpifTrack struct {
-	ID            string            `xml:"id,attr"`
-	Name          string            `xml:"Name"`
-	Color         string            `xml:"Color"`
-	Instrument    gpifInstrument    `xml:"Instrument"`
-	InstrumentSet gpifInstrumentSet `xml:"InstrumentSet"`
-	GeneralMidi   *gpifGeneralMidi  `xml:"GeneralMidi"`
-	Staves        gpifStaves        `xml:"Staves"`
-	Sounds        gpifSounds        `xml:"Sounds"`
-	Transpose     gpifTranspose     `xml:"Transpose"`
+	ID             string             `xml:"id,attr"`
+	Name           string             `xml:"Name"`
+	Color          string             `xml:"Color"`
+	Instrument     gpifInstrument     `xml:"Instrument"`
+	InstrumentSet  gpifInstrumentSet  `xml:"InstrumentSet"`
+	GeneralMidi    *gpifGeneralMidi   `xml:"GeneralMidi"`
+	Staves         gpifStaves         `xml:"Staves"`
+	Sounds         gpifSounds         `xml:"Sounds"`
+	Transpose      gpifTranspose      `xml:"Transpose"`
+	RSE            gpifTrackRSE       `xml:"RSE"`
+	MidiConnection gpifMidiConnection `xml:"MidiConnection"`
+	PlaybackState  string             `xml:"PlaybackState"`
+}
+
+type gpifTrackRSE struct {
+	ChannelStrip gpifChannelStrip `xml:"ChannelStrip"`
+}
+
+type gpifChannelStrip struct {
+	Parameters  string          `xml:"Parameters"`
+	Automations gpifAutomations `xml:"Automations"`
+}
+
+type gpifMidiConnection struct {
+	Port             int `xml:"Port"`
+	PrimaryChannel   int `xml:"PrimaryChannel"`
+	SecondaryChannel int `xml:"SecondaryChannel"`
 }
 
 type gpifInstrument struct {
@@ -106,7 +125,12 @@ func (t *gpifTrack) isPercussionTrack() bool {
 		return true
 	}
 	if t.GeneralMidi == nil || t.GeneralMidi.PrimaryChannel < 0 || t.GeneralMidi.PrimaryChannel > math.MaxUint8 {
-		return false
+		channel := t.MidiConnection.Port*16 + t.MidiConnection.PrimaryChannel
+		if channel < 0 || channel > math.MaxUint8 {
+			return false
+		}
+		midiChannel := MidiChannel{Channel: uint8(channel)}
+		return midiChannel.isPercussionChannel()
 	}
 	channel := MidiChannel{Channel: uint8(t.GeneralMidi.PrimaryChannel)}
 	return channel.isPercussionChannel()
@@ -358,15 +382,22 @@ func parseGPIF(data []byte) (*Song, error) {
 						track.Color = int32(r)*65536 + int32(g)*256 + int32(b)
 					}
 				}
-				// MIDI info from sounds
+				ch := defaultMidiChannel()
 				if len(t.Sounds.Sounds) > 0 {
-					s := t.Sounds.Sounds[0]
-					ch := defaultMidiChannel()
-					ch.Instrument = int32(s.Program)
-					ch.Channel = uint8(s.Channel)
-					song.Channels = append(song.Channels, ch)
-					track.ChannelIndex = len(song.Channels) - 1
+					ch.Instrument = int32(t.Sounds.Sounds[0].Program)
 				}
+				ch.Channel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.PrimaryChannel)
+				ch.EffectChannel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.SecondaryChannel)
+				gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
+				song.Channels = append(song.Channels, ch)
+				track.ChannelIndex = len(song.Channels) - 1
+				track.Mute = t.PlaybackState == "Mute"
+				track.Solo = t.PlaybackState == "Solo"
+				gpifReadVolumeAutomations(
+					t.RSE.ChannelStrip.Automations.Automations,
+					len(song.Tracks),
+					song,
+				)
 				break
 			}
 		}
@@ -505,6 +536,55 @@ func parseGPIF(data []byte) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+func gpifMIDIChannel(port, channel int) uint8 {
+	value := port*16 + channel
+	if value < 0 {
+		return 0
+	}
+	if value > math.MaxUint8 {
+		return math.MaxUint8
+	}
+	return uint8(value)
+}
+
+func gpifApplyChannelStrip(parameters string, channel *MidiChannel) {
+	values := strings.Fields(parameters)
+	if len(values) <= 12 {
+		return
+	}
+	balance, balanceErr := strconv.ParseFloat(values[11], 64)
+	if balanceErr == nil {
+		channel.Balance = int8(math.Round(min(1, max(0, balance)) * 127))
+	}
+	volume, volumeErr := strconv.ParseFloat(values[12], 64)
+	if volumeErr == nil {
+		channel.Volume = int8(math.Round(min(1, max(0, volume)) * 127))
+	}
+}
+
+func gpifReadVolumeAutomations(
+	automations []gpifAutomation,
+	trackIndex int,
+	song *Song,
+) {
+	for _, automation := range automations {
+		if automation.Type != "DSPParam_12" {
+			continue
+		}
+		value, err := strconv.ParseFloat(strings.TrimSpace(automation.Value), 64)
+		if err != nil {
+			continue
+		}
+		song.VolumeAutomations = append(song.VolumeAutomations, VolumeAutomation{
+			Track:    trackIndex,
+			Bar:      automation.Bar,
+			Position: min(1, max(0, automation.Position)),
+			Value:    min(1, max(0, value)),
+			Linear:   automation.Linear,
+		})
+	}
 }
 
 func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {

@@ -28,13 +28,29 @@ type Song struct {
 	Tracks         []Track
 	// TempoAutomations contains each tempo change in a GPIF file.
 	TempoAutomations []TempoAutomation
-	Lyrics           Lyrics
-	MasterEffect     RseMasterEffect
-	PageSetup        PageSetup
-	Tempo            int16
-	Key              KeySignature
-	HideTempo        bool
-	TripletFeel      TripletFeel
+	// VolumeAutomations contains each track gain point in a GPIF file.
+	VolumeAutomations []VolumeAutomation
+	Lyrics            Lyrics
+	MasterEffect      RseMasterEffect
+	PageSetup         PageSetup
+	Tempo             int16
+	Key               KeySignature
+	HideTempo         bool
+	TripletFeel       TripletFeel
+}
+
+// VolumeAutomation describes one track gain point in a GPIF file.
+type VolumeAutomation struct {
+	// Track is the zero-based track index.
+	Track int
+	// Bar is the zero-based bar index.
+	Bar int
+	// Position is the point position as a fraction of the bar length.
+	Position float64
+	// Value is the normalized channel-strip volume from silent (0) to full (1).
+	Value float64
+	// Linear means the segment from the preceding point to this point is linear.
+	Linear bool
 }
 
 // TempoAutomation describes one tempo change in a GPIF file.

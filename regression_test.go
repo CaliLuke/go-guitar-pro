@@ -192,6 +192,40 @@ func TestGPIFTempoAutomations(t *testing.T) {
 	}
 }
 
+func TestGPIFTrackMixerState(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/track-balance.gp")
+	if len(song.Tracks) < 2 || len(song.Channels) < 2 {
+		t.Fatalf("tracks/channels = %d/%d, want at least 2", len(song.Tracks), len(song.Channels))
+	}
+	first := song.Channels[song.Tracks[0].ChannelIndex]
+	second := song.Channels[song.Tracks[1].ChannelIndex]
+	if first.Channel != 0 || first.EffectChannel != 1 || second.Channel != 2 || second.EffectChannel != 3 {
+		t.Errorf("GPIF MIDI channels = [%d/%d %d/%d], want [0/1 2/3]", first.Channel, first.EffectChannel, second.Channel, second.EffectChannel)
+	}
+	if first.Volume != 101 || first.Balance != 0 || second.Balance != 32 {
+		t.Errorf("GPIF channel strip = %#v %#v", first, second)
+	}
+	if len(song.VolumeAutomations) < 2 {
+		t.Fatalf("volume automations = %d, want at least 2", len(song.VolumeAutomations))
+	}
+	if got := song.VolumeAutomations[0]; got.Track != 0 || got.Bar != 0 || got.Position != 0 || got.Value != 0.72 || got.Linear {
+		t.Errorf("first volume automation = %#v", got)
+	}
+}
+
+func TestGPIFTrackMuteState(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/dead-slap.gp")
+	muted := 0
+	for _, track := range song.Tracks {
+		if track.Mute {
+			muted++
+		}
+	}
+	if muted != 1 {
+		t.Errorf("muted tracks = %d, want 1", muted)
+	}
+}
+
 func TestGPIFUsesOpeningTempoAutomation(t *testing.T) {
 	song := &Song{Tempo: 120}
 	gpifReadTempoAutomations([]gpifAutomation{
