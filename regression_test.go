@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -210,6 +211,17 @@ func TestGPIFTrackMixerState(t *testing.T) {
 	}
 	if got := song.VolumeAutomations[0]; got.Track != 0 || got.Bar != 0 || got.Position != 0 || got.Value != 0.72 || got.Linear {
 		t.Errorf("first volume automation = %#v", got)
+	}
+}
+
+func TestGPIFTrackTunings(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/multi-track.gp")
+	if len(song.Tracks) < 5 {
+		t.Fatalf("tracks = %d, want at least 5", len(song.Tracks))
+	}
+	want := []GuitarString{{1, 62}, {2, 57}, {3, 53}, {4, 48}, {5, 43}, {6, 36}}
+	if got := song.Tracks[3].Strings; !slices.Equal(got, want) {
+		t.Errorf("Drop C tuning = %#v, want %#v", got, want)
 	}
 }
 

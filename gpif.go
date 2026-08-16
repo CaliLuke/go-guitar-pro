@@ -104,16 +104,12 @@ type gpifStaves struct {
 }
 
 type gpifStaff struct {
-	Properties []gpifStaffProperty `xml:"Property"`
+	Properties []gpifStaffProperty `xml:"Properties>Property"`
 }
 
 type gpifStaffProperty struct {
-	Name   string     `xml:"name,attr"`
-	Tuning gpifTuning `xml:"Tuning"`
-}
-
-type gpifTuning struct {
-	Values string `xml:"Values,attr"`
+	Name    string `xml:"name,attr"`
+	Pitches string `xml:"Pitches"`
 }
 
 type gpifInstrumentSet struct {
@@ -358,13 +354,13 @@ func parseGPIF(data []byte) (*Song, error) {
 				// Parse string tuning from staves
 				for _, staff := range t.Staves.Staff {
 					for _, prop := range staff.Properties {
-						if prop.Name == "Tuning" && prop.Tuning.Values != "" {
-							vals := splitIDs(prop.Tuning.Values)
+						if prop.Name == "Tuning" && prop.Pitches != "" {
+							vals := splitIDs(prop.Pitches)
 							track.Strings = nil
-							for si, sv := range vals {
-								if v, err := strconv.Atoi(sv); err == nil {
+							for sourceIndex := len(vals) - 1; sourceIndex >= 0; sourceIndex-- {
+								if v, err := strconv.ParseInt(vals[sourceIndex], 10, 8); err == nil {
 									track.Strings = append(track.Strings, GuitarString{
-										Number: int8(si + 1),
+										Number: int8(len(track.Strings) + 1),
 										Value:  int8(v),
 									})
 								}
