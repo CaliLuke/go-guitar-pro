@@ -10,13 +10,14 @@ type MidiChannel struct {
 	Channel       uint8
 	EffectChannel uint8
 	Instrument    int32
-	Volume        int8
-	Balance       int8
-	Chorus        int8
-	Reverb        int8
-	Phaser        int8
-	Tremolo       int8
-	Bank          uint8
+	// Volume and Balance use the normalized MIDI controller range 0 through 127.
+	Volume  int8
+	Balance int8
+	Chorus  int8
+	Reverb  int8
+	Phaser  int8
+	Tremolo int8
+	Bank    uint8
 }
 
 func defaultMidiChannel() MidiChannel {
@@ -51,14 +52,16 @@ func (s *Song) readMidiChannel(c *cursor, channel uint8) (MidiChannel, error) {
 	mc := defaultMidiChannel()
 	mc.Channel = channel
 	mc.EffectChannel = channel
-	mc.Volume, err = c.readSignedByte()
+	rawVolume, err := c.readSignedByte()
 	if err != nil {
 		return mc, err
 	}
-	mc.Balance, err = c.readSignedByte()
+	mc.Volume = normalizeBinaryMixerValue(rawVolume)
+	rawBalance, err := c.readSignedByte()
 	if err != nil {
 		return mc, err
 	}
+	mc.Balance = normalizeBinaryMixerValue(rawBalance)
 	mc.Chorus, err = c.readSignedByte()
 	if err != nil {
 		return mc, err
@@ -86,6 +89,18 @@ func (s *Song) readMidiChannel(c *cursor, channel uint8) (MidiChannel, error) {
 		return mc, err
 	}
 	return mc, nil
+}
+
+// normalizeBinaryMixerValue converts the 0-16 mixer scale stored by GP3-5
+// into the same 0-127 controller range exposed for GPIF files.
+func normalizeBinaryMixerValue(value int8) int8 {
+	if value <= 0 {
+		return 0
+	}
+	if value >= 16 {
+		return 127
+	}
+	return int8((int(value)*127 + 8) / 16)
 }
 
 // readChannel reads a MIDI channel reference from a track.

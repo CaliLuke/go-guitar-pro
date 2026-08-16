@@ -145,6 +145,22 @@ func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
 	}
 }
 
+func TestGP5TrackMixerUsesNormalizedMidiRange(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp5/Demo v5.gp5")
+	if len(song.Tracks) < 2 {
+		t.Fatalf("tracks = %d, want at least 2", len(song.Tracks))
+	}
+
+	rhythm := song.Channels[song.Tracks[0].ChannelIndex]
+	solo := song.Channels[song.Tracks[1].ChannelIndex]
+	if rhythm.Volume != 87 || rhythm.Balance != 64 {
+		t.Errorf("rhythm channel = %#v, want volume 87 and balance 64", rhythm)
+	}
+	if solo.Volume != 119 || solo.Balance != 64 {
+		t.Errorf("solo channel = %#v, want volume 119 and balance 64", solo)
+	}
+}
+
 func TestGP6PercussionTrack(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp6/full-song.gpx")
 	if len(song.Tracks) != 11 {
