@@ -4,6 +4,9 @@ package goguitarpro
 
 import "fmt"
 
+// GPIFBackingTrackSampleRate is the fixed frame rate Guitar Pro uses for audio synchronization.
+const GPIFBackingTrackSampleRate = 44100
+
 // Song is the root data structure for a parsed Guitar Pro file.
 type Song struct {
 	Clipboard      *Clipboard
@@ -26,6 +29,10 @@ type Song struct {
 	Channels       []MidiChannel
 	MeasureHeaders []MeasureHeader
 	Tracks         []Track
+	// BackingTrack contains the GPIF audio track and its embedded bytes when present.
+	BackingTrack *BackingTrack
+	// SyncPoints contains each score-to-backing-track anchor in a GPIF file.
+	SyncPoints []SyncPoint
 	// TempoAutomations contains each tempo change in a GPIF file.
 	TempoAutomations []TempoAutomation
 	// VolumeAutomations contains each track gain point in a GPIF file.
@@ -37,6 +44,39 @@ type Song struct {
 	Key               KeySignature
 	HideTempo         bool
 	TripletFeel       TripletFeel
+}
+
+// BackingTrack describes the external audio attached to a GPIF score.
+type BackingTrack struct {
+	Name             string
+	Source           string
+	AssetID          string
+	OriginalFilePath string
+	OriginalFileSHA1 string
+	EmbeddedFilePath string
+	AudioData        []byte
+	// FramePadding is the signed 44.1 kHz frame offset stored by Guitar Pro.
+	FramePadding int64
+	Enabled      bool
+}
+
+// SyncPoint describes one GPIF score-to-backing-track anchor.
+type SyncPoint struct {
+	// Bar is the zero-based master-bar index.
+	Bar int
+	// Position is the point position as a fraction of the bar length.
+	Position float64
+	// BarOccurrence identifies a particular playback occurrence when repeats are present.
+	BarOccurrence int
+	// FrameOffset is the raw 44.1 kHz project-frame position persisted for the point.
+	FrameOffset int64
+	// MediaTimeMS is the absolute backing-track position after subtracting FramePadding.
+	MediaTimeMS float64
+	// ModifiedTempo and OriginalTempo are Guitar Pro's persisted derived tempo metadata.
+	ModifiedTempo float64
+	OriginalTempo float64
+	Linear        bool
+	Visible       bool
 }
 
 // VolumeAutomation describes one track gain point in a GPIF file.

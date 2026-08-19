@@ -274,10 +274,10 @@ func TestGPIFTrackMuteState(t *testing.T) {
 func TestGPIFUsesOpeningTempoAutomation(t *testing.T) {
 	song := &Song{Tempo: 120}
 	gpifReadTempoAutomations([]gpifAutomation{
-		{Type: "Tempo", Bar: 4, Value: "180 2"},
-		{Type: "Tempo", Bar: 0, Position: 0.25, Value: "90 2", Text: "Slow"},
-		{Type: "Tempo", Bar: 0, Value: "140 2", Text: "Allegro"},
-		{Type: "Tempo", Bar: 2, Value: "invalid"},
+		{Type: "Tempo", Bar: 4, Value: gpifAutomationValue{Text: "180 2"}},
+		{Type: "Tempo", Bar: 0, Position: 0.25, Value: gpifAutomationValue{Text: "90 2"}, Text: "Slow"},
+		{Type: "Tempo", Bar: 0, Value: gpifAutomationValue{Text: "140 2"}, Text: "Allegro"},
+		{Type: "Tempo", Bar: 2, Value: gpifAutomationValue{Text: "invalid"}},
 	}, song)
 	if song.Tempo != 140 || song.TempoName != "Allegro" {
 		t.Errorf("opening tempo = %d %q, want 140 %q", song.Tempo, song.TempoName, "Allegro")

@@ -13,16 +13,18 @@ import (
 // GPIF XML structures for unmarshalling.
 
 type gpifDocument struct {
-	XMLName     xml.Name        `xml:"GPIF"`
-	Score       gpifScore       `xml:"Score"`
-	MasterTrack gpifMasterTrack `xml:"MasterTrack"`
-	Tracks      gpifTracks      `xml:"Tracks"`
-	MasterBars  gpifMasterBars  `xml:"MasterBars"`
-	Bars        gpifBars        `xml:"Bars"`
-	Voices      gpifVoices      `xml:"Voices"`
-	Beats       gpifBeats       `xml:"Beats"`
-	Notes       gpifNotes       `xml:"Notes"`
-	Rhythms     gpifRhythms     `xml:"Rhythms"`
+	XMLName      xml.Name          `xml:"GPIF"`
+	Score        gpifScore         `xml:"Score"`
+	MasterTrack  gpifMasterTrack   `xml:"MasterTrack"`
+	BackingTrack *gpifBackingTrack `xml:"BackingTrack"`
+	Tracks       gpifTracks        `xml:"Tracks"`
+	MasterBars   gpifMasterBars    `xml:"MasterBars"`
+	Bars         gpifBars          `xml:"Bars"`
+	Voices       gpifVoices        `xml:"Voices"`
+	Beats        gpifBeats         `xml:"Beats"`
+	Notes        gpifNotes         `xml:"Notes"`
+	Rhythms      gpifRhythms       `xml:"Rhythms"`
+	Assets       gpifAssets        `xml:"Assets"`
 }
 
 type gpifScore struct {
@@ -48,13 +50,41 @@ type gpifAutomations struct {
 }
 
 type gpifAutomation struct {
-	Type     string  `xml:"Type"`
-	Linear   bool    `xml:"Linear"`
-	Value    string  `xml:"Value"`
-	Visible  string  `xml:"Visible"`
-	Text     string  `xml:"Text"`
-	Bar      int     `xml:"Bar"`
-	Position float64 `xml:"Position"`
+	Type     string              `xml:"Type"`
+	Linear   bool                `xml:"Linear"`
+	Value    gpifAutomationValue `xml:"Value"`
+	Visible  string              `xml:"Visible"`
+	Text     string              `xml:"Text"`
+	Bar      int                 `xml:"Bar"`
+	Position float64             `xml:"Position"`
+}
+
+type gpifAutomationValue struct {
+	Text          string `xml:",chardata"`
+	BarIndex      string `xml:"BarIndex"`
+	BarOccurrence string `xml:"BarOccurrence"`
+	ModifiedTempo string `xml:"ModifiedTempo"`
+	OriginalTempo string `xml:"OriginalTempo"`
+	FrameOffset   string `xml:"FrameOffset"`
+}
+
+type gpifBackingTrack struct {
+	Name         string `xml:"Name"`
+	Enabled      bool   `xml:"Enabled"`
+	Source       string `xml:"Source"`
+	AssetID      string `xml:"AssetId"`
+	FramePadding string `xml:"FramePadding"`
+}
+
+type gpifAssets struct {
+	Assets []gpifAsset `xml:"Asset"`
+}
+
+type gpifAsset struct {
+	ID               string `xml:"id,attr"`
+	OriginalFilePath string `xml:"OriginalFilePath"`
+	OriginalFileSHA1 string `xml:"OriginalFileSha1"`
+	EmbeddedFilePath string `xml:"EmbeddedFilePath"`
 }
 
 type gpifTracks struct {
@@ -305,6 +335,8 @@ func parseGPIF(data []byte) (*Song, error) {
 	song.Transcriber = doc.Score.Tabber
 	song.Instructions = doc.Score.Instructions
 
+	gpifReadBackingTrack(doc, song)
+	gpifReadSyncPoints(doc.MasterTrack.Automations.Automations, song)
 	gpifReadTempoAutomations(doc.MasterTrack.Automations.Automations, song)
 
 	// Build rhythm lookup
@@ -573,7 +605,7 @@ func gpifReadVolumeAutomations(
 		if automation.Type != "DSPParam_12" {
 			continue
 		}
-		value, err := strconv.ParseFloat(strings.TrimSpace(automation.Value), 64)
+		value, err := strconv.ParseFloat(strings.TrimSpace(automation.Value.Text), 64)
 		if err != nil {
 			continue
 		}
@@ -587,13 +619,73 @@ func gpifReadVolumeAutomations(
 	}
 }
 
+func gpifReadBackingTrack(doc gpifDocument, song *Song) {
+	if doc.BackingTrack == nil {
+		return
+	}
+	framePadding, _ := strconv.ParseInt(strings.TrimSpace(doc.BackingTrack.FramePadding), 10, 64)
+	backingTrack := &BackingTrack{
+		Name:         doc.BackingTrack.Name,
+		Source:       doc.BackingTrack.Source,
+		AssetID:      doc.BackingTrack.AssetID,
+		FramePadding: framePadding,
+		Enabled:      doc.BackingTrack.Enabled,
+	}
+	for _, asset := range doc.Assets.Assets {
+		if asset.ID != backingTrack.AssetID {
+			continue
+		}
+		backingTrack.OriginalFilePath = asset.OriginalFilePath
+		backingTrack.OriginalFileSHA1 = asset.OriginalFileSHA1
+		backingTrack.EmbeddedFilePath = asset.EmbeddedFilePath
+		break
+	}
+	song.BackingTrack = backingTrack
+}
+
+func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
+	framePadding := int64(0)
+	if song.BackingTrack != nil {
+		framePadding = song.BackingTrack.FramePadding
+	}
+	for _, automation := range automations {
+		if automation.Type != "SyncPoint" {
+			continue
+		}
+		frameOffset, err := strconv.ParseInt(strings.TrimSpace(automation.Value.FrameOffset), 10, 64)
+		if err != nil {
+			continue
+		}
+		bar := automation.Bar
+		if value := strings.TrimSpace(automation.Value.BarIndex); value != "" {
+			if parsed, parseErr := strconv.Atoi(value); parseErr == nil {
+				bar = parsed
+			}
+		}
+		barOccurrence, _ := strconv.Atoi(strings.TrimSpace(automation.Value.BarOccurrence))
+		modifiedTempo, _ := strconv.ParseFloat(strings.TrimSpace(automation.Value.ModifiedTempo), 64)
+		originalTempo, _ := strconv.ParseFloat(strings.TrimSpace(automation.Value.OriginalTempo), 64)
+		song.SyncPoints = append(song.SyncPoints, SyncPoint{
+			Bar:           bar,
+			Position:      automation.Position,
+			BarOccurrence: barOccurrence,
+			FrameOffset:   frameOffset,
+			MediaTimeMS:   float64(frameOffset-framePadding) / GPIFBackingTrackSampleRate * 1000,
+			ModifiedTempo: modifiedTempo,
+			OriginalTempo: originalTempo,
+			Linear:        automation.Linear,
+			Visible:       automation.Visible == "" || strings.EqualFold(automation.Visible, "true"),
+		})
+	}
+}
+
 func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
 	earliest := -1
 	for _, auto := range automations {
 		if auto.Type != "Tempo" {
 			continue
 		}
-		parts := strings.Fields(auto.Value)
+		parts := strings.Fields(auto.Value.Text)
 		if len(parts) == 0 {
 			continue
 		}

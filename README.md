@@ -56,6 +56,9 @@ If the parser must read the file, use `guitarpro.ParseFile(path)`.
 The test suite reads every supported file in the compatibility corpus under `testdata/`.
 
 For GP6, GP7, and GP8 files, `Song.TempoAutomations` contains the complete tempo map.
+For GP7 and GP8 files, `Song.SyncPoints` contains the score-to-audio anchors and
+`Song.BackingTrack` contains the referenced asset metadata plus its embedded audio
+bytes when the asset is present in the project archive.
 
 ## Develop
 
