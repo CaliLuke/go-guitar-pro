@@ -238,6 +238,89 @@ func TestGP8PitchedInstrumentSet(t *testing.T) {
 	}
 }
 
+func TestGP8HiHatArticulationMetadata(t *testing.T) {
+	for _, test := range []struct {
+		midi      int16
+		name      string
+		staffLine int
+		noteheads string
+		rseSound  string
+	}{
+		{midi: 42, name: "Hi-Hat (closed)", staffLine: -1, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.closed"},
+		{midi: 44, name: "Pedal Hi-Hat (hit)", staffLine: 9, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "pedal.hit.pedal"},
+		{midi: 46, name: "Hi-Hat (open)", staffLine: -1, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.open"},
+	} {
+		element := gp8DrumElement(test.midi)
+		if element.Name != "Charley" || element.Type != "hiHat" || element.SoundbankName != "Master-Hihat" {
+			t.Errorf("MIDI %d element = %#v", test.midi, element)
+		}
+		if len(element.Articulations.Articulations) != 1 {
+			t.Fatalf("MIDI %d articulations = %#v", test.midi, element.Articulations.Articulations)
+		}
+		articulation := element.Articulations.Articulations[0]
+		if articulation.Name != test.name || articulation.StaffLine != test.staffLine || articulation.Noteheads != test.noteheads || articulation.OutputRSESound != test.rseSound {
+			t.Errorf("MIDI %d articulation = %#v", test.midi, articulation)
+		}
+		if articulation.InputMIDINumbers != fmt.Sprint(test.midi) || articulation.OutputMIDINumber != int(test.midi) {
+			t.Errorf("MIDI %d routing = %#v", test.midi, articulation)
+		}
+	}
+	elements := gp8DrumElements([]int16{36, 38, 42, 44, 46, 48, 49})
+	if len(elements) != 5 {
+		t.Fatalf("grouped drum elements = %#v", elements)
+	}
+	hiHat := elements[2]
+	if hiHat.Name != "Charley" || len(hiHat.Articulations.Articulations) != 3 {
+		t.Errorf("grouped hi-hat = %#v", hiHat)
+	}
+	for index, midi := range []int{42, 44, 46} {
+		if hiHat.Articulations.Articulations[index].OutputMIDINumber != midi {
+			t.Errorf("hi-hat articulation %d = %#v", index, hiHat.Articulations.Articulations[index])
+		}
+	}
+
+	interleaved := gp8DrumElements([]int16{42, 43, 44, 45, 46})
+	if len(interleaved) != 3 || len(interleaved[0].Articulations.Articulations) != 3 {
+		t.Fatalf("interleaved hi-hat elements = %#v", interleaved)
+	}
+	ids := gp8DrumArticulationIDs(interleaved)
+	for midi, id := range map[int16]int{42: 0, 44: 1, 46: 2, 43: 3, 45: 4} {
+		if ids[midi] != id {
+			t.Errorf("MIDI %d articulation ID = %d, want %d", midi, ids[midi], id)
+		}
+	}
+}
+
+func TestGP8StandardDrumRSEMetadata(t *testing.T) {
+	for _, test := range []struct {
+		midi      int16
+		name      string
+		kind      string
+		soundbank string
+		rseSound  string
+	}{
+		{midi: 36, name: "Kick Drum", kind: "kickDrum", soundbank: "Master-Kick", rseSound: "pedal.hit.hit"},
+		{midi: 38, name: "Snare", kind: "snare", soundbank: "Master-Snare", rseSound: "stick.hit.hit"},
+		{midi: 48, name: "Tom High", kind: "tom", soundbank: "Master-Tom04", rseSound: "stick.hit.hit"},
+	} {
+		element := gp8DrumElement(test.midi)
+		if element.Name != test.name || element.Type != test.kind || element.SoundbankName != test.soundbank || element.Articulations.Articulations[0].OutputRSESound != test.rseSound {
+			t.Errorf("MIDI %d element = %#v", test.midi, element)
+		}
+	}
+}
+
+func TestGP8CrashArticulationMetadata(t *testing.T) {
+	element := gp8DrumElement(49)
+	if element.Name != "Crash High" || element.Type != "crash" || element.SoundbankName != "Master-Crash02" {
+		t.Errorf("crash element = %#v", element)
+	}
+	articulation := element.Articulations.Articulations[0]
+	if articulation.Name != "Crash high (hit)" || articulation.StaffLine != -2 || articulation.Noteheads != "noteheadHeavyX noteheadHeavyX noteheadHeavyX" || articulation.OutputMIDINumber != 49 {
+		t.Errorf("crash articulation = %#v", articulation)
+	}
+}
+
 func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
 	song := syntheticGP8Song()
 	track := &song.Tracks[0]
