@@ -10,13 +10,16 @@ import (
 	"strings"
 )
 
-// GPIF XML structures for unmarshalling.
+// GPIF XML structures shared by parsing and export.
 
 type gpifDocument struct {
 	XMLName      xml.Name          `xml:"GPIF"`
+	GPVersion    string            `xml:"GPVersion,omitempty"`
+	GPRevision   gpifRevision      `xml:"GPRevision"`
+	Encoding     gpifEncoding      `xml:"Encoding"`
 	Score        gpifScore         `xml:"Score"`
 	MasterTrack  gpifMasterTrack   `xml:"MasterTrack"`
-	BackingTrack *gpifBackingTrack `xml:"BackingTrack"`
+	BackingTrack *gpifBackingTrack `xml:"BackingTrack,omitempty"`
 	Tracks       gpifTracks        `xml:"Tracks"`
 	MasterBars   gpifMasterBars    `xml:"MasterBars"`
 	Bars         gpifBars          `xml:"Bars"`
@@ -24,7 +27,17 @@ type gpifDocument struct {
 	Beats        gpifBeats         `xml:"Beats"`
 	Notes        gpifNotes         `xml:"Notes"`
 	Rhythms      gpifRhythms       `xml:"Rhythms"`
-	Assets       gpifAssets        `xml:"Assets"`
+	Assets       gpifAssets        `xml:"Assets,omitempty"`
+}
+
+type gpifRevision struct {
+	Required    string `xml:"required,attr,omitempty"`
+	Recommended string `xml:"recommended,attr,omitempty"`
+	Value       string `xml:",chardata"`
+}
+
+type gpifEncoding struct {
+	Description string `xml:"EncodingDescription,omitempty"`
 }
 
 type gpifScore struct {
@@ -42,6 +55,7 @@ type gpifScore struct {
 
 type gpifMasterTrack struct {
 	Tracks      string          `xml:"Tracks"`
+	Anacrusis   *struct{}       `xml:"Anacrusis,omitempty"`
 	Automations gpifAutomations `xml:"Automations"`
 }
 
@@ -53,19 +67,19 @@ type gpifAutomation struct {
 	Type     string              `xml:"Type"`
 	Linear   bool                `xml:"Linear"`
 	Value    gpifAutomationValue `xml:"Value"`
-	Visible  string              `xml:"Visible"`
-	Text     string              `xml:"Text"`
+	Visible  string              `xml:"Visible,omitempty"`
+	Text     string              `xml:"Text,omitempty"`
 	Bar      int                 `xml:"Bar"`
 	Position float64             `xml:"Position"`
 }
 
 type gpifAutomationValue struct {
 	Text          string `xml:",chardata"`
-	BarIndex      string `xml:"BarIndex"`
-	BarOccurrence string `xml:"BarOccurrence"`
-	ModifiedTempo string `xml:"ModifiedTempo"`
-	OriginalTempo string `xml:"OriginalTempo"`
-	FrameOffset   string `xml:"FrameOffset"`
+	BarIndex      string `xml:"BarIndex,omitempty"`
+	BarOccurrence string `xml:"BarOccurrence,omitempty"`
+	ModifiedTempo string `xml:"ModifiedTempo,omitempty"`
+	OriginalTempo string `xml:"OriginalTempo,omitempty"`
+	FrameOffset   string `xml:"FrameOffset,omitempty"`
 }
 
 type gpifBackingTrack struct {
@@ -94,16 +108,16 @@ type gpifTracks struct {
 type gpifTrack struct {
 	ID             string             `xml:"id,attr"`
 	Name           string             `xml:"Name"`
-	Color          string             `xml:"Color"`
-	Instrument     gpifInstrument     `xml:"Instrument"`
-	InstrumentSet  gpifInstrumentSet  `xml:"InstrumentSet"`
-	GeneralMidi    *gpifGeneralMidi   `xml:"GeneralMidi"`
+	Color          string             `xml:"Color,omitempty"`
+	Instrument     *gpifInstrument    `xml:"Instrument,omitempty"`
+	InstrumentSet  *gpifInstrumentSet `xml:"InstrumentSet,omitempty"`
+	GeneralMidi    *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
 	Staves         gpifStaves         `xml:"Staves"`
 	Sounds         gpifSounds         `xml:"Sounds"`
-	Transpose      gpifTranspose      `xml:"Transpose"`
-	RSE            gpifTrackRSE       `xml:"RSE"`
+	Transpose      *gpifTranspose     `xml:"Transpose,omitempty"`
+	RSE            *gpifTrackRSE      `xml:"RSE,omitempty"`
 	MidiConnection gpifMidiConnection `xml:"MidiConnection"`
-	PlaybackState  string             `xml:"PlaybackState"`
+	PlaybackState  string             `xml:"PlaybackState,omitempty"`
 }
 
 type gpifTrackRSE struct {
@@ -138,16 +152,69 @@ type gpifStaff struct {
 }
 
 type gpifStaffProperty struct {
-	Name    string `xml:"name,attr"`
-	Pitches string `xml:"Pitches"`
+	Name    string     `xml:"name,attr"`
+	Pitches string     `xml:"Pitches,omitempty"`
+	Items   *gpifItems `xml:"Items,omitempty"`
+}
+
+type gpifItems struct {
+	Items []gpifItem `xml:"Item"`
+}
+
+type gpifItem struct {
+	ID      string       `xml:"id,attr,omitempty"`
+	Name    string       `xml:"name,attr,omitempty"`
+	Diagram *gpifDiagram `xml:"Diagram,omitempty"`
+	Chord   *struct{}    `xml:"Chord,omitempty"`
+}
+
+type gpifDiagram struct {
+	StringCount int               `xml:"stringCount,attr,omitempty"`
+	FretCount   int               `xml:"fretCount,attr,omitempty"`
+	BaseFret    int               `xml:"baseFret,attr,omitempty"`
+	Frets       []gpifDiagramFret `xml:"Fret"`
+}
+
+type gpifDiagramFret struct {
+	String int `xml:"string,attr"`
+	Fret   int `xml:"fret,attr"`
 }
 
 type gpifInstrumentSet struct {
-	Type string `xml:"Type"`
+	Name      string       `xml:"Name,omitempty"`
+	Type      string       `xml:"Type,omitempty"`
+	LineCount int          `xml:"LineCount,omitempty"`
+	Elements  gpifElements `xml:"Elements"`
+}
+
+type gpifElements struct {
+	Elements []gpifElement `xml:"Element"`
+}
+
+type gpifElement struct {
+	Name          string            `xml:"Name,omitempty"`
+	Type          string            `xml:"Type,omitempty"`
+	Articulations gpifArticulations `xml:"Articulations"`
+}
+
+type gpifArticulations struct {
+	Articulations []gpifArticulation `xml:"Articulation"`
+}
+
+type gpifArticulation struct {
+	Name               string `xml:"Name,omitempty"`
+	StaffLine          int    `xml:"StaffLine"`
+	Noteheads          string `xml:"Noteheads,omitempty"`
+	TechniquePlacement string `xml:"TechniquePlacement,omitempty"`
+	InputMIDINumbers   string `xml:"InputMidiNumbers,omitempty"`
+	OutputMIDINumber   int    `xml:"OutputMidiNumber"`
 }
 
 func (t *gpifTrack) isPercussionTrack() bool {
-	if t.InstrumentSet.Type == "drums" || t.InstrumentSet.Type == "percussion" || t.Instrument.Ref == "drmkt" {
+	if t.InstrumentSet != nil && (t.InstrumentSet.Type == "drums" || t.InstrumentSet.Type == "percussion" || t.InstrumentSet.Type == "drumKit") {
+		return true
+	}
+	if t.Instrument != nil && t.Instrument.Ref == "drmkt" {
 		return true
 	}
 	if t.GeneralMidi == nil || t.GeneralMidi.PrimaryChannel < 0 || t.GeneralMidi.PrimaryChannel > math.MaxUint8 {
@@ -182,14 +249,14 @@ type gpifMasterBars struct {
 }
 
 type gpifMasterBar struct {
-	Section          gpifSection `xml:"Section"`
-	Key              gpifKey     `xml:"Key"`
-	Time             string      `xml:"Time"`
-	Bars             string      `xml:"Bars"`
-	AlternateEndings string      `xml:"AlternateEndings"`
-	DoubleBar        string      `xml:"DoubleBar"`
-	TripletFeel      string      `xml:"TripletFeel"`
-	Repeat           gpifRepeat  `xml:"Repeat"`
+	Section          *gpifSection `xml:"Section,omitempty"`
+	Key              gpifKey      `xml:"Key"`
+	Time             string       `xml:"Time"`
+	Bars             string       `xml:"Bars"`
+	AlternateEndings string       `xml:"AlternateEndings,omitempty"`
+	DoubleBar        *struct{}    `xml:"DoubleBar,omitempty"`
+	TripletFeel      string       `xml:"TripletFeel,omitempty"`
+	Repeat           *gpifRepeat  `xml:"Repeat,omitempty"`
 }
 
 type gpifKey struct {
@@ -198,9 +265,9 @@ type gpifKey struct {
 }
 
 type gpifRepeat struct {
-	Start string `xml:"start,attr"`
-	End   string `xml:"end,attr"`
-	Count int    `xml:"Count"`
+	Start string `xml:"start,attr,omitempty"`
+	End   string `xml:"end,attr,omitempty"`
+	Count int    `xml:"Count,omitempty"`
 }
 
 type gpifSection struct {
@@ -234,16 +301,17 @@ type gpifBeats struct {
 type gpifBeat struct {
 	ID         string         `xml:"id,attr"`
 	Rhythm     gpifRhythmRef  `xml:"Rhythm"`
-	Notes      string         `xml:"Notes"`
-	Dynamic    string         `xml:"Dynamic"`
-	GraceNotes string         `xml:"GraceNotes"`
-	Fadding    string         `xml:"Fadding"`
-	Tremolo    string         `xml:"Tremolo"`
-	Arpeggio   string         `xml:"Arpeggio"`
-	Hairpin    string         `xml:"Hairpin"`
-	FreeText   string         `xml:"FreeText"`
-	Ottavia    string         `xml:"Ottavia"`
-	Wah        string         `xml:"Wah"`
+	Notes      string         `xml:"Notes,omitempty"`
+	Chord      string         `xml:"Chord,omitempty"`
+	Dynamic    string         `xml:"Dynamic,omitempty"`
+	GraceNotes string         `xml:"GraceNotes,omitempty"`
+	Fadding    string         `xml:"Fadding,omitempty"`
+	Tremolo    string         `xml:"Tremolo,omitempty"`
+	Arpeggio   string         `xml:"Arpeggio,omitempty"`
+	Hairpin    string         `xml:"Hairpin,omitempty"`
+	FreeText   string         `xml:"FreeText,omitempty"`
+	Ottavia    string         `xml:"Ottavia,omitempty"`
+	Wah        string         `xml:"Wah,omitempty"`
 	Properties gpifProperties `xml:"Properties"`
 }
 
@@ -273,14 +341,15 @@ type gpifNotes struct {
 }
 
 type gpifNote struct {
-	LetRing    *string        `xml:"LetRing"`
-	Trill      *gpifTrill     `xml:"Trill"`
-	Tie        gpifTie        `xml:"Tie"`
-	ID         string         `xml:"id,attr"`
-	Vibrato    string         `xml:"Vibrato"`
-	AntiAccent string         `xml:"AntiAccent"`
-	Properties gpifProperties `xml:"Properties"`
-	Accent     int            `xml:"Accent"`
+	LetRing                *string        `xml:"LetRing,omitempty"`
+	Trill                  *gpifTrill     `xml:"Trill,omitempty"`
+	Tie                    *gpifTie       `xml:"Tie,omitempty"`
+	ID                     string         `xml:"id,attr"`
+	InstrumentArticulation *int           `xml:"InstrumentArticulation,omitempty"`
+	Vibrato                string         `xml:"Vibrato,omitempty"`
+	AntiAccent             string         `xml:"AntiAccent,omitempty"`
+	Properties             gpifProperties `xml:"Properties"`
+	Accent                 int            `xml:"Accent,omitempty"`
 }
 
 type gpifTrill struct {
@@ -323,6 +392,8 @@ func parseGPIF(data []byte) (*Song, error) {
 		Tempo:     120,
 		TempoName: "Moderate",
 	}
+	song.Version = gpifVersion(doc.GPVersion)
+	song.Anacrusis = doc.MasterTrack.Anacrusis != nil
 
 	// Score info
 	song.Name = doc.Score.Title
@@ -334,6 +405,9 @@ func parseGPIF(data []byte) (*Song, error) {
 	song.Copyright = doc.Score.Copyright
 	song.Transcriber = doc.Score.Tabber
 	song.Instructions = doc.Score.Instructions
+	if doc.Score.Notices != "" {
+		song.Notice = strings.Split(doc.Score.Notices, "\n")
+	}
 
 	gpifReadBackingTrack(doc, song)
 	gpifReadSyncPoints(doc.MasterTrack.Automations.Automations, song)
@@ -376,9 +450,11 @@ func parseGPIF(data []byte) (*Song, error) {
 
 	// Parse tracks
 	trackIDs := splitIDs(doc.MasterTrack.Tracks)
+	trackChordMaps := make([]map[string]Chord, 0, len(trackIDs))
 	for _, trackID := range trackIDs {
 		track := defaultTrack()
 		track.Number = int32(len(song.Tracks))
+		chordMap := make(map[string]Chord)
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
 				track.Name = t.Name
@@ -400,6 +476,7 @@ func parseGPIF(data []byte) (*Song, error) {
 						}
 					}
 				}
+				chordMap = gpifReadChordMap(t.Staves)
 				// Parse color
 				if t.Color != "" {
 					parts := splitIDs(t.Color)
@@ -416,20 +493,23 @@ func parseGPIF(data []byte) (*Song, error) {
 				}
 				ch.Channel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.PrimaryChannel)
 				ch.EffectChannel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.SecondaryChannel)
-				gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
+				if t.RSE != nil {
+					gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
+					gpifReadVolumeAutomations(
+						t.RSE.ChannelStrip.Automations.Automations,
+						len(song.Tracks),
+						song,
+					)
+				}
 				song.Channels = append(song.Channels, ch)
 				track.ChannelIndex = len(song.Channels) - 1
 				track.Mute = t.PlaybackState == "Mute"
 				track.Solo = t.PlaybackState == "Solo"
-				gpifReadVolumeAutomations(
-					t.RSE.ChannelStrip.Automations.Automations,
-					len(song.Tracks),
-					song,
-				)
 				break
 			}
 		}
 		song.Tracks = append(song.Tracks, track)
+		trackChordMaps = append(trackChordMaps, chordMap)
 	}
 
 	// Parse master bars → measure headers + measures
@@ -454,14 +534,21 @@ func parseGPIF(data []byte) (*Song, error) {
 		mh.KeySignature.Key = int8(mb.Key.AccidentalCount)
 		mh.KeySignature.IsMinor = mb.Key.Mode == "Minor"
 
-		// Repeat
-		mh.RepeatOpen = mb.Repeat.Start == "true"
-		if mb.Repeat.End == "true" && mb.Repeat.Count > 0 {
-			mh.RepeatClose = int8(mb.Repeat.Count - 1)
+		if mb.Repeat != nil {
+			mh.RepeatOpen = mb.Repeat.Start == "true"
+			if mb.Repeat.End == "true" && mb.Repeat.Count > 0 {
+				mh.RepeatClose = int8(mb.Repeat.Count - 1)
+			}
+		}
+		for _, ending := range splitIDs(mb.AlternateEndings) {
+			number, err := strconv.Atoi(ending)
+			if err == nil && number >= 1 && number <= 8 {
+				mh.RepeatAlternative |= 1 << (number - 1)
+			}
 		}
 
 		// Section marker
-		if mb.Section.Text != "" || mb.Section.Letter != "" {
+		if mb.Section != nil {
 			title := mb.Section.Text
 			if title == "" {
 				title = mb.Section.Letter
@@ -470,7 +557,7 @@ func parseGPIF(data []byte) (*Song, error) {
 		}
 
 		// Double bar
-		mh.DoubleBar = mb.DoubleBar != ""
+		mh.DoubleBar = mb.DoubleBar != nil
 
 		// Triplet feel
 		switch mb.TripletFeel {
@@ -484,11 +571,14 @@ func parseGPIF(data []byte) (*Song, error) {
 
 		// Parse bars for each track
 		barIDs := splitIDs(mb.Bars)
-		for trackIdx := 0; trackIdx < len(song.Tracks); trackIdx++ {
+		for trackIdx := range song.Tracks {
 			m := defaultMeasure()
 			m.Number = mbIdx + 1
 			m.TrackIndex = trackIdx
 			m.HeaderIndex = mbIdx
+			m.TimeSignature = mh.TimeSignature
+			m.KeySignature = mh.KeySignature
+			m.HasDoubleBar = mh.DoubleBar
 
 			if trackIdx < len(barIDs) {
 				barID := barIDs[trackIdx]
@@ -499,6 +589,7 @@ func parseGPIF(data []byte) (*Song, error) {
 							continue
 						}
 						voice := Voice{}
+						var pendingGrace []gpifPendingGrace
 						if v, ok := voiceMap[voiceID]; ok {
 							beatIDs := splitIDs(v.Beats)
 							for _, beatID := range beatIDs {
@@ -506,6 +597,8 @@ func parseGPIF(data []byte) (*Song, error) {
 									continue
 								}
 								beat := defaultBeat()
+								isGrace := false
+								graceOnBeat := false
 								if b, ok := beatMap[beatID]; ok {
 									// Rhythm → duration
 									if r, ok := rhythmMap[b.Rhythm.Ref]; ok {
@@ -515,14 +608,17 @@ func parseGPIF(data []byte) (*Song, error) {
 									// Beat effects
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
 									gpifApplyBeatEffects(b, &beat)
-
-									// Grace notes
-									var graceEffect *GraceEffect
+									if trackIdx < len(trackChordMaps) {
+										if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
+											beat.Effect.Chord = &chord
+										}
+									}
 									switch b.GraceNotes {
 									case "OnBeat":
-										graceEffect = &GraceEffect{IsOnBeat: true, Duration: 1, Velocity: DefaultVelocity, Transition: GraceEffectTransitionNone}
+										isGrace = true
+										graceOnBeat = true
 									case "BeforeBeat":
-										graceEffect = &GraceEffect{IsOnBeat: false, Duration: 1, Velocity: DefaultVelocity, Transition: GraceEffectTransitionNone}
+										isGrace = true
 									}
 
 									// Notes
@@ -539,17 +635,28 @@ func parseGPIF(data []byte) (*Song, error) {
 												song.Tracks[trackIdx].PercussionTrack,
 											)
 											note.Velocity = velocity
-											if graceEffect != nil {
-												ge := *graceEffect
-												ge.Fret = int8(note.Value)
-												note.Effect.Grace = &ge
-											}
 											beat.Notes = append(beat.Notes, note)
 										}
 									}
+									if len(beat.Notes) == 0 {
+										beat.Status = BeatStatusRest
+									}
 								}
+								if isGrace {
+									pendingGrace = append(pendingGrace, gpifPendingGrace{beat: beat, onBeat: graceOnBeat})
+									continue
+								}
+								voice.Beats = append(
+									voice.Beats,
+									gpifApplyPendingGrace(&beat, pendingGrace, song.Tracks[trackIdx].PercussionTrack)...,
+								)
+								pendingGrace = nil
 								voice.Beats = append(voice.Beats, beat)
 							}
+							voice.Beats = append(
+								voice.Beats,
+								gpifApplyPendingGrace(nil, pendingGrace, song.Tracks[trackIdx].PercussionTrack)...,
+							)
 						}
 						m.Voices = append(m.Voices, voice)
 					}
@@ -568,6 +675,115 @@ func parseGPIF(data []byte) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+type gpifPendingGrace struct {
+	beat   Beat
+	onBeat bool
+}
+
+func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion bool) []Beat {
+	var orphans []Beat
+	for _, pendingBeat := range pending {
+		orphan := pendingBeat.beat
+		orphan.Notes = nil
+		for noteIndex := range pendingBeat.beat.Notes {
+			graceNote := pendingBeat.beat.Notes[noteIndex]
+			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat)
+			targetIndex := gpifGraceTarget(target, &graceNote, percussion)
+			if targetIndex >= 0 {
+				target.Notes[targetIndex].Effect.Grace = &effect
+				continue
+			}
+			graceNote.Effect.Grace = &effect
+			orphan.Notes = append(orphan.Notes, graceNote)
+		}
+		if len(orphan.Notes) > 0 || len(pendingBeat.beat.Notes) == 0 {
+			orphans = append(orphans, orphan)
+		}
+	}
+	return orphans
+}
+
+func gpifGraceTarget(target *Beat, grace *Note, percussion bool) int {
+	if target == nil {
+		return -1
+	}
+	if percussion {
+		for index := range target.Notes {
+			if target.Notes[index].Effect.Grace == nil && target.Notes[index].Value == grace.Value {
+				return index
+			}
+		}
+	}
+	for index := range target.Notes {
+		if target.Notes[index].Effect.Grace == nil && target.Notes[index].String == grace.String {
+			return index
+		}
+	}
+	return -1
+}
+
+func gpifGraceEffect(note *Note, duration *Duration, onBeat bool) GraceEffect {
+	transition := GraceEffectTransitionNone
+	switch {
+	case note.Effect.Hammer:
+		transition = GraceEffectTransitionHammer
+	case len(note.Effect.Slides) > 0:
+		transition = GraceEffectTransitionSlide
+	}
+	return GraceEffect{
+		Duration:   uint8(min(uint16(math.MaxUint8), duration.Value)),
+		Fret:       int8(min(int16(math.MaxInt8), max(int16(math.MinInt8), note.Value))),
+		IsDead:     note.Kind == NoteTypeDead,
+		IsOnBeat:   onBeat,
+		Transition: transition,
+		Velocity:   note.Velocity,
+	}
+}
+
+func gpifVersion(value string) Version {
+	version := Version{Data: value}
+	parts := strings.Split(value, ".")
+	for index := 0; index < len(parts) && index < len(version.Number); index++ {
+		number, err := strconv.ParseUint(parts[index], 10, 8)
+		if err == nil {
+			version.Number[index] = byte(number)
+		}
+	}
+	return version
+}
+
+func gpifReadChordMap(staves gpifStaves) map[string]Chord {
+	chords := make(map[string]Chord)
+	for _, staff := range staves.Staff {
+		for _, property := range staff.Properties {
+			if property.Name != "DiagramCollection" || property.Items == nil {
+				continue
+			}
+			for _, item := range property.Items.Items {
+				if item.ID == "" {
+					continue
+				}
+				chord := Chord{Name: item.Name}
+				if item.Diagram != nil {
+					chord.Length = uint8(item.Diagram.StringCount)
+					chord.Strings = make([]int8, item.Diagram.StringCount)
+					for index := range chord.Strings {
+						chord.Strings[index] = -1
+					}
+					for _, fret := range item.Diagram.Frets {
+						index := item.Diagram.StringCount - fret.String - 1
+						if index >= 0 && index < len(chord.Strings) {
+							chord.Strings[index] = int8(fret.Fret)
+						}
+					}
+				}
+				chords[item.ID] = chord
+			}
+		}
+	}
+	return chords
 }
 
 func gpifMIDIChannel(port, channel int) uint8 {
@@ -946,7 +1162,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	}
 
 	// Tie
-	if n.Tie.Destination == "true" {
+	if n.Tie != nil && n.Tie.Destination == "true" {
 		note.Kind = NoteTypeTie
 	}
 

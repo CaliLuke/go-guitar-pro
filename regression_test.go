@@ -181,8 +181,8 @@ func TestGPIFPercussionSignals(t *testing.T) {
 		track gpifTrack
 		want  bool
 	}{
-		{name: "instrument set", track: gpifTrack{InstrumentSet: gpifInstrumentSet{Type: "drums"}}, want: true},
-		{name: "GP6 instrument", track: gpifTrack{Instrument: gpifInstrument{Ref: "drmkt"}}, want: true},
+		{name: "instrument set", track: gpifTrack{InstrumentSet: &gpifInstrumentSet{Type: "drums"}}, want: true},
+		{name: "GP6 instrument", track: gpifTrack{Instrument: &gpifInstrument{Ref: "drmkt"}}, want: true},
 		{name: "percussion channel", track: gpifTrack{GeneralMidi: &gpifGeneralMidi{PrimaryChannel: 9}}, want: true},
 		{name: "melodic channel", track: gpifTrack{GeneralMidi: &gpifGeneralMidi{PrimaryChannel: 8}}},
 	}

@@ -28,7 +28,9 @@ type Song struct {
 	Notice         []string
 	Channels       []MidiChannel
 	MeasureHeaders []MeasureHeader
-	Tracks         []Track
+	// Anacrusis reports whether the first measure is a pickup measure.
+	Anacrusis bool
+	Tracks    []Track
 	// BackingTrack contains the GPIF audio track and its embedded bytes when present.
 	BackingTrack *BackingTrack
 	// SyncPoints contains each score-to-backing-track anchor in a GPIF file.

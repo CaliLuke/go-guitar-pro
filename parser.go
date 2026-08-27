@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package goguitarpro parses Guitar Pro files from versions 3 through 8.
+// Package goguitarpro parses Guitar Pro 3 through 8 and exports native Guitar Pro 8 files.
 package goguitarpro
 
 import (
