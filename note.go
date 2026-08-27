@@ -10,7 +10,10 @@ type Note struct {
 	Velocity        int16
 	String          int8
 	SwapAccidentals bool
-	Kind            NoteType
+	// TieOrigin marks this note as the start of a tie in formats that model
+	// tie direction explicitly, such as GPIF.
+	TieOrigin bool
+	Kind      NoteType
 }
 
 func defaultNote() Note {

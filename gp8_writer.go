@@ -6,6 +6,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"cmp"
+	"encoding/binary"
 	"encoding/xml"
 	"fmt"
 	"os"
@@ -62,6 +63,10 @@ func Export(song *Song, target ExportFormat) ([]byte, error) {
 	}{
 		{name: "VERSION", method: zip.Store, data: []byte(gp8ContainerVersion)},
 		{name: "meta.json", method: zip.Deflate, data: []byte("{\n}\n")},
+		{name: "Content/", method: zip.Store},
+		{name: "Content/BinaryStylesheet", method: zip.Deflate, data: buildGP8BinaryStylesheet()},
+		{name: "Content/PartConfiguration", method: zip.Deflate, data: buildGP8PartConfiguration(song)},
+		{name: "Content/LayoutConfiguration", method: zip.Deflate, data: buildGP8LayoutConfiguration(song)},
 		{name: "Content/score.gpif", method: zip.Deflate, data: gpif},
 	}
 	for _, entry := range entries {
@@ -81,6 +86,72 @@ func Export(song *Song, target ExportFormat) ([]byte, error) {
 		return nil, fmt.Errorf("closing Guitar Pro archive: %w", err)
 	}
 	return output.Bytes(), nil
+}
+
+func buildGP8BinaryStylesheet() []byte {
+	// A zero-entry stylesheet is valid and lets Guitar Pro apply its defaults.
+	return make([]byte, 4)
+}
+
+func buildGP8PartConfiguration(song *Song) []byte {
+	var output bytes.Buffer
+	writeBigEndianInt32(&output, len(song.Tracks)+1)
+
+	// The first view contains every track. Each following view contains one track.
+	output.WriteByte(0)
+	writeBigEndianInt32(&output, len(song.Tracks))
+	for index := range song.Tracks {
+		output.WriteByte(gp8TrackViewFlags(&song.Tracks[index]))
+	}
+	for index := range song.Tracks {
+		output.WriteByte(0)
+		writeBigEndianInt32(&output, 1)
+		output.WriteByte(gp8TrackViewFlags(&song.Tracks[index]))
+	}
+
+	writeBigEndianInt32(&output, 1)
+	return output.Bytes()
+}
+
+func gp8TrackViewFlags(track *Track) byte {
+	if track.PercussionTrack {
+		return 0x01
+	}
+	var flags byte
+	if track.Settings.Notation {
+		flags |= 0x01
+	}
+	if track.Settings.Tablature {
+		flags |= 0x02
+	}
+	if flags == 0 {
+		flags = 0x01
+	}
+	return flags
+}
+
+func buildGP8LayoutConfiguration(song *Song) []byte {
+	var output bytes.Buffer
+	writeBigEndianInt32(&output, 4)
+	output.WriteByte(0x00)
+	output.WriteByte(0x00)
+	for index := range song.Tracks {
+		if song.Tracks[index].Visible {
+			output.WriteByte(0xff)
+		} else {
+			output.WriteByte(0x00)
+		}
+	}
+	for range song.Tracks {
+		output.WriteByte(0xff)
+	}
+	return output.Bytes()
+}
+
+func writeBigEndianInt32(output *bytes.Buffer, value int) {
+	var encoded [4]byte
+	binary.BigEndian.PutUint32(encoded[:], uint32(value))
+	output.Write(encoded[:])
 }
 
 // ExportFile serializes song in target format and writes it to path.
@@ -116,12 +187,28 @@ func validateGP8Song(song *Song) error {
 	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
+		if track.ChannelIndex >= 0 && track.ChannelIndex < len(song.Channels) {
+			program := song.Channels[track.ChannelIndex].Instrument
+			if program < 0 || program > 127 {
+				return fmt.Errorf("track %d has MIDI program %d outside 0..127", trackIndex, program)
+			}
+		}
 		if len(track.Measures) != len(song.MeasureHeaders) {
 			return fmt.Errorf("track %d has %d measures, want %d", trackIndex, len(track.Measures), len(song.MeasureHeaders))
 		}
 		for measureIndex := range track.Measures {
 			if len(track.Measures[measureIndex].Voices) > 4 {
 				return fmt.Errorf("track %d measure %d has %d voices, Guitar Pro 8 supports at most 4", trackIndex, measureIndex, len(track.Measures[measureIndex].Voices))
+			}
+			for voiceIndex := range track.Measures[measureIndex].Voices {
+				for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
+					for noteIndex, note := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
+						midi := gp8NoteMIDI(track, &note)
+						if midi < 0 || midi > 127 {
+							return fmt.Errorf("track %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
+						}
+					}
+				}
 			}
 		}
 	}
@@ -292,7 +379,8 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			PrimaryChannel:   int(channel.Channel) % 16,
 			SecondaryChannel: int(channel.EffectChannel) % 16,
 		},
-		PlaybackState: "Default",
+		PlaybackState:    "Default",
+		AudioEngineState: "MIDI",
 	}
 	switch {
 	case track.Mute:
@@ -320,8 +408,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	result.Staves = gpifStaves{Staff: []gpifStaff{{Properties: properties}}}
 
 	if track.PercussionTrack {
-		result.Instrument = &gpifInstrument{Ref: "drmkt"}
-		result.InstrumentSet = &gpifInstrumentSet{Name: "Drums", Type: "drums", LineCount: 5}
+		result.InstrumentSet = &gpifInstrumentSet{Name: "Drums", Type: "drumKit", LineCount: 5}
 		values := make([]int16, 0, len(builder.articulationIDs[trackIndex]))
 		for value := range builder.articulationIDs[trackIndex] {
 			values = append(values, value)
@@ -341,8 +428,103 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 				}}},
 			})
 		}
+	} else {
+		name, instrumentType := gp8PitchedInstrumentSet(channel.Instrument)
+		result.InstrumentSet = &gpifInstrumentSet{
+			Name:      name,
+			Type:      instrumentType,
+			LineCount: 5,
+			Elements: gpifElements{Elements: []gpifElement{{
+				Name: "Pitched",
+				Type: "pitched",
+				Articulations: gpifArticulations{Articulations: []gpifArticulation{{
+					StaffLine:          0,
+					Noteheads:          "noteheadBlack noteheadHalf noteheadWhole",
+					TechniquePlacement: "outside",
+				}}},
+			}}},
+		}
 	}
 	return result
+}
+
+func gp8PitchedInstrumentSet(program int32) (string, string) {
+	name := "Acoustic Piano"
+	switch program {
+	case 2, 4, 5:
+		name = "Electric Piano"
+	case 6, 7:
+		name = "Harpsichord"
+	case 8, 113, 119:
+		name = "Celesta"
+	case 9, 10, 11, 14, 114:
+		name = "Vibraphone"
+	case 12, 13, 108, 112, 115, 116, 117, 118:
+		name = "Xylophone"
+	case 15, 104, 105, 107:
+		name = "Banjo"
+	case 16, 17, 18, 19, 20, 21, 23:
+		name = "Electric Organ"
+	case 22, 74, 76, 78, 121, 122, 123, 124, 125, 126:
+		name = "Recorder"
+	case 24:
+		name = "Nylon Guitar"
+	case 25, 120:
+		name = "Steel Guitar"
+	case 26, 27, 28, 29, 30, 31:
+		name = "Electric Guitar"
+	case 32, 35:
+		name = "Acoustic Bass"
+	case 33, 34, 36, 37:
+		name = "Electric Bass"
+	case 38, 39:
+		name = "Synth Bass"
+	case 40, 44, 45, 48, 49, 50, 51, 110:
+		name = "Violin"
+	case 41:
+		name = "Viola"
+	case 42:
+		name = "Cello"
+	case 43:
+		name = "Contrabass"
+	case 46:
+		name = "Harp"
+	case 47, 127:
+		name = "Timpani"
+	case 52, 53, 54:
+		name = "Voice"
+	case 55, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99:
+		name = "Pad Synthesizer"
+	case 56, 59, 61, 62, 63, 103:
+		name = "Trumpet"
+	case 57:
+		name = "Trombone"
+	case 58:
+		name = "Tuba"
+	case 60:
+		name = "French Horn"
+	case 64, 65, 66, 67:
+		name = "Saxophone"
+	case 68:
+		name = "Oboe"
+	case 69:
+		name = "English Horn"
+	case 70, 109:
+		name = "Bassoon"
+	case 71:
+		name = "Clarinet"
+	case 72:
+		name = "Piccolo"
+	case 73, 75, 77, 79, 111:
+		name = "Flute"
+	case 80, 81, 82, 83, 84, 85, 86, 87, 100, 101, 102:
+		name = "Lead Synthesizer"
+	case 106:
+		name = "Ukulele"
+	}
+	parts := strings.Fields(name)
+	parts[0] = strings.ToLower(parts[0][:1]) + parts[0][1:]
+	return name, strings.Join(parts, "")
 }
 
 func gp8ChannelStripParameters(channel MidiChannel) string {
@@ -605,7 +787,7 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 	track := &builder.song.Tracks[trackIndex]
 	noteID := strconv.Itoa(len(builder.doc.Notes.Notes))
 	fret := int(note.Value)
-	midi := int(note.Value)
+	midi := gp8NoteMIDI(track, note)
 	properties := []gpifProperty{
 		{Name: "Fret", Fret: &fret},
 		{Name: "Midi", Number: &midi},
@@ -614,17 +796,24 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 		stringValue := float64(int(note.String) - 1)
 		if !track.PercussionTrack && int(note.String) <= len(track.Strings) {
 			stringValue = float64(len(track.Strings) - int(note.String))
-			midi += int(track.Strings[int(note.String)-1].Value)
 		}
 		properties = append(properties, gpifProperty{Name: "String", String: &stringValue})
 	}
-	result := gpifNote{ID: noteID, Properties: gpifProperties{Properties: properties}}
+	if !track.PercussionTrack {
+		pitch := gp8Pitch(midi)
+		properties = append([]gpifProperty{{Name: "ConcertPitch", Pitch: &pitch}, {Name: "TransposedPitch", Pitch: &pitch}}, properties...)
+	}
+	articulation := 0
+	result := gpifNote{ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
 	if track.PercussionTrack {
-		articulation := builder.articulationIDs[trackIndex][note.Value]
+		articulation = builder.articulationIDs[trackIndex][note.Value]
 		result.InstrumentArticulation = &articulation
 	}
-	if note.Kind == NoteTypeTie {
-		result.Tie = &gpifTie{Destination: "true"}
+	if note.TieOrigin || note.Kind == NoteTypeTie {
+		result.Tie = &gpifTie{
+			Origin:      strconv.FormatBool(note.TieOrigin),
+			Destination: strconv.FormatBool(note.Kind == NoteTypeTie),
+		}
 	}
 	if note.Kind == NoteTypeDead || note.Effect.GhostNote {
 		if note.Kind == NoteTypeDead {
@@ -683,6 +872,24 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 	}
 	builder.doc.Notes.Notes = append(builder.doc.Notes.Notes, result)
 	return noteID
+}
+
+func gp8NoteMIDI(track *Track, note *Note) int {
+	midi := int(note.Value)
+	if !track.PercussionTrack && note.String > 0 && int(note.String) <= len(track.Strings) {
+		midi += int(track.Strings[int(note.String)-1].Value)
+	}
+	return midi
+}
+
+func gp8Pitch(midi int) gpifPitch {
+	steps := [...]string{"C", "C", "D", "D", "E", "F", "F", "G", "G", "A", "A", "B"}
+	accidental := ""
+	switch midi % 12 {
+	case 1, 3, 6, 8, 10:
+		accidental = "#"
+	}
+	return gpifPitch{Step: steps[midi%12], Accidental: accidental, Octave: midi/12 - 1}
 }
 
 func gp8NoteValue(value uint16) (string, bool) {

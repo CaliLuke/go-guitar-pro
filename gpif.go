@@ -106,18 +106,19 @@ type gpifTracks struct {
 }
 
 type gpifTrack struct {
-	ID             string             `xml:"id,attr"`
-	Name           string             `xml:"Name"`
-	Color          string             `xml:"Color,omitempty"`
-	Instrument     *gpifInstrument    `xml:"Instrument,omitempty"`
-	InstrumentSet  *gpifInstrumentSet `xml:"InstrumentSet,omitempty"`
-	GeneralMidi    *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
-	Staves         gpifStaves         `xml:"Staves"`
-	Sounds         gpifSounds         `xml:"Sounds"`
-	Transpose      *gpifTranspose     `xml:"Transpose,omitempty"`
-	RSE            *gpifTrackRSE      `xml:"RSE,omitempty"`
-	MidiConnection gpifMidiConnection `xml:"MidiConnection"`
-	PlaybackState  string             `xml:"PlaybackState,omitempty"`
+	ID               string             `xml:"id,attr"`
+	Name             string             `xml:"Name"`
+	Color            string             `xml:"Color,omitempty"`
+	Instrument       *gpifInstrument    `xml:"Instrument,omitempty"`
+	InstrumentSet    *gpifInstrumentSet `xml:"InstrumentSet,omitempty"`
+	GeneralMidi      *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
+	Staves           gpifStaves         `xml:"Staves"`
+	Sounds           gpifSounds         `xml:"Sounds"`
+	Transpose        *gpifTranspose     `xml:"Transpose,omitempty"`
+	RSE              *gpifTrackRSE      `xml:"RSE,omitempty"`
+	MidiConnection   gpifMidiConnection `xml:"MidiConnection"`
+	PlaybackState    string             `xml:"PlaybackState,omitempty"`
+	AudioEngineState string             `xml:"AudioEngineState,omitempty"`
 }
 
 type gpifTrackRSE struct {
@@ -194,6 +195,7 @@ type gpifElements struct {
 type gpifElement struct {
 	Name          string            `xml:"Name,omitempty"`
 	Type          string            `xml:"Type,omitempty"`
+	SoundbankName string            `xml:"SoundbankName"`
 	Articulations gpifArticulations `xml:"Articulations"`
 }
 
@@ -206,7 +208,9 @@ type gpifArticulation struct {
 	StaffLine          int    `xml:"StaffLine"`
 	Noteheads          string `xml:"Noteheads,omitempty"`
 	TechniquePlacement string `xml:"TechniquePlacement,omitempty"`
-	InputMIDINumbers   string `xml:"InputMidiNumbers,omitempty"`
+	TechniqueSymbol    string `xml:"TechniqueSymbol"`
+	InputMIDINumbers   string `xml:"InputMidiNumbers"`
+	OutputRSESound     string `xml:"OutputRSESound"`
 	OutputMIDINumber   int    `xml:"OutputMidiNumber"`
 }
 
@@ -324,16 +328,23 @@ type gpifProperties struct {
 }
 
 type gpifProperty struct {
-	Fret      *int     `xml:"Fret"`
-	String    *float64 `xml:"String"`
-	Float     *string  `xml:"Float"`
-	Enable    *string  `xml:"Enable"`
-	Number    *int     `xml:"Number"`
-	HType     *string  `xml:"HType"`
-	Flags     *string  `xml:"Flags"`
-	Direction *string  `xml:"Direction"`
-	Strength  *string  `xml:"Strength"`
-	Name      string   `xml:"name,attr"`
+	Fret      *int       `xml:"Fret"`
+	String    *float64   `xml:"String"`
+	Pitch     *gpifPitch `xml:"Pitch"`
+	Float     *string    `xml:"Float"`
+	Enable    *string    `xml:"Enable"`
+	Number    *int       `xml:"Number"`
+	HType     *string    `xml:"HType"`
+	Flags     *string    `xml:"Flags"`
+	Direction *string    `xml:"Direction"`
+	Strength  *string    `xml:"Strength"`
+	Name      string     `xml:"name,attr"`
+}
+
+type gpifPitch struct {
+	Step       string `xml:"Step"`
+	Accidental string `xml:"Accidental"`
+	Octave     int    `xml:"Octave"`
 }
 
 type gpifNotes struct {
@@ -1162,8 +1173,11 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	}
 
 	// Tie
-	if n.Tie != nil && n.Tie.Destination == "true" {
-		note.Kind = NoteTypeTie
+	if n.Tie != nil {
+		note.TieOrigin = n.Tie.Origin == "true"
+		if n.Tie.Destination == "true" {
+			note.Kind = NoteTypeTie
+		}
 	}
 
 	// Let ring

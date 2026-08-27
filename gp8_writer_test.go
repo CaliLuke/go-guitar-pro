@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"path/filepath"
 	"testing"
@@ -53,6 +54,14 @@ func TestExportGP8RoundTrip(t *testing.T) {
 	if document.GPRevision.Required != gp8RevisionRequired || document.GPRevision.Value != gp8Revision {
 		t.Errorf("GPRevision = %#v, want required %q revision %q", document.GPRevision, gp8RevisionRequired, gp8Revision)
 	}
+	for _, name := range []string{
+		"Content/",
+		"Content/BinaryStylesheet",
+		"Content/PartConfiguration",
+		"Content/LayoutConfiguration",
+	} {
+		readZipMember(t, archive, name)
+	}
 
 	roundTrip, err := Parse(data)
 	if err != nil {
@@ -83,6 +92,24 @@ func TestExportGP8RoundTrip(t *testing.T) {
 	}
 	if roundTrip.Channels[track.ChannelIndex].Channel != DefaultPercussionChannel {
 		t.Errorf("percussion channel = %d, want %d", roundTrip.Channels[track.ChannelIndex].Channel, DefaultPercussionChannel)
+	}
+	if document.Tracks.Tracks[0].Instrument != nil {
+		t.Errorf("percussion track has deprecated instrument reference: %#v", document.Tracks.Tracks[0].Instrument)
+	}
+	if got := document.Tracks.Tracks[0].InstrumentSet.Type; got != "drumKit" {
+		t.Errorf("percussion instrument set type = %q, want drumKit", got)
+	}
+	if got := document.Tracks.Tracks[0].AudioEngineState; got != "MIDI" {
+		t.Errorf("audio engine state = %q, want MIDI", got)
+	}
+	var articulationMIDI []int
+	for _, element := range document.Tracks.Tracks[0].InstrumentSet.Elements.Elements {
+		for _, articulation := range element.Articulations.Articulations {
+			articulationMIDI = append(articulationMIDI, articulation.OutputMIDINumber)
+		}
+	}
+	if got, want := fmt.Sprint(articulationMIDI), "[36 38 42]"; got != want {
+		t.Errorf("percussion articulation MIDI values = %s, want %s", got, want)
 	}
 
 	firstHeader := roundTrip.MeasureHeaders[0]
@@ -139,6 +166,28 @@ func TestExportGP8RealPercussionFixture(t *testing.T) {
 	if len(roundTrip.Tracks) != len(song.Tracks) || len(roundTrip.MeasureHeaders) != len(song.MeasureHeaders) {
 		t.Fatalf("round trip has %d tracks/%d measures, want %d/%d", len(roundTrip.Tracks), len(roundTrip.MeasureHeaders), len(song.Tracks), len(song.MeasureHeaders))
 	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	for index, sourceTrack := range song.Tracks {
+		instrumentSet := document.Tracks.Tracks[index].InstrumentSet
+		if instrumentSet == nil {
+			t.Errorf("track %d (%q) has no instrument set", index+1, sourceTrack.Name)
+			continue
+		}
+		if sourceTrack.PercussionTrack {
+			if instrumentSet.Type != "drumKit" {
+				t.Errorf("percussion track %d instrument type = %q", index+1, instrumentSet.Type)
+			}
+		} else if instrumentSet.Type == "drumKit" || len(instrumentSet.Elements.Elements) != 1 || instrumentSet.Elements.Elements[0].Type != "pitched" {
+			t.Errorf("pitched track %d instrument set = %#v", index+1, instrumentSet)
+		}
+	}
 
 	var percussion *Track
 	for index := range roundTrip.Tracks {
@@ -170,6 +219,135 @@ func TestExportGP8RealPercussionFixture(t *testing.T) {
 	}
 }
 
+func TestGP8PitchedInstrumentSet(t *testing.T) {
+	for _, test := range []struct {
+		program        int32
+		name           string
+		instrumentType string
+	}{
+		{program: 30, name: "Electric Guitar", instrumentType: "electricGuitar"},
+		{program: 33, name: "Electric Bass", instrumentType: "electricBass"},
+		{program: 56, name: "Trumpet", instrumentType: "trumpet"},
+		{program: 68, name: "Oboe", instrumentType: "oboe"},
+		{program: 127, name: "Timpani", instrumentType: "timpani"},
+	} {
+		name, instrumentType := gp8PitchedInstrumentSet(test.program)
+		if name != test.name || instrumentType != test.instrumentType {
+			t.Errorf("program %d = %q/%q, want %q/%q", test.program, name, instrumentType, test.name, test.instrumentType)
+		}
+	}
+}
+
+func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.Name = "Guitar"
+	track.PercussionTrack = false
+	track.Strings = []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
+	song.Channels[0] = MidiChannel{Channel: 0, EffectChannel: 1, Instrument: 30, Volume: 100, Balance: 64}
+	for measureIndex := range track.Measures {
+		for voiceIndex := range track.Measures[measureIndex].Voices {
+			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
+				for noteIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
+					note := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
+					note.String = 1
+					note.Value = 5
+					if note.Effect.Grace != nil {
+						note.Effect.Grace.Fret = 3
+					}
+				}
+			}
+		}
+	}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	note := document.Notes.Notes[0]
+	if note.InstrumentArticulation == nil || *note.InstrumentArticulation != 0 {
+		t.Errorf("pitched note articulation = %v, want 0", note.InstrumentArticulation)
+	}
+	properties := make(map[string]gpifProperty)
+	for _, property := range note.Properties.Properties {
+		properties[property.Name] = property
+	}
+	for _, name := range []string{"ConcertPitch", "TransposedPitch"} {
+		pitch := properties[name].Pitch
+		if pitch == nil || *pitch != (gpifPitch{Step: "G", Octave: 4}) {
+			t.Errorf("%s = %#v, want G4", name, pitch)
+		}
+	}
+	if number := properties["Midi"].Number; number == nil || *number != 67 {
+		t.Errorf("MIDI property = %v, want 67", number)
+	}
+}
+
+func TestExportGP8WritesCompleteTieChain(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.PercussionTrack = false
+	track.Strings = []GuitarString{{Number: 1, Value: 64}}
+	song.Channels[0] = MidiChannel{Channel: 0, EffectChannel: 1, Instrument: 30, Volume: 100, Balance: 64}
+	quarter := defaultDuration()
+	track.Measures[0].Voices = []Voice{{Beats: []Beat{
+		{Duration: quarter, Status: BeatStatusNormal, Notes: []Note{{Value: 3, String: 1, Velocity: Forte, Kind: NoteTypeNormal, TieOrigin: true}}},
+		{Duration: quarter, Status: BeatStatusNormal, Notes: []Note{{Value: 3, String: 1, Velocity: Forte, Kind: NoteTypeTie, TieOrigin: true}}},
+		{Duration: quarter, Status: BeatStatusNormal, Notes: []Note{{Value: 3, String: 1, Velocity: Forte, Kind: NoteTypeTie}}},
+	}}}
+	for measureIndex := 1; measureIndex < len(track.Measures); measureIndex++ {
+		track.Measures[measureIndex].Voices = []Voice{{Beats: []Beat{{Duration: quarter, Status: BeatStatusRest}}}}
+	}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	if len(document.Notes.Notes) != 3 {
+		t.Fatalf("notes = %d, want 3", len(document.Notes.Notes))
+	}
+	want := []gpifTie{
+		{Origin: "true", Destination: "false"},
+		{Origin: "true", Destination: "true"},
+		{Origin: "false", Destination: "true"},
+	}
+	for index, expected := range want {
+		if tie := document.Notes.Notes[index].Tie; tie == nil || *tie != expected {
+			t.Errorf("note %d tie = %#v, want %#v", index, tie, expected)
+		}
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	parsedNotes := roundTrip.Tracks[0].Measures[0].Voices[0].Beats
+	if !parsedNotes[0].Notes[0].TieOrigin || parsedNotes[0].Notes[0].Kind != NoteTypeNormal {
+		t.Errorf("first parsed tie note = %#v", parsedNotes[0].Notes[0])
+	}
+	if !parsedNotes[1].Notes[0].TieOrigin || parsedNotes[1].Notes[0].Kind != NoteTypeTie {
+		t.Errorf("middle parsed tie note = %#v", parsedNotes[1].Notes[0])
+	}
+	if parsedNotes[2].Notes[0].TieOrigin || parsedNotes[2].Notes[0].Kind != NoteTypeTie {
+		t.Errorf("last parsed tie note = %#v", parsedNotes[2].Notes[0])
+	}
+}
+
 func TestExportFileGP8(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "score.gp")
 	if err := ExportFile(path, syntheticGP8Song(), ExportFormatGP8); err != nil {
@@ -186,6 +364,17 @@ func TestExportRejectsUnsupportedInput(t *testing.T) {
 	}
 	if _, err := Export(syntheticGP8Song(), ExportFormat(7)); err == nil {
 		t.Fatal("Export accepted an unsupported target")
+	}
+	song := syntheticGP8Song()
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 128
+	if _, err := Export(song, ExportFormatGP8); err == nil {
+		t.Fatal("Export accepted an out-of-range percussion MIDI value")
+	}
+	song = syntheticGP8Song()
+	song.Tracks[0].PercussionTrack = false
+	song.Channels[0].Instrument = 128
+	if _, err := Export(song, ExportFormatGP8); err == nil {
+		t.Fatal("Export accepted an out-of-range MIDI program")
 	}
 }
 
