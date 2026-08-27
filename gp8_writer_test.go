@@ -248,9 +248,9 @@ func TestGP8HiHatArticulationMetadata(t *testing.T) {
 	}{
 		{midi: 42, name: "Hi-Hat (closed)", staffLine: -1, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.closed"},
 		{midi: 44, name: "Pedal Hi-Hat (hit)", staffLine: 9, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "pedal.hit.pedal"},
-		{midi: 46, name: "Hi-Hat (open)", staffLine: -1, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.open"},
+		{midi: 46, name: "Hi-Hat (open)", staffLine: -1, noteheads: "noteheadCircleX noteheadCircleX noteheadCircleX", rseSound: "stick.hit.open"},
 	} {
-		element := gp8DrumElement(test.midi)
+		element := gp8DrumElement(test.midi, GP8ExportOptions{})
 		if element.Name != "Charley" || element.Type != "hiHat" || element.SoundbankName != "Master-Hihat" {
 			t.Errorf("MIDI %d element = %#v", test.midi, element)
 		}
@@ -265,7 +265,7 @@ func TestGP8HiHatArticulationMetadata(t *testing.T) {
 			t.Errorf("MIDI %d routing = %#v", test.midi, articulation)
 		}
 	}
-	elements := gp8DrumElements([]int16{36, 38, 42, 44, 46, 48, 49})
+	elements := gp8DrumElements([]int16{36, 38, 42, 44, 46, 48, 49}, GP8ExportOptions{})
 	if len(elements) != 5 {
 		t.Fatalf("grouped drum elements = %#v", elements)
 	}
@@ -279,7 +279,7 @@ func TestGP8HiHatArticulationMetadata(t *testing.T) {
 		}
 	}
 
-	interleaved := gp8DrumElements([]int16{42, 43, 44, 45, 46})
+	interleaved := gp8DrumElements([]int16{42, 43, 44, 45, 46}, GP8ExportOptions{})
 	if len(interleaved) != 3 || len(interleaved[0].Articulations.Articulations) != 3 {
 		t.Fatalf("interleaved hi-hat elements = %#v", interleaved)
 	}
@@ -289,6 +289,41 @@ func TestGP8HiHatArticulationMetadata(t *testing.T) {
 			t.Errorf("MIDI %d articulation ID = %d, want %d", midi, ids[midi], id)
 		}
 	}
+}
+
+func TestExportGP8PercussionNoteheadOverrides(t *testing.T) {
+	song := syntheticGP8Song()
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[1].Value = 46
+	options := ExportOptions{GP8: GP8ExportOptions{PercussionNoteheads: map[int16]GP8PercussionNotehead{
+		46: GP8PercussionNoteheadFilled,
+	}}}
+	data, err := ExportWithOptions(song, ExportFormatGP8, options)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	for _, element := range document.Tracks.Tracks[0].InstrumentSet.Elements.Elements {
+		for _, articulation := range element.Articulations.Articulations {
+			if articulation.OutputMIDINumber != 46 {
+				continue
+			}
+			if articulation.Noteheads != "noteheadBlack noteheadHalf noteheadWhole" {
+				t.Errorf("open hi-hat noteheads = %q", articulation.Noteheads)
+			}
+			if articulation.OutputRSESound != "stick.hit.open" || element.SoundbankName != "Master-Hihat" {
+				t.Errorf("open hi-hat playback metadata = %#v/%#v", element, articulation)
+			}
+			return
+		}
+	}
+	t.Fatal("exported GP8 has no open hi-hat articulation")
 }
 
 func TestGP8StandardDrumRSEMetadata(t *testing.T) {
@@ -303,7 +338,7 @@ func TestGP8StandardDrumRSEMetadata(t *testing.T) {
 		{midi: 38, name: "Snare", kind: "snare", soundbank: "Master-Snare", rseSound: "stick.hit.hit"},
 		{midi: 48, name: "Tom High", kind: "tom", soundbank: "Master-Tom04", rseSound: "stick.hit.hit"},
 	} {
-		element := gp8DrumElement(test.midi)
+		element := gp8DrumElement(test.midi, GP8ExportOptions{})
 		if element.Name != test.name || element.Type != test.kind || element.SoundbankName != test.soundbank || element.Articulations.Articulations[0].OutputRSESound != test.rseSound {
 			t.Errorf("MIDI %d element = %#v", test.midi, element)
 		}
@@ -311,7 +346,7 @@ func TestGP8StandardDrumRSEMetadata(t *testing.T) {
 }
 
 func TestGP8CrashArticulationMetadata(t *testing.T) {
-	element := gp8DrumElement(49)
+	element := gp8DrumElement(49, GP8ExportOptions{})
 	if element.Name != "Crash High" || element.Type != "crash" || element.SoundbankName != "Master-Crash02" {
 		t.Errorf("crash element = %#v", element)
 	}
@@ -458,6 +493,9 @@ func TestExportRejectsUnsupportedInput(t *testing.T) {
 	song.Channels[0].Instrument = 128
 	if _, err := Export(song, ExportFormatGP8); err == nil {
 		t.Fatal("Export accepted an out-of-range MIDI program")
+	}
+	if _, err := ExportWithOptions(syntheticGP8Song(), ExportFormatGP8, ExportOptions{GP8: GP8ExportOptions{PercussionNoteheads: map[int16]GP8PercussionNotehead{46: 99}}}); err == nil {
+		t.Fatal("Export accepted an unsupported percussion notehead")
 	}
 }
 

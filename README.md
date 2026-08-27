@@ -62,6 +62,23 @@ if err := os.WriteFile("song.gp", data, 0o644); err != nil {
 Use `guitarpro.ExportFile(path, song, guitarpro.ExportFormatGP8)` when the
 library should write the file. Export does not mutate the source `Song`.
 
+Guitar Pro's native percussion notation is the default. Override noteheads by
+MIDI value without changing playback routing:
+
+```go
+data, err := guitarpro.ExportWithOptions(song, guitarpro.ExportFormatGP8, guitarpro.ExportOptions{
+	GP8: guitarpro.GP8ExportOptions{
+		PercussionNoteheads: map[int16]guitarpro.GP8PercussionNotehead{
+			46: guitarpro.GP8PercussionNoteheadFilled,
+		},
+	},
+})
+```
+
+`ExportFileWithOptions` provides the corresponding file-based API. Supported
+families are filled, X, circle-X, and heavy-X. Playback soundbanks, RSE
+selectors, and MIDI values remain canonical regardless of the visual override.
+
 GP8 export preserves score metadata, tempo changes, track metadata and MIDI
 channels, measure structure, time and key signatures, sections, repeats,
 alternate endings, double bars, pickup status, voices, rests, chord diagrams,

@@ -31,9 +31,43 @@ const (
 	ExportFormatGP8 ExportFormat = 8
 )
 
+// ExportOptions configures format-specific serialization behavior.
+type ExportOptions struct {
+	GP8 GP8ExportOptions
+}
+
+// GP8ExportOptions configures native Guitar Pro 8 serialization.
+type GP8ExportOptions struct {
+	// PercussionNoteheads overrides the rendered notehead for a MIDI percussion
+	// value without changing its MIDI or RSE playback articulation.
+	PercussionNoteheads map[int16]GP8PercussionNotehead
+}
+
+// GP8PercussionNotehead identifies a rendered percussion notehead family.
+type GP8PercussionNotehead uint8
+
+const (
+	// GP8PercussionNoteheadDefault uses Guitar Pro's native kit notation.
+	GP8PercussionNoteheadDefault GP8PercussionNotehead = iota
+	// GP8PercussionNoteheadFilled uses duration-sensitive filled, half, and whole heads.
+	GP8PercussionNoteheadFilled
+	// GP8PercussionNoteheadX uses an X head for every duration.
+	GP8PercussionNoteheadX
+	// GP8PercussionNoteheadCircleX uses a circled X head for every duration.
+	GP8PercussionNoteheadCircleX
+	// GP8PercussionNoteheadHeavyX uses a heavy X head for every duration.
+	GP8PercussionNoteheadHeavyX
+)
+
 // Export serializes song in target format and returns the complete file bytes.
 // Export currently supports [ExportFormatGP8]. It does not mutate song.
 func Export(song *Song, target ExportFormat) ([]byte, error) {
+	return ExportWithOptions(song, target, ExportOptions{})
+}
+
+// ExportWithOptions serializes song in target format using options and returns
+// the complete file bytes. It does not mutate song or options.
+func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) ([]byte, error) {
 	if song == nil {
 		return nil, fmt.Errorf("exporting Guitar Pro file: song is nil")
 	}
@@ -43,8 +77,11 @@ func Export(song *Song, target ExportFormat) ([]byte, error) {
 	if err := validateGP8Song(song); err != nil {
 		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
 	}
+	if err := validateGP8ExportOptions(options.GP8); err != nil {
+		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
+	}
 
-	doc, err := buildGP8Document(song)
+	doc, err := buildGP8Document(song, options.GP8)
 	if err != nil {
 		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
 	}
@@ -156,7 +193,13 @@ func writeBigEndianInt32(output *bytes.Buffer, value int) {
 
 // ExportFile serializes song in target format and writes it to path.
 func ExportFile(path string, song *Song, target ExportFormat) error {
-	data, err := Export(song, target)
+	return ExportFileWithOptions(path, song, target, ExportOptions{})
+}
+
+// ExportFileWithOptions serializes song in target format using options and
+// writes it to path.
+func ExportFileWithOptions(path string, song *Song, target ExportFormat, options ExportOptions) error {
+	data, err := ExportWithOptions(song, target, options)
 	if err != nil {
 		return err
 	}
@@ -215,17 +258,31 @@ func validateGP8Song(song *Song) error {
 	return nil
 }
 
+func validateGP8ExportOptions(options GP8ExportOptions) error {
+	for midi, notehead := range options.PercussionNoteheads {
+		if midi < 0 || midi > 127 {
+			return fmt.Errorf("percussion notehead MIDI value %d is outside 0..127", midi)
+		}
+		if notehead > GP8PercussionNoteheadHeavyX {
+			return fmt.Errorf("percussion notehead for MIDI %d has unsupported value %d", midi, notehead)
+		}
+	}
+	return nil
+}
+
 type gp8Builder struct {
 	song            *Song
+	options         GP8ExportOptions
 	doc             gpifDocument
 	rhythmIDs       map[Duration]string
 	chordIDs        []map[*Chord]string
 	articulationIDs []map[int16]int
 }
 
-func buildGP8Document(song *Song) (gpifDocument, error) {
+func buildGP8Document(song *Song, options GP8ExportOptions) (gpifDocument, error) {
 	builder := gp8Builder{
 		song:            song,
+		options:         options,
 		rhythmIDs:       make(map[Duration]string),
 		chordIDs:        make([]map[*Chord]string, len(song.Tracks)),
 		articulationIDs: make([]map[int16]int, len(song.Tracks)),
@@ -342,7 +399,7 @@ func (builder *gp8Builder) prepareTrack(trackIndex int) {
 			}
 		}
 		slices.Sort(values)
-		articulationIDs = gp8DrumArticulationIDs(gp8DrumElements(values))
+		articulationIDs = gp8DrumArticulationIDs(gp8DrumElements(values, builder.options))
 	}
 	builder.articulationIDs[trackIndex] = articulationIDs
 }
@@ -412,7 +469,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			values = append(values, value)
 		}
 		slices.Sort(values)
-		result.InstrumentSet.Elements.Elements = gp8DrumElements(values)
+		result.InstrumentSet.Elements.Elements = gp8DrumElements(values, builder.options)
 	} else {
 		name, instrumentType := gp8PitchedInstrumentSet(channel.Instrument)
 		result.InstrumentSet = &gpifInstrumentSet{
@@ -947,11 +1004,11 @@ func gp8DrumStaffLine(value int16) int {
 	}
 }
 
-func gp8DrumElements(values []int16) []gpifElement {
+func gp8DrumElements(values []int16, options GP8ExportOptions) []gpifElement {
 	elements := make([]gpifElement, 0, len(values))
 	hiHatIndex := -1
 	for _, value := range values {
-		element := gp8DrumElement(value)
+		element := gp8DrumElement(value, options)
 		if element.Type == "hiHat" && hiHatIndex >= 0 {
 			hiHat := &elements[hiHatIndex]
 			hiHat.Articulations.Articulations = append(hiHat.Articulations.Articulations, element.Articulations.Articulations...)
@@ -977,7 +1034,7 @@ func gp8DrumArticulationIDs(elements []gpifElement) map[int16]int {
 	return ids
 }
 
-func gp8DrumElement(value int16) gpifElement {
+func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 	midi := strconv.Itoa(int(value))
 	element := gpifElement{
 		Name: "MIDI " + midi,
@@ -1024,7 +1081,7 @@ func gp8DrumElement(value int16) gpifElement {
 		element.Type = "hiHat"
 		element.SoundbankName = "Master-Hihat"
 		articulation.Name = "Hi-Hat (open)"
-		articulation.Noteheads = "noteheadBlack noteheadHalf noteheadWhole"
+		articulation.Noteheads = "noteheadCircleX noteheadCircleX noteheadCircleX"
 		articulation.OutputRSESound = "stick.hit.open"
 	case 48:
 		element.Name = "Tom High"
@@ -1041,8 +1098,26 @@ func gp8DrumElement(value int16) gpifElement {
 		articulation.Noteheads = "noteheadHeavyX noteheadHeavyX noteheadHeavyX"
 		articulation.OutputRSESound = "stick.hit.hit"
 	}
+	if notehead := options.PercussionNoteheads[value]; notehead != GP8PercussionNoteheadDefault {
+		articulation.Noteheads = gp8PercussionNoteheads(notehead)
+	}
 	element.Articulations.Articulations = []gpifArticulation{articulation}
 	return element
+}
+
+func gp8PercussionNoteheads(notehead GP8PercussionNotehead) string {
+	switch notehead {
+	case GP8PercussionNoteheadFilled:
+		return "noteheadBlack noteheadHalf noteheadWhole"
+	case GP8PercussionNoteheadX:
+		return "noteheadXBlack noteheadXBlack noteheadXBlack"
+	case GP8PercussionNoteheadCircleX:
+		return "noteheadCircleX noteheadCircleX noteheadCircleX"
+	case GP8PercussionNoteheadHeavyX:
+		return "noteheadHeavyX noteheadHeavyX noteheadHeavyX"
+	default:
+		return ""
+	}
 }
 
 func sequentialIDs(count int) string {
