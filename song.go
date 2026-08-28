@@ -243,6 +243,7 @@ func (s *Song) readBinary(c *cursor) error {
 			return fmt.Errorf("reading tracks: %w", err)
 		}
 	}
+	s.consolidateTrackChannels()
 
 	// Measures (beats/notes)
 	if err := s.readMeasures(c); err != nil {

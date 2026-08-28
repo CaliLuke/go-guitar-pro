@@ -35,7 +35,7 @@ func (mc *MidiChannel) isPercussionChannel() bool {
 // readMidiChannels reads all 64 MIDI channels.
 func (s *Song) readMidiChannels(c *cursor) error {
 	for i := uint8(0); i < 64; i++ {
-		ch, err := s.readMidiChannel(c, i)
+		ch, err := s.readMidiChannel(c, i*2)
 		if err != nil {
 			return err
 		}
@@ -51,7 +51,7 @@ func (s *Song) readMidiChannel(c *cursor, channel uint8) (MidiChannel, error) {
 	}
 	mc := defaultMidiChannel()
 	mc.Channel = channel
-	mc.EffectChannel = channel
+	mc.EffectChannel = channel + 1
 	rawVolume, err := c.readSignedByte()
 	if err != nil {
 		return mc, err
@@ -78,12 +78,7 @@ func (s *Song) readMidiChannel(c *cursor, channel uint8) (MidiChannel, error) {
 	if err != nil {
 		return mc, err
 	}
-	// Set instrument
-	if instrument == -1 && mc.isPercussionChannel() {
-		mc.Instrument = 0
-	} else {
-		mc.Instrument = instrument
-	}
+	mc.Instrument = instrument
 	// Skip 2 bytes (backward compatibility with v3.0)
 	if err := c.skip(2); err != nil {
 		return mc, err
@@ -118,14 +113,50 @@ func (s *Song) readChannel(c *cursor, track *Track) error {
 	idx := int(index)
 	if index >= 0 && idx < len(s.Channels) {
 		track.ChannelIndex = idx
-		if s.Channels[idx].Instrument < 0 {
-			s.Channels[idx].Instrument = 0
-		}
-		if s.Channels[idx].isPercussionChannel() {
+		if track.PercussionTrack || s.Channels[idx].isPercussionChannel() {
 			track.PercussionTrack = true
+			s.Channels[idx].Channel = DefaultPercussionChannel
+			s.Channels[idx].EffectChannel = DefaultPercussionChannel
+			s.Channels[idx].Instrument = 0
 		} else {
+			if s.Channels[idx].Instrument < 0 {
+				s.Channels[idx].Instrument = 0
+			}
 			s.Channels[idx].EffectChannel = uint8(effectChannel)
 		}
 	}
 	return nil
+}
+
+// consolidateTrackChannels applies the same playable-channel guarantees as
+// Guitar Pro importers: channel 10 is reserved for percussion and every
+// melodic primary/effect channel is unique. GP3-5 playback records describe
+// channel pairs, while tracks reference those records independently.
+func (s *Song) consolidateTrackChannels() {
+	used := map[uint8]bool{DefaultPercussionChannel: true}
+	for index := range s.Tracks {
+		track := &s.Tracks[index]
+		if track.ChannelIndex < 0 || track.ChannelIndex >= len(s.Channels) {
+			continue
+		}
+		channel := &s.Channels[track.ChannelIndex]
+		if track.PercussionTrack {
+			channel.Channel = DefaultPercussionChannel
+			channel.EffectChannel = DefaultPercussionChannel
+			channel.Instrument = 0
+			continue
+		}
+
+		channel.Channel = nextAvailableChannel(channel.Channel, used)
+		used[channel.Channel] = true
+		channel.EffectChannel = nextAvailableChannel(channel.EffectChannel, used)
+		used[channel.EffectChannel] = true
+	}
+}
+
+func nextAvailableChannel(channel uint8, used map[uint8]bool) uint8 {
+	for channel == DefaultPercussionChannel || used[channel] {
+		channel++
+	}
+	return channel
 }

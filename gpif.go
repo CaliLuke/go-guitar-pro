@@ -634,6 +634,7 @@ func parseGPIF(data []byte) (*Song, error) {
 
 									// Notes
 									velocity := gpifDynamicToVelocity(b.Dynamic)
+									beat.Dynamics = velocity
 									noteIDs := splitIDs(b.Notes)
 									for _, noteID := range noteIDs {
 										if noteID == "-1" {

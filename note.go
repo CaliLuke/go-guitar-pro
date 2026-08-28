@@ -12,8 +12,9 @@ type Note struct {
 	SwapAccidentals bool
 	// TieOrigin marks this note as the start of a tie in formats that model
 	// tie direction explicitly, such as GPIF.
-	TieOrigin bool
-	Kind      NoteType
+	TieOrigin        bool
+	Kind             NoteType
+	velocityExplicit bool
 }
 
 func defaultNote() Note {
@@ -45,6 +46,9 @@ func (s *Song) readNotes(c *cursor, trackIndex int, beat *Beat, duration *Durati
 				}
 			}
 			beat.Notes = append(beat.Notes, note)
+			if note.velocityExplicit {
+				beat.Dynamics = note.Velocity
+			}
 		}
 		beat.Duration = *duration
 	}
@@ -81,6 +85,7 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 			return velocityErr
 		}
 		note.Velocity = unpackVelocity(int16(v))
+		note.velocityExplicit = true
 	}
 	if (flags & 0x20) == 0x20 {
 		fret, fretErr := c.readSignedByte()
@@ -148,6 +153,7 @@ func (s *Song) readNoteV5(c *cursor, note *Note, guitarString GuitarString, trac
 			return velocityErr
 		}
 		note.Velocity = unpackVelocity(int16(v))
+		note.velocityExplicit = true
 	}
 	if (flags & 0x20) == 0x20 {
 		fret, fretErr := c.readSignedByte()

@@ -48,6 +48,10 @@ type Beat struct {
 	Text     string
 	Notes    []Note
 	Duration Duration
+	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. GP3-5
+	// stores the value on notes, but the last explicit value applies to the
+	// whole beat during playback.
+	Dynamics int16
 	Display  BeatDisplay
 	Octave   Octave
 	Status   BeatStatus
@@ -56,6 +60,7 @@ type Beat struct {
 func defaultBeat() Beat {
 	return Beat{
 		Duration: defaultDuration(),
+		Dynamics: DefaultVelocity,
 		Status:   BeatStatusNormal,
 	}
 }

@@ -161,6 +161,31 @@ func TestGP5TrackMixerUsesNormalizedMidiRange(t *testing.T) {
 	}
 }
 
+func TestGP5PlaybackChannelsUseAuthoredPairs(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp5/Demo v5.gp5")
+	want := [][2]uint8{{0, 1}, {4, 3}, {12, 7}, {8, 5}, {9, 9}}
+	if len(song.Tracks) != len(want) {
+		t.Fatalf("tracks = %d, want %d", len(song.Tracks), len(want))
+	}
+	for index, track := range song.Tracks {
+		channel := song.Channels[track.ChannelIndex]
+		if channel.Channel != want[index][0] || channel.EffectChannel != want[index][1] {
+			t.Errorf("track %d channels = %d/%d, want %d/%d", index, channel.Channel, channel.EffectChannel, want[index][0], want[index][1])
+		}
+	}
+}
+
+func TestGP5LastExplicitNoteDynamicAppliesToBeat(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp5/Demo v5.gp5")
+	beat := song.Tracks[0].Measures[0].Voices[0].Beats[0]
+	if len(beat.Notes) != 3 {
+		t.Fatalf("opening beat notes = %d, want 3", len(beat.Notes))
+	}
+	if beat.Notes[0].Velocity != Forte || beat.Dynamics != MinVelocity+VelocityIncrement*7 {
+		t.Errorf("opening note/beat dynamics = %d/%d, want %d/%d", beat.Notes[0].Velocity, beat.Dynamics, Forte, MinVelocity+VelocityIncrement*7)
+	}
+}
+
 func TestGP6PercussionTrack(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp6/full-song.gpx")
 	if len(song.Tracks) != 11 {
