@@ -105,7 +105,7 @@ func TestPercussionUsesTrackChannel(t *testing.T) {
 	}
 }
 
-func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
+func TestGP5PercussionGracePreservesAuthoredValue(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp5/motherload-percussion-grace.gp5")
 	var track *Track
 	for index := range song.Tracks {
@@ -133,8 +133,8 @@ func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
 					if note.Value != 38 {
 						t.Errorf("bar %d grace parent articulation = %d, want 38", measureIndex+1, note.Value)
 					}
-					if got := note.Effect.Grace.Fret; got != int8(note.Value) {
-						t.Errorf("bar %d grace articulation = %d, want parent articulation %d", measureIndex+1, got, note.Value)
+					if got := note.Effect.Grace.Fret; got != 0 {
+						t.Errorf("bar %d grace value = %d, want authored value 0", measureIndex+1, got)
 					}
 				}
 			}

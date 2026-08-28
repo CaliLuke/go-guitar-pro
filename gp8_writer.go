@@ -715,6 +715,9 @@ func (builder *gp8Builder) addGraceBeats(trackIndex int, beat *Beat) ([]string, 
 		}
 		graceNote := *note
 		graceNote.Value = int16(grace.Fret)
+		if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {
+			graceNote.Value = note.Value
+		}
 		graceNote.Velocity = velocity
 		graceNote.Kind = NoteTypeNormal
 		graceNote.Effect = defaultNoteEffect()
