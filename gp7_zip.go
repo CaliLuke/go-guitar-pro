@@ -29,8 +29,8 @@ func parseGP7Zip(data []byte) (*Song, error) {
 				_ = rc.Close()
 				return nil, fmt.Errorf("reading score.gpif: %w", err)
 			}
-			if err := rc.Close(); err != nil {
-				return nil, fmt.Errorf("closing score.gpif: %w", err)
+			if closeErr := rc.Close(); closeErr != nil {
+				return nil, fmt.Errorf("closing score.gpif: %w", closeErr)
 			}
 			song, err = parseGPIF(gpifData)
 			if err != nil {

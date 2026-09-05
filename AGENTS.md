@@ -8,12 +8,20 @@ This repository is one Go package. The root files contain the public data types 
 
 ## Build and Test Commands
 
+- `prek run --all-files` runs every quality gate and is the prescribed entry point.
+- `prek install` installs the pre-commit and pre-push hooks for the checkout.
+- `./check.sh --fix` applies goimports and golangci-lint fixes before running the full gate.
 - `go build ./...` compiles the package.
 - `go test ./...` runs all compatibility tests.
 - `go test -run TestParseRejectsShortData` runs one test.
 - `go vet ./...` finds common Go errors.
 - `golangci-lint run` runs the configured static checks.
 - `go fmt ./...` formats all Go source files.
+
+The full gate covers build, vet, goimports, module-tidy drift, golangci-lint,
+duplication, race-enabled tests, and an 80% statement-coverage floor. This
+repository is a library, so reachability-based `deadcode` is intentionally not
+used for exported APIs.
 
 The repository contains a library. It does not contain a command-line program.
 

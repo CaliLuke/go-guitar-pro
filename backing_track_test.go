@@ -133,15 +133,15 @@ func buildGP7Archive(t *testing.T, gpif, assetPath string, assetData []byte) []b
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := gpifFile.Write([]byte(gpif)); err != nil {
-		t.Fatal(err)
+	if _, writeErr := gpifFile.Write([]byte(gpif)); writeErr != nil {
+		t.Fatal(writeErr)
 	}
 	assetFile, err := archive.Create(assetPath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := assetFile.Write(assetData); err != nil {
-		t.Fatal(err)
+	if _, writeErr := assetFile.Write(assetData); writeErr != nil {
+		t.Fatal(writeErr)
 	}
 	if err := archive.Close(); err != nil {
 		t.Fatal(err)

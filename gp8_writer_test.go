@@ -43,8 +43,8 @@ func TestExportGP8RoundTrip(t *testing.T) {
 	}
 	gpifData := readZipMember(t, archive, "Content/score.gpif")
 	var document gpifDocument
-	if err := xml.Unmarshal(gpifData, &document); err != nil {
-		t.Fatal(err)
+	if unmarshalErr := xml.Unmarshal(gpifData, &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
 	}
 	if document.GPVersion != gp8DocumentVersion {
 		t.Errorf("GPVersion = %q, want %q", document.GPVersion, gp8DocumentVersion)
@@ -180,8 +180,8 @@ func TestExportGP8RealPercussionFixture(t *testing.T) {
 		t.Fatal(err)
 	}
 	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
+	if unmarshalErr := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
 	}
 	for index, sourceTrack := range song.Tracks {
 		instrumentSet := document.Tracks.Tracks[index].InstrumentSet
@@ -315,8 +315,8 @@ func TestExportGP8PercussionNoteheadOverrides(t *testing.T) {
 		t.Fatal(err)
 	}
 	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
+	if unmarshalErr := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
 	}
 	for _, element := range document.Tracks.Tracks[0].InstrumentSet.Elements.Elements {
 		for _, articulation := range element.Articulations.Articulations {
@@ -477,8 +477,8 @@ func TestExportGP8UsesInstrumentClefs(t *testing.T) {
 		t.Fatal(err)
 	}
 	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
+	if unmarshalErr := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
 	}
 	for index, bar := range document.Bars.Bars {
 		if bar.Clef != "F4" {
@@ -540,8 +540,8 @@ func TestExportGP8WritesCompleteTieChain(t *testing.T) {
 		t.Fatal(err)
 	}
 	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
+	if unmarshalErr := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
 	}
 	if len(document.Notes.Notes) != 3 {
 		t.Fatalf("notes = %d, want 3", len(document.Notes.Notes))
