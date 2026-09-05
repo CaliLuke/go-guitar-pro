@@ -290,6 +290,12 @@ func validateGP8Song(song *Song) error {
 						if midi < 0 || midi > 127 {
 							return fmt.Errorf("track %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
 						}
+						if track.PercussionTrack {
+							element := gp8DrumElement(note.Value, GP8ExportOptions{})
+							if element.Type == "percussion" {
+								return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value)
+							}
+						}
 					}
 				}
 			}
@@ -1110,9 +1116,11 @@ func gp8DrumStaffLine(value int16) int {
 		return 8
 	case 36:
 		return 7
-	case 38, 40:
+	case 37, 38, 40:
 		return 3
-	case 41, 43:
+	case 41:
+		return 5
+	case 43:
 		return 6
 	case 45:
 		return 5
@@ -1124,6 +1132,12 @@ func gp8DrumStaffLine(value int16) int {
 		return 1
 	case 42, 44, 46:
 		return -1
+	case 52:
+		return -3
+	case 55:
+		return -2
+	case 92:
+		return -1
 	default:
 		return 0
 	}
@@ -1131,18 +1145,22 @@ func gp8DrumStaffLine(value int16) int {
 
 func gp8DrumElements(values []int16, options GP8ExportOptions) []gpifElement {
 	elements := make([]gpifElement, 0, len(values))
-	hiHatIndex := -1
+	type elementKey struct {
+		name          string
+		kind          string
+		soundbankName string
+	}
+	elementIndices := make(map[elementKey]int, len(values))
 	for _, value := range values {
 		element := gp8DrumElement(value, options)
-		if element.Type == "hiHat" && hiHatIndex >= 0 {
-			hiHat := &elements[hiHatIndex]
-			hiHat.Articulations.Articulations = append(hiHat.Articulations.Articulations, element.Articulations.Articulations...)
+		key := elementKey{name: element.Name, kind: element.Type, soundbankName: element.SoundbankName}
+		if index, exists := elementIndices[key]; exists {
+			existing := &elements[index]
+			existing.Articulations.Articulations = append(existing.Articulations.Articulations, element.Articulations.Articulations...)
 			continue
 		}
 		elements = append(elements, element)
-		if element.Type == "hiHat" {
-			hiHatIndex = len(elements) - 1
-		}
+		elementIndices[key] = len(elements) - 1
 	}
 	return elements
 }
@@ -1152,7 +1170,12 @@ func gp8DrumArticulationIDs(elements []gpifElement) map[int16]int {
 	index := 0
 	for _, element := range elements {
 		for _, articulation := range element.Articulations.Articulations {
-			ids[int16(articulation.OutputMIDINumber)] = index
+			for _, input := range strings.Fields(articulation.InputMIDINumbers) {
+				midi, err := strconv.ParseInt(input, 10, 16)
+				if err == nil {
+					ids[int16(midi)] = index
+				}
+			}
 			index++
 		}
 	}
@@ -1174,17 +1197,36 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		OutputMIDINumber:   int(value),
 	}
 	switch value {
+	case 35:
+		element.Name = "Acoustic Kick Drum"
+		element.Type = "kickDrum"
+		element.SoundbankName = "AcousticKick-Percu"
+		articulation.Name = "Kick (hit)"
+		articulation.OutputRSESound = "pedal.hit.hit"
 	case 36:
 		element.Name = "Kick Drum"
 		element.Type = "kickDrum"
 		element.SoundbankName = "Master-Kick"
 		articulation.Name = "Kick (hit)"
 		articulation.OutputRSESound = "pedal.hit.hit"
+	case 37:
+		element.Name = "Snare"
+		element.Type = "snare"
+		element.SoundbankName = "Master-Snare"
+		articulation.Name = "Snare (side stick)"
+		articulation.Noteheads = "noteheadXBlack noteheadXBlack noteheadXBlack"
+		articulation.OutputRSESound = "stick.hit.sidestick"
 	case 38:
 		element.Name = "Snare"
 		element.Type = "snare"
 		element.SoundbankName = "Master-Snare"
 		articulation.Name = "Snare (hit)"
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 41:
+		element.Name = "Very Low Floor Tom"
+		element.Type = "tom"
+		element.SoundbankName = "LowFloorTom-Percu"
+		articulation.Name = "Low Floor Tom (hit)"
 		articulation.OutputRSESound = "stick.hit.hit"
 	case 42:
 		element.Name = "Charley"
@@ -1201,6 +1243,12 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		articulation.StaffLine = 9
 		articulation.Noteheads = "noteheadXBlack noteheadXBlack noteheadXBlack"
 		articulation.OutputRSESound = "pedal.hit.pedal"
+	case 45:
+		element.Name = "Tom Low"
+		element.Type = "tom"
+		element.SoundbankName = "Master-Tom02"
+		articulation.Name = "Low Tom (hit)"
+		articulation.OutputRSESound = "stick.hit.hit"
 	case 46:
 		element.Name = "Charley"
 		element.Type = "hiHat"
@@ -1208,6 +1256,18 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		articulation.Name = "Hi-Hat (open)"
 		articulation.Noteheads = "noteheadCircleX noteheadCircleX noteheadCircleX"
 		articulation.OutputRSESound = "stick.hit.open"
+	case 43:
+		element.Name = "Tom Very Low"
+		element.Type = "tom"
+		element.SoundbankName = "Master-Tom01"
+		articulation.Name = "Very Low Tom (hit)"
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 47:
+		element.Name = "Tom Medium"
+		element.Type = "tom"
+		element.SoundbankName = "Master-Tom03"
+		articulation.Name = "Mid Tom (hit)"
+		articulation.OutputRSESound = "stick.hit.hit"
 	case 48:
 		element.Name = "Tom High"
 		element.Type = "tom"
@@ -1222,6 +1282,48 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		articulation.StaffLine = -2
 		articulation.Noteheads = "noteheadHeavyX noteheadHeavyX noteheadHeavyX"
 		articulation.OutputRSESound = "stick.hit.hit"
+	case 50:
+		element.Name = "Tom Very High"
+		element.Type = "tom"
+		element.SoundbankName = "Master-Tom05"
+		articulation.Name = "High Floor Tom (hit)"
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 51:
+		element.Name = "Ride"
+		element.Type = "ride"
+		element.SoundbankName = "Master-Ride"
+		articulation.Name = "Ride (middle)"
+		articulation.Noteheads = "noteheadXBlack noteheadXBlack noteheadXBlack"
+		articulation.OutputRSESound = "stick.hit.mid"
+	case 52:
+		element.Name = "China"
+		element.Type = "china"
+		element.SoundbankName = "Master-China"
+		articulation.Name = "China (hit)"
+		articulation.Noteheads = "noteheadHeavyXHat noteheadHeavyXHat noteheadHeavyXHat"
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 53:
+		element.Name = "Ride"
+		element.Type = "ride"
+		element.SoundbankName = "Master-Ride"
+		articulation.Name = "Ride (bell)"
+		articulation.Noteheads = "noteheadDiamondWhite noteheadDiamondWhite noteheadDiamondWhite"
+		articulation.OutputRSESound = "stick.hit.bell"
+	case 55:
+		element.Name = "Splash"
+		element.Type = "splash"
+		element.SoundbankName = "Master-Splash"
+		articulation.Name = "Splash (hit)"
+		articulation.Noteheads = "noteheadXBlack noteheadXBlack noteheadXBlack"
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 92:
+		element.Name = "Charley"
+		element.Type = "hiHat"
+		element.SoundbankName = "Master-Hihat"
+		articulation.Name = "Hi-Hat (half)"
+		articulation.Noteheads = "noteheadCircleSlash noteheadCircleSlash noteheadCircleSlash"
+		articulation.OutputMIDINumber = 46
+		articulation.OutputRSESound = "stick.hit.half"
 	}
 	if notehead := options.PercussionNoteheads[value]; notehead != GP8PercussionNoteheadDefault {
 		articulation.Noteheads = gp8PercussionNoteheads(notehead)

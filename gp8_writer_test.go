@@ -11,6 +11,7 @@ import (
 	"io"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -335,22 +336,69 @@ func TestExportGP8PercussionNoteheadOverrides(t *testing.T) {
 	t.Fatal("exported GP8 has no open hi-hat articulation")
 }
 
-func TestGP8StandardDrumRSEMetadata(t *testing.T) {
+func TestGP8NativeDrumKitMetadata(t *testing.T) {
 	for _, test := range []struct {
-		midi      int16
-		name      string
-		kind      string
-		soundbank string
-		rseSound  string
+		midi             int16
+		elementName      string
+		kind             string
+		soundbank        string
+		articulationName string
+		staffLine        int
+		noteheads        string
+		rseSound         string
+		outputMIDI       int
 	}{
-		{midi: 36, name: "Kick Drum", kind: "kickDrum", soundbank: "Master-Kick", rseSound: "pedal.hit.hit"},
-		{midi: 38, name: "Snare", kind: "snare", soundbank: "Master-Snare", rseSound: "stick.hit.hit"},
-		{midi: 48, name: "Tom High", kind: "tom", soundbank: "Master-Tom04", rseSound: "stick.hit.hit"},
+		{midi: 35, elementName: "Acoustic Kick Drum", kind: "kickDrum", soundbank: "AcousticKick-Percu", articulationName: "Kick (hit)", staffLine: 8, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "pedal.hit.hit"},
+		{midi: 36, elementName: "Kick Drum", kind: "kickDrum", soundbank: "Master-Kick", articulationName: "Kick (hit)", staffLine: 7, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "pedal.hit.hit"},
+		{midi: 37, elementName: "Snare", kind: "snare", soundbank: "Master-Snare", articulationName: "Snare (side stick)", staffLine: 3, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.sidestick"},
+		{midi: 38, elementName: "Snare", kind: "snare", soundbank: "Master-Snare", articulationName: "Snare (hit)", staffLine: 3, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 41, elementName: "Very Low Floor Tom", kind: "tom", soundbank: "LowFloorTom-Percu", articulationName: "Low Floor Tom (hit)", staffLine: 5, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 42, elementName: "Charley", kind: "hiHat", soundbank: "Master-Hihat", articulationName: "Hi-Hat (closed)", staffLine: -1, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.closed"},
+		{midi: 43, elementName: "Tom Very Low", kind: "tom", soundbank: "Master-Tom01", articulationName: "Very Low Tom (hit)", staffLine: 6, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 44, elementName: "Charley", kind: "hiHat", soundbank: "Master-Hihat", articulationName: "Pedal Hi-Hat (hit)", staffLine: 9, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "pedal.hit.pedal"},
+		{midi: 45, elementName: "Tom Low", kind: "tom", soundbank: "Master-Tom02", articulationName: "Low Tom (hit)", staffLine: 5, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 46, elementName: "Charley", kind: "hiHat", soundbank: "Master-Hihat", articulationName: "Hi-Hat (open)", staffLine: -1, noteheads: "noteheadCircleX noteheadCircleX noteheadCircleX", rseSound: "stick.hit.open"},
+		{midi: 47, elementName: "Tom Medium", kind: "tom", soundbank: "Master-Tom03", articulationName: "Mid Tom (hit)", staffLine: 4, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 48, elementName: "Tom High", kind: "tom", soundbank: "Master-Tom04", articulationName: "High Tom (hit)", staffLine: 2, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 49, elementName: "Crash High", kind: "crash", soundbank: "Master-Crash02", articulationName: "Crash high (hit)", staffLine: -2, noteheads: "noteheadHeavyX noteheadHeavyX noteheadHeavyX", rseSound: "stick.hit.hit"},
+		{midi: 50, elementName: "Tom Very High", kind: "tom", soundbank: "Master-Tom05", articulationName: "High Floor Tom (hit)", staffLine: 1, noteheads: "noteheadBlack noteheadHalf noteheadWhole", rseSound: "stick.hit.hit"},
+		{midi: 51, elementName: "Ride", kind: "ride", soundbank: "Master-Ride", articulationName: "Ride (middle)", staffLine: 0, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.mid"},
+		{midi: 52, elementName: "China", kind: "china", soundbank: "Master-China", articulationName: "China (hit)", staffLine: -3, noteheads: "noteheadHeavyXHat noteheadHeavyXHat noteheadHeavyXHat", rseSound: "stick.hit.hit"},
+		{midi: 53, elementName: "Ride", kind: "ride", soundbank: "Master-Ride", articulationName: "Ride (bell)", staffLine: 0, noteheads: "noteheadDiamondWhite noteheadDiamondWhite noteheadDiamondWhite", rseSound: "stick.hit.bell"},
+		{midi: 55, elementName: "Splash", kind: "splash", soundbank: "Master-Splash", articulationName: "Splash (hit)", staffLine: -2, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.hit"},
+		{midi: 92, elementName: "Charley", kind: "hiHat", soundbank: "Master-Hihat", articulationName: "Hi-Hat (half)", staffLine: -1, noteheads: "noteheadCircleSlash noteheadCircleSlash noteheadCircleSlash", rseSound: "stick.hit.half", outputMIDI: 46},
 	} {
 		element := gp8DrumElement(test.midi, GP8ExportOptions{})
-		if element.Name != test.name || element.Type != test.kind || element.SoundbankName != test.soundbank || element.Articulations.Articulations[0].OutputRSESound != test.rseSound {
+		if element.Name != test.elementName || element.Type != test.kind || element.SoundbankName != test.soundbank {
 			t.Errorf("MIDI %d element = %#v", test.midi, element)
 		}
+		articulation := element.Articulations.Articulations[0]
+		if articulation.Name != test.articulationName || articulation.StaffLine != test.staffLine || articulation.Noteheads != test.noteheads || articulation.OutputRSESound != test.rseSound {
+			t.Errorf("MIDI %d articulation = %#v", test.midi, articulation)
+		}
+		expectedOutput := int(test.midi)
+		if test.outputMIDI != 0 {
+			expectedOutput = test.outputMIDI
+		}
+		if articulation.InputMIDINumbers != fmt.Sprint(test.midi) || articulation.OutputMIDINumber != expectedOutput {
+			t.Errorf("MIDI %d routing = %#v", test.midi, articulation)
+		}
+	}
+
+	snares := gp8DrumElements([]int16{37, 38}, GP8ExportOptions{})
+	if len(snares) != 1 || len(snares[0].Articulations.Articulations) != 2 {
+		t.Fatalf("grouped snare elements = %#v", snares)
+	}
+	for index, midi := range []int{37, 38} {
+		if snares[0].Articulations.Articulations[index].OutputMIDINumber != midi {
+			t.Errorf("snare articulation %d = %#v", index, snares[0].Articulations.Articulations[index])
+		}
+	}
+
+	hiHats := gp8DrumElements([]int16{42, 44, 46, 92}, GP8ExportOptions{})
+	ids := gp8DrumArticulationIDs(hiHats)
+	if ids[92] != 3 {
+		t.Errorf("MIDI 92 articulation ID = %d, want 3", ids[92])
 	}
 }
 
@@ -593,6 +641,13 @@ func TestExportRejectsUnsupportedInput(t *testing.T) {
 	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 128
 	if _, err := Export(song, ExportFormatGP8); err == nil {
 		t.Fatal("Export accepted an out-of-range percussion MIDI value")
+	}
+	song = syntheticGP8Song()
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 40
+	if _, err := Export(song, ExportFormatGP8); err == nil {
+		t.Fatal("Export accepted percussion without native Guitar Pro drum-kit metadata")
+	} else if !strings.Contains(err.Error(), "percussion MIDI value 40 without a native Guitar Pro drum-kit articulation") {
+		t.Fatalf("unsupported percussion error = %v", err)
 	}
 	song = syntheticGP8Song()
 	song.Tracks[0].PercussionTrack = false
