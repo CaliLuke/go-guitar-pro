@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -594,6 +595,7 @@ func parseGPIF(data []byte) (*Song, error) {
 			if trackIdx < len(barIDs) {
 				barID := barIDs[trackIdx]
 				if bar, ok := barMap[barID]; ok {
+					m.Clef = gpifMeasureClef(bar.Clef)
 					voiceIDs := splitIDs(bar.Voices)
 					for _, voiceID := range voiceIDs {
 						if voiceID == "-1" {
@@ -1089,6 +1091,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
 	hasFret := false
+	bend := gpifBendProperties{}
 
 	// Parse properties
 	for _, p := range n.Properties.Properties {
@@ -1115,6 +1118,22 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 			}
 		case "Muted":
 			note.Kind = NoteTypeDead
+		case "Bended":
+			bend.enabled = true
+		case "BendOriginOffset":
+			bend.originPosition = gpifBendPosition(p.Float)
+		case "BendOriginValue":
+			bend.originValue = gpifBendValue(p.Float)
+		case "BendMiddleOffset1":
+			bend.middlePosition1 = gpifBendPosition(p.Float)
+		case "BendMiddleOffset2":
+			bend.middlePosition2 = gpifBendPosition(p.Float)
+		case "BendMiddleValue":
+			bend.middleValue = gpifBendValue(p.Float)
+		case "BendDestinationOffset":
+			bend.destinationPosition = gpifBendPosition(p.Float)
+		case "BendDestinationValue":
+			bend.destinationValue = gpifBendValue(p.Float)
 		case "PalmMuted":
 			note.Effect.PalmMute = true
 		case "Tapped":
@@ -1172,6 +1191,9 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 			}
 		}
 	}
+	if bend.enabled {
+		note.Effect.Bend = bend.effect()
+	}
 
 	// Tie
 	if n.Tie != nil {
@@ -1220,4 +1242,106 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	note.Velocity = DefaultVelocity
 
 	return note
+}
+
+type gpifBendProperties struct {
+	enabled             bool
+	originPosition      uint8
+	originValue         int8
+	middlePosition1     uint8
+	middlePosition2     uint8
+	middleValue         int8
+	destinationPosition uint8
+	destinationValue    int8
+}
+
+func (bend gpifBendProperties) effect() *BendEffect {
+	points := []BendPoint{
+		{Position: bend.originPosition, Value: bend.originValue},
+		{Position: bend.middlePosition1, Value: bend.middleValue},
+		{Position: bend.middlePosition2, Value: bend.middleValue},
+		{Position: bend.destinationPosition, Value: bend.destinationValue},
+	}
+	sort.SliceStable(points, func(left, right int) bool {
+		return points[left].Position < points[right].Position
+	})
+	if bend.destinationPosition < uint8(BendEffectMaxPosition) {
+		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition), Value: bend.destinationValue})
+	}
+	points = simplifyBendPoints(points)
+	maximum := int8(0)
+	for _, point := range points {
+		if point.Value > maximum {
+			maximum = point.Value
+		}
+	}
+	kind := BendTypePrebend
+	origin := points[0].Value
+	destination := points[len(points)-1].Value
+	switch {
+	case destination > origin:
+		kind = BendTypeBend
+	case destination < origin:
+		kind = BendTypePrebendRelease
+	case maximum > origin:
+		kind = BendTypeBendRelease
+	}
+	return &BendEffect{Points: points, Value: int16(maximum) * int16(GPBendSemitone), Kind: kind}
+}
+
+func simplifyBendPoints(points []BendPoint) []BendPoint {
+	result := make([]BendPoint, 0, len(points))
+	for _, point := range points {
+		if len(result) > 0 && result[len(result)-1] == point {
+			continue
+		}
+		result = append(result, point)
+	}
+	for index := 1; index+1 < len(result); {
+		left := result[index-1]
+		middle := result[index]
+		right := result[index+1]
+		leftSpan := int(right.Position) - int(left.Position)
+		if leftSpan > 0 && (int(middle.Value)-int(left.Value))*leftSpan == (int(right.Value)-int(left.Value))*(int(middle.Position)-int(left.Position)) {
+			result = append(result[:index], result[index+1:]...)
+			continue
+		}
+		index++
+	}
+	return result
+}
+
+func gpifBendPosition(value *string) uint8 {
+	if value == nil {
+		return 0
+	}
+	parsed, err := strconv.ParseFloat(*value, 64)
+	if err != nil {
+		return 0
+	}
+	return uint8(math.Round(parsed * float64(BendEffectMaxPosition) / 100))
+}
+
+func gpifBendValue(value *string) int8 {
+	if value == nil {
+		return 0
+	}
+	parsed, err := strconv.ParseFloat(*value, 64)
+	if err != nil {
+		return 0
+	}
+	return int8(math.Round(parsed / float64(GPBendSemitone)))
+}
+
+func gpifMeasureClef(value string) MeasureClef {
+	switch value {
+	case "F4":
+		return MeasureClefBass
+	case "C4":
+		return MeasureClefTenor
+	case "C3":
+		return MeasureClefAlto
+	default:
+		return MeasureClefTreble
+	}
 }

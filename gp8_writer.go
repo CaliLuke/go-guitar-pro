@@ -6,9 +6,11 @@ import (
 	"archive/zip"
 	"bytes"
 	"cmp"
+	"compress/flate"
 	"encoding/binary"
 	"encoding/xml"
 	"fmt"
+	"hash/crc32"
 	"os"
 	"slices"
 	"strconv"
@@ -91,8 +93,6 @@ func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) (
 	}
 	gpif = append(append([]byte(xml.Header), gpif...), '\n')
 
-	var output bytes.Buffer
-	archive := zip.NewWriter(&output)
 	entries := []struct {
 		name   string
 		method uint16
@@ -106,15 +106,55 @@ func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) (
 		{name: "Content/LayoutConfiguration", method: zip.Deflate, data: buildGP8LayoutConfiguration(song)},
 		{name: "Content/score.gpif", method: zip.Deflate, data: gpif},
 	}
+	return writeGP8Archive(entries)
+}
+
+func writeGP8Archive(entries []struct {
+	name   string
+	method uint16
+	data   []byte
+}) ([]byte, error) {
+	var output bytes.Buffer
+	archive := zip.NewWriter(&output)
 	for _, entry := range entries {
-		header := &zip.FileHeader{Name: entry.name, Method: entry.method}
-		header.SetMode(0o644)
-		writer, createErr := archive.CreateHeader(header)
+		encoded := entry.data
+		if entry.method == zip.Deflate {
+			var compressed bytes.Buffer
+			compressor, createErr := flate.NewWriter(&compressed, flate.DefaultCompression)
+			if createErr != nil {
+				_ = archive.Close()
+				return nil, fmt.Errorf("creating compressor for archive member %q: %w", entry.name, createErr)
+			}
+			if _, writeErr := compressor.Write(entry.data); writeErr != nil {
+				_ = compressor.Close()
+				_ = archive.Close()
+				return nil, fmt.Errorf("compressing archive member %q: %w", entry.name, writeErr)
+			}
+			if closeErr := compressor.Close(); closeErr != nil {
+				_ = archive.Close()
+				return nil, fmt.Errorf("closing compressor for archive member %q: %w", entry.name, closeErr)
+			}
+			encoded = compressed.Bytes()
+		}
+		header := &zip.FileHeader{
+			Name:               entry.name,
+			Method:             entry.method,
+			Flags:              0x0800,
+			CRC32:              crc32.ChecksumIEEE(entry.data),
+			CompressedSize64:   uint64(len(encoded)),
+			UncompressedSize64: uint64(len(entry.data)),
+		}
+		if strings.HasSuffix(entry.name, "/") {
+			header.SetMode(os.ModeDir | 0o755)
+		} else {
+			header.SetMode(0o644)
+		}
+		writer, createErr := archive.CreateRaw(header)
 		if createErr != nil {
 			_ = archive.Close()
 			return nil, fmt.Errorf("creating archive member %q: %w", entry.name, createErr)
 		}
-		if _, writeErr := writer.Write(entry.data); writeErr != nil {
+		if _, writeErr := writer.Write(encoded); writeErr != nil {
 			_ = archive.Close()
 			return nil, fmt.Errorf("writing archive member %q: %w", entry.name, writeErr)
 		}
@@ -627,7 +667,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 			for len(voiceIDs) < 4 {
 				voiceIDs = append(voiceIDs, "-1")
 			}
-			builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: "G2"})
+			builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure)})
 		}
 		builder.doc.MasterBars.MasterBars = append(builder.doc.MasterBars.MasterBars, gp8MasterBar(header, strings.Join(barIDs, " ")))
 	}
@@ -850,6 +890,7 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 	}
 	articulation := 0
 	result := gpifNote{ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
+	result.Properties.Properties = append(result.Properties.Properties, gp8BendProperties(note.Effect.Bend)...)
 	if track.PercussionTrack {
 		articulation = builder.articulationIDs[trackIndex][note.Value]
 		result.InstrumentArticulation = &articulation
@@ -917,6 +958,87 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 	}
 	builder.doc.Notes.Notes = append(builder.doc.Notes.Notes, result)
 	return noteID
+}
+
+func gp8BarClef(song *Song, trackIndex int, measure *Measure) string {
+	if song.Tracks[trackIndex].PercussionTrack {
+		return "Neutral"
+	}
+	switch measure.Clef {
+	case MeasureClefBass:
+		return "F4"
+	case MeasureClefTenor:
+		return "C4"
+	case MeasureClefAlto:
+		return "C3"
+	}
+	track := &song.Tracks[trackIndex]
+	if track.ChannelIndex >= 0 && track.ChannelIndex < len(song.Channels) {
+		program := song.Channels[track.ChannelIndex].Instrument
+		if program >= 32 && program <= 39 {
+			return "F4"
+		}
+	}
+	return "G2"
+}
+
+func gp8BendProperties(bend *BendEffect) []gpifProperty {
+	if bend == nil || len(bend.Points) < 2 || len(bend.Points) > 4 {
+		return nil
+	}
+	origin := bend.Points[0]
+	destination := bend.Points[len(bend.Points)-1]
+	var middle1, middle2 BendPoint
+	switch len(bend.Points) {
+	case 4:
+		if bend.Points[0].Value == bend.Points[1].Value && bend.Points[2].Value == bend.Points[3].Value {
+			// GPIF keeps the destination value through the end of the note. Encode
+			// an initial hold and release by ending the explicit curve where the
+			// final value is reached.
+			middle1 = bend.Points[1]
+			middle2 = bend.Points[1]
+			destination = bend.Points[2]
+		} else {
+			middle1 = bend.Points[1]
+			middle2 = bend.Points[2]
+		}
+	case 3:
+		middle1 = bend.Points[1]
+		if bend.Points[1].Value == bend.Points[2].Value {
+			// A destination before the end denotes a bend followed by a hold.
+			destination = bend.Points[1]
+			middle2 = bend.Points[2]
+		} else {
+			middle2 = bend.Points[1]
+		}
+	default:
+		middle1 = BendPoint{
+			Position: uint8((uint16(origin.Position) + uint16(destination.Position)) / 2),
+			Value:    int8((int16(origin.Value) + int16(destination.Value)) / 2),
+		}
+		middle2 = middle1
+	}
+	enable := ""
+	return []gpifProperty{
+		{Name: "Bended", Enable: &enable},
+		{Name: "BendDestinationOffset", Float: gp8BendOffset(destination.Position)},
+		{Name: "BendDestinationValue", Float: gp8BendValue(destination.Value)},
+		{Name: "BendMiddleOffset1", Float: gp8BendOffset(middle1.Position)},
+		{Name: "BendMiddleOffset2", Float: gp8BendOffset(middle2.Position)},
+		{Name: "BendMiddleValue", Float: gp8BendValue(middle1.Value)},
+		{Name: "BendOriginOffset", Float: gp8BendOffset(origin.Position)},
+		{Name: "BendOriginValue", Float: gp8BendValue(origin.Value)},
+	}
+}
+
+func gp8BendOffset(position uint8) *string {
+	value := strconv.FormatFloat(float64(position)*100/float64(BendEffectMaxPosition), 'f', 6, 64)
+	return &value
+}
+
+func gp8BendValue(value int8) *string {
+	encoded := strconv.FormatFloat(float64(value)*float64(GPBendSemitone), 'f', 6, 64)
+	return &encoded
 }
 
 func gp8NoteMIDI(track *Track, note *Note) int {

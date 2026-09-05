@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
+	"reflect"
 	"testing"
 )
 
@@ -61,6 +62,14 @@ func TestExportGP8RoundTrip(t *testing.T) {
 		"Content/LayoutConfiguration",
 	} {
 		readZipMember(t, archive, name)
+	}
+	for _, file := range archive.File {
+		if file.Flags&0x08 != 0 {
+			t.Errorf("archive member %q uses a streaming data descriptor", file.Name)
+		}
+		if file.Name == "Content/" && !file.Mode().IsDir() {
+			t.Errorf("Content/ mode = %v, want directory", file.Mode())
+		}
 	}
 
 	roundTrip, err := Parse(data)
@@ -406,6 +415,103 @@ func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
 	}
 	if number := properties["Midi"].Number; number == nil || *number != 67 {
 		t.Errorf("MIDI property = %v, want 67", number)
+	}
+}
+
+func TestExportGP8PreservesBendCurves(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.Name = "Bass"
+	track.PercussionTrack = false
+	track.Strings = []GuitarString{{Number: 1, Value: 43}}
+	song.Channels[0] = MidiChannel{Channel: 0, EffectChannel: 1, Instrument: 33, Volume: 100, Balance: 64}
+
+	bends := []*BendEffect{
+		{Kind: BendTypeBend, Value: 25, Points: []BendPoint{{Position: 0, Value: 0}, {Position: 3, Value: 1}, {Position: 12, Value: 1}}},
+		{Kind: BendTypePrebendRelease, Value: 50, Points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 6, Value: 0}, {Position: 12, Value: 0}}},
+		{Kind: BendTypePrebend, Points: []BendPoint{{Position: 0, Value: 0}, {Position: 12, Value: 0}}},
+	}
+	quarter := defaultDuration()
+	track.Measures[0].Voices = []Voice{{Beats: make([]Beat, len(bends))}}
+	for index, bend := range bends {
+		track.Measures[0].Voices[0].Beats[index] = Beat{
+			Duration: quarter,
+			Status:   BeatStatusNormal,
+			Notes:    []Note{{Value: int16(index + 3), String: 1, Velocity: Forte, Kind: NoteTypeNormal, Effect: NoteEffect{Bend: bend}}},
+		}
+	}
+	for measureIndex := 1; measureIndex < len(track.Measures); measureIndex++ {
+		track.Measures[measureIndex].Voices = []Voice{{Beats: []Beat{{Duration: quarter, Status: BeatStatusRest}}}}
+	}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for index, want := range bends {
+		got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[index].Notes[0].Effect.Bend
+		if got == nil || got.Kind != want.Kind || got.Value != want.Value || !reflect.DeepEqual(got.Points, want.Points) {
+			t.Errorf("bend %d = %#v, want %#v", index, got, want)
+		}
+	}
+}
+
+func TestExportGP8UsesInstrumentClefs(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.Name = "Bass"
+	track.PercussionTrack = false
+	track.Strings = []GuitarString{{Number: 1, Value: 43}}
+	song.Channels[0] = MidiChannel{Channel: 0, EffectChannel: 1, Instrument: 33, Volume: 100, Balance: 64}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	for index, bar := range document.Bars.Bars {
+		if bar.Clef != "F4" {
+			t.Errorf("bass bar %d clef = %q, want F4", index+1, bar.Clef)
+		}
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for index, measure := range roundTrip.Tracks[0].Measures {
+		if measure.Clef != MeasureClefBass {
+			t.Errorf("round-trip bass measure %d clef = %d, want bass", index+1, measure.Clef)
+		}
+	}
+
+	song.Tracks[0].PercussionTrack = true
+	data, err = Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err = zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	document = gpifDocument{}
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
+		t.Fatal(err)
+	}
+	for index, bar := range document.Bars.Bars {
+		if bar.Clef != "Neutral" {
+			t.Errorf("percussion bar %d clef = %q, want Neutral", index+1, bar.Clef)
+		}
 	}
 }
 
