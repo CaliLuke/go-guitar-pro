@@ -37,6 +37,7 @@ type BeatEffects struct {
 	HasRasgueado   bool
 	PickStroke     BeatStrokeDirection
 	FadeIn         bool
+	Hairpin        Hairpin
 	SlapEffect     SlapEffect
 	Vibrato        bool
 }

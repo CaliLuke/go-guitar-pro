@@ -279,6 +279,19 @@ func validateGP8Song(song *Song) error {
 		if len(track.Measures) != len(song.MeasureHeaders) {
 			return fmt.Errorf("track %d has %d measures, want %d", trackIndex, len(track.Measures), len(song.MeasureHeaders))
 		}
+		for soundIndex, sound := range track.Sounds {
+			if sound.Program < 0 || sound.Program > 127 {
+				return fmt.Errorf("track %d sound %d has MIDI program %d outside 0..127", trackIndex, soundIndex, sound.Program)
+			}
+		}
+		for automationIndex, automation := range track.SoundAutomations {
+			if automation.Sound < 0 || automation.Sound >= len(track.Sounds) {
+				return fmt.Errorf("track %d sound automation %d uses sound index %d with %d sounds", trackIndex, automationIndex, automation.Sound, len(track.Sounds))
+			}
+			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || automation.Position < 0 || automation.Position > 1 {
+				return fmt.Errorf("track %d sound automation %d has invalid position bar=%d position=%v", trackIndex, automationIndex, automation.Bar, automation.Position)
+			}
+		}
 		for measureIndex := range track.Measures {
 			if len(track.Measures[measureIndex].Voices) > 4 {
 				return fmt.Errorf("track %d measure %d has %d voices, Guitar Pro 8 supports at most 4", trackIndex, measureIndex, len(track.Measures[measureIndex].Voices))
@@ -482,6 +495,28 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		},
 		PlaybackState:    "Default",
 		AudioEngineState: "MIDI",
+	}
+	if len(track.Sounds) > 0 {
+		result.Sounds.Sounds = make([]gpifSound, 0, len(track.Sounds))
+		for _, sound := range track.Sounds {
+			result.Sounds.Sounds = append(result.Sounds.Sounds, gpifSound{
+				Name: sound.Name, Label: sound.Label, Path: sound.Path, Role: sound.Role,
+				Program: int(sound.Program), Channel: int(channel.Channel % 16),
+			})
+		}
+	}
+	for _, automation := range track.SoundAutomations {
+		sound := track.Sounds[automation.Sound]
+		result.Automations.Automations = append(result.Automations.Automations, gpifAutomation{
+			Type: "Sound", Value: gpifAutomationValue{Text: sound.Path + ";" + sound.Name + ";" + sound.Role},
+			Visible: "true", Bar: automation.Bar, Position: automation.Position,
+		})
+	}
+	if len(track.Lyrics) > 0 {
+		result.Lyrics = &gpifLyrics{Dispatched: true, Lines: make([]gpifLyricLine, 0, len(track.Lyrics))}
+		for _, line := range track.Lyrics {
+			result.Lyrics.Lines = append(result.Lyrics.Lines, gpifLyricLine(line))
+		}
 	}
 	switch {
 	case track.Mute:
@@ -823,6 +858,13 @@ func (builder *gp8Builder) addBeat(trackIndex int, beat *Beat) (string, error) {
 	if beat.Effect.FadeIn {
 		result.Fadding = "FadeIn"
 	}
+	result.Whammy = gp8Whammy(beat.Effect.TremoloBar)
+	switch beat.Effect.Hairpin {
+	case HairpinCrescendo:
+		result.Hairpin = "Crescendo"
+	case HairpinDiminuendo:
+		result.Hairpin = "Diminuendo"
+	}
 	switch beat.Effect.Stroke.Direction {
 	case BeatStrokeDirectionUp:
 		result.Arpeggio = "Up"
@@ -897,6 +939,23 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 	articulation := 0
 	result := gpifNote{ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
 	result.Properties.Properties = append(result.Properties.Properties, gp8BendProperties(note.Effect.Bend)...)
+	if note.Effect.Harmonic != nil {
+		harmonicType := gp8HarmonicType(note.Effect.Harmonic.Kind)
+		if harmonicType != "" {
+			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HarmonicType", HType: &harmonicType})
+		}
+		var harmonicFret *float64
+		if note.Effect.Harmonic.FretFloat != nil {
+			harmonicFret = note.Effect.Harmonic.FretFloat
+		} else if note.Effect.Harmonic.Fret != nil {
+			value := float64(*note.Effect.Harmonic.Fret)
+			harmonicFret = &value
+		}
+		if harmonicFret != nil {
+			value := strconv.FormatFloat(*harmonicFret, 'f', -1, 64)
+			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HarmonicFret", Float: &value})
+		}
+	}
 	if track.PercussionTrack {
 		articulation = builder.articulationIDs[trackIndex][note.Value]
 		result.InstrumentArticulation = &articulation
@@ -907,9 +966,10 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 			Destination: strconv.FormatBool(note.Kind == NoteTypeTie),
 		}
 	}
-	if note.Kind == NoteTypeDead || note.Effect.GhostNote {
-		if note.Kind == NoteTypeDead {
-			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Muted"})
+	if note.Kind == NoteTypeDead || note.Effect.DeadNote || note.Effect.GhostNote {
+		if note.Kind == NoteTypeDead || note.Effect.DeadNote {
+			enable := ""
+			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Muted", Enable: &enable})
 		}
 		if note.Effect.GhostNote {
 			result.AntiAccent = "Normal"
@@ -924,7 +984,8 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "PalmMuted", Enable: &value})
 	}
 	if note.Effect.Hammer {
-		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HopoOrigin"})
+		enable := ""
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HopoOrigin", Enable: &enable})
 	}
 	if len(note.Effect.Slides) > 0 {
 		flags := 0
@@ -986,6 +1047,65 @@ func gp8BarClef(song *Song, trackIndex int, measure *Measure) string {
 		}
 	}
 	return "G2"
+}
+
+func gp8HarmonicType(kind HarmonicType) string {
+	switch kind {
+	case HarmonicTypeNatural:
+		return "Natural"
+	case HarmonicTypeArtificial:
+		return "Artificial"
+	case HarmonicTypePinch:
+		return "Pinch"
+	case HarmonicTypeTapped:
+		return "Tap"
+	case HarmonicTypeSemi:
+		return "Semi"
+	default:
+		return ""
+	}
+}
+
+func gp8Whammy(bend *BendEffect) *gpifWhammy {
+	if bend == nil || len(bend.Points) == 0 || len(bend.Points) > 4 {
+		return nil
+	}
+	points := slices.Clone(bend.Points)
+	if len(points) == 1 {
+		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition), Value: points[0].Value})
+	}
+	origin := points[0]
+	destination := points[len(points)-1]
+	middle1, middle2 := origin, destination
+	switch len(points) {
+	case 4:
+		middle1, middle2 = points[1], points[2]
+	case 3:
+		middle1, middle2 = points[1], points[1]
+	case 2:
+		middle1 = BendPoint{
+			Position: uint8((uint16(origin.Position) + uint16(destination.Position)) / 2),
+			Value:    int8((int16(origin.Value) + int16(destination.Value)) / 2),
+		}
+		middle2 = middle1
+	}
+	return &gpifWhammy{
+		OriginValue:       gp8WhammyValue(origin.Value),
+		MiddleValue:       gp8WhammyValue(middle1.Value),
+		DestinationValue:  gp8WhammyValue(destination.Value),
+		OriginOffset:      gp8WhammyOffset(origin.Position),
+		MiddleOffset1:     gp8WhammyOffset(middle1.Position),
+		MiddleOffset2:     gp8WhammyOffset(middle2.Position),
+		DestinationOffset: gp8WhammyOffset(destination.Position),
+	}
+}
+
+func gp8WhammyOffset(position uint8) string {
+	return strconv.FormatFloat(float64(position)*100/float64(BendEffectMaxPosition), 'f', 6, 64)
+}
+
+func gp8WhammyValue(value int8) string {
+	return strconv.FormatFloat(float64(value)*float64(GPBendSemitone), 'f', 6, 64)
 }
 
 func gp8BendProperties(bend *BendEffect) []gpifProperty {
@@ -1136,7 +1256,13 @@ func gp8DrumStaffLine(value int16) int {
 		return -3
 	case 55:
 		return -2
+	case 57:
+		return -1
 	case 92:
+		return -1
+	case 99:
+		return 1
+	case 102:
 		return -1
 	default:
 		return 0
@@ -1316,6 +1442,14 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		articulation.Name = "Splash (hit)"
 		articulation.Noteheads = "noteheadXBlack noteheadXBlack noteheadXBlack"
 		articulation.OutputRSESound = "stick.hit.hit"
+	case 57:
+		element.Name = "Crash Medium"
+		element.Type = "crash"
+		element.SoundbankName = "Master-Crash01"
+		articulation.Name = "Crash medium (hit)"
+		articulation.StaffLine = -1
+		articulation.Noteheads = "noteheadHeavyX noteheadHeavyX noteheadHeavyX"
+		articulation.OutputRSESound = "stick.hit.hit"
 	case 92:
 		element.Name = "Charley"
 		element.Type = "hiHat"
@@ -1324,6 +1458,24 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		articulation.Noteheads = "noteheadCircleSlash noteheadCircleSlash noteheadCircleSlash"
 		articulation.OutputMIDINumber = 46
 		articulation.OutputRSESound = "stick.hit.half"
+	case 99:
+		element.Name = "Cowbell Low"
+		element.Type = "cowbell"
+		element.SoundbankName = "CowbellBig-Percu"
+		articulation.Name = "Cowbell low (hit)"
+		articulation.StaffLine = 1
+		articulation.Noteheads = "noteheadTriangleUpBlack noteheadTriangleUpHalf noteheadTriangleUpWhole"
+		articulation.OutputMIDINumber = 56
+		articulation.OutputRSESound = "stick.hit.hit"
+	case 102:
+		element.Name = "Cowbell High"
+		element.Type = "cowbell"
+		element.SoundbankName = "CowbellSmall-Percu"
+		articulation.Name = "Cowbell high (hit)"
+		articulation.StaffLine = -1
+		articulation.Noteheads = "noteheadTriangleUpBlack noteheadTriangleUpHalf noteheadTriangleUpWhole"
+		articulation.OutputMIDINumber = 56
+		articulation.OutputRSESound = "stick.hit.hit"
 	}
 	if notehead := options.PercussionNoteheads[value]; notehead != GP8PercussionNoteheadDefault {
 		articulation.Noteheads = gp8PercussionNoteheads(notehead)

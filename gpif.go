@@ -115,11 +115,23 @@ type gpifTrack struct {
 	GeneralMidi      *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
 	Staves           gpifStaves         `xml:"Staves"`
 	Sounds           gpifSounds         `xml:"Sounds"`
+	Automations      gpifAutomations    `xml:"Automations"`
 	Transpose        *gpifTranspose     `xml:"Transpose,omitempty"`
 	RSE              *gpifTrackRSE      `xml:"RSE,omitempty"`
 	MidiConnection   gpifMidiConnection `xml:"MidiConnection"`
 	PlaybackState    string             `xml:"PlaybackState,omitempty"`
 	AudioEngineState string             `xml:"AudioEngineState,omitempty"`
+	Lyrics           *gpifLyrics        `xml:"Lyrics,omitempty"`
+}
+
+type gpifLyrics struct {
+	Dispatched bool            `xml:"dispatched,attr"`
+	Lines      []gpifLyricLine `xml:"Line"`
+}
+
+type gpifLyricLine struct {
+	Text   string `xml:"Text"`
+	Offset int    `xml:"Offset"`
 }
 
 type gpifTrackRSE struct {
@@ -245,6 +257,9 @@ type gpifSounds struct {
 
 type gpifSound struct {
 	Name    string `xml:"Name"`
+	Label   string `xml:"Label,omitempty"`
+	Path    string `xml:"Path,omitempty"`
+	Role    string `xml:"Role,omitempty"`
 	Program int    `xml:"MIDI>Program"`
 	Channel int    `xml:"MIDI>PrimaryChannel"`
 }
@@ -317,7 +332,18 @@ type gpifBeat struct {
 	FreeText   string         `xml:"FreeText,omitempty"`
 	Ottavia    string         `xml:"Ottavia,omitempty"`
 	Wah        string         `xml:"Wah,omitempty"`
+	Whammy     *gpifWhammy    `xml:"Whammy,omitempty"`
 	Properties gpifProperties `xml:"Properties"`
+}
+
+type gpifWhammy struct {
+	OriginValue       string `xml:"originValue,attr"`
+	MiddleValue       string `xml:"middleValue,attr"`
+	DestinationValue  string `xml:"destinationValue,attr"`
+	OriginOffset      string `xml:"originOffset,attr"`
+	MiddleOffset1     string `xml:"middleOffset1,attr"`
+	MiddleOffset2     string `xml:"middleOffset2,attr"`
+	DestinationOffset string `xml:"destinationOffset,attr"`
 }
 
 type gpifRhythmRef struct {
@@ -471,6 +497,30 @@ func parseGPIF(data []byte) (*Song, error) {
 			if t.ID == trackID {
 				track.Name = t.Name
 				track.PercussionTrack = t.isPercussionTrack()
+				if t.Lyrics != nil {
+					for _, line := range t.Lyrics.Lines {
+						track.Lyrics = append(track.Lyrics, TrackLyricLine(line))
+					}
+				}
+				for _, sound := range t.Sounds.Sounds {
+					track.Sounds = append(track.Sounds, TrackSound{
+						Name: sound.Name, Label: sound.Label, Path: sound.Path,
+						Role: sound.Role, Program: int32(sound.Program),
+					})
+				}
+				for _, automation := range t.Automations.Automations {
+					if automation.Type != "Sound" {
+						continue
+					}
+					for soundIndex, sound := range track.Sounds {
+						if automation.Value.Text == sound.Path+";"+sound.Name+";"+sound.Role {
+							track.SoundAutomations = append(track.SoundAutomations, SoundAutomation{
+								Bar: automation.Bar, Position: automation.Position, Sound: soundIndex,
+							})
+							break
+						}
+					}
+				}
 				// Parse string tuning from staves
 				for _, staff := range t.Staves.Staff {
 					for _, prop := range staff.Properties {
@@ -620,6 +670,12 @@ func parseGPIF(data []byte) (*Song, error) {
 
 									// Beat effects
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
+									switch b.Hairpin {
+									case "Crescendo":
+										beat.Effect.Hairpin = HairpinCrescendo
+									case "Diminuendo":
+										beat.Effect.Hairpin = HairpinDiminuendo
+									}
 									gpifApplyBeatEffects(b, &beat)
 									if trackIdx < len(trackChordMaps) {
 										if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
@@ -943,6 +999,33 @@ func gpifAutomationIsBefore(a, b TempoAutomation) bool {
 }
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
+	if b.Whammy != nil {
+		values := []struct {
+			position string
+			value    string
+		}{
+			{b.Whammy.OriginOffset, b.Whammy.OriginValue},
+			{b.Whammy.MiddleOffset1, b.Whammy.MiddleValue},
+			{b.Whammy.MiddleOffset2, b.Whammy.MiddleValue},
+			{b.Whammy.DestinationOffset, b.Whammy.DestinationValue},
+		}
+		bend := &BendEffect{}
+		for _, point := range values {
+			position, positionErr := strconv.ParseFloat(point.position, 64)
+			value, valueErr := strconv.ParseFloat(point.value, 64)
+			if positionErr != nil || valueErr != nil {
+				continue
+			}
+			bend.Points = append(bend.Points, BendPoint{
+				Position: uint8(math.Round(position * float64(BendEffectMaxPosition) / 100)),
+				Value:    int8(math.Round(value / float64(GPBendSemitone))),
+			})
+		}
+		if len(bend.Points) > 0 {
+			beat.Effect.TremoloBar = bend
+		}
+	}
+
 	// Tremolo picking
 	if b.Tremolo != "" {
 		tp := TremoloPickingEffect{Duration: defaultDuration()}
@@ -1118,6 +1201,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 			}
 		case "Muted":
 			note.Kind = NoteTypeDead
+			note.Effect.DeadNote = true
 		case "Bended":
 			bend.enabled = true
 		case "BendOriginOffset":
@@ -1164,6 +1248,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 				if v, err := strconv.ParseFloat(*p.Float, 64); err == nil {
 					fret := int8(v)
 					note.Effect.Harmonic.Fret = &fret
+					note.Effect.Harmonic.FretFloat = &v
 				}
 			}
 		case "Slide":

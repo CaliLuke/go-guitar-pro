@@ -13,6 +13,17 @@ const (
 	TripletFeelSixteenth TripletFeel = 2
 )
 
+// Hairpin describes a gradual dynamic change beginning on a beat.
+type Hairpin int8
+
+// Hairpin values enumerate the gradual dynamic changes supported by GPIF.
+const (
+	// HairpinNone indicates no gradual dynamic change.
+	HairpinNone Hairpin = iota
+	HairpinCrescendo
+	HairpinDiminuendo
+)
+
 // MeasureClef represents available clefs.
 type MeasureClef int8
 

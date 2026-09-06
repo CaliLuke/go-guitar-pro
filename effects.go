@@ -42,10 +42,11 @@ type GraceEffect struct {
 
 // HarmonicEffect represents a harmonic note effect.
 type HarmonicEffect struct {
-	Pitch  *PitchClass
-	Octave *Octave
-	Fret   *int8
-	Kind   HarmonicType
+	Pitch     *PitchClass
+	Octave    *Octave
+	Fret      *int8
+	FretFloat *float64
+	Kind      HarmonicType
 }
 
 // TremoloPickingEffect represents a tremolo picking effect.
@@ -76,6 +77,7 @@ type NoteEffect struct {
 	Staccato             bool
 	Hammer               bool
 	GhostNote            bool
+	DeadNote             bool
 	Vibrato              bool
 }
 

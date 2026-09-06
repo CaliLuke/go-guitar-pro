@@ -366,7 +366,10 @@ func TestGP8NativeDrumKitMetadata(t *testing.T) {
 		{midi: 52, elementName: "China", kind: "china", soundbank: "Master-China", articulationName: "China (hit)", staffLine: -3, noteheads: "noteheadHeavyXHat noteheadHeavyXHat noteheadHeavyXHat", rseSound: "stick.hit.hit"},
 		{midi: 53, elementName: "Ride", kind: "ride", soundbank: "Master-Ride", articulationName: "Ride (bell)", staffLine: 0, noteheads: "noteheadDiamondWhite noteheadDiamondWhite noteheadDiamondWhite", rseSound: "stick.hit.bell"},
 		{midi: 55, elementName: "Splash", kind: "splash", soundbank: "Master-Splash", articulationName: "Splash (hit)", staffLine: -2, noteheads: "noteheadXBlack noteheadXBlack noteheadXBlack", rseSound: "stick.hit.hit"},
+		{midi: 57, elementName: "Crash Medium", kind: "crash", soundbank: "Master-Crash01", articulationName: "Crash medium (hit)", staffLine: -1, noteheads: "noteheadHeavyX noteheadHeavyX noteheadHeavyX", rseSound: "stick.hit.hit"},
 		{midi: 92, elementName: "Charley", kind: "hiHat", soundbank: "Master-Hihat", articulationName: "Hi-Hat (half)", staffLine: -1, noteheads: "noteheadCircleSlash noteheadCircleSlash noteheadCircleSlash", rseSound: "stick.hit.half", outputMIDI: 46},
+		{midi: 99, elementName: "Cowbell Low", kind: "cowbell", soundbank: "CowbellBig-Percu", articulationName: "Cowbell low (hit)", staffLine: 1, noteheads: "noteheadTriangleUpBlack noteheadTriangleUpHalf noteheadTriangleUpWhole", rseSound: "stick.hit.hit", outputMIDI: 56},
+		{midi: 102, elementName: "Cowbell High", kind: "cowbell", soundbank: "CowbellSmall-Percu", articulationName: "Cowbell high (hit)", staffLine: -1, noteheads: "noteheadTriangleUpBlack noteheadTriangleUpHalf noteheadTriangleUpWhole", rseSound: "stick.hit.hit", outputMIDI: 56},
 	} {
 		element := gp8DrumElement(test.midi, GP8ExportOptions{})
 		if element.Name != test.elementName || element.Type != test.kind || element.SoundbankName != test.soundbank {
@@ -505,6 +508,157 @@ func TestExportGP8PreservesBendCurves(t *testing.T) {
 		if got == nil || got.Kind != want.Kind || got.Value != want.Value || !reflect.DeepEqual(got.Points, want.Points) {
 			t.Errorf("bend %d = %#v, want %#v", index, got, want)
 		}
+	}
+}
+
+func TestExportGP8PreservesHairpins(t *testing.T) {
+	song := syntheticGP8Song()
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Hairpin = HairpinCrescendo
+	song.Tracks[0].Measures[0].Voices[0].Beats[1].Effect.Hairpin = HairpinDiminuendo
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	err = xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := document.Beats.Beats[1].Hairpin; got != "Crescendo" {
+		t.Errorf("first beat hairpin = %q, want Crescendo", got)
+	}
+	if got := document.Beats.Beats[2].Hairpin; got != "Diminuendo" {
+		t.Errorf("second beat hairpin = %q, want Diminuendo", got)
+	}
+
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beats := roundTrip.Tracks[0].Measures[0].Voices[0].Beats
+	if beats[0].Effect.Hairpin != HairpinCrescendo {
+		t.Errorf("first round-trip hairpin = %d, want Crescendo", beats[0].Effect.Hairpin)
+	}
+	if beats[1].Effect.Hairpin != HairpinDiminuendo {
+		t.Errorf("second round-trip hairpin = %d, want Diminuendo", beats[1].Effect.Hairpin)
+	}
+}
+
+func TestExportGP8PreservesTrackLyricsAndSoundAutomations(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.Lyrics = []TrackLyricLine{{Text: "Hel-lo world", Offset: 2}}
+	track.Sounds = []TrackSound{
+		{Name: "Clean", Label: "Clean", Path: "Stringed/Electric Guitars/Clean Guitar", Role: "Factory", Program: 27},
+		{Name: "Distortion", Label: "Distortion", Path: "Stringed/Electric Guitars/Distortion Guitar", Role: "Factory", Program: 30},
+	}
+	track.SoundAutomations = []SoundAutomation{{Bar: 0, Sound: 0}, {Bar: 1, Position: 0.5, Sound: 1}}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(roundTrip.Tracks[0].Lyrics, track.Lyrics) {
+		t.Errorf("lyrics = %#v, want %#v", roundTrip.Tracks[0].Lyrics, track.Lyrics)
+	}
+	if !reflect.DeepEqual(roundTrip.Tracks[0].Sounds, track.Sounds) {
+		t.Errorf("sounds = %#v, want %#v", roundTrip.Tracks[0].Sounds, track.Sounds)
+	}
+	if !reflect.DeepEqual(roundTrip.Tracks[0].SoundAutomations, track.SoundAutomations) {
+		t.Errorf("sound automations = %#v, want %#v", roundTrip.Tracks[0].SoundAutomations, track.SoundAutomations)
+	}
+}
+
+func TestExportGP8PreservesHarmonicsAndWhammyCurves(t *testing.T) {
+	song := syntheticGP8Song()
+	harmonicFret := 2.4
+	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Effect.Harmonic = &HarmonicEffect{Kind: HarmonicTypeArtificial, FretFloat: &harmonicFret}
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.TremoloBar = &BendEffect{Points: []BendPoint{
+		{Position: 0, Value: 0}, {Position: 6, Value: -32}, {Position: 12, Value: 0},
+	}}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beat := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0]
+	if beat.Effect.TremoloBar == nil || len(beat.Effect.TremoloBar.Points) != 4 {
+		t.Fatalf("round-trip whammy = %#v, want four GPIF control points", beat.Effect.TremoloBar)
+	}
+	parsedHarmonic := beat.Notes[0].Effect.Harmonic
+	if parsedHarmonic == nil || parsedHarmonic.Kind != HarmonicTypeArtificial || parsedHarmonic.FretFloat == nil || *parsedHarmonic.FretFloat != harmonicFret {
+		t.Errorf("round-trip harmonic = %#v, want artificial at fret %.1f", parsedHarmonic, harmonicFret)
+	}
+}
+
+func TestExportGP8EmitsEnabledMutedAndHammerOnProperties(t *testing.T) {
+	song := syntheticGP8Song()
+	mutedTie := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	mutedTie.Kind = NoteTypeTie
+	mutedTie.Effect.DeadNote = true
+	hammerOn := &song.Tracks[0].Measures[0].Voices[0].Beats[1].Notes[0]
+	hammerOn.Effect.Hammer = true
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	err = xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"Muted", "HopoOrigin"} {
+		foundEnabled := false
+		for _, rawNote := range document.Notes.Notes {
+			for _, property := range rawNote.Properties.Properties {
+				if property.Name == name && property.Enable != nil {
+					foundEnabled = true
+				}
+			}
+		}
+		if !foundEnabled {
+			t.Errorf("GPIF %s property is missing its required Enable element", name)
+		}
+	}
+
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	parsedMutedTie := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	if parsedMutedTie.Kind != NoteTypeTie || !parsedMutedTie.Effect.DeadNote {
+		t.Errorf("round-trip tied muted note = %#v, want both tie and muted semantics", parsedMutedTie)
+	}
+	parsedHammerOn := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[1].Notes[0]
+	if !parsedHammerOn.Effect.Hammer {
+		t.Error("round trip dropped hammer-on semantics")
+	}
+}
+
+func TestExportGP8RejectsInvalidSoundAutomation(t *testing.T) {
+	song := syntheticGP8Song()
+	song.Tracks[0].SoundAutomations = []SoundAutomation{{Bar: 0, Sound: 1}}
+	if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "sound index") {
+		t.Fatalf("Export error = %v, want invalid sound index", err)
 	}
 }
 

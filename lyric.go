@@ -15,6 +15,12 @@ type LyricLine struct {
 	Number          uint8
 }
 
+// TrackLyricLine is one GPIF lyric line attached to a track.
+type TrackLyricLine struct {
+	Text   string
+	Offset int
+}
+
 func (s *Song) readLyrics(c *cursor) (Lyrics, error) {
 	tc, err := c.readInt()
 	if err != nil {

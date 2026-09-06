@@ -19,10 +19,13 @@ type TrackSettings struct {
 
 // Track represents a track.
 type Track struct {
-	Name     string
-	Measures []Measure
-	Strings  []GuitarString
-	Rse      TrackRse
+	Name             string
+	Measures         []Measure
+	Strings          []GuitarString
+	Lyrics           []TrackLyricLine
+	Sounds           []TrackSound
+	SoundAutomations []SoundAutomation
+	Rse              TrackRse
 	// ChannelIndex is the index of the track channel in Song.Channels.
 	// A value of -1 means that the file does not bind the track to a channel.
 	ChannelIndex              int
@@ -40,6 +43,22 @@ type Track struct {
 	PercussionTrack           bool
 	Visible                   bool
 	Solo                      bool
+}
+
+// TrackSound describes one selectable GPIF playback sound.
+type TrackSound struct {
+	Name    string
+	Label   string
+	Path    string
+	Role    string
+	Program int32
+}
+
+// SoundAutomation selects a track sound at a score position.
+type SoundAutomation struct {
+	Bar      int
+	Position float64
+	Sound    int
 }
 
 // GuitarString represents a guitar string with tuning.
