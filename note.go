@@ -199,6 +199,11 @@ func (s *Song) readNoteV5(c *cursor, note *Note, guitarString GuitarString, trac
 			return effectErr
 		}
 	}
+	if s.Tracks[trackIndex].PercussionTrack {
+		for index := range note.Effect.Graces {
+			note.Effect.Graces[index].Fret = int8(note.Value)
+		}
+	}
 	return nil
 }
 

@@ -32,8 +32,10 @@ type BendEffect struct {
 
 // GraceEffect represents a grace note effect.
 type GraceEffect struct {
-	Duration   uint8
-	Fret       int8
+	Duration uint8
+	Fret     int8
+	// RawFret preserves the source-format fret byte when Fret is normalized.
+	RawFret    *int8
 	IsDead     bool
 	IsOnBeat   bool
 	Sequence   uint8
@@ -141,7 +143,7 @@ func (s *Song) readGraceEffect(c *cursor) (GraceEffect, error) {
 	if err != nil {
 		return GraceEffect{}, err
 	}
-	g := GraceEffect{Fret: fret, Velocity: DefaultVelocity, Duration: 1}
+	g := GraceEffect{Fret: fret, RawFret: &fret, Velocity: DefaultVelocity, Duration: 1}
 	velByte, err := c.readByte()
 	if err != nil {
 		return g, err
@@ -167,7 +169,8 @@ func (s *Song) readGraceEffectV5(c *cursor) (GraceEffect, error) {
 	if err != nil {
 		return GraceEffect{}, err
 	}
-	g := GraceEffect{Fret: int8(fretByte), Velocity: DefaultVelocity, Duration: 1}
+	rawFret := int8(fretByte)
+	g := GraceEffect{Fret: rawFret, RawFret: &rawFret, Velocity: DefaultVelocity, Duration: 1}
 	velByte, err := c.readByte()
 	if err != nil {
 		return g, err

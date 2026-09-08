@@ -105,7 +105,7 @@ func TestPercussionUsesTrackChannel(t *testing.T) {
 	}
 }
 
-func TestGP5PercussionGracePreservesAuthoredValue(t *testing.T) {
+func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp5/motherload-percussion-grace.gp5")
 	var track *Track
 	for index := range song.Tracks {
@@ -121,7 +121,7 @@ func TestGP5PercussionGracePreservesAuthoredValue(t *testing.T) {
 		t.Fatal("Percussion track is not marked as percussion")
 	}
 
-	graceCount := 0
+	var graceBars []int
 	for measureIndex, measure := range track.Measures {
 		for _, voice := range measure.Voices {
 			for _, beat := range voice.Beats {
@@ -129,21 +129,25 @@ func TestGP5PercussionGracePreservesAuthoredValue(t *testing.T) {
 					if len(note.Effect.Graces) == 0 {
 						continue
 					}
-					graceCount += len(note.Effect.Graces)
 					if note.Value != 38 {
 						t.Errorf("bar %d grace parent articulation = %d, want 38", measureIndex+1, note.Value)
 					}
 					for _, grace := range note.Effect.Graces {
-						if grace.Fret != 0 {
-							t.Errorf("bar %d grace value = %d, want authored value 0", measureIndex+1, grace.Fret)
+						graceBars = append(graceBars, measureIndex+1)
+						if grace.Fret != 38 {
+							t.Errorf("bar %d grace articulation = %d, want 38", measureIndex+1, grace.Fret)
+						}
+						if grace.RawFret == nil || *grace.RawFret != 0 {
+							t.Errorf("bar %d raw grace fret = %v, want 0", measureIndex+1, grace.RawFret)
 						}
 					}
 				}
 			}
 		}
 	}
-	if graceCount != 8 {
-		t.Errorf("percussion grace notes = %d, want 8", graceCount)
+	wantBars := []int{2, 2, 3, 26, 27, 51, 74, 75}
+	if !slices.Equal(graceBars, wantBars) {
+		t.Errorf("percussion grace bars = %v, want %v", graceBars, wantBars)
 	}
 }
 
