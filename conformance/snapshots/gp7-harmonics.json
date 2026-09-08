@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "case": "gp7-harmonics",
+  "comparison": "input-go-vs-alphatab",
+  "differences": [
+    {
+      "path": "/harmonics/0/value/fret",
+      "feature": "harmonics",
+      "alphaTab": 2.4
+    },
+    {
+      "path": "/harmonics/1/value/fret",
+      "feature": "harmonics",
+      "alphaTab": 12
+    },
+    {
+      "path": "/harmonics/2/value/fret",
+      "feature": "harmonics",
+      "alphaTab": 12
+    },
+    {
+      "path": "/harmonics/3/value/fret",
+      "feature": "harmonics",
+      "alphaTab": 12
+    },
+    {
+      "path": "/harmonics/4/value/fret",
+      "feature": "harmonics",
+      "alphaTab": 12
+    }
+  ]
+}

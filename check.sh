@@ -74,6 +74,7 @@ else
 fi
 
 run_gate "duplication" check_duplication
+run_gate "AlphaTab semantic conformance" ./conformance/check.sh
 run_gate "race tests and coverage" test_with_coverage
 
 echo ""

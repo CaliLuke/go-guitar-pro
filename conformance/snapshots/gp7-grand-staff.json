@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "case": "gp7-grand-staff",
+  "comparison": "input-go-vs-alphatab",
+  "differences": [
+    {
+      "path": "/staff-ownership/0/staffCount",
+      "feature": "staff-ownership",
+      "go": 1,
+      "alphaTab": 2
+    },
+    {
+      "path": "/staff-ownership/0/staves/1",
+      "feature": "staff-ownership",
+      "alphaTab": {
+        "barCount": 9,
+        "clefs": [
+          "bass",
+          "bass",
+          "bass",
+          "bass",
+          "bass",
+          "bass",
+          "bass",
+          "bass",
+          "bass"
+        ],
+        "index": 1,
+        "noteCount": 18,
+        "percussion": false,
+        "tuning": [
+          64,
+          59,
+          55,
+          50,
+          45,
+          40
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "case": "gp7-notation-legend",
+  "comparison": "input-go-vs-alphatab",
+  "differences": [
+    {
+      "path": "/hairpins/5",
+      "feature": "hairpins",
+      "alphaTab": {
+        "path": "/tracks/0/staves/0/bars/80/voices/0/beats/5/hairpin",
+        "value": "decrescendo"
+      }
+    },
+    {
+      "path": "/hairpins/6",
+      "feature": "hairpins",
+      "alphaTab": {
+        "path": "/tracks/0/staves/0/bars/80/voices/0/beats/6/hairpin",
+        "value": "decrescendo"
+      }
+    },
+    {
+      "path": "/hairpins/7",
+      "feature": "hairpins",
+      "alphaTab": {
+        "path": "/tracks/0/staves/0/bars/80/voices/0/beats/7/hairpin",
+        "value": "decrescendo"
+      }
+    }
+  ]
+}

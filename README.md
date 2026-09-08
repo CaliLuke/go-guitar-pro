@@ -104,6 +104,8 @@ normalize to rests.
 | 8 | `.gp` | ZIP with GPIF XML | Yes | Yes |
 
 The test suite reads every supported file in the compatibility corpus under `testdata/`.
+The generated [semantic support matrix](docs/format-support.md) records independently
+checked behavior and known issue-linked gaps.
 
 For GP6, GP7, and GP8 files, `Song.TempoAutomations` contains the complete tempo map.
 For GP7 and GP8 files, `Song.SyncPoints` contains the score-to-audio anchors and
@@ -113,12 +115,12 @@ bytes when the asset is present in the project archive.
 ## Develop
 
 ```sh
-go test ./...
-go vet ./...
-golangci-lint run
+prek run --all-files
 ```
 
-Before you submit a change, run `go fmt ./...`.
+The full gate includes the pinned AlphaTab differential oracle. Run only that
+development check with `./conformance/check.sh`; AlphaTab is never linked into
+the production Go package.
 
 ## Provenance
 

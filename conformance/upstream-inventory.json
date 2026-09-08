@@ -1,0 +1,4734 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+  "sources": [
+    {
+      "path": "packages/alphatab/src/importer/GpifParser.ts",
+      "sha256": "42a394801dde72c834b3d80c4aaed2f71ae6f3d784504e2bc87d7fe5f5a98113"
+    },
+    {
+      "path": "packages/alphatab/src/importer/Gp3To5Importer.ts",
+      "sha256": "63ee3c6f34358e15ea475b02ab73ea9ba3a1d0ac4a1319bd621295e0f48a2bc2"
+    },
+    {
+      "path": "packages/alphatab/src/model/Automation.ts",
+      "sha256": "29ee126dcbec57d08c5fca14c89f00b937ac35a8c0db419ee4aae49192e06a3a"
+    },
+    {
+      "path": "packages/alphatab/src/model/Bar.ts",
+      "sha256": "eef9d39f2e7a0fc2bd44975e6c1d4a187a862d806666e0c0d4d02e6eeaf9ca1c"
+    },
+    {
+      "path": "packages/alphatab/src/model/Beat.ts",
+      "sha256": "46ca31e21630effe58c9776663309c16ace09a1f0601436c20c5f6ddecc0b5b7"
+    },
+    {
+      "path": "packages/alphatab/src/model/MasterBar.ts",
+      "sha256": "20a82bec4e1dcaed91a2e1deac6501a0d27da43da7647ed74f16b13515347139"
+    },
+    {
+      "path": "packages/alphatab/src/model/Note.ts",
+      "sha256": "2e959a11f9f6c88280c8e647551756fb0f9b92cb4166cf4201295d1382622e7d"
+    },
+    {
+      "path": "packages/alphatab/src/model/Score.ts",
+      "sha256": "12069085ba20f4754e1c3c53a6162871354c628de3f3517662f331dd6e51b972"
+    },
+    {
+      "path": "packages/alphatab/src/model/Staff.ts",
+      "sha256": "3111038544a233246b853af02787b623aa47f94d793dbcd3565b26d92157d42c"
+    },
+    {
+      "path": "packages/alphatab/src/model/Track.ts",
+      "sha256": "97ee0f41de9a3e01142901852196bd6c25ebac693a59fef6fd0c0a1f43cef111"
+    },
+    {
+      "path": "packages/alphatab/src/model/Voice.ts",
+      "sha256": "42371a693bb2ec4d570de8387a14190d85f137f27be927fcf4674a233b979122"
+    },
+    {
+      "path": "packages/alphatab/test/importer/GpImporterTestHelper.ts",
+      "sha256": "83874a9b604baa4b829904e1b66c6c188aff1daff446a14634ec2cc4b9ae0cd0"
+    },
+    {
+      "path": "packages/alphatab/test/importer/Gp3Importer.test.ts",
+      "sha256": "b46adbcdaa4b37eee9abce51d0beaf7c71caf0e979a7af8c9cd76a49abee81f5"
+    },
+    {
+      "path": "packages/alphatab/test/importer/Gp4Importer.test.ts",
+      "sha256": "899ae077c532dbbc996b097f18fc5c5e5a8373a9f3870e63c3fbf9699f6ae158"
+    },
+    {
+      "path": "packages/alphatab/test/importer/Gp5Importer.test.ts",
+      "sha256": "f59db9e2536bfa0c6e7a464f756b1e2af69725fbeb4306c380e1cc037a5c3920"
+    },
+    {
+      "path": "packages/alphatab/test/importer/GpxImporter.test.ts",
+      "sha256": "53dab93b5eccff631c4eb49a7111a019241794d6227b418bc37b0ccb2469eace"
+    },
+    {
+      "path": "packages/alphatab/test/importer/Gp7Importer.test.ts",
+      "sha256": "3f679eaefbf1b118614455c22cc9c24a10a496e50ae0997b978f8082e0981a4d"
+    },
+    {
+      "path": "packages/alphatab/test/importer/Gp8Importer.test.ts",
+      "sha256": "c36e856b6670ecff29cdc877170496288f4a45e09ad888d7021f08675e88ccf9"
+    }
+  ],
+  "testCases": [
+    {
+      "name": "checkNotes",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Duration, fret, string and rest facts are in the canonical contract."
+    },
+    {
+      "name": "checkTimeSignatures",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Master-bar signatures are compared."
+    },
+    {
+      "name": "checkDead",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Dead-note identity is compared; a wider fixture snapshot is pending."
+    },
+    {
+      "name": "checkGrace",
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Grace ownership is normalized separately from AlphaTab display timing."
+    },
+    {
+      "name": "checkAccentuations",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Accent fields are modeled but not yet a dedicated differential case."
+    },
+    {
+      "name": "checkHarmonics",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Kinds are retained; GPIF harmonic fret gaps are baselined."
+    },
+    {
+      "name": "checkHammer",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Origin flags are modeled; destination linking is not fully lossless."
+    },
+    {
+      "name": "checkBend",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Bend points are normalized but not yet a dedicated differential case."
+    },
+    {
+      "name": "checkTremolo",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Whammy points are outside the first feature cases."
+    },
+    {
+      "name": "checkSlides",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Slide values are modeled; complete relationship semantics remain pending."
+    },
+    {
+      "name": "checkStrings",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Per-staff tuning is compared; Go currently has track-level ownership."
+    },
+    {
+      "name": "checkVibrato",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Note vibrato is modeled; wide/beat variants remain pending."
+    },
+    {
+      "name": "checkTrills",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Trill values are modeled but not yet a dedicated differential case."
+    },
+    {
+      "name": "checkOtherEffects",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "The contract includes the represented effects; issue 12 owns missing semantics."
+    },
+    {
+      "name": "checkFingering",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Fingering remains inventoried but is not in the first snapshot projection."
+    },
+    {
+      "name": "checkStroke",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Stroke direction remains inventoried but is not in the first snapshot projection."
+    },
+    {
+      "name": "checkTuplets",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Tuplet ratio and played duration are compared."
+    },
+    {
+      "name": "checkRanges",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Display range selection is not authored score semantics."
+    },
+    {
+      "name": "checkEffects",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Reserved upstream aggregate; individual effect checks carry meaning."
+    },
+    {
+      "name": "checkKeySignatures",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Key data is parsed but not projected in the first differential cases."
+    },
+    {
+      "name": "checkColors",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Track colors are display metadata, not authored playback or notation semantics."
+    },
+    {
+      "name": "checkChords",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Chord diagrams are modeled but not projected in the first differential cases."
+    },
+    {
+      "name": "checkChord",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Helper used by checkChords rather than an independently discovered feature."
+    },
+    {
+      "name": "checkMultiTrackLayoutConfiguration",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Page layout configuration is not semantic score content."
+    },
+    {
+      "name": "checkSlash",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Slash notation remains inventoried but is not in the first snapshot projection."
+    }
+  ],
+  "modelFields": [
+    {
+      "name": "Score.masterBars",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Master-bar structure is canonical."
+    },
+    {
+      "name": "Score.tracks",
+      "disposition": "supported",
+      "feature": "score-core",
+      "reason": "Track ownership is canonical."
+    },
+    {
+      "name": "MasterBar.start",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Compared after zero-origin normalization; GPIF gaps are issue 9."
+    },
+    {
+      "name": "MasterBar.tempoAutomations",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Compared after BPM normalization; reference-unit gaps are issue 8."
+    },
+    {
+      "name": "Track.staves",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Go lacks a staff collection; issue 4."
+    },
+    {
+      "name": "Track.percussionArticulations",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Go lacks per-track definitions; issue 10."
+    },
+    {
+      "name": "Staff.bars",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Go owns bars through Track.Measures; issue 4."
+    },
+    {
+      "name": "Staff.tuning",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Go tuning is track-owned; issue 4."
+    },
+    {
+      "name": "Staff.isPercussion",
+      "disposition": "supported",
+      "feature": "percussion-articulations",
+      "reason": "Normalized against Track.PercussionTrack."
+    },
+    {
+      "name": "Beat.duration",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Denominator and ticks are compared."
+    },
+    {
+      "name": "Beat.displayStart",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Authored display timing is compared; playback timing is derived."
+    },
+    {
+      "name": "Beat.playbackStart",
+      "disposition": "derived",
+      "feature": "timing",
+      "reason": "Playback timing is deliberately separate from authored timing."
+    },
+    {
+      "name": "Beat.graceType",
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Normalized onto the owning note."
+    },
+    {
+      "name": "Beat.tremoloPicking",
+      "disposition": "partial",
+      "feature": "tremolo-picking",
+      "reason": "GPIF values are currently lost; issue 5."
+    },
+    {
+      "name": "Beat.crescendo",
+      "disposition": "partial",
+      "feature": "hairpins",
+      "reason": "Decrescendo values are currently lost; issue 7."
+    },
+    {
+      "name": "Beat.automations",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Tempo values are projected; other automation kinds remain pending."
+    },
+    {
+      "name": "Note.fret",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Authored fret is canonical for pitched notes."
+    },
+    {
+      "name": "Note.string",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "String ownership is canonical."
+    },
+    {
+      "name": "Note.percussionArticulation",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "GPIF identity is currently lost; issue 10."
+    },
+    {
+      "name": "Note.harmonicType",
+      "disposition": "supported",
+      "feature": "harmonics",
+      "reason": "Harmonic kind is compared."
+    },
+    {
+      "name": "Note.harmonicValue",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "HFret is currently lost; issue 6."
+    },
+    {
+      "name": "Note.bendPoints",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Bend points are canonical; wider normalization remains pending."
+    },
+    {
+      "name": "Note.tieOrigin",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Relationship presence is canonical; complete linking belongs to issue 12."
+    },
+    {
+      "name": "Note.tieDestination",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Relationship presence is canonical; complete linking belongs to issue 12."
+    },
+    {
+      "name": "Note.slideOrigin",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived link is separated from authored slide direction."
+    },
+    {
+      "name": "Note.slideTarget",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived link is separated from authored slide direction."
+    }
+  ],
+  "modelSymbols": [
+    {
+      "name": "Automation.barOccurence",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.buildInstrumentAutomation",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "tempo-automations",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Automation.buildTempoAutomation",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "tempo-automations",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Automation.isLinear",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.isVisible",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "tempo-automations",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Automation.millisecondOffset",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.ratioPosition",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.syncPointValue",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.text",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.type",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Automation.value",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.addVoice",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.bar",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.barLineLeft",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.barLineRight",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.barNumberDisplay",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.calculateDuration",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.clef",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.clefOttava",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.displayScale",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.displayWidth",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Bar.filledVoices",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.getActualBarLineLeft",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.getActualBarLineRight",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.hasChanges",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.id",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.isEmpty",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.isMultiVoice",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.isRestOnly",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.keySignature",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.keySignatureType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.masterBar",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.nextBar",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.nextPedalMarker",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.pedalType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.previousBar",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.previousPedalMarker",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Bar.ratioPosition",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.resetIds",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Bar.shortestDuration",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.simileMark",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.staff",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Bar.sustainPedals",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Bar.voices",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.absoluteDisplayStart",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "timing",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.absolutePlaybackStart",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "timing",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.addNote",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.addWhammyBarPoint",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.automations",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.barreFret",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.barreShape",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.beamingMode",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.brushDuration",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.brushType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.chain",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.chord",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.chordId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.crescendo",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "hairpins",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.deadSlapped",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.displayDuration",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.displayEnd",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.displayStart",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.dots",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.duration",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.dynamics",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.effectSlur",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.effectSlurDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.effectSlurOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.fade",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.fadeIn",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.fadeIn",
+      "kind": "set",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.fermata",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.finishTuplet",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.getAutomation",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "tempo-automations",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.getNoteOnString",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.getNoteWithRealValue",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.golpe",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.graceGroup",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "grace-relationships",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.graceIndex",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.graceType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.hasChord",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.hasNoteOnString",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.hasRasgueado",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.hasTuplet",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.hasWhammyBar",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.id",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.invertBeamDirection",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isAfter",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.isBarre",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isBefore",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.isContinuedWhammy",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isEffectSlurDestination",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.isEffectSlurOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.isEmpty",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.isFullBarRest",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isLastOfVoice",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isLegatoDestination",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.isLegatoOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.isLetRing",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isPalmMute",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.isRest",
+      "kind": "get",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.isTremolo",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.lyrics",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.maxNote",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.maxStringNote",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.maxWhammyPoint",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.minNote",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.minStringNote",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.minWhammyPoint",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.nextBeat",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.notes",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.noteStringLookup",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Beat.noteValueLookup",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Beat.ottava",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.overrideDisplayDuration",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.pickStroke",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.playbackDuration",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.playbackStart",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "timing",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.pop",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.preferredBeamDirection",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.previousBeat",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.rasgueado",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.removeNote",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.removeWhammyBarPoint",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.resetIds",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.showTimer",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.slap",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.slashed",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Beat.tap",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.text",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.timer",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.tremoloPicking",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tremolo-picking",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.tremoloSpeed",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "tremolo-picking",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.tremoloSpeed",
+      "kind": "set",
+      "disposition": "partial",
+      "feature": "tremolo-picking",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.tupletDenominator",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.tupletGroup",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Beat.tupletNumerator",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "rhythm",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Beat.updateDurations",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Beat.vibrato",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.voice",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.wahPedal",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.whammyBarPoints",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.whammyBarType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Beat.whammyStyle",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "MasterBar.actualBeamingRules",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.addDirection",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.addFermata",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.addSyncPoint",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.alternateEndings",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.beamingRules",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.calculateDuration",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.createSimple",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.directions",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.displayScale",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.displayWidth",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "MasterBar.fermata",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.findRule",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.getFermata",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "MasterBar.groups",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.hasChanges",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.isAnacrusis",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.isDoubleBar",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.isFreeTime",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.isRepeatEnd",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.isRepeatStart",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.isSectionStart",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.keySignature",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.keySignature",
+      "kind": "set",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.keySignatureType",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.keySignatureType",
+      "kind": "set",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.MaxAlternateEndings",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.nextMasterBar",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.previousMasterBar",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.repeatCount",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.repeatGroup",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.score",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.section",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.start",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "timing",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.syncPoints",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.tempoAutomation",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.tempoAutomations",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.timeSignatureCommon",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.timeSignatureDenominator",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "MasterBar.timeSignatureNumerator",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.tripletFeel",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "MasterBar.uniqueId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.accentuated",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.accidentalMode",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.addBendPoint",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.beat",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.bendOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.bendPoints",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.bendStyle",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Note.bendType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.calculateRealValue",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.chain",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.displayValue",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.displayValueWithoutBend",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.durationPercent",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.dynamics",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.effectSlur",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.effectSlurDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.effectSlurOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.element",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.findTieOrigin",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.fret",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.getStringTuning",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.globalNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.hammerPullDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.hammerPullDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.hammerPullOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.hammerPullOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.harmonicPitch",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.harmonicType",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "harmonics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.harmonicValue",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.hasBend",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.hasEffectSlur",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.hasQuarterToneOffset",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.id",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.initialBendValue",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isContinuedBend",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isDead",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.isEffectSlurDestination",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isEffectSlurOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isFingering",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isGhost",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.isHammerPullDestination",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isHammerPullOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isHarmonic",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isLeftHandTapped",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isLetRing",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.isPalmMute",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.isPercussion",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isPiano",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isSlurDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isSlurOrigin",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isStaccato",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.isStringed",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isTieDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isTieOrigin",
+      "kind": "get",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.isTrill",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.isVisible",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Note.leftHandFinger",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.letRingDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.maxBendPoint",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.nextNoteOnSameLine",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.noteHead",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.noteHeadCenterOnStem",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.octave",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.ornament",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.palmMuteDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.percussionArticulation",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.realValue",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.realValueWithoutHarmonic",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.resetIds",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.rightHandFinger",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.setProperty",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.showStringNumber",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slideInType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slideOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.slideOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slideOutType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slideTarget",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slideTargetNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slurDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.slurDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.slurOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.slurOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.string",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "note-and-beat-semantics",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Note.stringTuning",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "note-and-beat-semantics",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Note.tieDestination",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.tieDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.tieOrigin",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Note.tieOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.toJson",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "note-and-beat-semantics",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Note.tone",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.trillFret",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.trillSpeed",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.trillValue",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.variation",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Note.vibrato",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.addMasterBar",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.addTrack",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.album",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.applyFlatSyncPoints",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.artist",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.backingTrack",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.buildText",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.copyright",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.defaultHeaderAndFooter",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.defaultSystemsLayout",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Score.equals",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.exportFlatSyncPoints",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.headerAndFooter",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.instructions",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.isVisible",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Score.masterBars",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.music",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.notices",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.rebuildRepeatGroups",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.resetIds",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Score.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Score.stylesheet",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Score.subTitle",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.systemsLayout",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Score.tab",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.template",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.tempo",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.tempoLabel",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.textAlign",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.title",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.tracks",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Score.words",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.addBar",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Staff.addChord",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Staff.bars",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.capo",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.chords",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.DefaultStandardNotationLineCount",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.displayTranspositionPitch",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.filledVoices",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Staff.getChord",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Staff.hasChord",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Staff.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Staff.isPercussion",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "percussion-articulations",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Staff.isStringed",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.showNumbered",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.showSlash",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.showStandardNotation",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.showTablature",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.standardNotationLineCount",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.stringTuning",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.track",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.transpositionPitch",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Staff.tuning",
+      "kind": "get",
+      "disposition": "supported",
+      "feature": "staff-ownership",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Staff.tuningName",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.addLineBreaks",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Track.addStaff",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Track.applyLyrics",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Track.color",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Track.defaultSystemsLayout",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Track.ensureStaveCount",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Track.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Track.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Track.isPercussion",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.isVisibleOnMultiTrack",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Track.lineBreaks",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.name",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "staff-ownership",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Track.percussionArticulations",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.playbackInfo",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Track.score",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.shortName",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Track.staves",
+      "kind": "field",
+      "disposition": "supported",
+      "feature": "staff-ownership",
+      "reason": "Represented directly in the normalized authored-semantic contract."
+    },
+    {
+      "name": "Track.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Track.systemsLayout",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "staff-ownership",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "Voice.addBeat",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.addGraceBeat",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "grace-relationships",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.bar",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Voice.beats",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Voice.calculateDuration",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "rhythm",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.finish",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.forceNonEmpty",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.getBeatAtPlaybackStart",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "timing",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.id",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Voice.index",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "Voice.insertBeat",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.isEmpty",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Voice.isRestOnly",
+      "kind": "get",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Voice.resetIds",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "Voice.shortestDuration",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "Voice.style",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    }
+  ],
+  "importerCases": [
+    {
+      "name": "Gp3Importer.score-info",
+      "fixture": "guitarpro3/score-info.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro3/score-info.gp3 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.notes",
+      "fixture": "guitarpro3/notes.gp3",
+      "assertions": [
+        "checkNotes"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/notes.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.time-signatures",
+      "fixture": "guitarpro3/time-signatures.gp3",
+      "assertions": [
+        "checkTimeSignatures"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro3/time-signatures.gp3 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.dead",
+      "fixture": "guitarpro3/dead.gp3",
+      "assertions": [
+        "checkDead"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/dead.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.accentuations",
+      "fixture": "guitarpro3/accentuations.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/accentuations.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.harmonics",
+      "fixture": "guitarpro3/harmonics.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro3/harmonics.gp3 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.hammer",
+      "fixture": "guitarpro3/hammer.gp3",
+      "assertions": [
+        "checkHammer"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/hammer.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.bends",
+      "fixture": "guitarpro3/bends.gp3",
+      "assertions": [
+        "checkBend"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/bends.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.slides",
+      "fixture": "guitarpro3/slides.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/slides.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.vibrato",
+      "fixture": "guitarpro3/vibrato.gp3",
+      "assertions": [
+        "checkVibrato"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/vibrato.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.other-effects",
+      "fixture": "guitarpro3/other-effects.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/other-effects.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.strokes",
+      "fixture": "guitarpro3/strokes.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/strokes.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.tuplets",
+      "fixture": "guitarpro3/tuplets.gp3",
+      "assertions": [
+        "checkTuplets"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro3/tuplets.gp3 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.ranges",
+      "fixture": "guitarpro3/ranges.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro3/ranges.gp3 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.effects",
+      "fixture": "guitarpro3/effects.gp3",
+      "assertions": [
+        "checkEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro3/effects.gp3 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.strings",
+      "fixture": "guitarpro3/strings.gp3",
+      "assertions": [
+        "checkStrings"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro3/strings.gp3 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp3Importer.beat-harmonics",
+      "fixture": "guitarpro3/beat-harmonics.gp3",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro3/beat-harmonics.gp3 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.score-info",
+      "fixture": "guitarpro4/score-info.gp4",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro4/score-info.gp4 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.notes",
+      "fixture": "guitarpro4/notes.gp4",
+      "assertions": [
+        "checkNotes"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/notes.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.time-signatures",
+      "fixture": "guitarpro4/time-signatures.gp4",
+      "assertions": [
+        "checkTimeSignatures"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro4/time-signatures.gp4 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.dead",
+      "fixture": "guitarpro4/dead.gp4",
+      "assertions": [
+        "checkDead"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/dead.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.grace",
+      "fixture": "guitarpro4/grace.gp4",
+      "assertions": [
+        "checkGrace"
+      ],
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Upstream importer fixture guitarpro4/grace.gp4 is mapped to grace-relationships; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.accentuations",
+      "fixture": "guitarpro4/accentuations.gp4",
+      "assertions": [
+        "checkAccentuations"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/accentuations.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.harmonics",
+      "fixture": "guitarpro4/harmonics.gp4",
+      "assertions": [
+        "checkHarmonics"
+      ],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro4/harmonics.gp4 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.hammer",
+      "fixture": "guitarpro4/hammer.gp4",
+      "assertions": [
+        "checkHammer"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/hammer.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.bend",
+      "fixture": "guitarpro4/bends.gp4",
+      "assertions": [
+        "checkBend"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/bends.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.tremolo",
+      "fixture": "guitarpro4/tremolo.gp4",
+      "assertions": [
+        "checkTremolo"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro4/tremolo.gp4 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.slides",
+      "fixture": "guitarpro4/slides.gp4",
+      "assertions": [
+        "checkSlides"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/slides.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.vibrato",
+      "fixture": "guitarpro4/vibrato.gp4",
+      "assertions": [
+        "checkVibrato"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/vibrato.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.trills",
+      "fixture": "guitarpro4/trills.gp4",
+      "assertions": [
+        "checkTrills"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/trills.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.otherEffects",
+      "fixture": "guitarpro4/other-effects.gp4",
+      "assertions": [
+        "checkOtherEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/other-effects.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.fingering",
+      "fixture": "guitarpro4/fingering.gp4",
+      "assertions": [
+        "checkFingering"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/fingering.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.stroke",
+      "fixture": "guitarpro4/strokes.gp4",
+      "assertions": [
+        "checkStroke"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/strokes.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.tuplets",
+      "fixture": "guitarpro4/tuplets.gp4",
+      "assertions": [
+        "checkTuplets"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro4/tuplets.gp4 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.ranges",
+      "fixture": "guitarpro4/ranges.gp4",
+      "assertions": [
+        "checkRanges"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro4/ranges.gp4 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.effects",
+      "fixture": "guitarpro4/effects.gp4",
+      "assertions": [
+        "checkEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro4/effects.gp4 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.strings",
+      "fixture": "guitarpro4/strings.gp4",
+      "assertions": [
+        "checkStrings"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro4/strings.gp4 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.colors",
+      "fixture": "guitarpro4/colors.gp4",
+      "assertions": [
+        "checkColors"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro4/colors.gp4 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp4Importer.harmonic-types",
+      "fixture": "guitarpro4/harmonic-types.gp4",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro4/harmonic-types.gp4 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.score-info",
+      "fixture": "guitarpro5/score-info.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/score-info.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.notes",
+      "fixture": "guitarpro5/notes.gp5",
+      "assertions": [
+        "checkNotes"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/notes.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.time-signatures",
+      "fixture": "guitarpro5/time-signatures.gp5",
+      "assertions": [
+        "checkTimeSignatures"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro5/time-signatures.gp5 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.dead",
+      "fixture": "guitarpro5/dead.gp5",
+      "assertions": [
+        "checkDead"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/dead.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.grace",
+      "fixture": "guitarpro5/grace.gp5",
+      "assertions": [
+        "checkGrace"
+      ],
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Upstream importer fixture guitarpro5/grace.gp5 is mapped to grace-relationships; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.accentuations",
+      "fixture": "guitarpro5/accentuations.gp5",
+      "assertions": [
+        "checkAccentuations"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/accentuations.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.harmonics",
+      "fixture": "guitarpro5/harmonics.gp5",
+      "assertions": [
+        "checkHarmonics"
+      ],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro5/harmonics.gp5 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.hammer",
+      "fixture": "guitarpro5/hammer.gp5",
+      "assertions": [
+        "checkHammer"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/hammer.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.bend",
+      "fixture": "guitarpro5/bends.gp5",
+      "assertions": [
+        "checkBend"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/bends.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.tremolo",
+      "fixture": "guitarpro5/tremolo.gp5",
+      "assertions": [
+        "checkTremolo"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/tremolo.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.slides",
+      "fixture": "guitarpro5/slides.gp5",
+      "assertions": [
+        "checkSlides"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/slides.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.vibrato",
+      "fixture": "guitarpro5/vibrato.gp5",
+      "assertions": [
+        "checkVibrato"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/vibrato.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.trills",
+      "fixture": "guitarpro5/trills.gp5",
+      "assertions": [
+        "checkTrills"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/trills.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.other-effects",
+      "fixture": "guitarpro5/other-effects.gp5",
+      "assertions": [
+        "checkOtherEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/other-effects.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.fingering",
+      "fixture": "guitarpro5/fingering.gp5",
+      "assertions": [
+        "checkFingering"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/fingering.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.stroke",
+      "fixture": "guitarpro5/strokes.gp5",
+      "assertions": [
+        "checkStroke"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/strokes.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.tuplets",
+      "fixture": "guitarpro5/tuplets.gp5",
+      "assertions": [
+        "checkTuplets"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro5/tuplets.gp5 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.ranges",
+      "fixture": "guitarpro5/ranges.gp5",
+      "assertions": [
+        "checkRanges"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/ranges.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.effects",
+      "fixture": "guitarpro5/effects.gp5",
+      "assertions": [
+        "checkEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/effects.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.serenade",
+      "fixture": "guitarpro5/serenade.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/serenade.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.strings",
+      "fixture": "guitarpro5/strings.gp5",
+      "assertions": [
+        "checkStrings"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro5/strings.gp5 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.key-signatures",
+      "fixture": "guitarpro5/key-signatures.gp5",
+      "assertions": [
+        "checkKeySignatures"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/key-signatures.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.chords",
+      "fixture": "guitarpro5/chords.gp5",
+      "assertions": [
+        "checkChords"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/chords.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.colors",
+      "fixture": "guitarpro5/colors.gp5",
+      "assertions": [
+        "checkColors"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/colors.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.alternate-endings-section-error",
+      "fixture": "guitarpro5/alternate-endings-section-error.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/alternate-endings-section-error.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.canon",
+      "fixture": "guitarpro5/canon.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/canon.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.beat-text-lyrics",
+      "fixture": "guitarpro5/beat-text-lyrics.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/beat-text-lyrics.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.layout-configuration",
+      "fixture": "guitarpro5/layout-configuration-multi-track-1.gp5",
+      "assertions": [
+        "checkMultiTrackLayoutConfiguration"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro5/layout-configuration-multi-track-1.gp5 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.hide-tuning",
+      "fixture": "guitarpro5/hide-tuning.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro5/hide-tuning.gp5 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.staves",
+      "fixture": "guitarpro5/staves.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro5/staves.gp5 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.hide-diagram",
+      "fixture": "guitarpro5/hide-diagrams.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/hide-diagrams.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.directions",
+      "fixture": "guitarpro5/directions.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/directions.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.beaming-mode",
+      "fixture": "guitarpro5/beaming-mode.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro5/beaming-mode.gp5 is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.ottavia",
+      "fixture": "guitarpro5/ottavia.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/ottavia.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.wah-wah",
+      "fixture": "guitarpro5/wah-wah.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/wah-wah.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.header-footer",
+      "fixture": "guitarpro5/header-footer.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/header-footer.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.bank",
+      "fixture": "guitarpro5/bank.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro5/bank.gp5 is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.tuning-bass-clef",
+      "fixture": "guitarpro5/bass-tuning.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro5/bass-tuning.gp5 is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.percusson",
+      "fixture": "guitarpro5/percussion-all.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "percussion-articulations",
+      "reason": "Upstream importer fixture guitarpro5/percussion-all.gp5 is mapped to percussion-articulations; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.chord-name-overflow",
+      "fixture": "guitarpro5/chord-name-overflow.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro5/chord-name-overflow.gp5 is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.gpReadStringByteLength caps consumption at field width",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.max-bar-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.max-track-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.notice-lines-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.beat-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.tremolo-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.bend-count",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.eof",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp5Importer.harmonic-types",
+      "fixture": "guitarpro5/harmonic-types.gp5",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro5/harmonic-types.gp5 is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.file-system-compressed",
+      "fixture": null,
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer behavior without a fixture reference is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.score-info",
+      "fixture": "guitarpro6/score-info.gpx",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/score-info.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.notes",
+      "fixture": "guitarpro6/notes.gpx",
+      "assertions": [
+        "checkNotes"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/notes.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.time-signatures",
+      "fixture": "guitarpro6/time-signatures.gpx",
+      "assertions": [
+        "checkTimeSignatures"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro6/time-signatures.gpx is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.dead",
+      "fixture": "guitarpro6/dead.gpx",
+      "assertions": [
+        "checkDead"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/dead.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.grace",
+      "fixture": "guitarpro6/grace.gpx",
+      "assertions": [
+        "checkGrace"
+      ],
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Upstream importer fixture guitarpro6/grace.gpx is mapped to grace-relationships; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.accentuations",
+      "fixture": "guitarpro6/accentuations.gpx",
+      "assertions": [
+        "checkAccentuations"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/accentuations.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.harmonics",
+      "fixture": "guitarpro6/harmonics.gpx",
+      "assertions": [
+        "checkHarmonics"
+      ],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro6/harmonics.gpx is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.hammer",
+      "fixture": "guitarpro6/hammer.gpx",
+      "assertions": [
+        "checkHammer"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/hammer.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.bends",
+      "fixture": "guitarpro6/bends.gpx",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/bends.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.tremolo",
+      "fixture": "guitarpro6/tremolo.gpx",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/tremolo.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.slides",
+      "fixture": "guitarpro6/slides.gpx",
+      "assertions": [
+        "checkSlides"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/slides.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.vibrato",
+      "fixture": "guitarpro6/vibrato.gpx",
+      "assertions": [
+        "checkVibrato"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/vibrato.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.trills",
+      "fixture": "guitarpro6/trills.gpx",
+      "assertions": [
+        "checkTrills"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/trills.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.other-effects",
+      "fixture": "guitarpro6/other-effects.gpx",
+      "assertions": [
+        "checkOtherEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/other-effects.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.fingering",
+      "fixture": "guitarpro6/fingering.gpx",
+      "assertions": [
+        "checkFingering"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/fingering.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.stroke",
+      "fixture": "guitarpro6/strokes.gpx",
+      "assertions": [
+        "checkStroke"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/strokes.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.tuplets",
+      "fixture": "guitarpro6/tuplets.gpx",
+      "assertions": [
+        "checkTuplets"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro6/tuplets.gpx is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.ranges",
+      "fixture": "guitarpro6/ranges.gpx",
+      "assertions": [
+        "checkRanges"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/ranges.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.effects",
+      "fixture": "guitarpro6/effects.gpx",
+      "assertions": [
+        "checkEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/effects.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.serenade",
+      "fixture": "guitarpro6/serenade.gpx",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/serenade.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.strings",
+      "fixture": "guitarpro6/strings.gpx",
+      "assertions": [
+        "checkStrings"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro6/strings.gpx is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.key-signatures",
+      "fixture": "guitarpro6/key-signatures.gpx",
+      "assertions": [
+        "checkKeySignatures"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/key-signatures.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.chords",
+      "fixture": "guitarpro6/chords.gpx",
+      "assertions": [
+        "checkChords"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro6/chords.gpx is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.colors",
+      "fixture": "guitarpro6/colors.gpx",
+      "assertions": [
+        "checkColors"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/colors.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.layout-configuration",
+      "fixture": "guitarpro6/layout-configuration-multi-track-1.gpx",
+      "assertions": [
+        "checkMultiTrackLayoutConfiguration"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro6/layout-configuration-multi-track-1.gpx is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "GpxImporter.slash",
+      "fixture": "guitarpro6/slash.gpx",
+      "assertions": [
+        "checkSlash"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro6/slash.gpx is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.score-info",
+      "fixture": "guitarpro7/score-info.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/score-info.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.notes",
+      "fixture": "guitarpro7/notes.gp",
+      "assertions": [
+        "checkNotes"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/notes.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.time-signatures",
+      "fixture": "guitarpro7/time-signatures.gp",
+      "assertions": [
+        "checkTimeSignatures"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro7/time-signatures.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.dead",
+      "fixture": "guitarpro7/dead.gp",
+      "assertions": [
+        "checkDead"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/dead.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.grace",
+      "fixture": "guitarpro7/grace.gp",
+      "assertions": [
+        "checkGrace"
+      ],
+      "disposition": "partial",
+      "feature": "grace-relationships",
+      "reason": "Upstream importer fixture guitarpro7/grace.gp is mapped to grace-relationships; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.accentuations",
+      "fixture": "guitarpro7/accentuations.gp",
+      "assertions": [
+        "checkAccentuations"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/accentuations.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.harmonics",
+      "fixture": "guitarpro7/harmonics.gp",
+      "assertions": [
+        "checkHarmonics"
+      ],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro7/harmonics.gp is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.hammer",
+      "fixture": "guitarpro7/hammer.gp",
+      "assertions": [
+        "checkHammer"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/hammer.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.bend",
+      "fixture": "guitarpro7/bends.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/bends.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.bends-advanced",
+      "fixture": "guitarpro7/bends-advanced.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/bends-advanced.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.whammy-advanced",
+      "fixture": "guitarpro7/whammy-advanced.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/whammy-advanced.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.tremolo",
+      "fixture": "guitarpro7/tremolo.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/tremolo.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.slides",
+      "fixture": "guitarpro7/slides.gp",
+      "assertions": [
+        "checkSlides"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/slides.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.vibrato",
+      "fixture": "guitarpro7/vibrato.gp",
+      "assertions": [
+        "checkVibrato"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/vibrato.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.trills",
+      "fixture": "guitarpro7/trills.gp",
+      "assertions": [
+        "checkTrills"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/trills.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.other-effects",
+      "fixture": "guitarpro7/other-effects.gp",
+      "assertions": [
+        "checkOtherEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/other-effects.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.fingering",
+      "fixture": "guitarpro7/fingering.gp",
+      "assertions": [
+        "checkFingering"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/fingering.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.stroke",
+      "fixture": "guitarpro7/strokes.gp",
+      "assertions": [
+        "checkStroke"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/strokes.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.tuplets",
+      "fixture": "guitarpro7/tuplets.gp",
+      "assertions": [
+        "checkTuplets"
+      ],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro7/tuplets.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.ranges",
+      "fixture": "guitarpro7/ranges.gp",
+      "assertions": [
+        "checkRanges"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/ranges.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.effects",
+      "fixture": "guitarpro7/effects.gp",
+      "assertions": [
+        "checkEffects"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/effects.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.serenade",
+      "fixture": "guitarpro7/serenade.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/serenade.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.strings",
+      "fixture": "guitarpro7/strings.gp",
+      "assertions": [
+        "checkStrings"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro7/strings.gp is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.key-signatures",
+      "fixture": "guitarpro7/key-signatures.gp",
+      "assertions": [
+        "checkKeySignatures"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/key-signatures.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.chords",
+      "fixture": "guitarpro7/chords.gp",
+      "assertions": [
+        "checkChords"
+      ],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/chords.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.colors",
+      "fixture": "guitarpro7/colors.gp",
+      "assertions": [
+        "checkColors"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/colors.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.tremolo-vibrato",
+      "fixture": "guitarpro7/tremolo-vibrato.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/tremolo-vibrato.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.ottavia",
+      "fixture": "guitarpro7/ottavia.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/ottavia.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.simile-mark",
+      "fixture": "guitarpro7/simile-mark.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/simile-mark.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.anacrusis",
+      "fixture": "guitarpro7/anacrusis.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro7/anacrusis.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.left-hand-tap",
+      "fixture": "guitarpro7/left-hand-tap.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/left-hand-tap.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.fermata",
+      "fixture": "guitarpro7/fermata.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/fermata.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.pick-slide",
+      "fixture": "guitarpro7/pick-slide.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/pick-slide.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.beat-lyrics",
+      "fixture": "guitarpro7/beat-lyrics.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/beat-lyrics.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.track-volume",
+      "fixture": "guitarpro7/track-volume.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Upstream importer fixture guitarpro7/track-volume.gp is mapped to tempo-automations; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.track-balance",
+      "fixture": "guitarpro7/track-balance.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/track-balance.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.program-change",
+      "fixture": "guitarpro7/program-change.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Upstream importer fixture guitarpro7/program-change.gp is mapped to tempo-automations; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.chord-no-diagram",
+      "fixture": "guitarpro7/chord-no-diagram.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro7/chord-no-diagram.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.layout-configuration",
+      "fixture": "guitarpro7/layout-configuration-multi-track-1.gp",
+      "assertions": [
+        "checkMultiTrackLayoutConfiguration"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro7/layout-configuration-multi-track-1.gp is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.slash",
+      "fixture": "guitarpro7/slash.gp",
+      "assertions": [
+        "checkSlash"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro7/slash.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp7Importer.beaming-mode",
+      "fixture": "guitarpro7/beaming-mode.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro7/beaming-mode.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.layout-configuration",
+      "fixture": "guitarpro8/layout-configuration-multi-track-1.gp",
+      "assertions": [
+        "checkMultiTrackLayoutConfiguration"
+      ],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro8/layout-configuration-multi-track-1.gp is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.slash",
+      "fixture": "guitarpro8/slash.gp",
+      "assertions": [
+        "checkSlash"
+      ],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/slash.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.beat-tempo-change",
+      "fixture": "guitarpro8/beat-tempo-change.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Upstream importer fixture guitarpro8/beat-tempo-change.gp is mapped to tempo-automations; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.bracket-braces",
+      "fixture": "visual-tests/layout/brackets-braces-none.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture visual-tests/layout/brackets-braces-none.gp is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.system-separator",
+      "fixture": "visual-tests/layout/system-divider.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture visual-tests/layout/system-divider.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.directions",
+      "fixture": "guitarpro8/directions.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/directions.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.hide-tuning",
+      "fixture": "guitarpro8/hide-tuning.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Upstream importer fixture guitarpro8/hide-tuning.gp is mapped to staff-ownership; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.hide-chord-diagram-list",
+      "fixture": "guitarpro8/hide-diagrams.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro8/hide-diagrams.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.show-chord-diagrams-in-score",
+      "fixture": "guitarpro8/show-diagrams-in-score.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Upstream importer fixture guitarpro8/show-diagrams-in-score.gp is mapped to note-and-beat-semantics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.beaming-mode",
+      "fixture": "guitarpro8/beaming-mode.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro8/beaming-mode.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.track-names-hidden",
+      "fixture": "guitarpro8/track-names-hidden.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/track-names-hidden.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.track-names-adjusted",
+      "fixture": "guitarpro8/track-names.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/track-names.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.timer",
+      "fixture": "guitarpro8/timer.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro8/timer.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.multibar-rest",
+      "fixture": "guitarpro8/multibar-rest.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro8/multibar-rest.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.header-footer",
+      "fixture": "guitarpro8/header-footer.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/header-footer.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.faulty",
+      "fixture": "guitarpro8/faulty.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/faulty.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.audio-track",
+      "fixture": "guitarpro8/canon-audio-track.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/canon-audio-track.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.bank",
+      "fixture": "guitarpro8/bank.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/bank.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.bank-change",
+      "fixture": "guitarpro8/bank-change.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/bank-change.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.extend-bar-lines",
+      "fixture": "guitarpro8/extended-barlines.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/extended-barlines.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.all",
+      "fixture": "guitarpro8/barnumbers-all.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/barnumbers-all.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.hide",
+      "fixture": "guitarpro8/barnumbers-hide.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/barnumbers-hide.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.first",
+      "fixture": "guitarpro8/barnumbers-first.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Upstream importer fixture guitarpro8/barnumbers-first.gp is mapped to score-core; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.custom-beaming",
+      "fixture": "guitarpro8/custom-beaming.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "rhythm",
+      "reason": "Upstream importer fixture guitarpro8/custom-beaming.gp is mapped to rhythm; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.harmonics-lowercase",
+      "fixture": "guitarpro8/harmonics-lowercase.gp",
+      "assertions": [
+        "checkHarmonics"
+      ],
+      "disposition": "partial",
+      "feature": "harmonics",
+      "reason": "Upstream importer fixture guitarpro8/harmonics-lowercase.gp is mapped to harmonics; Go coverage is recorded by the feature ledger."
+    },
+    {
+      "name": "Gp8Importer.orphan-tempo-automation",
+      "fixture": "guitarpro8/orphan-tempo-automation.gp",
+      "assertions": [],
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Upstream importer fixture guitarpro8/orphan-tempo-automation.gp is mapped to tempo-automations; Go coverage is recorded by the feature ledger."
+    }
+  ]
+}

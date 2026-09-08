@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "case": "gp8-core-notes",
+  "comparison": "input-go-vs-alphatab",
+  "differences": [
+    {
+      "path": "/note-and-beat-semantics/5/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/15/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/25/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/35/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/45/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/55/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/65/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/75/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/85/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/95/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/105/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/115/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/125/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/135/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/145/value",
+      "feature": "note-and-beat-semantics",
+      "go": 6,
+      "alphaTab": 1
+    },
+    {
+      "path": "/note-and-beat-semantics/155/value",
+      "feature": "note-and-beat-semantics",
+      "go": 1,
+      "alphaTab": 6
+    },
+    {
+      "path": "/note-and-beat-semantics/165/value",
+      "feature": "note-and-beat-semantics",
+      "go": 1,
+      "alphaTab": 6
+    }
+  ]
+}

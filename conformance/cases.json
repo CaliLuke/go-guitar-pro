@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "inputCases": [
+    {
+      "id": "gp3-core-notes",
+      "fixture": "testdata/gp3/notes.gp3",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    },
+    {
+      "id": "gp4-core-notes",
+      "fixture": "testdata/gp4/notes.gp4",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    },
+    {
+      "id": "gp5-grace",
+      "fixture": "testdata/gp5/grace.gp5",
+      "features": ["rhythm", "grace-relationships"]
+    },
+    {
+      "id": "gp5-percussion-grace",
+      "fixture": "testdata/gp5/motherload-percussion-grace.gp5",
+      "features": ["grace-relationships"]
+    },
+    {
+      "id": "gp5-tuplets",
+      "fixture": "testdata/gp5/tuplets.gp5",
+      "features": ["rhythm", "timing"]
+    },
+    {
+      "id": "gp5-core-notes",
+      "fixture": "testdata/gp5/notes.gp5",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    },
+    {
+      "id": "gp6-core-notes",
+      "fixture": "testdata/gp6/notes.gpx",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    },
+    {
+      "id": "gp7-grand-staff",
+      "fixture": "testdata/gp7/grand-staff.gp",
+      "features": ["staff-ownership"],
+      "issues": [4]
+    },
+    {
+      "id": "gp7-tremolo-picking",
+      "fixture": "testdata/gp7/tremolo-picking.gp",
+      "features": ["tremolo-picking"],
+      "issues": [5]
+    },
+    {
+      "id": "gp7-harmonics",
+      "fixture": "testdata/gp7/harmonics.gp",
+      "features": ["harmonics"],
+      "issues": [6]
+    },
+    {
+      "id": "gp7-notation-legend",
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "features": ["hairpins"],
+      "issues": [7]
+    },
+    {
+      "id": "gp7-tempo",
+      "fixture": "testdata/gp7/beat-tempo-change.gp",
+      "features": ["tempo-automations"],
+      "issues": [8]
+    },
+    {
+      "id": "gp7-timing",
+      "fixture": "testdata/gp7/time-signatures.gp",
+      "features": ["rhythm", "timing"],
+      "issues": [9]
+    },
+    {
+      "id": "gp7-percussion",
+      "fixture": "testdata/gp7/percussion.gp",
+      "features": ["percussion-articulations"],
+      "issues": [10]
+    },
+    {
+      "id": "gp7-core-notes",
+      "fixture": "testdata/gp7/notes.gp",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    },
+    {
+      "id": "gp8-core-notes",
+      "fixture": "testdata/gp8/beaming-mode.gp",
+      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+    }
+  ],
+  "exportCases": [
+    {
+      "id": "gp8-semantic-export",
+      "features": ["rhythm", "harmonics", "hairpins", "percussion-articulations"],
+      "issues": [6, 7]
+    }
+  ]
+}

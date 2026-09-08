@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "case": "gp7-tremolo-picking",
+  "comparison": "input-go-vs-alphatab",
+  "differences": [
+    {
+      "path": "/tremolo-picking",
+      "feature": "tremolo-picking",
+      "alphaTab": [
+        {
+          "path": "/tracks/0/staves/0/bars/0/voices/0/beats/0/tremoloPicking",
+          "value": 32
+        },
+        {
+          "path": "/tracks/0/staves/0/bars/0/voices/0/beats/1/tremoloPicking",
+          "value": 16
+        },
+        {
+          "path": "/tracks/0/staves/0/bars/0/voices/0/beats/2/tremoloPicking",
+          "value": 8
+        },
+        {
+          "path": "/tracks/0/staves/0/bars/1/voices/0/beats/0/tremoloPicking",
+          "value": 32
+        },
+        {
+          "path": "/tracks/0/staves/0/bars/1/voices/0/beats/1/tremoloPicking",
+          "value": 16
+        },
+        {
+          "path": "/tracks/0/staves/0/bars/1/voices/0/beats/2/tremoloPicking",
+          "value": 8
+        }
+      ]
+    }
+  ]
+}
