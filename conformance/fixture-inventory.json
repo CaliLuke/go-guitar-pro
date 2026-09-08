@@ -1746,8 +1746,8 @@
       "path": "testdata/gp7/beat-tempo-change.gp",
       "sha256": "2820892be6f38c898956a3fabb6aec7c5cf0f155e5df63ba7f5c60e64158223d",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering tempo-automations.",
+      "disposition": "supported",
+      "reason": "The authored tempo map and reference-unit mutations agree with the pinned AlphaTab oracle after BPM normalization.",
       "features": [
         "tempo-automations"
       ],

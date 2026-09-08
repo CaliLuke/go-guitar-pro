@@ -250,7 +250,7 @@
       "name": "MasterBar.tempoAutomations",
       "disposition": "partial",
       "feature": "tempo-automations",
-      "reason": "Compared after BPM normalization; reference-unit gaps are issue 8."
+      "reason": "Values, bars, and positions are compared after BPM normalization; richer authored automation metadata remains issue 12."
     },
     {
       "name": "Track.staves",
@@ -459,9 +459,9 @@
     {
       "name": "Automation.value",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "tempo-automations",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented as normalized BPM in TempoAutomation.Tempo, including GPIF reference units."
     },
     {
       "name": "Bar.addVoice",

@@ -1015,6 +1015,7 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
 		if err != nil || tempo <= 0 {
 			continue
 		}
+		tempo *= gpifTempoReferenceFactor(parts)
 		change := TempoAutomation{Bar: auto.Bar, Position: auto.Position, Tempo: tempo}
 		song.TempoAutomations = append(song.TempoAutomations, change)
 		if earliest < 0 || gpifAutomationIsBefore(change, song.TempoAutomations[earliest]) {
@@ -1025,6 +1026,31 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
 			}
 		}
 	}
+}
+
+func gpifTempoReferenceFactor(parts []string) float64 {
+	reference := 1
+	if len(parts) > 1 {
+		value := parts[1]
+		end := 0
+		if value != "" && (value[0] == '+' || value[0] == '-') {
+			end++
+		}
+		digitStart := end
+		for end < len(value) && value[end] >= '0' && value[end] <= '9' {
+			end++
+		}
+		parsed, err := strconv.Atoi(value[:end])
+		if end == digitStart {
+			err = strconv.ErrSyntax
+		}
+		if err != nil || parsed < 1 || parsed > 5 {
+			reference = 2
+		} else {
+			reference = parsed
+		}
+	}
+	return [...]float64{0, 0.5, 1, 1.5, 2, 3}[reference]
 }
 
 func gpifAutomationIsBefore(a, b TempoAutomation) bool {

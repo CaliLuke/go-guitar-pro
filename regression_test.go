@@ -318,6 +318,30 @@ func TestGPIFUsesOpeningTempoAutomation(t *testing.T) {
 	}
 }
 
+func TestGPIFAppliesTempoReferenceUnits(t *testing.T) {
+	values := []string{"100 1", "100 2", "100 3", "100 4", "100 5", "100", "100 invalid", "100 0", "100 6", "100 3x", "100 3.5", "81.5 3"}
+	want := []float64{50, 100, 150, 200, 300, 50, 100, 100, 100, 150, 150, 122.25}
+	automations := make([]gpifAutomation, 0, len(values))
+	for index, value := range values {
+		automations = append(automations, gpifAutomation{
+			Type: "Tempo", Bar: index, Value: gpifAutomationValue{Text: value},
+		})
+	}
+	song := &Song{}
+	gpifReadTempoAutomations(automations, song)
+	if len(song.TempoAutomations) != len(want) {
+		t.Fatalf("tempo automations = %d, want %d", len(song.TempoAutomations), len(want))
+	}
+	for index := range want {
+		if got := song.TempoAutomations[index].Tempo; got != want[index] {
+			t.Errorf("tempo %q = %v, want %v", values[index], got, want[index])
+		}
+	}
+	if song.Tempo != 50 {
+		t.Errorf("initial tempo = %d, want 50", song.Tempo)
+	}
+}
+
 func TestMixTableTempoAboveByte(t *testing.T) {
 	data := []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 	data = binary.LittleEndian.AppendUint32(data, 300)

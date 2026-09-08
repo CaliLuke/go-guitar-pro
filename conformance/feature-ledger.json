@@ -129,8 +129,8 @@
       "fixtures": ["testdata/gp7/beat-tempo-change.gp"],
       "semanticAssertions": ["bar", "ratio position", "normalized BPM", "linear interpolation"],
       "status": "partial",
-      "reason": "Quarter-note reference fixtures agree, but non-quarter reference units are ignored; see issue 8.",
-      "issues": [8]
+      "reason": "GPIF references 1–5 and absent or invalid defaults agree after BPM normalization; authored units, text, visibility, and interpolation remain part of issue 12.",
+      "issues": [12]
     },
     {
       "id": "percussion-articulations",

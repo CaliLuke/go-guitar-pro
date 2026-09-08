@@ -220,6 +220,56 @@ func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
 	}
 }
 
+func TestAlphaTabTempoReferences(t *testing.T) {
+	requireAlphaTabConformance(t)
+	fixture, err := os.ReadFile("testdata/gp7/notes.gp")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, test := range []struct {
+		value string
+		want  float64
+	}{
+		{value: "120 1", want: 60},
+		{value: "120 2", want: 120},
+		{value: "120 3", want: 180},
+		{value: "120 4", want: 240},
+		{value: "120 5", want: 360},
+		{value: "120", want: 60},
+		{value: "120 invalid", want: 120},
+		{value: "120 0", want: 120},
+		{value: "120 6", want: 120},
+		{value: "120 3x", want: 180},
+		{value: "120 3.5", want: 180},
+		{value: "81.5 3", want: 122.25},
+	} {
+		t.Run(test.value, func(t *testing.T) {
+			data := rewriteConformanceGPIF(t, fixture, func(gpif string) string {
+				return strings.Replace(gpif, "<Value>120 2</Value>", "<Value>"+test.value+"</Value>", 1)
+			})
+			song, parseErr := Parse(data)
+			if parseErr != nil {
+				t.Fatal(parseErr)
+			}
+			if len(song.TempoAutomations) == 0 || song.TempoAutomations[0].Tempo != test.want {
+				t.Fatalf("Go tempo for %q = %#v, want %v", test.value, song.TempoAutomations, test.want)
+			}
+			goScore := selectConformanceFeatures(normalizeGoScore(song), []string{"tempo-automations"})
+			alphaScore := selectConformanceFeatures(
+				readAlphaTabScore(t, writeConformanceFixture(t, data)),
+				[]string{"tempo-automations"},
+			)
+			if differences := semanticDifferences(goScore, alphaScore); len(differences) != 0 {
+				formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
+				if marshalErr != nil {
+					t.Fatal(marshalErr)
+				}
+				t.Fatalf("tempo reference %q differs from AlphaTab:\n%s", test.value, formatted)
+			}
+		})
+	}
+}
+
 func requireAlphaTabConformance(t *testing.T) {
 	t.Helper()
 	if os.Getenv("ALPHATAB_CONFORMANCE") != "1" {
