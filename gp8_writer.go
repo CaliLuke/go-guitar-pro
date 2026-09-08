@@ -986,7 +986,7 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 		}
 		if harmonicFret != nil {
 			value := strconv.FormatFloat(*harmonicFret, 'f', -1, 64)
-			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HarmonicFret", Float: &value})
+			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HarmonicFret", HFret: &value})
 		}
 	}
 	if track.PercussionTrack {

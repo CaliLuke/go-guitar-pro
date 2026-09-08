@@ -108,9 +108,9 @@
     },
     {
       "name": "checkHarmonics",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "harmonics",
-      "reason": "Kinds are retained; GPIF harmonic fret gaps are baselined."
+      "reason": "Harmonic kinds and exact fractional frets are compared."
     },
     {
       "name": "checkHammer",
@@ -350,9 +350,9 @@
     },
     {
       "name": "Note.harmonicValue",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "harmonics",
-      "reason": "HFret is currently lost; issue 6."
+      "reason": "Mapped directly to HarmonicEffect.FretFloat from GPIF HFret."
     },
     {
       "name": "Note.bendPoints",
@@ -1950,9 +1950,9 @@
     {
       "name": "Note.harmonicValue",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "harmonics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly by HarmonicEffect.FretFloat in the normalized authored-semantic contract."
     },
     {
       "name": "Note.hasBend",

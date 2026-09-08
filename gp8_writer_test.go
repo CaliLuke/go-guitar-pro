@@ -637,6 +637,26 @@ func TestExportGP8PreservesHarmonicsAndWhammyCurves(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document gpifDocument
+	if unmarshalErr := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); unmarshalErr != nil {
+		t.Fatal(unmarshalErr)
+	}
+	foundHFret := false
+	for _, rawNote := range document.Notes.Notes {
+		for _, property := range rawNote.Properties.Properties {
+			if property.Name != "HarmonicFret" {
+				continue
+			}
+			foundHFret = property.HFret != nil && *property.HFret == "2.4" && property.Float == nil
+		}
+	}
+	if !foundHFret {
+		t.Error("GPIF fractional harmonic is not encoded as <HFret>2.4</HFret>")
+	}
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)

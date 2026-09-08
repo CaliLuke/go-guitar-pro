@@ -102,9 +102,9 @@
       "goDestination": ["HarmonicEffect.Kind", "HarmonicEffect.FretFloat"],
       "fixtures": ["testdata/gp7/harmonics.gp"],
       "semanticAssertions": ["harmonic kind", "fractional harmonic fret", "property order"],
-      "status": "partial",
-      "reason": "GPIF HFret values are missing on import and Go exports the nonstandard Float child; see issue 6.",
-      "issues": [6]
+      "status": "supported",
+      "reason": "GPIF HFret values and harmonic kinds agree with AlphaTab on import and GP8 export, including fractional values and property-order variants.",
+      "issues": []
     },
     {
       "id": "hairpins",

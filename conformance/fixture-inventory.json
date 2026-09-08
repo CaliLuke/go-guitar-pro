@@ -2244,8 +2244,8 @@
       "path": "testdata/gp7/harmonics.gp",
       "sha256": "cb8b28bc6b5f3ab9cc6b8237a7f46a1770a3bb3ed1549c4ac3b4b0e6607ce23b",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering harmonics.",
+      "disposition": "supported",
+      "reason": "All five harmonic kinds and HFret values agree with the pinned AlphaTab snapshot.",
       "features": [
         "harmonics"
       ],

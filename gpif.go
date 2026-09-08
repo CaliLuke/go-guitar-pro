@@ -359,6 +359,7 @@ type gpifProperty struct {
 	String    *float64   `xml:"String"`
 	Pitch     *gpifPitch `xml:"Pitch"`
 	Float     *string    `xml:"Float"`
+	HFret     *string    `xml:"HFret"`
 	Enable    *string    `xml:"Enable"`
 	Number    *int       `xml:"Number"`
 	HType     *string    `xml:"HType"`
@@ -1219,6 +1220,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	note.Kind = NoteTypeNormal
 	hasFret := false
 	bend := gpifBendProperties{}
+	var harmonicFret *float64
 
 	// Parse properties
 	for _, p := range n.Properties.Properties {
@@ -1288,11 +1290,13 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 				}
 			}
 		case "HarmonicFret":
-			if p.Float != nil && note.Effect.Harmonic != nil {
-				if v, err := strconv.ParseFloat(*p.Float, 64); err == nil {
-					fret := int8(v)
-					note.Effect.Harmonic.Fret = &fret
-					note.Effect.Harmonic.FretFloat = &v
+			value := p.HFret
+			if value == nil {
+				value = p.Float
+			}
+			if value != nil {
+				if parsed, err := strconv.ParseFloat(*value, 64); err == nil {
+					harmonicFret = &parsed
 				}
 			}
 		case "Slide":
@@ -1319,6 +1323,11 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 				}
 			}
 		}
+	}
+	if harmonicFret != nil && note.Effect.Harmonic != nil {
+		fret := int8(*harmonicFret)
+		note.Effect.Harmonic.Fret = &fret
+		note.Effect.Harmonic.FretFloat = harmonicFret
 	}
 	if bend.enabled {
 		note.Effect.Bend = bend.effect()

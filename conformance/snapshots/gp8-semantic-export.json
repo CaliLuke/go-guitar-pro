@@ -12,12 +12,6 @@
           "value": "decrescendo"
         }
       ]
-    },
-    {
-      "path": "/harmonics/0/value/fret",
-      "feature": "harmonics",
-      "go": 2.4,
-      "alphaTab": 0
     }
   ]
 }
