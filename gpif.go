@@ -692,12 +692,7 @@ func parseGPIF(data []byte) (*Song, error) {
 									}
 
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
-									switch b.Hairpin {
-									case "Crescendo":
-										beat.Effect.Hairpin = HairpinCrescendo
-									case "Diminuendo":
-										beat.Effect.Hairpin = HairpinDiminuendo
-									}
+									beat.Effect.Hairpin = gpifHairpin(b.Hairpin)
 									gpifApplyBeatEffects(b, &beat)
 									if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
 										beat.Effect.Chord = &chord
@@ -1145,6 +1140,17 @@ func gpifApplyTremoloPicking(value string, notes []Note) {
 	for noteIndex := range notes {
 		noteEffect := effect
 		notes[noteIndex].Effect.TremoloPicking = &noteEffect
+	}
+}
+
+func gpifHairpin(value string) Hairpin {
+	switch value {
+	case "Crescendo":
+		return HairpinCrescendo
+	case "Decrescendo", "Diminuendo":
+		return HairpinDiminuendo
+	default:
+		return HairpinNone
 	}
 }
 

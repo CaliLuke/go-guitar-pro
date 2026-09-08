@@ -578,8 +578,8 @@ func TestExportGP8PreservesHairpins(t *testing.T) {
 	if got := document.Beats.Beats[1].Hairpin; got != "Crescendo" {
 		t.Errorf("first beat hairpin = %q, want Crescendo", got)
 	}
-	if got := document.Beats.Beats[2].Hairpin; got != "Diminuendo" {
-		t.Errorf("second beat hairpin = %q, want Diminuendo", got)
+	if got := document.Beats.Beats[2].Hairpin; got != "Decrescendo" {
+		t.Errorf("second beat hairpin = %q, want Decrescendo", got)
 	}
 
 	roundTrip, err := Parse(data)

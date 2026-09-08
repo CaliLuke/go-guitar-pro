@@ -14,6 +14,6 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | The canonical contract inventories these fields; a lossless semantic model is tracked by issue 12. |
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
 | `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | GPIF HFret values and harmonic kinds agree with AlphaTab on import and GP8 export, including fractional values and property-order variants. |
-| `hairpins` | gp6, gp7, gp8 | partial | [#7](https://github.com/CaliLuke/go-guitar-pro/issues/7) | Three Decrescendo beats are lost and GP8 output uses Diminuendo; see issue 7. |
+| `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
 | `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#8](https://github.com/CaliLuke/go-guitar-pro/issues/8) | Quarter-note reference fixtures agree, but non-quarter reference units are ignored; see issue 8. |
 | `percussion-articulations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#10](https://github.com/CaliLuke/go-guitar-pro/issues/10) | Binary drum values are exposed, but GPIF articulation identity and per-track definitions are lost; see issue 10. |

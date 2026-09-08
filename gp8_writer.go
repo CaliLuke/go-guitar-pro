@@ -896,7 +896,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, beat *Beat) (string, error) {
 	case HairpinCrescendo:
 		result.Hairpin = "Crescendo"
 	case HairpinDiminuendo:
-		result.Hairpin = "Diminuendo"
+		result.Hairpin = "Decrescendo"
 	}
 	switch beat.Effect.Stroke.Direction {
 	case BeatStrokeDirectionUp:

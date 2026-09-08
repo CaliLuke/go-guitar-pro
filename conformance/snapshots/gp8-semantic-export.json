@@ -2,16 +2,5 @@
   "schemaVersion": 1,
   "case": "gp8-semantic-export",
   "comparison": "go-source-vs-export-alphatab",
-  "differences": [
-    {
-      "path": "/hairpins",
-      "feature": "hairpins",
-      "go": [
-        {
-          "path": "/tracks/0/staves/0/bars/0/voices/0/beats/0/hairpin",
-          "value": "decrescendo"
-        }
-      ]
-    }
-  ]
+  "differences": []
 }

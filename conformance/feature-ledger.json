@@ -115,9 +115,9 @@
       "goDestination": ["BeatEffects.Hairpin"],
       "fixtures": ["testdata/gp7/notation-legend.gp"],
       "semanticAssertions": ["crescendo beat path", "decrescendo beat path"],
-      "status": "partial",
-      "reason": "Three Decrescendo beats are lost and GP8 output uses Diminuendo; see issue 7.",
-      "issues": [7]
+      "status": "supported",
+      "reason": "All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted.",
+      "issues": []
     },
     {
       "id": "tempo-automations",

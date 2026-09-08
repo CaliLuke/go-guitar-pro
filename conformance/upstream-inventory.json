@@ -314,9 +314,9 @@
     },
     {
       "name": "Beat.crescendo",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "hairpins",
-      "reason": "Decrescendo values are currently lost; issue 7."
+      "reason": "Mapped directly to BeatEffects.Hairpin, including GPIF Decrescendo."
     },
     {
       "name": "Beat.automations",
@@ -809,9 +809,9 @@
     {
       "name": "Beat.crescendo",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "hairpins",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly by BeatEffects.Hairpin in the normalized authored-semantic contract."
     },
     {
       "name": "Beat.deadSlapped",

@@ -2552,8 +2552,8 @@
       "path": "testdata/gp7/notation-legend.gp",
       "sha256": "efe0c38471744dcaaaa73031813291a7ac94d8a8152a88268edb60f17b5d20ef",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering hairpins.",
+      "disposition": "supported",
+      "reason": "All five crescendo and three decrescendo beats agree with the pinned AlphaTab snapshot.",
       "features": [
         "hairpins"
       ],
