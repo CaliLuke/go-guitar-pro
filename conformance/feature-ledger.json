@@ -35,11 +35,11 @@
       "upstreamModel": ["MasterBar.start", "Beat.displayStart", "Beat.playbackStart"],
       "upstreamTests": ["checkNotes", "checkTuplets", "checkGrace"],
       "goDestination": ["MeasureHeader.Start", "Measure.Start", "Beat.Start"],
-      "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/time-signatures.gp"],
+      "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/notes.gp", "testdata/gp7/time-signatures.gp", "testdata/gp7/anacrusis.gp", "testdata/gp7/multi-voice.gp", "testdata/gp7/tuplets.gp", "testdata/gp7/grace.gp"],
       "semanticAssertions": ["zero-normalized measure start", "zero-normalized beat start"],
-      "status": "partial",
-      "reason": "Binary timing is populated, but GPIF measure and beat timing is missing; see issue 9.",
-      "issues": [9]
+      "status": "supported",
+      "reason": "Binary and GPIF absolute display starts agree after zero-origin normalization across measures, independent voices, tuplets, empty and populated pickups, and attached or orphan grace notes.",
+      "issues": []
     },
     {
       "id": "staff-ownership",

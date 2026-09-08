@@ -44,6 +44,8 @@ type BeatEffects struct {
 
 // Beat contains multiple notes.
 type Beat struct {
+	// Start is the absolute display-time start in ticks. Voices begin independently
+	// at their measure start. Playback transformations are not applied.
 	Start    *int64
 	Effect   BeatEffects
 	Text     string
@@ -56,6 +58,7 @@ type Beat struct {
 	Display  BeatDisplay
 	Octave   Octave
 	Status   BeatStatus
+	isGrace  bool
 }
 
 func defaultBeat() Beat {

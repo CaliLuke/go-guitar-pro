@@ -22,8 +22,10 @@ type Clipboard struct {
 
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
-	Marker            *Marker
-	Direction         *DirectionSign
+	Marker    *Marker
+	Direction *DirectionSign
+	// Start is the absolute display-time start in ticks. Parsed scores use a
+	// one-quarter-note origin, so the first measure starts at 960.
 	Start             int64
 	Tempo             int32
 	TimeSignature     TimeSignature

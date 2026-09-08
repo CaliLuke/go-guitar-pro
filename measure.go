@@ -8,8 +8,9 @@ const maxVoices = 2
 
 // Measure represents a measure within a track.
 type Measure struct {
-	Voices     []Voice
-	Number     int
+	Voices []Voice
+	Number int
+	// Start matches the owning MeasureHeader display-time start in ticks.
 	Start      int64
 	TrackIndex int
 	// StaffIndex is the zero-based staff index within the owning track.
@@ -57,6 +58,56 @@ func (s *Song) readMeasures(c *cursor) error {
 	}
 	s.currentTrack = nil
 	return nil
+}
+
+func (s *Song) finalizeTiming() {
+	start := DurationQuarterTime
+	for headerIndex := range s.MeasureHeaders {
+		s.MeasureHeaders[headerIndex].Start = start
+		contentLength := int64(0)
+		for trackIndex := range s.Tracks {
+			track := &s.Tracks[trackIndex]
+			if len(track.Staves) == 0 {
+				contentLength = max(contentLength, finalizeMeasureTiming(track.Measures, headerIndex, start))
+				continue
+			}
+			for staffIndex := range track.Staves {
+				contentLength = max(
+					contentLength,
+					finalizeMeasureTiming(track.Staves[staffIndex].Measures, headerIndex, start),
+				)
+			}
+		}
+		measureLength := s.MeasureHeaders[headerIndex].length()
+		if headerIndex == 0 && s.Anacrusis {
+			measureLength = contentLength
+		}
+		start += measureLength
+	}
+}
+
+func finalizeMeasureTiming(measures []Measure, headerIndex int, start int64) int64 {
+	contentLength := int64(0)
+	for measureIndex := range measures {
+		measure := &measures[measureIndex]
+		if measure.HeaderIndex != headerIndex {
+			continue
+		}
+		measure.Start = start
+		for voiceIndex := range measure.Voices {
+			voiceStart := start
+			for beatIndex := range measure.Voices[voiceIndex].Beats {
+				beat := &measure.Voices[voiceIndex].Beats[beatIndex]
+				beatStart := voiceStart
+				beat.Start = &beatStart
+				if !beat.isGrace {
+					voiceStart += int64(beat.Duration.time())
+				}
+			}
+			contentLength = max(contentLength, voiceStart-start)
+		}
+	}
+	return contentLength
 }
 
 func (s *Song) readMeasure(c *cursor, measure *Measure, trackIndex int) error {

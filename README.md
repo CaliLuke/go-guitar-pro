@@ -116,6 +116,12 @@ bytes when the asset is present in the project archive.
 `Track.Measures` and `Track.Strings` remain first-staff compatibility views;
 binary GP3–5 tracks expose one staff.
 
+Parsed timing uses absolute display-time ticks with a one-quarter-note origin:
+the first `MeasureHeader.Start`, `Measure.Start`, and `Beat.Start` is 960. Each
+voice advances independently by its played duration, including tuplets; pickup
+measures advance by their authored content length. Playback transformations such
+as repeats and grace-note scheduling are not folded into these display starts.
+
 ## Develop
 
 ```sh

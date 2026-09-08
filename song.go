@@ -252,6 +252,7 @@ func (s *Song) readBinary(c *cursor) error {
 	for trackIndex := range s.Tracks {
 		s.Tracks[trackIndex].populateSingleStaff()
 	}
+	s.finalizeTiming()
 	return nil
 }
 

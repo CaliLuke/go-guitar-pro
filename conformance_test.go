@@ -270,6 +270,53 @@ func TestAlphaTabTempoReferences(t *testing.T) {
 	}
 }
 
+func TestAlphaTabGPIFTiming(t *testing.T) {
+	requireAlphaTabConformance(t)
+	for _, test := range []struct {
+		name    string
+		fixture string
+		old     string
+		new     string
+	}{
+		{name: "notes", fixture: "testdata/gp7/notes.gp"},
+		{name: "time signatures", fixture: "testdata/gp7/time-signatures.gp"},
+		{name: "pickup", fixture: "testdata/gp7/anacrusis.gp"},
+		{name: "empty pickup", fixture: "testdata/gp7/anacrusis.gp", old: "<Beats>0 1</Beats>", new: "<Beats>-1</Beats>"},
+		{name: "multiple voices", fixture: "testdata/gp7/multi-voice.gp"},
+		{name: "tuplets", fixture: "testdata/gp7/tuplets.gp"},
+		{name: "grace", fixture: "testdata/gp7/grace.gp"},
+		{name: "unmatched grace", fixture: "testdata/gp7/grace.gp", old: "<Beats>0 1 2 3 4</Beats>", new: "<Beats>1 2 4</Beats>"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			data, err := os.ReadFile(test.fixture)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if test.old != "" {
+				data = rewriteConformanceGPIF(t, data, func(gpif string) string {
+					return strings.Replace(gpif, test.old, test.new, 1)
+				})
+			}
+			song, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			goScore := selectConformanceFeatures(normalizeGoScore(song), []string{"timing"})
+			alphaScore := selectConformanceFeatures(
+				readAlphaTabScore(t, writeConformanceFixture(t, data)),
+				[]string{"timing"},
+			)
+			if differences := semanticDifferences(goScore, alphaScore); len(differences) != 0 {
+				formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
+				if marshalErr != nil {
+					t.Fatal(marshalErr)
+				}
+				t.Fatalf("timing differs from AlphaTab:\n%s", formatted)
+			}
+		})
+	}
+}
+
 func requireAlphaTabConformance(t *testing.T) {
 	t.Helper()
 	if os.Getenv("ALPHATAB_CONFORMANCE") != "1" {
@@ -755,9 +802,18 @@ func normalizeGoBars(song *Song, staff *Staff) []any {
 				continue
 			}
 			beats := make([]any, 0, len(voice.Beats))
+			pendingGrace := make([]*Beat, 0)
 			for beatIndex := range voice.Beats {
 				beat := &voice.Beats[beatIndex]
+				if beat.isGrace {
+					pendingGrace = append(pendingGrace, beat)
+					continue
+				}
+				pendingGrace = pendingGrace[:0]
 				beats = append(beats, normalizeGoBeat(song, measureIndex, staff, beat))
+			}
+			for _, grace := range pendingGrace {
+				beats = append(beats, normalizeGoBeat(song, measureIndex, staff, grace))
 			}
 			voices = append(voices, map[string]any{"beats": beats})
 		}

@@ -81,7 +81,7 @@
     {
       "id": "gp7-core-notes",
       "fixture": "testdata/gp7/notes.gp",
-      "features": ["score-core", "rhythm", "note-and-beat-semantics"]
+      "features": ["score-core", "rhythm", "timing", "note-and-beat-semantics"]
     },
     {
       "id": "gp8-core-notes",

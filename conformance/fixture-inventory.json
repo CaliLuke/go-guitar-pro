@@ -1648,9 +1648,10 @@
       "sha256": "345e3b5da449fdfcc42d709f512d263adacc3e90eb909020f9a647350d3d0af5",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Live AlphaTab differential covers populated and empty pickup timing; a dedicated rhythm snapshot is pending.",
       "features": [
-        "rhythm"
+        "rhythm",
+        "timing"
       ],
       "semanticSnapshot": false
     },
@@ -2212,9 +2213,10 @@
       "sha256": "330b751d3ad867ba1439fbf32ba28688ab617060303482f98c5e8785a6bcd423",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships; a dedicated semantic snapshot is pending.",
+      "reason": "Live AlphaTab differential covers attached and unmatched grace timing; a dedicated grace-relationships snapshot is pending.",
       "features": [
-        "grace-relationships"
+        "grace-relationships",
+        "timing"
       ],
       "semanticSnapshot": false
     },
@@ -2509,9 +2511,10 @@
       "sha256": "91bd3d5b52ec558e44229abaa40c7c3bcf9978e31ead0ef9144a93dd82680883",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Live AlphaTab differential covers independent voice timing; a dedicated score-core snapshot is pending.",
       "features": [
-        "score-core"
+        "score-core",
+        "timing"
       ],
       "semanticSnapshot": false
     },
@@ -2576,10 +2579,11 @@
       "sha256": "44c5c7f3d15c9088fc23c3a4bb8cf2350bc8a2e0a5405816eb209eb764d5c81a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Pinned differential snapshot covering score-core, rhythm, note-and-beat-semantics.",
+      "reason": "Pinned differential snapshot and live AlphaTab checks cover score-core, rhythm, timing, and note-and-beat-semantics.",
       "features": [
         "score-core",
         "rhythm",
+        "timing",
         "note-and-beat-semantics"
       ],
       "semanticSnapshot": true
@@ -3029,8 +3033,8 @@
       "path": "testdata/gp7/time-signatures.gp",
       "sha256": "36459acb704f7e22023347bba6189616816db0b3e3e76fd04a6dd0c0528f039e",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering rhythm, timing.",
+      "disposition": "supported",
+      "reason": "Measure starts across changing time signatures agree with the pinned AlphaTab snapshot.",
       "features": [
         "rhythm",
         "timing"
@@ -3251,9 +3255,10 @@
       "sha256": "f39ecf0cfebd1b9e849b32daf6074dafe86df182e1dc5b87eac6274bf473c28a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Live AlphaTab differential covers tuplet timing; a dedicated rhythm snapshot is pending.",
       "features": [
-        "rhythm"
+        "rhythm",
+        "timing"
       ],
       "semanticSnapshot": false
     },

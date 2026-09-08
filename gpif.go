@@ -749,12 +749,7 @@ func parseGPIF(data []byte) (*Song, error) {
 		}
 	}
 
-	// Set measure header starts
-	start := DurationQuarterTime
-	for i := range song.MeasureHeaders {
-		song.MeasureHeaders[i].Start = start
-		start += song.MeasureHeaders[i].length()
-	}
+	song.finalizeTiming()
 
 	return song, nil
 }
@@ -768,6 +763,7 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 	var orphans []Beat
 	for pendingIndex, pendingBeat := range pending {
 		orphan := pendingBeat.beat
+		orphan.isGrace = true
 		orphan.Notes = nil
 		for noteIndex := range pendingBeat.beat.Notes {
 			graceNote := pendingBeat.beat.Notes[noteIndex]

@@ -242,9 +242,9 @@
     },
     {
       "name": "MasterBar.start",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "timing",
-      "reason": "Compared after zero-origin normalization; GPIF gaps are issue 9."
+      "reason": "Mapped to MeasureHeader.Start and Measure.Start after zero-origin normalization."
     },
     {
       "name": "MasterBar.tempoAutomations",
@@ -290,9 +290,9 @@
     },
     {
       "name": "Beat.displayStart",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "timing",
-      "reason": "Authored display timing is compared; playback timing is derived."
+      "reason": "Mapped to Beat.Start after zero-origin normalization; playback timing remains derived."
     },
     {
       "name": "Beat.playbackStart",
@@ -837,9 +837,9 @@
     {
       "name": "Beat.displayStart",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "timing",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly by Beat.Start in the normalized display-time contract."
     },
     {
       "name": "Beat.dots",
@@ -1684,9 +1684,9 @@
     {
       "name": "MasterBar.start",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "timing",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented by MeasureHeader.Start and Measure.Start in the normalized display-time contract."
     },
     {
       "name": "MasterBar.syncPoints",
