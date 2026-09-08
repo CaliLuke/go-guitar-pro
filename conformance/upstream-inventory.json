@@ -308,9 +308,9 @@
     },
     {
       "name": "Beat.tremoloPicking",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "tremolo-picking",
-      "reason": "GPIF values are currently lost; issue 5."
+      "reason": "Retained on every owning Go note with the same subdivision as AlphaTab."
     },
     {
       "name": "Beat.crescendo",
@@ -1348,23 +1348,23 @@
     {
       "name": "Beat.tremoloPicking",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "tremolo-picking",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Retained on every owning Go note with the same subdivision as AlphaTab."
     },
     {
       "name": "Beat.tremoloSpeed",
       "kind": "get",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "tremolo-picking",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Derived from the retained tremolo subdivision."
     },
     {
       "name": "Beat.tremoloSpeed",
       "kind": "set",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "tremolo-picking",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Mapped through NoteEffect.TremoloPicking for Go compatibility."
     },
     {
       "name": "Beat.tupletDenominator",

@@ -3162,8 +3162,8 @@
       "path": "testdata/gp7/tremolo-picking.gp",
       "sha256": "99d2701d1b074240149ad3208930e5489029949c8de227027c651cf46e24f4a9",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering tremolo-picking.",
+      "disposition": "supported",
+      "reason": "All six 1/2, 1/4, and 1/8 tremolo-picking beats agree with the pinned AlphaTab snapshot.",
       "features": [
         "tremolo-picking"
       ],

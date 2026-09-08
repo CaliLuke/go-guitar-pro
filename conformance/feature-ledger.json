@@ -89,9 +89,9 @@
       "goDestination": ["NoteEffect.TremoloPicking"],
       "fixtures": ["testdata/gp7/tremolo-picking.gp"],
       "semanticAssertions": ["marked beat path", "1/2, 1/4 and 1/8 subdivision"],
-      "status": "partial",
-      "reason": "All six GPIF tremolo-picking values are discarded; see issue 5.",
-      "issues": [5]
+      "status": "supported",
+      "reason": "Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab.",
+      "issues": []
     },
     {
       "id": "harmonics",

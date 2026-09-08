@@ -721,6 +721,7 @@ func parseGPIF(data []byte) (*Song, error) {
 											beat.Notes = append(beat.Notes, note)
 										}
 									}
+									gpifApplyTremoloPicking(b.Tremolo, beat.Notes)
 									if len(beat.Notes) == 0 {
 										beat.Status = BeatStatusRest
 									}
@@ -1065,21 +1066,6 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 		}
 	}
 
-	// Tremolo picking
-	if b.Tremolo != "" {
-		tp := TremoloPickingEffect{Duration: defaultDuration()}
-		switch b.Tremolo {
-		case "1/2":
-			tp.Duration.Value = uint16(DurationEighth)
-		case "1/4":
-			tp.Duration.Value = uint16(DurationSixteenth)
-		case "1/8":
-			tp.Duration.Value = uint16(DurationThirtySecond)
-		}
-		// Apply to all notes in the beat (set after notes are parsed)
-		_ = tp // stored for later use on notes
-	}
-
 	// Arpeggio / brush stroke
 	switch b.Arpeggio {
 	case "Up":
@@ -1139,6 +1125,25 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 				beat.Effect.Vibrato = true
 			}
 		}
+	}
+}
+
+func gpifApplyTremoloPicking(value string, notes []Note) {
+	if value == "" {
+		return
+	}
+	effect := TremoloPickingEffect{Duration: defaultDuration()}
+	switch value {
+	case "1/2":
+		effect.Duration.Value = uint16(DurationEighth)
+	case "1/4":
+		effect.Duration.Value = uint16(DurationSixteenth)
+	case "1/8":
+		effect.Duration.Value = uint16(DurationThirtySecond)
+	}
+	for noteIndex := range notes {
+		noteEffect := effect
+		notes[noteIndex].Effect.TremoloPicking = &noteEffect
 	}
 }
 
