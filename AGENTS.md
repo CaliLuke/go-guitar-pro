@@ -25,6 +25,18 @@ used for exported APIs.
 
 The repository contains a library. It does not contain a command-line program.
 
+## External References
+
+Local source checkouts used for implementation reference belong under the ignored
+`references/` directory. AlphaTab is expected at `references/alphaTab`. If that
+checkout is missing, recreate it from the repository root with:
+
+```sh
+git clone --branch develop https://github.com/CoderLine/alphaTab.git references/alphaTab
+```
+
+Do not add files from `references/` to this repository.
+
 ## Code Style
 
 Use standard Go formatting and naming. Use `PascalCase` for exported identifiers. Use `camelCase` for private identifiers. Add a documentation comment to each new exported API. Return errors with operation context. Do not write logs from library code. Do not terminate a process from library code.
