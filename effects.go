@@ -36,6 +36,7 @@ type GraceEffect struct {
 	Fret       int8
 	IsDead     bool
 	IsOnBeat   bool
+	Sequence   uint8
 	Transition GraceEffectTransition
 	Velocity   int16
 }
@@ -64,7 +65,7 @@ type TrillEffect struct {
 type NoteEffect struct {
 	Bend                 *BendEffect
 	Trill                *TrillEffect
-	Grace                *GraceEffect
+	Graces               []GraceEffect
 	TremoloPicking       *TremoloPickingEffect
 	Harmonic             *HarmonicEffect
 	Slides               []SlideType

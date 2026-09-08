@@ -287,7 +287,7 @@ type gpifKey struct {
 type gpifRepeat struct {
 	Start string `xml:"start,attr,omitempty"`
 	End   string `xml:"end,attr,omitempty"`
-	Count int    `xml:"Count,omitempty"`
+	Count int    `xml:"count,attr,omitempty"`
 }
 
 type gpifSection struct {
@@ -754,18 +754,18 @@ type gpifPendingGrace struct {
 
 func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion bool) []Beat {
 	var orphans []Beat
-	for _, pendingBeat := range pending {
+	for pendingIndex, pendingBeat := range pending {
 		orphan := pendingBeat.beat
 		orphan.Notes = nil
 		for noteIndex := range pendingBeat.beat.Notes {
 			graceNote := pendingBeat.beat.Notes[noteIndex]
-			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat)
+			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat, pendingIndex)
 			targetIndex := gpifGraceTarget(target, &graceNote, percussion)
 			if targetIndex >= 0 {
-				target.Notes[targetIndex].Effect.Grace = &effect
+				target.Notes[targetIndex].Effect.Graces = append(target.Notes[targetIndex].Effect.Graces, effect)
 				continue
 			}
-			graceNote.Effect.Grace = &effect
+			graceNote.Effect.Graces = append(graceNote.Effect.Graces, effect)
 			orphan.Notes = append(orphan.Notes, graceNote)
 		}
 		if len(orphan.Notes) > 0 || len(pendingBeat.beat.Notes) == 0 {
@@ -781,20 +781,21 @@ func gpifGraceTarget(target *Beat, grace *Note, percussion bool) int {
 	}
 	if percussion {
 		for index := range target.Notes {
-			if target.Notes[index].Effect.Grace == nil && target.Notes[index].Value == grace.Value {
+			if target.Notes[index].Value == grace.Value {
 				return index
 			}
 		}
+		return -1
 	}
 	for index := range target.Notes {
-		if target.Notes[index].Effect.Grace == nil && target.Notes[index].String == grace.String {
+		if target.Notes[index].String == grace.String {
 			return index
 		}
 	}
 	return -1
 }
 
-func gpifGraceEffect(note *Note, duration *Duration, onBeat bool) GraceEffect {
+func gpifGraceEffect(note *Note, duration *Duration, onBeat bool, sequence int) GraceEffect {
 	transition := GraceEffectTransitionNone
 	switch {
 	case note.Effect.Hammer:
@@ -807,6 +808,7 @@ func gpifGraceEffect(note *Note, duration *Duration, onBeat bool) GraceEffect {
 		Fret:       int8(min(int16(math.MaxInt8), max(int16(math.MinInt8), note.Value))),
 		IsDead:     note.Kind == NoteTypeDead,
 		IsOnBeat:   onBeat,
+		Sequence:   uint8(min(sequence, math.MaxUint8)),
 		Transition: transition,
 		Velocity:   note.Velocity,
 	}

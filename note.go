@@ -221,7 +221,7 @@ func (s *Song) readNoteEffectsV3(c *cursor, note *Note) error {
 		if err != nil {
 			return err
 		}
-		note.Effect.Grace = &grace
+		note.Effect.Graces = append(note.Effect.Graces, grace)
 	}
 	if (flags & 0x04) == 0x04 {
 		note.Effect.Slides = append(note.Effect.Slides, SlideShiftSlideTo)
@@ -257,13 +257,13 @@ func (s *Song) readNoteEffectsV4(c *cursor, note *Note) error {
 			if err != nil {
 				return err
 			}
-			note.Effect.Grace = &grace
+			note.Effect.Graces = append(note.Effect.Graces, grace)
 		} else {
 			grace, err := s.readGraceEffect(c)
 			if err != nil {
 				return err
 			}
-			note.Effect.Grace = &grace
+			note.Effect.Graces = append(note.Effect.Graces, grace)
 		}
 	}
 	if (flags2 & 0x04) == 0x04 {

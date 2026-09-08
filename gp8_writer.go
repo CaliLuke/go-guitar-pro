@@ -767,53 +767,86 @@ type gp8GraceGroup struct {
 }
 
 func (builder *gp8Builder) addGraceBeats(trackIndex int, beat *Beat) ([]string, error) {
+	var ids []string
+	for _, sequence := range graceSequences(beat) {
+		groups := builder.graceGroups(trackIndex, beat, sequence)
+		groupIDs, err := builder.addGraceGroups(trackIndex, groups)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, groupIDs...)
+	}
+	return ids, nil
+}
+
+func graceSequences(beat *Beat) []uint8 {
+	seen := make(map[uint8]struct{})
+	for noteIndex := range beat.Notes {
+		for _, grace := range beat.Notes[noteIndex].Effect.Graces {
+			seen[grace.Sequence] = struct{}{}
+		}
+	}
+	result := make([]uint8, 0, len(seen))
+	for sequence := range seen {
+		result = append(result, sequence)
+	}
+	slices.Sort(result)
+	return result
+}
+
+func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint8) []gp8GraceGroup {
 	var groups []gp8GraceGroup
 	for noteIndex := range beat.Notes {
 		note := &beat.Notes[noteIndex]
-		grace := note.Effect.Grace
-		if grace == nil {
-			continue
-		}
-		duration := defaultDuration()
-		duration.Value = uint16(grace.Duration)
-		if _, supported := gp8NoteValue(duration.Value); !supported {
-			duration.Value = uint16(DurationThirtySecond)
-		}
-		velocity := grace.Velocity
-		if velocity == 0 {
-			velocity = DefaultVelocity
-		}
-		groupIndex := -1
-		for index := range groups {
-			if groups[index].duration == duration && groups[index].velocity == velocity && groups[index].onBeat == grace.IsOnBeat {
-				groupIndex = index
-				break
+		for graceIndex := range note.Effect.Graces {
+			grace := &note.Effect.Graces[graceIndex]
+			if grace.Sequence != sequence {
+				continue
 			}
+			duration := defaultDuration()
+			duration.Value = uint16(grace.Duration)
+			if _, supported := gp8NoteValue(duration.Value); !supported {
+				duration.Value = uint16(DurationThirtySecond)
+			}
+			velocity := grace.Velocity
+			if velocity == 0 {
+				velocity = DefaultVelocity
+			}
+			groupIndex := -1
+			for index := range groups {
+				if groups[index].duration == duration && groups[index].velocity == velocity && groups[index].onBeat == grace.IsOnBeat {
+					groupIndex = index
+					break
+				}
+			}
+			if groupIndex < 0 {
+				groups = append(groups, gp8GraceGroup{duration: duration, velocity: velocity, onBeat: grace.IsOnBeat})
+				groupIndex = len(groups) - 1
+			}
+			graceNote := *note
+			graceNote.Value = int16(grace.Fret)
+			if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {
+				graceNote.Value = note.Value
+			}
+			graceNote.Velocity = velocity
+			graceNote.Kind = NoteTypeNormal
+			graceNote.Effect = defaultNoteEffect()
+			if grace.IsDead {
+				graceNote.Kind = NoteTypeDead
+			}
+			switch grace.Transition {
+			case GraceEffectTransitionSlide:
+				graceNote.Effect.Slides = []SlideType{SlideLegatoSlideTo}
+			case GraceEffectTransitionHammer:
+				graceNote.Effect.Hammer = true
+			}
+			groups[groupIndex].notes = append(groups[groupIndex].notes, graceNote)
 		}
-		if groupIndex < 0 {
-			groups = append(groups, gp8GraceGroup{duration: duration, velocity: velocity, onBeat: grace.IsOnBeat})
-			groupIndex = len(groups) - 1
-		}
-		graceNote := *note
-		graceNote.Value = int16(grace.Fret)
-		if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {
-			graceNote.Value = note.Value
-		}
-		graceNote.Velocity = velocity
-		graceNote.Kind = NoteTypeNormal
-		graceNote.Effect = defaultNoteEffect()
-		if grace.IsDead {
-			graceNote.Kind = NoteTypeDead
-		}
-		switch grace.Transition {
-		case GraceEffectTransitionSlide:
-			graceNote.Effect.Slides = []SlideType{SlideLegatoSlideTo}
-		case GraceEffectTransitionHammer:
-			graceNote.Effect.Hammer = true
-		}
-		groups[groupIndex].notes = append(groups[groupIndex].notes, graceNote)
 	}
+	return groups
+}
 
+func (builder *gp8Builder) addGraceGroups(trackIndex int, groups []gp8GraceGroup) ([]string, error) {
 	ids := make([]string, 0, len(groups))
 	for _, group := range groups {
 		rhythmID, err := builder.addRhythm(group.duration)

@@ -126,15 +126,17 @@ func TestGP5PercussionGracePreservesAuthoredValue(t *testing.T) {
 		for _, voice := range measure.Voices {
 			for _, beat := range voice.Beats {
 				for _, note := range beat.Notes {
-					if note.Effect.Grace == nil {
+					if len(note.Effect.Graces) == 0 {
 						continue
 					}
-					graceCount++
+					graceCount += len(note.Effect.Graces)
 					if note.Value != 38 {
 						t.Errorf("bar %d grace parent articulation = %d, want 38", measureIndex+1, note.Value)
 					}
-					if got := note.Effect.Grace.Fret; got != 0 {
-						t.Errorf("bar %d grace value = %d, want authored value 0", measureIndex+1, got)
+					for _, grace := range note.Effect.Graces {
+						if grace.Fret != 0 {
+							t.Errorf("bar %d grace value = %d, want authored value 0", measureIndex+1, grace.Fret)
+						}
 					}
 				}
 			}

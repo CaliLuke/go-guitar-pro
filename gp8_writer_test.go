@@ -142,13 +142,13 @@ func TestExportGP8RoundTrip(t *testing.T) {
 		t.Fatalf("pickup beats = %d, want 3", len(pickupBeats))
 	}
 	graceNote := pickupBeats[0].Notes[0]
-	if graceNote.Value != 38 || graceNote.Effect.Grace == nil || graceNote.Effect.Grace.Fret != 38 || !graceNote.Effect.AccentuatedNote {
+	if graceNote.Value != 38 || len(graceNote.Effect.Graces) != 1 || graceNote.Effect.Graces[0].Fret != 38 || !graceNote.Effect.AccentuatedNote {
 		t.Errorf("grace snare = %#v", graceNote)
 	}
 	if pickupBeats[0].Duration.Value != uint16(DurationEighth) || graceNote.Velocity != Forte {
 		t.Errorf("grace beat duration/velocity = %d/%d", pickupBeats[0].Duration.Value, graceNote.Velocity)
 	}
-	if len(pickupBeats[0].Notes) != 2 || pickupBeats[0].Notes[1].Effect.Grace != nil || pickupBeats[0].Notes[1].String != 0 {
+	if len(pickupBeats[0].Notes) != 2 || len(pickupBeats[0].Notes[1].Effect.Graces) != 0 || pickupBeats[0].Notes[1].String != 0 {
 		t.Errorf("partial grace chord = %#v", pickupBeats[0].Notes)
 	}
 	if len(pickupBeats[1].Notes) != 2 || pickupBeats[1].Effect.Chord == nil || pickupBeats[1].Effect.Chord.Name != "Kick + hat" {
@@ -214,10 +214,12 @@ func TestExportGP8RealPercussionFixture(t *testing.T) {
 		for _, voice := range measure.Voices {
 			for _, beat := range voice.Beats {
 				for _, note := range beat.Notes {
-					if note.Effect.Grace != nil {
-						graceCount++
-						if note.Value != 38 || note.Effect.Grace.Fret != 38 {
-							t.Errorf("grace articulation = note %d grace %d, want 38", note.Value, note.Effect.Grace.Fret)
+					if len(note.Effect.Graces) > 0 {
+						graceCount += len(note.Effect.Graces)
+						for _, grace := range note.Effect.Graces {
+							if note.Value != 38 || grace.Fret != 38 {
+								t.Errorf("grace articulation = note %d grace %d, want 38", note.Value, grace.Fret)
+							}
 						}
 					}
 				}
@@ -226,6 +228,50 @@ func TestExportGP8RealPercussionFixture(t *testing.T) {
 	}
 	if graceCount != 8 {
 		t.Errorf("percussion grace notes = %d, want 8", graceCount)
+	}
+}
+
+func TestExportGP8PreservesOrderedMultipleGraceNotes(t *testing.T) {
+	song := syntheticGP8Song()
+	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Effect.Graces = []GraceEffect{
+		{Fret: 38, Duration: DurationThirtySecond, Velocity: Forte},
+		{Fret: 38, Duration: DurationThirtySecond, Velocity: Forte - VelocityIncrement},
+	}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces
+	if len(got) != 2 {
+		t.Fatalf("grace notes = %#v, want two ordered grace notes", got)
+	}
+	if got[0].Fret != 38 || got[0].Velocity != Forte || got[1].Fret != 38 || got[1].Velocity != Forte-VelocityIncrement {
+		t.Errorf("grace notes = %#v, want preserved values and order", got)
+	}
+}
+
+func TestExportGP8WritesRepeatCountAsAttribute(t *testing.T) {
+	data, err := Export(syntheticGP8Song(), ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	gpif := string(readZipMember(t, archive, "Content/score.gpif"))
+	if !strings.Contains(gpif, `<Repeat end="true" count="2">`) {
+		t.Errorf("repeat close does not use the GPIF count attribute:\n%s", gpif)
+	}
+	if strings.Contains(gpif, "<Count>") {
+		t.Error("repeat close uses a Count child element that independent consumers ignore")
 	}
 }
 
@@ -430,8 +476,8 @@ func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
 					note := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
 					note.String = 1
 					note.Value = 5
-					if note.Effect.Grace != nil {
-						note.Effect.Grace.Fret = 3
+					for graceIndex := range note.Effect.Graces {
+						note.Effect.Graces[graceIndex].Fret = 3
 					}
 				}
 			}
@@ -835,12 +881,12 @@ func syntheticGP8Song() *Song {
 	headers[2].DoubleBar = true
 
 	chord := &Chord{Name: "Kick + hat", Strings: []int8{0}}
-	grace := &GraceEffect{Fret: 38, Duration: 1, Velocity: Forte}
+	grace := GraceEffect{Fret: 38, Duration: 1, Velocity: Forte}
 	measures := []Measure{
 		{
 			Number: 1,
 			Voices: []Voice{{Beats: []Beat{
-				{Duration: eighth, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: Forte, Kind: NoteTypeNormal, Effect: NoteEffect{Grace: grace, AccentuatedNote: true}}, {Value: 42, Velocity: Forte, Kind: NoteTypeNormal}}},
+				{Duration: eighth, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: Forte, Kind: NoteTypeNormal, Effect: NoteEffect{Graces: []GraceEffect{grace}, AccentuatedNote: true}}, {Value: 42, Velocity: Forte, Kind: NoteTypeNormal}}},
 				{Duration: eighth, Status: BeatStatusNormal, Effect: BeatEffects{Chord: chord}, Notes: []Note{{Value: 36, String: 1, Velocity: Forte, Kind: NoteTypeNormal}, {Value: 42, String: 1, Velocity: Forte, Kind: NoteTypeNormal}}},
 				{Duration: quarter, Status: BeatStatusRest},
 			}}},
