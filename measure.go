@@ -8,10 +8,12 @@ const maxVoices = 2
 
 // Measure represents a measure within a track.
 type Measure struct {
-	Voices        []Voice
-	Number        int
-	Start         int64
-	TrackIndex    int
+	Voices     []Voice
+	Number     int
+	Start      int64
+	TrackIndex int
+	// StaffIndex is the zero-based staff index within the owning track.
+	StaffIndex    int
 	HeaderIndex   int
 	TimeSignature TimeSignature
 	KeySignature  KeySignature

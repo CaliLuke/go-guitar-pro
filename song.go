@@ -249,6 +249,9 @@ func (s *Song) readBinary(c *cursor) error {
 	if err := s.readMeasures(c); err != nil {
 		return fmt.Errorf("reading measures: %w", err)
 	}
+	for trackIndex := range s.Tracks {
+		s.Tracks[trackIndex].populateSingleStaff()
+	}
 	return nil
 }
 

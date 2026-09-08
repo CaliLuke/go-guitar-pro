@@ -2222,8 +2222,8 @@
       "path": "testdata/gp7/grand-staff.gp",
       "sha256": "782f6be7954a8c3a5f054af884c2cdf39480c4bb073d2b93487b2a961b04a370",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering staff-ownership.",
+      "disposition": "supported",
+      "reason": "Pinned AlphaTab differential covers both staff ownership, tuning, clefs, bars, voices, and all 53 notes.",
       "features": [
         "staff-ownership"
       ],

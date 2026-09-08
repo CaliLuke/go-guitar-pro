@@ -17,10 +17,24 @@ type TrackSettings struct {
 	ExtendRhythmic  bool
 }
 
+// Staff represents one notation staff owned by a track.
+type Staff struct {
+	// Measures contains this staff's ordered measures.
+	Measures []Measure
+	// Strings contains this staff's tuning from highest string to lowest.
+	Strings []GuitarString
+	// PercussionTrack reports whether this staff uses percussion articulations.
+	PercussionTrack bool
+}
+
 // Track represents a track.
 type Track struct {
-	Name             string
-	Measures         []Measure
+	Name string
+	// Staves preserves every staff in GPIF track order. Binary GP3–5 tracks have one staff.
+	Staves []Staff
+	// Measures is the first staff's compatibility view. Use Staves for lossless multi-staff access.
+	Measures []Measure
+	// Strings is the first staff's compatibility view. Use Staves for staff-specific tuning.
 	Strings          []GuitarString
 	Lyrics           []TrackLyricLine
 	Sounds           []TrackSound
@@ -43,6 +57,14 @@ type Track struct {
 	PercussionTrack           bool
 	Visible                   bool
 	Solo                      bool
+}
+
+func (t *Track) populateSingleStaff() {
+	t.Staves = []Staff{{
+		Measures:        t.Measures,
+		Strings:         t.Strings,
+		PercussionTrack: t.PercussionTrack,
+	}}
 }
 
 // TrackSound describes one selectable GPIF playback sound.

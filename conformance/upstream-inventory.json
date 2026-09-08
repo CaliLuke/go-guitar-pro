@@ -254,9 +254,9 @@
     },
     {
       "name": "Track.staves",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "staff-ownership",
-      "reason": "Go lacks a staff collection; issue 4."
+      "reason": "Mapped directly to Track.Staves in source order."
     },
     {
       "name": "Track.percussionArticulations",
@@ -266,15 +266,15 @@
     },
     {
       "name": "Staff.bars",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "staff-ownership",
-      "reason": "Go owns bars through Track.Measures; issue 4."
+      "reason": "Mapped directly to Staff.Measures with track and staff ownership."
     },
     {
       "name": "Staff.tuning",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "staff-ownership",
-      "reason": "Go tuning is track-owned; issue 4."
+      "reason": "Mapped directly to Staff.Strings; Track.Strings remains the first-staff view."
     },
     {
       "name": "Staff.isPercussion",
@@ -2678,9 +2678,9 @@
     {
       "name": "Staff.bars",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly by Staff.Measures in the normalized authored-semantic contract."
     },
     {
       "name": "Staff.capo",

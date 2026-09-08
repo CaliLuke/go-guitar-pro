@@ -186,6 +186,40 @@ func TestAlphaTabComparatorDetectsWireMutations(t *testing.T) {
 	}
 }
 
+func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
+	requireAlphaTabConformance(t)
+	for _, test := range []struct {
+		name string
+		gpif string
+	}{
+		{name: "all staves present", gpif: multiStaffFollowedByTrackGPIF},
+		{
+			name: "missing multi-staff track",
+			gpif: strings.Replace(multiStaffFollowedByTrackGPIF, "<Bars>0 1 2</Bars>", "<Bars>-1 2</Bars>", 1),
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			song, err := parseGPIF([]byte(test.gpif))
+			if err != nil {
+				t.Fatal(err)
+			}
+			archive := conformanceGPIFArchive(t, test.gpif)
+			goScore := selectConformanceFeatures(normalizeGoScore(song), []string{"staff-ownership"})
+			alphaScore := selectConformanceFeatures(
+				readAlphaTabScore(t, writeConformanceFixture(t, archive)),
+				[]string{"staff-ownership"},
+			)
+			if differences := semanticDifferences(goScore, alphaScore); len(differences) != 0 {
+				formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
+				if marshalErr != nil {
+					t.Fatal(marshalErr)
+				}
+				t.Fatalf("multi-staff track ordering differs from AlphaTab:\n%s", formatted)
+			}
+		})
+	}
+}
+
 func requireAlphaTabConformance(t *testing.T) {
 	t.Helper()
 	if os.Getenv("ALPHATAB_CONFORMANCE") != "1" {
@@ -614,12 +648,7 @@ func normalizeGoScore(song *Song) any {
 			"name":           track.Name,
 			"program":        program,
 			"primaryChannel": primaryChannel,
-			"staves": []any{map[string]any{
-				"index":      0,
-				"percussion": track.PercussionTrack,
-				"tuning":     normalizeGoTuning(track.Strings),
-				"bars":       normalizeGoBars(song, trackIndex),
-			}},
+			"staves":         normalizeGoStaves(song, trackIndex),
 		})
 	}
 	return map[string]any{
@@ -642,11 +671,33 @@ func normalizeGoTuning(strings []GuitarString) []any {
 	return result
 }
 
-func normalizeGoBars(song *Song, trackIndex int) []any {
+func normalizeGoStaves(song *Song, trackIndex int) []any {
 	track := &song.Tracks[trackIndex]
-	result := make([]any, 0, len(track.Measures))
-	for measureIndex := range track.Measures {
-		measure := &track.Measures[measureIndex]
+	staves := track.Staves
+	if len(staves) == 0 {
+		staves = []Staff{{
+			Measures:        track.Measures,
+			Strings:         track.Strings,
+			PercussionTrack: track.PercussionTrack,
+		}}
+	}
+	result := make([]any, 0, len(staves))
+	for staffIndex := range staves {
+		staff := &staves[staffIndex]
+		result = append(result, map[string]any{
+			"index":      staffIndex,
+			"percussion": staff.PercussionTrack,
+			"tuning":     normalizeGoTuning(staff.Strings),
+			"bars":       normalizeGoBars(song, staff),
+		})
+	}
+	return result
+}
+
+func normalizeGoBars(song *Song, staff *Staff) []any {
+	result := make([]any, 0, len(staff.Measures))
+	for measureIndex := range staff.Measures {
+		measure := &staff.Measures[measureIndex]
 		voices := make([]any, 0, len(measure.Voices))
 		for voiceIndex := range measure.Voices {
 			voice := &measure.Voices[voiceIndex]
@@ -656,7 +707,7 @@ func normalizeGoBars(song *Song, trackIndex int) []any {
 			beats := make([]any, 0, len(voice.Beats))
 			for beatIndex := range voice.Beats {
 				beat := &voice.Beats[beatIndex]
-				beats = append(beats, normalizeGoBeat(song, trackIndex, measureIndex, beat))
+				beats = append(beats, normalizeGoBeat(song, measureIndex, staff, beat))
 			}
 			voices = append(voices, map[string]any{"beats": beats})
 		}
@@ -673,14 +724,14 @@ func goVoiceHasContent(voice *Voice) bool {
 	})
 }
 
-func normalizeGoBeat(song *Song, trackIndex, measureIndex int, beat *Beat) any {
+func normalizeGoBeat(song *Song, measureIndex int, staff *Staff, beat *Beat) any {
 	start := any(nil)
 	if beat.Start != nil {
 		start = *beat.Start - song.MeasureHeaders[measureIndex].Start
 	}
 	notes := make([]any, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		notes = append(notes, normalizeGoNote(song, trackIndex, &beat.Notes[noteIndex]))
+		notes = append(notes, normalizeGoNote(staff, &beat.Notes[noteIndex]))
 	}
 	return map[string]any{
 		"start":          start,
@@ -697,16 +748,15 @@ func normalizeGoBeat(song *Song, trackIndex, measureIndex int, beat *Beat) any {
 	}
 }
 
-func normalizeGoNote(song *Song, trackIndex int, note *Note) any {
-	track := &song.Tracks[trackIndex]
+func normalizeGoNote(staff *Staff, note *Note) any {
 	fret := any(note.Value)
 	articulation := any(nil)
-	if track.PercussionTrack {
+	if staff.PercussionTrack {
 		fret = nil
 	}
 	midi := note.Value
-	if !track.PercussionTrack && note.String > 0 && int(note.String) <= len(track.Strings) {
-		midi += int16(track.Strings[note.String-1].Value)
+	if !staff.PercussionTrack && note.String > 0 && int(note.String) <= len(staff.Strings) {
+		midi += int16(staff.Strings[note.String-1].Value)
 	}
 	graces := make([]any, 0, len(note.Effect.Graces))
 	for _, grace := range note.Effect.Graces {
@@ -717,7 +767,7 @@ func normalizeGoNote(song *Song, trackIndex int, note *Note) any {
 		graces = append(graces, map[string]any{
 			"rawFret": rawFret,
 			"dead":    grace.IsDead, "onBeat": grace.IsOnBeat, "dynamic": goDynamic(grace.Velocity),
-			"transition": goGraceTransition(grace.Transition), "staffPercussion": track.PercussionTrack,
+			"transition": goGraceTransition(grace.Transition), "staffPercussion": staff.PercussionTrack,
 		})
 	}
 	return map[string]any{
@@ -983,6 +1033,23 @@ func writeConformanceFixture(t *testing.T, data []byte) string {
 		t.Fatal(err)
 	}
 	return path
+}
+
+func conformanceGPIFArchive(t *testing.T, gpif string) []byte {
+	t.Helper()
+	var output bytes.Buffer
+	writer := zip.NewWriter(&output)
+	entry, err := writer.Create("Content/score.gpif")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := entry.Write([]byte(gpif)); err != nil {
+		t.Fatal(err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return output.Bytes()
 }
 
 func rewriteConformanceGPIF(t *testing.T, data []byte, mutate func(string) string) []byte {

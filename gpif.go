@@ -521,23 +521,24 @@ func parseGPIF(data []byte) (*Song, error) {
 						}
 					}
 				}
-				// Parse string tuning from staves
-				for _, staff := range t.Staves.Staff {
-					for _, prop := range staff.Properties {
-						if prop.Name == "Tuning" && prop.Pitches != "" {
-							vals := splitIDs(prop.Pitches)
-							track.Strings = nil
-							for sourceIndex := len(vals) - 1; sourceIndex >= 0; sourceIndex-- {
-								if v, err := strconv.ParseInt(vals[sourceIndex], 10, 8); err == nil {
-									track.Strings = append(track.Strings, GuitarString{
-										Number: int8(len(track.Strings) + 1),
-										Value:  int8(v),
-									})
-								}
-							}
+				staffCount := max(1, len(t.Staves.Staff))
+				if t.Instrument != nil && (strings.HasSuffix(t.Instrument.Ref, "-gs") || strings.HasSuffix(t.Instrument.Ref, "GrandStaff")) {
+					staffCount = max(2, staffCount)
+				}
+				track.Staves = make([]Staff, staffCount)
+				for staffIndex := range track.Staves {
+					strings := append([]GuitarString(nil), track.Strings...)
+					if staffIndex < len(t.Staves.Staff) {
+						if parsed := gpifReadStaffStrings(t.Staves.Staff[staffIndex]); parsed != nil {
+							strings = parsed
 						}
 					}
+					track.Staves[staffIndex] = Staff{
+						Strings:         strings,
+						PercussionTrack: track.PercussionTrack,
+					}
 				}
+				track.Strings = track.Staves[0].Strings
 				chordMap = gpifReadChordMap(t.Staves)
 				// Parse color
 				if t.Color != "" {
@@ -569,6 +570,9 @@ func parseGPIF(data []byte) (*Song, error) {
 				track.Solo = t.PlaybackState == "Solo"
 				break
 			}
+		}
+		if len(track.Staves) == 0 {
+			track.populateSingleStaff()
 		}
 		song.Tracks = append(song.Tracks, track)
 		trackChordMaps = append(trackChordMaps, chordMap)
@@ -631,19 +635,38 @@ func parseGPIF(data []byte) (*Song, error) {
 
 		song.MeasureHeaders = append(song.MeasureHeaders, mh)
 
-		// Parse bars for each track
+		// GPIF lists bars vertically by staff, advancing the track only after its final staff.
 		barIDs := splitIDs(mb.Bars)
+		barIndex := 0
+		newMeasure := func(trackIndex, staffIndex int) Measure {
+			measure := defaultMeasure()
+			measure.Number = mbIdx + 1
+			measure.TrackIndex = trackIndex
+			measure.StaffIndex = staffIndex
+			measure.HeaderIndex = mbIdx
+			measure.TimeSignature = mh.TimeSignature
+			measure.KeySignature = mh.KeySignature
+			measure.HasDoubleBar = mh.DoubleBar
+			return measure
+		}
 		for trackIdx := range song.Tracks {
-			m := defaultMeasure()
-			m.Number = mbIdx + 1
-			m.TrackIndex = trackIdx
-			m.HeaderIndex = mbIdx
-			m.TimeSignature = mh.TimeSignature
-			m.KeySignature = mh.KeySignature
-			m.HasDoubleBar = mh.DoubleBar
+			track := &song.Tracks[trackIdx]
+			for staffIdx := range track.Staves {
+				if barIndex >= len(barIDs) {
+					break
+				}
+				barID := barIDs[barIndex]
+				barIndex++
+				if barID == "-1" {
+					for skippedStaffIdx := range track.Staves {
+						measure := newMeasure(trackIdx, skippedStaffIdx)
+						track.Staves[skippedStaffIdx].Measures = append(track.Staves[skippedStaffIdx].Measures, measure)
+					}
+					break
+				}
+				staff := &track.Staves[staffIdx]
+				m := newMeasure(trackIdx, staffIdx)
 
-			if trackIdx < len(barIDs) {
-				barID := barIDs[trackIdx]
 				if bar, ok := barMap[barID]; ok {
 					m.Clef = gpifMeasureClef(bar.Clef)
 					voiceIDs := splitIDs(bar.Voices)
@@ -663,12 +686,10 @@ func parseGPIF(data []byte) (*Song, error) {
 								isGrace := false
 								graceOnBeat := false
 								if b, ok := beatMap[beatID]; ok {
-									// Rhythm → duration
 									if r, ok := rhythmMap[b.Rhythm.Ref]; ok {
 										beat.Duration = gpifRhythmToDuration(r)
 									}
 
-									// Beat effects
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
 									switch b.Hairpin {
 									case "Crescendo":
@@ -677,10 +698,8 @@ func parseGPIF(data []byte) (*Song, error) {
 										beat.Effect.Hairpin = HairpinDiminuendo
 									}
 									gpifApplyBeatEffects(b, &beat)
-									if trackIdx < len(trackChordMaps) {
-										if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
-											beat.Effect.Chord = &chord
-										}
+									if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
+										beat.Effect.Chord = &chord
 									}
 									switch b.GraceNotes {
 									case "OnBeat":
@@ -690,20 +709,14 @@ func parseGPIF(data []byte) (*Song, error) {
 										isGrace = true
 									}
 
-									// Notes
 									velocity := gpifDynamicToVelocity(b.Dynamic)
 									beat.Dynamics = velocity
-									noteIDs := splitIDs(b.Notes)
-									for _, noteID := range noteIDs {
+									for _, noteID := range splitIDs(b.Notes) {
 										if noteID == "-1" {
 											continue
 										}
 										if n, ok := noteMap[noteID]; ok {
-											note := gpifNoteToNote(
-												n,
-												len(song.Tracks[trackIdx].Strings),
-												song.Tracks[trackIdx].PercussionTrack,
-											)
+											note := gpifNoteToNote(n, len(staff.Strings), staff.PercussionTrack)
 											note.Velocity = velocity
 											beat.Notes = append(beat.Notes, note)
 										}
@@ -718,22 +731,24 @@ func parseGPIF(data []byte) (*Song, error) {
 								}
 								voice.Beats = append(
 									voice.Beats,
-									gpifApplyPendingGrace(&beat, pendingGrace, song.Tracks[trackIdx].PercussionTrack)...,
+									gpifApplyPendingGrace(&beat, pendingGrace, staff.PercussionTrack)...,
 								)
 								pendingGrace = nil
 								voice.Beats = append(voice.Beats, beat)
 							}
 							voice.Beats = append(
 								voice.Beats,
-								gpifApplyPendingGrace(nil, pendingGrace, song.Tracks[trackIdx].PercussionTrack)...,
+								gpifApplyPendingGrace(nil, pendingGrace, staff.PercussionTrack)...,
 							)
 						}
 						m.Voices = append(m.Voices, voice)
 					}
 				}
-			}
 
-			song.Tracks[trackIdx].Measures = append(song.Tracks[trackIdx].Measures, m)
+				staff.Measures = append(staff.Measures, m)
+			}
+			track.Measures = track.Staves[0].Measures
+			track.Strings = track.Staves[0].Strings
 		}
 	}
 
@@ -824,6 +839,28 @@ func gpifVersion(value string) Version {
 		}
 	}
 	return version
+}
+
+func gpifReadStaffStrings(staff gpifStaff) []GuitarString {
+	for _, property := range staff.Properties {
+		if property.Name != "Tuning" || property.Pitches == "" {
+			continue
+		}
+		values := splitIDs(property.Pitches)
+		strings := make([]GuitarString, 0, len(values))
+		for sourceIndex := len(values) - 1; sourceIndex >= 0; sourceIndex-- {
+			value, err := strconv.ParseInt(values[sourceIndex], 10, 8)
+			if err != nil {
+				continue
+			}
+			strings = append(strings, GuitarString{
+				Number: int8(len(strings) + 1),
+				Value:  int8(value),
+			})
+		}
+		return strings
+	}
+	return nil
 }
 
 func gpifReadChordMap(staves gpifStaves) map[string]Chord {

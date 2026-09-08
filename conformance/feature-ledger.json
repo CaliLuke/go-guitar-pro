@@ -47,12 +47,12 @@
       "upstreamParser": ["GpifParser._parseTracks", "GpifParser._buildModel"],
       "upstreamModel": ["Track.staves", "Staff.bars", "Staff.tuning"],
       "upstreamTests": ["checkStrings", "checkMultiTrackLayoutConfiguration"],
-      "goDestination": ["Track.Measures", "Track.Strings", "Measure.Clef"],
+      "goDestination": ["Track.Staves", "Staff.Measures", "Staff.Strings", "Measure.StaffIndex", "Measure.Clef", "Track.Measures", "Track.Strings"],
       "fixtures": ["testdata/gp7/grand-staff.gp"],
       "semanticAssertions": ["staff count", "bar count per staff", "note ownership per staff", "clef", "tuning"],
-      "status": "partial",
-      "reason": "The second staff and its 18 notes are missing from the Go model; see issue 4.",
-      "issues": [4]
+      "status": "supported",
+      "reason": "GPIF staff order, measures, voices, notes, clefs, and tuning agree with the pinned AlphaTab grand-staff fixture; legacy track fields expose the first staff.",
+      "issues": []
     },
     {
       "id": "grace-relationships",

@@ -112,6 +112,10 @@ For GP7 and GP8 files, `Song.SyncPoints` contains the score-to-audio anchors and
 `Song.BackingTrack` contains the referenced asset metadata plus its embedded audio
 bytes when the asset is present in the project archive.
 
+`Track.Staves` preserves every GPIF staff with its own tuning and measures.
+`Track.Measures` and `Track.Strings` remain first-staff compatibility views;
+binary GP3–5 tracks expose one staff.
+
 ## Develop
 
 ```sh
