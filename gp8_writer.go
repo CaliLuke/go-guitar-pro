@@ -1002,7 +1002,11 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 		builder.addReport("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
 	}
 	if len(beat.Notes) > 0 {
-		velocity := gpifDynamicToVelocity(gp8VelocityToDynamic(beat.Notes[0].Velocity))
+		velocity := beat.Notes[0].Velocity
+		if beat.Dynamics != 0 {
+			velocity = beat.Dynamics
+		}
+		velocity = gpifDynamicToVelocity(gp8VelocityToDynamic(velocity))
 		for _, note := range beat.Notes {
 			if note.Velocity != velocity {
 				builder.addReport("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
@@ -1265,8 +1269,12 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
 	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
-	if len(beat.Notes) > 0 {
-		result.Dynamic = gp8VelocityToDynamic(beat.Notes[0].Velocity)
+	velocity := beat.Dynamics
+	if velocity == 0 && len(beat.Notes) > 0 {
+		velocity = beat.Notes[0].Velocity
+	}
+	if velocity != 0 {
+		result.Dynamic = gp8VelocityToDynamic(velocity)
 	}
 	if beat.Effect.Chord != nil {
 		result.Chord = builder.chordIDs[trackIndex][beat.Effect.Chord]

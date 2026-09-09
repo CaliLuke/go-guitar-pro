@@ -135,6 +135,17 @@ GP8 preserves note pitch, string, dead-note state, and complete tie markers. It
 does not preserve `SwapAccidentals` or `DurationPercent`, so export reports
 these fields when they are non-default.
 
+`Beat.Dynamics` is the authored beat-wide value. GP8 uses it when it is set,
+including on a rest. If it is zero, GP8 uses the first note velocity. GPIF has
+one quantized dynamic for the complete beat, so export reports note velocities
+that differ from the selected target dynamic. Text remains valid on rests.
+GP8 changes an explicit empty beat to a rest and reports that normalization.
+
+GP8 preserves fade-in, hairpin, octave, and stroke direction. The target uses
+an eighth-note stroke duration. Export reports a different source duration. It
+also reports rasgueado, pick stroke, slap effects, and beat vibrato because the
+writer does not emit them.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.
