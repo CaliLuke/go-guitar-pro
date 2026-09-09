@@ -113,6 +113,18 @@ directions, header-local tempo, or authored meter beam groups. Export reports
 each of these omissions. Import and export reject an invalid meter or repeat
 count before a value can wrap to a smaller integer type.
 
+Duration arithmetic uses exact rational score ticks until it updates a legacy
+integer field. The score starts at tick 960. Each voice starts at its measure
+origin. A grace beat does not advance the regular beat timeline. A pickup uses
+its longest staff content as its length, including an empty pickup. Repeated
+finalization is idempotent.
+
+GP8 preserves all supported note values, one or two dots, and tuplets through
+the legacy 255 limit. If both legacy dot flags are true, GP8 emits two dots and
+reports a normalization. The legacy 0:0 tuplet means 1:1. GP8 emits the
+canonical representation and reports that normalization. Invalid durations
+are rejected before export.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.

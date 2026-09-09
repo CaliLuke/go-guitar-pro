@@ -989,6 +989,12 @@ func (builder *gp8Builder) addReport(code, feature string, disposition ExportDis
 }
 
 func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocation) {
+	if beat.Duration.Dotted && beat.Duration.DoubleDotted {
+		builder.addReport("gp8.normalize.duration-dot-flags", "rhythm", ExportDispositionNormalized, location, "GP8 emits the double-dot value when both legacy dot flags are set")
+	}
+	if beat.Duration.TupletEnters == 0 && beat.Duration.TupletTimes == 0 {
+		builder.addReport("gp8.normalize.tuplet-default", "rhythm", ExportDispositionNormalized, location, "GP8 emits a missing tuplet as the canonical 1:1 legacy ratio")
+	}
 	if beat.Display != (BeatDisplay{}) {
 		builder.addReport("gp8.omit.beat-display", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit beat beam and tuplet display overrides")
 	}
