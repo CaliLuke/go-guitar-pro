@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 const maxGPIFXMLSize = 16 << 20
@@ -73,14 +75,30 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 		}
 		break
 	}
-	if song.BackingTrack == nil || song.BackingTrack.EmbeddedFilePath == "" {
+	if song.BackingTrack == nil {
+		return song, nil
+	}
+	if !song.BackingTrack.Enabled || !strings.EqualFold(song.BackingTrack.Source, "Local") {
+		return song, nil
+	}
+	embeddedReferenceSource := diagnosticSource("GPIF.BackingTrack.EmbeddedFile.Reference", "score-core", ParseDiagnosticInvalidData)
+	if song.BackingTrack.EmbeddedFilePath == "" {
+		if song.BackingTrack.Enabled && strings.EqualFold(song.BackingTrack.Source, "Local") {
+			context.add(embeddedReferenceSource, ParseDiagnostic{
+				SourcePath: "/GPIF/Assets/Asset[@id=" + strconv.Quote(song.BackingTrack.AssetID) + "]/EmbeddedFilePath",
+				ObjectID:   song.BackingTrack.AssetID,
+				Reason:     "enabled local backing track has no embedded file path",
+			})
+		}
 		return song, nil
 	}
 
+	foundBackingTrack := false
 	for _, f := range r.File {
 		if f.Name != song.BackingTrack.EmbeddedFilePath {
 			continue
 		}
+		foundBackingTrack = true
 		rc, err := f.Open()
 		if err != nil {
 			return nil, fmt.Errorf("opening backing track %q: %w", f.Name, err)
@@ -93,7 +111,21 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 		if err := rc.Close(); err != nil {
 			return nil, fmt.Errorf("closing backing track %q: %w", f.Name, err)
 		}
+		if len(song.BackingTrack.AudioData) == 0 {
+			context.add(diagnosticSource("GPIF.BackingTrack.EmbeddedFile.Empty", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: "/GPIF/Assets/Asset[@id=" + strconv.Quote(song.BackingTrack.AssetID) + "]/EmbeddedFilePath",
+				ObjectID:   song.BackingTrack.AssetID,
+				Reason:     fmt.Sprintf("embedded backing track %q contains no audio bytes", f.Name),
+			})
+		}
 		break
+	}
+	if !foundBackingTrack {
+		context.add(embeddedReferenceSource, ParseDiagnostic{
+			SourcePath: "/GPIF/Assets/Asset[@id=" + strconv.Quote(song.BackingTrack.AssetID) + "]/EmbeddedFilePath",
+			ObjectID:   song.BackingTrack.AssetID,
+			Reason:     fmt.Sprintf("embedded backing track %q is absent from the archive", song.BackingTrack.EmbeddedFilePath),
+		})
 	}
 	return song, nil
 }

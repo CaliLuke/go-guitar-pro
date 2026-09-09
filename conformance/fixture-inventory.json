@@ -6,7 +6,7 @@
       "sha256": "f1c75acdd701f0b72648151edd4ffde9d699ec0f89891340a5f95a359c3b6061",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -17,7 +17,7 @@
       "sha256": "f05c229d0ae3b06c05a52b3b9fe953841d2a794d408812cab179996fa781db68",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -28,7 +28,7 @@
       "sha256": "e7084f8ceda23d6c8ca4ca5d619806c01f4a1c2476ca208798c52307ac1fa242",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 10 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -39,7 +39,7 @@
       "sha256": "1d287b5ad6f3f9275c77cf1f0f26ba0fcaab396d9901235823ebfb3f227992c2",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to harmonics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers harmonics and records 5 exact issue-linked differences.",
       "features": [
         "harmonics"
       ],
@@ -50,7 +50,7 @@
       "sha256": "93fe850912887f1289dda8728f1e2c86ef5c6d836f8455a2d9051f0a616645ce",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -61,7 +61,7 @@
       "sha256": "df2a5491be3b4e53c63c0819a741d2cd34a3b403227f7d6667c25ece9a107a80",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -72,7 +72,7 @@
       "sha256": "0947aac963f6484dbc71b2137b6d905715eb3ce2cc65a232ad364779d8460135",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -83,7 +83,7 @@
       "sha256": "baa9dba22f5f70b50c01ce2f69a10b86268a54dee940c3612fadb36d4db4ed90",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -94,7 +94,7 @@
       "sha256": "066dc84d3733faed186bea8d531a4485030bec948278ee25921fb20f9ee1e7b4",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships and records 2 exact issue-linked differences.",
       "features": [
         "grace-relationships"
       ],
@@ -105,7 +105,7 @@
       "sha256": "0d4002221fa841ba0ec3510392dd030905841c7437169928b15316c2be7df7f3",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -129,7 +129,7 @@
       "sha256": "0b4e4830280fc805ba41e1e6565ffe493be64ae61bce3bb40bf65ea4e30a5d92",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -140,7 +140,7 @@
       "sha256": "0beb0f168e32df6175472f7a4f21a597793aa07fef5a1903ab8d6e1349a1455e",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -151,7 +151,7 @@
       "sha256": "747ec00f760079ce263f9d2804c5084ed37c9f7f0682a7d3c4966da2dddbf44d",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -162,7 +162,7 @@
       "sha256": "579dbaecb5ddd1649d323597d18fc2a7b93c8923cf7b2bc1524802a903ba3293",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -173,7 +173,7 @@
       "sha256": "6d7925db420b3a9ddc4f31dc18affc3e724bd00e205f23ef1d5391fe5fc88876",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership",
         "note-and-beat-semantics"
@@ -185,7 +185,7 @@
       "sha256": "14eb0f4d8a95068c082d1127f642408529f1b40fe807744c381b9da6ed0b5498",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -196,7 +196,7 @@
       "sha256": "e7f6789d704c907e9a0190faf0d4668bbe35b13ae68bb827fe8fd0d56df2beec",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -207,7 +207,7 @@
       "sha256": "1b41341db689a67aad106c4771c8d11d291f851d0dc19378bb8a5cf65d515b53",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -218,7 +218,7 @@
       "sha256": "91a2a4cbaa527195c76024efbc4f141a3235e61c0ca18a22759876bde44a6e26",
       "format": "gp3",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 4 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -229,7 +229,7 @@
       "sha256": "090b83216a0eb65898bc6c5b3ef9e95cf427f740e50739253c25e97be6ad1526",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -240,7 +240,7 @@
       "sha256": "36a1023288fe35c624bf77f5d3fe1f2172cfed3ed322904cf952110ab9801b46",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 11 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -251,7 +251,7 @@
       "sha256": "63af4fdc93353671a9b2abdfdf0199a51c0ee4a517392bb55b3cdd99ff3c3586",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to harmonics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers harmonics and records 5 exact issue-linked differences.",
       "features": [
         "harmonics"
       ],
@@ -262,7 +262,7 @@
       "sha256": "2522ea047a7a598853fb3dd4201185511e8e563888454cbbb7ec42e39891af7e",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -273,7 +273,7 @@
       "sha256": "0c13564f07899deed781342b1b6464307597f544444d15680fa3658cbe7be66f",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -284,7 +284,7 @@
       "sha256": "b026794866773d9b70691991f9e03462fd7b5f5cb1749aa35809507ac91fd29a",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 1 exact issue-linked difference.",
       "features": [
         "score-core"
       ],
@@ -295,7 +295,7 @@
       "sha256": "c5a3eb7108c0b7f758a22d5aaeaf4139a8e1179b0794d7a5a57ce81a6b7c0670",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -306,7 +306,7 @@
       "sha256": "3c881c9e8005db5fc90dca76ad9b0986829890f978750a9aea5bda4866bcf57b",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -317,7 +317,7 @@
       "sha256": "2fb3231b6fc0b3d68bec4f6e064ecddb958cc8d86be0f8226eca65d80e661739",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -328,7 +328,7 @@
       "sha256": "b354cde74c5690a64d1220e5db1b082a38ff61859b95f3a6c7ee00af111876b9",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -339,7 +339,7 @@
       "sha256": "b9ebfec95b0099756ea587737c409a98bd2976e80382531d2e8ac726e0378f01",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -350,7 +350,7 @@
       "sha256": "d0b65ee1b0f2f954db58070e06d3e3ca48eca3f9dac9868740048499a1438742",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -361,7 +361,7 @@
       "sha256": "2e84809ead2b140fae80026f099714c7a53a3ded901d974f011a9b375959a2d1",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -372,7 +372,7 @@
       "sha256": "51712a4e61b017da00b4cb37d6c6382cf6ef97ff0ed9f477de61756c20cb05f6",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -383,7 +383,7 @@
       "sha256": "a292090cdd3b26bdbbc97e0a13b3d568e02f4eca1013c2de75a3b190eee3b34e",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -394,7 +394,7 @@
       "sha256": "1a4df1556a6d9280100941202b0ff54bad159b9ac02222524a8214a6e36063b4",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships and records 2 exact issue-linked differences.",
       "features": [
         "grace-relationships"
       ],
@@ -405,7 +405,7 @@
       "sha256": "f06ad8585cdf1478c92b81bc71ec4e6e37847b13c8931fd6f369733979eaf361",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -429,7 +429,7 @@
       "sha256": "9d9f92df711640844df05f9bf37a6a2b6cdadc562380b6dd510ebccef54a9041",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -440,7 +440,7 @@
       "sha256": "2fda4208fd4b8d31d57a25d2831e90d9f951f45285a12ff39d8138588178be07",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -451,7 +451,7 @@
       "sha256": "ba4bd24ca5f5408c18fc318eba2569ba46fb55d7e83ba8f85bc0d2e90d0f3116",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -462,7 +462,7 @@
       "sha256": "792470922f6077f34b6b5407297ae4c419e12edbb1cbefde0df99f534a3a8960",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership",
         "note-and-beat-semantics"
@@ -474,7 +474,7 @@
       "sha256": "8bb247a07f491854db310379d2b78f8b8704629a0b7c9f47e84bc32c1510d792",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -485,7 +485,7 @@
       "sha256": "5a9f000f6cbdd8597ccc6dfb4e2a469a175eecc0209dd9906f681610735b0b0c",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -496,7 +496,7 @@
       "sha256": "ca6832dff7c7286c37eb6f3badc82595272aeb4be7158208173502a87052f9be",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -507,7 +507,7 @@
       "sha256": "6c39f2ec5ee35495b28468f23d65d97fad602633e233b7f4ebfa1904fcd7c916",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -518,7 +518,7 @@
       "sha256": "29c5240458f8b1ce93ed24c7e00b2e4cfc78430a30fb16e07dcd5fb36ca72e10",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -529,7 +529,7 @@
       "sha256": "4d55ac19189f32db11400949c305f302af3e604cdbdc4b57af861ce2a098c0b4",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -540,7 +540,7 @@
       "sha256": "60068359a12ce40f8dab7d39d40c9b8709552df5436b113438872d69710dde6c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -551,7 +551,7 @@
       "sha256": "22f8dbed0426d642c5c366723d5b8363a5eff6e7ce8425aa9f0d7d573fe703c5",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -562,7 +562,7 @@
       "sha256": "a5b4edbfa45c3d8b01319558f4d56a1f9f51d5146ab6c7769db8bd7bb40ad198",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -573,7 +573,7 @@
       "sha256": "e364cf882db1d849653183d8aa52ca73e5af104ba6dd535d6273a7565ab81455",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 16 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -584,7 +584,7 @@
       "sha256": "e7ed366e161528a26a454ca726ff809a512caaab77a377ba90ebb0ffb850485c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to harmonics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers harmonics and records 5 exact issue-linked differences.",
       "features": [
         "harmonics"
       ],
@@ -595,7 +595,7 @@
       "sha256": "1590c481de5997e52e2056e10f8fab07e11e318bffbbe8393cd64756f6c044c0",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -606,7 +606,7 @@
       "sha256": "898fe9b639549ee83cda6a915876d95f94e0ef1cc0b79b7572b8fccbba9a2d26",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -617,7 +617,7 @@
       "sha256": "b80932b53b1f34ff54d8a94ae2dd7e732b88bb5c05b1d4bd8244f36bf330be42",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -628,7 +628,7 @@
       "sha256": "8e9e712724de18f2f0d8235cb1aaade49c21eccc48a6cefa5858f45042738d31",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -639,7 +639,7 @@
       "sha256": "19b155da73ec72b411050304eda78de377d5ecfc216191c58a20ff41d561aa2b",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -650,7 +650,7 @@
       "sha256": "b1de57a7c07118ad7ccadee2e4d040fc10f34e16db57798fe891ff1e4a9c4367",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -661,7 +661,7 @@
       "sha256": "f65cad42bcfd14bbae47998373f7e62fecdb7404f35d9e503f6f25efdcf143a1",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -672,7 +672,7 @@
       "sha256": "7b8c1565e60be05d745b9902d746080f7f67bc9868e7d4f71c7abd9c27209e60",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -683,7 +683,7 @@
       "sha256": "993094eb17d3491338c94ae0efb6885df29a9b67ead8f521ddbe420907dcffe2",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -694,7 +694,7 @@
       "sha256": "bc39fe1042ac7af5f20b7217f6fa36cfa6d5e97703aa357ffcbe737130408449",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -705,7 +705,7 @@
       "sha256": "a81e8989833de77390bfeff3739da215a8d2b1b8adf7345b073c0e5fc9edeace",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -716,7 +716,7 @@
       "sha256": "9d5d4b1bf12ce8e65a6a7725b6a80d99e7df3966cbce748e6fac8b070ea1b528",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -727,7 +727,7 @@
       "sha256": "a6cf82daa0fddf529e63d06ef80647fd5be313719983eb4add61fe10cc77b717",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -738,7 +738,7 @@
       "sha256": "b19530dd2cd8df3ab61cf6a324d0a947d0c32f8abc8e0339906182472f35ca56",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -749,7 +749,7 @@
       "sha256": "6f3520a01a371c982dbb62c9435781cdd53f6592748368c10d773083936153f9",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -760,7 +760,7 @@
       "sha256": "ec0b2cf69b30fb332472ae532576e18c5454671365370bc5a0f947e29b5c2387",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -771,7 +771,7 @@
       "sha256": "04bfd0e05fd10a90d9e23122d3797fa3514a27bf569e1ede28277d86a82492fa",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -782,7 +782,7 @@
       "sha256": "378c05e5886a1e0f6a7786a0bd58d144a1f9ab4c7711513d2fa008a0713bd686",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -793,7 +793,7 @@
       "sha256": "946d82d47b269276e0db9eeead60f0052f0afe0f6846d252e472c070547e502b",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -804,7 +804,7 @@
       "sha256": "7cf35686f709878fe101679f1d9fbf369af083368df20827a6e2bea4e1bccb17",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -815,7 +815,7 @@
       "sha256": "b8356bac83c04c80aa35df802847c8755d9e310e9cb6a85d5f96badb88bc4300",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -826,7 +826,7 @@
       "sha256": "bd07854318187ee67e551373ad77d8acf334d6a194dd4d1f56c008ecdc71821b",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -837,7 +837,7 @@
       "sha256": "4aefb46920047ae6ab351f91a09751371347ad344a8b5ca69850f606ce7e074e",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -848,7 +848,7 @@
       "sha256": "3226e44088279aa4e3f268308d6cb505d8c6af0c9ea1ac8736afe0b25a24fb7e",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -871,7 +871,7 @@
       "sha256": "70328570512392c8dd53e216158b5d7a9012a568615f17eca1ba205ae84e419f",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -882,7 +882,7 @@
       "sha256": "beb6abe660aea39345e6b188ef28e460f3c88b72e7e7b219b17883963353c921",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -893,7 +893,7 @@
       "sha256": "1e326b0065c877a331524ff71dcf6fd2a50b9108a2c087c38fc20e0602a85d8d",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -904,7 +904,7 @@
       "sha256": "53870f8fce98ab54b5e75b9d25b6d3723e71fe6f6555be955302edcdd156fa49",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -915,7 +915,7 @@
       "sha256": "ece1e7c3f96257ab09d3cbba58623e4fc007c4d1b7c4524157946f3efb32310b",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -926,7 +926,7 @@
       "sha256": "da22828e2ce62ccaa12bc8dd0d99d0adc58931971155adbd992e8947bda06f6c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -937,7 +937,7 @@
       "sha256": "725be685105dfe7f45a1fc2d2b5cdd461e53a565cfff8e67ebd9a3c499a3e7c5",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -948,7 +948,7 @@
       "sha256": "557e53fad5dfccc7ebcb8511b7c0e2c3eef3ec58ebdfe5ac1b3b647a9c2f11ad",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -959,7 +959,7 @@
       "sha256": "af7620c63693c3abe75eb9f7cfa8a8dcd9b70321a28f2e7cf0a81ad04a26bafa",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -981,7 +981,7 @@
       "sha256": "9d6bb0711d341a29649a672442979d935bdc767b020bf5a1586affec817fdb92",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1005,7 +1005,7 @@
       "sha256": "0ba99966f485b4c6420c2e3da3526d5bbc20b574ed6d43caa68147a3b0bbe986",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1016,7 +1016,7 @@
       "sha256": "39a7e889689ddc1b53a6cc76051172b55b86c62c5461101e416babd6b501868c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1027,7 +1027,7 @@
       "sha256": "f0a3e0cb02f77ed02c6cb5ac6de442c9d1be5014696acd133c575733bb8729eb",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1038,7 +1038,7 @@
       "sha256": "10e1cb4a2a37081dec1eb690f0f1ffc90eb4ae3aa4d35ec350bcbc60f4eff1a5",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1049,7 +1049,7 @@
       "sha256": "05322f0898770c9a49df084ccf8c4a64b823df5a8b38e8cbd6d1fddc5ed30dd1",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1060,7 +1060,7 @@
       "sha256": "8d8c595a6a7d9ba9f195f6738e7c5be25d185b6f1b553dce80a6ef826af43251",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1071,7 +1071,7 @@
       "sha256": "c082b482063685f9747ce01f63082ba8bebd602c5982a88743b416b540fb6834",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1082,7 +1082,7 @@
       "sha256": "c36e489d5d0aaeb135d7ef6798a1974b1b2e1c9f6411ac4e89393b51aeced70f",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1093,7 +1093,7 @@
       "sha256": "ce8090c55e47c68c06f68f9795dbea787aead29e3d0773df7255ef7752b635ef",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1104,7 +1104,7 @@
       "sha256": "f4036a94ef999630a547a6ef2c99fab57f15ba36c3cb0d8ddee007789bb9a709",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1115,7 +1115,7 @@
       "sha256": "a3aa99e9659632a81753f64407cbf33b9c8f24bf0a36065ab56a678a24af12f4",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership",
         "note-and-beat-semantics"
@@ -1127,7 +1127,7 @@
       "sha256": "0c938ca1f1363065a1dbde327c993a99afa5cc65cd84c5a173ccdf19bd5daf83",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1138,7 +1138,7 @@
       "sha256": "da2fcc6757a6fb4da9ac106e9f603290f4fff325cde96b6f52f2698f944a350c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1149,7 +1149,7 @@
       "sha256": "b38e7099a42e8d0e779613305f617b644530bc938b8f89dba98404252ae3415a",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1172,7 +1172,7 @@
       "sha256": "4fb9cc007aeedd55a57de63c092733b34ef47e5d0cfc98dadcd80fce898af5fe",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1183,7 +1183,7 @@
       "sha256": "b4e40107eecc608d17e494389ee4ed8e16904811da3226b4c10768d3b3d25ec1",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1194,7 +1194,7 @@
       "sha256": "b544aecbe908efb4814bad5f2a5d9e3c708ab16311f23fdbb2933133640d7bd7",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1205,7 +1205,7 @@
       "sha256": "9a58be9804c4dc0b8d46963f6b64b9668b1e0e237359291745ac9015a421b3d2",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1216,7 +1216,7 @@
       "sha256": "8576a341be4491d83f56553ca2703daa4f49137daa72a95288593ca15c485d68",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 7 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1227,7 +1227,7 @@
       "sha256": "e0fea5ef49e0ec7a481f4838d48abcba591ef60b58f13a7e53810ae4dbfa2f02",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1238,7 +1238,7 @@
       "sha256": "3ae6a43c26e202a2f62c995d8c3e0c1af598f450f0fe492fc747eeafa0b894ce",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 3 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1249,7 +1249,7 @@
       "sha256": "81fae1f140673d02aa3bc84bf4a5d43838fc149d69f4455613bc13e33563617b",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1260,7 +1260,7 @@
       "sha256": "1f1f59dee79a90a9d11fad35ed6ee02f9e26215dadcaada19276803e1ce9b692",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 9 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1271,7 +1271,7 @@
       "sha256": "33a391c6a9fe54fd66a12aa3d6bcf9d34054dc6dc3d6b16dbade1c0e863b69f4",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1282,7 +1282,7 @@
       "sha256": "251266558d4bb4c2a304613e6be15b4dfa4a496e1781a1789ed3be3992ff332f",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1293,7 +1293,7 @@
       "sha256": "316d3df0c3f4d76cbf37a452555f4bb4f8fe5b7e329283a7c9463dc542163ba4",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 20 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1304,7 +1304,7 @@
       "sha256": "032c91705acb16a82019d07a152958ee60dadc243c12d3c3274c2475c1c00e5b",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships; the declared slices have no current AlphaTab difference.",
       "features": [
         "grace-relationships"
       ],
@@ -1315,7 +1315,7 @@
       "sha256": "65022645c3c03a0f7c2a777215ec90d957458d1c092b69fe7c350c4ec6161fd7",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1326,7 +1326,7 @@
       "sha256": "f11e3dd649780e5c92b1104ece42669cb58dd9a4c41deef1dcfcaa644b861e4c",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to harmonics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers harmonics; the declared slices have no current AlphaTab difference.",
       "features": [
         "harmonics"
       ],
@@ -1337,7 +1337,7 @@
       "sha256": "80c1736b87474114a40073df3e3ce707df416037cf7c884a8636f2db7b94c5d1",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1348,7 +1348,7 @@
       "sha256": "989fd347bb3371137b7b342c31f53de913fc957c769846d2574cf121c7c7d1de",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1359,7 +1359,7 @@
       "sha256": "ee566cd8e9e2ed32321ce6d887ea4e7b1c598b3f807ac8ef3a552dc28c0d59b6",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1370,7 +1370,7 @@
       "sha256": "64f9dab76fa50990498ae63c0a1f0614b685b20bc619c35df8390123667d84dd",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1381,7 +1381,7 @@
       "sha256": "adde2ca28b8c3f072381f52b9995cd573f2abf97e72672c1df515bb412e20501",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1392,7 +1392,7 @@
       "sha256": "1ce9cf7a7246fdbb751bffaf9cabe1b4ad40d5b8058cade618a82bb9c0ad8222",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1416,7 +1416,7 @@
       "sha256": "4b512f4e50b1da819207ba5853ccfec53795588119b80f86e6ae4903811efb56",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1427,7 +1427,7 @@
       "sha256": "d388a2ff35904f8893443205ac1e5ec771830194e3492c0301864052c6a49a72",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1438,7 +1438,7 @@
       "sha256": "b14db5c6d87a5a3add07e3327e4c58ff33cef1ec2ef5a213769fd01aeab67dad",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1449,7 +1449,7 @@
       "sha256": "0118770be2a5df8fa79cc18960c9c16bba70a324189caa5b53dabcea36d6c26b",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1460,7 +1460,7 @@
       "sha256": "2c04bc1fcd5d4fda5bd13467c7ad8fb38c84680638876eaa62525fd14e568ea4",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1471,7 +1471,7 @@
       "sha256": "c1421d86b924aef0de01258afae7ad95caf88b40ff0bf28c2a3f3fdb252a2cf7",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 1 exact issue-linked difference.",
       "features": [
         "score-core"
       ],
@@ -1482,7 +1482,7 @@
       "sha256": "36b415d317838e8a1132488ff52eb52ecabc24af0428742f1fcf597bc901a014",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 5 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1493,7 +1493,7 @@
       "sha256": "4987a0b359fbb5bc6a4ef77828bc449639f4d3b4396f74891b1bf27638c94ea1",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1504,7 +1504,7 @@
       "sha256": "8f400de6d833d097c363027e7fd5b16f4a085235182e50fcc428ac403f53bc3c",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1515,7 +1515,7 @@
       "sha256": "919f457431ccb9a990d09b0efd6688b9e44d4bb4b06c4ad14ba60108e0100fd8",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership",
         "note-and-beat-semantics"
@@ -1527,7 +1527,7 @@
       "sha256": "2050cb6b2f6044f3b705df5d61182ae0e10011e3474a8c74ed58ef35a7d5dfce",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1538,7 +1538,7 @@
       "sha256": "1ce9cf7a7246fdbb751bffaf9cabe1b4ad40d5b8058cade618a82bb9c0ad8222",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1549,7 +1549,7 @@
       "sha256": "ea0756c32a126ac426e99d5e367611dee7c4f00b8b3966dd28063c1d5a72e14c",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1560,7 +1560,7 @@
       "sha256": "d29fd12e0dbca4e20eaa90ef1c4e94c5016c85af3dda6e308b051bcc7767dd9d",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1571,7 +1571,7 @@
       "sha256": "51a8d287016dc16962500da6f1156f7b40f075ba302626a8f4e3dae497887172",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1582,7 +1582,7 @@
       "sha256": "efdbd4e030a1c3c87e9ff0d3312c3fbed049b162020081906511e9dba56986b5",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1593,7 +1593,7 @@
       "sha256": "b2e7d134ad6fe395b204b5171843ca53707702ab4d02c974bb86f8a16de639f8",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1604,7 +1604,7 @@
       "sha256": "cb7ccd7741d47e49cded9de6e9f1ae5cccf7faf5d480b89fd532170b77e825c1",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 2 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1615,7 +1615,7 @@
       "sha256": "744c1df811b7cc2f154a382665997a3d449e8508eae696d3f35fc564267cc6f6",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1626,7 +1626,7 @@
       "sha256": "fed2fc6b6e8539aa9ea59976073ec63838f3152a31c5b5b323e07f54ac76395c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1637,7 +1637,7 @@
       "sha256": "64150a0153ab9898bd2b75293068d345d7f23f3088ded98805b12d155d086eff",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1648,7 +1648,7 @@
       "sha256": "345e3b5da449fdfcc42d709f512d263adacc3e90eb909020f9a647350d3d0af5",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Live AlphaTab differential covers populated and empty pickup timing; a dedicated rhythm snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm, timing; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm",
         "timing"
@@ -1660,7 +1660,7 @@
       "sha256": "4ee28a692cdb9f79580a4c1bf8561c740d882c843198726377cac2bb76aca70d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1671,7 +1671,7 @@
       "sha256": "942cc5c60e7128714ad27c8a6f2ab9c915487166b4d344884bf76387a93af2b4",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1682,7 +1682,7 @@
       "sha256": "fb987058a975e537d530cce4cdee9c398f1bb8fa963a10e89f5d8dbf3fda0280",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1693,7 +1693,7 @@
       "sha256": "ef942e5885f56e8a280e92adc446f2f4805c859c3416f249389c8d1282ba0cbc",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1704,7 +1704,7 @@
       "sha256": "689781b67a56a9cbf1647a674fc9d51e031a5cfa1399b804dbfbeca4a2690e08",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -1715,7 +1715,7 @@
       "sha256": "b4f4ec6cca74533334e7fb381b74512590a025363a156214966e5ceace29c8a7",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1726,7 +1726,7 @@
       "sha256": "b93c02cd33539f28523e16e0776c3ac4dc6df2538305f92f37a9ef1c5d9f26a7",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1737,7 +1737,7 @@
       "sha256": "dc086c8a23bffad2837d7bf106d8494359271b4b3b0e3e228aa83986f065d5d0",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1759,7 +1759,7 @@
       "sha256": "48ed11c0fb509965e8c674aeffe0e579ef17b5fd7728fb1bc74e9f3664bcd5e2",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 16 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1770,7 +1770,7 @@
       "sha256": "063e2be8fc0f45c0b090807a546af833d2ce04ac632d10057c7821e253b4c905",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 66 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1781,7 +1781,7 @@
       "sha256": "fd4bb2f794d312b335756e5241ca6ce2b9f804fbdec20cf55d00d4aa71bf0642",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 80 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1792,7 +1792,7 @@
       "sha256": "782682fd1ca6a10757fbba7ed0edbb79f4be9c22632e868eb6fa461dc9732a4c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1803,7 +1803,7 @@
       "sha256": "382b9c19a34291d03302254c861fe247d8dc6e398edd70fd3de1bd882ea56bd5",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1814,7 +1814,7 @@
       "sha256": "cf230a4906f6fb3898533c74277a6e1bb432c6868e607839ba520a6b1badc6ba",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1825,7 +1825,7 @@
       "sha256": "0992a8a5bfd67ad71e7cdbabcdb801d036d757ae0ac5bff73333e09c4e07bfab",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1836,7 +1836,7 @@
       "sha256": "652581381da4a6a49830f623d720e5d144878b26aa9934a4e39ef16ce225424a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1847,7 +1847,7 @@
       "sha256": "65950c0e363d670e4990ba6cd8f8652a61eba1c98250213baa656f592452bcc3",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1858,7 +1858,7 @@
       "sha256": "dd50673c1d3a7a8d0c3c167001affac79c7ade062541a2acf8f1704fb648cc3d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -1869,7 +1869,7 @@
       "sha256": "986070d85a3e24dda06b076358bee9489bf52822371a0512d936296a8e30bcd3",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1880,7 +1880,7 @@
       "sha256": "08c77e0bb50cedb5c321e2af8a4d1e0b545e83170c4c3767c29204b7b0b01a8b",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1891,7 +1891,7 @@
       "sha256": "01709fc82ab2fa3127c4d2d356e8aa3e6159ce33d689d3e25ac19566a955f82e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1902,7 +1902,7 @@
       "sha256": "1fe2176f56e5fc368b61afa4aefc7c01b79380f5fcd657ed2d7aa16c5a2bee2f",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -1925,7 +1925,7 @@
       "sha256": "a0efbbb4a8298f073971f84e24a84d9cd282b3ddb2bffd97a03cef27b5518f3d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1936,7 +1936,7 @@
       "sha256": "346ac6d63a260d49ec329f56cbfed88504390eb7710c6d0d15172f75dde21b59",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1947,7 +1947,7 @@
       "sha256": "1eda8252974e2c21f1370dc12ce46e95b70628d7260901b9d1a69df564d4a2e9",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1958,7 +1958,7 @@
       "sha256": "826ffd9c0ff7299b5437ad41d8ec5e81d847360b7595ff7559a3d31d144ee75d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 9 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1969,7 +1969,7 @@
       "sha256": "1cbdb201e47def4ebe59a17a6373efb78797da4ead2c70cd31032f457ab7519b",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -1980,7 +1980,7 @@
       "sha256": "36c15b6435433f8c5f082bf3de0828a97394b18a86bdafbb0f320137fa37ec7a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -1991,7 +1991,7 @@
       "sha256": "b56bb7e719b1b97cca8c494595e8babf78baa0d4606a54e70a2a7e7882bc735c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2002,7 +2002,7 @@
       "sha256": "a6f4b8e5bebb302f627e37f1429c72a2c76d3ce78ffed7ad1ce4c2c5b0708461",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2013,7 +2013,7 @@
       "sha256": "178d024d488492a639294e833a63eab2f3545122e8d7151c3fd3e9113d37dfa1",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to percussion-articulations; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers percussion-articulations; the declared slices have no current AlphaTab difference.",
       "features": [
         "percussion-articulations"
       ],
@@ -2024,7 +2024,7 @@
       "sha256": "ef7640a1f084f711811136820d957cac365db42e8059f3d8e1c592c39a317f50",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2035,7 +2035,7 @@
       "sha256": "178b4d99171febb68c86f418aa451c44adc4c7a1ec2e31bcda587b303bb2867b",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 5 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2046,7 +2046,7 @@
       "sha256": "8629394381ae8203d877b035017f61c90428d68897e59365ef376add97b92913",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2057,7 +2057,7 @@
       "sha256": "1cf06e525ca738ae0a0f2f6868c15432b2146c1e7c8c18c17f9f2b01786983b8",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2068,7 +2068,7 @@
       "sha256": "12e242540ef8a16ea9dc1e971be28d7644df6a7889418e3ad57c488ba2ed8d38",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 5 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -2079,7 +2079,7 @@
       "sha256": "07507f9ff5f439447f922b61f7186099e6ddc92de51279ea0e8b13054cf647d5",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2090,7 +2090,7 @@
       "sha256": "e7da2b81036f6565153bdb84fce1009bede98835af9f991a343d196850ff518c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2101,7 +2101,7 @@
       "sha256": "02e45ebc7b503b578696c4d57fcbc103ee64be31997b6c3cd3bdaade06e64df9",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2112,7 +2112,7 @@
       "sha256": "f19478b3cc7adf009a67bc216e5d8e3eb1ce01e26d154c9ae408f26dd4634e1a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2123,7 +2123,7 @@
       "sha256": "019a501c0abde3dee0a972bd6dc5c758e4b1d60b014c247eb9a4177266138356",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2134,7 +2134,7 @@
       "sha256": "7a8002d30345d32c89ae66ecc4ac705f841b646e97579963ec4984c75c618571",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2145,7 +2145,7 @@
       "sha256": "d9cc0a5b66c89548f9b2f9fa7f0787eb5c7112c7ecb5d56e2ddbad7a30421ddb",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2156,7 +2156,7 @@
       "sha256": "81777fa363bca9097c39fdeea7b2d3e7be7a103d3b450f3e2b12f7b9bf1d2cb6",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2167,7 +2167,7 @@
       "sha256": "fc97a1db7933dc83aca32a6e5841f9c7fda07ac0248d907c25def0df8b385840",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships; the declared slices have no current AlphaTab difference.",
       "features": [
         "grace-relationships"
       ],
@@ -2178,7 +2178,7 @@
       "sha256": "7b506a98a6187edf5e82c4fccdd0ef699e13228fe4d7ac651a6b0e6d7b6aba43",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships, note-and-beat-semantics and records 10 exact issue-linked differences.",
       "features": [
         "grace-relationships",
         "note-and-beat-semantics"
@@ -2190,7 +2190,7 @@
       "sha256": "5085c131a0187e30c91cc57d2cc08effe71e5f00d32a141b29a038ea99b1112f",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "grace-relationships",
         "note-and-beat-semantics"
@@ -2202,7 +2202,7 @@
       "sha256": "9bb02ae4ca6c7b72ebeeb0d774a373780f0588dcaa4d44790cf7364955265b89",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to grace-relationships, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "grace-relationships",
         "note-and-beat-semantics"
@@ -2214,7 +2214,7 @@
       "sha256": "330b751d3ad867ba1439fbf32ba28688ab617060303482f98c5e8785a6bcd423",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Live AlphaTab differential covers attached and unmatched grace timing; a dedicated grace-relationships snapshot is pending.",
+      "reason": "Whole-corpus receipt covers grace-relationships, timing; the declared slices have no current AlphaTab difference.",
       "features": [
         "grace-relationships",
         "timing"
@@ -2237,7 +2237,7 @@
       "sha256": "793b389f6f00284770ff688f68000cad8b1cc9adb5e783ec6b4d392623c87869",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2259,7 +2259,7 @@
       "sha256": "86a24c8025295267a713511e4fbd348ee71ae00addaf097d9955bb90cc4bf812",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2270,7 +2270,7 @@
       "sha256": "06bfe126a8a7da9707ff1defb65f03d28913fd93d45c1a5cbb418d980e05953a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2281,7 +2281,7 @@
       "sha256": "1155c19866180112b835ec543f9941fe603e4a39fe099101a49e7d25d0c0ec82",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2292,7 +2292,7 @@
       "sha256": "67a9892b531acbed2d3e921830b2cf496e218cd107c834958379c01d67a6c163",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2303,7 +2303,7 @@
       "sha256": "67a9892b531acbed2d3e921830b2cf496e218cd107c834958379c01d67a6c163",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2314,7 +2314,7 @@
       "sha256": "357fce3c947e06d67924f23ebd5c1637a9dffac502bba96af381446d78d63b21",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2336,7 +2336,7 @@
       "sha256": "df6fc1e1cb503753e3ab554063cabf1fffab7dd3d656d76013f9b93683a75559",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2347,7 +2347,7 @@
       "sha256": "66f1cec535324fc1b6a1accb300004f7abebd8c5ca37e10f8171922232321828",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2358,7 +2358,7 @@
       "sha256": "a53f00a68ac05f2b04374c57758c12fe57f48b859422e29b0b0ed244bae87477",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2369,7 +2369,7 @@
       "sha256": "7cadeb2ba1c7abd12954b01f2e5e625199dfa455c90a200a2248adef43aa7b25",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2380,7 +2380,7 @@
       "sha256": "2d4da439630b7e42d1e14993e2a0ebea4489d63d48b1edaac74b2d2841eef7f7",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2391,7 +2391,7 @@
       "sha256": "3a7b51fc5f3bd2527e2c8e854eb4980d80998b7858a1d142142be126c301f535",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2402,7 +2402,7 @@
       "sha256": "6013fd1c8e58c11d8b1b7b8bee6ebe314f53846eeea319d7862086c8b08d07b8",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2413,7 +2413,7 @@
       "sha256": "336554df3dd0568f73d356da8162aee23cbb06cbd9cae4a992a570c3896c697f",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2424,7 +2424,7 @@
       "sha256": "33504b7504ce3821bef6d228ff298001630acdc9854bfe2afe99d550a0a541f4",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 3 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2435,7 +2435,7 @@
       "sha256": "62209bfff14839e713a67b61b213f6d93080b24e3f7c75cf5cc0640785d7772d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2446,7 +2446,7 @@
       "sha256": "b399498b7c72c6a959229cd5bb5a1c0b0fdfb969840909b6fda1bde0aeab236c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2457,7 +2457,7 @@
       "sha256": "ca7d6ec35971c33a9fd4e4a59f94169d55f07bba846183363274c752c9cb2ee7",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -2468,7 +2468,7 @@
       "sha256": "4f7f04b3b3846284a146de3df4ba92573fda7706dd2fd74d99616a241e325c44",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2479,7 +2479,7 @@
       "sha256": "2f5b746d6a246d2ea30a94368c32529159ff381126a0b3de020ae1d911d16db6",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2490,7 +2490,7 @@
       "sha256": "4574ef1eea91b95b15310895fec82c769513be4d1e3ef20ad5c39d622b80cd9e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2501,7 +2501,7 @@
       "sha256": "566fb564ce6ad813dd0bfe751907d8ce4337795cbb4023535062ff137e985b0e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2512,7 +2512,7 @@
       "sha256": "91bd3d5b52ec558e44229abaa40c7c3bcf9978e31ead0ef9144a93dd82680883",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Live AlphaTab differential covers independent voice timing; a dedicated score-core snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core, timing; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core",
         "timing"
@@ -2524,7 +2524,7 @@
       "sha256": "2812f2cb6d826f40cc46455f16936860d837eaa32d63cbbe86ca5276f59e599e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2535,7 +2535,7 @@
       "sha256": "4efb95777db6ddaf72205e65e3dfc471472ccfc114cd5488b2dc392debbc01bc",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -2546,7 +2546,7 @@
       "sha256": "89cbd142b5756ba93e6fefb2a08e2af2509fdf08c6574cd5d7b477809e7943ee",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2569,7 +2569,7 @@
       "sha256": "a55881b8833a8ef5af063da3bb62f8a20dc67c0823e6c3accb1c6e8591d616de",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm",
         "note-and-beat-semantics"
@@ -2595,7 +2595,7 @@
       "sha256": "b6f539979f57932694b57bee6815880e0899e22697b89cc3a8147c188e0ff961",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2606,7 +2606,7 @@
       "sha256": "04735d026b9cafb0b98b05d6a51191ec208526e95ada06ce7e06d176f2066b1c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2617,7 +2617,7 @@
       "sha256": "b5822f4e7c13a16e00e0e266ff1c8e7e90a5acc25c26dc7dee8207d52c30a6bc",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2628,7 +2628,7 @@
       "sha256": "ccd46d9934e6204e2e69014e6867ba008d254e38d76357e2c935a3b45279b24a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2639,7 +2639,7 @@
       "sha256": "67a9892b531acbed2d3e921830b2cf496e218cd107c834958379c01d67a6c163",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2650,7 +2650,7 @@
       "sha256": "67a9892b531acbed2d3e921830b2cf496e218cd107c834958379c01d67a6c163",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2661,7 +2661,7 @@
       "sha256": "67a9892b531acbed2d3e921830b2cf496e218cd107c834958379c01d67a6c163",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2672,7 +2672,7 @@
       "sha256": "8e627f9eed38c703dc3b22b1c55571fbfcff3ae9766b3fc67ca388fb19e01495",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2694,7 +2694,7 @@
       "sha256": "a988df415924a92abebe861a4c96cdf08a38e2934ea82f47d29829d83528ba0e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 13 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2705,7 +2705,7 @@
       "sha256": "51994bbd9ebb774fff5edeca2267a44c1a682455456711ca9fff26964bc8b525",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2716,7 +2716,7 @@
       "sha256": "901dca94ead1cde6aacaec2c1351a3b8e10d120c510cdf154d8e279a4697d390",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to tempo-automations; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers tempo-automations; the declared slices have no current AlphaTab difference.",
       "features": [
         "tempo-automations"
       ],
@@ -2727,7 +2727,7 @@
       "sha256": "b3944b297a2dbca5e68b263980eb92ccef5d6a25516c4367dc319b51db051f0a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2738,7 +2738,7 @@
       "sha256": "bceeb65cfaa50d5971001faa0110ab58760a89248a19fd17d0bae83e07c1f965",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2749,7 +2749,7 @@
       "sha256": "03b84b85fba0d477378c4f8f87fe6329351634c9597f1e97c44e0a260d3154e7",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2760,7 +2760,7 @@
       "sha256": "94a89db7433c25d1259f1f3586908943f13298b80799626dec54edfd99cd9522",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2771,7 +2771,7 @@
       "sha256": "3e999bdece102e9f9a25e6cee94e2209296737974b007a64e1f41b08c4ada603",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2782,7 +2782,7 @@
       "sha256": "efc15d6dd83d08a2fc278979ce73321b00f2c9a0f7631c14a234d1d74fdb3d0a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2793,7 +2793,7 @@
       "sha256": "16a6070a84112902950ad124249f1824cee7d30b26799ad479ed046d932e0667",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2804,7 +2804,7 @@
       "sha256": "1542c6f4b09580d518029593b55aaeab89204de6b4267b6bdf5abd123b9bf3d8",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2815,7 +2815,7 @@
       "sha256": "e3e4c989b8c0e486f6414baf78b585631e30f78705375c0eaa8d3ff9dc33c343",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2826,7 +2826,7 @@
       "sha256": "6ec9dd35797dac68b5d294785fe88eedaf94c7f72d66ef537584937c6543557c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -2837,7 +2837,7 @@
       "sha256": "8ca9ecb2210a0a7f0fe167486bac06ec237d6966f2b6d63018c5d8b2436ffa62",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2848,7 +2848,7 @@
       "sha256": "744a58b7451ecce742bad0b6b3e96909d35947af7086c20357f5f78b67547c03",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2859,7 +2859,7 @@
       "sha256": "ab740a25f242a5fce079fbc8fe5b0e9b1fc5703ff29c4b7dd90b71a2366f3bcf",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2870,7 +2870,7 @@
       "sha256": "ca49b91e631906dac1cef68d56843f678969b6f91504d1d9248fdce787bd5c6a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2881,7 +2881,7 @@
       "sha256": "a7de3a15d1d6e0280a0c3f886b19e8c41a491cda725ddd787435d0c469586da8",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2892,7 +2892,7 @@
       "sha256": "505ed04d41866d0d755e7c3f6f782d3d1065b713a39bdf6278a5187a50316f7d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2903,7 +2903,7 @@
       "sha256": "1df6d5ae116e54fe0df1b4c1500bd77768f8f82a61bbf49ea31d47f53cffca9d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2914,7 +2914,7 @@
       "sha256": "fd565fcdb4bb321e25cd940a933946203a27da46025dab4cc3173ebf9dcb372c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2925,7 +2925,7 @@
       "sha256": "8635022dbf1f1a2d851133abd6461cb679fb9e71eacc05a36989b1c923edbd2f",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership, note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership, note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership",
         "note-and-beat-semantics"
@@ -2937,7 +2937,7 @@
       "sha256": "5fb8e6ae85c0cda39231e572024aba9670a92953154ed7f81180ac613c4a1745",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2948,7 +2948,7 @@
       "sha256": "8c9dcf3555b5d64744361605d34592f48f31208a55aa0c797ea1e1f965cc2a39",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2959,7 +2959,7 @@
       "sha256": "3b67d4698383a959019d76330364124cbd68b1051b7a754d5aa6b08acd4b274c",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -2970,7 +2970,7 @@
       "sha256": "e1e4902512cefb0e453760d2aa68c739110eb763d6b817a16b55e25080bd8e39",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -2981,7 +2981,7 @@
       "sha256": "de3ff0e514bf6eeb01043cf9915b3dc5fe9a0898c246c773bdbfb03413265eb2",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to tempo-automations; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers tempo-automations; the declared slices have no current AlphaTab difference.",
       "features": [
         "tempo-automations"
       ],
@@ -2992,7 +2992,7 @@
       "sha256": "60313d3b4f1bf7cc17b8457d002e06291daaca1d8c6a461724a6fe76212a28b1",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3003,7 +3003,7 @@
       "sha256": "008c09909626e5dc0e226fe7691a60a7148b350e5735f05fe5d02d304d006706",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 1 exact issue-linked difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3014,7 +3014,7 @@
       "sha256": "144222a36d94b0e02fc217acabb3af673e24bf9f9c62a74b1c8ffc0996fa46eb",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3025,7 +3025,7 @@
       "sha256": "6da7999727923c518d27d8437b44fa3e76d1febeff7e3b2eceeed5d66b0136d0",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3048,7 +3048,7 @@
       "sha256": "2e00acbe54443d39b0aa070130eaf5216f91422072152aac29f169452327e7d0",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -3059,7 +3059,7 @@
       "sha256": "47c331e5ce5ee335fdd96deda5da2852bbb32f1a6623268df81b4a86b263a75e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3070,7 +3070,7 @@
       "sha256": "14192c7138d06d00e894ac1d067b58ba8e513d6ef08ae9215661581ded20bb06",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3081,7 +3081,7 @@
       "sha256": "271c08af4e0cb5491d50ff8db3074ee1ab64221ef89e03f18885326758236a94",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3092,7 +3092,7 @@
       "sha256": "a155092238bdf0cc7ad2713caddb51c46e6bfdc86af0efb51d7ca89859326c79",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3103,7 +3103,7 @@
       "sha256": "ffeb675b11d1a44d8763a2c1157fbed2f1cef851baff4532fe2a4c6e940f7463",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3114,7 +3114,7 @@
       "sha256": "0b6aeb74bc13129a7612102f2904c7909be5f52593eac7c5796738879b929560",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3125,7 +3125,7 @@
       "sha256": "210f82e0dca7c10e420b9ac4ede783f2e516eda4ac1d1708d05c95227dcdb7c0",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3136,7 +3136,7 @@
       "sha256": "8aa783ef8097558b2f2a01e09513cebee2ab1a0b3e21c765f746ea85f043995a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3147,7 +3147,7 @@
       "sha256": "5c77f930ec3fde7d0d70844ba4e53f74a3d91cbb3b916c039ab5043c456bcbc6",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to tempo-automations; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers tempo-automations; the declared slices have no current AlphaTab difference.",
       "features": [
         "tempo-automations"
       ],
@@ -3158,7 +3158,7 @@
       "sha256": "588911bea90f8f9e369017bbc86b64e5fa3056b8b132331fd8798bae4ca06b2e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3180,7 +3180,7 @@
       "sha256": "f4d7553afc5ebe5b9b6a8f7f6ce02c62b9c6b0693574a4e94ce0bee287f77101",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 6 exact issue-linked differences.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3191,7 +3191,7 @@
       "sha256": "1d449d098c15a0da7627ac66e6cb63dbe92f94faaf5158c86fd0b11adb53a8e1",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3202,7 +3202,7 @@
       "sha256": "f4794c574f9091c9a495fadda0049226aebd53ae25b57fe0a12e627892cc4291",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3213,7 +3213,7 @@
       "sha256": "761271d80ab56833d8de26124afc87d21ce4c48cf5de1554928f910c38c803d0",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3224,7 +3224,7 @@
       "sha256": "6a1eb45e7bf3b0fe632f0cf22d06e842f8162e6be5d975b64961284446611642",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 4 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -3235,7 +3235,7 @@
       "sha256": "fc5e348ab8060949f9671ef02709a884dc2e4636ea374c788c3f129e3857a25d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3246,7 +3246,7 @@
       "sha256": "cb1083391ecb920726b8abaa2309d054d1e3dd27dbc60d01670557e18c5620db",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -3257,7 +3257,7 @@
       "sha256": "f39ecf0cfebd1b9e849b32daf6074dafe86df182e1dc5b87eac6274bf473c28a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Live AlphaTab differential covers tuplet timing; a dedicated rhythm snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm, timing and records 1 exact issue-linked difference.",
       "features": [
         "rhythm",
         "timing"
@@ -3269,7 +3269,7 @@
       "sha256": "1fce8f7266055123b92de461e9c7b8011513b0c86c3a89c831d8082926c3ad9a",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to note-and-beat-semantics; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
         "note-and-beat-semantics"
       ],
@@ -3280,7 +3280,7 @@
       "sha256": "55d458d6068cf411eb2595f273256787cca101f8e69a6f1b9fed635bfe00f9be",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3304,7 +3304,7 @@
       "sha256": "2820892be6f38c898956a3fabb6aec7c5cf0f155e5df63ba7f5c60e64158223d",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to tempo-automations; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers tempo-automations; the declared slices have no current AlphaTab difference.",
       "features": [
         "tempo-automations"
       ],
@@ -3315,7 +3315,7 @@
       "sha256": "dd50673c1d3a7a8d0c3c167001affac79c7ade062541a2acf8f1704fb648cc3d",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 2 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -3326,7 +3326,7 @@
       "sha256": "a6f4b8e5bebb302f627e37f1429c72a2c76d3ce78ffed7ad1ce4c2c5b0708461",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3337,7 +3337,7 @@
       "sha256": "12e242540ef8a16ea9dc1e971be28d7644df6a7889418e3ad57c488ba2ed8d38",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core and records 5 exact issue-linked differences.",
       "features": [
         "score-core"
       ],
@@ -3348,7 +3348,7 @@
       "sha256": "86a24c8025295267a713511e4fbd348ee71ae00addaf097d9955bb90cc4bf812",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3359,7 +3359,7 @@
       "sha256": "06bfe126a8a7da9707ff1defb65f03d28913fd93d45c1a5cbb418d980e05953a",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3370,7 +3370,7 @@
       "sha256": "1155c19866180112b835ec543f9941fe603e4a39fe099101a49e7d25d0c0ec82",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3381,7 +3381,7 @@
       "sha256": "2d4da439630b7e42d1e14993e2a0ebea4489d63d48b1edaac74b2d2841eef7f7",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3392,7 +3392,7 @@
       "sha256": "3a7b51fc5f3bd2527e2c8e854eb4980d80998b7858a1d142142be126c301f535",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3403,7 +3403,7 @@
       "sha256": "6013fd1c8e58c11d8b1b7b8bee6ebe314f53846eeea319d7862086c8b08d07b8",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3414,7 +3414,7 @@
       "sha256": "336554df3dd0568f73d356da8162aee23cbb06cbd9cae4a992a570c3896c697f",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to staff-ownership; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers staff-ownership; the declared slices have no current AlphaTab difference.",
       "features": [
         "staff-ownership"
       ],
@@ -3425,7 +3425,7 @@
       "sha256": "e42fffdba3e9d7b174d72be896e4a858ce4355b1ee6bb5b8b047031224853904",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -3436,7 +3436,7 @@
       "sha256": "905caaf7c94f8606801525491717c4cbefd68bd0e6c95cf22641a50192e09588",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3447,7 +3447,7 @@
       "sha256": "c25b2536120b64d8a54f7c9e004b85a4a37182565f67def029a41505454148b4",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to rhythm; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers rhythm; the declared slices have no current AlphaTab difference.",
       "features": [
         "rhythm"
       ],
@@ -3458,7 +3458,7 @@
       "sha256": "210f82e0dca7c10e420b9ac4ede783f2e516eda4ac1d1708d05c95227dcdb7c0",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],
@@ -3469,7 +3469,7 @@
       "sha256": "8aa783ef8097558b2f2a01e09513cebee2ab1a0b3e21c765f746ea85f043995a",
       "format": "gp8",
       "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
         "score-core"
       ],

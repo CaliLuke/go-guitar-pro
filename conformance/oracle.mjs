@@ -8,7 +8,7 @@ alphaTab.Logger.logLevel = alphaTab.LogLevel.None;
 
 export function enumName(values, value) {
   const name = values?.[value];
-  return typeof name === 'string' ? name.toLowerCase() : String(value);
+  return typeof name === 'string' ? name.toLowerCase() : `unknown:${value}`;
 }
 
 function finite(value) {
@@ -27,6 +27,127 @@ function normalizeArticulation(articulation) {
     techniqueSymbol: enumName(alphaTab.model.MusicFontSymbol, articulation.techniqueSymbol),
     outputMidiNumber: articulation.outputMidiNumber
   };
+}
+
+export function normalizeAccent(value) {
+  switch (value) {
+    case alphaTab.model.AccentuationType.None:
+      return 'none';
+    case alphaTab.model.AccentuationType.Normal:
+      return 'normal';
+    case alphaTab.model.AccentuationType.Heavy:
+      return 'heavy';
+    case alphaTab.model.AccentuationType.Tenuto:
+      return 'tenuto';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
+export function normalizeDynamic(value) {
+  return enumName(alphaTab.model.DynamicValue, value);
+}
+
+export function normalizeHairpin(value) {
+  return enumName(alphaTab.model.CrescendoType, value);
+}
+
+export function normalizeHarmonicKind(value) {
+  return enumName(alphaTab.model.HarmonicType, value);
+}
+
+export function normalizeVibrato(value) {
+  return enumName(alphaTab.model.VibratoType, value);
+}
+
+export function normalizeSlideIn(value) {
+  switch (value) {
+    case alphaTab.model.SlideInType.None:
+      return 'none';
+    case alphaTab.model.SlideInType.IntoFromBelow:
+      return 'into-from-below';
+    case alphaTab.model.SlideInType.IntoFromAbove:
+      return 'into-from-above';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
+export function normalizeSlideOut(value) {
+  switch (value) {
+    case alphaTab.model.SlideOutType.None:
+      return 'none';
+    case alphaTab.model.SlideOutType.Shift:
+      return 'shift';
+    case alphaTab.model.SlideOutType.Legato:
+      return 'legato';
+    case alphaTab.model.SlideOutType.OutUp:
+      return 'out-up';
+    case alphaTab.model.SlideOutType.OutDown:
+      return 'out-down';
+    case alphaTab.model.SlideOutType.PickSlideDown:
+      return 'pick-slide-down';
+    case alphaTab.model.SlideOutType.PickSlideUp:
+      return 'pick-slide-up';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
+export function normalizeTripletFeel(value) {
+  switch (value) {
+    case alphaTab.model.TripletFeel.NoTripletFeel:
+      return 'none';
+    case alphaTab.model.TripletFeel.Triplet16th:
+      return 'triplet-16th';
+    case alphaTab.model.TripletFeel.Triplet8th:
+      return 'triplet-8th';
+    case alphaTab.model.TripletFeel.Dotted16th:
+      return 'dotted-16th';
+    case alphaTab.model.TripletFeel.Dotted8th:
+      return 'dotted-8th';
+    case alphaTab.model.TripletFeel.Scottish16th:
+      return 'scottish-16th';
+    case alphaTab.model.TripletFeel.Scottish8th:
+      return 'scottish-8th';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
+export function normalizeOttavia(value) {
+  switch (value) {
+    case alphaTab.model.Ottavia._15ma:
+      return '15ma';
+    case alphaTab.model.Ottavia._8va:
+      return '8va';
+    case alphaTab.model.Ottavia.Regular:
+      return 'none';
+    case alphaTab.model.Ottavia._8vb:
+      return '8vb';
+    case alphaTab.model.Ottavia._15mb:
+      return '15mb';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
+export function normalizeBeatStatus(beat) {
+  if (beat.isEmpty && beat.isRest) {
+    return 'unknown:empty+rest';
+  }
+  return beat.isEmpty ? 'empty' : beat.isRest ? 'rest' : 'normal';
+}
+
+export function normalizeNoteKind(note) {
+  if (note.isDead && note.isTieDestination) {
+    return 'unknown:dead+tie';
+  }
+  return note.isDead ? 'dead' : note.isTieDestination ? 'tie' : 'normal';
+}
+
+export function normalizeTuning(tuning) {
+  return Array.from(tuning ?? []);
 }
 
 export function normalizeAutomation(automation, bar) {
@@ -72,46 +193,73 @@ function percussionInput(note, staff) {
     : null;
 }
 
-function normalizeGrace(note, beat, staff) {
-  return {
-    rawFret: finite(note.fret),
-    dead: Boolean(note.isDead),
-    onBeat: beat.graceType === alphaTab.model.GraceType.OnBeat,
-    dynamic: enumName(alphaTab.model.DynamicValue, note.dynamics),
-    transition: note.slideOutType !== alphaTab.model.SlideOutType.None
-      ? 'slide'
-      : note.isHammerPullOrigin ? 'hammer' : 'none',
-    staffPercussion: Boolean(staff.isPercussion)
-  };
-}
-
-function normalizeNote(note, staff, graces) {
+export function normalizeNotePitch(note, staff) {
   const isPercussion = Boolean(staff.isPercussion);
+  const isStringed = !isPercussion && staff.tuning.length > 0 && note.string > 0;
   let midi = finite(note.realValueWithoutHarmonic);
   if (isPercussion && note.percussionArticulation >= 0 && note.percussionArticulation < staff.track.percussionArticulations.length) {
     midi = staff.track.percussionArticulations[note.percussionArticulation].outputMidiNumber;
   }
   return {
-    string: isPercussion ? note.string : staff.tuning.length - note.string + 1,
-    fret: isPercussion ? null : finite(note.fret),
+    string: isPercussion ? note.string : isStringed ? staff.tuning.length - note.string + 1 : 0,
+    fret: isStringed ? finite(note.fret) : null,
     percussionArticulation: note.percussionArticulation >= 0 ? note.percussionArticulation : null,
     percussionInput: isPercussion ? percussionInput(note, staff) : null,
-    midi,
-    kind: note.isDead ? 'dead' : note.isTieDestination ? 'tie' : 'normal',
-    dynamic: enumName(alphaTab.model.DynamicValue, note.dynamics),
+    midi
+  };
+}
+
+export function normalizeGrace(note, beat, staff) {
+  let onBeat;
+  switch (beat.graceType) {
+    case alphaTab.model.GraceType.OnBeat:
+      onBeat = true;
+      break;
+    case alphaTab.model.GraceType.BeforeBeat:
+      onBeat = false;
+      break;
+    case alphaTab.model.GraceType.BendGrace:
+      onBeat = 'bend-grace';
+      break;
+    case alphaTab.model.GraceType.None:
+      onBeat = 'none';
+      break;
+    default:
+      onBeat = `unknown:${beat.graceType}`;
+  }
+  const slide = normalizeSlideOut(note.slideOutType);
+  const transition = slide.startsWith('unknown:')
+    ? slide
+    : slide !== 'none' ? 'slide' : note.isHammerPullOrigin ? 'hammer' : 'none';
+  return {
+    rawFret: finite(note.fret),
+    dead: Boolean(note.isDead),
+    onBeat,
+    dynamic: normalizeDynamic(note.dynamics),
+    transition,
+    staffPercussion: Boolean(staff.isPercussion)
+  };
+}
+
+function normalizeNote(note, staff, graces) {
+  const pitch = normalizeNotePitch(note, staff);
+  return {
+    ...pitch,
+    kind: normalizeNoteKind(note),
+    dynamic: normalizeDynamic(note.dynamics),
     durationPercent: finite(note.durationPercent),
     tieOrigin: Boolean(note.tieDestination),
     tieDestination: Boolean(note.isTieDestination),
     effects: {
-      accent: enumName(alphaTab.model.AccentuationType, note.accentuated),
+      accent: normalizeAccent(note.accentuated),
       ghost: Boolean(note.isGhost),
       hammerOrigin: Boolean(note.isHammerPullOrigin),
       letRing: Boolean(note.isLetRing),
       palmMute: Boolean(note.isPalmMute),
       staccato: Boolean(note.isStaccato),
-      vibrato: enumName(alphaTab.model.VibratoType, note.vibrato),
+      vibrato: normalizeVibrato(note.vibrato),
       harmonic: note.harmonicType === alphaTab.model.HarmonicType.None ? null : {
-        kind: enumName(alphaTab.model.HarmonicType, note.harmonicType),
+        kind: normalizeHarmonicKind(note.harmonicType),
         fret: finite(note.harmonicValue)
       },
       bend: normalizeBend(note.bendPoints),
@@ -120,8 +268,8 @@ function normalizeNote(note, staff, graces) {
         duration: finite(note.trillSpeed)
       },
       slides: [
-        enumName(alphaTab.model.SlideInType, note.slideInType),
-        enumName(alphaTab.model.SlideOutType, note.slideOutType)
+        normalizeSlideIn(note.slideInType),
+        normalizeSlideOut(note.slideOutType)
       ].filter(value => value !== 'none')
     },
     graces
@@ -151,16 +299,17 @@ function normalizeVoice(voice, staff) {
     pendingGraceBeats = [];
     beats.push({
       start: finite(beat.displayStart),
-      status: beat.isEmpty ? 'empty' : beat.isRest ? 'rest' : 'normal',
+      status: normalizeBeatStatus(beat),
       duration: beat.duration,
       durationTicks: beat.displayDuration,
       dots: beat.dots,
       tuplet: beat.tupletNumerator > 0 && beat.tupletDenominator > 0
         ? [beat.tupletNumerator, beat.tupletDenominator]
         : [1, 1],
-      dynamic: enumName(alphaTab.model.DynamicValue, beat.dynamics),
+      dynamic: normalizeDynamic(beat.dynamics),
       text: beat.text ?? '',
-      hairpin: enumName(alphaTab.model.CrescendoType, beat.crescendo),
+      octave: normalizeOttavia(beat.ottava),
+      hairpin: normalizeHairpin(beat.crescendo),
       tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,
       notes
     });
@@ -173,8 +322,9 @@ function normalizeVoice(voice, staff) {
       durationTicks: graceBeat.displayDuration,
       dots: graceBeat.dots,
       tuplet: [1, 1],
-      dynamic: enumName(alphaTab.model.DynamicValue, graceBeat.dynamics),
+      dynamic: normalizeDynamic(graceBeat.dynamics),
       text: graceBeat.text ?? '',
+      octave: normalizeOttavia(graceBeat.ottava),
       hairpin: 'none',
       tremoloPicking: null,
       notes: graceBeat.notes.map(note => normalizeNote(note, staff, []))
@@ -189,7 +339,7 @@ function normalizeStaff(staff) {
     capo: finite(staff.capo),
     percussion: Boolean(staff.isPercussion),
     standardNotationLineCount: staff.standardNotationLineCount,
-    tuning: Array.from(staff.tuning ?? []),
+    tuning: normalizeTuning(staff.tuning),
     bars: staff.bars.map(bar => ({
       index: bar.index,
       clef: normalizeClef(bar.clef),
@@ -198,7 +348,7 @@ function normalizeStaff(staff) {
   };
 }
 
-function normalizeScore(score) {
+export function normalizeScore(score) {
   const tempoAutomations = [];
   for (const masterBar of score.masterBars) {
     for (const automation of masterBar.tempoAutomations) {
@@ -224,9 +374,7 @@ function normalizeScore(score) {
       repeatStart: Boolean(masterBar.isRepeatStart),
       repeatCount: masterBar.repeatCount,
       alternateEndings: masterBar.alternateEndings,
-      tripletFeel: masterBar.tripletFeel === alphaTab.model.TripletFeel.NoTripletFeel
-        ? 'none'
-        : enumName(alphaTab.model.TripletFeel, masterBar.tripletFeel).replace('tripletfeel', ''),
+      tripletFeel: normalizeTripletFeel(masterBar.tripletFeel),
       pickup: Boolean(masterBar.isAnacrusis)
     })),
     tempoAutomations,
@@ -241,18 +389,28 @@ function normalizeScore(score) {
   };
 }
 
-function main() {
-  const fixture = process.argv[2];
-  if (!fixture) {
-    console.error('usage: node oracle.mjs FIXTURE');
-    process.exit(2);
-  }
-
+export function loadNormalizedScore(fixture) {
   const settings = new alphaTab.Settings();
   Object.assign(settings.importer, oracle.importerSettings);
   const bytes = new Uint8Array(fs.readFileSync(path.resolve(fixture)));
-  const score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings);
-  process.stdout.write(`${JSON.stringify(normalizeScore(score), null, 2)}\n`);
+  return normalizeScore(alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings));
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    console.error('usage: node oracle.mjs FIXTURE | --batch FIXTURE...');
+    process.exit(2);
+  }
+  if (args[0] === '--batch') {
+    const fixtures = args.slice(1);
+    process.stdout.write(`${JSON.stringify(fixtures.map(fixture => ({
+      fixture,
+      score: loadNormalizedScore(fixture)
+    })))}\n`);
+    return;
+  }
+  process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -10,6 +10,7 @@ import (
 	"io"
 	"reflect"
 	"regexp"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -70,6 +71,43 @@ func TestGPIFMetamorphicSensitivity(t *testing.T) {
 	}
 	if findParseDiagnostic(result.Diagnostics, ParseDiagnosticInvalidData, "rhythm") == nil {
 		t.Fatal("broken reference mapping was not detected")
+	}
+}
+
+func TestM25AdapterMutationSensitivity(t *testing.T) {
+	testM25AdapterMutationSensitivity(t)
+}
+
+func testM25AdapterMutationSensitivity(t *testing.T) {
+	t.Helper()
+	if goSlide(SlideIntoFromAbove) == goSlide(SlideIntoFromBelow) {
+		t.Fatal("slide adapter collapsed distinct enum values")
+	}
+	if goSlide(SlideType(99)) == goSlide(SlideNone) {
+		t.Fatal("slide adapter collapsed an unknown enum into the default")
+	}
+}
+
+func TestSemanticMatrixM25StructuralResilience(t *testing.T) {
+	runSemanticMatrixM25StructuralResilience(newSemanticMatrixRun(t))
+}
+
+func runSemanticMatrixM25StructuralResilience(run *semanticMatrixRun) {
+	t := run.t
+	t.Run("adapter sensitivity", testM25AdapterMutationSensitivity)
+	data, err := Export(conformanceExportSong(), ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for operation := range 7 {
+		t.Run(fmt.Sprintf("malformed GPIF %d", operation), func(t *testing.T) {
+			assertM25MalformedGPIF(t, data, []byte{byte(operation)})
+		})
+	}
+	for _, shape := range [][4]int{{1, 1, 1, 1}, {2, 2, 2, 2}, {3, 1, 2, 3}} {
+		t.Run(fmt.Sprintf("public Song %d-%d-%d-%d", shape[0], shape[1], shape[2], shape[3]), func(t *testing.T) {
+			assertM25ValidPublicSong(t, shape[0], shape[1], shape[2], shape[3])
+		})
 	}
 }
 
@@ -157,7 +195,9 @@ func FuzzGPIFSemanticPreservingTransforms(f *testing.F) {
 	}
 	f.Add([]byte{0})
 	f.Add([]byte{1, 0, 3})
-	f.Add([]byte{3, 2, 1, 0})
+	f.Add([]byte{4, 3, 2, 1, 0})
+	f.Add([]byte{0x80})
+	f.Add([]byte("11"))
 	f.Fuzz(func(t *testing.T, plan []byte) {
 		if len(plan) > 16 {
 			t.Skip()
@@ -165,7 +205,7 @@ func FuzzGPIFSemanticPreservingTransforms(f *testing.F) {
 		step := 0
 		transformed := rewriteConformanceGPIF(t, data, func(gpif string) string {
 			for _, operation := range plan {
-				switch operation % 4 {
+				switch operation % 5 {
 				case 0:
 					gpif = reorderFirstNoteProperties(gpif)
 				case 1:
@@ -174,11 +214,16 @@ func FuzzGPIFSemanticPreservingTransforms(f *testing.F) {
 					gpif = reverseGPIFNoteDefinitions(gpif)
 				case 3:
 					gpif = duplicateFirstGPIFRhythmWithPrefix(gpif, fmt.Sprintf("fuzz-%d-", step))
+				case 4:
+					gpif = duplicateFirstGPIFNoteWithPrefix(gpif, fmt.Sprintf("fuzz-%d-", step))
 				}
 				step++
 			}
 			return gpif
 		})
+		if len(plan) > 0 && plan[0]&0x80 != 0 {
+			transformed = repackGP8ForMetamorphicTest(t, transformed)
+		}
 		got, err := Parse(transformed)
 		if err != nil {
 			t.Fatal(err)
@@ -218,6 +263,146 @@ func FuzzParseMalformedClassified(f *testing.F) {
 			t.Fatalf("unclassified parse outcome: %T %v", err, err)
 		}
 	})
+}
+
+func FuzzGPIFMalformedStructures(f *testing.F) {
+	data, err := Export(conformanceExportSong(), ExportFormatGP8)
+	if err != nil {
+		f.Fatal(err)
+	}
+	for operation := range 7 {
+		f.Add([]byte{byte(operation)})
+	}
+	f.Add([]byte{0, 2, 5})
+	f.Fuzz(func(t *testing.T, plan []byte) {
+		if len(plan) == 0 || len(plan) > 8 {
+			t.Skip()
+		}
+		assertM25MalformedGPIF(t, data, plan)
+	})
+}
+
+func FuzzValidPublicSongStructures(f *testing.F) {
+	f.Add(uint8(1), uint8(1), uint8(1), uint8(1))
+	f.Add(uint8(2), uint8(2), uint8(2), uint8(2))
+	f.Add(uint8(3), uint8(1), uint8(2), uint8(3))
+	f.Fuzz(func(t *testing.T, trackSeed, staffSeed, voiceSeed, beatSeed uint8) {
+		trackCount := 1 + int(trackSeed%3)
+		staffCount := 1 + int(staffSeed%3)
+		voiceCount := 1 + int(voiceSeed%3)
+		beatCount := 1 + int(beatSeed%3)
+		assertM25ValidPublicSong(t, trackCount, staffCount, voiceCount, beatCount)
+	})
+}
+
+func assertM25MalformedGPIF(t *testing.T, data, plan []byte) {
+	t.Helper()
+	malformed := rewriteConformanceGPIF(t, data, func(gpif string) string {
+		for _, operation := range plan {
+			switch operation % 7 {
+			case 0:
+				gpif = strings.Replace(gpif, "<GPIF>", "<GPIF><M25UnknownElement/>", 1)
+			case 1:
+				gpif = strings.Replace(gpif, "<GPIF>", `<GPIF m25UnknownAttribute="true">`, 1)
+			case 2:
+				gpif = strings.Replace(gpif, `<Rhythm ref="0"`, `<Rhythm ref="m25-missing"`, 1)
+			case 3:
+				gpif = replaceFirstGPIFNoteID(gpif, "")
+			case 4:
+				gpif = duplicateSecondGPIFNoteID(gpif)
+			case 5:
+				gpif = regexp.MustCompile(`(<Property name="Fret">\s*<Fret>)[^<]*(</Fret>)`).ReplaceAllString(gpif, `${1}not-a-number${2}`)
+			case 6:
+				gpif = regexp.MustCompile(`<Hairpin>[^<]*</Hairpin>`).ReplaceAllString(gpif, `<Hairpin>M25UnknownHairpin</Hairpin>`)
+			}
+		}
+		return gpif
+	})
+	result, parseErr := ParseWithOptions(malformed, ParseOptions{Strict: true})
+	var strictErr *StrictParseError
+	var formatErr *ParseError
+	if errors.As(parseErr, &formatErr) {
+		if result != nil {
+			t.Fatalf("malformed structural plan %v returned a ParseError with result %#v", plan, result)
+		}
+		return
+	}
+	if !errors.As(parseErr, &strictErr) || result == nil || len(result.Diagnostics) == 0 {
+		t.Fatalf("malformed structural plan %v returned result %#v and error %T %v", plan, result, parseErr, parseErr)
+	}
+	for _, diagnostic := range result.Diagnostics {
+		if diagnostic.Code == "" || diagnostic.Kind == "" || diagnostic.SourcePath == "" {
+			t.Fatalf("malformed structural plan %v produced an unclassified diagnostic: %#v", plan, diagnostic)
+		}
+	}
+}
+
+func assertM25ValidPublicSong(t *testing.T, trackCount, staffCount, voiceCount, beatCount int) {
+	t.Helper()
+	song := m25ValidPublicSong(trackCount, staffCount, voiceCount, beatCount)
+	if err := FinalizeSong(song); err != nil {
+		t.Fatalf("finalizing %d/%d/%d/%d structure: %v", trackCount, staffCount, voiceCount, beatCount, err)
+	}
+	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
+		t.Fatalf("valid %d/%d/%d/%d structure diagnostics: %#v", trackCount, staffCount, voiceCount, beatCount, diagnostics)
+	}
+	assertM25PublicSongShape(t, song, trackCount, staffCount, voiceCount, beatCount)
+	preflight := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	allowedCodes := make([]string, 0, len(preflight.Entries))
+	for _, entry := range preflight.Entries {
+		if !slices.Contains(allowedCodes, entry.Code) {
+			allowedCodes = append(allowedCodes, entry.Code)
+		}
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
+		RequirePreservation: true,
+		AllowedCodes:        allowedCodes,
+	}})
+	if err != nil {
+		t.Fatalf("exporting %d/%d/%d/%d structure: %v; report %#v", trackCount, staffCount, voiceCount, beatCount, err, report.Entries)
+	}
+	if !reflect.DeepEqual(report, preflight) {
+		t.Fatalf("export report = %#v, want preflight %#v", report, preflight)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatalf("reimporting %d/%d/%d/%d structure: %v", trackCount, staffCount, voiceCount, beatCount, err)
+	}
+	assertM25PublicSongShape(t, roundTrip, trackCount, staffCount, voiceCount, beatCount)
+}
+
+func assertM25PublicSongShape(t *testing.T, song *Song, trackCount, staffCount, voiceCount, beatCount int) {
+	t.Helper()
+	if len(song.Tracks) != trackCount {
+		t.Fatalf("track count = %d, want %d", len(song.Tracks), trackCount)
+	}
+	for trackIndex := range song.Tracks {
+		track := &song.Tracks[trackIndex]
+		if len(track.Staves) != staffCount {
+			t.Fatalf("track %d staff count = %d, want %d", trackIndex, len(track.Staves), staffCount)
+		}
+		for staffIndex := range track.Staves {
+			if len(track.Staves[staffIndex].Measures) != 1 {
+				t.Fatalf("track %d staff %d measure count = %d, want 1", trackIndex, staffIndex, len(track.Staves[staffIndex].Measures))
+			}
+			measure := &track.Staves[staffIndex].Measures[0]
+			if len(measure.Voices) != voiceCount {
+				t.Fatalf("track %d staff %d voice count = %d, want %d", trackIndex, staffIndex, len(measure.Voices), voiceCount)
+			}
+			for voiceIndex := range measure.Voices {
+				if len(measure.Voices[voiceIndex].Beats) != beatCount {
+					t.Fatalf("track %d staff %d voice %d beat count = %d, want %d", trackIndex, staffIndex, voiceIndex, len(measure.Voices[voiceIndex].Beats), beatCount)
+				}
+				for beatIndex := range measure.Voices[voiceIndex].Beats {
+					notes := measure.Voices[voiceIndex].Beats[beatIndex].Notes
+					wantValue := int16((trackIndex + staffIndex + voiceIndex + beatIndex) % 12)
+					if len(notes) != 1 || notes[0].Value != wantValue {
+						t.Fatalf("track %d staff %d voice %d beat %d notes = %#v, want value %d", trackIndex, staffIndex, voiceIndex, beatIndex, notes, wantValue)
+					}
+				}
+			}
+		}
+	}
 }
 
 func TestParseGP8RejectsOversizedGPIFBeforeInflatingIt(t *testing.T) {
@@ -307,6 +492,87 @@ func duplicateFirstGPIFRhythmWithPrefix(gpif, prefix string) string {
 	duplicate := strings.Replace(match[0], `id="`+match[1]+`"`, `id="`+duplicateID+`"`, 1)
 	gpif = strings.Replace(gpif, "</Rhythms>", duplicate+"</Rhythms>", 1)
 	return strings.Replace(gpif, `<Rhythm ref="`+match[1]+`"`, `<Rhythm ref="`+duplicateID+`"`, 1)
+}
+
+func duplicateFirstGPIFNoteWithPrefix(gpif, prefix string) string {
+	note := regexp.MustCompile(`(?s)<Note id="([^"]+)">.*?</Note>`)
+	match := note.FindStringSubmatch(gpif)
+	if len(match) == 0 {
+		return gpif
+	}
+	duplicateID := prefix + match[1]
+	duplicate := strings.Replace(match[0], `id="`+match[1]+`"`, `id="`+duplicateID+`"`, 1)
+	definitionsEnd := strings.LastIndex(gpif, "</Notes>")
+	if definitionsEnd < 0 {
+		return gpif
+	}
+	gpif = gpif[:definitionsEnd] + duplicate + gpif[definitionsEnd:]
+	references := regexp.MustCompile(`<Notes>([^<]*)</Notes>`)
+	return references.ReplaceAllStringFunc(gpif, func(value string) string {
+		openEnd := strings.IndexByte(value, '>')
+		closeStart := strings.LastIndex(value, "</")
+		ids := strings.Fields(value[openEnd+1 : closeStart])
+		for index, id := range ids {
+			if id == match[1] {
+				ids[index] = duplicateID
+			}
+		}
+		return value[:openEnd+1] + strings.Join(ids, " ") + value[closeStart:]
+	})
+}
+
+func replaceFirstGPIFNoteID(gpif, replacement string) string {
+	note := regexp.MustCompile(`<Note id="[^"]+">`)
+	location := note.FindStringIndex(gpif)
+	if location == nil {
+		return gpif
+	}
+	return gpif[:location[0]] + `<Note id="` + replacement + `">` + gpif[location[1]:]
+}
+
+func duplicateSecondGPIFNoteID(gpif string) string {
+	note := regexp.MustCompile(`<Note id="([^"]+)">`)
+	matches := note.FindAllStringSubmatchIndex(gpif, 2)
+	if len(matches) < 2 {
+		return gpif
+	}
+	firstID := gpif[matches[0][2]:matches[0][3]]
+	secondIDStart, secondIDEnd := matches[1][2], matches[1][3]
+	return gpif[:secondIDStart] + firstID + gpif[secondIDEnd:]
+}
+
+func m25ValidPublicSong(trackCount, staffCount, voiceCount, beatCount int) *Song {
+	song := &Song{Tempo: 120, MeasureHeaders: []MeasureHeader{defaultMeasureHeader()}}
+	for trackIndex := range trackCount {
+		track := defaultTrack()
+		track.Number = int32(trackIndex + 1)
+		track.Name = fmt.Sprintf("Track %d", trackIndex+1)
+		track.Measures = nil
+		track.Staves = make([]Staff, staffCount)
+		for staffIndex := range staffCount {
+			measure := Measure{HeaderIndex: 0, Voices: make([]Voice, voiceCount)}
+			for voiceIndex := range voiceCount {
+				beats := make([]Beat, beatCount)
+				for beatIndex := range beatCount {
+					beat := defaultBeat()
+					note := defaultNote()
+					note.Kind = NoteTypeNormal
+					note.String = 1
+					note.Value = int16((trackIndex + staffIndex + voiceIndex + beatIndex) % 12)
+					beat.Notes = []Note{note}
+					beats[beatIndex] = beat
+				}
+				measure.Voices[voiceIndex] = Voice{Beats: beats}
+			}
+			track.Staves[staffIndex] = Staff{
+				Strings:                   append([]GuitarString(nil), track.Strings...),
+				Measures:                  []Measure{measure},
+				StandardNotationLineCount: 5,
+			}
+		}
+		song.Tracks = append(song.Tracks, track)
+	}
+	return song
 }
 
 func reuseFirstMainNoteReference(gpif string) string {

@@ -18,6 +18,15 @@ import (
 
 // GPIF XML structures shared by parsing and export.
 
+var gpifBackingTrackAssetReferenceSource = diagnosticSource("GPIF.BackingTrack.AssetId.Reference", "score-core", ParseDiagnosticInvalidData)
+
+var (
+	gpifTrackPropertyConflictSource = diagnosticSource("GPIF.Track.Property.ConflictingDuplicate", "staff-ownership", ParseDiagnosticInvalidData)
+	gpifStaffPropertyConflictSource = diagnosticSource("GPIF.Staff.Property.ConflictingDuplicate", "staff-ownership", ParseDiagnosticInvalidData)
+	gpifBeatPropertyConflictSource  = diagnosticSource("GPIF.Beat.Property.ConflictingDuplicate", "note-and-beat-semantics", ParseDiagnosticInvalidData)
+	gpifNotePropertyConflictSource  = diagnosticSource("GPIF.Note.Property.ConflictingDuplicate", "note-and-beat-semantics", ParseDiagnosticInvalidData)
+)
+
 type gpifDocument struct {
 	XMLName      xml.Name          `xml:"GPIF"`
 	GPVersion    string            `xml:"GPVersion,omitempty"`
@@ -354,7 +363,7 @@ type gpifSound struct {
 	Path    string `xml:"Path,omitempty"`
 	Role    string `xml:"Role,omitempty"`
 	Program int    `xml:"MIDI>Program"`
-	Channel int    `xml:"MIDI>PrimaryChannel"`
+	Channel *int   `xml:"MIDI>PrimaryChannel"`
 }
 
 type gpifMasterBars struct {
@@ -707,6 +716,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				}
 				song.Channels = append(song.Channels, ch)
 				track.ChannelIndex = len(song.Channels) - 1
+				track.UseRse = t.AudioEngineState == "RSE"
 				track.Mute = t.PlaybackState == "Mute"
 				track.Solo = t.PlaybackState == "Solo"
 				break
@@ -1121,9 +1131,26 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	if context == nil {
 		return
 	}
+	if doc.BackingTrack != nil && doc.BackingTrack.Enabled && strings.EqualFold(doc.BackingTrack.Source, "Local") {
+		if strings.TrimSpace(doc.BackingTrack.AssetID) == "" {
+			context.add(gpifBackingTrackAssetReferenceSource, ParseDiagnostic{
+				SourcePath: "/GPIF/BackingTrack/AssetId",
+				Reason:     "backing track has no asset reference",
+			})
+		}
+	}
 
 	for _, track := range doc.Tracks.Tracks {
 		path := gpifObjectPath("Tracks/Track", track.ID)
+		switch track.AudioEngineState {
+		case "", "MIDI", "RSE":
+		default:
+			context.add(diagnosticSource("GPIF.Track.AudioEngineState.InvalidValue", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+				SourcePath: path + "/AudioEngineState", ObjectID: track.ID,
+				Location: ParseLocation{TrackID: track.ID},
+				Reason:   fmt.Sprintf("audio-engine state %q is not recognized", track.AudioEngineState),
+			})
+		}
 		if track.Lyrics != nil && !track.Lyrics.Dispatched {
 			context.add(diagnosticSource("GPIF.Track.Lyrics.Undispatched", "score-core", ParseDiagnosticLossyProjection), ParseDiagnostic{
 				SourcePath: path + "/Lyrics/@dispatched", ObjectID: track.ID,
@@ -1138,10 +1165,25 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 				Reason: "track transposition has no destination in Song",
 			})
 		}
+		for soundIndex, sound := range track.Sounds.Sounds {
+			if sound.Channel == nil || *sound.Channel == track.MidiConnection.PrimaryChannel {
+				continue
+			}
+			context.add(diagnosticSource("GPIF.Track.Sound.Channel", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				SourcePath: fmt.Sprintf("%s/Sounds/Sound[%d]/MIDI/PrimaryChannel", path, soundIndex),
+				ObjectID:   track.ID, Location: ParseLocation{TrackID: track.ID},
+				Reason: "TrackSound does not retain a per-sound MIDI channel",
+			})
+		}
+		gpifAuditStaffPropertyConflicts(context, track.Properties, path+"/Properties", track.ID, ParseLocation{TrackID: track.ID}, gpifTrackPropertyConflictSource)
 		for propertyIndex, property := range track.Properties {
 			gpifAuditTrackProperty(context, track.ID, fmt.Sprintf("%s/Properties/Property[%d]", path, propertyIndex), property)
 		}
 		for staffIndex, staff := range track.Staves.Staff {
+			gpifAuditStaffPropertyConflicts(
+				context, staff.Properties, fmt.Sprintf("%s/Staves/Staff[%d]/Properties", path, staffIndex),
+				track.ID, ParseLocation{TrackID: track.ID}, gpifStaffPropertyConflictSource,
+			)
 			for propertyIndex, property := range staff.Properties {
 				propertyPath := fmt.Sprintf("%s/Staves/Staff[%d]/Properties/Property[%d]", path, staffIndex, propertyIndex)
 				gpifAuditStaffProperty(context, track.ID, propertyPath, property)
@@ -1152,6 +1194,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, note := range doc.Notes.Notes {
 		path := gpifObjectPath("Notes/Note", note.ID)
+		gpifAuditPropertyConflicts(context, note.Properties.Properties, path+"/Properties", note.ID, ParseLocation{NoteID: note.ID}, gpifNotePropertyConflictSource)
 		if note.InstrumentArticulation != nil && *note.InstrumentArticulation < 0 {
 			context.add(diagnosticSource("GPIF.Note.InstrumentArticulation.Invalid", "percussion-articulations", ParseDiagnosticInvalidData), ParseDiagnostic{
 				SourcePath: path + "/InstrumentArticulation", ObjectID: note.ID,
@@ -1187,6 +1230,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, beat := range doc.Beats.Beats {
 		path := gpifObjectPath("Beats/Beat", beat.ID)
+		gpifAuditPropertyConflicts(context, beat.Properties.Properties, path+"/Properties", beat.ID, ParseLocation{BeatID: beat.ID}, gpifBeatPropertyConflictSource)
 		for _, property := range beat.Properties.Properties {
 			gpifAuditBeatProperty(context, beat.ID, path, property)
 		}
@@ -1228,6 +1272,30 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	gpifAuditMasterBarCardinality(doc, context)
 
 	gpifAuditReferences(doc, context)
+}
+
+func gpifAuditPropertyConflicts(context *parseContext, properties []gpifProperty, path, objectID string, location ParseLocation, source parseDiagnosticSource) {
+	gpifAuditPropertyConflictValues(context, properties, path, objectID, location, source, func(property gpifProperty) string { return property.Name })
+}
+
+func gpifAuditStaffPropertyConflicts(context *parseContext, properties []gpifStaffProperty, path, objectID string, location ParseLocation, source parseDiagnosticSource) {
+	gpifAuditPropertyConflictValues(context, properties, path, objectID, location, source, func(property gpifStaffProperty) string { return property.Name })
+}
+
+func gpifAuditPropertyConflictValues[T any](context *parseContext, properties []T, path, objectID string, location ParseLocation, source parseDiagnosticSource, propertyName func(T) string) {
+	seen := make(map[string]T, len(properties))
+	for _, property := range properties {
+		name := propertyName(property)
+		previous, exists := seen[name]
+		if exists && !reflect.DeepEqual(previous, property) {
+			context.add(source, ParseDiagnostic{
+				SourcePath: fmt.Sprintf("%s/Property[@name=%q]", path, name),
+				ObjectID:   objectID, Location: location,
+				Reason: fmt.Sprintf("GPIF property %q has conflicting duplicate values", name),
+			})
+		}
+		seen[name] = property
+	}
 }
 
 func gpifAuditMasterBarCardinality(doc gpifDocument, context *parseContext) {
@@ -1824,7 +1892,16 @@ func gpifAuditReferences(doc gpifDocument, context *parseContext) {
 		}
 	}
 	if doc.BackingTrack != nil {
-		gpifAuditReferenceList(context, diagnosticSource("GPIF.BackingTrack.AssetId.Reference", "score-core", ParseDiagnosticInvalidData), []string{doc.BackingTrack.AssetID}, assets, "/GPIF/BackingTrack/AssetId", "", ParseLocation{}, "score-core")
+		if doc.BackingTrack.Enabled && strings.EqualFold(doc.BackingTrack.Source, "Local") {
+			gpifAuditReferenceList(context, gpifBackingTrackAssetReferenceSource, []string{doc.BackingTrack.AssetID}, assets, "/GPIF/BackingTrack/AssetId", "", ParseLocation{}, "score-core")
+		}
+		framePadding := strings.TrimSpace(doc.BackingTrack.FramePadding)
+		if _, err := strconv.ParseInt(framePadding, 10, 64); err != nil {
+			context.add(diagnosticSource("GPIF.BackingTrack.FramePadding.Invalid", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: "/GPIF/BackingTrack/FramePadding",
+				Reason:     fmt.Sprintf("backing-track frame padding %q is not a signed 64-bit frame count", framePadding),
+			})
+		}
 	}
 }
 
@@ -2369,7 +2446,7 @@ func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
 			BarOccurrence: barOccurrence,
 			FrameOffset:   frameOffset,
 			AudioFrame:    audioFrame,
-			MediaTimeMS:   float64(frameOffset-framePadding) / GPIFBackingTrackSampleRate * 1000,
+			MediaTimeMS:   (float64(frameOffset) - float64(framePadding)) / GPIFBackingTrackSampleRate * 1000,
 			ModifiedTempo: modifiedTempo,
 			OriginalTempo: originalTempo,
 			Linear:        automation.Linear,

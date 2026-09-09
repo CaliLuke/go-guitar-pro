@@ -51,11 +51,18 @@ It reports bank and effect controllers as one scoped MIDI omission. It also
 reports each legacy master or track RSE record as one scoped omission. The RSE
 tests assert every descendant covered by those parent reports.
 
+GPIF `AudioEngineState` maps `RSE` to `Track.UseRse` and `MIDI` to false. An
+unknown engine state produces an unknown-syntax diagnostic.
+
 `InitialTempo` is the fractional authored value. `Tempo` is its legacy integer
 projection. When an opening automation identifies the stale value, an edit to
 either representation wins and produces a normalization report. GP8 preserves
 the tempo name and ordered automation values. It cannot preserve `HideTempo`,
 so it reports that omission.
+
+A score must have a valid opening tempo from `Tempo`, `InitialTempo`, or an
+automation at bar zero and position zero. A later automation does not supply
+the missing opening value.
 
 GP8 has one playback-state value and one MIDI port per track. Export reports a
 normalization when mute and solo are both true or when the effect channel uses
@@ -199,6 +206,36 @@ lyrics and their offsets, but it does not emit binary score lyrics. Export
 reports the score-level omission. Beat text remains separate and is preserved
 on rests. An undispatched GPIF lyric source produces a loss diagnostic because
 the public model does not retain that source state.
+
+An enabled local backing track must refer to an archive entry with audio data.
+Its frame padding must fit in a signed 64-bit frame count. Sync points preserve
+their authored bar, position, tempo, visibility, frame, and media-time values.
+GP8 export reports backing tracks and sync points because it does not emit them.
+
+The GPIF source audit accounts for every known wire field and named dispatch.
+It rejects conflicting duplicate properties. It also keeps an explicit source
+state when zero and absence have different meanings. New wire fields or
+dispatch cases fail the inventory until the ledger classifies them.
+
+Validation, preflight, and export use the same format-independent invariants.
+These read-only operations do not change the score. A failed strict file export
+does not replace an existing file and does not leave a new partial file.
+
+The whole-corpus receipt covers every inventoried fixture in one pinned
+AlphaTab batch. It stores counted diagnostic signatures and exact semantic
+differences. Each difference records its path, both values, a narrow reason,
+and an open issue. A snapshot update does not accept a new difference. A new
+or changed difference has no classification, and the strict test fails.
+Each counted diagnostic also hashes every source and object location. This hash
+detects location drift without storing every repeated diagnostic in full.
+
+Test sufficiency uses several independent signals. The contract inventory
+checks breadth. The AlphaTab oracle checks results through another importer.
+Metamorphic tests check equivalent structures. Deterministic mutation tests
+check that realistic faults make tests fail. Structural fuzz tests check
+malformed input and valid nested score graphs. Statement coverage remains a
+minimum execution measure. No one signal proves that the code has no defects.
+Together, these signals make missing evidence visible and measurable.
 
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains

@@ -6,17 +6,17 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 
 | Feature | Formats | Status | Issues | Reason |
 | --- | --- | --- | --- | --- |
-| `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12), [#13](https://github.com/CaliLuke/go-guitar-pro/issues/13) | The full corpus parses, while richer metadata and loss reporting remain tracked by issues 12 and 13. |
-| `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12), [#15](https://github.com/CaliLuke/go-guitar-pro/issues/15) | Selected duration, dot, tuplet, time-signature, and rest cases are compared; exact score time and the remaining authored rhythm model are tracked by issues 12 and 15. |
-| `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#14](https://github.com/CaliLuke/go-guitar-pro/issues/14), [#15](https://github.com/CaliLuke/go-guitar-pro/issues/15) | Selected absolute display starts agree after zero-origin normalization; exact score time and shared finalized-graph validation are tracked by issues 14 and 15. |
-| `staff-ownership` | gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | The grand-staff contract compares exact track, staff, bar, voice, beat, and note hierarchy plus authored contents; broader model ownership and legacy projection are tracked by issue 12. |
-| `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | Selected authored ownership and source-fret cases agree after excluding display duration and playback pitch; complete cross-format grace coverage is tracked by issue 12. |
-| `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | The canonical contract inventories these fields; a lossless semantic model is tracked by issue 12. |
+| `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix accounts for score fields and fixtures. Exact remaining corpus differences are tracked by issue 31. |
+| `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix covers duration, exact timing, meter, tuplets, and rests. Exact remaining corpus differences are tracked by issue 31. |
+| `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix covers exact time and finalized graph validation. One remaining exact corpus timing difference is tracked by issue 31. |
+| `staff-ownership` | gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix compares exact ownership paths and compatibility authority. Any new corpus ownership difference must be tracked by issue 31. |
+| `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers authored grace order, ownership, source fret, transitions, and export policy. Exact remaining corpus differences are tracked by issue 31. |
+| `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#22](https://github.com/CaliLuke/go-guitar-pro/issues/22), [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix inventories and tests note and beat fields. Remaining effect gaps are tracked by issues 22 and 31. |
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
-| `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | GPIF HFret values and common harmonic kinds are compared on import and GP8 export; distinctions that the legacy model collapses are tracked by issue 12. |
+| `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | GPIF harmonic kinds and fret values are compared on import and GP8 export. Exact remaining corpus differences are tracked by issue 31. |
 | `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
-| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | GPIF references 1–5 and absent or invalid defaults agree after BPM normalization; authored units, text, visibility, and interpolation remain part of issue 12. |
-| `percussion-articulations` | gp7, gp8 | partial | [#12](https://github.com/CaliLuke/go-guitar-pro/issues/12) | GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI are compared; cross-format semantic integration is tracked by issue 12. |
+| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers tempo authority, values, order, validation, and export policy. Exact remaining corpus differences are tracked by issue 31. |
+| `percussion-articulations` | gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers GPIF articulation identity, notation, playback, validation, and export policy. Exact remaining corpus differences are tracked by issue 31. |
 
 ## Parse diagnostics
 
@@ -85,6 +85,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Asset.DuplicateID` | `score-core` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Asset.EmptyID` | `score-core` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.BackingTrack.AssetId.Reference` | `score-core` | `invalid-data` | The source reference must resolve to an object of the requested type. |
+| `GPIF.BackingTrack.EmbeddedFile.Empty` | `score-core` | `invalid-data` | An enabled local backing-track asset must contain audio bytes. |
+| `GPIF.BackingTrack.EmbeddedFile.Reference` | `score-core` | `invalid-data` | An enabled local backing-track asset must name an archive entry that exists. |
+| `GPIF.BackingTrack.FramePadding.Invalid` | `score-core` | `invalid-data` | Backing-track frame padding must be a signed 64-bit frame count. |
 | `GPIF.Bar.DuplicateID` | `staff-ownership` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Bar.EmptyID` | `staff-ownership` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Bar.Voices.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
@@ -180,6 +183,12 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Voice.Beats.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Voice.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Voice.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
+| `GPIF.Beat.Property.ConflictingDuplicate` | `note-and-beat-semantics` | `invalid-data` | Repeated beat properties must not provide conflicting authored values. |
+| `GPIF.Note.Property.ConflictingDuplicate` | `note-and-beat-semantics` | `invalid-data` | Repeated note properties must not provide conflicting authored values. |
+| `GPIF.Staff.Property.ConflictingDuplicate` | `staff-ownership` | `invalid-data` | Repeated staff properties must not provide conflicting authored values. |
+| `GPIF.Track.AudioEngineState.InvalidValue` | `score-core` | `unknown-syntax` | The source audio-engine state must be MIDI or RSE. |
+| `GPIF.Track.Property.ConflictingDuplicate` | `staff-ownership` | `invalid-data` | Repeated track properties must not provide conflicting authored values. |
+| `GPIF.Track.Sound.Channel` | `score-core` | `unsupported-feature` | The public sound model has no destination for a per-sound MIDI channel. |
 
 ## Public model inventory
 
@@ -303,6 +312,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditDiagnostics:beat.Fadding` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `unsupported-feature` | The audit classifies each fading value before the importer maps it. |
 | `gpifApplyBeatEffects:b.Ottavia` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps each supported octave-shift value. |
 | `gpifApplyBeatEffects:b.Arpeggio` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps each supported arpeggio direction. |
+| `gpifAuditDiagnostics:track.AudioEngineState` | `score-core` | 3 | `audio-engine-state` | `unknown-syntax` | The audit accepts the two known playback engines and reports any other token. |
 
 ## Behavioral contracts
 
@@ -335,3 +345,5 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |
+| `structural-export-resilience` | `staff-ownership` | `TestSemanticMatrixM25StructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
+| `audio-engine-state` | `score-core` | `TestSemanticMatrixM20SourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |

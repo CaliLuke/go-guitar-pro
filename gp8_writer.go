@@ -667,6 +667,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	red := (uint32(track.Color) >> 16) & 0xff
 	green := (uint32(track.Color) >> 8) & 0xff
 	blue := uint32(track.Color) & 0xff
+	primaryChannel := int(channel.Channel % 16)
 	result := gpifTrack{
 		ID:    strconv.Itoa(trackIndex),
 		Name:  track.Name,
@@ -674,7 +675,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		Sounds: gpifSounds{Sounds: []gpifSound{{
 			Name:    track.Name,
 			Program: int(channel.Instrument),
-			Channel: int(channel.Channel % 16),
+			Channel: &primaryChannel,
 		}}},
 		RSE: &gpifTrackRSE{ChannelStrip: gpifChannelStrip{
 			Parameters: gp8ChannelStripParameters(channel),
@@ -696,7 +697,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		for _, sound := range track.Sounds {
 			result.Sounds.Sounds = append(result.Sounds.Sounds, gpifSound{
 				Name: sound.Name, Label: sound.Label, Path: sound.Path, Role: sound.Role,
-				Program: int(sound.Program), Channel: int(channel.Channel % 16),
+				Program: int(sound.Program), Channel: &primaryChannel,
 			})
 		}
 	}

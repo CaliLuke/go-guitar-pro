@@ -107,7 +107,7 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 		{
 			name: "invalid backing asset reference",
 			mutate: func(gpif string) string {
-				return strings.Replace(gpif, "<MasterTrack>", "<BackingTrack><AssetId>missing-asset</AssetId></BackingTrack><MasterTrack>", 1)
+				return strings.Replace(gpif, "<MasterTrack>", "<BackingTrack><Enabled>true</Enabled><Source>Local</Source><AssetId>missing-asset</AssetId><FramePadding>0</FramePadding></BackingTrack><MasterTrack>", 1)
 			},
 			kind: ParseDiagnosticInvalidData, feature: "score-core", pathContains: "AssetId",
 		},

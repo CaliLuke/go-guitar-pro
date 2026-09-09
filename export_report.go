@@ -111,7 +111,14 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		add("gp8.omit.score-lyrics", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit binary score lyrics")
 	}
 	for _, point := range song.SyncPoints {
-		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, ScoreLocation{Measure: point.Bar}, "GP8 writer does not emit this backing-track sync point")
+		location := ScoreLocation{Measure: point.Bar}
+		if point.AudioFrame != AudioFrame(point.FrameOffset) {
+			add("gp8.normalize.sync-point-frame-authority", "timing", ExportDispositionNormalized, location, "the checked audio frame takes precedence over its conflicting legacy frame offset")
+		}
+		if legacyPosition, err := NewBarPositionFromFloat64(point.Position); err == nil && point.BarPosition.Ratio().Compare(legacyPosition.Ratio()) != 0 {
+			add("gp8.normalize.sync-point-position-authority", "timing", ExportDispositionNormalized, location, "the exact bar position takes precedence over its conflicting legacy position")
+		}
+		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit this backing-track sync point")
 	}
 	for _, automation := range song.VolumeAutomations {
 		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "GP8 writer does not emit this track volume automation")

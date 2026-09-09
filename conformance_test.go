@@ -676,6 +676,7 @@ func selectConformanceFeatures(score any, features []string) any {
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{
 				"status": true, "dynamic": true, "text": true, "string": true, "fret": true,
 				"kind": true, "durationPercent": true, "tieOrigin": true, "tieDestination": true, "effects": true,
+				"octave": true,
 			}, nil)
 		default:
 			panic("unhandled conformance feature " + feature)
@@ -803,7 +804,7 @@ func normalizeGoScore(song *Song) any {
 			"start":            header.Start - DurationQuarterTime,
 			"timeSignature":    []any{header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value},
 			"repeatStart":      header.RepeatOpen,
-			"repeatCount":      max(0, int(header.RepeatClose)),
+			"repeatCount":      normalizeGoRepeatCount(header.RepeatClose),
 			"alternateEndings": header.RepeatAlternative,
 			"tripletFeel":      goTripletFeel(header.TripletFeel),
 			"pickup":           index == 0 && song.Anacrusis,
@@ -866,7 +867,7 @@ func normalizeGoPercussionArticulations(articulations []PercussionArticulation) 
 		if articulation.TechniqueSymbol != "" {
 			techniqueSymbol = strings.ToLower(articulation.TechniqueSymbol)
 		}
-		inputMIDINumber := 0
+		var inputMIDINumber any
 		if len(articulation.InputMIDINumbers) > 0 {
 			inputMIDINumber = articulation.InputMIDINumbers[0]
 		}
@@ -898,14 +899,19 @@ func normalizeGoStaves(song *Song, trackIndex int) []any {
 	}
 	result := make([]any, 0, len(staves))
 	for staffIndex := range staves {
-		staff := &staves[staffIndex]
+		staff := staves[staffIndex]
+		staff.PercussionTrack = staff.PercussionTrack || track.PercussionTrack
+		tuning := normalizeGoTuning(staff.Strings)
+		if staff.PercussionTrack {
+			tuning = []any{}
+		}
 		result = append(result, map[string]any{
 			"index":                     staffIndex,
 			"capo":                      track.Offset,
 			"percussion":                staff.PercussionTrack,
 			"standardNotationLineCount": staff.StandardNotationLineCount,
-			"tuning":                    normalizeGoTuning(staff.Strings),
-			"bars":                      normalizeGoBars(song, track, staff),
+			"tuning":                    tuning,
+			"bars":                      normalizeGoBars(song, track, &staff),
 		})
 	}
 	return result
@@ -937,9 +943,11 @@ func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 			}
 			voices = append(voices, map[string]any{"index": voiceIndex, "beats": beats})
 		}
-		result = append(result, map[string]any{
-			"index": measureIndex, "clef": goClef(measure.Clef), "voices": voices,
-		})
+		clef := goClef(measure.Clef)
+		if staff.PercussionTrack {
+			clef = "neutral"
+		}
+		result = append(result, map[string]any{"index": measureIndex, "clef": clef, "voices": voices})
 	}
 	return result
 }
@@ -968,6 +976,7 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 		"tuplet":         []any{normalizedTuplet(beat.Duration.TupletEnters), normalizedTuplet(beat.Duration.TupletTimes)},
 		"dynamic":        goDynamic(beat.Dynamics),
 		"text":           beat.Text,
+		"octave":         goOctave(beat.Octave),
 		"hairpin":        goHairpin(beat.Effect.Hairpin),
 		"tremoloPicking": goTremoloPicking(beat.Notes),
 		"notes":          notes,
@@ -976,18 +985,22 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 
 func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
 	fret := any(note.Value)
+	stringNumber := note.String
 	articulation := any(nil)
-	midi := note.Value
+	midi := int(note.Value)
 	if staff.PercussionTrack {
 		fret = nil
+		stringNumber = -1
 		if note.HasPercussionArticulation {
 			articulation = note.PercussionArticulation
 			if note.PercussionArticulation >= 0 && note.PercussionArticulation < len(track.PercussionArticulations) {
-				midi = int16(track.PercussionArticulations[note.PercussionArticulation].OutputMIDINumber)
+				midi = track.PercussionArticulations[note.PercussionArticulation].OutputMIDINumber
 			}
 		}
+	} else if note.String == 0 {
+		fret = nil
 	} else if note.String > 0 && int(note.String) <= len(staff.Strings) {
-		midi += int16(staff.Strings[note.String-1].Value)
+		midi += int(staff.Strings[note.String-1].Value) + int(track.Offset)
 	}
 	graces := make([]any, 0, len(note.Effect.Graces))
 	for _, grace := range note.Effect.Graces {
@@ -1006,7 +1019,7 @@ func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
 		percussionInput = note.Value
 	}
 	return map[string]any{
-		"string": note.String, "fret": fret, "percussionArticulation": articulation, "percussionInput": percussionInput, "midi": midi,
+		"string": stringNumber, "fret": fret, "percussionArticulation": articulation, "percussionInput": percussionInput, "midi": midi,
 		"kind": goNoteKind(note.Kind), "dynamic": goDynamic(note.Velocity), "tieOrigin": note.TieOrigin,
 		"durationPercent": note.DurationPercent,
 		"tieDestination":  note.Kind == NoteTypeTie,
@@ -1087,7 +1100,11 @@ func goTremoloPicking(notes []Note) any {
 }
 
 func goDynamic(velocity int16) string {
-	index := (velocity - MinVelocity) / VelocityIncrement
+	delta := velocity - MinVelocity
+	if delta < 0 || delta%VelocityIncrement != 0 {
+		return strconv.Itoa(int(velocity))
+	}
+	index := delta / VelocityIncrement
 	names := []string{"ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"}
 	if index < 0 || int(index) >= len(names) {
 		return strconv.Itoa(int(velocity))
@@ -1101,8 +1118,10 @@ func goBeatStatus(status BeatStatus) string {
 		return "empty"
 	case BeatStatusRest:
 		return "rest"
-	default:
+	case BeatStatusNormal:
 		return "normal"
+	default:
+		return fmt.Sprintf("unknown:%d", status)
 	}
 }
 
@@ -1114,8 +1133,10 @@ func goNoteKind(kind NoteType) string {
 		return "tie"
 	case NoteTypeRest:
 		return "rest"
-	default:
+	case NoteTypeNormal:
 		return "normal"
+	default:
+		return fmt.Sprintf("unknown:%d", kind)
 	}
 }
 
@@ -1125,19 +1146,23 @@ func goHairpin(hairpin Hairpin) string {
 		return "crescendo"
 	case HairpinDiminuendo:
 		return "decrescendo"
-	default:
+	case HairpinNone:
 		return "none"
+	default:
+		return fmt.Sprintf("unknown:%d", hairpin)
 	}
 }
 
 func goTripletFeel(feel TripletFeel) string {
 	switch feel {
 	case TripletFeelEighth:
-		return "eighth"
+		return "triplet-8th"
 	case TripletFeelSixteenth:
-		return "sixteenth"
-	default:
+		return "triplet-16th"
+	case TripletFeelNone:
 		return "none"
+	default:
+		return fmt.Sprintf("unknown:%d", feel)
 	}
 }
 
@@ -1149,8 +1174,27 @@ func goClef(clef MeasureClef) string {
 		return "tenor"
 	case MeasureClefAlto:
 		return "alto"
-	default:
+	case MeasureClefTreble:
 		return "treble"
+	default:
+		return fmt.Sprintf("unknown:%d", clef)
+	}
+}
+
+func goOctave(octave Octave) string {
+	switch octave {
+	case OctaveNone:
+		return "none"
+	case OctaveOttava:
+		return "8va"
+	case OctaveQuindicesima:
+		return "15ma"
+	case OctaveOttavaBassa:
+		return "8vb"
+	case OctaveQuindicesimaBassa:
+		return "15mb"
+	default:
+		return fmt.Sprintf("unknown:%d", octave)
 	}
 }
 
@@ -1200,8 +1244,10 @@ func goHarmonicKind(kind HarmonicType) string {
 		return "pinch"
 	case HarmonicTypeSemi:
 		return "semi"
-	default:
+	case 0:
 		return "none"
+	default:
+		return fmt.Sprintf("unknown:%d", kind)
 	}
 }
 
@@ -1213,8 +1259,10 @@ func goGraceTransition(transition GraceEffectTransition) string {
 		return "bend"
 	case GraceEffectTransitionHammer:
 		return "hammer"
-	default:
+	case GraceEffectTransitionNone:
 		return "none"
+	default:
+		return fmt.Sprintf("unknown:%d", transition)
 	}
 }
 
@@ -1232,9 +1280,18 @@ func goSlide(slide SlideType) string {
 		return "out-down"
 	case SlideOutUpwards:
 		return "out-up"
-	default:
+	case SlideNone:
 		return "none"
+	default:
+		return fmt.Sprintf("unknown:%d", slide)
 	}
+}
+
+func normalizeGoRepeatCount(repeatClose int8) int {
+	if repeatClose < 0 {
+		return 0
+	}
+	return int(repeatClose) + 1
 }
 
 func conformanceExportSong() *Song {

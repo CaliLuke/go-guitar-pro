@@ -90,6 +90,16 @@ Refresh expected snapshots only after classifying every changed path in
 ALPHATAB_CONFORMANCE=1 ALPHATAB_CONFORMANCE_UPDATE=1 go test -run '^TestAlphaTab' .
 ```
 
+Refresh the whole-corpus receipt with:
+
+```sh
+ALPHATAB_CONFORMANCE=1 ALPHATAB_CORPUS_UPDATE=1 go test -run '^TestSemanticMatrixM23WholeCorpusAccounting$' .
+```
+
+This command retains classifications only for unchanged fixture, difference,
+and semantic paths. The strict run fails until each new or changed difference
+has a narrow reason and an open issue.
+
 The contract records authored structure and semantics. AlphaTab grace beats are
 normalized onto their owning note, and their raw source fret is compared with
 Go's `GraceEffect.RawFret`. AlphaTab's fixed display duration and derived

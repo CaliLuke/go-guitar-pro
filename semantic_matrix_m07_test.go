@@ -25,6 +25,7 @@ func runSemanticMatrixM07MasterBars(run *semanticMatrixRun) {
 	song := semanticM07Song(t)
 	headers := song.MeasureHeaders
 
+	run.Field("Song.MeasureHeaders", len(headers), 4)
 	run.Field("MeasureHeader.Number", []uint16{headers[0].Number, headers[1].Number, headers[2].Number, headers[3].Number}, []uint16{1, 2, 3, 4})
 	run.Field("MeasureHeader.KeySignature", []KeySignature{headers[0].KeySignature, headers[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
 	run.Field("KeySignature.Key", []int8{headers[0].KeySignature.Key, headers[2].KeySignature.Key}, []int8{-7, 7})

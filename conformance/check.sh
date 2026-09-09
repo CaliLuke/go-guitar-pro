@@ -33,4 +33,4 @@ node "$CONFORMANCE/verify.mjs"
 node "$CONFORMANCE/sync-upstream-inventory.mjs" --check
 go test -count=1 -run '^TestSemanticContractInventory$' "$ROOT"
 node "$CONFORMANCE/sensitivity.mjs"
-ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestAlphaTab' "$ROOT"
+ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestAlphaTab|TestSemanticMatrixM23WholeCorpusAccounting$)' "$ROOT"

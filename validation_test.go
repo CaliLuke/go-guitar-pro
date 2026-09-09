@@ -35,6 +35,7 @@ func TestFinalizeSongIsIdempotentAndAcceptsSpecialStructures(t *testing.T) {
 	grace.isGrace = true
 	song := Song{
 		Anacrusis:      true,
+		Tempo:          120,
 		MeasureHeaders: []MeasureHeader{defaultMeasureHeader(), defaultMeasureHeader()},
 		Tracks: []Track{{ChannelIndex: -1, Measures: []Measure{
 			{HeaderIndex: 0, Voices: []Voice{{Beats: []Beat{grace}}}},

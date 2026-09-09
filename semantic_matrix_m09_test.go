@@ -42,6 +42,7 @@ func runSemanticMatrixM09NoteRepresentation(run *semanticMatrixRun) {
 	if err := FinalizeSong(song); err != nil {
 		t.Fatal(err)
 	}
+	run.Field("Beat.Notes", len(song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes), 1)
 	for index := range notes {
 		note := song.Tracks[0].Measures[0].Voices[0].Beats[index].Notes[0]
 		run.Field("Note.Value", note.Value, notes[index].Value)
@@ -52,6 +53,7 @@ func runSemanticMatrixM09NoteRepresentation(run *semanticMatrixRun) {
 		run.Field("Note.DurationPercent", note.DurationPercent, notes[index].DurationPercent)
 		run.Field("Note.HasPercussionArticulation", note.HasPercussionArticulation, false)
 		run.Field("Note.PercussionArticulation", note.PercussionArticulation, 0)
+		run.Field("Note.Velocity", note.Velocity, Forte)
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.omit.swap-accidentals", "gp8.omit.note-duration-percent"} {

@@ -17,6 +17,7 @@ const ledger = process.env.SEMANTIC_LEDGER_OVERLAY
   : read('conformance/feature-ledger.json');
 const cases = read('conformance/cases.json');
 const fixtures = read('conformance/fixture-inventory.json');
+const corpus = read('conformance/corpus-snapshot.json');
 const upstream = read('conformance/upstream-inventory.json');
 
 if (ledger.schemaVersion !== 4) {
@@ -277,6 +278,39 @@ for (const item of cases.inputCases) {
   const fixture = fixtureByPath.get(item.fixture);
   if (!fixture?.semanticSnapshot) fail(`${item.fixture} is not marked as a semantic snapshot fixture`);
   if (JSON.stringify(fixture.features) !== JSON.stringify(item.features)) fail(`${item.fixture} feature inventory is stale`);
+}
+
+if (corpus.schemaVersion !== 2) fail(`unsupported corpus snapshot schema ${corpus.schemaVersion}; want 2`);
+if (corpus.oracle !== `${oracle.package}@${oracle.version}`) fail('corpus snapshot oracle does not match oracle.json');
+if (!Array.isArray(corpus.fixtures) || corpus.fixtures.length !== fixtures.fixtures.length) {
+  fail('corpus snapshot fixture count does not match the fixture inventory');
+}
+const corpusPaths = new Set();
+for (let index = 0; index < corpus.fixtures.length; index++) {
+  const receipt = corpus.fixtures[index];
+  const fixture = fixtures.fixtures[index];
+  if (receipt.path !== fixture.path) fail(`corpus snapshot order changed at ${fixture.path}`);
+  if (corpusPaths.has(receipt.path)) fail(`duplicate corpus snapshot receipt ${receipt.path}`);
+  corpusPaths.add(receipt.path);
+  if (JSON.stringify(receipt.features) !== JSON.stringify(fixture.features)) {
+    fail(`${receipt.path} corpus feature mapping is stale`);
+  }
+  for (const diagnostic of receipt.diagnostics ?? []) {
+    if (!diagnostic.code || !allowedDiagnosticDispositions.has(diagnostic.kind) || !Number.isInteger(diagnostic.count) || diagnostic.count < 1 || !/^[0-9a-f]{64}$/.test(diagnostic.locationsSha256 ?? '')) {
+      fail(`${receipt.path} has an invalid counted diagnostic receipt`);
+    }
+  }
+  for (const difference of receipt.differences ?? []) {
+    if (!fixture.features.includes(difference.feature)) {
+      fail(`${receipt.path} difference ${difference.path} is outside its declared feature slices`);
+    }
+    if (!difference.path || !difference.semanticPath || !difference.reason) {
+      fail(`${receipt.path} has an incomplete exact semantic difference`);
+    }
+    if (!Array.isArray(difference.issues) || difference.issues.length === 0 || difference.issues.some(issue => !Number.isInteger(issue) || issue < 1)) {
+      fail(`${receipt.path} difference ${difference.semanticPath} has no issue tracking`);
+    }
+  }
 }
 
 for (const group of ['testCases', 'importerCases', 'modelFields', 'modelSymbols']) {

@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
-    "complete": false,
+    "complete": true,
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -77,16 +77,36 @@
       {"id":"M17-BINARY-MIX-TABLE","family":"M17","test":"TestSemanticMatrixM17BinaryMixTable","formats":["GP4"],"stages":["import"],"values":["distinct values and durations for every mix-table item","all-tracks flags","tempo and instrument exceptions"],"oracle":"Hand-authored binary GP4 mix-table bytes.","limitations":[]},
       {"id":"M18-LYRIC-SCOPES","family":"M18","test":"TestSemanticMatrixM18LyricScopes","formats":["GP8","programmatic"],"stages":["programmatic","preflight","export","policy","read-only"],"values":["distinct score, track, and rest text","multiple ordered lines","empty line","punctuation and Unicode","offsets 0, 2, and 4","score track choice"],"oracle":"Independent GPIF lyric and beat-text decoding plus GP8 reimport.","limitations":["GP8 omits binary score lyrics but preserves GPIF track lyrics and beat text."]},
       {"id":"M18-BINARY-SCORE-LYRICS","family":"M18","test":"TestSemanticMatrixM18BinaryScoreLyrics","formats":["GP4","GP5"],"stages":["import"],"values":["track choice 2","five ordered lines","empty text","distinct starting measures and line numbers"],"oracle":"Hand-authored little-endian binary lyric record.","limitations":[]},
-      {"id":"M18-SOURCE-LYRIC-DISPATCH","family":"M18","test":"TestSemanticMatrixM18SourceLyricsDispatch","formats":["GP6","GP7","GP8"],"stages":["import","policy"],"values":["dispatched true","dispatched false","ordered source line and offset"],"oracle":"Hand-authored GPIF attribute and selected strict-kind behavior.","limitations":["The public lyric model does not retain the GPIF dispatched state, so false is diagnosed as a lossy source projection."]}
+      {"id":"M18-SOURCE-LYRIC-DISPATCH","family":"M18","test":"TestSemanticMatrixM18SourceLyricsDispatch","formats":["GP6","GP7","GP8"],"stages":["import","policy"],"values":["dispatched true","dispatched false","ordered source line and offset"],"oracle":"Hand-authored GPIF attribute and selected strict-kind behavior.","limitations":["The public lyric model does not retain the GPIF dispatched state, so false is diagnosed as a lossy source projection."]},
+      {"id":"M19-BACKING-ASSETS-SYNC","family":"M19","test":"TestSemanticMatrixM19BackingAssetsAndSyncPoints","formats":["GP7","GP8"],"stages":["import","oracle"],"values":["two assets and two sync points","selected and unused embedded bytes","local and external sources","negative frame padding","frame and position endpoints","distinct tempos and visibility"],"oracle":"Independent ZIP entries and XML decoding with exact 44.1 kHz frame arithmetic.","limitations":[]},
+      {"id":"M19-SOURCE-DIAGNOSTICS","family":"M19","test":"TestSemanticMatrixM19BackingSourceDiagnostics","formats":["GP7","GP8"],"stages":["import","policy"],"values":["missing and malformed padding","missing, empty, duplicate, and broken asset references","invalid frame, bar, position, occurrence, and tempo values"],"oracle":"Hand-authored GPIF and archive entries with stable source locations and selected strict-kind refusal.","limitations":[]},
+      {"id":"M19-VALIDATION-EXPORT-POLICY","family":"M19","test":"TestSemanticMatrixM19ValidationAndExportPolicy","formats":["GP8","programmatic"],"stages":["programmatic","validation","preflight","export","policy"],"values":["frame and exact-position authority conflicts","invalid numeric boundaries","point-scoped omissions","matching and unrelated allowlists"],"oracle":"Shared validation, independent GPIF absence checks, and identical preflight/export decisions.","limitations":["GP8 export omits backing assets and sync points."]},
+      {"id":"M20-SOURCE-AUDIT","family":"M20","test":"TestSemanticMatrixM20SourceAudit","formats":["GP5","GP6","GP7","GP8"],"stages":["import","oracle","policy"],"values":["every discovered GPIF wire field and source-dispatch branch","unknown element, attribute, enum, flag, and type","missing, malformed, non-finite, duplicate, dangling, wrong-scope, and conflicting values","reused definitions","binary diagnostic offsets","strict-kind filtering"],"oracle":"Inventory-derived XML round trip, exact dispatch reconciliation, hand-authored malformed inputs, and binary offsets.","limitations":[]},
+      {"id":"M21-SHARED-VALIDATION","family":"M21","test":"TestSemanticMatrixM21SharedValidation","formats":["GP8","programmatic"],"stages":["validation","preflight","export","policy"],"values":["channel, sound, articulation, measure, duration, tempo, and automation invariants","NaN and infinity","exact diagnostic locations"],"oracle":"One-invariant mutations with identical validation, preflight, and export refusal receipts.","limitations":[]},
+      {"id":"M21-AUTHORED-DERIVED","family":"M21","test":"TestSemanticMatrixM21AuthoredAndDerivedDistinction","formats":["GP8","programmatic"],"stages":["validation","export"],"values":["header, track, staff, and voice ownership","legacy and exact beat starts","omitted derived starts"],"oracle":"Direct authored-versus-derived diagnostic classification and successful derived-field export.","limitations":[]},
+      {"id":"M21-FINALIZATION","family":"M21","test":"TestSemanticMatrixM21FinalizeContracts","formats":["programmatic"],"stages":["finalization","validation","read-only"],"values":["pickup and full first bars","multiple tracks, staves, voices, and durations","deep second-pass snapshot"],"oracle":"Exact expected ownership and timing plus a deep snapshot including private rational terms.","limitations":[]},
+      {"id":"M21-READ-ONLY","family":"M21","test":"TestSemanticMatrixM21ReadOnlyAndFileContracts","formats":["GP8","programmatic"],"stages":["validation","preflight","export","policy","read-only"],"values":["deep nested pointers, slices, maps, and rational values","existing and absent output files","failed strict export"],"oracle":"Deterministic deep graph snapshots and direct filesystem contents.","limitations":[]},
+      {"id":"M22-MULTI-STAFF-CONTEXT","family":"M22","test":"TestSemanticMatrixM22MultiStaffContext","formats":["GP8","programmatic"],"stages":["programmatic","validation","export","oracle"],"values":["two-staff track followed by one-staff track","distinct clefs, tunings, offsets, and notes"],"oracle":"GP8 reimport with exact ordered staff ownership and tuning paths.","limitations":[]},
+      {"id":"M22-PICKUP-TUPLET-TEMPO","family":"M22","test":"TestSemanticMatrixM22PickupTupletTempo","formats":["GP8","programmatic"],"stages":["programmatic","finalization","validation","export","oracle"],"values":["pickup","seven dotted 7:4 tuplets","independent voice","opening and later fractional tempo"],"oracle":"Exact rational starts, independent GPIF automation extraction, and GP8 reimport.","limitations":[]},
+      {"id":"M22-CHORD-OCCURRENCE","family":"M22","test":"TestSemanticMatrixM22ChordOccurrence","formats":["GP8","programmatic"],"stages":["import","programmatic","preflight","export","policy"],"values":["shared source definition","isolated occurrence edits","strings, first fret, fingerings, and barres"],"oracle":"Independent occurrence identity, GP8 reimport, and explicit omission receipts.","limitations":["GP8 omits chord fingerings and barres."]},
+      {"id":"M22-GRACE-COMBINATIONS","family":"M22","test":"TestSemanticMatrixM22GraceCombinations","formats":["GP8","programmatic"],"stages":["programmatic","export","oracle"],"values":["grace with tie, bend, and hammer","percussion grace with articulation identity, dead state, and muted track"],"oracle":"GP8 reimport with exact combined note, grace, and percussion fields.","limitations":[]},
+      {"id":"M22-EFFECTS-DYNAMICS","family":"M22","test":"TestSemanticMatrixM22EffectsAndDynamics","formats":["GP8","programmatic"],"stages":["programmatic","finalization","export","oracle"],"values":["harmonic, bend, slide, and hammer on one note","rest and chord dynamics","both hairpin directions"],"oracle":"GP8 reimport with exact combined note and beat effects.","limitations":[]},
+      {"id":"M22-LYRICS-PLAYBACK-AUTOMATION","family":"M22","test":"TestSemanticMatrixM22LyricsPlaybackAutomation","formats":["GP8","programmatic"],"stages":["programmatic","preflight","export","policy","oracle"],"values":["track lyrics","two sounds and a sound change","mute plus solo","volume automation"],"oracle":"GP8 reimport with explicit playback normalization and automation omission receipts.","limitations":["GP8 normalizes simultaneous mute and solo and omits volume automation."]},
+      {"id":"M22-BACKING-SYNC-TEMPO","family":"M22","test":"TestSemanticMatrixM22BackingSyncTempo","formats":["GP8","programmatic"],"stages":["programmatic","preflight","export","policy","oracle"],"values":["fractional opening tempo","backing asset","exact half-bar sync point","frame padding"],"oracle":"Independent GPIF tempo extraction and GP8 reimport with explicit backing-data absence.","limitations":["GP8 omits backing assets and sync points."]},
+      {"id":"M22-SELECTIVE-ALLOWLIST","family":"M22","test":"TestSemanticMatrixM22SelectiveAllowlist","formats":["GP8","programmatic"],"stages":["programmatic","preflight","export","policy","oracle"],"values":["preserved title","omitted writer","omitted duration percentage","each single and complete allowlist"],"oracle":"Exact loss-entry sets, zero-byte refusals, and GP8 reimport.","limitations":["GP8 omits Writer and note duration percentage."]},
+      {"id":"M22-LEGACY-EDIT-AUTHORITY","family":"M22","test":"TestSemanticMatrixM22LegacyEditAuthority","formats":["GP5","GP8","programmatic"],"stages":["import","programmatic","finalization","preflight","export","policy"],"values":["legacy tempo edit after binary import","stale semantic tempo","explicit compatibility normalization"],"oracle":"GP8 reimport proves that the explicit legacy edit wins after reported normalization.","limitations":[]},
+      {"id":"M23-WHOLE-CORPUS","family":"M23","test":"TestSemanticMatrixM23WholeCorpusAccounting","formats":["GP3","GP4","GP5","GP6","GP7","GP8"],"stages":["import","oracle","policy"],"values":["all 313 inventoried fixtures","every declared feature slice","counted import diagnostic signatures","exact semantic paths and values","narrow issue-linked differences"],"oracle":"One batched pinned AlphaTab 1.8.4 run compared with every permissive Go parse.","limitations":["Playback and rendering state outside each fixture declared authored feature slice is not compared."]},
+      {"id":"M24-ORACLE-CORRECTNESS","family":"M24","test":"TestSemanticMatrixM24OracleCorrectness","formats":["GP3","GP4","GP5","GP6","GP7","GP8"],"stages":["oracle"],"values":["every compared enum sentinel and unknown value","omitted versus explicit zero","absolute and stringed pitch","capo-aware MIDI","repeat-count convention","ownership swap","octave change"],"oracle":"Independent hard-coded adapter expectations plus mutations that must produce exact comparator differences.","limitations":["AlphaTab playback and rendering values outside the selected authored projections are not compared."]},
+      {"id":"M25-STRUCTURAL-RESILIENCE","family":"M25","test":"TestSemanticMatrixM25StructuralResilience","formats":["GP3","GP4","GP5","GP6","GP7","GP8","programmatic"],"stages":["import","programmatic","validation","export","policy","oracle"],"values":["19 deterministic semantic mutants","malformed GPIF structures","valid one-to-three track, staff, voice, and beat graphs","equivalent ZIP packaging","duplicated note definitions"],"oracle":"Every deterministic mutant must be killed, and structural fuzz and metamorphic campaigns must preserve their declared invariants.","limitations":["Mutation and fuzz campaigns increase fault-detection evidence but cannot prove that the implementation has no defects."]}
     ],
     "fieldCases": {
-      "Song.Name":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
+      "Song.Name":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT","M22-SELECTIVE-ALLOWLIST"],
       "Song.Subtitle":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Artist":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Album":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Words":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Author":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT","M01-ORACLE-METADATA"],
-      "Song.Writer":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
+      "Song.Writer":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT","M22-SELECTIVE-ALLOWLIST"],
       "Song.Transcriber":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Copyright":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
       "Song.Instructions":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
@@ -107,6 +127,7 @@
       "Clipboard.SubBarCopy":["M01-BINARY-CLIPBOARD"],
       "Song.Key":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
       "Song.TripletFeel":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
+      "Song.MeasureHeaders":["M07-MASTER-BARS"],
       "Song.PageSetup":["M02-DISPLAY-EXPORT","M02-PAGE-SETUP-IMPORT"],
       "PageSetup.Words":["M02-DISPLAY-EXPORT","M02-PAGE-SETUP-IMPORT"],
       "PageSetup.Music":["M02-DISPLAY-EXPORT","M02-PAGE-SETUP-IMPORT"],
@@ -154,30 +175,30 @@
       "BeatDisplay.BreakSecondary":["M02-DISPLAY-EXPORT"],
       "BeatDisplay.BreakSecondaryTuplet":["M02-DISPLAY-EXPORT"],
       "BeatDisplay.ForceBracket":["M02-DISPLAY-EXPORT"],
-      "Song.Tracks":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Song.Tracks":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY","M22-MULTI-STAFF-CONTEXT"],
       "Track.Name":["M03-OWNERSHIP-IMPORT"],
       "Track.Number":["M03-OWNERSHIP-IMPORT"],
-      "Track.Staves":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Track.Staves":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY","M22-MULTI-STAFF-CONTEXT"],
       "Track.Measures":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
       "Track.Strings":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY","M04-INSTRUMENT-CONTEXT"],
       "Staff.Measures":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
-      "Staff.Strings":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Staff.Strings":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY","M22-MULTI-STAFF-CONTEXT"],
       "Measure.Number":["M03-OWNERSHIP-IMPORT"],
-      "Measure.TrackIndex":["M03-OWNERSHIP-IMPORT"],
-      "Measure.StaffIndex":["M03-OWNERSHIP-IMPORT"],
+      "Measure.TrackIndex":["M03-OWNERSHIP-IMPORT","M21-FINALIZATION"],
+      "Measure.StaffIndex":["M03-OWNERSHIP-IMPORT","M21-FINALIZATION"],
       "Measure.HeaderIndex":["M03-OWNERSHIP-IMPORT"],
-      "Measure.Voices":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
-      "Voice.MeasureIndex":["M03-OWNERSHIP-IMPORT"],
+      "Measure.Voices":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY","M22-PICKUP-TUPLET-TEMPO"],
+      "Voice.MeasureIndex":["M03-OWNERSHIP-IMPORT","M21-FINALIZATION"],
       "Voice.Beats":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
       "GuitarString.Number":["M04-INSTRUMENT-CONTEXT"],
       "GuitarString.Value":["M04-INSTRUMENT-CONTEXT"],
-      "Track.Offset":["M04-INSTRUMENT-CONTEXT"],
+      "Track.Offset":["M04-INSTRUMENT-CONTEXT","M22-MULTI-STAFF-CONTEXT"],
       "Track.FretCount":["M04-INSTRUMENT-CONTEXT"],
       "Track.Port":["M04-INSTRUMENT-CONTEXT"],
       "Track.TwelveStringedGuitarTrack":["M04-INSTRUMENT-CONTEXT"],
       "Track.BanjoTrack":["M04-INSTRUMENT-CONTEXT"],
       "Track.PercussionTrack":["M04-INSTRUMENT-CONTEXT","M16-PERCUSSION-IDENTITY"],
-      "Track.PercussionArticulations":["M16-PERCUSSION-IDENTITY"],
+      "Track.PercussionArticulations":["M16-PERCUSSION-IDENTITY","M22-GRACE-COMBINATIONS"],
       "Staff.PercussionTrack":["M04-INSTRUMENT-CONTEXT","M16-PERCUSSION-IDENTITY"],
       "Staff.StandardNotationLineCount":["M04-INSTRUMENT-CONTEXT","M16-PERCUSSION-IDENTITY"],
       "Song.Channels":["M05-PLAYBACK-ROUTING"],
@@ -193,12 +214,12 @@
       "MidiChannel.Phaser":["M05-PLAYBACK-ROUTING"],
       "MidiChannel.Tremolo":["M05-PLAYBACK-ROUTING"],
       "Track.ChannelIndex":["M05-PLAYBACK-ROUTING"],
-      "Track.Mute":["M05-PLAYBACK-ROUTING"],
-      "Track.Solo":["M05-PLAYBACK-ROUTING"],
+      "Track.Mute":["M05-PLAYBACK-ROUTING","M22-GRACE-COMBINATIONS","M22-LYRICS-PLAYBACK-AUTOMATION"],
+      "Track.Solo":["M05-PLAYBACK-ROUTING","M22-LYRICS-PLAYBACK-AUTOMATION"],
       "Track.UseRse":["M05-PLAYBACK-ROUTING"],
-      "Track.Sounds":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "Track.SoundAutomations":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "Track.Lyrics":["M18-LYRIC-SCOPES","M18-SOURCE-LYRIC-DISPATCH"],
+      "Track.Sounds":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M22-LYRICS-PLAYBACK-AUTOMATION"],
+      "Track.SoundAutomations":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M22-LYRICS-PLAYBACK-AUTOMATION"],
+      "Track.Lyrics":["M18-LYRIC-SCOPES","M18-SOURCE-LYRIC-DISPATCH","M22-LYRICS-PLAYBACK-AUTOMATION"],
       "TrackLyricLine.Text":["M18-LYRIC-SCOPES"],
       "TrackLyricLine.Offset":["M18-LYRIC-SCOPES"],
       "Track.Rse":["M05-PLAYBACK-ROUTING"],
@@ -225,11 +246,11 @@
       "RseInstrument.Unknown":["M05-PLAYBACK-ROUTING"],
       "RseInstrument.SoundBank":["M05-PLAYBACK-ROUTING"],
       "RseInstrument.EffectNumber":["M05-PLAYBACK-ROUTING"],
-      "Song.InitialTempo":["M06-TEMPO-AUTHORITY"],
-      "Song.Tempo":["M06-TEMPO-AUTHORITY"],
+      "Song.InitialTempo":["M06-TEMPO-AUTHORITY","M22-BACKING-SYNC-TEMPO","M22-LEGACY-EDIT-AUTHORITY"],
+      "Song.Tempo":["M06-TEMPO-AUTHORITY","M22-LEGACY-EDIT-AUTHORITY"],
       "Song.TempoName":["M06-TEMPO-AUTHORITY"],
       "Song.HideTempo":["M06-TEMPO-AUTHORITY"],
-      "Song.TempoAutomations":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
+      "Song.TempoAutomations":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M22-PICKUP-TUPLET-TEMPO"],
       "Song.Lyrics":["M18-LYRIC-SCOPES"],
       "Lyrics.Lines":["M18-LYRIC-SCOPES","M18-BINARY-SCORE-LYRICS"],
       "Lyrics.TrackChoice":["M18-LYRIC-SCOPES","M18-BINARY-SCORE-LYRICS"],
@@ -259,35 +280,37 @@
       "MeasureHeader.Tempo":["M07-MASTER-BARS"],
       "Measure.KeySignature":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES"],
       "Measure.TimeSignature":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES"],
-      "Measure.Clef":["M07-MASTER-BARS"],
+      "Measure.Clef":["M07-MASTER-BARS","M22-MULTI-STAFF-CONTEXT"],
       "Duration.Value":["M08-DURATIONS"],
-      "Duration.Dotted":["M08-DURATIONS"],
+      "Duration.Dotted":["M08-DURATIONS","M22-PICKUP-TUPLET-TEMPO"],
       "Duration.DoubleDotted":["M08-DURATIONS"],
-      "Duration.TupletEnters":["M08-DURATIONS"],
-      "Duration.TupletTimes":["M08-DURATIONS"],
+      "Duration.TupletEnters":["M08-DURATIONS","M22-PICKUP-TUPLET-TEMPO"],
+      "Duration.TupletTimes":["M08-DURATIONS","M22-PICKUP-TUPLET-TEMPO"],
       "Beat.Duration":["M08-DURATIONS"],
-      "Song.Anacrusis":["M08-EXACT-TIMING"],
-      "MeasureHeader.Start":["M08-EXACT-TIMING"],
-      "MeasureHeader.ExactStart":["M08-EXACT-TIMING"],
-      "Measure.Start":["M08-EXACT-TIMING"],
-      "Measure.ExactStart":["M08-EXACT-TIMING"],
-      "Beat.Start":["M08-EXACT-TIMING"],
-      "Beat.ExactStart":["M08-EXACT-TIMING"],
+      "Song.Anacrusis":["M08-EXACT-TIMING","M21-FINALIZATION","M22-PICKUP-TUPLET-TEMPO"],
+      "MeasureHeader.Start":["M08-EXACT-TIMING","M21-FINALIZATION"],
+      "MeasureHeader.ExactStart":["M08-EXACT-TIMING","M21-FINALIZATION","M22-PICKUP-TUPLET-TEMPO"],
+      "Measure.Start":["M08-EXACT-TIMING","M21-FINALIZATION"],
+      "Measure.ExactStart":["M08-EXACT-TIMING","M21-FINALIZATION"],
+      "Beat.Start":["M08-EXACT-TIMING","M21-FINALIZATION"],
+      "Beat.ExactStart":["M08-EXACT-TIMING","M22-PICKUP-TUPLET-TEMPO","M21-FINALIZATION"],
       "Note.Value":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
       "Note.String":["M09-NOTE-REPRESENTATION"],
       "Note.Kind":["M09-NOTE-REPRESENTATION"],
-      "Note.TieOrigin":["M09-NOTE-REPRESENTATION"],
+      "Note.TieOrigin":["M09-NOTE-REPRESENTATION","M22-GRACE-COMBINATIONS"],
       "Note.SwapAccidentals":["M09-NOTE-REPRESENTATION"],
-      "Note.DurationPercent":["M09-NOTE-REPRESENTATION"],
+      "Note.DurationPercent":["M09-NOTE-REPRESENTATION","M22-SELECTIVE-ALLOWLIST"],
       "Note.HasPercussionArticulation":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
       "Note.PercussionArticulation":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
-      "Beat.Status":["M10-BEAT-SEMANTICS"],
-      "Beat.Dynamics":["M10-BEAT-SEMANTICS"],
+      "Note.Velocity":["M09-NOTE-REPRESENTATION"],
+      "Beat.Notes":["M09-NOTE-REPRESENTATION"],
+      "Beat.Status":["M10-BEAT-SEMANTICS","M22-EFFECTS-DYNAMICS"],
+      "Beat.Dynamics":["M10-BEAT-SEMANTICS","M22-EFFECTS-DYNAMICS"],
       "Beat.Text":["M10-BEAT-SEMANTICS","M18-LYRIC-SCOPES"],
       "Beat.Effect":["M10-BEAT-EFFECTS"],
       "Beat.Octave":["M10-BEAT-EFFECTS"],
       "BeatEffects.FadeIn":["M10-BEAT-EFFECTS"],
-      "BeatEffects.Hairpin":["M10-BEAT-EFFECTS"],
+      "BeatEffects.Hairpin":["M10-BEAT-EFFECTS","M22-EFFECTS-DYNAMICS"],
       "BeatEffects.Stroke":["M10-BEAT-EFFECTS"],
       "BeatEffects.HasRasgueado":["M10-BEAT-EFFECTS"],
       "BeatEffects.PickStroke":["M10-BEAT-EFFECTS"],
@@ -304,11 +327,11 @@
       "NoteEffect.DeadNote":["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.LetRing":["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.Vibrato":["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.Hammer":["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.Slides":["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.Graces":["M11-TECHNIQUE-DISPOSITIONS","M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS"],
+      "NoteEffect.Hammer":["M11-TECHNIQUE-DISPOSITIONS","M22-EFFECTS-DYNAMICS"],
+      "NoteEffect.Slides":["M11-TECHNIQUE-DISPOSITIONS","M22-EFFECTS-DYNAMICS"],
+      "NoteEffect.Graces":["M11-TECHNIQUE-DISPOSITIONS","M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS"],
       "NoteEffect.Trill":["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.Harmonic":["M11-TECHNIQUE-DISPOSITIONS"],
+      "NoteEffect.Harmonic":["M11-TECHNIQUE-DISPOSITIONS","M22-EFFECTS-DYNAMICS"],
       "NoteEffect.TremoloPicking":["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.LeftHandFinger":["M11-TECHNIQUE-DISPOSITIONS","M11-VALIDATION"],
       "NoteEffect.RightHandFinger":["M11-TECHNIQUE-DISPOSITIONS","M11-VALIDATION"],
@@ -318,28 +341,28 @@
       "TrillEffect.Fret":["M11-TECHNIQUE-DISPOSITIONS"],
       "TrillEffect.Duration":["M11-TECHNIQUE-DISPOSITIONS"],
       "BeatEffects.TremoloBar":["M12-CURVE-PRESERVATION"],
-      "NoteEffect.Bend":["M12-CURVE-PRESERVATION"],
-      "BendEffect.Points":["M12-CURVE-PRESERVATION"],
+      "NoteEffect.Bend":["M12-CURVE-PRESERVATION","M22-GRACE-COMBINATIONS","M22-EFFECTS-DYNAMICS"],
+      "BendEffect.Points":["M12-CURVE-PRESERVATION","M22-EFFECTS-DYNAMICS"],
       "BendEffect.Kind":["M12-CURVE-LOSS-POLICY"],
       "BendEffect.Value":["M12-CURVE-LOSS-POLICY"],
       "BendPoint.Position":["M12-CURVE-PRESERVATION"],
       "BendPoint.Value":["M12-CURVE-PRESERVATION"],
       "BendPoint.Vibrato":["M12-CURVE-PRESERVATION","M12-CURVE-LOSS-POLICY"],
-      "HarmonicEffect.Kind":["M13-HARMONIC-VARIANTS"],
-      "HarmonicEffect.Fret":["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY"],
-      "HarmonicEffect.FretFloat":["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY"],
+      "HarmonicEffect.Kind":["M13-HARMONIC-VARIANTS","M22-EFFECTS-DYNAMICS"],
+      "HarmonicEffect.Fret":["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS"],
+      "HarmonicEffect.FretFloat":["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS"],
       "HarmonicEffect.Pitch":["M13-HARMONIC-VARIANTS"],
       "HarmonicEffect.Octave":["M13-HARMONIC-VARIANTS"],
       "GraceEffect.Duration":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS"],
       "GraceEffect.Fret":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE"],
       "GraceEffect.ExactFret":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-COMBINED-GRACE-EFFECTS"],
       "GraceEffect.RawFret":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE"],
-      "GraceEffect.PercussionArticulation":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY"],
-      "GraceEffect.HasPercussionArticulation":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY"],
-      "GraceEffect.IsDead":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS"],
+      "GraceEffect.PercussionArticulation":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY","M22-GRACE-COMBINATIONS"],
+      "GraceEffect.HasPercussionArticulation":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY","M22-GRACE-COMBINATIONS"],
+      "GraceEffect.IsDead":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS"],
       "GraceEffect.IsOnBeat":["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS"],
       "GraceEffect.Sequence":["M15-ORDERED-GRACE-EXPORT"],
-      "GraceEffect.Transition":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-COMBINED-GRACE-EFFECTS"],
+      "GraceEffect.Transition":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS"],
       "GraceEffect.Velocity":["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS"],
       "PercussionArticulation.ElementName":["M16-PERCUSSION-IDENTITY"],
       "PercussionArticulation.ElementType":["M16-PERCUSSION-IDENTITY"],
@@ -354,13 +377,13 @@
       "PercussionArticulation.InputMIDINumbers":["M16-PERCUSSION-IDENTITY"],
       "PercussionArticulation.OutputRSESound":["M16-PERCUSSION-IDENTITY"],
       "PercussionArticulation.OutputMIDINumber":["M16-PERCUSSION-IDENTITY"],
-      "BeatEffects.Chord":["M14-CHORD-SCOPE-ISOLATION"],
+      "BeatEffects.Chord":["M14-CHORD-SCOPE-ISOLATION","M22-CHORD-OCCURRENCE","M22-EFFECTS-DYNAMICS"],
       "Chord.Name":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS"],
       "Chord.Length":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS"],
-      "Chord.Strings":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS","M14-CHORD-SCOPE-ISOLATION"],
-      "Chord.FirstFret":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS","M14-CHORD-SCOPE-ISOLATION"],
-      "Chord.Barres":["M14-CHORD-DEFINITIONS"],
-      "Chord.Fingerings":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS"],
+      "Chord.Strings":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS","M14-CHORD-SCOPE-ISOLATION","M22-CHORD-OCCURRENCE"],
+      "Chord.FirstFret":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS","M14-CHORD-SCOPE-ISOLATION","M22-CHORD-OCCURRENCE"],
+      "Chord.Barres":["M14-CHORD-DEFINITIONS","M22-CHORD-OCCURRENCE"],
+      "Chord.Fingerings":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS","M22-CHORD-OCCURRENCE"],
       "Chord.Omissions":["M14-CHORD-DEFINITIONS"],
       "Chord.Root":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS"],
       "Chord.Bass":["M14-CHORD-DEFINITIONS","M14-CHORD-DEFAULTS"],
@@ -382,7 +405,7 @@
       "Barre.Fret":["M14-CHORD-DEFINITIONS"],
       "Barre.Start":["M14-CHORD-DEFINITIONS"],
       "Barre.End":["M14-CHORD-DEFINITIONS"],
-      "Song.VolumeAutomations":["M17-AUTOMATION-SEMANTICS"],
+      "Song.VolumeAutomations":["M17-AUTOMATION-SEMANTICS","M22-LYRICS-PLAYBACK-AUTOMATION"],
       "VolumeAutomation.Track":["M17-AUTOMATION-SEMANTICS"],
       "VolumeAutomation.Bar":["M17-AUTOMATION-SEMANTICS"],
       "VolumeAutomation.Position":["M17-AUTOMATION-SEMANTICS"],
@@ -407,191 +430,286 @@
       "MixTableItem.AllTracks":["M17-AUTOMATION-SEMANTICS","M17-BINARY-MIX-TABLE"],
       "WahEffect.Value":["M17-AUTOMATION-SEMANTICS"],
       "WahEffect.Display":["M17-AUTOMATION-SEMANTICS"]
+      ,"BackingTrack.AssetID":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.AudioData":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.EmbeddedFilePath":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.Enabled":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.FramePadding":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.Name":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.OriginalFilePath":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.OriginalFileSHA1":["M19-BACKING-ASSETS-SYNC"]
+      ,"BackingTrack.Source":["M19-BACKING-ASSETS-SYNC"]
+      ,"Song.BackingTrack":["M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"]
+      ,"Song.SyncPoints":["M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"]
+      ,"SyncPoint.AudioFrame":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M22-BACKING-SYNC-TEMPO"]
+      ,"SyncPoint.Bar":["M19-BACKING-ASSETS-SYNC"]
+      ,"SyncPoint.BarOccurrence":["M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"]
+      ,"SyncPoint.BarPosition":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M22-BACKING-SYNC-TEMPO"]
+      ,"SyncPoint.FrameOffset":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY"]
+      ,"SyncPoint.Linear":["M19-BACKING-ASSETS-SYNC"]
+      ,"SyncPoint.MediaTimeMS":["M19-BACKING-ASSETS-SYNC"]
+      ,"SyncPoint.ModifiedTempo":["M19-BACKING-ASSETS-SYNC"]
+      ,"SyncPoint.OriginalTempo":["M19-BACKING-ASSETS-SYNC"]
+      ,"SyncPoint.Position":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY"]
+      ,"SyncPoint.Visible":["M19-BACKING-ASSETS-SYNC"]
     },
     "wireFieldCases": {
-      "gpifDocument.GPVersion":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Title":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.SubTitle":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Artist":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Album":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Words":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Music":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Copyright":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Tabber":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Instructions":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifScore.Notices":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
-      "gpifSection.Text":["M02-DISPLAY-EXPORT","M07-MASTER-BARS"],
-      "gpifTrack.Color":["M02-DISPLAY-EXPORT"],
-      "gpifMasterTrack.Tracks":["M03-OWNERSHIP-IMPORT"],
-      "gpifTrack.ID":["M03-OWNERSHIP-IMPORT"],
-      "gpifTrack.Name":["M03-OWNERSHIP-IMPORT"],
-      "gpifTrack.Staves":["M03-OWNERSHIP-IMPORT"],
-      "gpifStaves.Staff":["M03-OWNERSHIP-IMPORT"],
-      "gpifMasterBar.Bars":["M03-OWNERSHIP-IMPORT","M03-BAR-CARDINALITY"],
-      "gpifBar.ID":["M03-OWNERSHIP-IMPORT"],
-      "gpifBar.Voices":["M03-OWNERSHIP-IMPORT"],
-      "gpifVoice.ID":["M03-OWNERSHIP-IMPORT"],
-      "gpifVoice.Beats":["M03-OWNERSHIP-IMPORT"],
-      "gpifStaffProperty.Name":["M04-INSTRUMENT-CONTEXT"],
-      "gpifStaffProperty.Fret":["M04-INSTRUMENT-CONTEXT"],
-      "gpifStaffProperty.Pitches":["M04-INSTRUMENT-CONTEXT"],
-      "gpifMidiConnection.Port":["M05-PLAYBACK-ROUTING"],
-      "gpifMidiConnection.PrimaryChannel":["M05-PLAYBACK-ROUTING"],
-      "gpifMidiConnection.SecondaryChannel":["M05-PLAYBACK-ROUTING"],
-      "gpifTrack.PlaybackState":["M05-PLAYBACK-ROUTING"],
-      "gpifTrack.AudioEngineState":["M05-PLAYBACK-ROUTING"],
-      "gpifTrack.Sounds":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifTrack.Automations":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Name":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Label":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Path":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Role":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Program":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS"],
-      "gpifSound.Channel":["M05-PLAYBACK-ROUTING"],
-      "gpifAutomation.Type":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifAutomation.Value":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifAutomation.Text":["M06-TEMPO-AUTHORITY"],
-      "gpifAutomation.Bar":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifAutomation.Position":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifAutomation.Visible":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifAutomation.Linear":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS"],
-      "gpifMasterBar.Key":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES"],
-      "gpifKey.Mode":["M07-MASTER-BARS"],
-      "gpifKey.AccidentalCount":["M07-MASTER-BARS"],
-      "gpifMasterBar.Time":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES"],
-      "gpifMasterBar.Section":["M07-MASTER-BARS"],
-      "gpifSection.Letter":["M07-MASTER-BARS"],
-      "gpifMasterBar.Repeat":["M07-MASTER-BARS"],
-      "gpifRepeat.Start":["M07-MASTER-BARS"],
-      "gpifRepeat.End":["M07-MASTER-BARS"],
-      "gpifRepeat.Count":["M07-MASTER-BARS"],
-      "gpifMasterBar.AlternateEndings":["M07-MASTER-BARS"],
-      "gpifMasterBar.DoubleBar":["M07-MASTER-BARS"],
-      "gpifMasterBar.TripletFeel":["M07-MASTER-BARS"],
-      "gpifBar.Clef":["M07-MASTER-BARS"],
-      "gpifRhythm.NoteValue":["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT"],
-      "gpifRhythm.AugmentationDot":["M08-DURATIONS"],
-      "gpifAugDot.Count":["M08-DURATIONS"],
-      "gpifRhythm.PrimaryTuplet":["M08-DURATIONS"],
-      "gpifTuplet.Num":["M08-DURATIONS"],
-      "gpifTuplet.Den":["M08-DURATIONS"],
-      "gpifNotes.Notes":["M09-NOTE-REPRESENTATION"],
-      "gpifNote.ID":["M09-NOTE-REPRESENTATION"],
-      "gpifNote.Properties":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
-      "gpifProperties.Properties":["M09-NOTE-REPRESENTATION"],
-      "gpifProperty.Fret":["M09-NOTE-REPRESENTATION"],
-      "gpifProperty.Number":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
-      "gpifProperty.String":["M09-NOTE-REPRESENTATION"],
-      "gpifProperty.Pitch":["M09-NOTE-REPRESENTATION"],
-      "gpifPitch.Step":["M09-NOTE-REPRESENTATION"],
-      "gpifPitch.Accidental":["M09-NOTE-REPRESENTATION"],
-      "gpifPitch.Octave":["M09-NOTE-REPRESENTATION"],
-      "gpifBeat.Notes":["M09-NOTE-REPRESENTATION","M15-ORDERED-GRACE-EXPORT"],
-      "gpifNote.Tie":["M09-NOTE-REPRESENTATION"],
-      "gpifTie.Origin":["M09-NOTE-REPRESENTATION"],
-      "gpifTie.Destination":["M09-NOTE-REPRESENTATION"],
-      "gpifBeat.Dynamic":["M10-BEAT-SEMANTICS","M15-ORDERED-GRACE-EXPORT"],
-      "gpifBeat.FreeText":["M10-BEAT-SEMANTICS","M18-LYRIC-SCOPES"],
-      "gpifBeat.Fadding":["M10-BEAT-EFFECTS"],
-      "gpifBeat.Hairpin":["M10-BEAT-EFFECTS"],
-      "gpifBeat.Arpeggio":["M10-BEAT-EFFECTS"],
-      "gpifNote.Accent":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifNote.AntiAccent":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifNote.LetRing":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifNote.Vibrato":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifNote.Trill":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifTrill.Fret":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifProperty.Name":["M09-NOTE-REPRESENTATION","M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS"],
-      "gpifProperty.Enable":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifProperty.Flags":["M11-TECHNIQUE-DISPOSITIONS"],
-      "gpifProperty.HType":["M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS"],
-      "gpifProperty.Float":["M12-CURVE-PRESERVATION","M13-HARMONIC-VARIANTS"],
-      "gpifProperty.HFret":["M13-HARMONIC-VARIANTS","M13-HARMONIC-AUTHORITY"],
-      "gpifBeat.Whammy":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.OriginValue":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.MiddleValue":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.DestinationValue":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.OriginOffset":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.MiddleOffset1":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.MiddleOffset2":["M12-CURVE-PRESERVATION"],
-      "gpifWhammy.DestinationOffset":["M12-CURVE-PRESERVATION"],
-      "gpifBeat.GraceNotes":["M15-ORDERED-GRACE-EXPORT"],
-      "gpifBeat.Rhythm":["M15-ORDERED-GRACE-EXPORT"],
-      "gpifRhythmRef.Ref":["M15-ORDERED-GRACE-EXPORT"],
-      "gpifTrack.InstrumentSet":["M16-PERCUSSION-IDENTITY"],
-      "gpifInstrumentSet.Name":["M16-PERCUSSION-IDENTITY"],
-      "gpifInstrumentSet.Type":["M16-PERCUSSION-IDENTITY"],
-      "gpifInstrumentSet.LineCount":["M16-PERCUSSION-IDENTITY"],
-      "gpifInstrumentSet.Elements":["M16-PERCUSSION-IDENTITY"],
-      "gpifElements.Elements":["M16-PERCUSSION-IDENTITY"],
-      "gpifElement.Name":["M16-PERCUSSION-IDENTITY"],
-      "gpifElement.Type":["M16-PERCUSSION-IDENTITY"],
-      "gpifElement.SoundbankName":["M16-PERCUSSION-IDENTITY"],
-      "gpifElement.Articulations":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulations.Articulations":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.Name":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.StaffLine":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.Noteheads":["M16-PERCUSSION-IDENTITY","M16-NOTEHEAD-OPTIONS"],
-      "gpifArticulation.TechniquePlacement":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.TechniqueSymbol":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.InputMIDINumbers":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.OutputRSESound":["M16-PERCUSSION-IDENTITY"],
-      "gpifArticulation.OutputMIDINumber":["M16-PERCUSSION-IDENTITY"],
-      "gpifNote.InstrumentArticulation":["M16-PERCUSSION-IDENTITY"],
-      "gpifBeat.Chord":["M14-CHORD-DEFINITIONS"],
-      "gpifItem.ID":["M14-CHORD-DEFINITIONS"],
-      "gpifItem.Name":["M14-CHORD-DEFINITIONS"],
-      "gpifItem.Diagram":["M14-CHORD-DEFINITIONS"],
-      "gpifItem.Chord":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.StringCount":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.FretCount":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.BaseFret":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.Frets":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramFret.String":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramFret.Fret":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.Fingering":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramFingering.Positions":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramPosition.Fret":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramPosition.Finger":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagram.Properties":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramProperty.Name":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramProperty.Type":["M14-CHORD-DEFINITIONS"],
-      "gpifDiagramProperty.Value":["M14-CHORD-DEFINITIONS"],
-      "gpifAutomations.Automations":["M17-AUTOMATION-SEMANTICS"],
-      "gpifSounds.Sounds":["M17-AUTOMATION-SEMANTICS"]
-      ,"gpifTrack.Lyrics":["M18-LYRIC-SCOPES"]
-      ,"gpifLyrics.Dispatched":["M18-LYRIC-SCOPES","M18-SOURCE-LYRIC-DISPATCH"]
-      ,"gpifLyrics.Lines":["M18-LYRIC-SCOPES"]
-      ,"gpifLyricLine.Text":["M18-LYRIC-SCOPES"]
-      ,"gpifLyricLine.Offset":["M18-LYRIC-SCOPES"]
+      "gpifDocument.GPVersion":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Title":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M22-SELECTIVE-ALLOWLIST","M20-SOURCE-AUDIT"],
+      "gpifScore.SubTitle":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Artist":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Album":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Words":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Music":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Copyright":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Tabber":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Instructions":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifScore.Notices":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifSection.Text":["M02-DISPLAY-EXPORT","M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifTrack.Color":["M02-DISPLAY-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifMasterTrack.Tracks":["M03-OWNERSHIP-IMPORT","M22-MULTI-STAFF-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifTrack.ID":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifTrack.Name":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifTrack.Staves":["M03-OWNERSHIP-IMPORT","M22-MULTI-STAFF-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifStaves.Staff":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.Bars":["M03-OWNERSHIP-IMPORT","M03-BAR-CARDINALITY","M20-SOURCE-AUDIT"],
+      "gpifBar.ID":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifBar.Voices":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifVoice.ID":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifVoice.Beats":["M03-OWNERSHIP-IMPORT","M20-SOURCE-AUDIT"],
+      "gpifStaffProperty.Name":["M04-INSTRUMENT-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifStaffProperty.Fret":["M04-INSTRUMENT-CONTEXT","M22-MULTI-STAFF-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifStaffProperty.Pitches":["M04-INSTRUMENT-CONTEXT","M22-MULTI-STAFF-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifMidiConnection.Port":["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
+      "gpifMidiConnection.PrimaryChannel":["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
+      "gpifMidiConnection.SecondaryChannel":["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
+      "gpifTrack.PlaybackState":["M05-PLAYBACK-ROUTING","M22-LYRICS-PLAYBACK-AUTOMATION","M20-SOURCE-AUDIT"],
+      "gpifTrack.AudioEngineState":["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
+      "gpifTrack.Sounds":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifTrack.Automations":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M22-LYRICS-PLAYBACK-AUTOMATION","M20-SOURCE-AUDIT"],
+      "gpifSound.Name":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifSound.Label":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifSound.Path":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifSound.Role":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifSound.Program":["M05-PLAYBACK-ROUTING","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
+      "gpifSound.Channel":["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Type":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Value":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M22-BACKING-SYNC-TEMPO","M22-LEGACY-EDIT-AUTHORITY","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Text":["M06-TEMPO-AUTHORITY","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Bar":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Position":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Visible":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Linear":["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.Key":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES","M20-SOURCE-AUDIT"],
+      "gpifKey.Mode":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifKey.AccidentalCount":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.Time":["M07-MASTER-BARS","M07-AUTHORITY-BOUNDARIES","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.Section":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifSection.Letter":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.Repeat":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifRepeat.Start":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifRepeat.End":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifRepeat.Count":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.AlternateEndings":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.DoubleBar":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifMasterBar.TripletFeel":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifBar.Clef":["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
+      "gpifRhythm.NoteValue":["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifRhythm.AugmentationDot":["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifAugDot.Count":["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifRhythm.PrimaryTuplet":["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifTuplet.Num":["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifTuplet.Den":["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifNotes.Notes":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifNote.ID":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifNote.Properties":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifProperties.Properties":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifProperty.Fret":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifProperty.Number":["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifProperty.String":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifProperty.Pitch":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifPitch.Step":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifPitch.Accidental":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifPitch.Octave":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifBeat.Notes":["M09-NOTE-REPRESENTATION","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifNote.Tie":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifTie.Origin":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifTie.Destination":["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
+      "gpifBeat.Dynamic":["M10-BEAT-SEMANTICS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifBeat.FreeText":["M10-BEAT-SEMANTICS","M18-LYRIC-SCOPES","M20-SOURCE-AUDIT"],
+      "gpifBeat.Fadding":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifBeat.Hairpin":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifBeat.Arpeggio":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifNote.Accent":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifNote.AntiAccent":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifNote.LetRing":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifNote.Vibrato":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifNote.Trill":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifTrill.Fret":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifProperty.Name":["M09-NOTE-REPRESENTATION","M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
+      "gpifProperty.Enable":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifProperty.Flags":["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifProperty.HType":["M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
+      "gpifProperty.Float":["M12-CURVE-PRESERVATION","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
+      "gpifProperty.HFret":["M13-HARMONIC-VARIANTS","M13-HARMONIC-AUTHORITY","M20-SOURCE-AUDIT"],
+      "gpifBeat.Whammy":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.OriginValue":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.MiddleValue":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.DestinationValue":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.OriginOffset":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.MiddleOffset1":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.MiddleOffset2":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifWhammy.DestinationOffset":["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
+      "gpifBeat.GraceNotes":["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifBeat.Rhythm":["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifRhythmRef.Ref":["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifTrack.InstrumentSet":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifInstrumentSet.Name":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifInstrumentSet.Type":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifInstrumentSet.LineCount":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifInstrumentSet.Elements":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifElements.Elements":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifElement.Name":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifElement.Type":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifElement.SoundbankName":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifElement.Articulations":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulations.Articulations":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.Name":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.StaffLine":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.Noteheads":["M16-PERCUSSION-IDENTITY","M16-NOTEHEAD-OPTIONS","M20-SOURCE-AUDIT"],
+      "gpifArticulation.TechniquePlacement":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.TechniqueSymbol":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.InputMIDINumbers":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.OutputRSESound":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifArticulation.OutputMIDINumber":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifNote.InstrumentArticulation":["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
+      "gpifBeat.Chord":["M14-CHORD-DEFINITIONS","M22-CHORD-OCCURRENCE","M20-SOURCE-AUDIT"],
+      "gpifItem.ID":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifItem.Name":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifItem.Diagram":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifItem.Chord":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.StringCount":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.FretCount":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.BaseFret":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.Frets":["M14-CHORD-DEFINITIONS","M22-CHORD-OCCURRENCE","M20-SOURCE-AUDIT"],
+      "gpifDiagramFret.String":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramFret.Fret":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.Fingering":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramFingering.Positions":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramPosition.Fret":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramPosition.Finger":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagram.Properties":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramProperty.Name":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramProperty.Type":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifDiagramProperty.Value":["M14-CHORD-DEFINITIONS","M20-SOURCE-AUDIT"],
+      "gpifAutomations.Automations":["M17-AUTOMATION-SEMANTICS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifSounds.Sounds":["M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"]
+      ,"gpifTrack.Lyrics":["M18-LYRIC-SCOPES","M22-LYRICS-PLAYBACK-AUTOMATION","M20-SOURCE-AUDIT"]
+      ,"gpifLyrics.Dispatched":["M18-LYRIC-SCOPES","M18-SOURCE-LYRIC-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"gpifLyrics.Lines":["M18-LYRIC-SCOPES","M20-SOURCE-AUDIT"]
+      ,"gpifLyricLine.Text":["M18-LYRIC-SCOPES","M20-SOURCE-AUDIT"]
+      ,"gpifLyricLine.Offset":["M18-LYRIC-SCOPES","M20-SOURCE-AUDIT"]
+      ,"gpifAsset.EmbeddedFilePath":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAsset.ID":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAsset.OriginalFilePath":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAsset.OriginalFileSHA1":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAssets.Assets":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.BarIndex":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.BarOccurrence":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.FrameOffset":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.ModifiedTempo":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.OriginalTempo":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifBackingTrack.AssetID":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifBackingTrack.Enabled":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifBackingTrack.FramePadding":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifBackingTrack.Name":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifBackingTrack.Source":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Assets":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M20-SOURCE-AUDIT"]
+      ,"gpifDocument.BackingTrack":["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M20-SOURCE-AUDIT"]
+      ,"gpifMasterTrack.Automations":["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifAutomationValue.Text":["M20-SOURCE-AUDIT"]
+      ,"gpifBars.Bars":["M20-SOURCE-AUDIT"]
+      ,"gpifBeat.ID":["M20-SOURCE-AUDIT"]
+      ,"gpifBeat.Ottavia":["M20-SOURCE-AUDIT"]
+      ,"gpifBeat.Properties":["M20-SOURCE-AUDIT"]
+      ,"gpifBeat.Tremolo":["M20-SOURCE-AUDIT"]
+      ,"gpifBeat.Wah":["M20-SOURCE-AUDIT"]
+      ,"gpifBeats.Beats":["M20-SOURCE-AUDIT"]
+      ,"gpifChannelStrip.Automations":["M20-SOURCE-AUDIT"]
+      ,"gpifChannelStrip.Parameters":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Bars":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Beats":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Encoding":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.GPRevision":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.MasterBars":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.MasterTrack":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Notes":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Rhythms":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Score":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Tracks":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.Voices":["M20-SOURCE-AUDIT"]
+      ,"gpifDocument.XMLName":["M20-SOURCE-AUDIT"]
+      ,"gpifEncoding.Description":["M20-SOURCE-AUDIT"]
+      ,"gpifGeneralMidi.PrimaryChannel":["M20-SOURCE-AUDIT"]
+      ,"gpifInstrument.Ref":["M20-SOURCE-AUDIT"]
+      ,"gpifItems.Items":["M20-SOURCE-AUDIT"]
+      ,"gpifMasterBars.MasterBars":["M20-SOURCE-AUDIT"]
+      ,"gpifMasterTrack.Anacrusis":["M20-SOURCE-AUDIT"]
+      ,"gpifProperty.Direction":["M20-SOURCE-AUDIT"]
+      ,"gpifProperty.Strength":["M20-SOURCE-AUDIT"]
+      ,"gpifRevision.Recommended":["M20-SOURCE-AUDIT"]
+      ,"gpifRevision.Required":["M20-SOURCE-AUDIT"]
+      ,"gpifRevision.Value":["M20-SOURCE-AUDIT"]
+      ,"gpifRhythm.ID":["M20-SOURCE-AUDIT"]
+      ,"gpifRhythms.Rhythms":["M20-SOURCE-AUDIT"]
+      ,"gpifStaff.Properties":["M20-SOURCE-AUDIT"]
+      ,"gpifStaffProperty.Items":["M20-SOURCE-AUDIT"]
+      ,"gpifStaffProperty.Label":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.GeneralMidi":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.Instrument":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.MidiConnection":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.NotationPatch":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.Properties":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.RSE":["M20-SOURCE-AUDIT"]
+      ,"gpifTrack.Transpose":["M20-SOURCE-AUDIT"]
+      ,"gpifTrackRSE.ChannelStrip":["M20-SOURCE-AUDIT"]
+      ,"gpifTracks.Tracks":["M20-SOURCE-AUDIT"]
+      ,"gpifTranspose.Chromatic":["M20-SOURCE-AUDIT"]
+      ,"gpifTranspose.Octave":["M20-SOURCE-AUDIT"]
+      ,"gpifVoices.Voices":["M20-SOURCE-AUDIT"]
     },
     "dispatchCases": {
-      "gpifReadStaffStrings:property.Name":["M04-INSTRUMENT-CONTEXT"],
-      "gpifReadCapo:property.Name":["M04-INSTRUMENT-CONTEXT"],
-      "gpifAuditOwnedStaffProperty:property.Name":["M04-INSTRUMENT-CONTEXT"]
-      ,"gpifReadTempoAutomations:auto.Type":["M06-TEMPO-AUTHORITY","M17-SOURCE-DISPATCH"]
-      ,"gpifAuditMasterAutomations:automation.Type":["M06-TEMPO-AUTHORITY","M17-SOURCE-DISPATCH"]
-      ,"parseGPIFWithContext:mb.TripletFeel":["M07-MASTER-BARS"]
-      ,"gpifRhythmToDuration:r.NoteValue":["M08-DURATIONS"]
-      ,"gpifApplyBeatEffects:p.Name":["M10-BEAT-EFFECTS"]
-      ,"gpifApplyBeatEffects:p.Direction":["M10-BEAT-EFFECTS"]
-      ,"gpifApplyBeatEffects:b.Ottavia":["M10-BEAT-EFFECTS"]
-      ,"gpifApplyBeatEffects:b.Arpeggio":["M10-BEAT-EFFECTS"]
-      ,"gpifNoteToNote:p.Name":["M11-SOURCE-DISTINCTIONS","M13-GPIF-COMPATIBILITY"]
-      ,"gpifAuditNoteProperty:property.Name":["M11-SOURCE-DISTINCTIONS"]
-      ,"gpifAuditNoteProperty:property.HType":["M13-GPIF-COMPATIBILITY"]
-      ,"gpifNoteToNote:p.HType":["M13-GPIF-COMPATIBILITY"]
-      ,"gpifReadChordProperties:property.Name":["M14-CHORD-SCOPE-ISOLATION"]
-      ,"gpifAuditChordIDs:property.Name":["M14-CHORD-SCOPE-ISOLATION"]
-      ,"gpifAuditChannelStripAutomations:automation.Type":["M17-SOURCE-DISPATCH"]
-      ,"gpifAuditTrackAutomations:automation.Type":["M17-SOURCE-DISPATCH"]
-      ,"gpifReadSyncPoints:automation.Type":["M17-SOURCE-DISPATCH"]
-      ,"gpifReadVolumeAutomations:automation.Type":["M17-SOURCE-DISPATCH"]
-      ,"parseGPIFWithContext:automation.Type":["M17-SOURCE-DISPATCH"]
-      ,"parseGPIFWithContext:b.GraceNotes":["M15-ORDERED-GRACE-EXPORT"]
-      ,"isPercussionTrack:t.InstrumentSet.Type":["M16-SOURCE-VALIDATION"]
-      ,"gpifNormalizePercussionArticulation:element.Type":["M16-SOURCE-VALIDATION"]
-      ,"validateGP8Staff:element.Type":["M16-SOURCE-VALIDATION"]
+      "gpifReadStaffStrings:property.Name":["M04-INSTRUMENT-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifReadCapo:property.Name":["M04-INSTRUMENT-CONTEXT","M20-SOURCE-AUDIT"],
+      "gpifAuditOwnedStaffProperty:property.Name":["M04-INSTRUMENT-CONTEXT","M20-SOURCE-AUDIT"]
+      ,"gpifReadTempoAutomations:auto.Type":["M06-TEMPO-AUTHORITY","M17-SOURCE-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"gpifAuditMasterAutomations:automation.Type":["M06-TEMPO-AUTHORITY","M17-SOURCE-DISPATCH","M19-SOURCE-DIAGNOSTICS","M20-SOURCE-AUDIT"]
+      ,"parseGPIFWithContext:mb.TripletFeel":["M07-MASTER-BARS","M20-SOURCE-AUDIT"]
+      ,"gpifRhythmToDuration:r.NoteValue":["M08-DURATIONS","M20-SOURCE-AUDIT"]
+      ,"gpifApplyBeatEffects:p.Name":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]
+      ,"gpifApplyBeatEffects:p.Direction":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]
+      ,"gpifApplyBeatEffects:b.Ottavia":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]
+      ,"gpifApplyBeatEffects:b.Arpeggio":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]
+      ,"gpifNoteToNote:p.Name":["M11-SOURCE-DISTINCTIONS","M13-GPIF-COMPATIBILITY","M20-SOURCE-AUDIT"]
+      ,"gpifAuditNoteProperty:property.Name":["M11-SOURCE-DISTINCTIONS","M20-SOURCE-AUDIT"]
+      ,"gpifAuditNoteProperty:property.HType":["M13-GPIF-COMPATIBILITY","M20-SOURCE-AUDIT"]
+      ,"gpifNoteToNote:p.HType":["M13-GPIF-COMPATIBILITY","M20-SOURCE-AUDIT"]
+      ,"gpifReadChordProperties:property.Name":["M14-CHORD-SCOPE-ISOLATION","M20-SOURCE-AUDIT"]
+      ,"gpifAuditChordIDs:property.Name":["M14-CHORD-SCOPE-ISOLATION","M20-SOURCE-AUDIT"]
+      ,"gpifAuditChannelStripAutomations:automation.Type":["M17-SOURCE-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"gpifAuditTrackAutomations:automation.Type":["M17-SOURCE-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"gpifReadSyncPoints:automation.Type":["M17-SOURCE-DISPATCH","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"]
+      ,"gpifReadVolumeAutomations:automation.Type":["M17-SOURCE-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"parseGPIFWithContext:automation.Type":["M17-SOURCE-DISPATCH","M20-SOURCE-AUDIT"]
+      ,"parseGPIFWithContext:b.GraceNotes":["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"]
+      ,"isPercussionTrack:t.InstrumentSet.Type":["M16-SOURCE-VALIDATION","M20-SOURCE-AUDIT"]
+      ,"gpifNormalizePercussionArticulation:element.Type":["M16-SOURCE-VALIDATION","M20-SOURCE-AUDIT"]
+      ,"validateGP8Staff:element.Type":["M16-SOURCE-VALIDATION","M20-SOURCE-AUDIT"]
+      ,"gpifAuditBeatProperty:property.Name":["M20-SOURCE-AUDIT"]
+      ,"gpifAuditDiagnostics:beat.Fadding":["M20-SOURCE-AUDIT"]
+      ,"gpifAuditDiagnostics:property.Name":["M20-SOURCE-AUDIT"]
+      ,"gpifXMLAuditStart:element.Name.Local":["M20-SOURCE-AUDIT"]
+      ,"gpifAuditDiagnostics:track.AudioEngineState":["M20-SOURCE-AUDIT"]
     }
   },
   "diagnosticDispositions": [
@@ -926,6 +1044,24 @@
     "feature": "score-core",
     "disposition": "invalid-data",
     "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.BackingTrack.EmbeddedFile.Empty",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "An enabled local backing-track asset must contain audio bytes."
+  },
+  {
+    "source": "GPIF.BackingTrack.EmbeddedFile.Reference",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "An enabled local backing-track asset must name an archive entry that exists."
+  },
+  {
+    "source": "GPIF.BackingTrack.FramePadding.Invalid",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "Backing-track frame padding must be a signed 64-bit frame count."
   },
   {
     "source": "GPIF.Bar.DuplicateID",
@@ -1504,6 +1640,42 @@
     "feature": "note-and-beat-semantics",
     "disposition": "invalid-data",
     "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Beat.Property.ConflictingDuplicate",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "Repeated beat properties must not provide conflicting authored values."
+  },
+  {
+    "source": "GPIF.Note.Property.ConflictingDuplicate",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "Repeated note properties must not provide conflicting authored values."
+  },
+  {
+    "source": "GPIF.Staff.Property.ConflictingDuplicate",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "Repeated staff properties must not provide conflicting authored values."
+  },
+  {
+    "source": "GPIF.Track.AudioEngineState.InvalidValue",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The source audio-engine state must be MIDI or RSE."
+  },
+  {
+    "source": "GPIF.Track.Property.ConflictingDuplicate",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "Repeated track properties must not provide conflicting authored values."
+  },
+  {
+    "source": "GPIF.Track.Sound.Channel",
+    "feature": "score-core",
+    "disposition": "unsupported-feature",
+    "reason": "The public sound model has no destination for a per-sound MIDI channel."
   }
 ],
   "features": [
@@ -1517,8 +1689,8 @@
       "fixtures": ["testdata/gp*/score-info.*", "testdata/gp*/colors.*"],
       "semanticAssertions": ["metadata", "track identity", "repeat structure"],
       "status": "partial",
-      "reason": "The full corpus parses, while richer metadata and loss reporting remain tracked by issues 12 and 13.",
-      "issues": [12, 13]
+      "reason": "The complete matrix accounts for score fields and fixtures. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "rhythm",
@@ -1530,8 +1702,8 @@
       "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/time-signatures.gp"],
       "semanticAssertions": ["duration denominator", "duration ticks", "dots", "tuplet ratio", "rest status"],
       "status": "partial",
-      "reason": "Selected duration, dot, tuplet, time-signature, and rest cases are compared; exact score time and the remaining authored rhythm model are tracked by issues 12 and 15.",
-      "issues": [12, 15]
+      "reason": "The complete matrix covers duration, exact timing, meter, tuplets, and rests. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "timing",
@@ -1543,8 +1715,8 @@
       "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/notes.gp", "testdata/gp7/time-signatures.gp", "testdata/gp7/anacrusis.gp", "testdata/gp7/multi-voice.gp", "testdata/gp7/tuplets.gp", "testdata/gp7/grace.gp"],
       "semanticAssertions": ["zero-normalized measure start", "zero-normalized beat start"],
       "status": "partial",
-      "reason": "Selected absolute display starts agree after zero-origin normalization; exact score time and shared finalized-graph validation are tracked by issues 14 and 15.",
-      "issues": [14, 15]
+      "reason": "The complete matrix covers exact time and finalized graph validation. One remaining exact corpus timing difference is tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "staff-ownership",
@@ -1556,8 +1728,8 @@
       "fixtures": ["testdata/gp7/grand-staff.gp"],
       "semanticAssertions": ["staff count", "bar count per staff", "note ownership per staff", "clef", "tuning"],
       "status": "partial",
-      "reason": "The grand-staff contract compares exact track, staff, bar, voice, beat, and note hierarchy plus authored contents; broader model ownership and legacy projection are tracked by issue 12.",
-      "issues": [12]
+      "reason": "The matrix compares exact ownership paths and compatibility authority. Any new corpus ownership difference must be tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "grace-relationships",
@@ -1569,8 +1741,8 @@
       "fixtures": ["testdata/gp5/grace.gp5", "testdata/gp5/motherload-percussion-grace.gp5"],
       "semanticAssertions": ["owning note", "ordered grace sequence", "authored source fret", "transition", "on-beat flag"],
       "status": "partial",
-      "reason": "Selected authored ownership and source-fret cases agree after excluding display duration and playback pitch; complete cross-format grace coverage is tracked by issue 12.",
-      "issues": [12]
+      "reason": "The matrix covers authored grace order, ownership, source fret, transitions, and export policy. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "note-and-beat-semantics",
@@ -1582,8 +1754,8 @@
       "fixtures": ["testdata/gp*/effects.*", "testdata/gp*/notes.*"],
       "semanticAssertions": ["note ownership", "pitch and string", "dynamics", "ties", "bends", "slides", "articulations"],
       "status": "partial",
-      "reason": "The canonical contract inventories these fields; a lossless semantic model is tracked by issue 12.",
-      "issues": [12]
+      "reason": "The complete matrix inventories and tests note and beat fields. Remaining effect gaps are tracked by issues 22 and 31.",
+      "issues": [22, 31]
     },
     {
       "id": "tremolo-picking",
@@ -1608,8 +1780,8 @@
       "fixtures": ["testdata/gp7/harmonics.gp"],
       "semanticAssertions": ["harmonic kind", "fractional harmonic fret", "property order"],
       "status": "partial",
-      "reason": "GPIF HFret values and common harmonic kinds are compared on import and GP8 export; distinctions that the legacy model collapses are tracked by issue 12.",
-      "issues": [12]
+      "reason": "GPIF harmonic kinds and fret values are compared on import and GP8 export. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "hairpins",
@@ -1634,8 +1806,8 @@
       "fixtures": ["testdata/gp7/beat-tempo-change.gp"],
       "semanticAssertions": ["bar", "ratio position", "normalized BPM", "linear interpolation"],
       "status": "partial",
-      "reason": "GPIF references 1–5 and absent or invalid defaults agree after BPM normalization; authored units, text, visibility, and interpolation remain part of issue 12.",
-      "issues": [12]
+      "reason": "The matrix covers tempo authority, values, order, validation, and export policy. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     },
     {
       "id": "percussion-articulations",
@@ -1647,8 +1819,8 @@
       "fixtures": ["testdata/gp7/percussion.gp"],
       "semanticAssertions": ["articulation identity", "input value", "output MIDI", "staff line and technique"],
       "status": "partial",
-      "reason": "GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI are compared; cross-format semantic integration is tracked by issue 12.",
-      "issues": [12]
+      "reason": "The matrix covers GPIF articulation identity, notation, playback, validation, and export policy. Exact remaining corpus differences are tracked by issue 31.",
+      "issues": [31]
     }
   ],
   "semanticContracts": {
@@ -1685,7 +1857,9 @@
       {"id":"inspected-chord-barres","feature":"note-and-beat-semantics","construct":"Chord.Barres","test":"TestGP8StrictExportCoversInspectedSemanticFields","reason":"Strict export reports explicit barre ranges before it emits bytes."},
       {"id":"inspected-bend-points","feature":"note-and-beat-semantics","construct":"BendEffect.Points","test":"TestGP8StrictExportCoversInspectedSemanticFields","reason":"The conversion reports point-count loss and curves that GPIF shared middle values would normalize."},
       {"id":"field-disposition-evidence","feature":"note-and-beat-semantics","construct":"Inspected field dispositions","test":"TestSemanticContractInventory","mutationSensitive":true,"reason":"A field claim must match the disposition proved by its focused evidence."},
-      {"id":"capo-precedence","feature":"staff-ownership","construct":"GPIF track and staff CapoFret precedence","test":"TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing","independentTest":"TestAlphaTabGPIFCapoPrecedence","reason":"Import and diagnostics use the effective staff capo values that the independent consumer uses."}
+      {"id":"capo-precedence","feature":"staff-ownership","construct":"GPIF track and staff CapoFret precedence","test":"TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing","independentTest":"TestAlphaTabGPIFCapoPrecedence","reason":"Import and diagnostics use the effective staff capo values that the independent consumer uses."},
+      {"id":"structural-export-resilience","feature":"staff-ownership","construct":"Generated multi-track, staff, voice, and beat GP8 graphs","test":"TestSemanticMatrixM25StructuralResilience","mutationSensitive":true,"reason":"Valid generated public graphs keep their complete topology and note values through GP8 export and reimport."},
+      {"id":"audio-engine-state","feature":"score-core","construct":"GPIF AudioEngineState import","test":"TestSemanticMatrixM20SourceAudit","reason":"MIDI and RSE map to distinct public playback states, and unknown states remain visible."}
     ],
     "modelTypes": [
       {"type":"Song","feature":"score-core","fields":["Album","Anacrusis","Artist","Author","BackingTrack","Channels","Clipboard","Comments","Copyright","Date","HideTempo","InitialTempo","Instructions","Key","Lyrics","MasterEffect","MeasureHeaders","Name","Notice","PageSetup","Subtitle","SyncPoints","Tempo","TempoAutomations","TempoName","Tracks","Transcriber","TripletFeel","Version","VolumeAutomations","Words","Writer"],"compatibility":["Tempo"],"reason":"The root contains authored score data. Tempo is the legacy view of InitialTempo."},
@@ -1770,7 +1944,8 @@
       {"function":"parseGPIFWithContext","selector":"b.GraceNotes","feature":"grace-relationships","cases":{"BeforeBeat":"preserved","OnBeat":"preserved"},"evidence":"grace-order-preservation","defaultDisposition":"unsupported-feature","reason":"The importer preserves supported before-beat and on-beat grace ordering."},
       {"function":"gpifAuditDiagnostics","selector":"beat.Fadding","feature":"note-and-beat-semantics","cases":{"":"preserved","FadeIn":"preserved","FadeOut":"normalized","VolumeSwell":"normalized"},"evidence":"gpif-property-dispatch","defaultDisposition":"unsupported-feature","reason":"The audit classifies each fading value before the importer maps it."},
       {"function":"gpifApplyBeatEffects","selector":"b.Ottavia","feature":"note-and-beat-semantics","cases":{"15ma":"preserved","15mb":"preserved","8va":"preserved","8vb":"preserved"},"evidence":"gpif-property-dispatch","defaultDisposition":"delegated-to-audit","reason":"The importer maps each supported octave-shift value."},
-      {"function":"gpifApplyBeatEffects","selector":"b.Arpeggio","feature":"note-and-beat-semantics","cases":{"Down":"preserved","Up":"preserved"},"evidence":"gpif-property-dispatch","defaultDisposition":"delegated-to-audit","reason":"The importer maps each supported arpeggio direction."}
+      {"function":"gpifApplyBeatEffects","selector":"b.Arpeggio","feature":"note-and-beat-semantics","cases":{"Down":"preserved","Up":"preserved"},"evidence":"gpif-property-dispatch","defaultDisposition":"delegated-to-audit","reason":"The importer maps each supported arpeggio direction."},
+      {"function":"gpifAuditDiagnostics","selector":"track.AudioEngineState","feature":"score-core","cases":{"":"preserved","MIDI":"preserved","RSE":"preserved"},"evidence":"audio-engine-state","defaultDisposition":"unknown-syntax","reason":"The audit accepts the two known playback engines and reports any other token."}
     ]
   }
 }

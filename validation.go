@@ -56,6 +56,33 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	add := func(code string, kind ScoreDiagnosticKind, location ScoreLocation, format string, args ...any) {
 		diagnostics = append(diagnostics, ScoreDiagnostic{Code: code, Kind: kind, Location: location, Reason: fmt.Sprintf(format, args...)})
 	}
+	validTempoAuthority := song.Tempo > 0
+	tempoDiagnostic := false
+	if song.Tempo < 0 {
+		add("score.tempo", ScoreDiagnosticValue, ScoreLocation{}, "legacy tempo %d must be non-negative", song.Tempo)
+		tempoDiagnostic = true
+	}
+	if song.InitialTempo.State == SourceValueKnown {
+		if _, err := NewBPM(float64(song.InitialTempo.Value)); err != nil {
+			add("score.tempo", ScoreDiagnosticValue, ScoreLocation{}, "initial tempo: %v", err)
+			tempoDiagnostic = true
+		} else {
+			validTempoAuthority = true
+		}
+	}
+	if !validTempoAuthority {
+		for _, automation := range song.TempoAutomations {
+			if automation.Bar == 0 && automation.Position == 0 {
+				if _, err := NewBPM(automation.Tempo); err == nil {
+					validTempoAuthority = true
+				}
+				break
+			}
+		}
+	}
+	if !validTempoAuthority && !tempoDiagnostic {
+		add("score.tempo", ScoreDiagnosticValue, ScoreLocation{}, "song has no valid opening tempo")
+	}
 	for channelIndex, channel := range song.Channels {
 		if channel.Instrument < 0 || channel.Instrument > 127 {
 			add("score.channel.instrument", ScoreDiagnosticValue, ScoreLocation{}, "channel %d instrument %d is outside 0..127", channelIndex, channel.Instrument)
@@ -157,6 +184,26 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 {
 				add("score.sound-automation.location", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound automation %d has bar %d position %v", automationIndex, automation.Bar, automation.Position)
 			}
+		}
+	}
+	framePadding := int64(0)
+	if song.BackingTrack != nil {
+		framePadding = song.BackingTrack.FramePadding
+	}
+	for index, point := range song.SyncPoints {
+		location := ScoreLocation{Measure: point.Bar}
+		if point.Bar < 0 || point.Bar >= len(song.MeasureHeaders) || math.IsNaN(point.Position) || math.IsInf(point.Position, 0) || point.Position < 0 || point.Position > 1 || point.BarOccurrence < 0 {
+			add("score.sync-point.location", ScoreDiagnosticValue, location, "sync point %d has bar %d position %v occurrence %d", index, point.Bar, point.Position, point.BarOccurrence)
+		}
+		if point.FrameOffset < 0 || point.AudioFrame < 0 {
+			add("score.sync-point.frame", ScoreDiagnosticValue, location, "sync point %d has frame offset %d and audio frame %d", index, point.FrameOffset, point.AudioFrame)
+		}
+		expectedMediaTime := (float64(point.AudioFrame) - float64(framePadding)) / GPIFBackingTrackSampleRate * 1000
+		if math.IsNaN(point.MediaTimeMS) || math.IsInf(point.MediaTimeMS, 0) || point.MediaTimeMS != expectedMediaTime {
+			add("score.sync-point.media-time", ScoreDiagnosticTiming, location, "sync point %d media time %v does not match derived value %v", index, point.MediaTimeMS, expectedMediaTime)
+		}
+		if math.IsNaN(point.ModifiedTempo) || math.IsInf(point.ModifiedTempo, 0) || point.ModifiedTempo < 0 || math.IsNaN(point.OriginalTempo) || math.IsInf(point.OriginalTempo, 0) || point.OriginalTempo < 0 {
+			add("score.sync-point.tempo", ScoreDiagnosticValue, location, "sync point %d has modified tempo %v and original tempo %v", index, point.ModifiedTempo, point.OriginalTempo)
 		}
 	}
 	for index, automation := range song.TempoAutomations {
