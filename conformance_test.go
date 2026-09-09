@@ -502,7 +502,7 @@ func conformanceFeature(path string) string {
 		{[]string{"/staff-ownership", "/staffCount", "/noteCount", "/clefs", "/tuning"}, "staff-ownership"},
 		{[]string{"/timing", "/start", "/durationTicks"}, "timing"},
 		{[]string{"/rhythm", "/duration", "/tuplet", "/timeSignature", "/pickup"}, "rhythm"},
-		{[]string{"/percussion", "/percussionArticulation", "/midi"}, "percussion-articulations"},
+		{[]string{"/percussion", "/percussionArticulation", "/percussionInput", "/midi"}, "percussion-articulations"},
 		{[]string{"/effects", "/kind", "/dynamic", "/status", "/notes", "/voices", "/bars"}, "note-and-beat-semantics"},
 		{[]string{"/metadata", "/program", "/primaryChannel", "/name", "/index", "/repeat", "/alternateEndings", "/tripletFeel", "/text", "/schemaVersion", "/string", "/fret"}, "score-core"},
 	}
@@ -678,6 +678,11 @@ func conformancePercussionFacts(score any) []any {
 	var facts []any
 	for trackIndex, trackItem := range tracks {
 		track, _ := trackItem.(map[string]any)
+		if articulations, ok := track["percussionArticulations"].([]any); ok && len(articulations) > 0 {
+			facts = append(facts, map[string]any{
+				"path": fmt.Sprintf("/tracks/%d/percussionArticulations", trackIndex), "value": articulations,
+			})
+		}
 		staves, _ := track["staves"].([]any)
 		for staffIndex, staffItem := range staves {
 			staff, _ := staffItem.(map[string]any)
@@ -690,7 +695,7 @@ func conformancePercussionFacts(score any) []any {
 			collectConformanceFactsAt(
 				fmt.Sprintf("/tracks/%d/staves/%d", trackIndex, staffIndex),
 				staff,
-				map[string]bool{"percussionArticulation": true, "midi": true},
+				map[string]bool{"standardNotationLineCount": true, "percussionArticulation": true, "percussionInput": true, "midi": true},
 				nil,
 				&facts,
 			)
@@ -741,11 +746,12 @@ func normalizeGoScore(song *Song) any {
 			primaryChannel = song.Channels[track.ChannelIndex].Channel
 		}
 		tracks = append(tracks, map[string]any{
-			"index":          trackIndex,
-			"name":           track.Name,
-			"program":        program,
-			"primaryChannel": primaryChannel,
-			"staves":         normalizeGoStaves(song, trackIndex),
+			"index":                   trackIndex,
+			"name":                    track.Name,
+			"program":                 program,
+			"primaryChannel":          primaryChannel,
+			"percussionArticulations": normalizeGoPercussionArticulations(track.PercussionArticulations),
+			"staves":                  normalizeGoStaves(song, trackIndex),
 		})
 	}
 	return map[string]any{
@@ -768,30 +774,58 @@ func normalizeGoTuning(strings []GuitarString) []any {
 	return result
 }
 
+func normalizeGoPercussionArticulations(articulations []PercussionArticulation) []any {
+	result := make([]any, 0, len(articulations))
+	for _, articulation := range articulations {
+		techniqueSymbol := "none"
+		if articulation.TechniqueSymbol != "" {
+			techniqueSymbol = strings.ToLower(articulation.TechniqueSymbol)
+		}
+		inputMIDINumber := 0
+		if len(articulation.InputMIDINumbers) > 0 {
+			inputMIDINumber = articulation.InputMIDINumbers[0]
+		}
+		result = append(result, map[string]any{
+			"elementName":        articulation.ElementName,
+			"staffLine":          articulation.StaffLine,
+			"noteheadDefault":    strings.ToLower(articulation.NoteheadDefault),
+			"noteheadHalf":       strings.ToLower(articulation.NoteheadHalf),
+			"noteheadWhole":      strings.ToLower(articulation.NoteheadWhole),
+			"techniquePlacement": strings.ToLower(articulation.TechniquePlacement),
+			"techniqueSymbol":    techniqueSymbol,
+			"inputMidiNumber":    inputMIDINumber,
+			"outputMidiNumber":   articulation.OutputMIDINumber,
+		})
+	}
+	return result
+}
+
 func normalizeGoStaves(song *Song, trackIndex int) []any {
 	track := &song.Tracks[trackIndex]
 	staves := track.Staves
 	if len(staves) == 0 {
 		staves = []Staff{{
-			Measures:        track.Measures,
-			Strings:         track.Strings,
-			PercussionTrack: track.PercussionTrack,
+			Measures:                  track.Measures,
+			Strings:                   track.Strings,
+			PercussionTrack:           track.PercussionTrack,
+			StandardNotationLineCount: 5,
 		}}
 	}
 	result := make([]any, 0, len(staves))
 	for staffIndex := range staves {
 		staff := &staves[staffIndex]
 		result = append(result, map[string]any{
-			"index":      staffIndex,
-			"percussion": staff.PercussionTrack,
-			"tuning":     normalizeGoTuning(staff.Strings),
-			"bars":       normalizeGoBars(song, staff),
+			"index":                     staffIndex,
+			"percussion":                staff.PercussionTrack,
+			"standardNotationLineCount": staff.StandardNotationLineCount,
+			"tuning":                    normalizeGoTuning(staff.Strings),
+			"bars":                      normalizeGoBars(song, track, staff),
 		})
 	}
 	return result
 }
 
-func normalizeGoBars(song *Song, staff *Staff) []any {
+func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 	result := make([]any, 0, len(staff.Measures))
 	for measureIndex := range staff.Measures {
 		measure := &staff.Measures[measureIndex]
@@ -810,10 +844,10 @@ func normalizeGoBars(song *Song, staff *Staff) []any {
 					continue
 				}
 				pendingGrace = pendingGrace[:0]
-				beats = append(beats, normalizeGoBeat(song, measureIndex, staff, beat))
+				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, beat))
 			}
 			for _, grace := range pendingGrace {
-				beats = append(beats, normalizeGoBeat(song, measureIndex, staff, grace))
+				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, grace))
 			}
 			voices = append(voices, map[string]any{"beats": beats})
 		}
@@ -830,14 +864,14 @@ func goVoiceHasContent(voice *Voice) bool {
 	})
 }
 
-func normalizeGoBeat(song *Song, measureIndex int, staff *Staff, beat *Beat) any {
+func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, beat *Beat) any {
 	start := any(nil)
 	if beat.Start != nil {
 		start = *beat.Start - song.MeasureHeaders[measureIndex].Start
 	}
 	notes := make([]any, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		notes = append(notes, normalizeGoNote(staff, &beat.Notes[noteIndex]))
+		notes = append(notes, normalizeGoNote(track, staff, &beat.Notes[noteIndex]))
 	}
 	return map[string]any{
 		"start":          start,
@@ -854,14 +888,19 @@ func normalizeGoBeat(song *Song, measureIndex int, staff *Staff, beat *Beat) any
 	}
 }
 
-func normalizeGoNote(staff *Staff, note *Note) any {
+func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
 	fret := any(note.Value)
 	articulation := any(nil)
+	midi := note.Value
 	if staff.PercussionTrack {
 		fret = nil
-	}
-	midi := note.Value
-	if !staff.PercussionTrack && note.String > 0 && int(note.String) <= len(staff.Strings) {
+		if note.HasPercussionArticulation {
+			articulation = note.PercussionArticulation
+			if note.PercussionArticulation >= 0 && note.PercussionArticulation < len(track.PercussionArticulations) {
+				midi = int16(track.PercussionArticulations[note.PercussionArticulation].OutputMIDINumber)
+			}
+		}
+	} else if note.String > 0 && int(note.String) <= len(staff.Strings) {
 		midi += int16(staff.Strings[note.String-1].Value)
 	}
 	graces := make([]any, 0, len(note.Effect.Graces))
@@ -876,8 +915,12 @@ func normalizeGoNote(staff *Staff, note *Note) any {
 			"transition": goGraceTransition(grace.Transition), "staffPercussion": staff.PercussionTrack,
 		})
 	}
+	percussionInput := any(nil)
+	if staff.PercussionTrack {
+		percussionInput = note.Value
+	}
 	return map[string]any{
-		"string": note.String, "fret": fret, "percussionArticulation": articulation, "midi": midi,
+		"string": note.String, "fret": fret, "percussionArticulation": articulation, "percussionInput": percussionInput, "midi": midi,
 		"kind": goNoteKind(note.Kind), "dynamic": goDynamic(note.Velocity), "tieOrigin": note.TieOrigin,
 		"tieDestination": note.Kind == NoteTypeTie,
 		"effects": map[string]any{
@@ -1126,6 +1169,8 @@ func conformanceExportCase(t *testing.T, id string) *Song {
 	switch id {
 	case "gp8-semantic-export":
 		return conformanceExportSong()
+	case "gp8-percussion-export":
+		return parseTestFixture(t, "testdata/gp7/percussion.gp")
 	default:
 		t.Fatalf("export conformance case %q has no source builder", id)
 		return nil

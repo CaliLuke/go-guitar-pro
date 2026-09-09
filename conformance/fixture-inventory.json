@@ -2680,8 +2680,8 @@
       "path": "testdata/gp7/percussion.gp",
       "sha256": "8f7ed8e99f2c24da4ba134c41ba9608258c5377b7f7c06dd35f865e9955c5e72",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Pinned differential snapshot covering percussion-articulations.",
+      "disposition": "supported",
+      "reason": "GPIF percussion identities, definitions, notation metadata, and output mappings agree with AlphaTab.",
       "features": [
         "percussion-articulations"
       ],

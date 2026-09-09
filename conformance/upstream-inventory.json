@@ -260,9 +260,9 @@
     },
     {
       "name": "Track.percussionArticulations",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "percussion-articulations",
-      "reason": "Go lacks per-track definitions; issue 10."
+      "reason": "Mapped directly to Track.PercussionArticulations in source order."
     },
     {
       "name": "Staff.bars",
@@ -338,9 +338,9 @@
     },
     {
       "name": "Note.percussionArticulation",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "percussion-articulations",
-      "reason": "GPIF identity is currently lost; issue 10."
+      "reason": "Mapped directly to Note.PercussionArticulation without changing Note.Value."
     },
     {
       "name": "Note.harmonicType",
@@ -2216,9 +2216,9 @@
     {
       "name": "Note.percussionArticulation",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "percussion-articulations",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly in the normalized authored-semantic contract."
     },
     {
       "name": "Note.realValue",
@@ -2790,9 +2790,9 @@
     {
       "name": "Staff.standardNotationLineCount",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly in the normalized authored-semantic contract."
     },
     {
       "name": "Staff.stringTuning",
@@ -2916,9 +2916,9 @@
     {
       "name": "Track.percussionArticulations",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "supported",
       "feature": "percussion-articulations",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Represented directly in the normalized authored-semantic contract."
     },
     {
       "name": "Track.playbackInfo",

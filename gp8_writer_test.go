@@ -15,6 +15,171 @@ import (
 	"testing"
 )
 
+func TestExportPreservesGPIFPercussionArticulations(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/percussion.gp")
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	track := &roundTrip.Tracks[0]
+	if len(track.PercussionArticulations) != 95 {
+		t.Fatalf("percussion articulations = %d, want 95", len(track.PercussionArticulations))
+	}
+	if got := track.Staves[0].StandardNotationLineCount; got != 1 {
+		t.Errorf("standard notation line count = %d, want 1", got)
+	}
+	for _, index := range []int{68, 69} {
+		got := track.PercussionArticulations[index]
+		want := song.Tracks[0].PercussionArticulations[index]
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("round-trip articulation %d = %#v, want %#v", index, got, want)
+		}
+	}
+	var notes []Note
+	for _, measure := range track.Measures {
+		for _, voice := range measure.Voices {
+			for _, beat := range voice.Beats {
+				notes = append(notes, beat.Notes...)
+			}
+		}
+	}
+	if len(notes) < 2 {
+		t.Fatalf("notes = %d, want at least 2", len(notes))
+	}
+	if !notes[0].HasPercussionArticulation || notes[0].Value != 69 || notes[0].PercussionArticulation != 68 || !notes[1].HasPercussionArticulation || notes[1].Value != 117 || notes[1].PercussionArticulation != 69 {
+		t.Errorf("round-trip note identities = %d/%d/%t and %d/%d/%t, want 69/68/true and 117/69/true", notes[0].Value, notes[0].PercussionArticulation, notes[0].HasPercussionArticulation, notes[1].Value, notes[1].PercussionArticulation, notes[1].HasPercussionArticulation)
+	}
+}
+
+func TestExportAppliesPercussionNoteheadOverrideToDefinitions(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/percussion.gp")
+	data, err := ExportWithOptions(song, ExportFormatGP8, ExportOptions{GP8: GP8ExportOptions{
+		PercussionNoteheads: map[int16]GP8PercussionNotehead{69: GP8PercussionNoteheadX},
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := roundTrip.Tracks[0].PercussionArticulations[68]
+	if got.NoteheadDefault != "noteheadXBlack" || got.NoteheadHalf != "noteheadXBlack" || got.NoteheadWhole != "noteheadXBlack" {
+		t.Errorf("overridden noteheads = %q/%q/%q", got.NoteheadDefault, got.NoteheadHalf, got.NoteheadWhole)
+	}
+	if want := song.Tracks[0].PercussionArticulations[69]; !reflect.DeepEqual(roundTrip.Tracks[0].PercussionArticulations[69], want) {
+		t.Error("override for input 69 changed the input 117 articulation")
+	}
+}
+
+func TestExportUsesPercussionInputForNoteWithoutIdentity(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/percussion.gp")
+	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Value = 117
+	note.PercussionArticulation = 0
+	note.HasPercussionArticulation = false
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	if !got.HasPercussionArticulation || got.PercussionArticulation != 69 {
+		t.Errorf("resolved articulation = %d/%t, want 69/true", got.PercussionArticulation, got.HasPercussionArticulation)
+	}
+}
+
+func TestExportPreservesPercussionGraceIdentity(t *testing.T) {
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.PercussionArticulations = []PercussionArticulation{
+		{ElementName: "Test", ElementType: "percussion", Name: "Main", NoteheadDefault: "noteheadBlack", InputMIDINumbers: []int{38}, OutputMIDINumber: 38},
+		{ElementName: "Test", ElementType: "percussion", Name: "Grace", NoteheadDefault: "noteheadXBlack", InputMIDINumbers: []int{38}, OutputMIDINumber: 42},
+	}
+	note := &track.Measures[0].Voices[0].Beats[0].Notes[0]
+	note.PercussionArticulation = 0
+	note.HasPercussionArticulation = true
+	note.Effect.Graces[0].PercussionArticulation = 1
+	note.Effect.Graces[0].HasPercussionArticulation = true
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	graces := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces
+	if len(graces) != 1 || !graces[0].HasPercussionArticulation || graces[0].PercussionArticulation != 1 {
+		t.Fatalf("round-trip grace identities = %#v, want articulation 1", graces)
+	}
+}
+
+func TestGPIFNormalizesBuiltinPercussionArticulation(t *testing.T) {
+	data, err := Export(syntheticGP8Song(), ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	data = rewriteConformanceGPIF(t, data, func(gpif string) string {
+		const open = "<InstrumentArticulation>"
+		start := strings.Index(gpif, open)
+		if start < 0 {
+			t.Fatal("exported GPIF has no instrument articulation")
+		}
+		start += len(open)
+		end := strings.Index(gpif[start:], "</InstrumentArticulation>")
+		if end < 0 {
+			t.Fatal("exported GPIF has an unterminated instrument articulation")
+		}
+		return gpif[:start] + "38" + gpif[start+end:]
+	})
+	song, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	note := song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	definitions := song.Tracks[0].PercussionArticulations
+	if !note.HasPercussionArticulation || note.PercussionArticulation < 0 || note.PercussionArticulation >= len(definitions) {
+		t.Fatalf("normalized identity = %d/%t with %d definitions", note.PercussionArticulation, note.HasPercussionArticulation, len(definitions))
+	}
+	if got := definitions[note.PercussionArticulation].InputMIDINumbers; !reflect.DeepEqual(got, []int{38}) {
+		t.Fatalf("normalized articulation inputs = %v, want [38]", got)
+	}
+	if _, err := Export(song, ExportFormatGP8); err != nil {
+		t.Fatalf("re-exporting normalized fallback: %v", err)
+	}
+}
+
+func TestGPIFNormalizesFallbacksAgainstOriginalTable(t *testing.T) {
+	track := Track{PercussionArticulations: make([]PercussionArticulation, 34)}
+	track.PercussionArticulations[0] = PercussionArticulation{
+		ElementName: "Acoustic Kick Drum", ElementType: "kickDrum", Name: "Custom",
+		InputMIDINumbers: []int{35}, OutputMIDINumber: 42,
+	}
+	fallbacks := gpifPercussionFallbacks{tableLength: len(track.PercussionArticulations)}
+	notes := []Note{
+		{PercussionArticulation: 35, HasPercussionArticulation: true},
+		{PercussionArticulation: 36, HasPercussionArticulation: true},
+		{PercussionArticulation: 35, HasPercussionArticulation: true},
+	}
+	for index := range notes {
+		gpifNormalizePercussionArticulation(&track, &notes[index], &fallbacks)
+	}
+	if notes[0].PercussionArticulation != 34 || notes[1].PercussionArticulation != 35 || notes[2].PercussionArticulation != 34 {
+		t.Fatalf("normalized fallback indices = %d, %d, %d; want 34, 35, 34", notes[0].PercussionArticulation, notes[1].PercussionArticulation, notes[2].PercussionArticulation)
+	}
+	if track.PercussionArticulations[34].OutputMIDINumber != 35 {
+		t.Fatalf("built-in fallback aliased custom definition: %#v", track.PercussionArticulations[34])
+	}
+}
+
 func TestExportGP8RoundTrip(t *testing.T) {
 	song := syntheticGP8Song()
 	before, err := json.Marshal(song)
@@ -848,6 +1013,35 @@ func TestExportFileGP8(t *testing.T) {
 	if _, err := ParseFile(path); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestExportRejectsInvalidPercussionArticulationIdentity(t *testing.T) {
+	newSong := func() *Song {
+		song := syntheticGP8Song()
+		song.Tracks[0].PercussionArticulations = []PercussionArticulation{{
+			ElementName: "Test", ElementType: "percussion", Name: "Hit", NoteheadDefault: "noteheadBlack",
+			InputMIDINumbers: []int{38}, OutputMIDINumber: 38,
+		}}
+		return song
+	}
+	t.Run("note", func(t *testing.T) {
+		song := newSong()
+		note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+		note.PercussionArticulation = 1
+		note.HasPercussionArticulation = true
+		if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "percussion articulation 1 with 1 definitions") {
+			t.Fatalf("Export error = %v, want invalid articulation identity", err)
+		}
+	})
+	t.Run("grace", func(t *testing.T) {
+		song := newSong()
+		grace := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces[0]
+		grace.PercussionArticulation = 1
+		grace.HasPercussionArticulation = true
+		if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "grace 0 uses percussion articulation 1 with 1 definitions") {
+			t.Fatalf("Export error = %v, want invalid grace articulation identity", err)
+		}
+	})
 }
 
 func TestExportRejectsUnsupportedInput(t *testing.T) {

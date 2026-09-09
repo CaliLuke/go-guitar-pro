@@ -35,12 +35,17 @@ type GraceEffect struct {
 	Duration uint8
 	Fret     int8
 	// RawFret preserves the source-format fret byte when Fret is normalized.
-	RawFret    *int8
-	IsDead     bool
-	IsOnBeat   bool
-	Sequence   uint8
-	Transition GraceEffectTransition
-	Velocity   int16
+	RawFret *int8
+	// PercussionArticulation is the grace note's track-local articulation index.
+	// It is meaningful only when HasPercussionArticulation is true.
+	PercussionArticulation int
+	// HasPercussionArticulation reports whether the track-local identity is present.
+	HasPercussionArticulation bool
+	IsDead                    bool
+	IsOnBeat                  bool
+	Sequence                  uint8
+	Transition                GraceEffectTransition
+	Velocity                  int16
 }
 
 // HarmonicEffect represents a harmonic note effect.

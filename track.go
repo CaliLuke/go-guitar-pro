@@ -25,6 +25,8 @@ type Staff struct {
 	Strings []GuitarString
 	// PercussionTrack reports whether this staff uses percussion articulations.
 	PercussionTrack bool
+	// StandardNotationLineCount is the number of rendered lines in standard notation.
+	StandardNotationLineCount int
 }
 
 // Track represents a track.
@@ -35,11 +37,13 @@ type Track struct {
 	// Measures is the first staff's compatibility view. Use Staves for lossless multi-staff access.
 	Measures []Measure
 	// Strings is the first staff's compatibility view. Use Staves for staff-specific tuning.
-	Strings          []GuitarString
-	Lyrics           []TrackLyricLine
-	Sounds           []TrackSound
-	SoundAutomations []SoundAutomation
-	Rse              TrackRse
+	Strings []GuitarString
+	Lyrics  []TrackLyricLine
+	Sounds  []TrackSound
+	// PercussionArticulations contains this track's ordered GPIF percussion definitions.
+	PercussionArticulations []PercussionArticulation
+	SoundAutomations        []SoundAutomation
+	Rse                     TrackRse
 	// ChannelIndex is the index of the track channel in Song.Channels.
 	// A value of -1 means that the file does not bind the track to a channel.
 	ChannelIndex              int
@@ -59,11 +63,42 @@ type Track struct {
 	Solo                      bool
 }
 
+// PercussionArticulation describes one track-local GPIF percussion definition.
+type PercussionArticulation struct {
+	// ElementName identifies the parent instrument-set element used by notation patches.
+	ElementName string
+	// ElementType retains the authored instrument-set element type.
+	ElementType string
+	// ElementSoundbankName identifies the authored RSE soundbank for the parent element.
+	ElementSoundbankName string
+	// Name identifies the articulation within its parent element.
+	Name string
+	// StaffLine is the Guitar Pro staff step, including lines and spaces.
+	StaffLine int
+	// NoteheadDefault is the notehead used for durations other than half and whole notes.
+	NoteheadDefault string
+	// NoteheadHalf is the notehead used for half notes.
+	NoteheadHalf string
+	// NoteheadWhole is the notehead used for whole notes.
+	NoteheadWhole string
+	// TechniquePlacement identifies where the technique symbol is rendered.
+	TechniquePlacement string
+	// TechniqueSymbol identifies the optional technique glyph.
+	TechniqueSymbol string
+	// InputMIDINumbers contains every authored input MIDI value for this articulation.
+	InputMIDINumbers []int
+	// OutputRSESound identifies the authored RSE playback sound.
+	OutputRSESound string
+	// OutputMIDINumber is the MIDI value used for playback.
+	OutputMIDINumber int
+}
+
 func (t *Track) populateSingleStaff() {
 	t.Staves = []Staff{{
-		Measures:        t.Measures,
-		Strings:         t.Strings,
-		PercussionTrack: t.PercussionTrack,
+		Measures:                  t.Measures,
+		Strings:                   t.Strings,
+		PercussionTrack:           t.PercussionTrack,
+		StandardNotationLineCount: 5,
 	}}
 }
 

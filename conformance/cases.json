@@ -75,8 +75,7 @@
     {
       "id": "gp7-percussion",
       "fixture": "testdata/gp7/percussion.gp",
-      "features": ["percussion-articulations"],
-      "issues": [10]
+      "features": ["percussion-articulations"]
     },
     {
       "id": "gp7-core-notes",
@@ -92,8 +91,12 @@
   "exportCases": [
     {
       "id": "gp8-semantic-export",
-      "features": ["rhythm", "harmonics", "hairpins", "percussion-articulations"],
+      "features": ["rhythm", "harmonics", "hairpins"],
       "issues": [6, 7]
+    },
+    {
+      "id": "gp8-percussion-export",
+      "features": ["percussion-articulations"]
     }
   ]
 }

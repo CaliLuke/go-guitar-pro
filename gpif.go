@@ -112,6 +112,7 @@ type gpifTrack struct {
 	Color            string             `xml:"Color,omitempty"`
 	Instrument       *gpifInstrument    `xml:"Instrument,omitempty"`
 	InstrumentSet    *gpifInstrumentSet `xml:"InstrumentSet,omitempty"`
+	NotationPatch    *gpifInstrumentSet `xml:"NotationPatch,omitempty"`
 	GeneralMidi      *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
 	Staves           gpifStaves         `xml:"Staves"`
 	Sounds           gpifSounds         `xml:"Sounds"`
@@ -225,6 +226,73 @@ type gpifArticulation struct {
 	InputMIDINumbers   string `xml:"InputMidiNumbers"`
 	OutputRSESound     string `xml:"OutputRSESound"`
 	OutputMIDINumber   int    `xml:"OutputMidiNumber"`
+}
+
+func gpifReadPercussionArticulations(instrumentSet, notationPatch *gpifInstrumentSet) []PercussionArticulation {
+	if instrumentSet == nil {
+		return nil
+	}
+	count := 0
+	for _, element := range instrumentSet.Elements.Elements {
+		count += len(element.Articulations.Articulations)
+	}
+	articulations := make([]PercussionArticulation, 0, count)
+	type articulationName struct {
+		element string
+		name    string
+	}
+	byName := make(map[articulationName]int, count)
+	for _, element := range instrumentSet.Elements.Elements {
+		for _, source := range element.Articulations.Articulations {
+			noteheads := strings.Fields(source.Noteheads)
+			articulation := PercussionArticulation{
+				ElementName:          element.Name,
+				ElementType:          element.Type,
+				ElementSoundbankName: element.SoundbankName,
+				Name:                 source.Name,
+				StaffLine:            source.StaffLine,
+				TechniquePlacement:   source.TechniquePlacement,
+				TechniqueSymbol:      source.TechniqueSymbol,
+				OutputRSESound:       source.OutputRSESound,
+				OutputMIDINumber:     source.OutputMIDINumber,
+			}
+			if articulation.TechniquePlacement == "" {
+				articulation.TechniquePlacement = "outside"
+			}
+			if len(noteheads) > 0 {
+				articulation.NoteheadDefault = noteheads[0]
+			}
+			if len(noteheads) > 1 {
+				articulation.NoteheadHalf = noteheads[1]
+			}
+			if len(noteheads) > 2 {
+				articulation.NoteheadWhole = noteheads[2]
+			}
+			if articulation.NoteheadHalf == "" {
+				articulation.NoteheadHalf = articulation.NoteheadDefault
+			}
+			if articulation.NoteheadWhole == "" {
+				articulation.NoteheadWhole = articulation.NoteheadDefault
+			}
+			for _, value := range strings.Fields(source.InputMIDINumbers) {
+				if midi, err := strconv.Atoi(value); err == nil {
+					articulation.InputMIDINumbers = append(articulation.InputMIDINumbers, midi)
+				}
+			}
+			byName[articulationName{element: element.Name, name: source.Name}] = len(articulations)
+			articulations = append(articulations, articulation)
+		}
+	}
+	if notationPatch != nil {
+		for _, element := range notationPatch.Elements.Elements {
+			for _, patch := range element.Articulations.Articulations {
+				if index, ok := byName[articulationName{element: element.Name, name: patch.Name}]; ok {
+					articulations[index].StaffLine = patch.StaffLine
+				}
+			}
+		}
+	}
+	return articulations
 }
 
 func (t *gpifTrack) isPercussionTrack() bool {
@@ -498,6 +566,9 @@ func parseGPIF(data []byte) (*Song, error) {
 			if t.ID == trackID {
 				track.Name = t.Name
 				track.PercussionTrack = t.isPercussionTrack()
+				if track.PercussionTrack {
+					track.PercussionArticulations = gpifReadPercussionArticulations(t.InstrumentSet, t.NotationPatch)
+				}
 				if t.Lyrics != nil {
 					for _, line := range t.Lyrics.Lines {
 						track.Lyrics = append(track.Lyrics, TrackLyricLine(line))
@@ -526,6 +597,13 @@ func parseGPIF(data []byte) (*Song, error) {
 				if t.Instrument != nil && (strings.HasSuffix(t.Instrument.Ref, "-gs") || strings.HasSuffix(t.Instrument.Ref, "GrandStaff")) {
 					staffCount = max(2, staffCount)
 				}
+				lineCount := 5
+				if t.InstrumentSet != nil && t.InstrumentSet.LineCount > 0 {
+					lineCount = t.InstrumentSet.LineCount
+				}
+				if t.NotationPatch != nil && t.NotationPatch.LineCount > 0 {
+					lineCount = t.NotationPatch.LineCount
+				}
 				track.Staves = make([]Staff, staffCount)
 				for staffIndex := range track.Staves {
 					strings := append([]GuitarString(nil), track.Strings...)
@@ -535,8 +613,9 @@ func parseGPIF(data []byte) (*Song, error) {
 						}
 					}
 					track.Staves[staffIndex] = Staff{
-						Strings:         strings,
-						PercussionTrack: track.PercussionTrack,
+						Strings:                   strings,
+						PercussionTrack:           track.PercussionTrack,
+						StandardNotationLineCount: lineCount,
 					}
 				}
 				track.Strings = track.Staves[0].Strings
@@ -580,6 +659,10 @@ func parseGPIF(data []byte) (*Song, error) {
 	}
 
 	// Parse master bars → measure headers + measures
+	fallbackArticulations := make([]gpifPercussionFallbacks, len(song.Tracks))
+	for trackIndex := range song.Tracks {
+		fallbackArticulations[trackIndex].tableLength = len(song.Tracks[trackIndex].PercussionArticulations)
+	}
 	for mbIdx, mb := range doc.MasterBars.MasterBars {
 		mh := defaultMeasureHeader()
 		mh.Number = uint16(mbIdx + 1)
@@ -713,6 +796,7 @@ func parseGPIF(data []byte) (*Song, error) {
 										}
 										if n, ok := noteMap[noteID]; ok {
 											note := gpifNoteToNote(n, len(staff.Strings), staff.PercussionTrack)
+											gpifNormalizePercussionArticulation(track, &note, &fallbackArticulations[trackIdx])
 											note.Velocity = velocity
 											beat.Notes = append(beat.Notes, note)
 										}
@@ -812,13 +896,15 @@ func gpifGraceEffect(note *Note, duration *Duration, onBeat bool, sequence int) 
 		transition = GraceEffectTransitionSlide
 	}
 	return GraceEffect{
-		Duration:   uint8(min(uint16(math.MaxUint8), duration.Value)),
-		Fret:       int8(min(int16(math.MaxInt8), max(int16(math.MinInt8), note.Value))),
-		IsDead:     note.Kind == NoteTypeDead,
-		IsOnBeat:   onBeat,
-		Sequence:   uint8(min(sequence, math.MaxUint8)),
-		Transition: transition,
-		Velocity:   note.Velocity,
+		Duration:                  uint8(min(uint16(math.MaxUint8), duration.Value)),
+		Fret:                      int8(min(int16(math.MaxInt8), max(int16(math.MinInt8), note.Value))),
+		PercussionArticulation:    note.PercussionArticulation,
+		HasPercussionArticulation: note.HasPercussionArticulation,
+		IsDead:                    note.Kind == NoteTypeDead,
+		IsOnBeat:                  onBeat,
+		Sequence:                  uint8(min(sequence, math.MaxUint8)),
+		Transition:                transition,
+		Velocity:                  note.Velocity,
 	}
 }
 
@@ -1243,9 +1329,75 @@ func gpifRhythmToDuration(r *gpifRhythm) Duration {
 	return d
 }
 
+type gpifPercussionFallbacks struct {
+	tableLength int
+	ids         map[int]int
+}
+
+func gpifNormalizePercussionArticulation(track *Track, note *Note, fallbacks *gpifPercussionFallbacks) {
+	if !note.HasPercussionArticulation || note.PercussionArticulation < fallbacks.tableLength {
+		return
+	}
+	sourceID := note.PercussionArticulation
+	if sourceID < 29 || sourceID > 127 {
+		return
+	}
+	if fallbacks.ids != nil {
+		if index, ok := fallbacks.ids[sourceID]; ok {
+			note.PercussionArticulation = index
+			return
+		}
+	} else {
+		fallbacks.ids = make(map[int]int)
+	}
+	element := gp8DrumElement(int16(sourceID), GP8ExportOptions{})
+	if element.Type == "percussion" {
+		return
+	}
+	definitions := gpifReadPercussionArticulations(&gpifInstrumentSet{
+		Elements: gpifElements{Elements: []gpifElement{element}},
+	}, nil)
+	if len(definitions) == 0 {
+		return
+	}
+	definition := definitions[0]
+	for index, existing := range track.PercussionArticulations {
+		if gpifSamePercussionArticulation(existing, definition) {
+			fallbacks.ids[sourceID] = index
+			note.PercussionArticulation = index
+			return
+		}
+	}
+	index := len(track.PercussionArticulations)
+	track.PercussionArticulations = append(track.PercussionArticulations, definition)
+	fallbacks.ids[sourceID] = index
+	note.PercussionArticulation = index
+}
+
+func gpifSamePercussionArticulation(a, b PercussionArticulation) bool {
+	if a.ElementName != b.ElementName || a.ElementType != b.ElementType || a.ElementSoundbankName != b.ElementSoundbankName ||
+		a.Name != b.Name || a.StaffLine != b.StaffLine || a.NoteheadDefault != b.NoteheadDefault ||
+		a.NoteheadHalf != b.NoteheadHalf || a.NoteheadWhole != b.NoteheadWhole ||
+		a.TechniquePlacement != b.TechniquePlacement || a.TechniqueSymbol != b.TechniqueSymbol ||
+		a.OutputRSESound != b.OutputRSESound || a.OutputMIDINumber != b.OutputMIDINumber ||
+		len(a.InputMIDINumbers) != len(b.InputMIDINumbers) {
+		return false
+	}
+	for index := range a.InputMIDINumbers {
+		if a.InputMIDINumbers[index] != b.InputMIDINumbers[index] {
+			return false
+		}
+	}
+	return true
+}
+
 func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
+	if percussion && n.InstrumentArticulation != nil && *n.InstrumentArticulation >= 0 {
+		note.PercussionArticulation = *n.InstrumentArticulation
+		note.HasPercussionArticulation = true
+	}
 	hasFret := false
 	bend := gpifBendProperties{}
 	var harmonicFret *float64

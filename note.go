@@ -6,10 +6,17 @@ package goguitarpro
 type Note struct {
 	Effect          NoteEffect
 	DurationPercent float32
-	Value           int16
-	Velocity        int16
-	String          int8
-	SwapAccidentals bool
+	// Value retains the source fret or MIDI value. For GPIF percussion,
+	// PercussionArticulation identifies the track-local definition separately.
+	Value int16
+	// PercussionArticulation is the index into Track.PercussionArticulations.
+	// It is meaningful only when HasPercussionArticulation is true.
+	PercussionArticulation int
+	// HasPercussionArticulation reports whether the track-local identity is present.
+	HasPercussionArticulation bool
+	Velocity                  int16
+	String                    int8
+	SwapAccidentals           bool
 	// TieOrigin marks this note as the start of a tie in formats that model
 	// tie direction explicitly, such as GPIF.
 	TieOrigin        bool

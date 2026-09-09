@@ -292,6 +292,18 @@ func validateGP8Song(song *Song) error {
 				return fmt.Errorf("track %d sound automation %d has invalid position bar=%d position=%v", trackIndex, automationIndex, automation.Bar, automation.Position)
 			}
 		}
+		if track.PercussionTrack {
+			for articulationIndex, articulation := range track.PercussionArticulations {
+				if articulation.OutputMIDINumber < 0 || articulation.OutputMIDINumber > 127 {
+					return fmt.Errorf("track %d percussion articulation %d has output MIDI value %d outside 0..127", trackIndex, articulationIndex, articulation.OutputMIDINumber)
+				}
+				for _, input := range articulation.InputMIDINumbers {
+					if input < 0 || input > 127 {
+						return fmt.Errorf("track %d percussion articulation %d has input MIDI value %d outside 0..127", trackIndex, articulationIndex, input)
+					}
+				}
+			}
+		}
 		for measureIndex := range track.Measures {
 			if len(track.Measures[measureIndex].Voices) > 4 {
 				return fmt.Errorf("track %d measure %d has %d voices, Guitar Pro 8 supports at most 4", trackIndex, measureIndex, len(track.Measures[measureIndex].Voices))
@@ -299,14 +311,26 @@ func validateGP8Song(song *Song) error {
 			for voiceIndex := range track.Measures[measureIndex].Voices {
 				for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
 					for noteIndex, note := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
+						if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
+							return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion articulation %d with %d definitions", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.PercussionArticulation, len(track.PercussionArticulations))
+						}
+						if track.PercussionTrack {
+							for graceIndex, grace := range note.Effect.Graces {
+								if grace.HasPercussionArticulation && (grace.PercussionArticulation < 0 || grace.PercussionArticulation >= len(track.PercussionArticulations)) {
+									return fmt.Errorf("track %d measure %d voice %d beat %d note %d grace %d uses percussion articulation %d with %d definitions", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, grace.PercussionArticulation, len(track.PercussionArticulations))
+								}
+							}
+						}
 						midi := gp8NoteMIDI(track, &note)
 						if midi < 0 || midi > 127 {
 							return fmt.Errorf("track %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
 						}
 						if track.PercussionTrack {
-							element := gp8DrumElement(note.Value, GP8ExportOptions{})
-							if element.Type == "percussion" {
-								return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value)
+							if _, ok := gp8PercussionArticulationIndex(track, &note); !ok {
+								element := gp8DrumElement(note.Value, GP8ExportOptions{})
+								if element.Type == "percussion" {
+									return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value)
+								}
 							}
 						}
 					}
@@ -330,21 +354,23 @@ func validateGP8ExportOptions(options GP8ExportOptions) error {
 }
 
 type gp8Builder struct {
-	song            *Song
-	options         GP8ExportOptions
-	doc             gpifDocument
-	rhythmIDs       map[Duration]string
-	chordIDs        []map[*Chord]string
-	articulationIDs []map[int16]int
+	song               *Song
+	options            GP8ExportOptions
+	doc                gpifDocument
+	rhythmIDs          map[Duration]string
+	chordIDs           []map[*Chord]string
+	articulationIDs    []map[int16]int
+	percussionElements [][]gpifElement
 }
 
 func buildGP8Document(song *Song, options GP8ExportOptions) (gpifDocument, error) {
 	builder := gp8Builder{
-		song:            song,
-		options:         options,
-		rhythmIDs:       make(map[Duration]string),
-		chordIDs:        make([]map[*Chord]string, len(song.Tracks)),
-		articulationIDs: make([]map[int16]int, len(song.Tracks)),
+		song:               song,
+		options:            options,
+		rhythmIDs:          make(map[Duration]string),
+		chordIDs:           make([]map[*Chord]string, len(song.Tracks)),
+		articulationIDs:    make([]map[int16]int, len(song.Tracks)),
+		percussionElements: make([][]gpifElement, len(song.Tracks)),
 	}
 	builder.doc = gpifDocument{
 		GPVersion: gp8DocumentVersion,
@@ -443,22 +469,9 @@ func (builder *gp8Builder) prepareTrack(trackIndex int) {
 
 	articulationIDs := make(map[int16]int)
 	if track.PercussionTrack {
-		values := make([]int16, 0)
-		seen := make(map[int16]struct{})
-		for measureIndex := range track.Measures {
-			for voiceIndex := range track.Measures[measureIndex].Voices {
-				for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
-					for _, note := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
-						if _, exists := seen[note.Value]; !exists {
-							seen[note.Value] = struct{}{}
-							values = append(values, note.Value)
-						}
-					}
-				}
-			}
-		}
-		slices.Sort(values)
-		articulationIDs = gp8DrumArticulationIDs(gp8DrumElements(values, builder.options))
+		elements := gp8PercussionElements(track, builder.options)
+		builder.percussionElements[trackIndex] = elements
+		articulationIDs = gp8DrumArticulationIDs(elements)
 	}
 	builder.articulationIDs[trackIndex] = articulationIDs
 }
@@ -544,13 +557,16 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	result.Staves = gpifStaves{Staff: []gpifStaff{{Properties: properties}}}
 
 	if track.PercussionTrack {
-		result.InstrumentSet = &gpifInstrumentSet{Name: "Drums", Type: "drumKit", LineCount: 5}
-		values := make([]int16, 0, len(builder.articulationIDs[trackIndex]))
-		for value := range builder.articulationIDs[trackIndex] {
-			values = append(values, value)
+		lineCount := 5
+		if len(track.Staves) > 0 && track.Staves[0].StandardNotationLineCount > 0 {
+			lineCount = track.Staves[0].StandardNotationLineCount
 		}
-		slices.Sort(values)
-		result.InstrumentSet.Elements.Elements = gp8DrumElements(values, builder.options)
+		result.InstrumentSet = &gpifInstrumentSet{
+			Name:      "Drums",
+			Type:      "drumKit",
+			LineCount: lineCount,
+			Elements:  gpifElements{Elements: builder.percussionElements[trackIndex]},
+		}
 	} else {
 		name, instrumentType := gp8PitchedInstrumentSet(channel.Instrument)
 		result.InstrumentSet = &gpifInstrumentSet{
@@ -825,6 +841,8 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 			}
 			graceNote := *note
 			graceNote.Value = int16(grace.Fret)
+			graceNote.PercussionArticulation = grace.PercussionArticulation
+			graceNote.HasPercussionArticulation = grace.HasPercussionArticulation
 			if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {
 				graceNote.Value = note.Value
 			}
@@ -990,7 +1008,11 @@ func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
 		}
 	}
 	if track.PercussionTrack {
-		articulation = builder.articulationIDs[trackIndex][note.Value]
+		if index, ok := gp8PercussionArticulationIndex(track, note); ok {
+			articulation = index
+		} else {
+			articulation = builder.articulationIDs[trackIndex][note.Value]
+		}
 		result.InstrumentArticulation = &articulation
 	}
 	if note.TieOrigin || note.Kind == NoteTypeTie {
@@ -1300,6 +1322,86 @@ func gp8DrumStaffLine(value int16) int {
 	default:
 		return 0
 	}
+}
+
+func gp8PercussionArticulationIndex(track *Track, note *Note) (int, bool) {
+	if note.HasPercussionArticulation {
+		return note.PercussionArticulation, note.PercussionArticulation >= 0 && note.PercussionArticulation < len(track.PercussionArticulations)
+	}
+	for index, articulation := range track.PercussionArticulations {
+		for _, input := range articulation.InputMIDINumbers {
+			if input == int(note.Value) {
+				return index, true
+			}
+		}
+	}
+	return 0, false
+}
+
+func gp8PercussionElements(track *Track, options GP8ExportOptions) []gpifElement {
+	elements := make([]gpifElement, 0)
+	for _, source := range track.PercussionArticulations {
+		placement := source.TechniquePlacement
+		if placement == "" {
+			placement = "outside"
+		}
+		defaultHead := source.NoteheadDefault
+		halfHead := source.NoteheadHalf
+		if halfHead == "" {
+			halfHead = defaultHead
+		}
+		wholeHead := source.NoteheadWhole
+		if wholeHead == "" {
+			wholeHead = defaultHead
+		}
+		noteheads := strings.TrimSpace(strings.Join([]string{defaultHead, halfHead, wholeHead}, " "))
+		for _, input := range source.InputMIDINumbers {
+			if override := options.PercussionNoteheads[int16(input)]; override != GP8PercussionNoteheadDefault {
+				noteheads = gp8PercussionNoteheads(override)
+				break
+			}
+		}
+		inputs := make([]string, 0, len(source.InputMIDINumbers))
+		for _, input := range source.InputMIDINumbers {
+			inputs = append(inputs, strconv.Itoa(input))
+		}
+		articulation := gpifArticulation{
+			Name:               source.Name,
+			StaffLine:          source.StaffLine,
+			Noteheads:          noteheads,
+			TechniquePlacement: placement,
+			TechniqueSymbol:    source.TechniqueSymbol,
+			InputMIDINumbers:   strings.Join(inputs, " "),
+			OutputRSESound:     source.OutputRSESound,
+			OutputMIDINumber:   source.OutputMIDINumber,
+		}
+		if len(elements) == 0 || elements[len(elements)-1].Name != source.ElementName || elements[len(elements)-1].Type != source.ElementType || elements[len(elements)-1].SoundbankName != source.ElementSoundbankName {
+			elements = append(elements, gpifElement{Name: source.ElementName, Type: source.ElementType, SoundbankName: source.ElementSoundbankName})
+		}
+		last := &elements[len(elements)-1]
+		last.Articulations.Articulations = append(last.Articulations.Articulations, articulation)
+	}
+
+	values := make([]int16, 0)
+	seen := make(map[int16]struct{})
+	for measureIndex := range track.Measures {
+		for voiceIndex := range track.Measures[measureIndex].Voices {
+			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
+				for noteIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
+					note := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
+					if _, ok := gp8PercussionArticulationIndex(track, note); ok {
+						continue
+					}
+					if _, ok := seen[note.Value]; !ok {
+						seen[note.Value] = struct{}{}
+						values = append(values, note.Value)
+					}
+				}
+			}
+		}
+	}
+	slices.Sort(values)
+	return append(elements, gp8DrumElements(values, options)...)
 }
 
 func gp8DrumElements(values []int16, options GP8ExportOptions) []gpifElement {

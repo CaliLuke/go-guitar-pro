@@ -14,6 +14,20 @@ function finite(value) {
   return Number.isFinite(value) ? value : null;
 }
 
+function normalizeArticulation(articulation) {
+  return {
+    elementName: articulation.elementType,
+    inputMidiNumber: articulation.id,
+    staffLine: articulation.staffLine,
+    noteheadDefault: enumName(alphaTab.model.MusicFontSymbol, articulation.noteHeadDefault),
+    noteheadHalf: enumName(alphaTab.model.MusicFontSymbol, articulation.noteHeadHalf),
+    noteheadWhole: enumName(alphaTab.model.MusicFontSymbol, articulation.noteHeadWhole),
+    techniquePlacement: enumName(alphaTab.model.TechniqueSymbolPlacement, articulation.techniqueSymbolPlacement),
+    techniqueSymbol: enumName(alphaTab.model.MusicFontSymbol, articulation.techniqueSymbol),
+    outputMidiNumber: articulation.outputMidiNumber
+  };
+}
+
 function normalizeAutomation(automation, bar) {
   return {
     bar,
@@ -48,6 +62,12 @@ function normalizeClef(value) {
   }
 }
 
+function percussionInput(note, staff) {
+  return note.percussionArticulation >= 0 && note.percussionArticulation < staff.track.percussionArticulations.length
+    ? staff.track.percussionArticulations[note.percussionArticulation].id
+    : null;
+}
+
 function normalizeGrace(note, beat, staff) {
   return {
     rawFret: finite(note.fret),
@@ -63,11 +83,16 @@ function normalizeGrace(note, beat, staff) {
 
 function normalizeNote(note, staff, graces) {
   const isPercussion = Boolean(staff.isPercussion);
+  let midi = finite(note.realValueWithoutHarmonic);
+  if (isPercussion && note.percussionArticulation >= 0 && note.percussionArticulation < staff.track.percussionArticulations.length) {
+    midi = staff.track.percussionArticulations[note.percussionArticulation].outputMidiNumber;
+  }
   return {
     string: note.string,
     fret: isPercussion ? null : finite(note.fret),
     percussionArticulation: note.percussionArticulation >= 0 ? note.percussionArticulation : null,
-    midi: finite(note.realValueWithoutHarmonic),
+    percussionInput: isPercussion ? percussionInput(note, staff) : null,
+    midi,
     kind: note.isDead ? 'dead' : note.isTieDestination ? 'tie' : 'normal',
     dynamic: enumName(alphaTab.model.DynamicValue, note.dynamics),
     tieOrigin: Boolean(note.tieDestination),
@@ -157,6 +182,7 @@ function normalizeStaff(staff) {
   return {
     index: staff.index,
     percussion: Boolean(staff.isPercussion),
+    standardNotationLineCount: staff.standardNotationLineCount,
     tuning: Array.from(staff.tuning ?? []),
     bars: staff.bars.map(bar => ({
       index: bar.index,
@@ -203,6 +229,7 @@ function normalizeScore(score) {
       name: track.name ?? '',
       program: track.playbackInfo.program,
       primaryChannel: track.playbackInfo.primaryChannel,
+      percussionArticulations: track.percussionArticulations.map(normalizeArticulation),
       staves: track.staves.map(normalizeStaff)
     }))
   };

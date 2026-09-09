@@ -150,6 +150,61 @@ func TestGP5PercussionGraceUsesDrumArticulation(t *testing.T) {
 		t.Errorf("percussion grace bars = %v, want %v", graceBars, wantBars)
 	}
 }
+func TestGPIFPercussionPreservesArticulations(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/percussion.gp")
+	track := &song.Tracks[0]
+	if len(track.PercussionArticulations) != 95 {
+		t.Fatalf("percussion articulations = %d, want 95", len(track.PercussionArticulations))
+	}
+	if got := track.Staves[0].StandardNotationLineCount; got != 1 {
+		t.Errorf("standard notation line count = %d, want 1", got)
+	}
+
+	hit := track.PercussionArticulations[68]
+	returned := track.PercussionArticulations[69]
+	if hit.ElementName != "Cabasa" || hit.ElementType != "cabasa" || hit.Name != "Cabasa (hit)" {
+		t.Errorf("hit identity = %#v", hit)
+	}
+	if hit.StaffLine != 0 || hit.NoteheadDefault != "noteheadBlack" || hit.NoteheadHalf != "noteheadHalf" || hit.NoteheadWhole != "noteheadWhole" {
+		t.Errorf("hit notation = %#v", hit)
+	}
+	if hit.TechniquePlacement != "outside" || hit.TechniqueSymbol != "" || !slices.Equal(hit.InputMIDINumbers, []int{69}) || hit.OutputRSESound != "hand.hit.hit" || hit.OutputMIDINumber != 69 {
+		t.Errorf("hit playback = %#v", hit)
+	}
+	if returned.ElementName != "Cabasa" || returned.ElementType != "cabasa" || returned.Name != "Cabasa (return)" {
+		t.Errorf("return identity = %#v", returned)
+	}
+	if returned.StaffLine != 0 || returned.TechniquePlacement != "outside" || returned.TechniqueSymbol != "stringsUpBow" || !slices.Equal(returned.InputMIDINumbers, []int{117}) || returned.OutputRSESound != "hand.hit.return" || returned.OutputMIDINumber != 69 {
+		t.Errorf("return metadata = %#v", returned)
+	}
+
+	var notes []Note
+	for _, measure := range track.Staves[0].Measures {
+		for _, voice := range measure.Voices {
+			for _, beat := range voice.Beats {
+				notes = append(notes, beat.Notes...)
+			}
+		}
+	}
+	if len(notes) < 2 {
+		t.Fatalf("notes = %d, want at least 2", len(notes))
+	}
+	if !notes[0].HasPercussionArticulation || notes[0].Value != 69 || notes[0].PercussionArticulation != 68 {
+		t.Errorf("first note value/articulation/presence = %d/%d/%t, want 69/68/true", notes[0].Value, notes[0].PercussionArticulation, notes[0].HasPercussionArticulation)
+	}
+	if !notes[1].HasPercussionArticulation || notes[1].Value != 117 || notes[1].PercussionArticulation != 69 {
+		t.Errorf("second note value/articulation/presence = %d/%d/%t, want 117/69/true", notes[1].Value, notes[1].PercussionArticulation, notes[1].HasPercussionArticulation)
+	}
+}
+
+func TestGPIFPitchedTrackHasNoPercussionDefinitions(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/tuning.gp")
+	for trackIndex, track := range song.Tracks {
+		if !track.PercussionTrack && len(track.PercussionArticulations) != 0 {
+			t.Fatalf("pitched track %d has %d percussion definitions", trackIndex, len(track.PercussionArticulations))
+		}
+	}
+}
 
 func TestGP5TrackMixerUsesNormalizedMidiRange(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp5/Demo v5.gp5")

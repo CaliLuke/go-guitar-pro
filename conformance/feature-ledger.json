@@ -134,16 +134,16 @@
     },
     {
       "id": "percussion-articulations",
-      "formats": ["gp3", "gp4", "gp5", "gp6", "gp7", "gp8"],
-      "upstreamParser": ["Gp3To5Importer.readNote", "GpifParser._parseNote", "GpifParser._parseInstrumentSet"],
+      "formats": ["gp7", "gp8"],
+      "upstreamParser": ["GpifParser._parseNote", "GpifParser._parseInstrumentSet"],
       "upstreamModel": ["Note.percussionArticulation", "Track.percussionArticulations", "InstrumentArticulation"],
       "upstreamTests": ["checkNotes"],
-      "goDestination": ["Track.PercussionTrack", "Note.Value"],
-      "fixtures": ["testdata/gp5/motherload-percussion-grace.gp5", "testdata/gp7/percussion.gp"],
+      "goDestination": ["Track.PercussionTrack", "Track.PercussionArticulations", "Staff.StandardNotationLineCount", "Note.PercussionArticulation", "Note.Value"],
+      "fixtures": ["testdata/gp7/percussion.gp"],
       "semanticAssertions": ["articulation identity", "input value", "output MIDI", "staff line and technique"],
-      "status": "partial",
-      "reason": "Binary drum values are exposed, but GPIF articulation identity and per-track definitions are lost; see issue 10.",
-      "issues": [10]
+      "status": "supported",
+      "reason": "GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI agree with AlphaTab; older format mappings are outside this feature scope.",
+      "issues": []
     }
   ]
 }
