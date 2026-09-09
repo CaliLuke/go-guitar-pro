@@ -31,6 +31,11 @@ score, master-bar, track, staff, bar, voice, beat, note, and automation models
 used by the canonical contract. There is no automatic classifier or acceptance
 mode for oracle upgrades.
 
+The semantic contract starts at the public `Song` type. The gate discovers each
+reachable public structure and field. It compares that set with the model
+inventory in `feature-ledger.json`. The gate also inventories named GPIF source
+dispatch cases. A new field or dispatch case fails until its contract is added.
+
 Run the gate with:
 
 ```sh

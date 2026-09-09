@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "oracle": "@coderline/alphatab@1.8.4",
   "diagnosticDispositions": [
     {
@@ -877,5 +877,67 @@
       "reason": "GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI are compared; cross-format semantic integration is tracked by issue 12.",
       "issues": [12]
     }
-  ]
+  ],
+  "semanticContracts": {
+    "modelTypes": [
+      {"type":"Song","feature":"score-core","fields":["Album","Anacrusis","Artist","Author","BackingTrack","Channels","Clipboard","Comments","Copyright","Date","HideTempo","InitialTempo","Instructions","Key","Lyrics","MasterEffect","MeasureHeaders","Name","Notice","PageSetup","Subtitle","SyncPoints","Tempo","TempoAutomations","TempoName","Tracks","Transcriber","TripletFeel","Version","VolumeAutomations","Words","Writer"],"compatibility":["Tempo"],"reason":"The root contains authored score data. Tempo is the legacy view of InitialTempo."},
+      {"type":"Version","feature":"score-core","fields":["Clipboard","Data","Number"],"derived":["Number"],"reason":"The source version is preserved. Number is parsed from Data."},
+      {"type":"Clipboard","feature":"score-core","fields":["StartBeat","StartMeasure","StartTrack","StopBeat","StopMeasure","StopTrack","SubBarCopy"],"reason":"The binary clipboard range is authored source data."},
+      {"type":"BackingTrack","feature":"score-core","fields":["AssetID","AudioData","EmbeddedFilePath","Enabled","FramePadding","Name","OriginalFilePath","OriginalFileSHA1","Source"],"reason":"The backing-track record and embedded asset are authored source data."},
+      {"type":"SyncPoint","feature":"timing","fields":["AudioFrame","Bar","BarOccurrence","BarPosition","FrameOffset","Linear","MediaTimeMS","ModifiedTempo","OriginalTempo","Position","Visible"],"compatibility":["FrameOffset","Position"],"derived":["AudioFrame","BarPosition","MediaTimeMS"],"reason":"The sync point preserves source values and checked timing views."},
+      {"type":"VolumeAutomation","feature":"score-core","fields":["Bar","Linear","Position","Track","Value"],"reason":"The volume point is authored playback data."},
+      {"type":"TempoAutomation","feature":"tempo-automations","fields":["Bar","Position","Tempo"],"reason":"The tempo point is authored timing data."},
+      {"type":"Lyrics","feature":"score-core","fields":["Lines","TrackChoice"],"reason":"The score lyrics are authored text data."},
+      {"type":"LyricLine","feature":"score-core","fields":["Number","StartingMeasure","Text"],"reason":"The lyric line is authored text data."},
+      {"type":"PageSetup","feature":"score-core","fields":["Album","Artist","Copyright","HeaderAndFooter","MarginBottom","MarginLeft","MarginRight","MarginTop","Music","PageHeight","PageNumber","PageWidth","ScoreSizeProportion","Subtitle","Title","WordAndMusic","Words"],"reason":"The page setup is authored display data."},
+      {"type":"RseMasterEffect","feature":"score-core","fields":["Equalizer","Reverb","Volume"],"reason":"The master RSE effect is authored playback data."},
+      {"type":"MidiChannel","feature":"score-core","fields":["Balance","Bank","Channel","Chorus","EffectChannel","Instrument","Phaser","Reverb","Tremolo","Volume"],"reason":"The MIDI channel contains authored playback values."},
+      {"type":"MeasureHeader","feature":"rhythm","fields":["Direction","DoubleBar","ExactStart","KeySignature","Marker","Number","RepeatAlternative","RepeatClose","RepeatOpen","Start","Tempo","TimeSignature","TripletFeel"],"derived":["ExactStart","Start"],"reason":"The header contains authored bar data and derived absolute starts."},
+      {"type":"Marker","feature":"score-core","fields":["Color","Title"],"reason":"The marker is authored score data."},
+      {"type":"SourceValue","feature":"score-core","fields":["Raw","State","Value"],"reason":"The wrapper preserves source presence and unknown values."},
+      {"type":"Track","feature":"staff-ownership","fields":["BanjoTrack","ChannelIndex","Color","FretCount","IndicateTuning","Lyrics","Measures","Mute","Name","Number","Offset","PercussionArticulations","PercussionTrack","Port","Rse","Settings","Solo","SoundAutomations","Sounds","Staves","Strings","TwelveStringedGuitarTrack","UseRse","Visible"],"compatibility":["Measures","Strings"],"reason":"The track owns staves. Measures and Strings are first-staff compatibility views."},
+      {"type":"Staff","feature":"staff-ownership","fields":["Measures","PercussionTrack","StandardNotationLineCount","Strings"],"derived":["PercussionTrack"],"reason":"The staff owns measures and tuning. PercussionTrack mirrors its track."},
+      {"type":"TrackSettings","feature":"score-core","fields":["AutoBrush","AutoLetRing","DiagramAreBelow","DiagramInScore","DiagramList","ExtendRhythmic","ForceChannels","ForceHorizontal","Notation","ShowRhythm","Tablature"],"reason":"The track settings are authored display data."},
+      {"type":"PercussionArticulation","feature":"percussion-articulations","fields":["ElementName","ElementSoundbankName","ElementType","InputMIDINumbers","Name","NoteheadDefault","NoteheadHalf","NoteheadWhole","OutputMIDINumber","OutputRSESound","StaffLine","TechniquePlacement","TechniqueSymbol"],"reason":"The articulation preserves track-local notation and playback identity."},
+      {"type":"TrackSound","feature":"score-core","fields":["Label","Name","Path","Program","Role"],"reason":"The sound definition is authored playback data."},
+      {"type":"SoundAutomation","feature":"score-core","fields":["Bar","Position","Sound"],"reason":"The sound automation is authored playback data."},
+      {"type":"TrackLyricLine","feature":"score-core","fields":["Offset","Text"],"reason":"The track lyric line is authored text data."},
+      {"type":"TrackRse","feature":"score-core","fields":["AutoAccentuation","Equalizer","Humanize","Instrument"],"reason":"The track RSE record is authored playback data."},
+      {"type":"RseEqualizer","feature":"score-core","fields":["Gain","Knobs"],"reason":"The equalizer contains authored playback values."},
+      {"type":"RseInstrument","feature":"score-core","fields":["Effect","EffectCategory","EffectNumber","Instrument","SoundBank","Unknown"],"reason":"The RSE instrument contains authored playback values."},
+      {"type":"GuitarString","feature":"staff-ownership","fields":["Number","Value"],"reason":"The string contains authored tuning data."},
+      {"type":"Measure","feature":"timing","fields":["Clef","ExactStart","HasDoubleBar","HeaderIndex","KeySignature","LineBreak","Number","StaffIndex","Start","TimeSignature","TrackIndex","Voices"],"derived":["ExactStart","StaffIndex","Start","TrackIndex"],"reason":"The measure contains authored notation and finalized ownership and timing."},
+      {"type":"Voice","feature":"note-and-beat-semantics","fields":["Beats","Direction","MeasureIndex"],"derived":["MeasureIndex"],"reason":"The voice owns authored beats. MeasureIndex is finalized ownership data."},
+      {"type":"Beat","feature":"note-and-beat-semantics","fields":["Display","Duration","Dynamics","Effect","ExactStart","Notes","Octave","Start","Status","Text"],"derived":["ExactStart","Start"],"reason":"The beat contains authored values and finalized starts."},
+      {"type":"BeatDisplay","feature":"note-and-beat-semantics","fields":["BeamDirection","BreakBeam","BreakSecondary","BreakSecondaryTuplet","ForceBeam","ForceBracket","TupletBracket"],"reason":"The beat display record is authored notation data."},
+      {"type":"BeatEffects","feature":"note-and-beat-semantics","fields":["Chord","FadeIn","Hairpin","HasRasgueado","MixTableChange","PickStroke","SlapEffect","Stroke","TremoloBar","Vibrato"],"reason":"The beat effect record contains authored notation and playback effects."},
+      {"type":"BeatStroke","feature":"note-and-beat-semantics","fields":["Direction","Value"],"reason":"The stroke contains authored direction and duration."},
+      {"type":"Note","feature":"note-and-beat-semantics","fields":["DurationPercent","Effect","HasPercussionArticulation","Kind","PercussionArticulation","String","SwapAccidentals","TieOrigin","Value","Velocity"],"reason":"The note contains authored pitch, articulation, duration, and effect values."},
+      {"type":"NoteEffect","feature":"note-and-beat-semantics","fields":["AccentuatedNote","Bend","DeadNote","GhostNote","Graces","Hammer","Harmonic","HeavyAccentuatedNote","LeftHandFinger","LetRing","PalmMute","RightHandFinger","Slides","Staccato","TremoloPicking","Trill","Vibrato"],"reason":"The note effect record contains authored note techniques."},
+      {"type":"BendEffect","feature":"note-and-beat-semantics","fields":["Kind","Points","Value"],"reason":"The bend effect contains authored bend data."},
+      {"type":"BendPoint","feature":"note-and-beat-semantics","fields":["Position","Value","Vibrato"],"reason":"The bend point contains authored curve data."},
+      {"type":"GraceEffect","feature":"grace-relationships","fields":["Duration","ExactFret","Fret","HasPercussionArticulation","IsDead","IsOnBeat","PercussionArticulation","RawFret","Sequence","Transition","Velocity"],"compatibility":["Fret"],"reason":"The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret."},
+      {"type":"HarmonicEffect","feature":"harmonics","fields":["Fret","FretFloat","Kind","Octave","Pitch"],"compatibility":["Fret"],"reason":"The harmonic effect preserves authored kind and pitch data. Fret is a legacy view."},
+      {"type":"TremoloPickingEffect","feature":"tremolo-picking","fields":["Duration"],"reason":"The effect preserves the authored tremolo subdivision."},
+      {"type":"TrillEffect","feature":"note-and-beat-semantics","fields":["Duration","Fret"],"reason":"The trill effect contains authored fret and duration data."},
+      {"type":"MixTableChange","feature":"score-core","fields":["Balance","Chorus","HideTempo","Instrument","Phaser","Reverb","Rse","Tempo","TempoName","Tremolo","UseRse","Volume","Wah"],"reason":"The mix-table change contains authored playback changes."},
+      {"type":"MixTableItem","feature":"score-core","fields":["AllTracks","Duration","Value"],"reason":"The mix-table item contains an authored value and transition duration."},
+      {"type":"WahEffect","feature":"score-core","fields":["Display","Value"],"reason":"The wah effect contains authored playback values."},
+      {"type":"Duration","feature":"rhythm","fields":["Dotted","DoubleDotted","TupletEnters","TupletTimes","Value"],"reason":"The duration preserves the authored base value, dots, and tuplet ratio."},
+      {"type":"TimeSignature","feature":"rhythm","fields":["Beams","Denominator","Numerator"],"reason":"The time signature contains authored meter values."},
+      {"type":"KeySignature","feature":"score-core","fields":["IsMinor","Key"],"reason":"The key signature contains authored tonality values."},
+      {"type":"ScoreTime","feature":"timing","fields":[],"derived":[],"reason":"The private reduced terms provide a checked derived timing value."},
+      {"type":"BarPosition","feature":"timing","fields":[],"derived":[],"reason":"The private reduced terms provide a checked authored bar position."},
+      {"type":"Chord","feature":"note-and-beat-semantics","fields":["Add","Barres","Bass","Eleventh","Extension","Fifth","Fingerings","FirstFret","Kind","Length","Name","NewFormat","Ninth","Omissions","Root","Sharp","Show","Strings","Tonality"],"reason":"The chord contains authored identity, pitch, fingering, and diagram data."},
+      {"type":"PitchClass","feature":"note-and-beat-semantics","fields":["Accidental","Just","Note","Sharp","Value"],"reason":"The pitch class contains authored spelling data."},
+      {"type":"Barre","feature":"note-and-beat-semantics","fields":["End","Fret","Start"],"reason":"The barre contains authored chord fingering data."}
+    ],
+    "sourceDispatches": [
+      {"function":"gpifAuditOwnedStaffProperty","selector":"property.Name","feature":"staff-ownership","cases":["CapoFret","ChordCollection","DiagramCollection","Tuning"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each track and staff property before import."},
+      {"function":"gpifAuditNoteProperty","selector":"property.Name","feature":"note-and-beat-semantics","cases":["BendDestinationOffset","BendDestinationValue","BendMiddleOffset1","BendMiddleOffset2","BendMiddleValue","BendOriginOffset","BendOriginValue","Bended","ConcertPitch","Element","Fret","Harmonic","HarmonicFret","HarmonicType","HopoDestination","HopoOrigin","LeftHandTapped","Midi","Muted","Octave","PalmMuted","ShowStringNumber","Slide","String","Tapped","Tone","TransposedPitch","Variation"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each named note property before import."},
+      {"function":"gpifAuditBeatProperty","selector":"property.Name","feature":"note-and-beat-semantics","cases":["BarreFret","BarreString","Brush","PickStroke","Popped","PrimaryPickupTone","PrimaryPickupVolume","Rasgueado","Slapped","VibratoWTremBar","WhammyBar","WhammyBarDestinationOffset","WhammyBarDestinationValue","WhammyBarExtend","WhammyBarMiddleOffset1","WhammyBarMiddleOffset2","WhammyBarMiddleValue","WhammyBarOriginOffset","WhammyBarOriginValue"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each named beat property before import."},
+      {"function":"gpifApplyBeatEffects","selector":"p.Name","feature":"note-and-beat-semantics","cases":["Brush","PickStroke","Popped","Slapped","VibratoWTremBar"],"defaultDisposition":"delegated-to-audit","reason":"The importer maps represented beat properties after the audit classifies all names."},
+      {"function":"gpifNoteToNote","selector":"p.Name","feature":"note-and-beat-semantics","cases":["BendDestinationOffset","BendDestinationValue","BendMiddleOffset1","BendMiddleOffset2","BendMiddleValue","BendOriginOffset","BendOriginValue","Bended","Fret","HarmonicFret","HarmonicType","HopoOrigin","LeftHandTapped","Midi","Muted","PalmMuted","Slide","String","Tapped"],"defaultDisposition":"delegated-to-audit","reason":"The importer maps represented note properties after the audit classifies all names."}
+    ]
+  }
 }

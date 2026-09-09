@@ -17,6 +17,10 @@ const cases = read('conformance/cases.json');
 const fixtures = read('conformance/fixture-inventory.json');
 const upstream = read('conformance/upstream-inventory.json');
 
+if (ledger.schemaVersion !== 3) {
+  fail(`unsupported feature-ledger schema ${ledger.schemaVersion}; want 3`);
+}
+
 execFileSync('node', ['conformance/oracle-contract.mjs'], { cwd: root, stdio: 'inherit' });
 
 if (oracle.version !== lock.packages['node_modules/@coderline/alphatab'].version) {
@@ -107,6 +111,43 @@ for (const [source, declaration] of declaredSources) {
 for (const source of receiptBySource.keys()) {
   if (!declaredSources.has(source)) fail(`${source} receipt has no source declaration`);
 }
+
+const allowedDispatchDefaults = new Set(['unknown-syntax', 'unsupported-feature', 'invalid-data', 'delegated-to-audit']);
+const modelTypeContracts = new Map();
+for (const contract of ledger.semanticContracts.modelTypes) {
+  if (modelTypeContracts.has(contract.type)) fail(`duplicate semantic model contract ${contract.type}`);
+  if (!features.has(contract.feature)) fail(`${contract.type} has unknown feature ${contract.feature}`);
+  if (!Array.isArray(contract.fields)) fail(`${contract.type}.fields is not an array`);
+  if (!contract.reason) fail(`${contract.type} has no semantic contract reason`);
+  const fields = new Set();
+  for (const field of contract.fields) {
+    if (fields.has(field)) fail(`${contract.type}.${field} is duplicated`);
+    fields.add(field);
+  }
+  const classifiedOverrides = new Set();
+  for (const role of ['compatibility', 'derived', 'outOfScope']) {
+    for (const field of contract[role] ?? []) {
+      if (!fields.has(field)) fail(`${contract.type}.${field} has a ${role} role but is not inventoried`);
+      if (classifiedOverrides.has(field)) fail(`${contract.type}.${field} has more than one semantic role`);
+      classifiedOverrides.add(field);
+    }
+  }
+  modelTypeContracts.set(contract.type, contract);
+}
+
+const sourceDispatchContracts = new Set();
+for (const contract of ledger.semanticContracts.sourceDispatches) {
+  const key = `${contract.function}:${contract.selector}`;
+  if (sourceDispatchContracts.has(key)) fail(`duplicate source dispatch contract ${key}`);
+  if (!features.has(contract.feature)) fail(`${key} has unknown feature ${contract.feature}`);
+  if (!allowedDispatchDefaults.has(contract.defaultDisposition)) {
+    fail(`${key} has invalid default disposition ${contract.defaultDisposition}`);
+  }
+  if (!Array.isArray(contract.cases) || contract.cases.length === 0) fail(`${key}.cases is empty`);
+  if (!contract.reason) fail(`${key} has no reason`);
+  sourceDispatchContracts.add(key);
+}
+
 const allCases = [...cases.inputCases, ...cases.exportCases];
 const caseIDs = new Set();
 for (const item of allCases) {
@@ -195,6 +236,14 @@ function supportDocument() {
   const receiptRows = ledger.diagnosticReceipts.map(receipt =>
     `| \`${receipt.source}\` | \`${receipt.feature}\` | \`${receipt.disposition}\` | ${receipt.reason} |`
   );
+  const modelRows = ledger.semanticContracts.modelTypes.map(contract => {
+    const authored = contract.fields.length - (contract.compatibility?.length ?? 0) - (contract.derived?.length ?? 0) - (contract.outOfScope?.length ?? 0);
+    const roles = `${authored} authored, ${contract.compatibility?.length ?? 0} compatibility, ${contract.derived?.length ?? 0} derived, ${contract.outOfScope?.length ?? 0} out-of-scope`;
+    return `| \`${contract.type}\` | \`${contract.feature}\` | ${roles} | ${contract.reason} |`;
+  });
+  const dispatchRows = ledger.semanticContracts.sourceDispatches.map(contract =>
+    `| \`${contract.function}:${contract.selector}\` | \`${contract.feature}\` | ${contract.cases.length} | \`${contract.defaultDisposition}\` | ${contract.reason} |`
+  );
   return `# Guitar Pro semantic support\n\n` +
     `Generated from [\`conformance/feature-ledger.json\`](../conformance/feature-ledger.json). Do not edit these tables by hand.\n\n` +
     `AlphaTab oracle: \`${oracle.package}@${oracle.version}\`, source \`${oracle.sourceRevision}\`.\n\n` +
@@ -202,7 +251,11 @@ function supportDocument() {
     `## Parse diagnostics\n\nThe diagnostic disposition is separate from semantic feature support. Strict parsing rejects only dispositions marked Yes.\n\n` +
     `| Disposition | Strict rejection | Meaning |\n| --- | --- | --- |\n${dispositionRows.join('\n')}\n\n` +
     `Each diagnostic receipt names one source construct. Its feature value uses an ID from the semantic support table.\n\n` +
-    `| Source construct | Feature | Disposition | Reason |\n| --- | --- | --- | --- |\n${receiptRows.join('\n')}\n`;
+    `| Source construct | Feature | Disposition | Reason |\n| --- | --- | --- | --- |\n${receiptRows.join('\n')}\n\n` +
+    `## Public model inventory\n\nThe inventory starts at \`Song\`. Unlisted roles are authored values. Compatibility and derived fields have explicit roles.\n\n` +
+    `| Type | Feature | Field roles | Reason |\n| --- | --- | --- | --- |\n${modelRows.join('\n')}\n\n` +
+    `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +
+    `| Dispatch | Feature | Cases | Default | Reason |\n| --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n`;
 }
 
 const docsPath = path.join(root, 'docs/format-support.md');

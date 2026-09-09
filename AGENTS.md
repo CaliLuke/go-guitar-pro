@@ -47,6 +47,33 @@ Keep each format detail near its related reader. Do not add application, storage
 
 Use the standard `testing` package. Name tests `TestXxx`. Use `t.Run` for fixture cases. Add the smallest representative Guitar Pro file for each regression. Make sure that malformed data returns an error. Make sure that malformed data never causes a panic.
 
+## Semantic Change Workflow
+
+Use this workflow for changes to a reader, the public model, finalization,
+validation, or export.
+
+1. Read `docs/semantic-model.md` and `conformance/README.md`.
+2. Read the related AlphaTab importer and model code in `references/alphaTab`.
+3. Check the revision in `conformance/oracle.json` before you compare behavior.
+4. Trace the source value through decoding, the model, finalization, validation,
+   and export.
+5. Add an explicit disposition when a stage does not preserve the value.
+6. Add a failing public-API test with a valid, non-default value.
+7. Use the pinned AlphaTab consumer for an independent export assertion.
+8. Update `conformance/feature-ledger.json` in the same change.
+9. Run `./conformance/check.sh` and `prek run --all-files`.
+
+Use one authority for a semantic value and its compatibility fields. Document
+the reconciliation rule for edits after parsing. Check a numeric boundary before
+a narrowing conversion. Do not silently wrap or clamp an authored value.
+
+Create independent mutable data for each parsed occurrence. If definitions share
+data, expose an immutable definition and an explicit reference.
+
+A successful parse, statement coverage, a self-round-trip, or a new snapshot is
+not sufficient evidence. Keep each unresolved difference narrow and link it to
+an open issue. Do not hide a difference with broad normalization.
+
 ## Commits and Pull Requests
 
 Use a short imperative subject. The history uses prefixes such as `feat:`, `test:`, and `build:`. In each pull request, state the affected formats and the public API changes. Include the results of `go test ./...`, `go vet ./...`, and `golangci-lint run`.

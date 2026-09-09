@@ -150,3 +150,73 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Voice.Beats.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Voice.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Voice.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
+
+## Public model inventory
+
+The inventory starts at `Song`. Unlisted roles are authored values. Compatibility and derived fields have explicit roles.
+
+| Type | Feature | Field roles | Reason |
+| --- | --- | --- | --- |
+| `Song` | `score-core` | 31 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
+| `Version` | `score-core` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The source version is preserved. Number is parsed from Data. |
+| `Clipboard` | `score-core` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The binary clipboard range is authored source data. |
+| `BackingTrack` | `score-core` | 9 authored, 0 compatibility, 0 derived, 0 out-of-scope | The backing-track record and embedded asset are authored source data. |
+| `SyncPoint` | `timing` | 6 authored, 2 compatibility, 3 derived, 0 out-of-scope | The sync point preserves source values and checked timing views. |
+| `VolumeAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The volume point is authored playback data. |
+| `TempoAutomation` | `tempo-automations` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The tempo point is authored timing data. |
+| `Lyrics` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The score lyrics are authored text data. |
+| `LyricLine` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The lyric line is authored text data. |
+| `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
+| `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
+| `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
+| `MeasureHeader` | `rhythm` | 11 authored, 0 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. |
+| `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
+| `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
+| `Track` | `staff-ownership` | 22 authored, 2 compatibility, 0 derived, 0 out-of-scope | The track owns staves. Measures and Strings are first-staff compatibility views. |
+| `Staff` | `staff-ownership` | 3 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns measures and tuning. PercussionTrack mirrors its track. |
+| `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
+| `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
+| `TrackSound` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition is authored playback data. |
+| `SoundAutomation` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound automation is authored playback data. |
+| `TrackLyricLine` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track lyric line is authored text data. |
+| `TrackRse` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track RSE record is authored playback data. |
+| `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
+| `RseInstrument` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The RSE instrument contains authored playback values. |
+| `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
+| `Measure` | `timing` | 8 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
+| `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
+| `Beat` | `note-and-beat-semantics` | 8 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. |
+| `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
+| `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
+| `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and duration. |
+| `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
+| `NoteEffect` | `note-and-beat-semantics` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques. |
+| `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
+| `BendPoint` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend point contains authored curve data. |
+| `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
+| `HarmonicEffect` | `harmonics` | 4 authored, 1 compatibility, 0 derived, 0 out-of-scope | The harmonic effect preserves authored kind and pitch data. Fret is a legacy view. |
+| `TremoloPickingEffect` | `tremolo-picking` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | The effect preserves the authored tremolo subdivision. |
+| `TrillEffect` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The trill effect contains authored fret and duration data. |
+| `MixTableChange` | `score-core` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The mix-table change contains authored playback changes. |
+| `MixTableItem` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The mix-table item contains an authored value and transition duration. |
+| `WahEffect` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wah effect contains authored playback values. |
+| `Duration` | `rhythm` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The duration preserves the authored base value, dots, and tuplet ratio. |
+| `TimeSignature` | `rhythm` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The time signature contains authored meter values. |
+| `KeySignature` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The key signature contains authored tonality values. |
+| `ScoreTime` | `timing` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | The private reduced terms provide a checked derived timing value. |
+| `BarPosition` | `timing` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | The private reduced terms provide a checked authored bar position. |
+| `Chord` | `note-and-beat-semantics` | 19 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
+| `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
+| `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
+
+## Source dispatch inventory
+
+The gate compares these cases with the source switches. Each default has an explicit disposition.
+
+| Dispatch | Feature | Cases | Default | Reason |
+| --- | --- | --- | --- | --- |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `unknown-syntax` | The audit classifies each named note property before import. |
+| `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `unknown-syntax` | The audit classifies each named beat property before import. |
+| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
