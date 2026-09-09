@@ -95,18 +95,18 @@ func TestExportPreflightRejectsUnsupportedBeatDuration(t *testing.T) {
 
 func TestExportPreflightLocatesEachOmittedAutomation(t *testing.T) {
 	song := syntheticGP8Song()
-	song.SyncPoints = []SyncPoint{{Bar: 1}, {Bar: 2}}
-	song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 1}, {Track: 2, Bar: 2}}
+	song.SyncPoints = []SyncPoint{{Bar: 0}, {Bar: 1}}
+	song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 0}, {Track: 0, Bar: 1}}
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	want := map[string][]ScoreLocation{
 		"gp8.omit.sync-points": {
+			{Measure: 0},
 			{Measure: 1},
-			{Measure: 2},
 		},
 		"gp8.omit.volume-automations": {
+			{Track: 0, Measure: 0},
 			{Track: 0, Measure: 1},
-			{Track: 2, Measure: 2},
 		},
 	}
 	for code, locations := range want {
@@ -168,6 +168,12 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 			pitch := PitchClass{Note: "C"}
 			note.Effect.Harmonic = &HarmonicEffect{Kind: HarmonicTypeNatural, Pitch: &pitch}
 		}},
+		{name: "grace bend transition", code: "gp8.omit.grace-bend-transition", set: func(_ *Beat, note *Note) {
+			note.Effect.Graces = []GraceEffect{{Transition: GraceEffectTransitionBend, Duration: DurationThirtySecond, Velocity: Forte}}
+		}},
+		{name: "oversized whammy curve", code: "gp8.omit.whammy-curve", set: func(beat *Beat, _ *Note) {
+			beat.Effect.TremoloBar = &BendEffect{Points: make([]BendPoint, 5)}
+		}},
 	}
 
 	for _, test := range tests {
@@ -213,6 +219,9 @@ func TestGP8ExportRejectsSharedAuthoredInvariants(t *testing.T) {
 		}},
 		{name: "tempo automation", code: "gp8.reject.score.tempo-automation.value", set: func(song *Song) {
 			song.TempoAutomations = []TempoAutomation{{Bar: 0, Tempo: math.NaN()}}
+		}},
+		{name: "volume automation", code: "gp8.reject.score.volume-automation.value", set: func(song *Song) {
+			song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 0, Position: 2, Value: math.NaN()}}
 		}},
 	}
 
@@ -285,6 +294,39 @@ func TestGP8ExportReconcilesSemanticAndLegacyTempo(t *testing.T) {
 			t.Fatalf("strict conflict = %d bytes, %#v, %v", len(data), report.Entries, err)
 		}
 	})
+
+	t.Run("legacy edit replaces stale opening automation", func(t *testing.T) {
+		song := syntheticGP8Song()
+		song.InitialTempo = KnownSourceValue(BPM(132))
+		song.Tempo = 90
+		song.TempoAutomations = []TempoAutomation{{Bar: 0, Tempo: 132}}
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !hasExportReportEntry(report, "gp8.normalize.tempo-compatibility") {
+			t.Fatalf("report = %#v, want tempo compatibility decision", report.Entries)
+		}
+		roundTrip, err := Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if roundTrip.Tempo != 90 {
+			t.Fatalf("round-trip tempo = %d, want 90", roundTrip.Tempo)
+		}
+	})
+}
+
+func TestGP8StrictExportReportsScoreLyricsOmission(t *testing.T) {
+	song := syntheticGP8Song()
+	song.Lyrics = Lyrics{TrackChoice: 1, Lines: []LyricLine{{Text: "authored words"}}}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	var lossErr *ExportLossError
+	if len(data) != 0 || !errors.As(err, &lossErr) || !hasExportReportEntry(report, "gp8.omit.score-lyrics") {
+		t.Fatalf("strict export = %d bytes, %#v, %v", len(data), report.Entries, err)
+	}
 }
 
 func hasExportReportEntry(report ExportReport, code string) bool {

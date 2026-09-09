@@ -35,6 +35,9 @@ The semantic contract starts at the public `Song` type. The gate discovers each
 reachable public structure and field. It compares that set with the model
 inventory in `feature-ledger.json`. The gate also inventories named GPIF source
 dispatch cases. A new field or dispatch case fails until its contract is added.
+Each public field has one target disposition. Each source case has one source
+disposition and one behavioral evidence link. Automation cases also identify
+the consumer dispatch or diagnostic that handles the case.
 
 The ledger also names focused public API tests for each represented feature.
 Each feature links to a pinned AlphaTab test. This gives the contract an

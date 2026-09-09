@@ -113,7 +113,9 @@ for (const source of receiptBySource.keys()) {
 }
 
 const allowedDispatchDefaults = new Set(['unknown-syntax', 'unsupported-feature', 'invalid-data', 'delegated-to-audit']);
+const allowedSourceCaseDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected']);
 const modelTypeContracts = new Map();
+const inventoriedModelFields = new Set();
 for (const contract of ledger.semanticContracts.modelTypes) {
   if (modelTypeContracts.has(contract.type)) fail(`duplicate semantic model contract ${contract.type}`);
   if (!features.has(contract.feature)) fail(`${contract.type} has unknown feature ${contract.feature}`);
@@ -123,6 +125,7 @@ for (const contract of ledger.semanticContracts.modelTypes) {
   for (const field of contract.fields) {
     if (fields.has(field)) fail(`${contract.type}.${field} is duplicated`);
     fields.add(field);
+    inventoriedModelFields.add(`${contract.type}.${field}`);
   }
   const classifiedOverrides = new Set();
   for (const role of ['compatibility', 'derived', 'outOfScope']) {
@@ -134,8 +137,22 @@ for (const contract of ledger.semanticContracts.modelTypes) {
   }
   modelTypeContracts.set(contract.type, contract);
 }
+const allowedFieldDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected', 'derived', 'out-of-scope']);
+const classifiedModelFields = new Set();
+for (const [disposition, fields] of Object.entries(ledger.semanticContracts.fieldDispositions)) {
+  if (!allowedFieldDispositions.has(disposition)) fail(`invalid model field disposition ${disposition}`);
+  if (!Array.isArray(fields)) fail(`model field disposition ${disposition} is not an array`);
+  for (const field of fields) {
+    if (classifiedModelFields.has(field)) fail(`${field} has more than one model field disposition`);
+    if (!inventoriedModelFields.has(field)) fail(`${field} has a disposition but is not inventoried`);
+    classifiedModelFields.add(field);
+  }
+}
+for (const field of inventoriedModelFields) {
+  if (!classifiedModelFields.has(field)) fail(`${field} has no preservation, normalization, omission, rejection, derived, or out-of-scope disposition`);
+}
 
-const sourceDispatchContracts = new Set();
+const sourceDispatchContracts = new Map();
 for (const contract of ledger.semanticContracts.sourceDispatches) {
   const key = `${contract.function}:${contract.selector}`;
   if (sourceDispatchContracts.has(key)) fail(`duplicate source dispatch contract ${key}`);
@@ -143,9 +160,12 @@ for (const contract of ledger.semanticContracts.sourceDispatches) {
   if (!allowedDispatchDefaults.has(contract.defaultDisposition)) {
     fail(`${key} has invalid default disposition ${contract.defaultDisposition}`);
   }
-  if (!Array.isArray(contract.cases) || contract.cases.length === 0) fail(`${key}.cases is empty`);
-  if (!contract.reason) fail(`${key} has no reason`);
-  sourceDispatchContracts.add(key);
+  if (!contract.cases || Array.isArray(contract.cases) || Object.keys(contract.cases).length === 0) fail(`${key}.cases is empty`);
+  for (const [value, disposition] of Object.entries(contract.cases)) {
+    if (!allowedSourceCaseDispositions.has(disposition)) fail(`${key} case ${value} has invalid disposition ${disposition}`);
+  }
+  if (!contract.evidence || !contract.reason) fail(`${key} has no evidence or reason`);
+  sourceDispatchContracts.set(key, contract);
 }
 
 const goTests = new Set();
@@ -173,6 +193,29 @@ for (const contract of ledger.semanticContracts.behaviorContracts) {
 for (const [feature, evidence] of behavioralFeatures) {
   if (!evidence.publicAPI || !evidence.independent) {
     fail(`${feature} lacks public-API or independent-consumer behavioral evidence`);
+  }
+}
+for (const contract of ledger.semanticContracts.sourceDispatches) {
+  if (!behaviorContracts.has(contract.evidence)) {
+    fail(`${contract.function}:${contract.selector} references missing behavior contract ${contract.evidence}`);
+  }
+  if (/^gpifAudit.*Automations$/.test(contract.function)) {
+    const handling = contract.caseHandling ?? {};
+    if (JSON.stringify(Object.keys(handling).sort()) !== JSON.stringify(Object.keys(contract.cases).sort())) {
+      fail(`${contract.function}:${contract.selector} must bind every automation case to a consumer or diagnostic`);
+    }
+    for (const [value, target] of Object.entries(handling)) {
+      if (target.startsWith('diagnostic:')) {
+        const source = target.slice('diagnostic:'.length);
+        if (!receiptBySource.has(source)) fail(`${contract.function} case ${value} references missing diagnostic ${source}`);
+      } else if (target.startsWith('dispatch:')) {
+        const key = target.slice('dispatch:'.length);
+        const consumer = sourceDispatchContracts.get(key);
+        if (!consumer || !(value in consumer.cases)) fail(`${contract.function} case ${value} references missing consumer dispatch ${key}`);
+      } else {
+        fail(`${contract.function} case ${value} has invalid handling ${target}`);
+      }
+    }
   }
 }
 
@@ -269,8 +312,11 @@ function supportDocument() {
     const roles = `${authored} authored, ${contract.compatibility?.length ?? 0} compatibility, ${contract.derived?.length ?? 0} derived, ${contract.outOfScope?.length ?? 0} out-of-scope`;
     return `| \`${contract.type}\` | \`${contract.feature}\` | ${roles} | ${contract.reason} |`;
   });
+  const fieldDispositionRows = Object.entries(ledger.semanticContracts.fieldDispositions).map(([disposition, fields]) =>
+    `| \`${disposition}\` | ${fields.length} |`
+  );
   const dispatchRows = ledger.semanticContracts.sourceDispatches.map(contract =>
-    `| \`${contract.function}:${contract.selector}\` | \`${contract.feature}\` | ${contract.cases.length} | \`${contract.defaultDisposition}\` | ${contract.reason} |`
+    `| \`${contract.function}:${contract.selector}\` | \`${contract.feature}\` | ${Object.keys(contract.cases).length} | \`${contract.evidence}\` | \`${contract.defaultDisposition}\` | ${contract.reason} |`
   );
   const behaviorRows = ledger.semanticContracts.behaviorContracts.map(contract =>
     `| \`${contract.id}\` | \`${contract.feature}\` | \`${contract.test}\` | ${contract.independentTest ? `\`${contract.independentTest}\`` : 'none'} | ${contract.mutationSensitive ? 'yes' : 'no'} | ${contract.reason} |`
@@ -285,8 +331,10 @@ function supportDocument() {
     `| Source construct | Feature | Disposition | Reason |\n| --- | --- | --- | --- |\n${receiptRows.join('\n')}\n\n` +
     `## Public model inventory\n\nThe inventory starts at \`Song\`. Unlisted roles are authored values. Compatibility and derived fields have explicit roles.\n\n` +
     `| Type | Feature | Field roles | Reason |\n| --- | --- | --- | --- |\n${modelRows.join('\n')}\n\n` +
+    `Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.\n\n` +
+    `| Target disposition | Fields |\n| --- | --- |\n${fieldDispositionRows.join('\n')}\n\n` +
     `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +
-    `| Dispatch | Feature | Cases | Default | Reason |\n| --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n\n` +
+    `| Dispatch | Feature | Cases | Evidence | Default | Reason |\n| --- | --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n\n` +
     `## Behavioral contracts\n\nEach represented feature has a public-API test and pinned independent-consumer evidence. Mutation-sensitive contracts are exercised by \`conformance/sensitivity.mjs\`.\n\n` +
     `| Contract | Feature | Public API test | Independent test | Mutation check | Reason |\n| --- | --- | --- | --- | --- | --- |\n${behaviorRows.join('\n')}\n`;
 }

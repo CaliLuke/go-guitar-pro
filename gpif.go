@@ -1917,7 +1917,18 @@ func gpifAuditChannelStripAutomations(automations []gpifAutomation, trackID stri
 		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/RSE/ChannelStrip/Automations/Automation[%d]", trackID, index)
 		switch automation.Type {
 		case "DSPParam_12":
-			// Volume automation has a represented destination and a dedicated reader.
+			value, err := strconv.ParseFloat(strings.TrimSpace(automation.Value.Text), 64)
+			if err != nil || math.IsNaN(value) || math.IsInf(value, 0) {
+				context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Volume.Value.Invalid", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Value", ObjectID: trackID,
+					Reason: fmt.Sprintf("volume automation value %q must be finite", automation.Value.Text),
+				})
+			} else if automation.Position < 0 || automation.Position > 1 || value < 0 || value > 1 {
+				context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Volume.Range.Invalid", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path, ObjectID: trackID,
+					Reason: fmt.Sprintf("volume automation position %v and value %v must be within 0..1", automation.Position, value),
+				})
+			}
 		case "DSPParam_00", "DSPParam_01", "DSPParam_11":
 			context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Unsupported", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				SourcePath: path + "/Type", ObjectID: trackID,
@@ -1968,14 +1979,14 @@ func gpifReadVolumeAutomations(
 			continue
 		}
 		value, err := strconv.ParseFloat(strings.TrimSpace(automation.Value.Text), 64)
-		if err != nil {
+		if err != nil || math.IsNaN(value) || math.IsInf(value, 0) || automation.Position < 0 || automation.Position > 1 || value < 0 || value > 1 {
 			continue
 		}
 		song.VolumeAutomations = append(song.VolumeAutomations, VolumeAutomation{
 			Track:    trackIndex,
 			Bar:      automation.Bar,
-			Position: min(1, max(0, automation.Position)),
-			Value:    min(1, max(0, value)),
+			Position: automation.Position,
+			Value:    value,
 			Linear:   automation.Linear,
 		})
 	}

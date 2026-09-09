@@ -71,6 +71,14 @@ const mutations = [
     after: '\t\t\tif numeratorErr != nil || numerator <= 0 {\n',
     test: '^TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries$',
     want: 'modulo_numerator'
+  },
+  {
+    id: 'master-bar-denominator-boundary',
+    file: 'gpif.go',
+    before: '\t\t\tif denominatorErr != nil || denominator <= 0 || denominator > math.MaxUint16 {\n',
+    after: '\t\t\tif denominatorErr != nil || denominator <= 0 {\n',
+    test: '^TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries$',
+    want: 'denominator_modulo_overflow'
   }
 ];
 

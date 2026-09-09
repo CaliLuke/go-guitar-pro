@@ -36,6 +36,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | Source construct | Feature | Disposition | Reason |
 | --- | --- | --- | --- |
 | `GPIF.ChannelStrip.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The channel-strip automation type is not recognized. |
+| `GPIF.ChannelStrip.Automation.Volume.Range.Invalid` | `score-core` | `invalid-data` | The volume automation position and value must be within 0..1. |
+| `GPIF.ChannelStrip.Automation.Volume.Value.Invalid` | `score-core` | `invalid-data` | The volume automation value must be finite. |
 | `GPIF.ChannelStrip.Automation.Unsupported` | `score-core` | `unsupported-feature` | The channel-strip automation has no Song destination. |
 | `GPIF.MasterTrack.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The master-track automation type is not recognized. |
 | `GPIF.MasterTrack.Automation.Tempo.Invalid` | `tempo-automations` | `invalid-data` | The opening tempo must be finite and positive. |
@@ -215,20 +217,43 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 
+Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
+
+| Target disposition | Fields |
+| --- | --- |
+| `preserved` | 309 |
+| `normalized` | 10 |
+| `omitted` | 17 |
+| `rejected` | 0 |
+| `derived` | 14 |
+| `out-of-scope` | 0 |
+
 ## Source dispatch inventory
 
 The gate compares these cases with the source switches. Each default has an explicit disposition.
 
-| Dispatch | Feature | Cases | Default | Reason |
-| --- | --- | --- | --- | --- |
-| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `unknown-syntax` | The audit classifies each track and staff property before import. |
-| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `unknown-syntax` | The audit classifies each named note property before import. |
-| `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `unknown-syntax` | The audit classifies each named beat property before import. |
-| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
-| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
-| `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each master-track automation before import. |
-| `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
-| `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
+| Dispatch | Feature | Cases | Evidence | Default | Reason |
+| --- | --- | --- | --- | --- | --- |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `staff-ownership` | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
+| `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
+| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
+| `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
+| `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
+| `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
+| `parseGPIFWithContext:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only sound automations after the audit classifies all track automation types. |
+| `gpifReadVolumeAutomations:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only validated volume automations after the channel-strip audit. |
+| `gpifReadSyncPoints:automation.Type` | `timing` | 1 | `timing-finalization` | `delegated-to-audit` | The importer maps sync points after the master automation audit. |
+| `gpifReadTempoAutomations:auto.Type` | `tempo-automations` | 1 | `tempo-compatibility-authority` | `delegated-to-audit` | The importer maps tempo automations after the master automation audit. |
+| `gpifAuditNoteProperty:property.HType` | `harmonics` | 7 | `harmonic-conversion` | `unsupported-feature` | The audit classifies each harmonic type before import. |
+| `gpifNoteToNote:p.HType` | `harmonics` | 6 | `harmonic-conversion` | `delegated-to-audit` | The importer maps represented harmonic types after the audit. |
+| `gpifReadStaffStrings:property.Name` | `staff-ownership` | 1 | `staff-ownership` | `delegated-to-audit` | The importer maps the classified tuning property. |
+| `gpifAuditChordIDs:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The audit checks IDs in both supported chord collection spellings. |
+| `gpifReadChordProperties:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The importer maps both supported chord collection spellings. |
+| `gpifAuditDiagnostics:property.Name` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The audit uses valid MIDI properties when it checks percussion fallbacks. |
+| `isPercussionTrack:t.InstrumentSet.Type` | `percussion-articulations` | 3 | `percussion-identity` | `delegated-to-audit` | Known instrument-set spellings map to one percussion-track value. |
+| `gpifNormalizePercussionArticulation:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | Percussion elements use their authored articulation identity. |
 
 ## Behavioral contracts
 
@@ -251,3 +276,5 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `tremolo-import` | `tremolo-picking` | `TestParseGPIFRetainsTremoloPicking` | `TestAlphaTabInputConformance` | no | Non-default tremolo subdivisions agree with the independent consumer on import. |
 | `harmonic-conversion` | `harmonics` | `TestExportGP8PreservesHarmonicsAndWhammyCurves` | `TestAlphaTabExportConformance` | no | Represented harmonic values survive GP8 conversion. |
 | `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |
+| `gpif-property-dispatch` | `note-and-beat-semantics` | `TestParseWithOptionsReportsGPIFContentLoss` | `TestAlphaTabInputConformance` | no | Named properties are preserved or produce explicit parse diagnostics. |
+| `master-bar-denominator-boundary` | `rhythm` | `TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries` | `TestAlphaTabInputConformance` | yes | A denominator that exceeds uint16 cannot wrap to a valid value. |

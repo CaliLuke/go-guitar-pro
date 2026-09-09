@@ -229,6 +229,20 @@ func TestGPIFAutomationDispatchDiagnostics(t *testing.T) {
 			},
 			kind: ParseDiagnosticUnknownSyntax, code: "GPIF.ChannelStrip.Automation.Type.Unknown", pathContains: "ChannelStrip",
 		},
+		{
+			name: "invalid volume automation value",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<RSE><ChannelStrip><Parameters>0 0 0 0 0 0 0 0 0 0 0.5 0.5 0.5</Parameters><Automations><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>0</Position><Value>not-a-number</Value></Automation></Automations></ChannelStrip></RSE><Staves>`, 1)
+			},
+			kind: ParseDiagnosticInvalidData, code: "GPIF.ChannelStrip.Automation.Volume.Value.Invalid", pathContains: "Value",
+		},
+		{
+			name: "out of range volume automation",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<RSE><ChannelStrip><Parameters>0 0 0 0 0 0 0 0 0 0 0.5 0.5 0.5</Parameters><Automations><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>2</Position><Value>-1</Value></Automation></Automations></ChannelStrip></RSE><Staves>`, 1)
+			},
+			kind: ParseDiagnosticInvalidData, code: "GPIF.ChannelStrip.Automation.Volume.Range.Invalid", pathContains: "Automation",
+		},
 	}
 
 	for _, test := range tests {
@@ -455,6 +469,7 @@ func TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries(t *testing.T) {
 		name      string
 		mutate    func(string) string
 		wantError bool
+		errorText string
 		assert    func(*testing.T, *Song)
 	}{
 		{name: "maximum numerator", mutate: func(gpif string) string {
@@ -470,8 +485,8 @@ func TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries(t *testing.T) {
 		{name: "modulo numerator", wantError: true, mutate: func(gpif string) string {
 			return strings.Replace(gpif, "4/4", "260/4", 1)
 		}},
-		{name: "denominator overflow", wantError: true, mutate: func(gpif string) string {
-			return strings.Replace(gpif, "4/4", "4/65536", 1)
+		{name: "denominator modulo overflow", wantError: true, errorText: "outside 1..65535", mutate: func(gpif string) string {
+			return strings.Replace(gpif, "4/4", "4/65540", 1)
 		}},
 		{name: "key overflow", wantError: true, mutate: func(gpif string) string {
 			return strings.Replace(gpif, "<MasterBar><Time>", "<MasterBar><Key><AccidentalCount>128</AccidentalCount></Key><Time>", 1)
@@ -497,6 +512,9 @@ func TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries(t *testing.T) {
 			if test.wantError {
 				if err == nil {
 					t.Fatalf("strict parse succeeded with song %#v", result.Song.MeasureHeaders[0])
+				}
+				if test.errorText != "" && !strings.Contains(err.Error(), test.errorText) {
+					t.Fatalf("error = %v, want %q", err, test.errorText)
 				}
 				return
 			}

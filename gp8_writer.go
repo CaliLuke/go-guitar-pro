@@ -458,15 +458,19 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 
 func buildGP8TempoAutomations(song *Song) gpifAutomations {
 	tempos := slices.Clone(song.TempoAutomations)
+	openingTempo, conflict, _ := gp8ResolvedFieldTempo(song)
 	hasInitial := false
-	for _, tempo := range tempos {
+	for index, tempo := range tempos {
 		if tempo.Bar == 0 && tempo.Position == 0 {
 			hasInitial = true
+			if conflict && openingTempo > 0 {
+				tempos[index].Tempo = openingTempo
+			}
 			break
 		}
 	}
 	if !hasInitial {
-		if openingTempo, _, err := gp8ResolvedFieldTempo(song); err == nil && openingTempo > 0 {
+		if openingTempo > 0 {
 			tempos = append(tempos, TempoAutomation{Tempo: openingTempo})
 		}
 	}
@@ -867,6 +871,9 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Value != uint16(DurationEighth) {
 		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")
 	}
+	if beat.Effect.TremoloBar != nil && len(beat.Effect.TremoloBar.Points) > 4 {
+		builder.addReport("gp8.omit.whammy-curve", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer cannot emit a whammy curve with more than four points")
+	}
 	for noteIndex := range beat.Notes {
 		noteLocation := location
 		noteLocation.Note = noteIndex
@@ -904,6 +911,12 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	}
 	if harmonic := note.Effect.Harmonic; harmonic != nil && (harmonic.Pitch != nil || harmonic.Octave != nil) {
 		builder.addReport("gp8.omit.harmonic-pitch", "harmonics", ExportDispositionOmitted, location, "GP8 writer emits harmonic kind and fret but not pitch or octave fields")
+	}
+	for _, grace := range note.Effect.Graces {
+		if grace.Transition == GraceEffectTransitionBend {
+			builder.addReport("gp8.omit.grace-bend-transition", "grace-relationships", ExportDispositionOmitted, location, "GP8 writer does not emit a bend transition from a grace note")
+			break
+		}
 	}
 }
 

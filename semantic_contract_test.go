@@ -22,8 +22,9 @@ type semanticContractLedger struct {
 		ID string `json:"id"`
 	} `json:"features"`
 	SemanticContracts struct {
-		ModelTypes       []semanticModelTypeContract `json:"modelTypes"`
-		SourceDispatches []semanticDispatchContract  `json:"sourceDispatches"`
+		FieldDispositions map[string][]string         `json:"fieldDispositions"`
+		ModelTypes        []semanticModelTypeContract `json:"modelTypes"`
+		SourceDispatches  []semanticDispatchContract  `json:"sourceDispatches"`
 	} `json:"semanticContracts"`
 }
 
@@ -38,12 +39,13 @@ type semanticModelTypeContract struct {
 }
 
 type semanticDispatchContract struct {
-	Function           string   `json:"function"`
-	Selector           string   `json:"selector"`
-	Feature            string   `json:"feature"`
-	Cases              []string `json:"cases"`
-	DefaultDisposition string   `json:"defaultDisposition"`
-	Reason             string   `json:"reason"`
+	Function           string            `json:"function"`
+	Selector           string            `json:"selector"`
+	Feature            string            `json:"feature"`
+	Cases              map[string]string `json:"cases"`
+	Evidence           string            `json:"evidence"`
+	DefaultDisposition string            `json:"defaultDisposition"`
+	Reason             string            `json:"reason"`
 }
 
 type semanticGoInventory struct {
@@ -95,6 +97,21 @@ func TestSemanticContractInventory(t *testing.T) {
 			t.Errorf("semantic model contract %s does not resolve from Song", typeName)
 		}
 	}
+	allowedFieldDispositions := []string{"preserved", "normalized", "omitted", "rejected", "derived", "out-of-scope"}
+	var inventoriedFields []string
+	for typeName, fields := range inventory.modelTypes {
+		for _, field := range fields {
+			inventoriedFields = append(inventoriedFields, typeName+"."+field)
+		}
+	}
+	var classifiedFields []string
+	for disposition, fields := range ledger.SemanticContracts.FieldDispositions {
+		if !slices.Contains(allowedFieldDispositions, disposition) {
+			t.Errorf("unknown model field disposition %q", disposition)
+		}
+		classifiedFields = append(classifiedFields, fields...)
+	}
+	assertExactSemanticSet(t, "model field dispositions", inventoriedFields, classifiedFields)
 
 	dispatchContracts := make(map[string]semanticDispatchContract, len(ledger.SemanticContracts.SourceDispatches))
 	for _, contract := range ledger.SemanticContracts.SourceDispatches {
@@ -110,7 +127,14 @@ func TestSemanticContractInventory(t *testing.T) {
 		if contract.DefaultDisposition == "" || contract.Reason == "" {
 			t.Errorf("source dispatch contract %s has no default disposition or reason", key)
 		}
-		assertExactSemanticSet(t, "source cases for "+key, inventory.dispatches[key], contract.Cases)
+		classifiedCases := make([]string, 0, len(contract.Cases))
+		for value, disposition := range contract.Cases {
+			classifiedCases = append(classifiedCases, value)
+			if disposition == "" {
+				t.Errorf("source case %s %q has no disposition", key, value)
+			}
+		}
+		assertExactSemanticSet(t, "source cases for "+key, inventory.dispatches[key], classifiedCases)
 	}
 	for key, cases := range inventory.dispatches {
 		if _, ok := dispatchContracts[key]; !ok {
@@ -214,7 +238,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		modelTypes[typeName] = fields
 	}
 
-	dispatches := make(map[string][]string)
+	dispatchSets := make(map[string]map[string]struct{})
 	for file, parsed := range parsedFiles {
 		if file != "gpif.go" {
 			continue
@@ -225,52 +249,86 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 				continue
 			}
 			ast.Inspect(function.Body, func(node ast.Node) bool {
-				switchStatement, ok := node.(*ast.SwitchStmt)
-				if !ok || switchStatement.Tag == nil {
-					return true
-				}
-				selector := semanticSelectorName(switchStatement.Tag)
-				if selector == "" {
-					return true
-				}
-				var cases []string
-				for _, statement := range switchStatement.Body.List {
-					clause := statement.(*ast.CaseClause)
-					for _, expression := range clause.List {
-						literal, ok := expression.(*ast.BasicLit)
-						if !ok || literal.Kind != token.STRING {
-							continue
+				switch statement := node.(type) {
+				case *ast.SwitchStmt:
+					selector := semanticSelectorName(statement.Tag)
+					if selector == "" {
+						return true
+					}
+					for _, bodyStatement := range statement.Body.List {
+						clause := bodyStatement.(*ast.CaseClause)
+						for _, expression := range clause.List {
+							addSemanticDispatchLiteral(t, dispatchSets, function.Name.Name, selector, expression)
 						}
-						value, unquoteErr := strconv.Unquote(literal.Value)
-						if unquoteErr != nil {
-							t.Fatal(unquoteErr)
-						}
-						cases = append(cases, value)
+					}
+				case *ast.BinaryExpr:
+					if statement.Op != token.EQL && statement.Op != token.NEQ {
+						return true
+					}
+					if selector := semanticSelectorName(statement.X); selector != "" {
+						addSemanticDispatchLiteral(t, dispatchSets, function.Name.Name, selector, statement.Y)
+					}
+					if selector := semanticSelectorName(statement.Y); selector != "" {
+						addSemanticDispatchLiteral(t, dispatchSets, function.Name.Name, selector, statement.X)
 					}
 				}
-				sort.Strings(cases)
-				key := semanticDispatchKey(function.Name.Name, selector)
-				if previous, duplicate := dispatches[key]; duplicate {
-					t.Fatalf("duplicate semantic source dispatch %s: %v and %v", key, previous, cases)
-				}
-				dispatches[key] = cases
 				return true
 			})
 		}
+	}
+	dispatches := make(map[string][]string, len(dispatchSets))
+	for key, values := range dispatchSets {
+		for value := range values {
+			dispatches[key] = append(dispatches[key], value)
+		}
+		sort.Strings(dispatches[key])
 	}
 	return semanticGoInventory{modelTypes: modelTypes, dispatches: dispatches}
 }
 
 func semanticSelectorName(expression ast.Expr) string {
+	if pointer, ok := expression.(*ast.StarExpr); ok {
+		return semanticSelectorName(pointer.X)
+	}
 	selector, ok := expression.(*ast.SelectorExpr)
-	if !ok || (selector.Sel.Name != "Name" && selector.Sel.Name != "Type") {
+	if !ok || (selector.Sel.Name != "Name" && selector.Sel.Name != "Type" && selector.Sel.Name != "HType") {
 		return ""
 	}
-	identifier, ok := selector.X.(*ast.Ident)
-	if !ok {
+	prefix := semanticExpressionName(selector.X)
+	if prefix == "" {
 		return ""
 	}
-	return identifier.Name + "." + selector.Sel.Name
+	return prefix + "." + selector.Sel.Name
+}
+
+func semanticExpressionName(expression ast.Expr) string {
+	switch value := expression.(type) {
+	case *ast.Ident:
+		return value.Name
+	case *ast.SelectorExpr:
+		prefix := semanticExpressionName(value.X)
+		if prefix != "" {
+			return prefix + "." + value.Sel.Name
+		}
+	}
+	return ""
+}
+
+func addSemanticDispatchLiteral(t *testing.T, dispatches map[string]map[string]struct{}, function, selector string, expression ast.Expr) {
+	t.Helper()
+	literal, ok := expression.(*ast.BasicLit)
+	if !ok || literal.Kind != token.STRING {
+		return
+	}
+	value, err := strconv.Unquote(literal.Value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	key := semanticDispatchKey(function, selector)
+	if dispatches[key] == nil {
+		dispatches[key] = make(map[string]struct{})
+	}
+	dispatches[key][value] = struct{}{}
 }
 
 func semanticDispatchKey(function, selector string) string {
