@@ -55,6 +55,48 @@ func TestExportPreservesGPIFPercussionArticulations(t *testing.T) {
 	}
 }
 
+func TestExportPreservesMultipleStaves(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(roundTrip.Tracks) != 1 || len(roundTrip.Tracks[0].Staves) != 2 {
+		t.Fatalf("round-trip tracks/staves = %d/%d, want 1/2", len(roundTrip.Tracks), len(roundTrip.Tracks[0].Staves))
+	}
+	for staffIndex, wantNotes := range []int{35, 18} {
+		got := &roundTrip.Tracks[0].Staves[staffIndex]
+		want := &song.Tracks[0].Staves[staffIndex]
+		if notes := gp8TestStaffNoteCount(got); notes != wantNotes {
+			t.Errorf("staff %d notes = %d, want %d", staffIndex, notes, wantNotes)
+		}
+		if !reflect.DeepEqual(got.Strings, want.Strings) {
+			t.Errorf("staff %d tuning = %#v, want %#v", staffIndex, got.Strings, want.Strings)
+		}
+		for measureIndex := range want.Measures {
+			if got.Measures[measureIndex].Clef != want.Measures[measureIndex].Clef {
+				t.Errorf("staff %d measure %d clef = %d, want %d", staffIndex, measureIndex, got.Measures[measureIndex].Clef, want.Measures[measureIndex].Clef)
+			}
+		}
+	}
+}
+
+func gp8TestStaffNoteCount(staff *Staff) int {
+	count := 0
+	for _, measure := range staff.Measures {
+		for _, voice := range measure.Voices {
+			for _, beat := range voice.Beats {
+				count += len(beat.Notes)
+			}
+		}
+	}
+	return count
+}
+
 func TestExportAppliesPercussionNoteheadOverrideToDefinitions(t *testing.T) {
 	song := parseTestFixture(t, "testdata/gp7/percussion.gp")
 	data, err := ExportWithOptions(song, ExportFormatGP8, ExportOptions{GP8: GP8ExportOptions{

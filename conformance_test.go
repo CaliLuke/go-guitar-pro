@@ -220,6 +220,27 @@ func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
 	}
 }
 
+func TestAlphaTabMultiStaffExportConformance(t *testing.T) {
+	requireAlphaTabConformance(t)
+	song := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	goScore := selectConformanceFeatures(normalizeGoScore(song), []string{"staff-ownership"})
+	alphaScore := selectConformanceFeatures(
+		readAlphaTabScore(t, writeConformanceFixture(t, data)),
+		[]string{"staff-ownership"},
+	)
+	if differences := semanticDifferences(goScore, alphaScore); len(differences) != 0 {
+		formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
+		if marshalErr != nil {
+			t.Fatal(marshalErr)
+		}
+		t.Fatalf("multi-staff export differs from AlphaTab:\n%s", formatted)
+	}
+}
+
 func TestAlphaTabTempoReferences(t *testing.T) {
 	requireAlphaTabConformance(t)
 	fixture, err := os.ReadFile("testdata/gp7/notes.gp")

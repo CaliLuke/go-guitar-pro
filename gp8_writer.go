@@ -276,8 +276,11 @@ func validateGP8Song(song *Song) error {
 				return fmt.Errorf("track %d has MIDI program %d outside 0..127", trackIndex, program)
 			}
 		}
-		if len(track.Measures) != len(song.MeasureHeaders) {
-			return fmt.Errorf("track %d has %d measures, want %d", trackIndex, len(track.Measures), len(song.MeasureHeaders))
+		staves := gp8ExportStaves(track)
+		for staffIndex := range staves {
+			if len(staves[staffIndex].Measures) != len(song.MeasureHeaders) {
+				return fmt.Errorf("track %d staff %d has %d measures, want %d", trackIndex, staffIndex, len(staves[staffIndex].Measures), len(song.MeasureHeaders))
+			}
 		}
 		for soundIndex, sound := range track.Sounds {
 			if sound.Program < 0 || sound.Program > 127 {
@@ -304,33 +307,43 @@ func validateGP8Song(song *Song) error {
 				}
 			}
 		}
-		for measureIndex := range track.Measures {
-			if len(track.Measures[measureIndex].Voices) > 4 {
-				return fmt.Errorf("track %d measure %d has %d voices, Guitar Pro 8 supports at most 4", trackIndex, measureIndex, len(track.Measures[measureIndex].Voices))
+		for staffIndex := range staves {
+			if err := validateGP8Staff(track, trackIndex, staffIndex, &staves[staffIndex]); err != nil {
+				return err
 			}
-			for voiceIndex := range track.Measures[measureIndex].Voices {
-				for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
-					for noteIndex, note := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
-						if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
-							return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion articulation %d with %d definitions", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.PercussionArticulation, len(track.PercussionArticulations))
-						}
-						if track.PercussionTrack {
-							for graceIndex, grace := range note.Effect.Graces {
-								if grace.HasPercussionArticulation && (grace.PercussionArticulation < 0 || grace.PercussionArticulation >= len(track.PercussionArticulations)) {
-									return fmt.Errorf("track %d measure %d voice %d beat %d note %d grace %d uses percussion articulation %d with %d definitions", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, grace.PercussionArticulation, len(track.PercussionArticulations))
-								}
+		}
+	}
+	return nil
+}
+
+func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) error {
+	for measureIndex := range staff.Measures {
+		measure := &staff.Measures[measureIndex]
+		if len(measure.Voices) > 4 {
+			return fmt.Errorf("track %d staff %d measure %d has %d voices, Guitar Pro 8 supports at most 4", trackIndex, staffIndex, measureIndex, len(measure.Voices))
+		}
+		for voiceIndex := range measure.Voices {
+			for beatIndex := range measure.Voices[voiceIndex].Beats {
+				for noteIndex, note := range measure.Voices[voiceIndex].Beats[beatIndex].Notes {
+					if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
+						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d uses percussion articulation %d with %d definitions", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.PercussionArticulation, len(track.PercussionArticulations))
+					}
+					if track.PercussionTrack {
+						for graceIndex, grace := range note.Effect.Graces {
+							if grace.HasPercussionArticulation && (grace.PercussionArticulation < 0 || grace.PercussionArticulation >= len(track.PercussionArticulations)) {
+								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d uses percussion articulation %d with %d definitions", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, grace.PercussionArticulation, len(track.PercussionArticulations))
 							}
 						}
-						midi := gp8NoteMIDI(track, &note)
-						if midi < 0 || midi > 127 {
-							return fmt.Errorf("track %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
-						}
-						if track.PercussionTrack {
-							if _, ok := gp8PercussionArticulationIndex(track, &note); !ok {
-								element := gp8DrumElement(note.Value, GP8ExportOptions{})
-								if element.Type == "percussion" {
-									return fmt.Errorf("track %d measure %d voice %d beat %d note %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value)
-								}
+					}
+					midi := gp8NoteMIDI(track, staff.Strings, &note)
+					if midi < 0 || midi > 127 {
+						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
+					}
+					if track.PercussionTrack {
+						if _, ok := gp8PercussionArticulationIndex(track, &note); !ok {
+							element := gp8DrumElement(note.Value, GP8ExportOptions{})
+							if element.Type == "percussion" {
+								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value)
 							}
 						}
 					}
@@ -339,6 +352,16 @@ func validateGP8Song(song *Song) error {
 		}
 	}
 	return nil
+}
+
+func gp8ExportStaves(track *Track) []Staff {
+	if len(track.Staves) > 0 {
+		return track.Staves
+	}
+	return []Staff{{
+		Measures: track.Measures, Strings: track.Strings,
+		PercussionTrack: track.PercussionTrack, StandardNotationLineCount: 5,
+	}}
 }
 
 func validateGP8ExportOptions(options GP8ExportOptions) error {
@@ -453,13 +476,15 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 func (builder *gp8Builder) prepareTrack(trackIndex int) {
 	track := &builder.song.Tracks[trackIndex]
 	chords := make(map[*Chord]string)
-	for measureIndex := range track.Measures {
-		for voiceIndex := range track.Measures[measureIndex].Voices {
-			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
-				chord := track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Effect.Chord
-				if chord != nil {
-					if _, exists := chords[chord]; !exists {
-						chords[chord] = strconv.Itoa(len(chords))
+	for _, staff := range gp8ExportStaves(track) {
+		for measureIndex := range staff.Measures {
+			for voiceIndex := range staff.Measures[measureIndex].Voices {
+				for beatIndex := range staff.Measures[measureIndex].Voices[voiceIndex].Beats {
+					chord := staff.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Effect.Chord
+					if chord != nil {
+						if _, exists := chords[chord]; !exists {
+							chords[chord] = strconv.Itoa(len(chords))
+						}
 					}
 				}
 			}
@@ -538,28 +563,34 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		result.PlaybackState = "Solo"
 	}
 
-	properties := make([]gpifStaffProperty, 0, 2)
-	if len(track.Strings) > 0 {
-		pitches := make([]string, 0, len(track.Strings))
-		for index := len(track.Strings) - 1; index >= 0; index-- {
-			pitches = append(pitches, strconv.Itoa(int(track.Strings[index].Value)))
+	staves := gp8ExportStaves(track)
+	result.Staves.Staff = make([]gpifStaff, len(staves))
+	for staffIndex := range staves {
+		staff := &staves[staffIndex]
+		if len(staff.Strings) == 0 {
+			continue
 		}
-		properties = append(properties, gpifStaffProperty{Name: "Tuning", Pitches: strings.Join(pitches, " ")})
+		pitches := make([]string, 0, len(staff.Strings))
+		for index := len(staff.Strings) - 1; index >= 0; index-- {
+			pitches = append(pitches, strconv.Itoa(int(staff.Strings[index].Value)))
+		}
+		result.Staves.Staff[staffIndex].Properties = []gpifStaffProperty{{
+			Name: "Tuning", Pitches: strings.Join(pitches, " "),
+		}}
 	}
 	if len(builder.chordIDs[trackIndex]) > 0 {
 		items := make([]gpifItem, 0, len(builder.chordIDs[trackIndex]))
 		for chord, id := range builder.chordIDs[trackIndex] {
-			items = append(items, gp8ChordItem(id, chord, len(track.Strings)))
+			items = append(items, gp8ChordItem(id, chord, len(staves[0].Strings)))
 		}
 		slices.SortFunc(items, func(a, b gpifItem) int { return cmp.Compare(a.ID, b.ID) })
-		properties = append(properties, gpifStaffProperty{Name: "DiagramCollection", Items: &gpifItems{Items: items}})
+		result.Properties = append(result.Properties, gpifStaffProperty{Name: "DiagramCollection", Items: &gpifItems{Items: items}})
 	}
-	result.Staves = gpifStaves{Staff: []gpifStaff{{Properties: properties}}}
 
 	if track.PercussionTrack {
 		lineCount := 5
-		if len(track.Staves) > 0 && track.Staves[0].StandardNotationLineCount > 0 {
-			lineCount = track.Staves[0].StandardNotationLineCount
+		if staves[0].StandardNotationLineCount > 0 {
+			lineCount = staves[0].StandardNotationLineCount
 		}
 		result.InstrumentSet = &gpifInstrumentSet{
 			Name:      "Drums",
@@ -699,36 +730,41 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		header := &builder.song.MeasureHeaders[measureIndex]
 		barIDs := make([]string, 0, len(builder.song.Tracks))
 		for trackIndex := range builder.song.Tracks {
-			barID := strconv.Itoa(len(builder.doc.Bars.Bars))
-			barIDs = append(barIDs, barID)
-			measure := &builder.song.Tracks[trackIndex].Measures[measureIndex]
-			voiceIDs := make([]string, 0, 4)
-			for voiceIndex := range measure.Voices {
-				voice := &measure.Voices[voiceIndex]
-				if len(voice.Beats) == 0 {
-					continue
-				}
-				voiceID := strconv.Itoa(len(builder.doc.Voices.Voices))
-				voiceIDs = append(voiceIDs, voiceID)
-				beatIDs := make([]string, 0, len(voice.Beats))
-				for beatIndex := range voice.Beats {
-					graceIDs, err := builder.addGraceBeats(trackIndex, &voice.Beats[beatIndex])
-					if err != nil {
-						return fmt.Errorf("track %d measure %d voice %d beat %d grace notes: %w", trackIndex, measureIndex, voiceIndex, beatIndex, err)
+			track := &builder.song.Tracks[trackIndex]
+			staves := gp8ExportStaves(track)
+			for staffIndex := range staves {
+				staff := &staves[staffIndex]
+				barID := strconv.Itoa(len(builder.doc.Bars.Bars))
+				barIDs = append(barIDs, barID)
+				measure := &staff.Measures[measureIndex]
+				voiceIDs := make([]string, 0, 4)
+				for voiceIndex := range measure.Voices {
+					voice := &measure.Voices[voiceIndex]
+					if len(voice.Beats) == 0 {
+						continue
 					}
-					beatIDs = append(beatIDs, graceIDs...)
-					beatID, err := builder.addBeat(trackIndex, &voice.Beats[beatIndex])
-					if err != nil {
-						return fmt.Errorf("track %d measure %d voice %d beat %d: %w", trackIndex, measureIndex, voiceIndex, beatIndex, err)
+					voiceID := strconv.Itoa(len(builder.doc.Voices.Voices))
+					voiceIDs = append(voiceIDs, voiceID)
+					beatIDs := make([]string, 0, len(voice.Beats))
+					for beatIndex := range voice.Beats {
+						graceIDs, err := builder.addGraceBeats(trackIndex, staff.Strings, &voice.Beats[beatIndex])
+						if err != nil {
+							return fmt.Errorf("track %d staff %d measure %d voice %d beat %d grace notes: %w", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, err)
+						}
+						beatIDs = append(beatIDs, graceIDs...)
+						beatID, err := builder.addBeat(trackIndex, staff.Strings, &voice.Beats[beatIndex])
+						if err != nil {
+							return fmt.Errorf("track %d staff %d measure %d voice %d beat %d: %w", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, err)
+						}
+						beatIDs = append(beatIDs, beatID)
 					}
-					beatIDs = append(beatIDs, beatID)
+					builder.doc.Voices.Voices = append(builder.doc.Voices.Voices, gpifVoice{ID: voiceID, Beats: strings.Join(beatIDs, " ")})
 				}
-				builder.doc.Voices.Voices = append(builder.doc.Voices.Voices, gpifVoice{ID: voiceID, Beats: strings.Join(beatIDs, " ")})
+				for len(voiceIDs) < 4 {
+					voiceIDs = append(voiceIDs, "-1")
+				}
+				builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure)})
 			}
-			for len(voiceIDs) < 4 {
-				voiceIDs = append(voiceIDs, "-1")
-			}
-			builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure)})
 		}
 		builder.doc.MasterBars.MasterBars = append(builder.doc.MasterBars.MasterBars, gp8MasterBar(header, strings.Join(barIDs, " ")))
 	}
@@ -786,11 +822,11 @@ type gp8GraceGroup struct {
 	notes    []Note
 }
 
-func (builder *gp8Builder) addGraceBeats(trackIndex int, beat *Beat) ([]string, error) {
+func (builder *gp8Builder) addGraceBeats(trackIndex int, staffStrings []GuitarString, beat *Beat) ([]string, error) {
 	var ids []string
 	for _, sequence := range graceSequences(beat) {
 		groups := builder.graceGroups(trackIndex, beat, sequence)
-		groupIDs, err := builder.addGraceGroups(trackIndex, groups)
+		groupIDs, err := builder.addGraceGroups(trackIndex, staffStrings, groups)
 		if err != nil {
 			return nil, err
 		}
@@ -868,7 +904,7 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 	return groups
 }
 
-func (builder *gp8Builder) addGraceGroups(trackIndex int, groups []gp8GraceGroup) ([]string, error) {
+func (builder *gp8Builder) addGraceGroups(trackIndex int, staffStrings []GuitarString, groups []gp8GraceGroup) ([]string, error) {
 	ids := make([]string, 0, len(groups))
 	for _, group := range groups {
 		rhythmID, err := builder.addRhythm(group.duration)
@@ -888,7 +924,7 @@ func (builder *gp8Builder) addGraceGroups(trackIndex int, groups []gp8GraceGroup
 		}
 		noteIDs := make([]string, 0, len(group.notes))
 		for noteIndex := range group.notes {
-			noteIDs = append(noteIDs, builder.addNote(trackIndex, &group.notes[noteIndex]))
+			noteIDs = append(noteIDs, builder.addNote(trackIndex, staffStrings, &group.notes[noteIndex]))
 		}
 		result.Notes = strings.Join(noteIDs, " ")
 		builder.doc.Beats.Beats = append(builder.doc.Beats.Beats, result)
@@ -897,7 +933,7 @@ func (builder *gp8Builder) addGraceGroups(trackIndex int, groups []gp8GraceGroup
 	return ids, nil
 }
 
-func (builder *gp8Builder) addBeat(trackIndex int, beat *Beat) (string, error) {
+func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, beat *Beat) (string, error) {
 	rhythmID, err := builder.addRhythm(beat.Duration)
 	if err != nil {
 		return "", err
@@ -939,7 +975,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, beat *Beat) (string, error) {
 
 	noteIDs := make([]string, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		noteID := builder.addNote(trackIndex, &beat.Notes[noteIndex])
+		noteID := builder.addNote(trackIndex, staffStrings, &beat.Notes[noteIndex])
 		noteIDs = append(noteIDs, noteID)
 	}
 	result.Notes = strings.Join(noteIDs, " ")
@@ -971,19 +1007,19 @@ func (builder *gp8Builder) addRhythm(duration Duration) (string, error) {
 	return id, nil
 }
 
-func (builder *gp8Builder) addNote(trackIndex int, note *Note) string {
+func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, note *Note) string {
 	track := &builder.song.Tracks[trackIndex]
 	noteID := strconv.Itoa(len(builder.doc.Notes.Notes))
 	fret := int(note.Value)
-	midi := gp8NoteMIDI(track, note)
+	midi := gp8NoteMIDI(track, staffStrings, note)
 	properties := []gpifProperty{
 		{Name: "Fret", Fret: &fret},
 		{Name: "Midi", Number: &midi},
 	}
 	if note.String > 0 {
 		stringValue := float64(int(note.String) - 1)
-		if !track.PercussionTrack && int(note.String) <= len(track.Strings) {
-			stringValue = float64(len(track.Strings) - int(note.String))
+		if !track.PercussionTrack && int(note.String) <= len(staffStrings) {
+			stringValue = float64(len(staffStrings) - int(note.String))
 		}
 		properties = append(properties, gpifProperty{Name: "String", String: &stringValue})
 	}
@@ -1226,10 +1262,10 @@ func gp8BendValue(value int8) *string {
 	return &encoded
 }
 
-func gp8NoteMIDI(track *Track, note *Note) int {
+func gp8NoteMIDI(track *Track, staffStrings []GuitarString, note *Note) int {
 	midi := int(note.Value)
-	if !track.PercussionTrack && note.String > 0 && int(note.String) <= len(track.Strings) {
-		midi += int(track.Strings[int(note.String)-1].Value)
+	if !track.PercussionTrack && note.String > 0 && int(note.String) <= len(staffStrings) {
+		midi += int(staffStrings[int(note.String)-1].Value)
 	}
 	return midi
 }
