@@ -254,7 +254,7 @@ The gate compares these cases with the source switches. Each default has an expl
 
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
-| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `inspected-track-capo` | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `capo-precedence` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
@@ -275,7 +275,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `isPercussionTrack:t.InstrumentSet.Type` | `percussion-articulations` | 3 | `percussion-identity` | `delegated-to-audit` | Known instrument-set spellings map to one percussion-track value. |
 | `gpifNormalizePercussionArticulation:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | Percussion elements use their authored articulation identity. |
 | `gpifRhythmToDuration:r.NoteValue` | `rhythm` | 8 | `timing-finalization` | `unsupported-feature` | The importer maps each supported GPIF note value to one public duration. |
-| `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `inspected-track-capo` | `delegated-to-audit` | The importer maps the classified capo property to Track.Offset. |
+| `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `capo-precedence` | `delegated-to-audit` | The importer maps the classified capo property to Track.Offset. |
 | `gpifXMLAuditStart:element.Name.Local` | `score-core` | 5 | `unclassified-gpif-wire-field` | `delegated-to-audit` | The XML audit records graph object identifiers for diagnostic locations. |
 | `gpifApplyBeatEffects:p.Direction` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps both supported brush directions. |
 | `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 2 | `timing-finalization` | `delegated-to-audit` | The importer maps the supported master-bar triplet-feel values. |
@@ -315,3 +315,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `inspected-chord-barres` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | Strict export reports explicit barre ranges before it emits bytes. |
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
+| `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |

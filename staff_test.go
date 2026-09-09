@@ -134,6 +134,24 @@ func TestParseGPIFAssignsBarsAcrossStavesBeforeAdvancingTrack(t *testing.T) {
 }
 
 func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
+	t.Run("matching staff overrides", func(t *testing.T) {
+		gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",
+			`<Name>Piano</Name><Properties><Property name="CapoFret"><Fret>2</Fret></Property></Properties>`, 1)
+		gpif = strings.Replace(gpif,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property></Properties></Staff>`,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
+		gpif = strings.Replace(gpif,
+			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property></Properties></Staff>`,
+			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
+		result, err := ParseWithOptions(conformanceGPIFArchive(t, gpif), ParseOptions{Strict: true})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(result.Diagnostics) != 0 || result.Song.Tracks[0].Offset != 4 {
+			t.Fatalf("matching staff overrides = offset %d, diagnostics %#v", result.Song.Tracks[0].Offset, result.Diagnostics)
+		}
+	})
+
 	t.Run("staff fallback", func(t *testing.T) {
 		gpif := strings.Replace(multiStaffFollowedByTrackGPIF,
 			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property></Properties></Staff>`,
@@ -173,6 +191,43 @@ func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
 			t.Fatalf("diagnostics = %#v, want staff capo conflict", result.Diagnostics)
 		}
 	})
+}
+
+func TestGPIFCapoResolutionTable(t *testing.T) {
+	property := func(value int) gpifStaffProperty {
+		return gpifStaffProperty{Name: "CapoFret", Fret: &value}
+	}
+	staff := func(properties ...gpifStaffProperty) gpifStaff {
+		return gpifStaff{Properties: properties}
+	}
+	tests := []struct {
+		name   string
+		track  gpifTrack
+		value  int32
+		common bool
+	}{
+		{name: "neither level", track: gpifTrack{Staves: gpifStaves{Staff: []gpifStaff{staff()}}}, common: true},
+		{name: "track only", track: gpifTrack{Properties: []gpifStaffProperty{property(2)}, Staves: gpifStaves{Staff: []gpifStaff{staff()}}}, value: 2, common: true},
+		{name: "staff only", track: gpifTrack{Staves: gpifStaves{Staff: []gpifStaff{staff(property(4))}}}, value: 4, common: true},
+		{name: "matching track and staff", track: gpifTrack{Properties: []gpifStaffProperty{property(2)}, Staves: gpifStaves{Staff: []gpifStaff{staff(property(2))}}}, value: 2, common: true},
+		{name: "single staff override", track: gpifTrack{Properties: []gpifStaffProperty{property(2)}, Staves: gpifStaves{Staff: []gpifStaff{staff(property(4))}}}, value: 4, common: true},
+		{name: "both staves override", track: gpifTrack{Properties: []gpifStaffProperty{property(2)}, Staves: gpifStaves{Staff: []gpifStaff{staff(property(4)), staff(property(4))}}}, value: 4, common: true},
+		{name: "different staff values", track: gpifTrack{Staves: gpifStaves{Staff: []gpifStaff{staff(property(2)), staff(property(4))}}}, value: 2},
+		{name: "missing beside override", track: gpifTrack{Staves: gpifStaves{Staff: []gpifStaff{staff(), staff(property(4))}}}},
+		{name: "explicit zero override", track: gpifTrack{Properties: []gpifStaffProperty{property(2)}, Staves: gpifStaves{Staff: []gpifStaff{staff(property(0)), staff()}}}},
+		{name: "last property wins", track: gpifTrack{Properties: []gpifStaffProperty{property(2), property(4)}, Staves: gpifStaves{Staff: []gpifStaff{staff()}}}, value: 4, common: true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := gpifResolveCapo(test.track)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got.value != test.value || got.common != test.common {
+				t.Fatalf("resolution = %#v, want value %d common %t", got, test.value, test.common)
+			}
+		})
+	}
 }
 
 func TestParseGPIFInvalidBarSkipsWholeTrack(t *testing.T) {

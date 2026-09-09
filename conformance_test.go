@@ -187,6 +187,48 @@ func TestAlphaTabPreservesInspectedCapo(t *testing.T) {
 	}
 }
 
+func TestAlphaTabGPIFCapoPrecedence(t *testing.T) {
+	requireAlphaTabConformance(t)
+	gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",
+		`<Name>Piano</Name><Properties><Property name="CapoFret"><Fret>2</Fret></Property></Properties>`, 1)
+	gpif = strings.Replace(gpif,
+		`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property></Properties></Staff>`,
+		`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
+	gpif = strings.Replace(gpif,
+		`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property></Properties></Staff>`,
+		`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
+	data := conformanceGPIFArchive(t, gpif)
+	result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Song.Tracks[0].Offset != 4 {
+		t.Fatalf("Go effective capo = %d, want 4", result.Song.Tracks[0].Offset)
+	}
+	score, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	if !ok {
+		t.Fatal("AlphaTab score is not an object")
+	}
+	tracks, ok := score["tracks"].([]any)
+	if !ok || len(tracks) < 1 {
+		t.Fatalf("AlphaTab tracks = %#v", score["tracks"])
+	}
+	track, ok := tracks[0].(map[string]any)
+	if !ok {
+		t.Fatalf("AlphaTab track = %#v", tracks[0])
+	}
+	staves, ok := track["staves"].([]any)
+	if !ok || len(staves) != 2 {
+		t.Fatalf("AlphaTab staves = %#v", track["staves"])
+	}
+	for staffIndex, item := range staves {
+		staff, staffOK := item.(map[string]any)
+		if !staffOK || staff["capo"] != float64(4) {
+			t.Fatalf("AlphaTab staff %d capo = %#v, want 4", staffIndex, staff["capo"])
+		}
+	}
+}
+
 func TestAlphaTabComparatorDetectsWireMutations(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceExportSong()
