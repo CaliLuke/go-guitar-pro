@@ -98,6 +98,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		}
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
+			tiedNotes := make(map[int]map[int8]int16)
 			if len(staves[staffIndex].Measures) != len(song.MeasureHeaders) {
 				add("score.staff.measure-count", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "measure count %d does not match header count %d", len(staves[staffIndex].Measures), len(song.MeasureHeaders))
 			}
@@ -133,7 +134,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 						add("score.voice.measure-ownership", ScoreDiagnosticStructural, voiceLocation, "measure index %d does not match owner %d", measure.Voices[voiceIndex].MeasureIndex, measureIndex)
 					}
 				}
-				validateScoreVoices(track, measure, location, &diagnostics)
+				validateScoreVoices(track, &staves[staffIndex], measure, location, tiedNotes, &diagnostics)
 			}
 		}
 		for automationIndex, automation := range track.SoundAutomations {
@@ -168,6 +169,9 @@ func authoredScoreDiagnostics(song *Song) []ScoreDiagnostic {
 		"score.measure.exact-start":      {},
 		"score.beat.start":               {},
 		"score.beat.exact-start":         {},
+		// A tie can begin outside an imported excerpt. Report it to callers, but
+		// do not prevent GP8 from preserving the destination marker.
+		"score.note.tie-destination": {},
 	}
 	diagnostics := ValidateSong(song)
 	authored := make([]ScoreDiagnostic, 0, len(diagnostics))
@@ -179,8 +183,11 @@ func authoredScoreDiagnostics(song *Song) []ScoreDiagnostic {
 	return authored
 }
 
-func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, diagnostics *[]ScoreDiagnostic) {
+func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base ScoreLocation, tiedNotes map[int]map[int8]int16, diagnostics *[]ScoreDiagnostic) {
 	for voiceIndex := range measure.Voices {
+		if tiedNotes[voiceIndex] == nil {
+			tiedNotes[voiceIndex] = make(map[int8]int16)
+		}
 		expected := scoreTimeOrLegacy(measure.ExactStart, measure.Start)
 		for beatIndex := range measure.Voices[voiceIndex].Beats {
 			beat := &measure.Voices[voiceIndex].Beats[beatIndex]
@@ -206,11 +213,28 @@ func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, dia
 				}
 			}
 			for noteIndex, note := range beat.Notes {
-				if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
-					noteLocation := location
-					noteLocation.Note = noteIndex
+				noteLocation := location
+				noteLocation.Note = noteIndex
+				percussion := track.PercussionTrack || staff.PercussionTrack
+				if percussion && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.percussion-reference", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("articulation %d is outside 0..%d", note.PercussionArticulation, len(track.PercussionArticulations)-1)})
 				}
+				if math.IsNaN(float64(note.DurationPercent)) || math.IsInf(float64(note.DurationPercent), 0) || note.DurationPercent < 0 {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.duration-percent", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("duration percent %v must be finite and non-negative", note.DurationPercent)})
+				}
+				if note.Kind < NoteTypeNormal || note.Kind > NoteTypeDead {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.kind", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("note kind %d is not valid for a sounded note", note.Kind)})
+				}
+				if !percussion && (note.String < 0 || int(note.String) > len(staff.Strings)) {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.string", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("string %d is outside 0..%d", note.String, len(staff.Strings))})
+				}
+				if !percussion && note.Kind == NoteTypeTie {
+					previous, ok := tiedNotes[voiceIndex][note.String]
+					if !ok || previous != note.Value {
+						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.tie-destination", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("tie destination on string %d with value %d has no matching earlier note", note.String, note.Value)})
+					}
+				}
+				tiedNotes[voiceIndex][note.String] = note.Value
 			}
 		}
 	}

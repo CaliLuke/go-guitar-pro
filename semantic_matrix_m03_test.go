@@ -146,7 +146,7 @@ func runSemanticMatrixM03CompatibilityAuthority(run *semanticMatrixRun) {
 	first := track.Staves[0]
 	second := first
 	second.Measures = slices.Clone(first.Measures)
-	second.Strings = []GuitarString{{Number: 1, Value: 72}}
+	second.Strings = []GuitarString{{Number: 1, Value: 72}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	track.Staves = []Staff{first, second}
 
 	track.Measures = nil
@@ -159,11 +159,11 @@ func runSemanticMatrixM03CompatibilityAuthority(run *semanticMatrixRun) {
 
 	legacyMeasures := slices.Clone(track.Measures)
 	legacyMeasures[0].Clef = MeasureClefTenor
-	legacyStrings := []GuitarString{{Number: 1, Value: 67}}
+	legacyStrings := []GuitarString{{Number: 1, Value: 67}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	track.Measures = legacyMeasures
 	track.Strings = legacyStrings
 	track.Staves[0].Measures[0].Clef = MeasureClefBass
-	track.Staves[0].Strings = []GuitarString{{Number: 1, Value: 65}}
+	track.Staves[0].Strings = []GuitarString{{Number: 1, Value: 65}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	laterBefore := track.Staves[1]
 	if err := FinalizeSong(song); err != nil {
 		t.Fatal(err)
@@ -184,7 +184,7 @@ func runSemanticMatrixM03CompatibilityAuthority(run *semanticMatrixRun) {
 	}
 	track.Staves[0].Measures = slices.Clone(track.Staves[0].Measures)
 	track.Staves[0].Measures[0].Clef = MeasureClefBass
-	track.Staves[0].Strings = []GuitarString{{Number: 1, Value: 64}}
+	track.Staves[0].Strings = []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	track.Measures = nil
 	track.Strings = nil
 	if err := FinalizeSong(song); err != nil {

@@ -70,6 +70,8 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM07AuthorityAndBoundaries":             runSemanticMatrixM07AuthorityAndBoundaries,
 	"TestSemanticMatrixM08Durations":                          runSemanticMatrixM08Durations,
 	"TestSemanticMatrixM08ExactTiming":                        runSemanticMatrixM08ExactTiming,
+	"TestSemanticMatrixM09NoteRepresentation":                 runSemanticMatrixM09NoteRepresentation,
+	"TestSemanticMatrixM09NoteValidation":                     runSemanticMatrixM09NoteValidation,
 }
 
 func semanticValidGP8Song(t *testing.T) *Song {

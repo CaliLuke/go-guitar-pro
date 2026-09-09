@@ -125,6 +125,16 @@ reports a normalization. The legacy 0:0 tuplet means 1:1. GP8 emits the
 canonical representation and reports that normalization. Invalid durations
 are rejected before export.
 
+A pitched note uses `String` 1 through the staff string count for a fret. A
+`String` value of 0 makes `Value` an absolute MIDI note. Validation rejects an
+invalid string, note kind, MIDI result, or duration percentage. It also reports
+a tie destination without an earlier matching note. Export can keep that tie
+because its origin can be outside an imported excerpt.
+
+GP8 preserves note pitch, string, dead-note state, and complete tie markers. It
+does not preserve `SwapAccidentals` or `DurationPercent`, so export reports
+these fields when they are non-default.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.

@@ -1042,6 +1042,9 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 }
 
 func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocation) {
+	if note.SwapAccidentals {
+		builder.addReport("gp8.omit.swap-accidentals", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy accidental-swap preference")
+	}
 	if note.DurationPercent != 1 {
 		builder.addReport("gp8.omit.note-duration-percent", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 has no note duration-percent field")
 	}
