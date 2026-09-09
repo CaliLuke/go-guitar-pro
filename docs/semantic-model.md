@@ -1,0 +1,57 @@
+# Semantic score model
+
+`Score` is an alias for `Song`. The alias gives the model a semantic name
+without a second writable object tree. Existing callers can continue to use
+`Song`.
+
+The model covers Guitar Pro import and GP8 export. It does not cover AlphaTab
+rendering, synthesis, or other file importers.
+
+## Processing stages
+
+The parser uses these stages:
+
+1. The container reader extracts the format data.
+2. The format reader decodes source records.
+3. The importer creates independent score occurrences.
+4. `FinalizeSong` derives exact and legacy timing values.
+5. `ValidateSong` checks the public result without mutation.
+
+`FinalizeSong` is deterministic and idempotent. The parser calls the same
+finalizer before it returns a score. A caller can call it after an authored
+timing change.
+
+`ValidateSong` checks format-independent invariants. GP8 export uses a separate
+capability check because a valid score can exceed one target format.
+
+## Ownership and compatibility
+
+The hierarchy is `Score -> Track -> Staff -> Measure -> Voice -> Beat -> Note`.
+Each parsed beat and note is an independent occurrence. Reused GPIF definitions
+do not share mutable effect data.
+
+`Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
+are compatibility views of the first staff. GP8 export honors replacement of
+the compatibility slices. New multi-staff code must use `Track.Staves`.
+
+The existing integer timing fields remain compatibility projections.
+`ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
+quantizes values only at a target boundary.
+
+## Authored values and loss
+
+The model preserves ordered grace effects, staff ownership, chord scope,
+percussion articulation identity, fractional tempo, and exact duration ratios.
+The conformance fixtures cover each representation.
+
+`ParseWithOptions` reports source data that the model cannot preserve. Strict
+parse mode rejects selected diagnostic kinds. The default `Parse` function
+keeps its permissive behavior.
+
+`PreflightExport` reports target changes before serialization. A strict export
+policy rejects normalized or omitted values unless its code is in the explicit
+allowlist.
+
+This policy supports gradual migration. New code can use `Score`, exact value
+types, staves, diagnostics, and preflight reports. Existing `Song` code remains
+source compatible.

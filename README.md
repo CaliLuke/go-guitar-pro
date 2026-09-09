@@ -143,6 +143,9 @@ normalize to rests.
 
 ## Format support
 
+See the [semantic score model](docs/semantic-model.md) for ownership,
+finalization, validation, and migration rules.
+
 | Guitar Pro version | Extension | Container | Read | Export |
 | --- | --- | --- | --- | --- |
 | 3–5 | `.gp3`, `.gp4`, `.gp5` | Binary | Yes | No |
