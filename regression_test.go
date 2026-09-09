@@ -288,6 +288,8 @@ func TestDurationTime(t *testing.T) {
 		{"quarter", Duration{Value: 4, TupletEnters: 1, TupletTimes: 1}, 960},
 		{"dotted quarter", Duration{Value: 4, Dotted: true, TupletEnters: 1, TupletTimes: 1}, 1440},
 		{"double dotted quarter", Duration{Value: 4, DoubleDotted: true, TupletEnters: 1, TupletTimes: 1}, 1680},
+		{"simultaneous dot flags use double dot", Duration{Value: 4, Dotted: true, DoubleDotted: true, TupletEnters: 1, TupletTimes: 1}, 1680},
+		{"double dotted eighth triplet", Duration{Value: 8, DoubleDotted: true, TupletEnters: 3, TupletTimes: 2}, 560},
 		{"quarter triplet", Duration{Value: 4, TupletEnters: 3, TupletTimes: 2}, 640},
 		{"unset value", Duration{TupletEnters: 1, TupletTimes: 1}, 0},
 		{"unset tuplet", Duration{Value: 4}, 960},
@@ -298,6 +300,27 @@ func TestDurationTime(t *testing.T) {
 				t.Fatalf("time() = %d, want %d", got, test.want)
 			}
 		})
+	}
+}
+
+func TestGPIFDoubleDottedDurationAndTiming(t *testing.T) {
+	duration := gpifRhythmToDuration(&gpifRhythm{
+		NoteValue: "Eighth", AugmentationDot: &gpifAugDot{Count: 2},
+	})
+	if duration.Dotted || !duration.DoubleDotted || duration.time() != 840 {
+		t.Fatalf("duration = %#v, time = %d; want one double-dot flag and 840 ticks", duration, duration.time())
+	}
+
+	song := parseTestFixture(t, "testdata/gp7/colors.gp")
+	beats := song.Tracks[0].Staves[0].Measures[1].Voices[0].Beats
+	if len(beats) < 2 || beats[0].Start == nil || beats[1].Start == nil {
+		t.Fatalf("fixture beats = %#v, want two finalized beat starts", beats)
+	}
+	if got := beats[0].Duration; got.Dotted || !got.DoubleDotted || got.time() != 840 {
+		t.Fatalf("fixture duration = %#v, time = %d; want double-dotted eighth at 840 ticks", got, got.time())
+	}
+	if *beats[1].Start != 5640 || *beats[1].Start-*beats[0].Start != 840 {
+		t.Fatalf("beat starts = %d, %d; want 4800, 5640", *beats[0].Start, *beats[1].Start)
 	}
 }
 

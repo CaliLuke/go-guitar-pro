@@ -1912,12 +1912,12 @@
       "path": "testdata/gp7/colors.gp",
       "sha256": "7846a39a10be76244b3fbf44a5c0c6ce86557fbb5cd4e287a052ca11b1da4767",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "disposition": "supported",
+      "reason": "Double-dotted rhythm and finalized timing agree with the pinned AlphaTab oracle.",
       "features": [
-        "score-core"
+        "timing"
       ],
-      "semanticSnapshot": false
+      "semanticSnapshot": true
     },
     {
       "path": "testdata/gp7/compressed.gp",

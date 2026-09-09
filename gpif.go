@@ -1994,11 +1994,10 @@ func gpifRhythmToDuration(r *gpifRhythm) Duration {
 		d.Value = 128
 	}
 	if r.AugmentationDot != nil {
-		if r.AugmentationDot.Count >= 1 {
-			d.Dotted = true
-		}
 		if r.AugmentationDot.Count >= 2 {
 			d.DoubleDotted = true
+		} else if r.AugmentationDot.Count == 1 {
+			d.Dotted = true
 		}
 	}
 	if r.PrimaryTuplet != nil && r.PrimaryTuplet.Num > 0 && r.PrimaryTuplet.Den > 0 {

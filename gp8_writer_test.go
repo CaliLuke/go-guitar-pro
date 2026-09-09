@@ -1137,6 +1137,23 @@ func syntheticGP8Song() *Song {
 	}
 }
 
+func TestGP8WriterCanonicalizesDoubleDotFlags(t *testing.T) {
+	builder := gp8Builder{rhythmIDs: make(map[Duration]string)}
+	duration := Duration{
+		Value: 8, Dotted: true, DoubleDotted: true, TupletEnters: 1, TupletTimes: 1,
+	}
+	if _, err := builder.addRhythm(duration); err != nil {
+		t.Fatal(err)
+	}
+	if len(builder.doc.Rhythms.Rhythms) != 1 {
+		t.Fatalf("rhythms = %d, want 1", len(builder.doc.Rhythms.Rhythms))
+	}
+	dot := builder.doc.Rhythms.Rhythms[0].AugmentationDot
+	if dot == nil || dot.Count != 2 {
+		t.Fatalf("augmentation dot = %#v, want count 2", dot)
+	}
+}
+
 func readZipMember(t *testing.T, archive *zip.Reader, name string) []byte {
 	t.Helper()
 	for _, file := range archive.File {

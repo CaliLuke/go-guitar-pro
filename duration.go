@@ -45,10 +45,10 @@ func (d *Duration) time() uint32 {
 	}
 	result := math.Trunc(float64(DurationQuarterTime) * 4.0 / float64(d.Value))
 	switch {
-	case d.Dotted:
-		result += math.Trunc(result / 2.0)
 	case d.DoubleDotted:
 		result += math.Trunc(result/4.0) * 3.0
+	case d.Dotted:
+		result += math.Trunc(result / 2.0)
 	}
 	return d.convertTime(uint32(result))
 }

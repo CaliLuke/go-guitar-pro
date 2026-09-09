@@ -43,6 +43,12 @@
       "issues": [4]
     },
     {
+      "id": "gp7-double-dotted-timing",
+      "fixture": "testdata/gp7/colors.gp",
+      "features": ["timing"],
+      "issues": [19]
+    },
+    {
       "id": "gp7-tremolo-picking",
       "fixture": "testdata/gp7/tremolo-picking.gp",
       "features": ["tremolo-picking"],
