@@ -7,6 +7,11 @@ without a second writable object tree. Existing callers can continue to use
 The model covers Guitar Pro import and GP8 export. It does not cover AlphaTab
 rendering, synthesis, or other file importers.
 
+The semantic matrix traces each public field, GPIF wire field, source dispatch,
+and public enum member to an executable case. Each case records its stage,
+format, value shapes, evidence role, and evidence source. Structural schema
+evidence proves XML shape only. It cannot close a semantic behavior obligation.
+
 ## Processing stages
 
 The parser uses these stages:
@@ -172,11 +177,25 @@ unequal middle values, point vibrato, and summary fields. Strict export rejects
 each unapproved change. Parse diagnostics check GPIF curve numbers before they
 enter narrow legacy fields.
 
+Standard bends use three or four wire control points to identify one gesture.
+Import converts these controls to the canonical public gesture. It does not
+change a custom curve or remove a point that has vibrato. A missing GPIF bend
+destination offset means the end of the note. A middle value without middle
+offsets means the midpoint. GP8 export reports an authored initial or final
+hold when this standard gesture encoding cannot keep the hold boundary.
+
+GP8 percussion resources cover every resolved staff, including articulations
+used only by grace notes. The writer emits staff definitions before the shared
+instrument set because the pinned consumer applies that set only to staves that
+already exist. GPIF stores one percussion notation line count per track. Equal
+staff values are preserved; a later conflicting value is reported and strict
+export refuses it unless that exact normalization is allowed.
+
 `HarmonicEffect.FretFloat` is authoritative when both harmonic fret fields are
 present. GP8 reports a conflicting legacy `Fret` value as a normalization. It
 also reports harmonic pitch spelling and octave because the target does not
 emit them. Import rejects malformed, non-finite, and out-of-range harmonic
-frets. A GPIF feedback harmonic maps to semi and produces a loss diagnostic.
+frets. A GPIF feedback harmonic remains distinct through import and GP8 export.
 
 GP8 preserves a chord name, string pattern, and representable first fret. It
 reports barres, fingerings, omissions, and legacy chord descriptions. Imported
@@ -236,6 +255,13 @@ check that realistic faults make tests fail. Structural fuzz tests check
 malformed input and valid nested score graphs. Statement coverage remains a
 minimum execution measure. No one signal proves that the code has no defects.
 Together, these signals make missing evidence visible and measurable.
+
+Each public field has a disposition-bearing runtime assertion. The semantic
+matrix compares that declaration with the complete public-field partition. A
+new field cannot inherit a broad feature claim. The mutation gate swaps two
+unrelated dispositions and requires the matrix to fail. Another mutation
+removes represented-field serialization and requires its case to fail. These
+checks do not replace stage-specific and value-specific behavior evidence.
 
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains

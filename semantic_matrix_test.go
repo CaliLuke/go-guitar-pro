@@ -10,16 +10,54 @@ import (
 )
 
 type semanticMatrixRun struct {
-	t          *testing.T
-	assertions map[string]int
+	t                 *testing.T
+	assertions        map[string]int
+	fieldDispositions map[string]string
 }
 
 func newSemanticMatrixRun(t *testing.T) *semanticMatrixRun {
 	t.Helper()
-	return &semanticMatrixRun{t: t, assertions: make(map[string]int)}
+	return &semanticMatrixRun{
+		t:                 t,
+		assertions:        make(map[string]int),
+		fieldDispositions: make(map[string]string),
+	}
 }
 
 func (run *semanticMatrixRun) Field(path string, got, want any) {
+	run.equal("field", path, got, want)
+}
+
+func (run *semanticMatrixRun) Preserved(path string, got, want any) {
+	run.fieldWithDisposition(path, "preserved", got, want)
+}
+
+func (run *semanticMatrixRun) Normalized(path string, got, want any) {
+	run.fieldWithDisposition(path, "normalized", got, want)
+}
+
+func (run *semanticMatrixRun) Omitted(path string, got, want any) {
+	run.fieldWithDisposition(path, "omitted", got, want)
+}
+
+func (run *semanticMatrixRun) Rejected(path string, got, want any) {
+	run.fieldWithDisposition(path, "rejected", got, want)
+}
+
+func (run *semanticMatrixRun) Derived(path string, got, want any) {
+	run.fieldWithDisposition(path, "derived", got, want)
+}
+
+func (run *semanticMatrixRun) OutOfScope(path string, got, want any) {
+	run.fieldWithDisposition(path, "out-of-scope", got, want)
+}
+
+func (run *semanticMatrixRun) fieldWithDisposition(path, disposition string, got, want any) {
+	run.t.Helper()
+	if previous, ok := run.fieldDispositions[path]; ok && previous != disposition {
+		run.t.Errorf("field:%s has conflicting executable dispositions %s and %s", path, previous, disposition)
+	}
+	run.fieldDispositions[path] = disposition
 	run.equal("field", path, got, want)
 }
 
@@ -29,6 +67,10 @@ func (run *semanticMatrixRun) Wire(path string, got, want any) {
 
 func (run *semanticMatrixRun) Dispatch(path string, got, want any) {
 	run.equal("dispatch", path, got, want)
+}
+
+func (run *semanticMatrixRun) Enum(path string, got, want any) {
+	run.equal("enum", path, got, want)
 }
 
 func (run *semanticMatrixRun) equal(kind, path string, got, want any) {
@@ -74,6 +116,7 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM09NoteValidation":                     runSemanticMatrixM09NoteValidation,
 	"TestSemanticMatrixM10BeatSemantics":                      runSemanticMatrixM10BeatSemantics,
 	"TestSemanticMatrixM10BeatEffects":                        runSemanticMatrixM10BeatEffects,
+	"TestSemanticMatrixM10DynamicQuantization":                runSemanticMatrixM10DynamicQuantization,
 	"TestSemanticMatrixM11TechniqueDispositions":              runSemanticMatrixM11TechniqueDispositions,
 	"TestSemanticMatrixM11SourceDistinctions":                 runSemanticMatrixM11SourceDistinctions,
 	"TestSemanticMatrixM11Validation":                         runSemanticMatrixM11Validation,
@@ -104,6 +147,7 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM19BackingSourceDiagnostics":           runSemanticMatrixM19BackingSourceDiagnostics,
 	"TestSemanticMatrixM19ValidationAndExportPolicy":          runSemanticMatrixM19ValidationAndExportPolicy,
 	"TestSemanticMatrixM20SourceAudit":                        runSemanticMatrixM20SourceAudit,
+	"TestSemanticMatrixM20BehaviorReconciliation":             runSemanticMatrixM20BehaviorReconciliation,
 	"TestSemanticMatrixM21SharedValidation":                   runSemanticMatrixM21SharedValidation,
 	"TestSemanticMatrixM21AuthoredAndDerivedDistinction":      runSemanticMatrixM21AuthoredAndDerivedDistinction,
 	"TestSemanticMatrixM21FinalizeContracts":                  runSemanticMatrixM21FinalizeContracts,

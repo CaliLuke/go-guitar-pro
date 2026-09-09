@@ -24,12 +24,12 @@ func newCursor(data []byte) *cursor {
 func newCursorWithContext(data []byte, context *parseContext) *cursor {
 	return &cursor{data: data, context: context}
 }
-func (c *cursor) report(source parseDiagnosticSource, kind ParseDiagnosticKind, feature, reason string) {
+func (c *cursor) report(source parseDiagnosticSource, reason string) {
 	if c.context == nil {
 		return
 	}
 	offset := int64(c.pos)
-	c.context.add(source, ParseDiagnostic{Kind: kind, Feature: feature, Reason: reason, BinaryOffset: &offset})
+	c.context.add(source, ParseDiagnostic{Reason: reason, BinaryOffset: &offset})
 }
 
 func (c *cursor) remaining() int {

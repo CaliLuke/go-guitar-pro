@@ -16,6 +16,9 @@ func TestSemanticMatrixM06TempoAuthority(t *testing.T) {
 
 func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 	t := run.t
+	run.Enum("SourceValueState.SourceValueMissing", (SourceValue[BPM]{}).State, SourceValueMissing)
+	run.Enum("SourceValueState.SourceValueKnown", KnownSourceValue(BPM(120)).State, SourceValueKnown)
+	run.Enum("SourceValueState.SourceValueUnknown", UnknownSourceValue[BPM]("future").State, SourceValueUnknown)
 	for _, source := range []struct {
 		text string
 		want float64
@@ -25,7 +28,7 @@ func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 		if len(song.TempoAutomations) != 1 {
 			t.Fatalf("tempo %q was not imported", source.text)
 		}
-		run.Field("TempoAutomation.Tempo", song.TempoAutomations[0].Tempo, source.want)
+		run.Preserved("TempoAutomation.Tempo", song.TempoAutomations[0].Tempo, source.want)
 	}
 	dispatchSong := &Song{Tempo: 120}
 	gpifReadTempoAutomations([]gpifAutomation{{Type: "Tempo", Value: gpifAutomationValue{Text: "90 2"}}}, dispatchSong, nil)
@@ -41,16 +44,16 @@ func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 	song.TempoName = "Fractional"
 	song.HideTempo = true
 	song.TempoAutomations = []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}}
-	run.Field("Song.InitialTempo", song.InitialTempo, KnownSourceValue(BPM(132.5)))
-	run.Field("SourceValue.State", song.InitialTempo.State, SourceValueKnown)
-	run.Field("SourceValue.Value", song.InitialTempo.Value, BPM(132.5))
-	run.Field("SourceValue.Raw", song.InitialTempo.Raw, "")
-	run.Field("Song.Tempo", song.Tempo, int16(0))
-	run.Field("Song.TempoName", song.TempoName, "Fractional")
-	run.Field("Song.HideTempo", song.HideTempo, true)
-	run.Field("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}})
-	run.Field("TempoAutomation.Bar", song.TempoAutomations[0].Bar, 1)
-	run.Field("TempoAutomation.Position", song.TempoAutomations[0].Position, 0.75)
+	run.Preserved("Song.InitialTempo", song.InitialTempo, KnownSourceValue(BPM(132.5)))
+	run.Preserved("SourceValue.State", song.InitialTempo.State, SourceValueKnown)
+	run.Preserved("SourceValue.Value", song.InitialTempo.Value, BPM(132.5))
+	run.Preserved("SourceValue.Raw", song.InitialTempo.Raw, "")
+	run.Normalized("Song.Tempo", song.Tempo, int16(0))
+	run.Preserved("Song.TempoName", song.TempoName, "Fractional")
+	run.Omitted("Song.HideTempo", song.HideTempo, true)
+	run.Preserved("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}})
+	run.Preserved("TempoAutomation.Bar", song.TempoAutomations[0].Bar, 1)
+	run.Preserved("TempoAutomation.Position", song.TempoAutomations[0].Position, 0.75)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	if !slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Code == "gp8.omit.tempo-visibility" }) {
 		t.Fatalf("report = %#v, want tempo visibility omission", report.Entries)

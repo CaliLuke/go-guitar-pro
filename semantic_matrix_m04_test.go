@@ -19,8 +19,8 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 	t := run.t
 	for _, pitches := range []string{"64", "40 45 50 55 59 64", "35 40 45 50 55 59 64"} {
 		strings := gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: pitches}}})
-		run.Field("GuitarString.Number", strings[0].Number, int8(1))
-		run.Field("GuitarString.Value", strings[0].Value, int8(64))
+		run.Normalized("GuitarString.Number", strings[0].Number, int8(1))
+		run.Preserved("GuitarString.Value", strings[0].Value, int8(64))
 		run.Field("Track.Strings", len(strings), len(splitIDs(pitches)))
 		track := Track{Strings: strings}
 		for _, note := range []Note{{String: 1}, {String: int8(len(strings)), Value: 3}} {
@@ -59,7 +59,7 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 		if err != nil || got.value != test.value || got.common != test.common {
 			t.Errorf("capo resolution = %#v, %v, want %d common %t", got, err, test.value, test.common)
 		}
-		run.Field("Track.Offset", got.value, test.value)
+		run.Preserved("Track.Offset", got.value, test.value)
 	}
 	capoStrings := []GuitarString{{Number: 1, Value: 64}}
 	capoTrack := Track{Offset: 4, Strings: capoStrings}
@@ -78,13 +78,13 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 	track.BanjoTrack = true
 	track.Settings.Notation = true
 	track.Staves[0].StandardNotationLineCount = 7
-	run.Field("Track.FretCount", track.FretCount, uint8(31))
-	run.Field("Track.Port", track.Port, uint8(3))
-	run.Field("Track.TwelveStringedGuitarTrack", track.TwelveStringedGuitarTrack, true)
-	run.Field("Track.BanjoTrack", track.BanjoTrack, true)
-	run.Field("Staff.StandardNotationLineCount", track.Staves[0].StandardNotationLineCount, 7)
-	run.Field("Track.PercussionTrack", track.PercussionTrack, false)
-	run.Field("Staff.PercussionTrack", track.Staves[0].PercussionTrack, false)
+	run.Omitted("Track.FretCount", track.FretCount, uint8(31))
+	run.Omitted("Track.Port", track.Port, uint8(3))
+	run.Omitted("Track.TwelveStringedGuitarTrack", track.TwelveStringedGuitarTrack, true)
+	run.Omitted("Track.BanjoTrack", track.BanjoTrack, true)
+	run.Normalized("Staff.StandardNotationLineCount", track.Staves[0].StandardNotationLineCount, 7)
+	run.Preserved("Track.PercussionTrack", track.PercussionTrack, false)
+	run.Derived("Staff.PercussionTrack", track.Staves[0].PercussionTrack, false)
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	wantCodes := []string{

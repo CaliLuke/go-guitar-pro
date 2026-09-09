@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "fmt"
+
 // Note represents a note.
 type Note struct {
 	Effect          NoteEffect
@@ -52,6 +54,9 @@ func (s *Song) readNotes(c *cursor, trackIndex int, beat *Beat, duration *Durati
 					return err
 				}
 			}
+			if note.Effect.Harmonic != nil && note.Effect.Harmonic.FretFloat == nil {
+				setLegacyHarmonicFret(note.Effect.Harmonic, int(note.Value))
+			}
 			beat.Notes = append(beat.Notes, note)
 			if note.velocityExplicit {
 				beat.Dynamics = note.Velocity
@@ -69,6 +74,14 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 	}
 	note.String = guitarString.Number
 	note.Effect.GhostNote = (flags & 0x04) == 0x04
+	note.Effect.HeavyAccentuatedNote = (flags & 0x02) == 0x02
+	note.Effect.AccentuatedNote = (flags & 0x40) == 0x40
+	switch {
+	case note.Effect.HeavyAccentuatedNote:
+		note.Effect.Accent = NoteAccentHeavy
+	case note.Effect.AccentuatedNote:
+		note.Effect.Accent = NoteAccentNormal
+	}
 
 	if (flags & 0x20) == 0x20 {
 		kind, kindErr := c.readByte()
@@ -78,7 +91,7 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 		note.Kind = NoteType(kind)
 	}
 	if (flags & 0x01) == 0x01 {
-		c.report(diagnosticSource("Binary.Note.TimeIndependentDuration", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnosticUnsupportedFeature, "note-and-beat-semantics", "binary time-independent note duration has no Song destination")
+		c.report(diagnosticSource("Binary.Note.TimeIndependentDuration", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), "binary time-independent note duration has no Song destination")
 		// time-independent duration
 		if _, err := c.readSignedByte(); err != nil {
 			return err
@@ -132,10 +145,6 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 				return err
 			}
 		}
-		if note.Effect.Harmonic != nil && note.Effect.Harmonic.Kind == HarmonicTypeTapped {
-			fret := int8(note.Value) + 12
-			note.Effect.Harmonic.Fret = &fret
-		}
 	}
 	return nil
 }
@@ -149,6 +158,12 @@ func (s *Song) readNoteV5(c *cursor, note *Note, guitarString GuitarString, trac
 	note.Effect.HeavyAccentuatedNote = (flags & 0x02) == 0x02
 	note.Effect.GhostNote = (flags & 0x04) == 0x04
 	note.Effect.AccentuatedNote = (flags & 0x40) == 0x40
+	switch {
+	case note.Effect.HeavyAccentuatedNote:
+		note.Effect.Accent = NoteAccentHeavy
+	case note.Effect.AccentuatedNote:
+		note.Effect.Accent = NoteAccentNormal
+	}
 
 	if (flags & 0x20) == 0x20 {
 		kind, kindErr := c.readByte()
@@ -260,6 +275,9 @@ func (s *Song) readNoteEffectsV4(c *cursor, note *Note) error {
 	note.Effect.Staccato = (flags2 & 0x01) == 0x01
 	note.Effect.PalmMute = (flags2 & 0x02) == 0x02
 	note.Effect.Vibrato = (flags2&0x40) == 0x40 || note.Effect.Vibrato
+	if note.Effect.Vibrato {
+		note.Effect.VibratoStrength = NoteVibratoSlight
+	}
 
 	if (flags1 & 0x01) == 0x01 {
 		bend, err := s.readBendEffect(c)
@@ -307,7 +325,7 @@ func (s *Song) readNoteEffectsV4(c *cursor, note *Note) error {
 	}
 	if (flags2 & 0x10) == 0x10 {
 		if versionGTE(s.Version.Number, [3]byte{5, 0, 0}) {
-			h, err := s.readHarmonicV5(c)
+			h, err := s.readHarmonicV5ForNote(c, note)
 			if err != nil {
 				return err
 			}
@@ -325,6 +343,16 @@ func (s *Song) readNoteEffectsV4(c *cursor, note *Note) error {
 		if err != nil {
 			return err
 		}
+		if note.String > 0 && s.currentTrack != nil && *s.currentTrack < len(s.Tracks) {
+			stringIndex := int(note.String) - 1
+			if stringIndex < len(s.Tracks[*s.currentTrack].Strings) {
+				resolved := int(trill.Fret) + int(s.Tracks[*s.currentTrack].Strings[stringIndex].Value)
+				if resolved < 0 || resolved > 127 {
+					return fmt.Errorf("trill MIDI pitch %d is outside 0..127", resolved)
+				}
+				trill.Fret = int8(resolved)
+			}
+		}
 		note.Effect.Trill = &trill
 	}
 	return nil
@@ -339,20 +367,26 @@ func (s *Song) readHarmonic(c *cursor, note *Note) (HarmonicEffect, error) {
 	switch kind {
 	case 1:
 		he.Kind = HarmonicTypeNatural
+		setLegacyHarmonicFret(&he, int(note.Value))
 	case 3:
 		he.Kind = HarmonicTypeTapped
+		setLegacyHarmonicFret(&he, 12)
 	case 4:
 		he.Kind = HarmonicTypePinch
+		setLegacyHarmonicFret(&he, 12)
 	case 5:
 		he.Kind = HarmonicTypeSemi
+		setLegacyHarmonicFret(&he, 12)
 	case 15:
 		he.Kind = HarmonicTypeArtificial
+		setLegacyHarmonicFret(&he, 5)
 		pitch := pitchClassFrom(int8((note.Value+7)%12), nil, nil)
 		he.Pitch = &pitch
 		oct := OctaveOttava
 		he.Octave = &oct
 	case 17:
 		he.Kind = HarmonicTypeArtificial
+		setLegacyHarmonicFret(&he, 7)
 		if s.currentTrack != nil {
 			rv := s.realNoteValue(note, *s.currentTrack)
 			pitch := pitchClassFrom(rv, nil, nil)
@@ -362,6 +396,7 @@ func (s *Song) readHarmonic(c *cursor, note *Note) (HarmonicEffect, error) {
 		he.Octave = &oct
 	case 22:
 		he.Kind = HarmonicTypeArtificial
+		setLegacyHarmonicFret(&he, 12)
 		if s.currentTrack != nil {
 			rv := s.realNoteValue(note, *s.currentTrack)
 			pitch := pitchClassFrom(rv, nil, nil)
@@ -369,6 +404,8 @@ func (s *Song) readHarmonic(c *cursor, note *Note) (HarmonicEffect, error) {
 		}
 		oct := OctaveOttava
 		he.Octave = &oct
+	default:
+		c.report(diagnosticSource("Binary.Note.Harmonic.Kind.Unsupported", "harmonics", ParseDiagnosticUnsupportedFeature), "binary GP3/4 harmonic kind is not supported")
 	}
 	return he, nil
 }

@@ -115,6 +115,8 @@ func readDuration(c *cursor, flags byte) (Duration, error) {
 			d.TupletEnters, d.TupletTimes = 12, 8
 		case 13:
 			d.TupletEnters, d.TupletTimes = 13, 8
+		default:
+			c.report(diagnosticSource("Binary.Duration.Tuplet.Unsupported", "rhythm", ParseDiagnosticUnsupportedFeature), "binary tuplet discriminator is not supported")
 		}
 	}
 	return d, nil

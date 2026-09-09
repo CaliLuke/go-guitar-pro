@@ -41,23 +41,23 @@ func runSemanticMatrixM01MetadataCorpus(run *semanticMatrixRun) {
 	for _, test := range tests {
 		run.t.Run(test.path, func(t *testing.T) {
 			song := parseTestFixture(t, test.path)
-			run.Field("Song.Name", song.Name, "Title")
-			run.Field("Song.Subtitle", song.Subtitle, "Subtitle")
-			run.Field("Song.Artist", song.Artist, "Artist")
-			run.Field("Song.Album", song.Album, "Album")
-			run.Field("Song.Words", song.Words, test.words)
-			run.Field("Song.Author", song.Author, test.author)
-			run.Field("Song.Writer", song.Writer, test.writer)
-			run.Field("Song.Transcriber", song.Transcriber, test.transcriber)
-			run.Field("Song.Copyright", song.Copyright, "Copyright")
-			run.Field("Song.Instructions", song.Instructions, "Instructions")
-			run.Field("Song.Notice", song.Notice, []string{"Notice1", "Notice2"})
-			run.Field("Song.Comments", song.Comments, "")
-			run.Field("Song.Date", song.Date, "")
-			run.Field("Song.Version", song.Version, test.version)
-			run.Field("Version.Data", song.Version.Data, test.version.Data)
-			run.Field("Version.Number", song.Version.Number, test.version.Number)
-			run.Field("Version.Clipboard", song.Version.Clipboard, false)
+			run.Preserved("Song.Name", song.Name, "Title")
+			run.Preserved("Song.Subtitle", song.Subtitle, "Subtitle")
+			run.Preserved("Song.Artist", song.Artist, "Artist")
+			run.Preserved("Song.Album", song.Album, "Album")
+			run.Preserved("Song.Words", song.Words, test.words)
+			run.Preserved("Song.Author", song.Author, test.author)
+			run.Omitted("Song.Writer", song.Writer, test.writer)
+			run.Preserved("Song.Transcriber", song.Transcriber, test.transcriber)
+			run.Preserved("Song.Copyright", song.Copyright, "Copyright")
+			run.Preserved("Song.Instructions", song.Instructions, "Instructions")
+			run.Normalized("Song.Notice", song.Notice, []string{"Notice1", "Notice2"})
+			run.Omitted("Song.Comments", song.Comments, "")
+			run.Omitted("Song.Date", song.Date, "")
+			run.Normalized("Song.Version", song.Version, test.version)
+			run.Normalized("Version.Data", song.Version.Data, test.version.Data)
+			run.Derived("Version.Number", song.Version.Number, test.version.Number)
+			run.Omitted("Version.Clipboard", song.Version.Clipboard, false)
 		})
 	}
 }
@@ -68,7 +68,7 @@ func runSemanticMatrixM01MetadataImport(run *semanticMatrixRun) {
   <GPVersion>8.0</GPVersion>
   <Score>
     <Title>Title &amp; 名</Title><SubTitle>Subtitle</SubTitle><Artist>Artist</Artist>
-    <Album>Album</Album><Words>words sentinel</Words><Music>author sentinel</Music>
+    <Album>Album</Album><Words>words sentinel</Words><Music>author sentinel</Music><WordsAndMusic>shared sentinel</WordsAndMusic>
     <Copyright>Copyright</Copyright><Tabber>Transcriber</Tabber>
     <Instructions>Line 1&#10;Line 2 &lt;ok&gt;</Instructions><Notices>First&#10;Second</Notices>
   </Score>
@@ -116,8 +116,8 @@ func runSemanticMatrixM01MetadataImport(run *semanticMatrixRun) {
 	run.Field("Version.Data", song.Version.Data, "8.0")
 	run.Field("Version.Number", song.Version.Number, [3]byte{8, 0, 0})
 	run.Field("Version.Clipboard", song.Version.Clipboard, false)
-	run.Field("Song.Key", song.Key, KeySignature{})
-	run.Field("Song.TripletFeel", song.TripletFeel, TripletFeelNone)
+	run.Normalized("Song.Key", song.Key, KeySignature{})
+	run.Normalized("Song.TripletFeel", song.TripletFeel, TripletFeelNone)
 
 	values := decodeGPIFLeafText(run.t, []byte(source))
 	run.Wire("gpifDocument.GPVersion", values["GPIF/GPVersion"], "8.0")
@@ -127,6 +127,7 @@ func runSemanticMatrixM01MetadataImport(run *semanticMatrixRun) {
 	run.Wire("gpifScore.Album", values["GPIF/Score/Album"], "Album")
 	run.Wire("gpifScore.Words", values["GPIF/Score/Words"], "words sentinel")
 	run.Wire("gpifScore.Music", values["GPIF/Score/Music"], "author sentinel")
+	run.Wire("gpifScore.WordsAndMusic", values["GPIF/Score/WordsAndMusic"], "shared sentinel")
 	run.Wire("gpifScore.Copyright", values["GPIF/Score/Copyright"], "Copyright")
 	run.Wire("gpifScore.Tabber", values["GPIF/Score/Tabber"], "Transcriber")
 	run.Wire("gpifScore.Instructions", values["GPIF/Score/Instructions"], "Line 1\nLine 2 <ok>")
@@ -169,7 +170,7 @@ func runSemanticMatrixM01BinaryClipboard(run *semanticMatrixRun) {
 	if err := absent.readClipboard(newCursor(nil)); err != nil {
 		run.t.Fatal(err)
 	}
-	run.Field("Song.Clipboard", absent.Clipboard, (*Clipboard)(nil))
+	run.Omitted("Song.Clipboard", absent.Clipboard, (*Clipboard)(nil))
 
 	var data bytes.Buffer
 	for _, value := range []int32{2, 4, 1, 3, 5, 7, 1} {
@@ -183,13 +184,13 @@ func runSemanticMatrixM01BinaryClipboard(run *semanticMatrixRun) {
 	}
 	want := &Clipboard{StartMeasure: 2, StopMeasure: 4, StartTrack: 1, StopTrack: 3, StartBeat: 5, StopBeat: 7, SubBarCopy: true}
 	run.Field("Song.Clipboard", song.Clipboard, want)
-	run.Field("Clipboard.StartMeasure", song.Clipboard.StartMeasure, want.StartMeasure)
-	run.Field("Clipboard.StopMeasure", song.Clipboard.StopMeasure, want.StopMeasure)
-	run.Field("Clipboard.StartTrack", song.Clipboard.StartTrack, want.StartTrack)
-	run.Field("Clipboard.StopTrack", song.Clipboard.StopTrack, want.StopTrack)
-	run.Field("Clipboard.StartBeat", song.Clipboard.StartBeat, want.StartBeat)
-	run.Field("Clipboard.StopBeat", song.Clipboard.StopBeat, want.StopBeat)
-	run.Field("Clipboard.SubBarCopy", song.Clipboard.SubBarCopy, want.SubBarCopy)
+	run.Omitted("Clipboard.StartMeasure", song.Clipboard.StartMeasure, want.StartMeasure)
+	run.Omitted("Clipboard.StopMeasure", song.Clipboard.StopMeasure, want.StopMeasure)
+	run.Omitted("Clipboard.StartTrack", song.Clipboard.StartTrack, want.StartTrack)
+	run.Omitted("Clipboard.StopTrack", song.Clipboard.StopTrack, want.StopTrack)
+	run.Omitted("Clipboard.StartBeat", song.Clipboard.StartBeat, want.StartBeat)
+	run.Omitted("Clipboard.StopBeat", song.Clipboard.StopBeat, want.StopBeat)
+	run.Omitted("Clipboard.SubBarCopy", song.Clipboard.SubBarCopy, want.SubBarCopy)
 }
 
 func TestSemanticMatrixM01MetadataExportPolicy(t *testing.T) {

@@ -40,18 +40,25 @@ disposition and one behavioral evidence link. Automation cases also identify
 the consumer dispatch or diagnostic that handles the case.
 
 The same ledger contains the M01 through M25 semantic matrix. Each matrix case
-names its formats, stages, values, oracle, and limits. A registered test executes
-the case and records each exact field, wire field, or dispatch that it checks.
+names its evidence role, typed evidence sources, formats, stages, value shapes,
+oracle, and limits. A registered test executes the case and records each exact
+field, wire field, dispatch, or public enum member that it checks.
 The inventory rejects a case assignment when the matching assertion does not
-run. Run the progress report with:
+run. One runtime assertion for each public field also records its target
+disposition. The inventory rejects a conflict between this declaration and the
+ledger. A new public field fails until both records exist. This check does not
+replace stage-specific behavior evidence. Run the progress report with:
 
 ```sh
 go test -v -run '^TestSemanticMatrixInventory$' .
 ```
 
-The `complete` flag stays false while the report has uncovered constructs. Set
-it to true only when all three uncovered sets are empty. The test then enforces
-that state for future fields and dispatches.
+The `complete` flag stays false while the report has uncovered constructs or
+behavioral obligations. Set it to true only when all uncovered sets are empty.
+An XML schema round trip has a structural role. It cannot satisfy a semantic
+leaf, dispatch, public field, or public enum obligation. The inventory also
+discovers new typed constants, so an added enum member fails until a focused
+case executes its behavior.
 
 Ownership cases compare ordered track, staff, bar, voice, beat, and note paths.
 They do not use aggregate counts as semantic evidence. The compatibility case
@@ -65,11 +72,12 @@ feature loses either form of evidence.
 
 `sensitivity.mjs` applies a fixed set of valid defects through Go overlays. Each
 defect must make its focused test fail for the expected reason. The set covers
-model and dispatch inventory, automation diagnostics, effect serialization,
-shared validation, tempo authority, mutable chord isolation, and checked
-numeric narrowing. This is selective mutation testing. It measures whether the
-tests detect realistic faults. Statement coverage measures execution breadth.
-Use both signals. Neither signal proves that the code has no defects.
+model, wire, dispatch, and enum inventory; diagnostics; serialization;
+independent adapters; strict policy; ownership; and checked numeric narrowing.
+Mutants cover distinct value classes, not only one named example. This is
+selective mutation testing. It measures whether the tests detect realistic
+faults. Statement coverage measures execution breadth. Use both signals.
+Neither signal proves that the code has no defects.
 
 Run the gate with:
 

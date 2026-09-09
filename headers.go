@@ -295,7 +295,11 @@ func (s *Song) readRepeatAlternative(c *cursor) (uint8, error) {
 		return 0, err
 	}
 	var existingAlternative uint16
-	for i := len(s.MeasureHeaders) - 1; i >= 0; i-- {
+	previousIndex := len(s.MeasureHeaders) - 1
+	for i := previousIndex; i >= 0; i-- {
+		if i != previousIndex && s.MeasureHeaders[i].RepeatClose >= 0 {
+			break
+		}
 		if s.MeasureHeaders[i].RepeatOpen {
 			break
 		}

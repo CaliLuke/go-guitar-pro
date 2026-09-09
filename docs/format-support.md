@@ -6,17 +6,17 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 
 | Feature | Formats | Status | Issues | Reason |
 | --- | --- | --- | --- | --- |
-| `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix accounts for score fields and fixtures. Exact remaining corpus differences are tracked by issue 31. |
-| `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix covers duration, exact timing, meter, tuplets, and rests. Exact remaining corpus differences are tracked by issue 31. |
-| `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix covers exact time and finalized graph validation. One remaining exact corpus timing difference is tracked by issue 31. |
-| `staff-ownership` | gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix compares exact ownership paths and compatibility authority. Any new corpus ownership difference must be tracked by issue 31. |
-| `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers authored grace order, ownership, source fret, transitions, and export policy. Exact remaining corpus differences are tracked by issue 31. |
-| `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#22](https://github.com/CaliLuke/go-guitar-pro/issues/22), [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The complete matrix inventories and tests note and beat fields. Remaining effect gaps are tracked by issues 22 and 31. |
+| `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix accounts for the public score model, fixtures, validation, and explicit GP8 conversion limits; audited upstream-only model surface is recorded by issue 34. |
+| `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public duration, exact timing, meter, tuplets, rests, and binary discriminants; audited upstream-only model surface is recorded by issue 34. |
+| `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
+| `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
+| `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
+| `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix inventories and tests public note and beat fields, effects, strict export decisions, and independent consumption; audited upstream-only model surface is recorded by issue 34. |
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
-| `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | GPIF harmonic kinds and fret values are compared on import and GP8 export. Exact remaining corpus differences are tracked by issue 31. |
+| `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | GPIF and binary harmonic kinds and fret values are compared on import and GP8 export, including feedback harmonics; audited upstream-only model surface is recorded by issue 34. |
 | `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
-| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers tempo authority, values, order, validation, and export policy. Exact remaining corpus differences are tracked by issue 31. |
-| `percussion-articulations` | gp7, gp8 | partial | [#31](https://github.com/CaliLuke/go-guitar-pro/issues/31) | The matrix covers GPIF articulation identity, notation, playback, validation, and export policy. Exact remaining corpus differences are tracked by issue 31. |
+| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public tempo authority, values, order, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
+| `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 
 ## Parse diagnostics
 
@@ -46,7 +46,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.MasterTrack.Automation.Tempo.Linear` | `tempo-automations` | `lossy-projection` | TempoAutomation has no interpolation field. |
 | `GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid` | `score-core` | `invalid-data` | A sync point must contain a valid non-negative frame offset and score location. |
 | `GPIF.Track.Automation.Sound.Linear` | `score-core` | `lossy-projection` | SoundAutomation has no interpolation field. |
-| `GPIF.Note.Accent.Tenuto` | `note-and-beat-semantics` | `unsupported-feature` | Song has no destination for the GPIF tenuto accent bit. |
 | `GPIF.Note.Property.Muted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The muted property must contain its Enable payload. |
 | `GPIF.Note.Property.PalmMuted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The palm-muted property must contain its Enable payload. |
 | `GPIF.Note.Property.Tapped.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The tapped property must contain its Enable payload. |
@@ -80,6 +79,11 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.UnknownAttribute.ScoreCore` | `score-core` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownElement.ScoreCore` | `score-core` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `Binary.Note.TimeIndependentDuration` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `Binary.Duration.Tuplet.Unsupported` | `rhythm` | `unsupported-feature` | The binary tuplet discriminator is outside the supported mapping. |
+| `Binary.Note.TremoloPicking.Subdivision.Unsupported` | `tremolo-picking` | `unsupported-feature` | The binary tremolo-picking subdivision is outside the supported mapping. |
+| `Binary.Note.Trill.Period.Unsupported` | `note-and-beat-semantics` | `unsupported-feature` | The binary trill period is outside the supported mapping. |
+| `Binary.Note.Harmonic.Kind.Unsupported` | `harmonics` | `unsupported-feature` | The GP3/4 harmonic kind is outside the supported mapping. |
+| `Binary.Note.HarmonicV5.Kind.Unsupported` | `harmonics` | `unsupported-feature` | The GP5 harmonic kind is outside the supported mapping. |
 | `Binary.RSE.MasterMetadata` | `score-core` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `Binary.RSE.TrackMetadata` | `score-core` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Asset.DuplicateID` | `score-core` | `invalid-data` | The source object ID must be unique within its collection. |
@@ -148,7 +152,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.Fret.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicFret.Invalid` | `harmonics` | `invalid-data` | A harmonic fret must be finite and within the public harmonic-fret range. |
 | `GPIF.Note.Property.HarmonicFret.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
-| `GPIF.Note.Property.HarmonicType.Feedback` | `harmonics` | `lossy-projection` | Song retains a less precise value than this source construct. |
 | `GPIF.Note.Property.HarmonicType.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.Unsupported` | `harmonics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.HopoDestination` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
@@ -163,7 +166,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.TransposedPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Note.Property.Variation` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Note.Vibrato` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
+| `GPIF.Note.Vibrato.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source note vibrato token is not one of None, Slight, or Wide. |
 | `GPIF.Rhythm.DuplicateID` | `rhythm` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Rhythm.EmptyID` | `rhythm` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Rhythm.NoteValue.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -229,7 +232,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
 | `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and duration. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
-| `NoteEffect` | `note-and-beat-semantics` | 19 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
+| `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend point contains authored curve data. |
 | `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
@@ -252,21 +255,18 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 201 |
-| `normalized` | 33 |
-| `omitted` | 104 |
+| `preserved` | 190 |
+| `normalized` | 34 |
+| `omitted` | 118 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
 
-The following inspected fields have focused behavioral evidence. The assertion states the tested non-default value or limit.
+Each public field has disposition-bearing runtime evidence in the semantic matrix.
 
-| Field | Disposition | Behavior contract | Assertion |
-| --- | --- | --- | --- |
-| `Track.Offset` | `preserved` | `inspected-track-capo` | A nonzero capo survives GP8 export, Go reimport, and pinned AlphaTab consumption. |
-| `Note.DurationPercent` | `omitted` | `inspected-note-duration-percent` | A non-default duration percentage produces gp8.omit.note-duration-percent and strict export refuses bytes. |
-| `Chord.Barres` | `omitted` | `inspected-chord-barres` | Explicit barre ranges produce gp8.omit.chord-barres and strict export refuses bytes. |
-| `BendEffect.Points` | `normalized` | `inspected-bend-points` | GP8 preserves representable curves with two through four points. Strict export refuses other nonempty shapes and shared-middle-value normalization. |
+## Semantic matrix obligations
+
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 68 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 121 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -274,7 +274,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 223 |
+| `schema` | 227 |
 
 ## Source dispatch inventory
 
@@ -287,6 +287,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
+| `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
 | `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
@@ -296,6 +297,13 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifReadTempoAutomations:auto.Type` | `tempo-automations` | 1 | `tempo-compatibility-authority` | `delegated-to-audit` | The importer maps tempo automations after the master automation audit. |
 | `gpifAuditNoteProperty:property.HType` | `harmonics` | 7 | `harmonic-conversion` | `unsupported-feature` | The audit classifies each harmonic type before import. |
 | `gpifNoteToNote:p.HType` | `harmonics` | 6 | `harmonic-conversion` | `delegated-to-audit` | The importer maps represented harmonic types after the audit. |
+| `readDuration:iTuplet` | `rhythm` | 9 | `timing-finalization` | `unsupported-feature` | The binary reader maps every supported legacy tuplet discriminator. |
+| `gpifRhythmToDuration:r.AugmentationDot.Count` | `rhythm` | 3 | `timing-finalization` | `unsupported-feature` | The GPIF reader maps every supported augmentation-dot count. |
+| `ExactScoreTime:validated.Dots` | `rhythm` | 2 | `timing-finalization` | `delegated-to-audit` | Exact duration conversion applies the reviewed single- and double-dot factors. |
+| `readTremoloPicking:val` | `tremolo-picking` | 3 | `tremolo-import` | `unsupported-feature` | The binary reader maps every supported tremolo-picking subdivision. |
+| `readTrill:period` | `note-and-beat-semantics` | 3 | `gpif-property-dispatch` | `unsupported-feature` | The binary reader maps every supported trill subdivision. |
+| `readHarmonic:kind` | `harmonics` | 7 | `harmonic-conversion` | `unsupported-feature` | The GP3/4 reader maps every supported harmonic discriminator. |
+| `readHarmonicV5ForNote:kind` | `harmonics` | 5 | `harmonic-conversion` | `unsupported-feature` | The GP5 reader maps every supported harmonic discriminator. |
 | `gpifReadStaffStrings:property.Name` | `staff-ownership` | 1 | `staff-ownership` | `delegated-to-audit` | The importer maps the classified tuning property. |
 | `gpifAuditChordIDs:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The audit checks IDs in both supported chord collection spellings. |
 | `gpifReadChordProperties:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The importer maps both supported chord collection spellings. |
@@ -306,7 +314,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `capo-precedence` | `delegated-to-audit` | The importer maps the classified capo property to Track.Offset. |
 | `gpifXMLAuditStart:element.Name.Local` | `score-core` | 5 | `unclassified-gpif-wire-field` | `delegated-to-audit` | The XML audit records graph object identifiers for diagnostic locations. |
 | `gpifApplyBeatEffects:p.Direction` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps both supported brush directions. |
-| `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 2 | `timing-finalization` | `delegated-to-audit` | The importer maps the supported master-bar triplet-feel values. |
+| `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 6 | `timing-finalization` | `delegated-to-audit` | The importer maps every supported master-bar triplet-feel value. |
 | `validateGP8Staff:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The exporter validates percussion articulation MIDI boundaries. |
 | `parseGPIFWithContext:b.GraceNotes` | `grace-relationships` | 2 | `grace-order-preservation` | `unsupported-feature` | The importer preserves supported before-beat and on-beat grace ordering. |
 | `gpifAuditDiagnostics:beat.Fadding` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `unsupported-feature` | The audit classifies each fading value before the importer maps it. |
@@ -347,3 +355,16 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |
 | `structural-export-resilience` | `staff-ownership` | `TestSemanticMatrixM25StructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
 | `audio-engine-state` | `score-core` | `TestSemanticMatrixM20SourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
+| `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestSemanticMatrixM10DynamicQuantization` | `TestTicket33AlphaTabReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
+| `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
+| `octave-variant-conformance` | `note-and-beat-semantics` | `TestSemanticMatrixM10BeatEffects` | none | yes | Each octave variant must survive GP8 export, Go reimport, and independent consumption. |
+| `semantic-wire-requires-behavior` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A structural schema round trip cannot satisfy a semantic wire-field obligation. |
+| `semantic-wire-executable-assertion` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A semantic wire mapping must have an exact executable assertion in its focused case. |
+| `semantic-obligation-shape` | `score-core` | `TestSemanticMatrixInventory` | none | yes | Every executable case must declare the dimensions needed to interpret its evidence. |
+| `percussion-resolved-staff-resources` | `percussion-articulations` | `TestGP8PercussionUsesEveryResolvedStaff` | none | yes | Every resolved staff, including a grace-only staff, contributes required percussion resources. |
+| `percussion-resource-order` | `staff-ownership` | `TestGP8PercussionUsesEveryResolvedStaff` | none | yes | Staves precede InstrumentSet so the pinned consumer has staff context for percussion resources. |
+| `percussion-articulation-lookup` | `percussion-articulations` | `TestGP8PercussionRejectsMissingArticulationResource` | none | yes | A missing exported percussion resource is an error. |
+| `percussion-line-count-policy` | `staff-ownership` | `TestGP8PercussionLineCountPolicy` | none | yes | A later conflicting line count is reported and refused by strict export. |
+| `isolated-midi-controller-report` | `score-core` | `TestSemanticMatrixM05PlaybackRouting` | none | yes | Each grouped MIDI-effect loss condition is exercised with only one controller set. |
+| `isolated-harmonic-member-report` | `harmonics` | `TestSemanticMatrixM13HarmonicVariants` | none | yes | Pitch and octave each trigger the shared harmonic omission report in isolation. |
+| `isolated-chord-legacy-report` | `note-and-beat-semantics` | `TestSemanticMatrixM14ChordDefinitions` | none | yes | Every legacy chord field triggers the shared omission report in isolation. |

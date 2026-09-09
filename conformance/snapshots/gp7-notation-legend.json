@@ -2,12 +2,5 @@
   "schemaVersion": 1,
   "case": "gp7-notation-legend",
   "comparison": "input-go-vs-alphatab",
-  "differences": [
-    {
-      "path": "/harmonics/13/value/kind",
-      "feature": "harmonics",
-      "go": "semi",
-      "alphaTab": "feedback"
-    }
-  ]
+  "differences": []
 }

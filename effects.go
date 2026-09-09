@@ -86,17 +86,28 @@ type NoteEffect struct {
 	LeftHandFinger Fingering
 	// HasLeftHandFinger distinguishes an authored zero-valued thumb from an absent fingering.
 	HasLeftHandFinger bool
-	AccentuatedNote   bool
-	PalmMute          bool
-	RightHandFinger   Fingering
+	// Accent is authoritative when nonzero. The legacy accent booleans are used
+	// as a compatibility fallback when Accent is NoteAccentNone.
+	Accent          NoteAccent
+	AccentuatedNote bool
+	PalmMute        bool
+	RightHandFinger Fingering
 	// HasRightHandFinger distinguishes an authored zero-valued thumb from an absent fingering.
 	HasRightHandFinger   bool
 	HeavyAccentuatedNote bool
 	Staccato             bool
 	Hammer               bool
-	GhostNote            bool
-	DeadNote             bool
-	Vibrato              bool
+	// Tapped preserves the GPIF Tapped note property independently from a
+	// hammer/pull origin.
+	Tapped bool
+	// LeftHandTapped preserves the GPIF left-hand tapping destination marker.
+	LeftHandTapped bool
+	GhostNote      bool
+	DeadNote       bool
+	// VibratoStrength is authoritative when nonzero. Vibrato remains the
+	// compatibility fallback for callers that only model presence.
+	VibratoStrength NoteVibrato
+	Vibrato         bool
 }
 
 func defaultNoteEffect() NoteEffect {
@@ -147,9 +158,38 @@ func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
 		be.Points = append(be.Points, bp)
 	}
 	if count > 0 {
+		be.Points = canonicalizeStandardBendPoints(be.Points)
 		return be, nil
 	}
 	return nil, nil
+}
+
+// canonicalizeStandardBendPoints removes the control points that Guitar Pro
+// uses to identify a standard bend gesture. It keeps custom curves unchanged.
+func canonicalizeStandardBendPoints(points []BendPoint) []BendPoint {
+	if len(points) == 4 {
+		origin, middle1, middle2, destination := points[0], points[1], points[2], points[3]
+		if middle1.Vibrato || middle2.Vibrato || middle1.Value != middle2.Value {
+			return points
+		}
+		if destination.Value > origin.Value && middle1.Value > destination.Value ||
+			destination.Value == origin.Value && middle1.Value > origin.Value {
+			return points
+		}
+		return []BendPoint{origin, destination}
+	}
+	if len(points) == 3 {
+		origin, middle, destination := points[0], points[1], points[2]
+		if middle.Vibrato {
+			return points
+		}
+		if destination.Value > origin.Value && middle.Value > destination.Value ||
+			destination.Value == origin.Value && middle.Value > origin.Value {
+			return []BendPoint{origin, middle, middle, destination}
+		}
+		return []BendPoint{origin, destination}
+	}
+	return points
 }
 
 // readGraceEffect reads a grace note effect (GP3/GP4).
@@ -164,16 +204,16 @@ func (s *Song) readGraceEffect(c *cursor) (GraceEffect, error) {
 		return g, err
 	}
 	g.Velocity = unpackVelocity(int16(velByte))
+	transByte, err := c.readSignedByte()
+	if err != nil {
+		return g, err
+	}
 	durByte, err := c.readByte()
 	if err != nil {
 		return g, err
 	}
 	g.Duration = 1 << (7 - durByte)
 	g.IsDead = g.Fret == -1
-	transByte, err := c.readSignedByte()
-	if err != nil {
-		return g, err
-	}
 	g.Transition = GraceEffectTransition(transByte)
 	return g, nil
 }
@@ -224,6 +264,8 @@ func (s *Song) readTremoloPicking(c *cursor) (TremoloPickingEffect, error) {
 		tp.Duration.Value = uint16(DurationSixteenth)
 	case 2:
 		tp.Duration.Value = uint16(DurationThirtySecond)
+	default:
+		c.report(diagnosticSource("Binary.Note.TremoloPicking.Subdivision.Unsupported", "tremolo-picking", ParseDiagnosticUnsupportedFeature), "binary tremolo-picking subdivision is not supported")
 	}
 	return tp, nil
 }
@@ -258,6 +300,10 @@ func (s *Song) readSlidesV5(c *cursor) ([]SlideType, error) {
 
 // readHarmonicV5 reads harmonic for GP5.
 func (s *Song) readHarmonicV5(c *cursor) (HarmonicEffect, error) {
+	return s.readHarmonicV5ForNote(c, &Note{})
+}
+
+func (s *Song) readHarmonicV5ForNote(c *cursor, note *Note) (HarmonicEffect, error) {
 	kind, err := c.readSignedByte()
 	if err != nil {
 		return HarmonicEffect{}, err
@@ -266,6 +312,7 @@ func (s *Song) readHarmonicV5(c *cursor) (HarmonicEffect, error) {
 	switch kind {
 	case 1:
 		he.Kind = HarmonicTypeNatural
+		setLegacyHarmonicFret(&he, int(note.Value))
 	case 2:
 		he.Kind = HarmonicTypeArtificial
 		semitone, err := c.readByte()
@@ -284,6 +331,12 @@ func (s *Song) readHarmonicV5(c *cursor) (HarmonicEffect, error) {
 		}
 		oct := Octave(octByte)
 		he.Octave = &oct
+		playedPitch := int(s.realNoteValue(note, s.currentTrackOrZero())) % 12
+		targetHarmonic := int(semitone) + int(accidental) + int(octByte)*12
+		if targetHarmonic < playedPitch {
+			targetHarmonic += 12
+		}
+		setLegacyHarmonicFret(&he, targetHarmonic-playedPitch)
 	case 3:
 		he.Kind = HarmonicTypeTapped
 		fretByte, err := c.readByte()
@@ -292,12 +345,53 @@ func (s *Song) readHarmonicV5(c *cursor) (HarmonicEffect, error) {
 		}
 		fret := int8(fretByte)
 		he.Fret = &fret
+		value := legacyHarmonicFret(int(fretByte))
+		he.FretFloat = &value
 	case 4:
 		he.Kind = HarmonicTypePinch
+		setLegacyHarmonicFret(&he, 12)
 	case 5:
 		he.Kind = HarmonicTypeSemi
+		setLegacyHarmonicFret(&he, 12)
+	default:
+		c.report(diagnosticSource("Binary.Note.HarmonicV5.Kind.Unsupported", "harmonics", ParseDiagnosticUnsupportedFeature), "binary GP5 harmonic kind is not supported")
 	}
 	return he, nil
+}
+
+func (s *Song) currentTrackOrZero() int {
+	if s.currentTrack == nil {
+		return 0
+	}
+	return *s.currentTrack
+}
+
+func legacyHarmonicFret(delta int) float64 {
+	switch delta {
+	case 2:
+		return 2.4
+	case 3:
+		return 3.2
+	case 8:
+		return 8.2
+	case 10:
+		return 9.6
+	case 14, 15:
+		return 14.7
+	case 21, 22:
+		return 21.7
+	case 4, 5, 7, 9, 12, 16, 17, 19, 24:
+		return float64(delta)
+	default:
+		return 12
+	}
+}
+
+func setLegacyHarmonicFret(harmonic *HarmonicEffect, delta int) {
+	value := legacyHarmonicFret(delta)
+	legacy := int8(value)
+	harmonic.Fret = &legacy
+	harmonic.FretFloat = &value
 }
 
 // readTrill reads a trill effect.
@@ -318,6 +412,8 @@ func (s *Song) readTrill(c *cursor) (TrillEffect, error) {
 		t.Duration.Value = uint16(DurationThirtySecond)
 	case 3:
 		t.Duration.Value = uint16(DurationSixtyFourth)
+	default:
+		c.report(diagnosticSource("Binary.Note.Trill.Period.Unsupported", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), "binary trill period is not supported")
 	}
 	return t, nil
 }

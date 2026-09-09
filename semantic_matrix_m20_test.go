@@ -17,6 +17,10 @@ func TestSemanticMatrixM20SourceAudit(t *testing.T) {
 	runSemanticMatrixM20SourceAudit(newSemanticMatrixRun(t))
 }
 
+func TestSemanticMatrixM20BehaviorReconciliation(t *testing.T) {
+	runSemanticMatrixM20BehaviorReconciliation(newSemanticMatrixRun(t))
+}
+
 func runSemanticMatrixM20SourceAudit(run *semanticMatrixRun) {
 	t := run.t
 	ledger := readSemanticContractLedger(t)
@@ -131,6 +135,82 @@ func runSemanticMatrixM20SourceAudit(run *semanticMatrixRun) {
 	m20AssertBinaryDiagnosticLocations(t)
 }
 
+func runSemanticMatrixM20BehaviorReconciliation(run *semanticMatrixRun) {
+	t := run.t
+
+	tempoSong := &Song{Tempo: 120}
+	gpifReadTempoAutomations([]gpifAutomation{{Type: "Tempo", Value: gpifAutomationValue{Text: "90 2"}}}, tempoSong, nil)
+	run.Wire("gpifAutomationValue.Text", tempoSong.TempoAutomations[0].Tempo, float64(90))
+
+	channel := defaultMidiChannel()
+	gpifApplyChannelStrip("0 0 0 0 0 0 0 0 0 0 0 0.25 0.75", &channel)
+	run.Wire("gpifChannelStrip.Parameters", []int8{channel.Balance, channel.Volume}, []int8{32, 95})
+
+	direction, strength := "Up", "Wide"
+	beat := Beat{}
+	gpifApplyBeatEffects(&gpifBeat{Properties: gpifProperties{Properties: []gpifProperty{{Name: "Brush", Direction: &direction}, {Name: "VibratoWTremBar", Strength: &strength}}}}, &beat)
+	run.Wire("gpifProperty.Direction", beat.Effect.Stroke.Direction, BeatStrokeDirectionUp)
+	run.Wire("gpifProperty.Strength", beat.Effect.Vibrato, true)
+
+	context := &parseContext{format: "GP8"}
+	gpifAuditBeatProperty(context, "beat-id", "/GPIF/Beats/Beat", gpifProperty{Name: "FutureBeatProperty"})
+	run.Dispatch("gpifAuditBeatProperty:property.Name", m20DiagnosticByCode(context.diagnostics, "GPIF.Beat.Property.Unknown") != nil, true)
+
+	element := "Element"
+	staff := gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 45", Label: "Drop D"}}}
+	track := gpifTrack{
+		ID: "track-id", AudioEngineState: "FutureEngine",
+		Instrument: &gpifInstrument{Ref: "drmkt"},
+		Transpose:  &gpifTranspose{Chromatic: 2, Octave: -1},
+		Staves:     gpifStaves{Staff: []gpifStaff{staff}},
+	}
+	doc := gpifDocument{
+		Tracks: gpifTracks{Tracks: []gpifTrack{track}},
+		Beats: gpifBeats{Beats: []gpifBeat{{
+			ID: "beat-id", Tremolo: "future-rate", Wah: "Open", Fadding: "FadeOut",
+			Properties: gpifProperties{Properties: []gpifProperty{{Name: "FutureBeatProperty"}}},
+		}}},
+		Notes: gpifNotes{Notes: []gpifNote{{
+			ID: "note-id", Properties: gpifProperties{Properties: []gpifProperty{{Name: element}}},
+		}}},
+	}
+	gpifAuditDiagnostics(doc, context)
+	run.Wire("gpifBeat.ID", m20DiagnosticByCode(context.diagnostics, "GPIF.Beat.Wah").ObjectID, "beat-id")
+	run.Wire("gpifBeat.Tremolo", m20DiagnosticByCode(context.diagnostics, "GPIF.Beat.Tremolo.InvalidValue") != nil, true)
+	run.Wire("gpifBeat.Wah", m20DiagnosticByCode(context.diagnostics, "GPIF.Beat.Wah") != nil, true)
+	run.Wire("gpifInstrument.Ref", doc.Tracks.Tracks[0].isPercussionTrack(), true)
+	run.Wire("gpifStaffProperty.Label", m20DiagnosticByCode(context.diagnostics, "GPIF.Staff.Property.Tuning.Label") != nil, true)
+	run.Wire("gpifTranspose.Chromatic", m20DiagnosticByCode(context.diagnostics, "GPIF.Track.Transpose") != nil, true)
+	run.Wire("gpifTranspose.Octave", m20DiagnosticByCode(context.diagnostics, "GPIF.Track.Transpose") != nil, true)
+	run.Dispatch("gpifAuditDiagnostics:beat.Fadding", m20DiagnosticByCode(context.diagnostics, "GPIF.Beat.Fadding.Lossy") != nil, true)
+	run.Dispatch("gpifAuditDiagnostics:property.Name", m20DiagnosticByCode(context.diagnostics, "GPIF.Note.Property.Element") != nil, true)
+	run.Dispatch("gpifAuditDiagnostics:track.AudioEngineState", m20DiagnosticByCode(context.diagnostics, "GPIF.Track.AudioEngineState.InvalidValue") != nil, true)
+
+	xmlContext := &parseContext{format: "GP8"}
+	if err := gpifAuditXML([]byte("<GPIF><FutureRootChild/></GPIF>"), xmlContext); err != nil {
+		t.Fatal(err)
+	}
+	run.Dispatch("gpifXMLAuditStart:element.Name.Local", m20DiagnosticByCode(xmlContext.diagnostics, "GPIF.UnknownElement.NoteAndBeat") != nil, true)
+
+	metadataXML := strings.Replace(semanticM03OwnershipGPIF, "<GPVersion>8.0</GPVersion>", `<GPVersion>8.0</GPVersion><GPRevision required="12000" recommended="13000">14000</GPRevision><Encoding><EncodingDescription>producer-x</EncodingDescription></Encoding>`, 1)
+	var metadataDoc gpifDocument
+	if err := xml.Unmarshal([]byte(metadataXML), &metadataDoc); err != nil {
+		t.Fatal(err)
+	}
+	run.Wire("gpifEncoding.Description", metadataDoc.Encoding.Description, "producer-x")
+	run.Wire("gpifRevision.Required", metadataDoc.GPRevision.Required, "12000")
+	run.Wire("gpifRevision.Recommended", metadataDoc.GPRevision.Recommended, "13000")
+	run.Wire("gpifRevision.Value", strings.TrimSpace(metadataDoc.GPRevision.Value), "14000")
+
+	pickupXML := strings.Replace(semanticM03OwnershipGPIF, "<MasterTrack>", "<MasterTrack><Anacrusis/>", 1)
+	pickup, err := parseGPIF([]byte(pickupXML))
+	if err != nil {
+		t.Fatal(err)
+	}
+	run.Wire("gpifMasterTrack.Anacrusis", pickup.Anacrusis, true)
+	run.Wire("gpifRhythm.ID", pickup.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Duration.Value, uint16(DurationQuarter))
+}
+
 func m20AssertMalformedDiagnostics(t *testing.T) {
 	t.Helper()
 	tests := []struct {
@@ -166,7 +246,7 @@ func m20AssertMalformedDiagnostics(t *testing.T) {
 		{
 			name: "unknown flag",
 			mutate: func(source string) string {
-				return insertFirstNoteProperty(t, source, `<Property name="Slide"><Flags>64</Flags></Property>`)
+				return insertFirstNoteProperty(t, source, `<Property name="Slide"><Flags>256</Flags></Property>`)
 			},
 			code: "GPIF.Note.Property.Slide.UnknownFlags", kind: ParseDiagnosticUnsupportedFeature, path: "/Flags", objectID: true,
 		},

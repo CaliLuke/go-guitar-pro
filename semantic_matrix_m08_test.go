@@ -21,6 +21,37 @@ func TestSemanticMatrixM08Durations(t *testing.T) {
 
 func runSemanticMatrixM08Durations(run *semanticMatrixRun) {
 	t := run.t
+	for _, tuplet := range []struct {
+		value         byte
+		enters, times uint8
+	}{
+		{3, 3, 2}, {5, 5, 4}, {6, 6, 4}, {7, 7, 4}, {9, 9, 8}, {10, 10, 8}, {11, 11, 8}, {12, 12, 8}, {13, 13, 8},
+	} {
+		duration, err := readDuration(newCursor([]byte{2, tuplet.value, 0, 0, 0}), 0x20)
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("readDuration:iTuplet", [2]uint8{duration.TupletEnters, duration.TupletTimes}, [2]uint8{tuplet.enters, tuplet.times})
+	}
+	for dots := 0; dots <= 2; dots++ {
+		duration, err := gpifRhythmToDuration(&gpifRhythm{NoteValue: "Quarter", AugmentationDot: &gpifAugDot{Count: dots}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("gpifRhythmToDuration:r.AugmentationDot.Count", [2]bool{duration.Dotted, duration.DoubleDotted}, [2]bool{dots == 1, dots == 2})
+		exact, err := (MusicalDuration{Value: 4, Dots: DotCount(dots), Tuplet: TupletRatio{Enters: 1, Times: 1}}).ExactScoreTime()
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("ExactScoreTime:validated.Dots", exact.Compare(ScoreTime{}) > 0, true)
+	}
+	unknownTupletContext := &parseContext{format: "GP5"}
+	if _, err := readDuration(newCursorWithContext([]byte{2, 4, 0, 0, 0}, unknownTupletContext), 0x20); err != nil {
+		t.Fatal(err)
+	}
+	if diagnostic := m20DiagnosticByCode(unknownTupletContext.diagnostics, "Binary.Duration.Tuplet.Unsupported"); diagnostic == nil || diagnostic.Kind != ParseDiagnosticUnsupportedFeature {
+		t.Fatalf("unknown binary tuplet diagnostics = %#v", unknownTupletContext.diagnostics)
+	}
 	noteValues := []struct {
 		value uint16
 		wire  string
@@ -40,11 +71,11 @@ func runSemanticMatrixM08Durations(run *semanticMatrixRun) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			run.Field("Duration.Value", duration.Value, noteValue.value)
-			run.Field("Duration.Dotted", duration.Dotted, dots == 1)
-			run.Field("Duration.DoubleDotted", duration.DoubleDotted, dots == 2)
-			run.Field("Duration.TupletEnters", duration.TupletEnters, uint8(1))
-			run.Field("Duration.TupletTimes", duration.TupletTimes, uint8(1))
+			run.Preserved("Duration.Value", duration.Value, noteValue.value)
+			run.Normalized("Duration.Dotted", duration.Dotted, dots == 1)
+			run.Normalized("Duration.DoubleDotted", duration.DoubleDotted, dots == 2)
+			run.Normalized("Duration.TupletEnters", duration.TupletEnters, uint8(1))
+			run.Normalized("Duration.TupletTimes", duration.TupletTimes, uint8(1))
 
 			song := semanticM08SingleBeatSong(t, duration)
 			data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
@@ -64,7 +95,7 @@ func runSemanticMatrixM08Durations(run *semanticMatrixRun) {
 				t.Fatal(err)
 			}
 			got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Duration
-			run.Field("Beat.Duration", got, duration)
+			run.Preserved("Beat.Duration", got, duration)
 		}
 	}
 
@@ -161,18 +192,18 @@ func runSemanticMatrixM08ExactTiming(run *semanticMatrixRun) {
 	if err := FinalizeSong(&song); err != nil {
 		t.Fatal(err)
 	}
-	run.Field("Song.Anacrusis", song.Anacrusis, true)
-	run.Field("MeasureHeader.Start", []int64{song.MeasureHeaders[0].Start, song.MeasureHeaders[1].Start, song.MeasureHeaders[2].Start}, []int64{960, 4800, 8640})
-	run.Field("MeasureHeader.ExactStart", m08Times(song.MeasureHeaders), [][2]int64{{960, 1}, {4800, 1}, {8640, 1}})
+	run.Preserved("Song.Anacrusis", song.Anacrusis, true)
+	run.Derived("MeasureHeader.Start", []int64{song.MeasureHeaders[0].Start, song.MeasureHeaders[1].Start, song.MeasureHeaders[2].Start}, []int64{960, 4800, 8640})
+	run.Derived("MeasureHeader.ExactStart", m08Times(song.MeasureHeaders), [][2]int64{{960, 1}, {4800, 1}, {8640, 1}})
 	measures := song.Tracks[0].Measures
-	run.Field("Measure.Start", []int64{measures[0].Start, measures[1].Start, measures[2].Start}, []int64{960, 4800, 8640})
-	run.Field("Measure.ExactStart", m08MeasureTimes(measures), [][2]int64{{960, 1}, {4800, 1}, {8640, 1}})
+	run.Derived("Measure.Start", []int64{measures[0].Start, measures[1].Start, measures[2].Start}, []int64{960, 4800, 8640})
+	run.Derived("Measure.ExactStart", m08MeasureTimes(measures), [][2]int64{{960, 1}, {4800, 1}, {8640, 1}})
 	gotBeats := measures[0].Voices[0].Beats
 	wantFloor := []int64{960, 1508, 2057, 2605, 3154, 3702, 4251}
 	wantExact := [][2]int64{{960, 1}, {10560, 7}, {14400, 7}, {18240, 7}, {22080, 7}, {25920, 7}, {29760, 7}}
 	for index := range gotBeats {
-		run.Field("Beat.Start", *gotBeats[index].Start, wantFloor[index])
-		run.Field("Beat.ExactStart", [2]int64{gotBeats[index].ExactStart.Numerator(), gotBeats[index].ExactStart.Denominator()}, wantExact[index])
+		run.Derived("Beat.Start", *gotBeats[index].Start, wantFloor[index])
+		run.Derived("Beat.ExactStart", [2]int64{gotBeats[index].ExactStart.Numerator(), gotBeats[index].ExactStart.Denominator()}, wantExact[index])
 	}
 	if *measures[0].Voices[1].Beats[0].Start != measures[0].Start {
 		t.Fatal("second voice did not start at the measure origin")

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"reflect"
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -45,36 +46,58 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 	}
 
 	channel := song.Channels[0]
-	run.Field("Song.Channels", song.Channels, []MidiChannel{channel})
-	run.Field("MidiChannel.Channel", channel.Channel, uint8(18))
-	run.Field("MidiChannel.EffectChannel", channel.EffectChannel, uint8(19))
-	run.Field("MidiChannel.Instrument", channel.Instrument, int32(42))
-	run.Field("MidiChannel.Bank", channel.Bank, uint8(2))
-	run.Field("MidiChannel.Volume", channel.Volume, int8(101))
-	run.Field("MidiChannel.Balance", channel.Balance, int8(33))
-	run.Field("MidiChannel.Chorus", channel.Chorus, int8(12))
-	run.Field("MidiChannel.Reverb", channel.Reverb, int8(23))
-	run.Field("MidiChannel.Phaser", channel.Phaser, int8(34))
-	run.Field("MidiChannel.Tremolo", channel.Tremolo, int8(45))
-	run.Field("Track.ChannelIndex", track.ChannelIndex, 0)
-	run.Field("Track.Mute", track.Mute, true)
-	run.Field("Track.Solo", track.Solo, false)
-	run.Field("Track.UseRse", track.UseRse, true)
-	run.Field("Track.Sounds", track.Sounds, wantSounds)
-	run.Field("Track.SoundAutomations", track.SoundAutomations, wantSoundAutomations)
+	run.Preserved("Song.Channels", song.Channels, []MidiChannel{channel})
+	run.Preserved("MidiChannel.Channel", channel.Channel, uint8(18))
+	run.Normalized("MidiChannel.EffectChannel", channel.EffectChannel, uint8(19))
+	run.Preserved("MidiChannel.Instrument", channel.Instrument, int32(42))
+	run.Omitted("MidiChannel.Bank", channel.Bank, uint8(2))
+	run.Preserved("MidiChannel.Volume", channel.Volume, int8(101))
+	run.Preserved("MidiChannel.Balance", channel.Balance, int8(33))
+	run.Omitted("MidiChannel.Chorus", channel.Chorus, int8(12))
+	run.Omitted("MidiChannel.Reverb", channel.Reverb, int8(23))
+	run.Omitted("MidiChannel.Phaser", channel.Phaser, int8(34))
+	run.Omitted("MidiChannel.Tremolo", channel.Tremolo, int8(45))
+	run.Normalized("Track.ChannelIndex", track.ChannelIndex, 0)
+	run.Normalized("Track.Mute", track.Mute, true)
+	run.Normalized("Track.Solo", track.Solo, false)
+	run.Omitted("Track.UseRse", track.UseRse, true)
+	run.Preserved("Track.Sounds", track.Sounds, wantSounds)
+	run.Preserved("Track.SoundAutomations", track.SoundAutomations, wantSoundAutomations)
 	for index := range track.Sounds {
 		sound := track.Sounds[index]
-		run.Field("TrackSound.Name", sound.Name, []string{"Clean", "Lead"}[index])
-		run.Field("TrackSound.Label", sound.Label, []string{"A", "B"}[index])
-		run.Field("TrackSound.Path", sound.Path, []string{"factory/clean", "factory/lead"}[index])
-		run.Field("TrackSound.Role", sound.Role, []string{"main", "solo"}[index])
-		run.Field("TrackSound.Program", sound.Program, []int32{42, 81}[index])
+		run.Preserved("TrackSound.Name", sound.Name, []string{"Clean", "Lead"}[index])
+		run.Preserved("TrackSound.Label", sound.Label, []string{"A", "B"}[index])
+		run.Preserved("TrackSound.Path", sound.Path, []string{"factory/clean", "factory/lead"}[index])
+		run.Preserved("TrackSound.Role", sound.Role, []string{"main", "solo"}[index])
+		run.Preserved("TrackSound.Program", sound.Program, []int32{42, 81}[index])
 	}
 	automation := track.SoundAutomations[0]
-	run.Field("SoundAutomation.Bar", automation.Bar, 0)
-	run.Field("SoundAutomation.Position", automation.Position, 0.5)
-	run.Field("SoundAutomation.Sound", automation.Sound, 1)
+	run.Preserved("SoundAutomation.Bar", automation.Bar, 0)
+	run.Preserved("SoundAutomation.Position", automation.Position, 0.5)
+	run.Preserved("SoundAutomation.Sound", automation.Sound, 1)
 	assertM05RSEFields(run, song.MasterEffect, track.Rse)
+	for _, controller := range []struct {
+		name string
+		set  func(*MidiChannel)
+	}{
+		{"bank", func(channel *MidiChannel) { channel.Bank = 2 }},
+		{"chorus", func(channel *MidiChannel) { channel.Chorus = 12 }},
+		{"reverb", func(channel *MidiChannel) { channel.Reverb = 23 }},
+		{"phaser", func(channel *MidiChannel) { channel.Phaser = 34 }},
+		{"tremolo", func(channel *MidiChannel) { channel.Tremolo = 45 }},
+	} {
+		t.Run("isolated "+controller.name, func(t *testing.T) {
+			probe := semanticValidPitchedGP8Song(t)
+			controller.set(&probe.Channels[0])
+			if report := PreflightExport(probe, ExportFormatGP8, ExportOptions{}); !hasExportCode(report, "gp8.omit.midi-effects") {
+				t.Fatalf("isolated %s report = %#v, want gp8.omit.midi-effects", controller.name, report.Entries)
+			}
+			data, _, err := ExportWithReport(probe, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+			if len(data) != 0 || err == nil {
+				t.Fatalf("isolated %s strict export = %d bytes, %v", controller.name, len(data), err)
+			}
+		})
+	}
 
 	wantCodes := []string{"gp8.omit.master-rse", "gp8.omit.track-rse", "gp8.omit.track-use-rse", "gp8.omit.midi-effects"}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
@@ -126,6 +149,30 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 	run.Wire("gpifSound.Program", gotTrack.Sounds[1].Program, int32(81))
 	run.Wire("gpifSound.Channel", gotChannel.Channel%16, uint8(2))
 
+	generalMIDIData := rewriteConformanceGPIF(t, data, func(source string) string {
+		start := strings.Index(source, "<MidiConnection>")
+		if start < 0 {
+			t.Fatal("GPIF has no MIDI connection")
+		}
+		end := strings.Index(source[start:], "</MidiConnection>")
+		if end < 0 {
+			t.Fatal("GPIF MIDI connection is not closed")
+		}
+		end += start + len("</MidiConnection>")
+		return source[:start] + "<GeneralMidi><Program>81</Program><Port>2</Port><PrimaryChannel>4</PrimaryChannel><SecondaryChannel>5</SecondaryChannel></GeneralMidi>" + source[end:]
+	})
+	generalMIDIResult, err := ParseWithOptions(generalMIDIData, ParseOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	generalTrack := generalMIDIResult.Song.Tracks[0]
+	generalChannel := generalMIDIResult.Song.Channels[generalTrack.ChannelIndex]
+	generalValues := extractGPIFLeafText(t, generalMIDIData)
+	run.Wire("gpifGeneralMidi.Program", generalChannel.Instrument, int32(81))
+	run.Wire("gpifGeneralMidi.Port", generalValues["GPIF/Tracks/Track/GeneralMidi/Port"], "2")
+	run.Wire("gpifGeneralMidi.PrimaryChannel", generalChannel.Channel, uint8(36))
+	run.Wire("gpifGeneralMidi.SecondaryChannel", generalChannel.EffectChannel, uint8(37))
+
 	unbound := *song
 	unbound.Tracks = slices.Clone(song.Tracks)
 	unbound.Tracks[0].ChannelIndex = -1
@@ -152,24 +199,30 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 func assertM05RSEFields(run *semanticMatrixRun, master RseMasterEffect, track TrackRse) {
 	wantMaster := RseMasterEffect{Equalizer: RseEqualizer{Knobs: []float32{0.5, -0.25}, Gain: 2.5}, Volume: 0.75, Reverb: 0.4}
 	wantTrack := TrackRse{Humanize: 3, AutoAccentuation: AccentuationStrong, Equalizer: RseEqualizer{Knobs: []float32{0.25, -0.5}, Gain: 1.5}, Instrument: RseInstrument{EffectCategory: "Delay", Effect: "Echo", Instrument: 7, Unknown: 8, SoundBank: 9, EffectNumber: 10}}
-	run.Field("Song.MasterEffect", master, wantMaster)
-	run.Field("RseMasterEffect.Equalizer", master.Equalizer, wantMaster.Equalizer)
-	run.Field("RseMasterEffect.Volume", master.Volume, float32(0.75))
-	run.Field("RseMasterEffect.Reverb", master.Reverb, float32(0.4))
+	run.Omitted("Song.MasterEffect", master, wantMaster)
+	run.Omitted("RseMasterEffect.Equalizer", master.Equalizer, wantMaster.Equalizer)
+	run.Omitted("RseMasterEffect.Volume", master.Volume, float32(0.75))
+	run.Omitted("RseMasterEffect.Reverb", master.Reverb, float32(0.4))
 	for index, equalizer := range []RseEqualizer{master.Equalizer, track.Equalizer} {
 		want := []RseEqualizer{wantMaster.Equalizer, wantTrack.Equalizer}[index]
-		run.Field("RseEqualizer.Knobs", equalizer.Knobs, want.Knobs)
-		run.Field("RseEqualizer.Gain", equalizer.Gain, want.Gain)
+		run.Omitted("RseEqualizer.Knobs", equalizer.Knobs, want.Knobs)
+		run.Omitted("RseEqualizer.Gain", equalizer.Gain, want.Gain)
 	}
-	run.Field("Track.Rse", track, wantTrack)
-	run.Field("TrackRse.Instrument", track.Instrument, wantTrack.Instrument)
-	run.Field("TrackRse.Equalizer", track.Equalizer, wantTrack.Equalizer)
-	run.Field("TrackRse.Humanize", track.Humanize, uint8(3))
-	run.Field("TrackRse.AutoAccentuation", track.AutoAccentuation, AccentuationStrong)
-	run.Field("RseInstrument.EffectCategory", track.Instrument.EffectCategory, "Delay")
-	run.Field("RseInstrument.Effect", track.Instrument.Effect, "Echo")
-	run.Field("RseInstrument.Instrument", track.Instrument.Instrument, int16(7))
-	run.Field("RseInstrument.Unknown", track.Instrument.Unknown, int16(8))
-	run.Field("RseInstrument.SoundBank", track.Instrument.SoundBank, int16(9))
-	run.Field("RseInstrument.EffectNumber", track.Instrument.EffectNumber, int16(10))
+	run.Omitted("Track.Rse", track, wantTrack)
+	run.Omitted("TrackRse.Instrument", track.Instrument, wantTrack.Instrument)
+	run.Omitted("TrackRse.Equalizer", track.Equalizer, wantTrack.Equalizer)
+	run.Omitted("TrackRse.Humanize", track.Humanize, uint8(3))
+	run.Omitted("TrackRse.AutoAccentuation", track.AutoAccentuation, AccentuationStrong)
+	run.Omitted("RseInstrument.EffectCategory", track.Instrument.EffectCategory, "Delay")
+	run.Omitted("RseInstrument.Effect", track.Instrument.Effect, "Echo")
+	run.Omitted("RseInstrument.Instrument", track.Instrument.Instrument, int16(7))
+	run.Omitted("RseInstrument.Unknown", track.Instrument.Unknown, int16(8))
+	run.Omitted("RseInstrument.SoundBank", track.Instrument.SoundBank, int16(9))
+	run.Omitted("RseInstrument.EffectNumber", track.Instrument.EffectNumber, int16(10))
+	for index, value := range []Accentuation{AccentuationNone, AccentuationVerySoft, AccentuationSoft, AccentuationMedium, AccentuationStrong, AccentuationVeryStrong} {
+		probe := semanticValidPitchedGP8Song(run.t)
+		probe.Tracks[0].Rse.AutoAccentuation = value
+		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
+		run.Enum([]string{"Accentuation.AccentuationNone", "Accentuation.AccentuationVerySoft", "Accentuation.AccentuationSoft", "Accentuation.AccentuationMedium", "Accentuation.AccentuationStrong", "Accentuation.AccentuationVeryStrong"}[index], hasExportCode(probeReport, "gp8.omit.track-rse"), value != AccentuationNone)
+	}
 }

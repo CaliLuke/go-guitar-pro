@@ -732,8 +732,15 @@ func TestExportGP8PreservesBendCurves(t *testing.T) {
 
 	bends := []*BendEffect{
 		{Kind: BendTypeBend, Value: 25, Points: []BendPoint{{Position: 0, Value: 0}, {Position: 3, Value: 1}, {Position: 12, Value: 1}}},
-		{Kind: BendTypePrebendRelease, Value: 50, Points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 6, Value: 0}, {Position: 12, Value: 0}}},
+		{Kind: BendTypeBendRelease, Value: 50, Points: []BendPoint{{Position: 0, Value: 0}, {Position: 3, Value: 2}, {Position: 9, Value: 2}, {Position: 12, Value: 0}}},
 		{Kind: BendTypePrebend, Points: []BendPoint{{Position: 0, Value: 0}, {Position: 12, Value: 0}}},
+	}
+	// GPIF uses the early destination as the canonical form of a bend followed
+	// by a hold. The other two curves retain their public control points.
+	wantPoints := [][]BendPoint{
+		{{Position: 0, Value: 0}, {Position: 3, Value: 1}},
+		bends[1].Points,
+		bends[2].Points,
 	}
 	quarter := defaultDuration()
 	track.Measures[0].Voices = []Voice{{Beats: make([]Beat, len(bends))}}
@@ -758,8 +765,8 @@ func TestExportGP8PreservesBendCurves(t *testing.T) {
 	}
 	for index, want := range bends {
 		got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[index].Notes[0].Effect.Bend
-		if got == nil || got.Kind != want.Kind || got.Value != want.Value || !reflect.DeepEqual(got.Points, want.Points) {
-			t.Errorf("bend %d = %#v, want %#v", index, got, want)
+		if got == nil || got.Kind != want.Kind || got.Value != want.Value || !reflect.DeepEqual(got.Points, wantPoints[index]) {
+			t.Errorf("bend %d = %#v, want kind %d, value %d, points %#v", index, got, want.Kind, want.Value, wantPoints[index])
 		}
 	}
 }

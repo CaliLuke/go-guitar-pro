@@ -53,17 +53,17 @@ func runSemanticMatrixM15OrderedGraceExport(run *semanticMatrixRun) {
 	noGrace := NoteEffect{}
 	run.Field("NoteEffect.Graces", []int{len(notes[0].Effect.Graces), len(notes[1].Effect.Graces), len(notes[2].Effect.Graces), len(noGrace.Graces)}, []int{3, 1, 2, 0})
 	wantPrimary := notes[0].Effect.Graces
-	run.Field("GraceEffect.Duration", m15GraceDurations(wantPrimary), []uint8{DurationSixteenth, DurationThirtySecond, 64})
-	run.Field("GraceEffect.Fret", m15GraceFrets(wantPrimary), []int8{2, 3, 4})
-	run.Field("GraceEffect.ExactFret", m15GraceExactFrets(wantPrimary), []Fret{2, 3, 4})
-	run.Field("GraceEffect.RawFret", []*int8{wantPrimary[0].RawFret, wantPrimary[1].RawFret, wantPrimary[2].RawFret}, []*int8{nil, nil, nil})
-	run.Field("GraceEffect.PercussionArticulation", m15GraceArticulations(wantPrimary), []int{0, 0, 0})
-	run.Field("GraceEffect.HasPercussionArticulation", m15GraceArticulationPresence(wantPrimary), []bool{false, false, false})
-	run.Field("GraceEffect.IsDead", m15GraceDead(wantPrimary), []bool{false, true, false})
-	run.Field("GraceEffect.IsOnBeat", m15GraceOnBeat(wantPrimary), []bool{false, true, false})
-	run.Field("GraceEffect.Sequence", m15GraceSequences(wantPrimary), []uint8{0, 1, 2})
-	run.Field("GraceEffect.Transition", m15GraceTransitions(wantPrimary), []GraceEffectTransition{GraceEffectTransitionNone, GraceEffectTransitionSlide, GraceEffectTransitionHammer})
-	run.Field("GraceEffect.Velocity", m15GraceVelocities(wantPrimary), []int16{MinVelocity + VelocityIncrement*4, Forte, MinVelocity + VelocityIncrement*6})
+	run.Preserved("GraceEffect.Duration", m15GraceDurations(wantPrimary), []uint8{DurationSixteenth, DurationThirtySecond, 64})
+	run.Normalized("GraceEffect.Fret", m15GraceFrets(wantPrimary), []int8{2, 3, 4})
+	run.Preserved("GraceEffect.ExactFret", m15GraceExactFrets(wantPrimary), []Fret{2, 3, 4})
+	run.Preserved("GraceEffect.RawFret", []*int8{wantPrimary[0].RawFret, wantPrimary[1].RawFret, wantPrimary[2].RawFret}, []*int8{nil, nil, nil})
+	run.Preserved("GraceEffect.PercussionArticulation", m15GraceArticulations(wantPrimary), []int{0, 0, 0})
+	run.Preserved("GraceEffect.HasPercussionArticulation", m15GraceArticulationPresence(wantPrimary), []bool{false, false, false})
+	run.Preserved("GraceEffect.IsDead", m15GraceDead(wantPrimary), []bool{false, true, false})
+	run.Preserved("GraceEffect.IsOnBeat", m15GraceOnBeat(wantPrimary), []bool{false, true, false})
+	run.Preserved("GraceEffect.Sequence", m15GraceSequences(wantPrimary), []uint8{0, 1, 2})
+	run.Normalized("GraceEffect.Transition", m15GraceTransitions(wantPrimary), []GraceEffectTransition{GraceEffectTransitionNone, GraceEffectTransitionSlide, GraceEffectTransitionHammer})
+	run.Preserved("GraceEffect.Velocity", m15GraceVelocities(wantPrimary), []int16{MinVelocity + VelocityIncrement*4, Forte, MinVelocity + VelocityIncrement*6})
 
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	if err != nil || len(report.Entries) != 0 {
@@ -97,6 +97,9 @@ func runSemanticMatrixM15OrderedGraceExport(run *semanticMatrixRun) {
 	run.Dispatch("parseGPIFWithContext:b.GraceNotes", m15GraceOnBeat(gotPrimary), []bool{false, true, false})
 	run.Field("GraceEffect.Sequence", m15GraceSequences(gotPrimary), []uint8{0, 1, 2})
 	run.Field("GraceEffect.Transition", m15GraceTransitions(gotPrimary), []GraceEffectTransition{GraceEffectTransitionNone, GraceEffectTransitionSlide, GraceEffectTransitionHammer})
+	run.Enum("GraceEffectTransition.GraceEffectTransitionNone", gotPrimary[0].Transition, GraceEffectTransitionNone)
+	run.Enum("GraceEffectTransition.GraceEffectTransitionSlide", gotPrimary[1].Transition, GraceEffectTransitionSlide)
+	run.Enum("GraceEffectTransition.GraceEffectTransitionHammer", gotPrimary[2].Transition, GraceEffectTransitionHammer)
 	run.Field("GraceEffect.Velocity", m15GraceVelocities(gotPrimary), []int16{MinVelocity + VelocityIncrement*4, Forte, MinVelocity + VelocityIncrement*6})
 
 	reused := rewriteConformanceGPIF(t, data, func(gpif string) string {
@@ -111,11 +114,11 @@ func runSemanticMatrixM15OrderedGraceExport(run *semanticMatrixRun) {
 		t.Fatalf("boundary orphan beats = %#v", orphanVoice.Beats)
 	}
 	attached := &orphanVoice.Beats[0].Notes[0].Effect.Graces[0]
-	orphan := &orphanVoice.Beats[2].Notes[0].Effect.Graces[0]
-	if attached.ExactFret == orphan.ExactFret {
-		t.Fatal("reused grace definitions share ExactFret pointers")
+	orphan := &orphanVoice.Beats[2].Notes[0]
+	if len(orphan.Effect.Graces) != 0 {
+		t.Fatalf("orphan grace note has nested grace effects = %#v", orphan.Effect.Graces)
 	}
-	*orphan.ExactFret = 9
+	orphan.Value = 9
 	if *attached.ExactFret != 2 {
 		t.Fatal("mutating orphan grace changed attached occurrence")
 	}
@@ -160,6 +163,7 @@ func runSemanticMatrixM15GraceAuthorityAndLoss(run *semanticMatrixRun) {
 		Velocity:   0,
 	}}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	run.Enum("GraceEffectTransition.GraceEffectTransitionBend", hasExportCode(report, "gp8.omit.grace-bend-transition"), true)
 	wantCodes := []string{
 		"gp8.normalize.grace-duration",
 		"gp8.normalize.grace-fret-authority",

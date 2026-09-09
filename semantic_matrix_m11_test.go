@@ -18,17 +18,63 @@ func TestSemanticMatrixM11TechniqueDispositions(t *testing.T) {
 
 func runSemanticMatrixM11TechniqueDispositions(run *semanticMatrixRun) {
 	t := run.t
+	for _, source := range []struct {
+		value byte
+		want  uint16
+	}{{1, uint16(DurationEighth)}, {2, uint16(DurationThirtySecond)}, {3, uint16(DurationSixteenth)}} {
+		effect, err := (&Song{}).readTremoloPicking(newCursor([]byte{source.value}))
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("readTremoloPicking:val", effect.Duration.Value, source.want)
+	}
+	for _, source := range []struct {
+		period byte
+		want   uint16
+	}{{1, uint16(DurationSixteenth)}, {2, uint16(DurationThirtySecond)}, {3, uint16(DurationSixtyFourth)}} {
+		effect, err := (&Song{}).readTrill(newCursor([]byte{7, source.period}))
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("readTrill:period", effect.Duration.Value, source.want)
+	}
+	for _, unknown := range []struct {
+		code  string
+		data  []byte
+		parse func(*cursor) error
+	}{
+		{"Binary.Note.TremoloPicking.Subdivision.Unsupported", []byte{99}, func(cursor *cursor) error { _, err := (&Song{}).readTremoloPicking(cursor); return err }},
+		{"Binary.Note.Trill.Period.Unsupported", []byte{7, 99}, func(cursor *cursor) error { _, err := (&Song{}).readTrill(cursor); return err }},
+	} {
+		context := &parseContext{format: "GP5"}
+		if err := unknown.parse(newCursorWithContext(unknown.data, context)); err != nil {
+			t.Fatal(err)
+		}
+		if diagnostic := m20DiagnosticByCode(context.diagnostics, unknown.code); diagnostic == nil || diagnostic.Kind != ParseDiagnosticUnsupportedFeature {
+			t.Fatalf("%s diagnostics = %#v", unknown.code, context.diagnostics)
+		}
+	}
+	for index, accent := range []NoteAccent{NoteAccentNone, NoteAccentNormal, NoteAccentHeavy, NoteAccentTenuto} {
+		run.Enum([]string{"NoteAccent.NoteAccentNone", "NoteAccent.NoteAccentNormal", "NoteAccent.NoteAccentHeavy", "NoteAccent.NoteAccentTenuto"}[index], accent, NoteAccent(index))
+		run.Preserved("NoteEffect.Accent", NoteEffect{Accent: accent}.Accent, accent)
+	}
+	for index, vibrato := range []NoteVibrato{NoteVibratoNone, NoteVibratoSlight, NoteVibratoWide} {
+		run.Enum([]string{"NoteVibrato.NoteVibratoNone", "NoteVibrato.NoteVibratoSlight", "NoteVibrato.NoteVibratoWide"}[index], vibrato, NoteVibrato(index))
+		run.Preserved("NoteEffect.VibratoStrength", NoteEffect{VibratoStrength: vibrato}.VibratoStrength, vibrato)
+	}
+	run.Preserved("NoteEffect.Tapped", NoteEffect{Tapped: true}.Tapped, true)
+	run.Preserved("NoteEffect.LeftHandTapped", NoteEffect{LeftHandTapped: true}.LeftHandTapped, true)
 	fingerings := []Fingering{FingeringOpen, FingeringThumb, FingeringIndex, FingeringMiddle, FingeringAnnular, FingeringLittle}
-	for _, fingering := range fingerings {
+	for index, fingering := range fingerings {
 		effect := defaultNoteEffect()
 		effect.LeftHandFinger = fingering
 		effect.RightHandFinger = fingering
 		effect.HasLeftHandFinger = true
 		effect.HasRightHandFinger = true
-		run.Field("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
-		run.Field("NoteEffect.RightHandFinger", effect.RightHandFinger, fingering)
-		run.Field("NoteEffect.HasLeftHandFinger", effect.HasLeftHandFinger, true)
-		run.Field("NoteEffect.HasRightHandFinger", effect.HasRightHandFinger, true)
+		run.Omitted("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
+		run.Omitted("NoteEffect.RightHandFinger", effect.RightHandFinger, fingering)
+		run.Omitted("NoteEffect.HasLeftHandFinger", effect.HasLeftHandFinger, true)
+		run.Omitted("NoteEffect.HasRightHandFinger", effect.HasRightHandFinger, true)
 
 		song := m11Song(t)
 		note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
@@ -37,6 +83,7 @@ func runSemanticMatrixM11TechniqueDispositions(run *semanticMatrixRun) {
 		note.Effect.HasLeftHandFinger = true
 		note.Effect.HasRightHandFinger = true
 		report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+		run.Enum([]string{"Fingering.FingeringOpen", "Fingering.FingeringThumb", "Fingering.FingeringIndex", "Fingering.FingeringMiddle", "Fingering.FingeringAnnular", "Fingering.FingeringLittle"}[index], hasExportCode(report, "gp8.omit.left-hand-fingering") && hasExportCode(report, "gp8.omit.right-hand-fingering"), true)
 		for _, code := range []string{"gp8.omit.left-hand-fingering", "gp8.omit.right-hand-fingering"} {
 			if !hasExportCode(report, code) {
 				t.Errorf("fingering %d report = %#v, want %s", fingering, report.Entries, code)
@@ -52,10 +99,10 @@ func runSemanticMatrixM11TechniqueDispositions(run *semanticMatrixRun) {
 		note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: duration}
 		if value == uint16(DurationThirtySecond) {
 			note.Effect.Graces = []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}}
-			run.Field("NoteEffect.Graces", note.Effect.Graces, []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}})
+			run.Preserved("NoteEffect.Graces", note.Effect.Graces, []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}})
 		}
-		run.Field("NoteEffect.TremoloPicking", note.Effect.TremoloPicking.Duration.Value, value)
-		run.Field("TremoloPickingEffect.Duration", note.Effect.TremoloPicking.Duration, duration)
+		run.Omitted("NoteEffect.TremoloPicking", note.Effect.TremoloPicking.Duration.Value, value)
+		run.Preserved("TremoloPickingEffect.Duration", note.Effect.TremoloPicking.Duration, duration)
 		if report := PreflightExport(song, ExportFormatGP8, ExportOptions{}); !hasExportCode(report, "gp8.omit.tremolo-picking") {
 			t.Errorf("tremolo duration %d report = %#v", value, report.Entries)
 		}
@@ -78,21 +125,21 @@ func runSemanticMatrixM11TechniqueDispositions(run *semanticMatrixRun) {
 	}
 	values := extractGPIFLeafText(t, data)
 	wire := extractM11WireNote(t, data)
-	run.Field("Note.Effect", note.Effect, wantEffect)
-	run.Field("NoteEffect.AccentuatedNote", note.Effect.AccentuatedNote, true)
-	run.Field("NoteEffect.HeavyAccentuatedNote", note.Effect.HeavyAccentuatedNote, true)
-	run.Field("NoteEffect.GhostNote", note.Effect.GhostNote, true)
-	run.Field("NoteEffect.Staccato", note.Effect.Staccato, true)
-	run.Field("NoteEffect.PalmMute", note.Effect.PalmMute, true)
-	run.Field("NoteEffect.DeadNote", note.Effect.DeadNote, true)
-	run.Field("NoteEffect.LetRing", note.Effect.LetRing, true)
-	run.Field("NoteEffect.Vibrato", note.Effect.Vibrato, true)
-	run.Field("NoteEffect.Hammer", note.Effect.Hammer, true)
-	run.Field("NoteEffect.Slides", note.Effect.Slides, []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove})
-	run.Field("NoteEffect.Trill", note.Effect.Trill.Fret, int8(7))
-	run.Field("TrillEffect.Fret", note.Effect.Trill.Fret, int8(7))
-	run.Field("TrillEffect.Duration", note.Effect.Trill.Duration.Value, uint16(DurationSixteenth))
-	run.Field("NoteEffect.Harmonic", note.Effect.Harmonic.Kind, HarmonicTypeNatural)
+	run.Preserved("Note.Effect", note.Effect, wantEffect)
+	run.Preserved("NoteEffect.AccentuatedNote", note.Effect.AccentuatedNote, true)
+	run.Preserved("NoteEffect.HeavyAccentuatedNote", note.Effect.HeavyAccentuatedNote, true)
+	run.Preserved("NoteEffect.GhostNote", note.Effect.GhostNote, true)
+	run.Preserved("NoteEffect.Staccato", note.Effect.Staccato, true)
+	run.Preserved("NoteEffect.PalmMute", note.Effect.PalmMute, true)
+	run.Preserved("NoteEffect.DeadNote", note.Effect.DeadNote, true)
+	run.Preserved("NoteEffect.LetRing", note.Effect.LetRing, true)
+	run.Preserved("NoteEffect.Vibrato", note.Effect.Vibrato, true)
+	run.Preserved("NoteEffect.Hammer", note.Effect.Hammer, true)
+	run.Preserved("NoteEffect.Slides", note.Effect.Slides, []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove})
+	run.Preserved("NoteEffect.Trill", note.Effect.Trill.Fret, int8(7))
+	run.Preserved("TrillEffect.Fret", note.Effect.Trill.Fret, int8(7))
+	run.Normalized("TrillEffect.Duration", note.Effect.Trill.Duration.Value, uint16(DurationSixteenth))
+	run.Preserved("NoteEffect.Harmonic", note.Effect.Harmonic.Kind, HarmonicTypeNatural)
 	run.Wire("gpifNote.Accent", values["GPIF/Notes/Note/Accent"], "13")
 	run.Wire("gpifNote.AntiAccent", values["GPIF/Notes/Note/AntiAccent"], "Normal")
 	run.Wire("gpifNote.LetRing", wire.LetRing != nil, true)
@@ -198,6 +245,16 @@ func runSemanticMatrixM11SourceDistinctions(run *semanticMatrixRun) {
 		t.Fatal(err)
 	}
 	run.Dispatch("gpifNoteToNote:p.Name", emptyNote.Effect.DeadNote || emptyNote.Effect.PalmMute || emptyNote.Effect.Hammer, false)
+	for _, test := range []struct {
+		wire string
+		want NoteVibrato
+	}{{wire: "Slight", want: NoteVibratoSlight}, {wire: "Wide", want: NoteVibratoWide}} {
+		vibratoNote, vibratoErr := gpifNoteToNote(&gpifNote{Vibrato: test.wire}, 6, false)
+		if vibratoErr != nil {
+			t.Fatal(vibratoErr)
+		}
+		run.Dispatch("gpifNoteToNote:n.Vibrato", vibratoNote.Effect.VibratoStrength, test.want)
+	}
 
 	for _, test := range []struct {
 		flags string
@@ -210,16 +267,22 @@ func runSemanticMatrixM11SourceDistinctions(run *semanticMatrixRun) {
 		{flags: "8", want: []SlideType{SlideOutUpwards}},
 		{flags: "16", want: []SlideType{SlideIntoFromBelow}},
 		{flags: "32", want: []SlideType{SlideIntoFromAbove}},
-		{flags: "63", want: []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove}},
+		{flags: "64", want: []SlideType{SlidePickSlideDown}},
+		{flags: "128", want: []SlideType{SlidePickSlideUp}},
+		{flags: "255", want: []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove, SlidePickSlideDown, SlidePickSlideUp}},
 	} {
 		slideNote, slideErr := gpifNoteToNote(&gpifNote{Properties: gpifProperties{Properties: []gpifProperty{{Name: "Slide", Flags: &test.flags}}}}, 6, false)
 		if slideErr != nil {
 			t.Fatal(slideErr)
 		}
 		run.Dispatch("gpifNoteToNote:p.Name", slideNote.Effect.Slides, test.want)
+		for _, slide := range test.want {
+			run.Enum(semanticSlideMember(slide), slices.Contains(slideNote.Effect.Slides, slide), true)
+		}
 	}
+	run.Enum("SlideType.SlideNone", len([]SlideType(nil)), 0)
 
-	flags := "64"
+	flags := "256"
 	context := &parseContext{format: "GPIF"}
 	gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", gpifProperty{Name: "Slide", Flags: &flags}, nil)
 	if !slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool {
@@ -228,22 +291,33 @@ func runSemanticMatrixM11SourceDistinctions(run *semanticMatrixRun) {
 		t.Errorf("slide diagnostics = %#v, want unknown flag", context.diagnostics)
 	}
 
-	for _, property := range []gpifProperty{{Name: "Tapped", Enable: &empty}, {Name: "HopoOrigin", Enable: &empty}, {Name: "HopoDestination", Enable: &empty}, {Name: "LeftHandTapped", Enable: &empty}} {
+	for _, test := range []struct {
+		property gpifProperty
+		wantLoss bool
+	}{
+		{property: gpifProperty{Name: "Tapped", Enable: &empty}},
+		{property: gpifProperty{Name: "HopoOrigin", Enable: &empty}},
+		{property: gpifProperty{Name: "HopoDestination", Enable: &empty}, wantLoss: true},
+		{property: gpifProperty{Name: "LeftHandTapped", Enable: &empty}},
+	} {
 		context := &parseContext{format: "GPIF"}
-		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", property, nil)
+		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", test.property, nil)
 		run.Dispatch("gpifAuditNoteProperty:property.Name", slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool {
 			return diagnostic.Kind == ParseDiagnosticLossyProjection
-		}), true)
+		}), test.wantLoss)
 	}
 
 	vibratoContext := &parseContext{format: "GPIF"}
 	gpifAuditDiagnostics(gpifDocument{Notes: gpifNotes{Notes: []gpifNote{{ID: "n1", Vibrato: "Wide", Accent: 0x10}}}}, vibratoContext)
-	for _, code := range []string{"GPIF.Note.Vibrato", "GPIF.Note.Accent.Tenuto"} {
-		if !slices.ContainsFunc(vibratoContext.diagnostics, func(diagnostic ParseDiagnostic) bool {
-			return diagnostic.Code == code
-		}) {
-			t.Errorf("diagnostics = %#v, want %s", vibratoContext.diagnostics, code)
-		}
+	if len(vibratoContext.diagnostics) != 0 {
+		t.Errorf("supported wide vibrato and tenuto diagnostics = %#v", vibratoContext.diagnostics)
+	}
+	invalidVibratoContext := &parseContext{format: "GPIF"}
+	gpifAuditDiagnostics(gpifDocument{Notes: gpifNotes{Notes: []gpifNote{{ID: "n1", Vibrato: "Extreme"}}}}, invalidVibratoContext)
+	if !slices.ContainsFunc(invalidVibratoContext.diagnostics, func(diagnostic ParseDiagnostic) bool {
+		return diagnostic.Code == "GPIF.Note.Vibrato.InvalidValue"
+	}) {
+		t.Errorf("invalid vibrato diagnostics = %#v", invalidVibratoContext.diagnostics)
 	}
 
 	song := m11Song(t)
@@ -254,6 +328,29 @@ func runSemanticMatrixM11SourceDistinctions(run *semanticMatrixRun) {
 	var lossErr *ExportLossError
 	if len(data) != 0 || !errors.As(err, &lossErr) {
 		t.Fatalf("strict thumb export = %d bytes, %v", len(data), err)
+	}
+}
+
+func semanticSlideMember(value SlideType) string {
+	switch value {
+	case SlideIntoFromAbove:
+		return "SlideType.SlideIntoFromAbove"
+	case SlideIntoFromBelow:
+		return "SlideType.SlideIntoFromBelow"
+	case SlideShiftSlideTo:
+		return "SlideType.SlideShiftSlideTo"
+	case SlideLegatoSlideTo:
+		return "SlideType.SlideLegatoSlideTo"
+	case SlideOutDownwards:
+		return "SlideType.SlideOutDownwards"
+	case SlideOutUpwards:
+		return "SlideType.SlideOutUpwards"
+	case SlidePickSlideDown:
+		return "SlideType.SlidePickSlideDown"
+	case SlidePickSlideUp:
+		return "SlideType.SlidePickSlideUp"
+	default:
+		return "SlideType.SlideNone"
 	}
 }
 
@@ -270,7 +367,7 @@ func runSemanticMatrixM11Validation(run *semanticMatrixRun) {
 	}{
 		{name: "left fingering", code: "score.note.left-hand-fingering", set: func(note *Note) { note.Effect.LeftHandFinger = Fingering(-2) }},
 		{name: "right fingering", code: "score.note.right-hand-fingering", set: func(note *Note) { note.Effect.RightHandFinger = Fingering(5) }},
-		{name: "slide", code: "score.note.slide", set: func(note *Note) { note.Effect.Slides = []SlideType{SlideType(5)} }},
+		{name: "slide", code: "score.note.slide", set: func(note *Note) { note.Effect.Slides = []SlideType{SlideType(7)} }},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

@@ -722,9 +722,22 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 
 	staves := gp8ExportStaves(track)
+	percussionLineCount := 5
+	if track.PercussionTrack && len(staves) > 0 && staves[0].StandardNotationLineCount > 0 {
+		percussionLineCount = staves[0].StandardNotationLineCount
+	}
 	for staffIndex := range staves {
 		if !track.PercussionTrack && staves[staffIndex].StandardNotationLineCount != 0 && staves[staffIndex].StandardNotationLineCount != 5 {
 			builder.addReport("gp8.omit.staff-line-count", "staff-ownership", ExportDispositionOmitted, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "GP8 writer emits custom staff line counts only for percussion tracks")
+		}
+		if track.PercussionTrack {
+			lineCount := staves[staffIndex].StandardNotationLineCount
+			if lineCount <= 0 {
+				lineCount = 5
+			}
+			if lineCount != percussionLineCount {
+				builder.addReport("gp8.normalize.percussion-line-count", "staff-ownership", ExportDispositionNormalized, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "GP8 stores one notation line count for every percussion staff in a track")
+			}
 		}
 		for stringIndex, guitarString := range staves[staffIndex].Strings {
 			if guitarString.Number != int8(stringIndex+1) {
@@ -757,14 +770,10 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 
 	if track.PercussionTrack {
-		lineCount := 5
-		if staves[0].StandardNotationLineCount > 0 {
-			lineCount = staves[0].StandardNotationLineCount
-		}
 		result.InstrumentSet = &gpifInstrumentSet{
 			Name:      "Drums",
 			Type:      "drumKit",
-			LineCount: lineCount,
+			LineCount: percussionLineCount,
 			Elements:  gpifElements{Elements: builder.percussionElements[trackIndex]},
 		}
 	} else {
@@ -996,18 +1005,12 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Status == BeatStatusEmpty {
 		builder.addReport("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
 	}
-	if len(beat.Notes) > 0 {
-		velocity := beat.Notes[0].Velocity
-		if beat.Dynamics != 0 {
-			velocity = beat.Dynamics
-		}
-		velocity = gpifDynamicToVelocity(gp8VelocityToDynamic(velocity))
-		for _, note := range beat.Notes {
-			if note.Velocity != velocity {
-				builder.addReport("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
-				break
-			}
-		}
+	dynamic := gp8ConvertBeatDynamic(beat)
+	if dynamic.authoredNormalized {
+		builder.addReport("gp8.normalize.beat-dynamic", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores the authored beat dynamic as one of eight canonical markings")
+	}
+	if dynamic.noteVelocitiesNormalized {
+		builder.addReport("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
 	}
 	if beat.Effect.MixTableChange != nil {
 		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
@@ -1070,6 +1073,9 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	}
 	if note.Effect.TremoloPicking != nil {
 		builder.addReport("gp8.omit.tremolo-picking", "tremolo-picking", ExportDispositionOmitted, location, "GP8 writer does not emit tremolo picking")
+	}
+	if _, conflict := gp8ResolveNoteAccent(note.Effect); conflict {
+		builder.addReport("gp8.normalize.note-accent-authority", "note-and-beat-semantics", ExportDispositionNormalized, location, "the typed note accent takes precedence over conflicting legacy accent booleans")
 	}
 	if note.Effect.HasLeftHandFinger || (note.Effect.LeftHandFinger != FingeringOpen && note.Effect.LeftHandFinger != FingeringThumb) {
 		builder.addReport("gp8.omit.left-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit left-hand fingering")
@@ -1208,6 +1214,14 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		result.TripletFeel = "Triplet8th"
 	case TripletFeelSixteenth:
 		result.TripletFeel = "Triplet16th"
+	case TripletFeelDottedEighth:
+		result.TripletFeel = "Dotted8th"
+	case TripletFeelDottedSixteenth:
+		result.TripletFeel = "Dotted16th"
+	case TripletFeelScottishEighth:
+		result.TripletFeel = "Scottish8th"
+	case TripletFeelScottishSixteenth:
+		result.TripletFeel = "Scottish16th"
 	}
 	return result
 }
@@ -1324,7 +1338,11 @@ func (builder *gp8Builder) addGraceGroups(trackIndex int, staffStrings []GuitarS
 		}
 		noteIDs := make([]string, 0, len(group.notes))
 		for noteIndex := range group.notes {
-			noteIDs = append(noteIDs, builder.addNote(trackIndex, staffStrings, &group.notes[noteIndex]))
+			noteID, err := builder.addNote(trackIndex, staffStrings, &group.notes[noteIndex])
+			if err != nil {
+				return nil, err
+			}
+			noteIDs = append(noteIDs, noteID)
 		}
 		result.Notes = strings.Join(noteIDs, " ")
 		builder.doc.Beats.Beats = append(builder.doc.Beats.Beats, result)
@@ -1340,13 +1358,13 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
 	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
-	velocity := beat.Dynamics
-	if velocity == 0 && len(beat.Notes) > 0 {
-		velocity = beat.Notes[0].Velocity
+	if beat.isGrace {
+		result.GraceNotes = "BeforeBeat"
+		if beat.graceOnBeat {
+			result.GraceNotes = "OnBeat"
+		}
 	}
-	if velocity != 0 {
-		result.Dynamic = gp8VelocityToDynamic(velocity)
-	}
+	result.Dynamic = gp8ConvertBeatDynamic(beat).marking
 	if beat.Effect.Chord != nil {
 		result.Chord = builder.chordIDs[trackIndex][beat.Effect.Chord]
 	}
@@ -1379,7 +1397,10 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 
 	noteIDs := make([]string, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		noteID := builder.addNote(trackIndex, staffStrings, &beat.Notes[noteIndex])
+		noteID, err := builder.addNote(trackIndex, staffStrings, &beat.Notes[noteIndex])
+		if err != nil {
+			return "", err
+		}
 		noteIDs = append(noteIDs, noteID)
 	}
 	result.Notes = strings.Join(noteIDs, " ")
@@ -1411,7 +1432,7 @@ func (builder *gp8Builder) addRhythm(duration Duration) (string, error) {
 	return id, nil
 }
 
-func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, note *Note) string {
+func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, note *Note) (string, error) {
 	track := &builder.song.Tracks[trackIndex]
 	noteID := strconv.Itoa(len(builder.doc.Notes.Notes))
 	fret := int(note.Value)
@@ -1455,7 +1476,11 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		if index, ok := gp8PercussionArticulationIndex(track, note); ok {
 			articulation = index
 		} else {
-			articulation = builder.articulationIDs[trackIndex][note.Value]
+			var ok bool
+			articulation, ok = builder.articulationIDs[trackIndex][note.Value]
+			if !ok {
+				return "", fmt.Errorf("percussion MIDI value %d has no exported articulation resource", note.Value)
+			}
 		}
 		result.InstrumentArticulation = &articulation
 	}
@@ -1486,6 +1511,14 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		enable := ""
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HopoOrigin", Enable: &enable})
 	}
+	if note.Effect.Tapped {
+		enable := ""
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Tapped", Enable: &enable})
+	}
+	if note.Effect.LeftHandTapped {
+		enable := ""
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "LeftHandTapped", Enable: &enable})
+	}
 	if len(note.Effect.Slides) > 0 {
 		flags := 0
 		for _, slide := range note.Effect.Slides {
@@ -1502,28 +1535,26 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 				flags |= 0x10
 			case SlideIntoFromAbove:
 				flags |= 0x20
+			case SlidePickSlideDown:
+				flags |= 0x40
+			case SlidePickSlideUp:
+				flags |= 0x80
 			}
 		}
 		value := strconv.Itoa(flags)
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Slide", Flags: &value})
 	}
-	if note.Effect.Vibrato {
-		result.Vibrato = "Slight"
-	}
+	result.Vibrato = gp8ResolveNoteVibrato(note.Effect)
 	if note.Effect.Trill != nil {
 		result.Trill = &gpifTrill{Fret: int(note.Effect.Trill.Fret)}
 	}
 	if note.Effect.Staccato {
 		result.Accent |= 0x01
 	}
-	if note.Effect.HeavyAccentuatedNote {
-		result.Accent |= 0x04
-	}
-	if note.Effect.AccentuatedNote {
-		result.Accent |= 0x08
-	}
+	accentFlags, _ := gp8ResolveNoteAccent(note.Effect)
+	result.Accent |= accentFlags
 	builder.doc.Notes.Notes = append(builder.doc.Notes.Notes, result)
-	return noteID
+	return noteID, nil
 }
 
 func gp8BarClef(song *Song, trackIndex int, measure *Measure) string {
@@ -1560,6 +1591,8 @@ func gp8HarmonicType(kind HarmonicType) string {
 		return "Tap"
 	case HarmonicTypeSemi:
 		return "Semi"
+	case HarmonicTypeFeedback:
+		return "Feedback"
 	default:
 		return ""
 	}
@@ -1685,18 +1718,19 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 		{Name: "BendOriginValue", Float: gp8BendValue(origin.Value)},
 	}
 	encoded := gpifBendProperties{
-		enabled:             true,
-		originPosition:      origin.Position,
-		originValue:         origin.Value,
-		middlePosition1:     middle1.Position,
-		middlePosition2:     middle2.Position,
-		middleValue:         middle1.Value,
-		destinationPosition: destination.Position,
-		destinationValue:    destination.Value,
+		enabled:                true,
+		originPosition:         origin.Position,
+		originValue:            origin.Value,
+		middlePosition1:        middle1.Position,
+		middlePosition2:        middle2.Position,
+		middleValue:            middle1.Value,
+		destinationPosition:    destination.Position,
+		hasDestinationPosition: true,
+		destinationValue:       destination.Value,
 	}
 	return gp8BendConversion{
 		properties: properties,
-		normalized: !slices.Equal(encoded.effect().Points, points),
+		normalized: !slices.Equal(simplifyBendPoints(encoded.effect().Points), simplifyBendPoints(points)),
 	}
 }
 
@@ -1771,6 +1805,72 @@ func gp8VelocityToDynamic(velocity int16) string {
 	default:
 		return "FFF"
 	}
+}
+
+func gp8ResolveNoteVibrato(effect NoteEffect) string {
+	strength := effect.VibratoStrength
+	if strength == NoteVibratoNone && effect.Vibrato {
+		strength = NoteVibratoSlight
+	}
+	switch strength {
+	case NoteVibratoSlight:
+		return "Slight"
+	case NoteVibratoWide:
+		return "Wide"
+	default:
+		return ""
+	}
+}
+
+func gp8ResolveNoteAccent(effect NoteEffect) (int, bool) {
+	legacyFlags := 0
+	if effect.HeavyAccentuatedNote {
+		legacyFlags |= 0x04
+	}
+	if effect.AccentuatedNote {
+		legacyFlags |= 0x08
+	}
+	if effect.Accent == NoteAccentNone {
+		return legacyFlags, false
+	}
+	typedFlags := 0
+	switch effect.Accent {
+	case NoteAccentNormal:
+		typedFlags = 0x08
+	case NoteAccentHeavy:
+		typedFlags = 0x04
+	case NoteAccentTenuto:
+		typedFlags = 0x10
+	}
+	return typedFlags, legacyFlags != 0 && legacyFlags != typedFlags
+}
+
+type gp8BeatDynamicConversion struct {
+	marking                  string
+	velocity                 int16
+	authoredNormalized       bool
+	noteVelocitiesNormalized bool
+}
+
+func gp8ConvertBeatDynamic(beat *Beat) gp8BeatDynamicConversion {
+	source := beat.Dynamics
+	if source == 0 && len(beat.Notes) > 0 {
+		source = beat.Notes[0].Velocity
+	}
+	if source == 0 {
+		return gp8BeatDynamicConversion{}
+	}
+	marking := gp8VelocityToDynamic(source)
+	target := gpifDynamicToVelocity(marking)
+	conversion := gp8BeatDynamicConversion{
+		marking:            marking,
+		velocity:           target,
+		authoredNormalized: beat.Dynamics != 0 && beat.Dynamics != target,
+	}
+	conversion.noteVelocitiesNormalized = slices.ContainsFunc(beat.Notes, func(note Note) bool {
+		return note.Velocity != conversion.velocity
+	})
+	return conversion
 }
 
 func gp8DrumStaffLine(value int16) int {
@@ -1879,25 +1979,27 @@ func gp8PercussionElements(track *Track, options GP8ExportOptions) []gpifElement
 		seen[value] = struct{}{}
 		values = append(values, value)
 	}
-	for measureIndex := range track.Measures {
-		for voiceIndex := range track.Measures[measureIndex].Voices {
-			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
-				for noteIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
-					note := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
-					if _, ok := gp8PercussionArticulationIndex(track, note); !ok {
-						addFallback(note.Value)
-					}
-					for graceIndex := range note.Effect.Graces {
-						grace := &note.Effect.Graces[graceIndex]
-						graceNote := Note{Value: int16(grace.Fret), HasPercussionArticulation: grace.HasPercussionArticulation, PercussionArticulation: grace.PercussionArticulation}
-						if grace.ExactFret != nil {
-							graceNote.Value = int16(*grace.ExactFret)
+	for _, staff := range gp8ExportStaves(track) {
+		for measureIndex := range staff.Measures {
+			for voiceIndex := range staff.Measures[measureIndex].Voices {
+				for beatIndex := range staff.Measures[measureIndex].Voices[voiceIndex].Beats {
+					for noteIndex := range staff.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
+						note := &staff.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
+						if _, ok := gp8PercussionArticulationIndex(track, note); !ok {
+							addFallback(note.Value)
 						}
-						if graceNote.Value < 27 || graceNote.Value > 87 {
-							graceNote.Value = note.Value
-						}
-						if _, ok := gp8PercussionArticulationIndex(track, &graceNote); !ok {
-							addFallback(graceNote.Value)
+						for graceIndex := range note.Effect.Graces {
+							grace := &note.Effect.Graces[graceIndex]
+							graceNote := Note{Value: int16(grace.Fret), HasPercussionArticulation: grace.HasPercussionArticulation, PercussionArticulation: grace.PercussionArticulation}
+							if grace.ExactFret != nil {
+								graceNote.Value = int16(*grace.ExactFret)
+							}
+							if graceNote.Value < 27 || graceNote.Value > 87 {
+								graceNote.Value = note.Value
+							}
+							if _, ok := gp8PercussionArticulationIndex(track, &graceNote); !ok {
+								addFallback(graceNote.Value)
+							}
 						}
 					}
 				}

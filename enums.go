@@ -11,6 +11,14 @@ const (
 	TripletFeelNone      TripletFeel = 0
 	TripletFeelEighth    TripletFeel = 1
 	TripletFeelSixteenth TripletFeel = 2
+	// TripletFeelDottedEighth alternates a dotted eighth note with a sixteenth note.
+	TripletFeelDottedEighth TripletFeel = 3
+	// TripletFeelDottedSixteenth alternates a dotted sixteenth note with a thirty-second note.
+	TripletFeelDottedSixteenth TripletFeel = 4
+	// TripletFeelScottishEighth applies the Scottish eighth-note rhythm.
+	TripletFeelScottishEighth TripletFeel = 5
+	// TripletFeelScottishSixteenth applies the Scottish sixteenth-note rhythm.
+	TripletFeelScottishSixteenth TripletFeel = 6
 )
 
 // Hairpin describes a gradual dynamic change beginning on a beat.
@@ -60,6 +68,29 @@ const (
 	SlideLegatoSlideTo SlideType = 2
 	SlideOutDownwards  SlideType = 3
 	SlideOutUpwards    SlideType = 4
+	SlidePickSlideDown SlideType = 5
+	SlidePickSlideUp   SlideType = 6
+)
+
+// NoteVibrato identifies the authored strength of a note vibrato.
+type NoteVibrato uint8
+
+// Note vibrato values preserve GPIF's explicit strength.
+const (
+	NoteVibratoNone   NoteVibrato = 0
+	NoteVibratoSlight NoteVibrato = 1
+	NoteVibratoWide   NoteVibrato = 2
+)
+
+// NoteAccent identifies the authored articulation accent on a note.
+type NoteAccent uint8
+
+// Note accent values preserve GPIF's normal, heavy, and tenuto distinctions.
+const (
+	NoteAccentNone   NoteAccent = 0
+	NoteAccentNormal NoteAccent = 1
+	NoteAccentHeavy  NoteAccent = 2
+	NoteAccentTenuto NoteAccent = 3
 )
 
 // NoteType represents note types.
@@ -186,6 +217,8 @@ const (
 	HarmonicTypeTapped     HarmonicType = 3
 	HarmonicTypePinch      HarmonicType = 4
 	HarmonicTypeSemi       HarmonicType = 5
+	// HarmonicTypeFeedback identifies a sustained feedback harmonic.
+	HarmonicTypeFeedback HarmonicType = 6
 )
 
 // Accentuation identifies a dynamic accent strength.

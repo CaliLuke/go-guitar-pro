@@ -387,18 +387,17 @@ func TestAlphaTabTempoReferences(t *testing.T) {
 func TestAlphaTabGPIFTiming(t *testing.T) {
 	requireAlphaTabConformance(t)
 	for _, test := range []struct {
-		name                  string
-		fixture               string
-		old                   string
-		new                   string
-		exactTupletDifference bool
+		name    string
+		fixture string
+		old     string
+		new     string
 	}{
 		{name: "notes", fixture: "testdata/gp7/notes.gp"},
 		{name: "time signatures", fixture: "testdata/gp7/time-signatures.gp"},
 		{name: "pickup", fixture: "testdata/gp7/anacrusis.gp"},
 		{name: "empty pickup", fixture: "testdata/gp7/anacrusis.gp", old: "<Beats>0 1</Beats>", new: "<Beats>-1</Beats>"},
 		{name: "multiple voices", fixture: "testdata/gp7/multi-voice.gp"},
-		{name: "tuplets", fixture: "testdata/gp7/tuplets.gp", exactTupletDifference: true},
+		{name: "tuplets", fixture: "testdata/gp7/tuplets.gp"},
 		{name: "grace", fixture: "testdata/gp7/grace.gp"},
 		{name: "unmatched grace", fixture: "testdata/gp7/grace.gp", old: "<Beats>0 1 2 3 4</Beats>", new: "<Beats>1 2 4</Beats>"},
 	} {
@@ -422,11 +421,6 @@ func TestAlphaTabGPIFTiming(t *testing.T) {
 				[]string{"timing"},
 			)
 			differences := semanticDifferences(goScore, alphaScore)
-			if test.exactTupletDifference && reflect.DeepEqual(differences, []semanticDifference{{
-				Path: "/timing/24/value", Go: float64(2560), AlphaTab: float64(2559),
-			}}) {
-				return
-			}
 			if len(differences) != 0 {
 				formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
 				if marshalErr != nil {
@@ -436,6 +430,55 @@ func TestAlphaTabGPIFTiming(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestAlphaTabGP5DurationPercentWireValues(t *testing.T) {
+	requireAlphaTabConformance(t)
+	tests := []struct {
+		fixture       string
+		threeQuarters int
+		halves        int
+	}{
+		{fixture: "testdata/gp5/Effects.gp5", threeQuarters: 6, halves: 1},
+		{fixture: "testdata/gp5/other-effects.gp5", threeQuarters: 1, halves: 1},
+	}
+	for _, test := range tests {
+		t.Run(test.fixture, func(t *testing.T) {
+			data, err := os.ReadFile(test.fixture)
+			if err != nil {
+				t.Fatal(err)
+			}
+			littleThreeQuarters := []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe8, 0x3f}
+			littleHalf := []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f}
+			if got := bytes.Count(data, littleThreeQuarters); got != test.threeQuarters {
+				t.Fatalf("little-endian 0.75 values = %d, want %d", got, test.threeQuarters)
+			}
+			if got := bytes.Count(data, littleHalf); got != test.halves {
+				t.Fatalf("little-endian 0.5 values = %d, want %d", got, test.halves)
+			}
+
+			song, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			goFacts := durationPercentFacts(normalizeGoScore(song))
+			alphaFacts := durationPercentFacts(readAlphaTabScore(t, test.fixture))
+			if differences := semanticDifferences(goFacts, alphaFacts); len(differences) != 0 {
+				formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
+				if marshalErr != nil {
+					t.Fatal(marshalErr)
+				}
+				t.Fatalf("duration percentages differ from little-endian wire values:\n%s", formatted)
+			}
+		})
+	}
+}
+
+func durationPercentFacts(score any) []any {
+	data, _ := json.Marshal(score)
+	var canonical any
+	_ = json.Unmarshal(data, &canonical)
+	return collectConformanceFacts(canonical, map[string]bool{"durationPercent": true}, nil)
 }
 
 func requireAlphaTabConformance(t *testing.T) {
@@ -919,6 +962,7 @@ func normalizeGoStaves(song *Song, trackIndex int) []any {
 
 func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 	result := make([]any, 0, len(staff.Measures))
+	links := goNoteLinkProjections(staff)
 	for measureIndex := range staff.Measures {
 		measure := &staff.Measures[measureIndex]
 		voices := make([]any, 0, len(measure.Voices))
@@ -936,10 +980,10 @@ func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 					continue
 				}
 				pendingGrace = pendingGrace[:0]
-				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, beat))
+				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, beat, links))
 			}
 			for _, grace := range pendingGrace {
-				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, grace))
+				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, grace, links))
 			}
 			voices = append(voices, map[string]any{"index": voiceIndex, "beats": beats})
 		}
@@ -958,18 +1002,20 @@ func goVoiceHasContent(voice *Voice) bool {
 	})
 }
 
-func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, beat *Beat) any {
+func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, beat *Beat, links map[*Note]goNoteLinkProjection) any {
 	start := any(nil)
 	if beat.Start != nil {
 		start = *beat.Start - song.MeasureHeaders[measureIndex].Start
 	}
 	notes := make([]any, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		notes = append(notes, normalizeGoNote(track, staff, &beat.Notes[noteIndex]))
+		note := &beat.Notes[noteIndex]
+		notes = append(notes, normalizeGoNoteWithLinks(track, staff, note, links[note]))
 	}
 	return map[string]any{
 		"start":          start,
 		"status":         goBeatStatus(beat.Status),
+		"graceRole":      map[bool]string{false: "none", true: "orphan"}[beat.isGrace],
 		"duration":       beat.Duration.Value,
 		"durationTicks":  beat.Duration.time(),
 		"dots":           goDurationDots(beat.Duration),
@@ -983,7 +1029,106 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 	}
 }
 
+type goNoteLinkProjection struct {
+	hammerOrigin bool
+	slides       []SlideType
+}
+
+type goBeatLinkPosition struct {
+	measure int
+	beat    *Beat
+}
+
+func goNoteLinkProjections(staff *Staff) map[*Note]goNoteLinkProjection {
+	result := make(map[*Note]goNoteLinkProjection)
+	maxVoices := 0
+	for measureIndex := range staff.Measures {
+		maxVoices = max(maxVoices, len(staff.Measures[measureIndex].Voices))
+	}
+	for voiceIndex := 0; voiceIndex < maxVoices; voiceIndex++ {
+		var positions []goBeatLinkPosition
+		for measureIndex := range staff.Measures {
+			measure := &staff.Measures[measureIndex]
+			if voiceIndex >= len(measure.Voices) {
+				continue
+			}
+			for beatIndex := range measure.Voices[voiceIndex].Beats {
+				positions = append(positions, goBeatLinkPosition{measure: measureIndex, beat: &measure.Voices[voiceIndex].Beats[beatIndex]})
+			}
+		}
+		for positionIndex, position := range positions {
+			for noteIndex := range position.beat.Notes {
+				note := &position.beat.Notes[noteIndex]
+				projection := goNoteLinkProjection{slides: slices.Clone(note.Effect.Slides)}
+				projection.hammerOrigin = note.Effect.Hammer && goHasHammerDestination(note, positions[positionIndex+1:], position.measure, len(staff.Strings))
+				if !goHasNextNoteOnString(note, positions[positionIndex+1:], position.measure) {
+					projection.slides = slices.DeleteFunc(projection.slides, func(slide SlideType) bool {
+						return slide == SlideShiftSlideTo || slide == SlideLegatoSlideTo
+					})
+				}
+				result[note] = projection
+			}
+		}
+	}
+	return result
+}
+
+func goHasNextNoteOnString(note *Note, positions []goBeatLinkPosition, sourceMeasure int) bool {
+	for _, position := range positions {
+		if position.measure > sourceMeasure+3 {
+			break
+		}
+		if goBeatNoteOnString(position.beat, note.String) != nil {
+			return true
+		}
+	}
+	return false
+}
+
+func goHasHammerDestination(note *Note, positions []goBeatLinkPosition, sourceMeasure, stringCount int) bool {
+	for _, position := range positions {
+		if position.measure > sourceMeasure+3 {
+			break
+		}
+		if goBeatNoteOnString(position.beat, note.String) != nil {
+			return true
+		}
+		for sourceString := int(note.String) - 1; sourceString > 0; sourceString-- {
+			candidate := goBeatNoteOnString(position.beat, int8(sourceString))
+			if candidate != nil {
+				if candidate.Effect.LeftHandTapped {
+					return true
+				}
+				break
+			}
+		}
+		for sourceString := int(note.String) + 1; sourceString <= stringCount; sourceString++ {
+			candidate := goBeatNoteOnString(position.beat, int8(sourceString))
+			if candidate != nil {
+				if candidate.Effect.LeftHandTapped {
+					return true
+				}
+				break
+			}
+		}
+	}
+	return false
+}
+
+func goBeatNoteOnString(beat *Beat, stringNumber int8) *Note {
+	for noteIndex := range beat.Notes {
+		if beat.Notes[noteIndex].String == stringNumber {
+			return &beat.Notes[noteIndex]
+		}
+	}
+	return nil
+}
+
 func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
+	return normalizeGoNoteWithLinks(track, staff, note, goNoteLinkProjection{slides: note.Effect.Slides, hammerOrigin: note.Effect.Hammer})
+}
+
+func normalizeGoNoteWithLinks(track *Track, staff *Staff, note *Note, links goNoteLinkProjection) any {
 	fret := any(note.Value)
 	stringNumber := note.String
 	articulation := any(nil)
@@ -1024,11 +1169,11 @@ func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
 		"durationPercent": note.DurationPercent,
 		"tieDestination":  note.Kind == NoteTypeTie,
 		"effects": map[string]any{
-			"accent": goAccent(note.Effect), "ghost": note.Effect.GhostNote, "hammerOrigin": note.Effect.Hammer,
+			"accent": goAccent(note.Effect), "ghost": note.Effect.GhostNote, "hammerOrigin": links.hammerOrigin,
 			"letRing": note.Effect.LetRing, "palmMute": note.Effect.PalmMute, "staccato": note.Effect.Staccato,
-			"vibrato": goVibrato(note.Effect.Vibrato), "harmonic": normalizeGoHarmonic(note.Effect.Harmonic),
+			"vibrato": goVibrato(note.Effect), "harmonic": normalizeGoHarmonic(note.Effect.Harmonic),
 			"bend": normalizeGoBend(note.Effect.Bend), "trill": normalizeGoTrill(note.Effect.Trill),
-			"slides": normalizeGoSlides(note.Effect.Slides),
+			"slides": normalizeGoSlides(links.slides),
 		},
 		"graces": graces,
 	}
@@ -1159,6 +1304,14 @@ func goTripletFeel(feel TripletFeel) string {
 		return "triplet-8th"
 	case TripletFeelSixteenth:
 		return "triplet-16th"
+	case TripletFeelDottedEighth:
+		return "dotted-8th"
+	case TripletFeelDottedSixteenth:
+		return "dotted-16th"
+	case TripletFeelScottishEighth:
+		return "scottish-8th"
+	case TripletFeelScottishSixteenth:
+		return "scottish-16th"
 	case TripletFeelNone:
 		return "none"
 	default:
@@ -1216,6 +1369,14 @@ func TestGoClefNormalizationContract(t *testing.T) {
 }
 
 func goAccent(effect NoteEffect) string {
+	switch effect.Accent {
+	case NoteAccentNormal:
+		return "normal"
+	case NoteAccentHeavy:
+		return "heavy"
+	case NoteAccentTenuto:
+		return "tenuto"
+	}
 	if effect.HeavyAccentuatedNote {
 		return "heavy"
 	}
@@ -1225,8 +1386,14 @@ func goAccent(effect NoteEffect) string {
 	return "none"
 }
 
-func goVibrato(vibrato bool) string {
-	if vibrato {
+func goVibrato(effect NoteEffect) string {
+	switch effect.VibratoStrength {
+	case NoteVibratoSlight:
+		return "slight"
+	case NoteVibratoWide:
+		return "wide"
+	}
+	if effect.Vibrato {
 		return "slight"
 	}
 	return "none"
@@ -1244,6 +1411,8 @@ func goHarmonicKind(kind HarmonicType) string {
 		return "pinch"
 	case HarmonicTypeSemi:
 		return "semi"
+	case HarmonicTypeFeedback:
+		return "feedback"
 	case 0:
 		return "none"
 	default:
@@ -1280,6 +1449,10 @@ func goSlide(slide SlideType) string {
 		return "out-down"
 	case SlideOutUpwards:
 		return "out-up"
+	case SlidePickSlideDown:
+		return "pick-slide-down"
+	case SlidePickSlideUp:
+		return "pick-slide-up"
 	case SlideNone:
 		return "none"
 	default:

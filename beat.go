@@ -53,14 +53,16 @@ type Beat struct {
 	Text       string
 	Notes      []Note
 	Duration   Duration
-	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. GP3-5
-	// stores the value on notes, but the last explicit value applies to the
-	// whole beat during playback.
-	Dynamics int16
-	Display  BeatDisplay
-	Octave   Octave
-	Status   BeatStatus
-	isGrace  bool
+	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
+	// absent and lets export use the first note velocity. A nonzero value must be
+	// within 1..127. GP3-5 stores the value on notes, but the last explicit value
+	// applies to the whole beat during playback.
+	Dynamics    int16
+	Display     BeatDisplay
+	Octave      Octave
+	Status      BeatStatus
+	isGrace     bool
+	graceOnBeat bool
 }
 
 func defaultBeat() Beat {
@@ -239,8 +241,7 @@ func (s *Song) readBeatEffectsV3(c *cursor, noteEffect *NoteEffect) (BeatEffects
 	if err != nil {
 		return be, *noteEffect, err
 	}
-	noteEffect.Vibrato = (flags&0x01) == 0x01 || noteEffect.Vibrato
-	be.Vibrato = (flags & 0x02) == 0x02
+	be.Vibrato = flags&0x03 != 0
 	be.FadeIn = (flags & 0x10) == 0x10
 	if (flags & 0x20) == 0x20 {
 		slapByte, err := c.readByte()

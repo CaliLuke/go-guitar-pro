@@ -4,6 +4,7 @@ package goguitarpro
 
 import (
 	"errors"
+	"os"
 	"slices"
 	"testing"
 )
@@ -31,9 +32,9 @@ func runSemanticMatrixM10BeatSemantics(run *semanticMatrixRun) {
 	}
 	for index := range beats {
 		got := song.Tracks[0].Measures[0].Voices[0].Beats[index]
-		run.Field("Beat.Status", got.Status, beats[index].Status)
-		run.Field("Beat.Dynamics", got.Dynamics, beats[index].Dynamics)
-		run.Field("Beat.Text", got.Text, beats[index].Text)
+		run.Normalized("Beat.Status", got.Status, beats[index].Status)
+		run.Normalized("Beat.Dynamics", got.Dynamics, beats[index].Dynamics)
+		run.Preserved("Beat.Text", got.Text, beats[index].Text)
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.normalize.note-velocity", "gp8.normalize.empty-beat"} {
@@ -51,6 +52,9 @@ func runSemanticMatrixM10BeatSemantics(run *semanticMatrixRun) {
 	}
 	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats
 	run.Field("Beat.Status", []BeatStatus{got[0].Status, got[1].Status, got[2].Status}, []BeatStatus{BeatStatusNormal, BeatStatusRest, BeatStatusRest})
+	run.Enum("BeatStatus.BeatStatusNormal", got[0].Status, BeatStatusNormal)
+	run.Enum("BeatStatus.BeatStatusRest", got[1].Status, BeatStatusRest)
+	run.Enum("BeatStatus.BeatStatusEmpty", got[2].Status, BeatStatusRest)
 	run.Field("Beat.Dynamics", []int16{got[0].Dynamics, got[1].Dynamics, got[2].Dynamics}, []int16{MinVelocity + VelocityIncrement*7, MinVelocity, DefaultVelocity})
 	run.Field("Beat.Text", []string{got[0].Text, got[1].Text, got[2].Text}, []string{"normal <&>", "rest text", "empty metadata"})
 	values := extractGPIFLeafText(t, data)
@@ -64,32 +68,67 @@ func TestSemanticMatrixM10BeatEffects(t *testing.T) {
 
 func runSemanticMatrixM10BeatEffects(run *semanticMatrixRun) {
 	t := run.t
-	for _, hairpin := range []Hairpin{HairpinNone, HairpinCrescendo, HairpinDiminuendo} {
-		for _, stroke := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
+	for hairpinIndex, hairpin := range []Hairpin{HairpinNone, HairpinCrescendo, HairpinDiminuendo} {
+		wireHairpin := []string{"", "Crescendo", "Diminuendo"}[hairpinIndex]
+		run.Enum([]string{"Hairpin.HairpinNone", "Hairpin.HairpinCrescendo", "Hairpin.HairpinDiminuendo"}[hairpinIndex], gpifHairpin(wireHairpin), hairpin)
+		for strokeIndex, stroke := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
+			wireStroke := []string{"", "Up", "Down"}[strokeIndex]
+			parsedStroke := Beat{}
+			gpifApplyBeatEffects(&gpifBeat{Arpeggio: wireStroke}, &parsedStroke)
+			run.Enum([]string{"BeatStrokeDirection.BeatStrokeDirectionNone", "BeatStrokeDirection.BeatStrokeDirectionUp", "BeatStrokeDirection.BeatStrokeDirectionDown"}[strokeIndex], parsedStroke.Effect.Stroke.Direction, stroke)
 			beat := defaultBeat()
 			beat.Effect.Hairpin = hairpin
 			beat.Effect.Stroke = BeatStroke{Direction: stroke, Value: uint16(DurationEighth)}
-			run.Field("Beat.Effect", beat.Effect, BeatEffects{Hairpin: hairpin, Stroke: BeatStroke{Direction: stroke, Value: uint16(DurationEighth)}})
-			run.Field("BeatEffects.Hairpin", beat.Effect.Hairpin, hairpin)
-			run.Field("BeatEffects.Stroke", beat.Effect.Stroke, BeatStroke{Direction: stroke, Value: uint16(DurationEighth)})
-			run.Field("BeatStroke.Direction", beat.Effect.Stroke.Direction, stroke)
-			run.Field("BeatStroke.Value", beat.Effect.Stroke.Value, uint16(DurationEighth))
+			run.Preserved("Beat.Effect", beat.Effect, BeatEffects{Hairpin: hairpin, Stroke: BeatStroke{Direction: stroke, Value: uint16(DurationEighth)}})
+			run.Preserved("BeatEffects.Hairpin", beat.Effect.Hairpin, hairpin)
+			run.Normalized("BeatEffects.Stroke", beat.Effect.Stroke, BeatStroke{Direction: stroke, Value: uint16(DurationEighth)})
+			run.Preserved("BeatStroke.Direction", beat.Effect.Stroke.Direction, stroke)
+			run.Preserved("BeatStroke.Value", beat.Effect.Stroke.Value, uint16(DurationEighth))
 		}
 	}
-	for _, value := range []SlapEffect{SlapEffectNone, SlapEffectTapping, SlapEffectSlapping, SlapEffectPopping} {
-		run.Field("BeatEffects.SlapEffect", BeatEffects{SlapEffect: value}.SlapEffect, value)
+	for index, value := range []SlapEffect{SlapEffectNone, SlapEffectTapping, SlapEffectSlapping, SlapEffectPopping} {
+		probe := semanticValidPitchedGP8Song(t)
+		probe.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.SlapEffect = value
+		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
+		run.Enum([]string{"SlapEffect.SlapEffectNone", "SlapEffect.SlapEffectTapping", "SlapEffect.SlapEffectSlapping", "SlapEffect.SlapEffectPopping"}[index], hasExportCode(probeReport, "gp8.omit.slap-effect"), value != SlapEffectNone)
+		run.Omitted("BeatEffects.SlapEffect", BeatEffects{SlapEffect: value}.SlapEffect, value)
 	}
 	for _, value := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
-		run.Field("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
+		run.Omitted("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
 	}
 	for _, source := range []struct {
+		name  string
 		value string
 		want  Octave
-	}{{"8va", OctaveOttava}, {"8vb", OctaveOttavaBassa}, {"15ma", OctaveQuindicesima}, {"15mb", OctaveQuindicesimaBassa}} {
+	}{
+		{"OctaveNone", "", OctaveNone},
+		{"OctaveOttava", "8va", OctaveOttava},
+		{"OctaveOttavaBassa", "8vb", OctaveOttavaBassa},
+		{"OctaveQuindicesima", "15ma", OctaveQuindicesima},
+		{"OctaveQuindicesimaBassa", "15mb", OctaveQuindicesimaBassa},
+	} {
 		beat := Beat{}
 		gpifApplyBeatEffects(&gpifBeat{Ottavia: source.value}, &beat)
-		run.Field("Beat.Octave", beat.Octave, source.want)
+		run.Preserved("Beat.Octave", beat.Octave, source.want)
 		run.Dispatch("gpifApplyBeatEffects:b.Ottavia", beat.Octave, source.want)
+
+		song := semanticExportProbeSong(t)
+		song.Tracks[0].Measures[0].Voices[0].Beats[0].Octave = source.want
+		data, err := Export(song, ExportFormatGP8)
+		if err != nil {
+			t.Fatal(err)
+		}
+		wire := extractGPIFLeafText(t, data)["GPIF/Beats/Beat/Ottavia"]
+		run.Wire("gpifBeat.Ottavia", wire, source.value)
+		roundTrip, err := Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Octave
+		run.Enum("Octave."+source.name, got, source.want)
+		if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+			run.Enum("Octave."+source.name, m10AlphaTabFirstOctave(t, data), goOctave(source.want))
+		}
 	}
 	for _, source := range []struct {
 		value string
@@ -134,11 +173,11 @@ func runSemanticMatrixM10BeatEffects(run *semanticMatrixRun) {
 	beat.Effect.SlapEffect = SlapEffectPopping
 	beat.Effect.Vibrato = true
 	beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionDown, Value: uint16(DurationSixteenth)}
-	run.Field("BeatEffects.FadeIn", beat.Effect.FadeIn, true)
-	run.Field("BeatEffects.HasRasgueado", beat.Effect.HasRasgueado, true)
+	run.Preserved("BeatEffects.FadeIn", beat.Effect.FadeIn, true)
+	run.Omitted("BeatEffects.HasRasgueado", beat.Effect.HasRasgueado, true)
 	run.Field("BeatEffects.PickStroke", beat.Effect.PickStroke, BeatStrokeDirectionUp)
 	run.Field("BeatEffects.SlapEffect", beat.Effect.SlapEffect, SlapEffectPopping)
-	run.Field("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
+	run.Omitted("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.omit.beat-vibrato", "gp8.normalize.stroke-duration"} {
 		if !hasExportCode(report, code) {
@@ -167,4 +206,15 @@ func runSemanticMatrixM10BeatEffects(run *semanticMatrixRun) {
 	run.Wire("gpifBeat.Fadding", values["GPIF/Beats/Beat/Fadding"], "FadeIn")
 	run.Wire("gpifBeat.Hairpin", values["GPIF/Beats/Beat/Hairpin"], "Crescendo")
 	run.Wire("gpifBeat.Arpeggio", values["GPIF/Beats/Beat/Arpeggio"], "Down")
+}
+
+func m10AlphaTabFirstOctave(t *testing.T, data []byte) string {
+	t.Helper()
+	root := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	tracks := root["tracks"].([]any)
+	staves := tracks[0].(map[string]any)["staves"].([]any)
+	bars := staves[0].(map[string]any)["bars"].([]any)
+	voices := bars[0].(map[string]any)["voices"].([]any)
+	beats := voices[0].(map[string]any)["beats"].([]any)
+	return beats[0].(map[string]any)["octave"].(string)
 }

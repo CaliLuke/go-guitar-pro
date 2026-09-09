@@ -24,6 +24,13 @@ if (ledger.schemaVersion !== 4) {
   fail(`unsupported feature-ledger schema ${ledger.schemaVersion}; want 4`);
 }
 
+const obligationFields = ['id', 'family', 'evidenceRole', 'evidenceSources', 'test', 'formats', 'stages', 'values', 'oracle', 'limitations'];
+const obligationPayload = ledger.semanticMatrix.cases.map(item => Object.fromEntries(obligationFields.map(field => [field, item[field]])));
+const obligationDigest = crypto.createHash('sha256').update(JSON.stringify(obligationPayload)).digest('hex');
+if (obligationDigest !== ledger.semanticMatrix.obligationDigest) {
+  fail(`semantic matrix obligation digest changed: got ${obligationDigest}, want ${ledger.semanticMatrix.obligationDigest}`);
+}
+
 execFileSync('node', ['conformance/oracle-contract.mjs'], { cwd: root, stdio: 'inherit' });
 
 if (oracle.version !== lock.packages['node_modules/@coderline/alphatab'].version) {
@@ -211,20 +218,6 @@ for (const [feature, evidence] of behavioralFeatures) {
     fail(`${feature} lacks public-API or independent-consumer behavioral evidence`);
   }
 }
-const evidencedFields = new Set();
-for (const evidence of ledger.semanticContracts.fieldEvidence) {
-  if (!classifiedModelFields.has(evidence.field)) fail(`${evidence.field} has evidence but is not an inventoried model field`);
-  if (evidencedFields.has(evidence.field)) fail(`${evidence.field} has more than one field evidence record`);
-  if (evidence.disposition !== modelFieldDisposition.get(evidence.field)) {
-    fail(`${evidence.field} evidence proves ${evidence.disposition}, but the field partition claims ${modelFieldDisposition.get(evidence.field)}`);
-  }
-  if (!behaviorContracts.has(evidence.behavior)) fail(`${evidence.field} references missing behavior contract ${evidence.behavior}`);
-  if (!evidence.assertion) fail(`${evidence.field} has no field-level assertion`);
-  evidencedFields.add(evidence.field);
-}
-for (const field of ['Track.Offset', 'Note.DurationPercent', 'Chord.Barres', 'BendEffect.Points']) {
-  if (!evidencedFields.has(field)) fail(`${field} lacks inspected field-level behavioral evidence`);
-}
 for (const contract of ledger.semanticContracts.sourceDispatches) {
   if (!behaviorContracts.has(contract.evidence)) {
     fail(`${contract.function}:${contract.selector} references missing behavior contract ${contract.evidence}`);
@@ -247,6 +240,43 @@ for (const contract of ledger.semanticContracts.sourceDispatches) {
       }
     }
   }
+}
+
+const allowedMatrixRoles = new Set(['behavior', 'structural']);
+const allowedMatrixFormats = new Set(['GP3', 'GP4', 'GP5', 'GP6', 'GP7', 'GP8', 'programmatic']);
+const allowedMatrixStages = new Set(['import', 'programmatic', 'finalization', 'validation', 'preflight', 'export', 'policy', 'oracle', 'read-only']);
+const allowedMatrixSources = new Set(['public-api', 'independent-wire', 'independent-consumer', 'diagnostic-policy', 'schema-round-trip']);
+const matrixCases = new Map();
+for (const contract of ledger.semanticMatrix.cases) {
+  if (!contract.id || matrixCases.has(contract.id)) fail(`duplicate or empty semantic matrix case ${contract.id}`);
+  if (!allowedMatrixRoles.has(contract.evidenceRole)) fail(`${contract.id} has invalid evidence role ${contract.evidenceRole}`);
+  for (const [name, values] of [['formats', contract.formats], ['stages', contract.stages], ['values', contract.values], ['evidenceSources', contract.evidenceSources]]) {
+    if (!Array.isArray(values) || values.length === 0) fail(`${contract.id}.${name} is empty`);
+  }
+  if (!contract.test || !contract.oracle || !Array.isArray(contract.limitations)) fail(`${contract.id} has incomplete executable evidence`);
+  for (const format of contract.formats) if (!allowedMatrixFormats.has(format)) fail(`${contract.id} has unknown format ${format}`);
+  for (const stage of contract.stages) if (!allowedMatrixStages.has(stage)) fail(`${contract.id} has unknown stage ${stage}`);
+  for (const source of contract.evidenceSources) if (!allowedMatrixSources.has(source)) fail(`${contract.id} has unknown evidence source ${source}`);
+  if (contract.evidenceRole === 'structural' && !contract.evidenceSources.includes('schema-round-trip')) {
+    fail(`${contract.id} structural evidence has no schema round trip`);
+  }
+  if (contract.evidenceRole === 'behavior' && contract.evidenceSources.length === 1 && contract.evidenceSources[0] === 'schema-round-trip') {
+    fail(`${contract.id} behavior relies only on structural schema evidence`);
+  }
+  if (contract.stages.includes('policy') && !contract.evidenceSources.includes('diagnostic-policy')) {
+    fail(`${contract.id} policy stage has no diagnostic-policy source`);
+  }
+  matrixCases.set(contract.id, contract);
+}
+for (const assignments of [ledger.semanticMatrix.fieldCases, ledger.semanticMatrix.wireFieldCases, ledger.semanticMatrix.dispatchCases, ledger.semanticMatrix.enumCases]) {
+  for (const [construct, caseIDs] of Object.entries(assignments)) {
+    if (!Array.isArray(caseIDs) || caseIDs.length === 0) fail(`${construct} has no semantic matrix case`);
+    for (const caseID of caseIDs) if (!matrixCases.has(caseID)) fail(`${construct} references unknown semantic matrix case ${caseID}`);
+  }
+}
+for (const [field, reason] of Object.entries(ledger.semanticMatrix.structuralWireFields)) {
+  if (!reason.trim()) fail(`${field} has no structural wire reason`);
+  if (!(field in ledger.semanticMatrix.wireFieldCases)) fail(`${field} has no structural schema case`);
 }
 
 const allCases = [...cases.inputCases, ...cases.exportCases];
@@ -378,9 +408,6 @@ function supportDocument() {
   const fieldDispositionRows = Object.entries(ledger.semanticContracts.fieldDispositions).map(([disposition, fields]) =>
     `| \`${disposition}\` | ${fields.length} |`
   );
-  const fieldEvidenceRows = ledger.semanticContracts.fieldEvidence.map(evidence =>
-    `| \`${evidence.field}\` | \`${evidence.disposition}\` | \`${evidence.behavior}\` | ${evidence.assertion} |`
-  );
   const wireFieldRows = Object.entries(ledger.semanticContracts.wireFieldDispositions).map(([disposition, fields]) =>
     `| \`${disposition}\` | ${fields.length} |`
   );
@@ -390,6 +417,8 @@ function supportDocument() {
   const behaviorRows = ledger.semanticContracts.behaviorContracts.map(contract =>
     `| \`${contract.id}\` | \`${contract.feature}\` | \`${contract.test}\` | ${contract.independentTest ? `\`${contract.independentTest}\`` : 'none'} | ${contract.mutationSensitive ? 'yes' : 'no'} | ${contract.reason} |`
   );
+  const matrixBehaviorCount = ledger.semanticMatrix.cases.filter(item => item.evidenceRole === 'behavior').length;
+  const matrixStructuralCount = ledger.semanticMatrix.cases.filter(item => item.evidenceRole === 'structural').length;
   return `# Guitar Pro semantic support\n\n` +
     `Generated from [\`conformance/feature-ledger.json\`](../conformance/feature-ledger.json). Do not edit these tables by hand.\n\n` +
     `AlphaTab oracle: \`${oracle.package}@${oracle.version}\`, source \`${oracle.sourceRevision}\`.\n\n` +
@@ -402,8 +431,8 @@ function supportDocument() {
     `| Type | Feature | Field roles | Reason |\n| --- | --- | --- | --- |\n${modelRows.join('\n')}\n\n` +
     `Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.\n\n` +
     `| Target disposition | Fields |\n| --- | --- |\n${fieldDispositionRows.join('\n')}\n\n` +
-    `The following inspected fields have focused behavioral evidence. The assertion states the tested non-default value or limit.\n\n` +
-    `| Field | Disposition | Behavior contract | Assertion |\n| --- | --- | --- | --- |\n${fieldEvidenceRows.join('\n')}\n\n` +
+    `Each public field has disposition-bearing runtime evidence in the semantic matrix.\n\n` +
+    `## Semantic matrix obligations\n\nThe matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has ${matrixBehaviorCount} behavior cases, ${matrixStructuralCount} structural cases, ${Object.keys(ledger.semanticMatrix.structuralWireFields).length} justified structural wire wrappers, and ${Object.keys(ledger.semanticMatrix.enumCases).length} discovered public enum members.\n\n` +
     `## GPIF wire inventory\n\nThe schema inventory records every decoded GPIF field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.\n\n` +
     `| Wire role | Fields |\n| --- | --- |\n${wireFieldRows.join('\n')}\n\n` +
     `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +

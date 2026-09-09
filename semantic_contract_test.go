@@ -4,6 +4,7 @@ package goguitarpro
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"go/ast"
@@ -12,6 +13,7 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"sort"
 	"strconv"
@@ -30,12 +32,15 @@ type semanticContractLedger struct {
 		WireFieldDispositions map[string][]string         `json:"wireFieldDispositions"`
 	} `json:"semanticContracts"`
 	SemanticMatrix struct {
-		Complete       bool                         `json:"complete"`
-		Families       []semanticMatrixFamily       `json:"families"`
-		Cases          []semanticMatrixCaseContract `json:"cases"`
-		FieldCases     map[string][]string          `json:"fieldCases"`
-		WireFieldCases map[string][]string          `json:"wireFieldCases"`
-		DispatchCases  map[string][]string          `json:"dispatchCases"`
+		Complete             bool                         `json:"complete"`
+		ObligationDigest     string                       `json:"obligationDigest"`
+		Families             []semanticMatrixFamily       `json:"families"`
+		Cases                []semanticMatrixCaseContract `json:"cases"`
+		FieldCases           map[string][]string          `json:"fieldCases"`
+		WireFieldCases       map[string][]string          `json:"wireFieldCases"`
+		DispatchCases        map[string][]string          `json:"dispatchCases"`
+		EnumCases            map[string][]string          `json:"enumCases"`
+		StructuralWireFields map[string]string            `json:"structuralWireFields"`
 	} `json:"semanticMatrix"`
 }
 
@@ -46,14 +51,16 @@ type semanticMatrixFamily struct {
 }
 
 type semanticMatrixCaseContract struct {
-	ID          string   `json:"id"`
-	Family      string   `json:"family"`
-	Test        string   `json:"test"`
-	Formats     []string `json:"formats"`
-	Stages      []string `json:"stages"`
-	Values      []string `json:"values"`
-	Oracle      string   `json:"oracle"`
-	Limitations []string `json:"limitations"`
+	ID              string   `json:"id"`
+	Family          string   `json:"family"`
+	EvidenceRole    string   `json:"evidenceRole"`
+	EvidenceSources []string `json:"evidenceSources"`
+	Test            string   `json:"test"`
+	Formats         []string `json:"formats"`
+	Stages          []string `json:"stages"`
+	Values          []string `json:"values"`
+	Oracle          string   `json:"oracle"`
+	Limitations     []string `json:"limitations"`
 }
 
 type semanticModelTypeContract struct {
@@ -77,9 +84,11 @@ type semanticDispatchContract struct {
 }
 
 type semanticGoInventory struct {
-	modelTypes map[string][]string
-	dispatches map[string][]string
-	wireFields []string
+	modelTypes               map[string][]string
+	dispatches               map[string][]string
+	enumMembers              []string
+	wireFields               []string
+	structuralWireCandidates []string
 }
 
 func TestSemanticContractInventory(t *testing.T) {
@@ -205,6 +214,12 @@ func TestSemanticMatrixInventory(t *testing.T) {
 	assertExactSemanticSet(t, "semantic matrix families", wantFamilies, gotFamilies)
 
 	cases := make(map[string]semanticMatrixCaseContract, len(ledger.SemanticMatrix.Cases))
+	allowedFormats := []string{"GP3", "GP4", "GP5", "GP6", "GP7", "GP8", "programmatic"}
+	allowedStages := []string{"import", "programmatic", "finalization", "validation", "preflight", "export", "policy", "oracle", "read-only"}
+	allowedEvidenceSources := []string{"public-api", "independent-wire", "independent-consumer", "diagnostic-policy", "schema-round-trip"}
+	if got := semanticMatrixObligationDigest(ledger.SemanticMatrix.Cases); got != ledger.SemanticMatrix.ObligationDigest {
+		t.Errorf("semantic matrix obligation digest changed: got %s, want %s; review every stage, format, value shape, evidence source, oracle, and limitation before updating the digest", got, ledger.SemanticMatrix.ObligationDigest)
+	}
 	for _, contract := range ledger.SemanticMatrix.Cases {
 		if _, duplicate := cases[contract.ID]; duplicate {
 			t.Errorf("duplicate semantic matrix case %s", contract.ID)
@@ -215,6 +230,36 @@ func TestSemanticMatrixInventory(t *testing.T) {
 		}
 		if contract.Test == "" || len(contract.Formats) == 0 || len(contract.Stages) == 0 || len(contract.Values) == 0 || contract.Oracle == "" {
 			t.Errorf("semantic matrix case %s has incomplete executable evidence", contract.ID)
+		}
+		if contract.EvidenceRole != "behavior" && contract.EvidenceRole != "structural" {
+			t.Errorf("semantic matrix case %s has invalid evidence role %q", contract.ID, contract.EvidenceRole)
+		}
+		if len(contract.EvidenceSources) == 0 {
+			t.Errorf("semantic matrix case %s has no typed evidence source", contract.ID)
+		}
+		if contract.EvidenceRole == "structural" && !slices.Contains(contract.EvidenceSources, "schema-round-trip") {
+			t.Errorf("structural semantic matrix case %s has no schema-round-trip source", contract.ID)
+		}
+		if contract.EvidenceRole == "behavior" && slices.Equal(contract.EvidenceSources, []string{"schema-round-trip"}) {
+			t.Errorf("behavior semantic matrix case %s relies only on structural schema evidence", contract.ID)
+		}
+		for _, format := range contract.Formats {
+			if !slices.Contains(allowedFormats, format) {
+				t.Errorf("semantic matrix case %s has unknown format %q", contract.ID, format)
+			}
+		}
+		for _, stage := range contract.Stages {
+			if !slices.Contains(allowedStages, stage) {
+				t.Errorf("semantic matrix case %s has unknown stage %q", contract.ID, stage)
+			}
+		}
+		for _, source := range contract.EvidenceSources {
+			if !slices.Contains(allowedEvidenceSources, source) {
+				t.Errorf("semantic matrix case %s has unknown evidence source %q", contract.ID, source)
+			}
+		}
+		if slices.Contains(contract.Stages, "policy") && !slices.Contains(contract.EvidenceSources, "diagnostic-policy") {
+			t.Errorf("semantic matrix case %s has a policy stage without diagnostic-policy evidence", contract.ID)
 		}
 	}
 
@@ -231,13 +276,59 @@ func TestSemanticMatrixInventory(t *testing.T) {
 		dispatches = append(dispatches, key)
 	}
 	missingDispatches := assertSemanticCaseAssignments(t, "semantic matrix source dispatches", dispatches, ledger.SemanticMatrix.DispatchCases, cases)
+	missingEnumMembers := assertSemanticCaseAssignments(t, "semantic matrix enum members", inventory.enumMembers, ledger.SemanticMatrix.EnumCases, cases)
+	missingFieldBehavior := missingSemanticBehaviorAssignments(modelFields, ledger.SemanticMatrix.FieldCases, cases, nil)
+	missingWireBehavior := missingSemanticBehaviorAssignments(inventory.wireFields, ledger.SemanticMatrix.WireFieldCases, cases, ledger.SemanticMatrix.StructuralWireFields)
+	missingDispatchBehavior := missingSemanticBehaviorAssignments(dispatches, ledger.SemanticMatrix.DispatchCases, cases, nil)
+	missingEnumBehavior := missingSemanticBehaviorAssignments(inventory.enumMembers, ledger.SemanticMatrix.EnumCases, cases, nil)
+	for field, reason := range ledger.SemanticMatrix.StructuralWireFields {
+		if !slices.Contains(inventory.wireFields, field) {
+			t.Errorf("structural GPIF wire field %s is not discovered", field)
+		}
+		if strings.TrimSpace(reason) == "" {
+			t.Errorf("structural GPIF wire field %s has no reason", field)
+		}
+		if !slices.Contains(inventory.structuralWireCandidates, field) {
+			t.Errorf("structural GPIF wire field %s is a scalar semantic leaf", field)
+		}
+	}
 	assertSemanticMatrixEvidence(t, ledger, cases)
-	if ledger.SemanticMatrix.Complete && (len(missingFields) != 0 || len(missingWireFields) != 0 || len(missingDispatches) != 0) {
-		t.Errorf("complete semantic matrix has %d public fields, %d GPIF wire fields, and %d source dispatches without cases", len(missingFields), len(missingWireFields), len(missingDispatches))
+	if ledger.SemanticMatrix.Complete && (len(missingFields) != 0 || len(missingWireFields) != 0 || len(missingDispatches) != 0 || len(missingEnumMembers) != 0 || len(missingFieldBehavior) != 0 || len(missingWireBehavior) != 0 || len(missingDispatchBehavior) != 0 || len(missingEnumBehavior) != 0) {
+		t.Errorf("complete semantic matrix has %d public fields, %d GPIF wire fields, %d source dispatches, and %d enum members without cases", len(missingFields), len(missingWireFields), len(missingDispatches), len(missingEnumMembers))
+		t.Logf("missing behavioral obligations: %d public fields, %d GPIF wire fields, %d source dispatches, %d enum members", len(missingFieldBehavior), len(missingWireBehavior), len(missingDispatchBehavior), len(missingEnumBehavior))
+		if len(missingFields) != 0 {
+			t.Logf("missing public fields: %s", strings.Join(missingFields, ", "))
+		}
+		if len(missingWireFields) != 0 {
+			t.Logf("missing GPIF wire fields: %s", strings.Join(missingWireFields, ", "))
+		}
+		if len(missingDispatches) != 0 {
+			t.Logf("missing source dispatches: %s", strings.Join(missingDispatches, ", "))
+		}
+		if len(missingEnumMembers) != 0 {
+			t.Logf("missing enum members: %s", strings.Join(missingEnumMembers, ", "))
+		}
 	}
 	if !ledger.SemanticMatrix.Complete {
 		t.Logf("semantic matrix progress: %d/%d public fields, %d/%d GPIF wire fields, and %d/%d source dispatches assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches))
 	}
+}
+
+func missingSemanticBehaviorAssignments(discovered []string, assignments map[string][]string, cases map[string]semanticMatrixCaseContract, structural map[string]string) []string {
+	var missing []string
+	for _, construct := range discovered {
+		if _, structuralOnly := structural[construct]; structuralOnly {
+			continue
+		}
+		behavior := slices.ContainsFunc(assignments[construct], func(caseID string) bool {
+			return cases[caseID].EvidenceRole == "behavior"
+		})
+		if !behavior {
+			missing = append(missing, construct)
+		}
+	}
+	sort.Strings(missing)
+	return missing
 }
 
 func assertSemanticMatrixAssertionsIndependent(t *testing.T) {
@@ -258,7 +349,7 @@ func assertSemanticMatrixAssertionsIndependent(t *testing.T) {
 				return true
 			}
 			selector, ok := call.Fun.(*ast.SelectorExpr)
-			if !ok || !slices.Contains([]string{"Field", "Wire", "Dispatch"}, selector.Sel.Name) {
+			if !ok || !slices.Contains([]string{"Field", "Preserved", "Normalized", "Omitted", "Rejected", "Derived", "OutOfScope", "Wire", "Dispatch", "Enum"}, selector.Sel.Name) {
 				return true
 			}
 			var gotSource, wantSource bytes.Buffer
@@ -311,6 +402,12 @@ func assertSemanticCaseAssignments(
 func assertSemanticMatrixEvidence(t *testing.T, ledger semanticContractLedger, cases map[string]semanticMatrixCaseContract) {
 	t.Helper()
 	want := make(map[string][]string, len(cases))
+	wantFieldDispositions := make(map[string]string)
+	for disposition, fields := range ledger.SemanticContracts.FieldDispositions {
+		for _, field := range fields {
+			wantFieldDispositions[field] = disposition
+		}
+	}
 	for construct, caseIDs := range ledger.SemanticMatrix.FieldCases {
 		for _, caseID := range caseIDs {
 			want[caseID] = append(want[caseID], "field:"+construct)
@@ -326,6 +423,12 @@ func assertSemanticMatrixEvidence(t *testing.T, ledger semanticContractLedger, c
 			want[caseID] = append(want[caseID], "dispatch:"+construct)
 		}
 	}
+	for construct, caseIDs := range ledger.SemanticMatrix.EnumCases {
+		for _, caseID := range caseIDs {
+			want[caseID] = append(want[caseID], "enum:"+construct)
+		}
+	}
+	provedFieldDispositions := make(map[string]string)
 	for caseID, contract := range cases {
 		executor, ok := semanticMatrixExecutors[contract.Test]
 		if !ok {
@@ -336,13 +439,33 @@ func assertSemanticMatrixEvidence(t *testing.T, ledger semanticContractLedger, c
 			run := newSemanticMatrixRun(t)
 			executor(run)
 			assertExactSemanticSet(t, "semantic assertions for "+caseID, run.constructs(), want[caseID])
+			for field, disposition := range run.fieldDispositions {
+				if previous, ok := provedFieldDispositions[field]; ok && previous != disposition {
+					t.Errorf("field %s has conflicting executable dispositions %s and %s", field, previous, disposition)
+				}
+				provedFieldDispositions[field] = disposition
+			}
 		})
+	}
+	for field := range ledger.SemanticMatrix.FieldCases {
+		got, ok := provedFieldDispositions[field]
+		if !ok {
+			t.Errorf("field %s lacks an executable disposition proof", field)
+			continue
+		}
+		if want := wantFieldDispositions[field]; got != want {
+			t.Errorf("field %s executable evidence proves %s, but the field partition claims %s", field, got, want)
+		}
 	}
 }
 
 func readSemanticContractLedger(t *testing.T) semanticContractLedger {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("conformance", "feature-ledger.json"))
+	path := filepath.Join("conformance", "feature-ledger.json")
+	if overlay := os.Getenv("SEMANTIC_LEDGER_OVERLAY"); overlay != "" {
+		path = overlay
+	}
+	data, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -451,6 +574,37 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		modelTypes[typeName] = fields
 	}
 
+	var enumMembers []string
+	for _, parsed := range parsedFiles {
+		for _, declaration := range parsed.Decls {
+			general, ok := declaration.(*ast.GenDecl)
+			if !ok || general.Tok != token.CONST {
+				continue
+			}
+			lastType := ""
+			for _, specification := range general.Specs {
+				value := specification.(*ast.ValueSpec)
+				if identifier, ok := value.Type.(*ast.Ident); ok {
+					lastType = identifier.Name
+				} else if len(value.Values) != 0 {
+					lastType = ""
+				}
+				if _, reachable := seen[lastType]; !reachable {
+					continue
+				}
+				if expression, ok := typeExpressions[lastType]; !ok || !isSemanticEnumUnderlyingType(expression) {
+					continue
+				}
+				for _, name := range value.Names {
+					if name.IsExported() {
+						enumMembers = append(enumMembers, lastType+"."+name.Name)
+					}
+				}
+			}
+		}
+	}
+	sort.Strings(enumMembers)
+
 	dispatchSets := make(map[string]map[string]struct{})
 	for _, parsed := range parsedFiles {
 		for _, declaration := range parsed.Decls {
@@ -461,7 +615,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 			ast.Inspect(function.Body, func(node ast.Node) bool {
 				switch statement := node.(type) {
 				case *ast.SwitchStmt:
-					selector := semanticSelectorName(statement.Tag)
+					selector := semanticSwitchSelector(function.Name.Name, statement.Tag)
 					if selector == "" {
 						return true
 					}
@@ -493,7 +647,52 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		}
 		sort.Strings(dispatches[key])
 	}
-	return semanticGoInventory{modelTypes: modelTypes, dispatches: dispatches, wireFields: wireFields}
+	return semanticGoInventory{
+		modelTypes: modelTypes, dispatches: dispatches, enumMembers: enumMembers, wireFields: wireFields,
+		structuralWireCandidates: discoverStructuralWireCandidates(),
+	}
+}
+
+func discoverStructuralWireCandidates() []string {
+	seen := make(map[reflect.Type]bool)
+	var candidates []string
+	var walk func(reflect.Type)
+	walk = func(valueType reflect.Type) {
+		for valueType.Kind() == reflect.Pointer || valueType.Kind() == reflect.Slice {
+			valueType = valueType.Elem()
+		}
+		if valueType.Kind() != reflect.Struct || seen[valueType] {
+			return
+		}
+		seen[valueType] = true
+		for index := range valueType.NumField() {
+			field := valueType.Field(index)
+			fieldType := field.Type
+			for fieldType.Kind() == reflect.Pointer {
+				fieldType = fieldType.Elem()
+			}
+			if fieldType.Kind() == reflect.Struct || fieldType.Kind() == reflect.Slice {
+				candidates = append(candidates, valueType.Name()+"."+field.Name)
+			}
+			walk(field.Type)
+		}
+	}
+	walk(reflect.TypeOf(gpifDocument{}))
+	sort.Strings(candidates)
+	return candidates
+}
+
+func isSemanticEnumUnderlyingType(expression ast.Expr) bool {
+	identifier, ok := expression.(*ast.Ident)
+	if !ok {
+		return false
+	}
+	switch identifier.Name {
+	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "string":
+		return true
+	default:
+		return false
+	}
 }
 
 func semanticSelectorName(expression ast.Expr) string {
@@ -509,6 +708,20 @@ func semanticSelectorName(expression ast.Expr) string {
 		return ""
 	}
 	return prefix + "." + selector.Sel.Name
+}
+
+func semanticSwitchSelector(function string, expression ast.Expr) string {
+	if selector := semanticSelectorName(expression); selector != "" {
+		return selector
+	}
+	if !strings.HasPrefix(function, "read") {
+		return ""
+	}
+	identifier, ok := expression.(*ast.Ident)
+	if !ok {
+		return ""
+	}
+	return identifier.Name
 }
 
 func semanticBinarySelectorName(expression ast.Expr) string {
@@ -539,18 +752,44 @@ func semanticExpressionName(expression ast.Expr) string {
 func addSemanticDispatchLiteral(t *testing.T, dispatches map[string]map[string]struct{}, function, selector string, expression ast.Expr) {
 	t.Helper()
 	literal, ok := expression.(*ast.BasicLit)
-	if !ok || literal.Kind != token.STRING {
+	if !ok {
 		return
 	}
-	value, err := strconv.Unquote(literal.Value)
-	if err != nil {
-		t.Fatal(err)
+	var value string
+	switch literal.Kind {
+	case token.STRING:
+		unquoted, err := strconv.Unquote(literal.Value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		value = unquoted
+	case token.INT:
+		integer, err := strconv.ParseInt(literal.Value, 0, 64)
+		if err != nil {
+			t.Fatal(err)
+		}
+		value = strconv.FormatInt(integer, 10)
+	default:
+		return
 	}
 	key := semanticDispatchKey(function, selector)
 	if dispatches[key] == nil {
 		dispatches[key] = make(map[string]struct{})
 	}
 	dispatches[key][value] = struct{}{}
+}
+
+func semanticMatrixObligationDigest(cases []semanticMatrixCaseContract) string {
+	type obligation semanticMatrixCaseContract
+	values := make([]obligation, 0, len(cases))
+	for _, contract := range cases {
+		values = append(values, obligation(contract))
+	}
+	encoded, err := json.Marshal(values)
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%x", sha256.Sum256(encoded))
 }
 
 func semanticDispatchKey(function, selector string) string {

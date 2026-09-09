@@ -40,18 +40,18 @@ func runSemanticMatrixM18LyricScopes(run *semanticMatrixRun) {
 	rest.Text = "rest-only text"
 	song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
 
-	run.Field("Song.Lyrics", song.Lyrics, Lyrics{TrackChoice: 1, Lines: []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}}})
-	run.Field("Lyrics.TrackChoice", song.Lyrics.TrackChoice, uint8(1))
-	run.Field("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}})
+	run.Omitted("Song.Lyrics", song.Lyrics, Lyrics{TrackChoice: 1, Lines: []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}}})
+	run.Preserved("Lyrics.TrackChoice", song.Lyrics.TrackChoice, uint8(1))
+	run.Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}})
 	for index, line := range song.Lyrics.Lines {
-		run.Field("LyricLine.Number", line.Number, uint8(index))
-		run.Field("LyricLine.StartingMeasure", line.StartingMeasure, []uint16{0, 2, 4}[index])
-		run.Field("LyricLine.Text", line.Text, []string{"score-only one", "score punctuation: [a], don't!", "score 日本語"}[index])
+		run.Preserved("LyricLine.Number", line.Number, uint8(index))
+		run.Preserved("LyricLine.StartingMeasure", line.StartingMeasure, []uint16{0, 2, 4}[index])
+		run.Preserved("LyricLine.Text", line.Text, []string{"score-only one", "score punctuation: [a], don't!", "score 日本語"}[index])
 	}
-	run.Field("Track.Lyrics", song.Tracks[0].Lyrics, []TrackLyricLine{{Text: "track first", Offset: 0}, {Text: "", Offset: 2}, {Text: "track punctuation + 日本語", Offset: 4}})
+	run.Preserved("Track.Lyrics", song.Tracks[0].Lyrics, []TrackLyricLine{{Text: "track first", Offset: 0}, {Text: "", Offset: 2}, {Text: "track punctuation + 日本語", Offset: 4}})
 	for index, line := range song.Tracks[0].Lyrics {
-		run.Field("TrackLyricLine.Text", line.Text, []string{"track first", "", "track punctuation + 日本語"}[index])
-		run.Field("TrackLyricLine.Offset", line.Offset, []int{0, 2, 4}[index])
+		run.Preserved("TrackLyricLine.Text", line.Text, []string{"track first", "", "track punctuation + 日本語"}[index])
+		run.Preserved("TrackLyricLine.Offset", line.Offset, []int{0, 2, 4}[index])
 	}
 	run.Field("Beat.Text", rest.Text, "rest-only text")
 

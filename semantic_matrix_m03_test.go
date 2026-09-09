@@ -75,16 +75,16 @@ func runSemanticMatrixM03OwnershipImport(run *semanticMatrixRun) {
 	if err != nil {
 		run.t.Fatal(err)
 	}
-	run.Field("Song.Tracks", len(song.Tracks), 3)
+	run.Preserved("Song.Tracks", len(song.Tracks), 3)
 	wantNames := []string{"Grand before", "Single middle", "Grand after"}
 	wantStaffCounts := []int{2, 1, 2}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
-		run.Field("Track.Name", track.Name, wantNames[trackIndex])
-		run.Field("Track.Number", track.Number, int32(trackIndex))
-		run.Field("Track.Staves", len(track.Staves), wantStaffCounts[trackIndex])
-		run.Field("Track.Measures", len(track.Measures), 1)
-		run.Field("Track.Strings", track.Strings, track.Staves[0].Strings)
+		run.Preserved("Track.Name", track.Name, wantNames[trackIndex])
+		run.Preserved("Track.Number", track.Number, int32(trackIndex))
+		run.Preserved("Track.Staves", len(track.Staves), wantStaffCounts[trackIndex])
+		run.Normalized("Track.Measures", len(track.Measures), 1)
+		run.Normalized("Track.Strings", track.Strings, track.Staves[0].Strings)
 		if &track.Measures[0] != &track.Staves[0].Measures[0] {
 			run.t.Errorf("track %d compatibility measures do not alias staff 0", trackIndex)
 		}
@@ -93,22 +93,22 @@ func runSemanticMatrixM03OwnershipImport(run *semanticMatrixRun) {
 		}
 		for staffIndex := range track.Staves {
 			staff := &track.Staves[staffIndex]
-			run.Field("Staff.Measures", len(staff.Measures), 1)
-			run.Field("Staff.Strings", len(staff.Strings) > 0, true)
+			run.Preserved("Staff.Measures", len(staff.Measures), 1)
+			run.Preserved("Staff.Strings", len(staff.Strings) > 0, true)
 			measure := &staff.Measures[0]
-			run.Field("Measure.Number", measure.Number, 1)
-			run.Field("Measure.TrackIndex", measure.TrackIndex, trackIndex)
-			run.Field("Measure.StaffIndex", measure.StaffIndex, staffIndex)
-			run.Field("Measure.HeaderIndex", measure.HeaderIndex, 0)
-			run.Field("Measure.Voices", len(measure.Voices), []int{4, 1, 1, 1, 1}[trackIndex+staffIndex])
+			run.Preserved("Measure.Number", measure.Number, 1)
+			run.Derived("Measure.TrackIndex", measure.TrackIndex, trackIndex)
+			run.Derived("Measure.StaffIndex", measure.StaffIndex, staffIndex)
+			run.Preserved("Measure.HeaderIndex", measure.HeaderIndex, 0)
+			run.Preserved("Measure.Voices", len(measure.Voices), []int{4, 1, 1, 1, 1}[trackIndex+staffIndex])
 			for voiceIndex := range measure.Voices {
 				voice := &measure.Voices[voiceIndex]
-				run.Field("Voice.MeasureIndex", voice.MeasureIndex, int16(0))
+				run.Derived("Voice.MeasureIndex", voice.MeasureIndex, int16(0))
 				wantBeats := 1
 				if trackIndex == 0 && staffIndex == 0 && voiceIndex == 1 {
 					wantBeats = 0
 				}
-				run.Field("Voice.Beats", len(voice.Beats), wantBeats)
+				run.Preserved("Voice.Beats", len(voice.Beats), wantBeats)
 			}
 		}
 	}

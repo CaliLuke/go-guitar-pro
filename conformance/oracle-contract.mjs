@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import * as alphaTab from '@coderline/alphatab';
 import {
+  exactBeatStarts,
   enumName,
   normalizeAccent,
   normalizeAutomation,
@@ -11,6 +12,7 @@ import {
   normalizeGrace,
   normalizeHairpin,
   normalizeHarmonicKind,
+  normalizeLegacyDurationPercent,
   normalizeNoteKind,
   normalizeNotePitch,
   normalizeOttavia,
@@ -20,6 +22,17 @@ import {
   normalizeTripletFeel,
   normalizeVibrato
 } from './oracle.mjs';
+
+assert.equal(normalizeLegacyDurationPercent(1), 1);
+assert.equal(normalizeLegacyDurationPercent(0), 0);
+assert.equal(normalizeLegacyDurationPercent(2.93747e-319), 0.75);
+assert.equal(normalizeLegacyDurationPercent(2.8363e-319), 0.5);
+assert.deepEqual(exactBeatStarts([
+  { duration: 4, dots: 0, tupletNumerator: 9, tupletDenominator: 8 },
+  { duration: 4, dots: 0, tupletNumerator: 9, tupletDenominator: 8 },
+  { duration: 4, dots: 0, tupletNumerator: 9, tupletDenominator: 8 },
+  { duration: 4, dots: 0, tupletNumerator: 9, tupletDenominator: 8 }
+]), [0, 853, 1706, 2560]);
 
 const clefCases = [
   [alphaTab.model.Clef.G2, 'treble'],
@@ -86,6 +99,7 @@ assert.equal(normalizeBeatStatus({ isEmpty: true, isRest: false }), 'empty');
 assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: true }), 'rest');
 assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: false }), 'normal');
 assert.equal(normalizeBeatStatus({ isEmpty: true, isRest: true }), 'unknown:empty+rest');
+assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: false, deadSlapped: true, notes: [] }), 'rest');
 assert.equal(normalizeNoteKind({ isDead: true, isTieDestination: false }), 'dead');
 assert.equal(normalizeNoteKind({ isDead: false, isTieDestination: true }), 'tie');
 assert.equal(normalizeNoteKind({ isDead: false, isTieDestination: false }), 'normal');

@@ -11,7 +11,6 @@ import (
 	"math"
 	"reflect"
 	"slices"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -56,16 +55,17 @@ type gpifEncoding struct {
 }
 
 type gpifScore struct {
-	Title        string `xml:"Title"`
-	SubTitle     string `xml:"SubTitle"`
-	Artist       string `xml:"Artist"`
-	Album        string `xml:"Album"`
-	Words        string `xml:"Words"`
-	Music        string `xml:"Music"`
-	Copyright    string `xml:"Copyright"`
-	Tabber       string `xml:"Tabber"`
-	Instructions string `xml:"Instructions"`
-	Notices      string `xml:"Notices"`
+	Title         string `xml:"Title"`
+	SubTitle      string `xml:"SubTitle"`
+	Artist        string `xml:"Artist"`
+	Album         string `xml:"Album"`
+	Words         string `xml:"Words"`
+	Music         string `xml:"Music"`
+	WordsAndMusic string `xml:"WordsAndMusic"`
+	Copyright     string `xml:"Copyright"`
+	Tabber        string `xml:"Tabber"`
+	Instructions  string `xml:"Instructions"`
+	Notices       string `xml:"Notices"`
 }
 
 type gpifMasterTrack struct {
@@ -125,10 +125,10 @@ type gpifTrack struct {
 	Name             string              `xml:"Name"`
 	Color            string              `xml:"Color,omitempty"`
 	Instrument       *gpifInstrument     `xml:"Instrument,omitempty"`
-	InstrumentSet    *gpifInstrumentSet  `xml:"InstrumentSet,omitempty"`
-	NotationPatch    *gpifInstrumentSet  `xml:"NotationPatch,omitempty"`
 	GeneralMidi      *gpifGeneralMidi    `xml:"GeneralMidi,omitempty"`
 	Staves           gpifStaves          `xml:"Staves"`
+	InstrumentSet    *gpifInstrumentSet  `xml:"InstrumentSet,omitempty"`
+	NotationPatch    *gpifInstrumentSet  `xml:"NotationPatch,omitempty"`
 	Properties       []gpifStaffProperty `xml:"Properties>Property"`
 	Sounds           gpifSounds          `xml:"Sounds"`
 	Automations      gpifAutomations     `xml:"Automations"`
@@ -170,7 +170,10 @@ type gpifInstrument struct {
 }
 
 type gpifGeneralMidi struct {
-	PrimaryChannel int `xml:"PrimaryChannel"`
+	Program          *int `xml:"Program"`
+	Port             int  `xml:"Port"`
+	PrimaryChannel   int  `xml:"PrimaryChannel"`
+	SecondaryChannel int  `xml:"SecondaryChannel"`
 }
 
 type gpifStaves struct {
@@ -563,6 +566,14 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	song.Album = doc.Score.Album
 	song.Words = doc.Score.Words
 	song.Author = doc.Score.Music
+	if doc.Score.WordsAndMusic != "" {
+		if song.Words == "" {
+			song.Words = doc.Score.WordsAndMusic
+		}
+		if song.Author == "" {
+			song.Author = doc.Score.WordsAndMusic
+		}
+	}
 	song.Copyright = doc.Score.Copyright
 	song.Transcriber = doc.Score.Tabber
 	song.Instructions = doc.Score.Instructions
@@ -705,6 +716,13 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				}
 				ch.Channel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.PrimaryChannel)
 				ch.EffectChannel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.SecondaryChannel)
+				if t.GeneralMidi != nil {
+					ch.Channel = gpifMIDIChannel(t.GeneralMidi.Port, t.GeneralMidi.PrimaryChannel)
+					ch.EffectChannel = gpifMIDIChannel(t.GeneralMidi.Port, t.GeneralMidi.SecondaryChannel)
+					if t.GeneralMidi.Program != nil {
+						ch.Instrument = int32(*t.GeneralMidi.Program)
+					}
+				}
 				if t.RSE != nil {
 					gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
 					gpifAuditChannelStripAutomations(t.RSE.ChannelStrip.Automations.Automations, t.ID, context)
@@ -728,6 +746,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		song.Tracks = append(song.Tracks, track)
 		trackChordMaps = append(trackChordMaps, chordMap)
 	}
+	song.consolidateTrackChannels()
 
 	// Parse master bars → measure headers + measures
 	fallbackArticulations := make([]gpifPercussionFallbacks, len(song.Tracks))
@@ -801,6 +820,14 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			mh.TripletFeel = TripletFeelEighth
 		case "Triplet16th":
 			mh.TripletFeel = TripletFeelSixteenth
+		case "Dotted8th":
+			mh.TripletFeel = TripletFeelDottedEighth
+		case "Dotted16th":
+			mh.TripletFeel = TripletFeelDottedSixteenth
+		case "Scottish8th":
+			mh.TripletFeel = TripletFeelScottishEighth
+		case "Scottish16th":
+			mh.TripletFeel = TripletFeelScottishSixteenth
 		}
 
 		song.MeasureHeaders = append(song.MeasureHeaders, mh)
@@ -1212,20 +1239,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		for _, property := range note.Properties.Properties {
 			gpifAuditNoteProperty(context, note.ID, path, property, mappedMIDI)
 		}
-		if note.Vibrato != "" && note.Vibrato != "None" {
-			context.add(diagnosticSource("GPIF.Note.Vibrato", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
-				Kind: ParseDiagnosticLossyProjection, SourcePath: path + "/Vibrato", ObjectID: note.ID,
-				Location: ParseLocation{NoteID: note.ID}, Feature: "note-and-beat-semantics",
-				Reason: "Song represents typed note vibrato as a boolean",
-			})
-		}
-		if note.Accent&0x10 != 0 {
-			context.add(diagnosticSource("GPIF.Note.Accent.Tenuto", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
-				SourcePath: path + "/Accent", ObjectID: note.ID,
-				Location: ParseLocation{NoteID: note.ID}, Feature: "note-and-beat-semantics",
-				Reason: "Song has no destination for the GPIF tenuto accent bit",
-			})
-		}
+		gpifAuditEnum(context, diagnosticSource("GPIF.Note.Vibrato.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), note.Vibrato, []string{"", "None", "Slight", "Wide"}, path+"/Vibrato", note.ID, "note-and-beat-semantics")
 	}
 
 	for _, beat := range doc.Beats.Beats {
@@ -1267,7 +1281,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		gpifAuditEnum(context, diagnosticSource("GPIF.Rhythm.NoteValue.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), rhythm.NoteValue, []string{"Whole", "Half", "Quarter", "Eighth", "16th", "32nd", "64th", "128th"}, gpifObjectPath("Rhythms/Rhythm", rhythm.ID)+"/NoteValue", rhythm.ID, "rhythm")
 	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
-		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
+		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th", "Dotted8th", "Dotted16th", "Scottish8th", "Scottish16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
 	}
 	gpifAuditMasterBarCardinality(doc, context)
 
@@ -1554,7 +1568,7 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			})
 			return
 		}
-		if flags & ^0x3f != 0 {
+		if flags & ^0xff != 0 {
 			context.add(diagnosticSource("GPIF.Note.Property.Slide.UnknownFlags", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				SourcePath: propertyPath + "/Flags", ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
 				Reason: fmt.Sprintf("slide flags %d contain unknown bits", flags),
@@ -1564,12 +1578,14 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
 	case "Bended", "Harmonic", "ShowStringNumber":
 		return
-	case "Tapped", "HopoOrigin", "HopoDestination", "LeftHandTapped":
+	case "Tapped", "HopoOrigin", "LeftHandTapped":
+		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
+	case "HopoDestination":
 		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
 		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
 			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
 			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
-			Reason: "Song combines authored hammer and tapping relationships into Hammer",
+			Reason: "hammer/pull destinations are derived and have no authored destination field in Song",
 		})
 	case "HarmonicType":
 		if property.HType == nil {
@@ -1577,14 +1593,8 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			return
 		}
 		switch *property.HType {
-		case "NoHarmonic", "Natural", "Artificial", "Pinch", "Tap", "Semi":
+		case "NoHarmonic", "Natural", "Artificial", "Pinch", "Tap", "Semi", "Feedback":
 			return
-		case "Feedback":
-			context.add(diagnosticSource("GPIF.Note.Property.HarmonicType.Feedback", "harmonics", ParseDiagnosticLossyProjection), ParseDiagnostic{
-				Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
-				Location: ParseLocation{NoteID: noteID}, Feature: "harmonics",
-				Reason: "Song combines feedback and semi harmonics",
-			})
 		default:
 			context.add(diagnosticSource("GPIF.Note.Property.HarmonicType.Unsupported", "harmonics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
@@ -1980,6 +1990,7 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 	for pendingIndex, pendingBeat := range pending {
 		orphan := pendingBeat.beat
 		orphan.isGrace = true
+		orphan.graceOnBeat = pendingBeat.onBeat
 		orphan.Notes = nil
 		for noteIndex := range pendingBeat.beat.Notes {
 			graceNote := pendingBeat.beat.Notes[noteIndex]
@@ -1989,7 +2000,6 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 				target.Notes[targetIndex].Effect.Graces = append(target.Notes[targetIndex].Effect.Graces, effect)
 				continue
 			}
-			graceNote.Effect.Graces = append(graceNote.Effect.Graces, effect)
 			orphan.Notes = append(orphan.Notes, graceNote)
 		}
 		if len(orphan.Notes) > 0 || len(pendingBeat.beat.Notes) == 0 {
@@ -2871,16 +2881,17 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 			bend.middleValue = gpifBendValue(p.Float)
 		case "BendDestinationOffset":
 			bend.destinationPosition = gpifBendPosition(p.Float)
+			bend.hasDestinationPosition = true
 		case "BendDestinationValue":
 			bend.destinationValue = gpifBendValue(p.Float)
 		case "PalmMuted":
 			note.Effect.PalmMute = true
 		case "Tapped":
-			note.Effect.Hammer = true
+			note.Effect.Tapped = true
 		case "HopoOrigin":
 			note.Effect.Hammer = true
 		case "LeftHandTapped":
-			note.Effect.Hammer = true
+			note.Effect.LeftHandTapped = true
 		case "HarmonicType":
 			if p.HType != nil {
 				switch *p.HType {
@@ -2895,7 +2906,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 				case "Semi":
 					note.Effect.Harmonic = &HarmonicEffect{Kind: HarmonicTypeSemi}
 				case "Feedback":
-					note.Effect.Harmonic = &HarmonicEffect{Kind: HarmonicTypeSemi}
+					note.Effect.Harmonic = &HarmonicEffect{Kind: HarmonicTypeFeedback}
 				}
 			}
 		case "HarmonicFret":
@@ -2926,6 +2937,12 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 					}
 					if flags&0x20 != 0 {
 						note.Effect.Slides = append(note.Effect.Slides, SlideIntoFromAbove)
+					}
+					if flags&0x40 != 0 {
+						note.Effect.Slides = append(note.Effect.Slides, SlidePickSlideDown)
+					}
+					if flags&0x80 != 0 {
+						note.Effect.Slides = append(note.Effect.Slides, SlidePickSlideUp)
 					}
 				}
 			}
@@ -2964,13 +2981,23 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	}
 	if n.Accent&0x04 != 0 {
 		note.Effect.HeavyAccentuatedNote = true
+		note.Effect.Accent = NoteAccentHeavy
 	}
 	if n.Accent&0x08 != 0 {
 		note.Effect.AccentuatedNote = true
+		note.Effect.Accent = NoteAccentNormal
+	}
+	if n.Accent&0x10 != 0 {
+		note.Effect.Accent = NoteAccentTenuto
 	}
 
 	// Vibrato
-	if n.Vibrato != "" && n.Vibrato != "None" {
+	switch n.Vibrato {
+	case "Slight":
+		note.Effect.VibratoStrength = NoteVibratoSlight
+		note.Effect.Vibrato = true
+	case "Wide":
+		note.Effect.VibratoStrength = NoteVibratoWide
 		note.Effect.Vibrato = true
 	}
 
@@ -3001,30 +3028,38 @@ func gpifHarmonicFret(raw *string) (*float64, bool) {
 }
 
 type gpifBendProperties struct {
-	enabled             bool
-	originPosition      uint8
-	originValue         int8
-	middlePosition1     uint8
-	middlePosition2     uint8
-	middleValue         int8
-	destinationPosition uint8
-	destinationValue    int8
+	enabled                bool
+	originPosition         uint8
+	originValue            int8
+	middlePosition1        uint8
+	middlePosition2        uint8
+	middleValue            int8
+	destinationPosition    uint8
+	hasDestinationPosition bool
+	destinationValue       int8
 }
 
 func (bend gpifBendProperties) effect() *BendEffect {
-	points := []BendPoint{
-		{Position: bend.originPosition, Value: bend.originValue},
-		{Position: bend.middlePosition1, Value: bend.middleValue},
-		{Position: bend.middlePosition2, Value: bend.middleValue},
-		{Position: bend.destinationPosition, Value: bend.destinationValue},
+	destinationPosition := bend.destinationPosition
+	if !bend.hasDestinationPosition {
+		destinationPosition = uint8(BendEffectMaxPosition)
 	}
-	sort.SliceStable(points, func(left, right int) bool {
-		return points[left].Position < points[right].Position
-	})
-	if bend.destinationPosition < uint8(BendEffectMaxPosition) {
-		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition), Value: bend.destinationValue})
+	points := []BendPoint{{Position: bend.originPosition, Value: bend.originValue}}
+	if bend.middleValue != 0 {
+		switch {
+		case bend.middlePosition1 == 0 && bend.middlePosition2 == 0:
+			points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition) / 2, Value: bend.middleValue})
+		default:
+			if bend.middlePosition1 != 0 {
+				points = append(points, BendPoint{Position: bend.middlePosition1, Value: bend.middleValue})
+			}
+			if bend.middlePosition2 != 0 {
+				points = append(points, BendPoint{Position: bend.middlePosition2, Value: bend.middleValue})
+			}
+		}
 	}
-	points = simplifyBendPoints(points)
+	points = append(points, BendPoint{Position: destinationPosition, Value: bend.destinationValue})
+	points = canonicalizeStandardBendPoints(points)
 	maximum := int8(0)
 	for _, point := range points {
 		if point.Value > maximum {

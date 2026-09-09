@@ -326,17 +326,17 @@ func TestStrictParseAcceptsPitchedGP8Export(t *testing.T) {
 	}
 }
 
-func TestStrictParseReportsUnmappedTenutoAccent(t *testing.T) {
+func TestStrictParsePreservesTenutoAccent(t *testing.T) {
 	data := diagnosticGP8Fixture(t, func(gpif string) string {
-		return insertFirstGPIFObjectChild(t, gpif, "<Notes>", "</Note>", "<Accent>16</Accent>")
+		return strings.Replace(gpif, "<Accent>8</Accent>", "<Accent>16</Accent>", 1)
 	})
 	result, err := ParseWithOptions(data, ParseOptions{Strict: true})
-	var strictErr *StrictParseError
-	if !errors.As(err, &strictErr) {
-		t.Fatalf("error = %v, want StrictParseError", err)
+	if err != nil {
+		t.Fatalf("strict parse rejected tenuto: %v", err)
 	}
-	if result == nil || findParseDiagnostic(result.Diagnostics, ParseDiagnosticUnsupportedFeature, "note-and-beat-semantics") == nil {
-		t.Fatalf("diagnostics = %#v, want unsupported tenuto accent", result)
+	note := result.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	if note.Effect.Accent != NoteAccentTenuto {
+		t.Fatalf("accent = %d, want tenuto", note.Effect.Accent)
 	}
 }
 

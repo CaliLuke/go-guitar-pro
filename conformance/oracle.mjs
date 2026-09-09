@@ -15,6 +15,63 @@ function finite(value) {
   return Number.isFinite(value) ? value : null;
 }
 
+export function normalizeLegacyDurationPercent(value) {
+  if (!Number.isFinite(value) || value === 0 || Math.abs(value) >= 2.2250738585072014e-308) {
+    return finite(value);
+  }
+  const bytes = new ArrayBuffer(8);
+  const view = new DataView(bytes);
+  view.setFloat64(0, value, false);
+  return view.getFloat64(0, true);
+}
+
+function greatestCommonDivisor(left, right) {
+  while (right !== 0n) {
+    [left, right] = [right, left % right];
+  }
+  return left;
+}
+
+function exactAlphaTabDuration(beat) {
+  if (!Number.isInteger(beat.duration) || beat.duration === 0) {
+    return null;
+  }
+  let numerator = 3840n;
+  let denominator = BigInt(beat.duration);
+  if (beat.duration < 0) {
+    numerator *= BigInt(-beat.duration);
+    denominator = 1n;
+  }
+  if (beat.dots === 2) {
+    numerator *= 7n;
+    denominator *= 4n;
+  } else if (beat.dots === 1) {
+    numerator *= 3n;
+    denominator *= 2n;
+  }
+  if (beat.tupletNumerator > 0 && beat.tupletDenominator > 0) {
+    numerator *= BigInt(beat.tupletDenominator);
+    denominator *= BigInt(beat.tupletNumerator);
+  }
+  const divisor = greatestCommonDivisor(numerator, denominator);
+  return { numerator: numerator / divisor, denominator: denominator / divisor };
+}
+
+export function exactBeatStarts(beats, advances = () => true) {
+  let current = { numerator: 0n, denominator: 1n };
+  return beats.map(beat => {
+    const start = Number(current.numerator / current.denominator);
+    const duration = exactAlphaTabDuration(beat);
+    if (duration && advances(beat)) {
+      const numerator = current.numerator * duration.denominator + duration.numerator * current.denominator;
+      const denominator = current.denominator * duration.denominator;
+      const divisor = greatestCommonDivisor(numerator, denominator);
+      current = { numerator: numerator / divisor, denominator: denominator / divisor };
+    }
+    return start;
+  });
+}
+
 function normalizeArticulation(articulation) {
   return {
     elementName: articulation.elementType,
@@ -133,6 +190,11 @@ export function normalizeOttavia(value) {
 }
 
 export function normalizeBeatStatus(beat) {
+  // Dead-slap changes AlphaTab's playback/display rest predicate, but it does
+  // not turn the source beat into an authored note-bearing beat.
+  if (beat.deadSlapped && beat.notes.length === 0) {
+    return 'rest';
+  }
   if (beat.isEmpty && beat.isRest) {
     return 'unknown:empty+rest';
   }
@@ -247,7 +309,7 @@ function normalizeNote(note, staff, graces) {
     ...pitch,
     kind: normalizeNoteKind(note),
     dynamic: normalizeDynamic(note.dynamics),
-    durationPercent: finite(note.durationPercent),
+    durationPercent: normalizeLegacyDurationPercent(note.durationPercent),
     tieOrigin: Boolean(note.tieDestination),
     tieDestination: Boolean(note.isTieDestination),
     effects: {
@@ -279,7 +341,12 @@ function normalizeNote(note, staff, graces) {
 function normalizeVoice(voice, staff) {
   const beats = [];
   let pendingGraceBeats = [];
-  for (const beat of voice.beats) {
+  const exactStarts = exactBeatStarts(
+    voice.beats,
+    beat => beat.graceType === alphaTab.model.GraceType.None
+  );
+  for (let beatIndex = 0; beatIndex < voice.beats.length; beatIndex++) {
+    const beat = voice.beats[beatIndex];
     if (beat.graceType !== alphaTab.model.GraceType.None) {
       pendingGraceBeats.push(beat);
       continue;
@@ -298,8 +365,9 @@ function normalizeVoice(voice, staff) {
     });
     pendingGraceBeats = [];
     beats.push({
-      start: finite(beat.displayStart),
+      start: exactStarts[beatIndex],
       status: normalizeBeatStatus(beat),
+      graceRole: 'none',
       duration: beat.duration,
       durationTicks: beat.displayDuration,
       dots: beat.dots,
@@ -315,9 +383,11 @@ function normalizeVoice(voice, staff) {
     });
   }
   for (const graceBeat of pendingGraceBeats) {
+    const beatIndex = voice.beats.indexOf(graceBeat);
     beats.push({
-      start: finite(graceBeat.displayStart),
-      status: 'orphan-grace',
+      start: exactStarts[beatIndex],
+      status: normalizeBeatStatus(graceBeat),
+      graceRole: 'orphan',
       duration: graceBeat.duration,
       durationTicks: graceBeat.displayDuration,
       dots: graceBeat.dots,

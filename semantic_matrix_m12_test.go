@@ -36,6 +36,9 @@ func runSemanticMatrixM12CurvePreservation(run *semanticMatrixRun) {
 	}
 	for _, target := range []string{"bend", "whammy"} {
 		for _, test := range representable {
+			if target == "bend" && (test.name == "initial hold" || test.name == "final hold") {
+				continue
+			}
 			t.Run(target+"/"+test.name, func(t *testing.T) {
 				song := m12Song(t)
 				if test.present {
@@ -48,14 +51,6 @@ func runSemanticMatrixM12CurvePreservation(run *semanticMatrixRun) {
 			})
 		}
 	}
-	t.Run("bend combined initial and final hold", func(t *testing.T) {
-		song := m12Song(t)
-		m12SetCurve(song, "bend", &BendEffect{Points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 9}, {Position: 12}}})
-		if _, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}}); err != nil {
-			t.Fatalf("strict bend hold export: %#v, %v", report.Entries, err)
-		}
-	})
-
 	collinear := []BendPoint{
 		{Position: 0, Value: 0},
 		{Position: 3, Value: 1},
@@ -69,13 +64,13 @@ func runSemanticMatrixM12CurvePreservation(run *semanticMatrixRun) {
 	beat.Effect.TremoloBar = &BendEffect{Points: slices.Clone(collinear)}
 	beat.Notes[0].Effect.Bend = &BendEffect{Points: slices.Clone(collinear)}
 
-	run.Field("BeatEffects.TremoloBar", beat.Effect.TremoloBar, &BendEffect{Points: collinear})
-	run.Field("NoteEffect.Bend", beat.Notes[0].Effect.Bend, &BendEffect{Points: collinear})
-	run.Field("BendEffect.Points", beat.Notes[0].Effect.Bend.Points, collinear)
+	run.Preserved("BeatEffects.TremoloBar", beat.Effect.TremoloBar, &BendEffect{Points: collinear})
+	run.Preserved("NoteEffect.Bend", beat.Notes[0].Effect.Bend, &BendEffect{Points: collinear})
+	run.Normalized("BendEffect.Points", beat.Notes[0].Effect.Bend.Points, collinear)
 	for index, point := range collinear {
-		run.Field("BendPoint.Position", beat.Notes[0].Effect.Bend.Points[index].Position, point.Position)
-		run.Field("BendPoint.Value", beat.Notes[0].Effect.Bend.Points[index].Value, point.Value)
-		run.Field("BendPoint.Vibrato", beat.Notes[0].Effect.Bend.Points[index].Vibrato, false)
+		run.Preserved("BendPoint.Position", beat.Notes[0].Effect.Bend.Points[index].Position, point.Position)
+		run.Preserved("BendPoint.Value", beat.Notes[0].Effect.Bend.Points[index].Value, point.Value)
+		run.Omitted("BendPoint.Vibrato", beat.Notes[0].Effect.Bend.Points[index].Vibrato, false)
 	}
 
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
@@ -131,6 +126,13 @@ func TestSemanticMatrixM12CurveLossPolicy(t *testing.T) {
 
 func runSemanticMatrixM12CurveLossPolicy(run *semanticMatrixRun) {
 	t := run.t
+	for index, kind := range []BendType{BendTypeNone, BendTypeBend, BendTypeBendRelease, BendTypeBendReleaseBend, BendTypePrebend, BendTypePrebendRelease, BendTypeDip, BendTypeDive, BendTypeReleaseUp, BendTypeInvertedDip, BendTypeReturn, BendTypeReleaseDown} {
+		name := []string{"BendTypeNone", "BendTypeBend", "BendTypeBendRelease", "BendTypeBendReleaseBend", "BendTypePrebend", "BendTypePrebendRelease", "BendTypeDip", "BendTypeDive", "BendTypeReleaseUp", "BendTypeInvertedDip", "BendTypeReturn", "BendTypeReleaseDown"}[index]
+		song := m12Song(t)
+		song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Kind: kind, Points: []BendPoint{{Position: 0}, {Position: 12, Value: 2}}}
+		report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+		run.Enum("BendType."+name, hasExportCode(report, "gp8.omit.bend-summary"), kind != BendTypeNone)
+	}
 	alternatingFive := []BendPoint{{Position: 0}, {Position: 3, Value: 2}, {Position: 6}, {Position: 9, Value: 2}, {Position: 12}}
 	cases := []struct {
 		name   string
@@ -145,6 +147,9 @@ func runSemanticMatrixM12CurveLossPolicy(run *semanticMatrixRun) {
 	}
 	for _, target := range []string{"bend", "whammy"} {
 		for _, test := range cases {
+			if target == "bend" && test.name == "odd midpoint sum" {
+				continue
+			}
 			t.Run(target+"/"+test.name, func(t *testing.T) {
 				song := m12Song(t)
 				song.Tracks[0].Settings.Notation = true
@@ -168,6 +173,33 @@ func runSemanticMatrixM12CurveLossPolicy(run *semanticMatrixRun) {
 			})
 		}
 	}
+	for _, test := range []struct {
+		name   string
+		points []BendPoint
+	}{
+		{name: "initial hold", points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 12}}},
+		{name: "final hold", points: []BendPoint{{Position: 0}, {Position: 9, Value: 2}, {Position: 12, Value: 2}}},
+		{name: "combined initial and final hold", points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 9}, {Position: 12}}},
+	} {
+		t.Run("bend/"+test.name, func(t *testing.T) {
+			song := m12Song(t)
+			m12SetCurve(song, "bend", &BendEffect{Points: test.points})
+			report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+			if !hasExportCode(report, "gp8.normalize.bend-curve") {
+				t.Fatalf("report = %#v, want bend normalization", report.Entries)
+			}
+			if data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}}); len(data) != 0 || err == nil {
+				t.Fatalf("strict bend hold export = %d bytes, %v", len(data), err)
+			}
+		})
+	}
+	t.Run("bend/odd midpoint sum", func(t *testing.T) {
+		song := m12Song(t)
+		m12SetCurve(song, "bend", &BendEffect{Points: []BendPoint{{Position: 0}, {Position: 12, Value: 1}}})
+		if report := PreflightExport(song, ExportFormatGP8, ExportOptions{}); hasExportCode(report, "gp8.normalize.bend-curve") {
+			t.Fatalf("report = %#v, bend endpoints are preserved", report.Entries)
+		}
+	})
 	t.Run("whammy combined initial and final hold", func(t *testing.T) {
 		song := m12Song(t)
 		m12SetCurve(song, "whammy", &BendEffect{Points: []BendPoint{{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 9}, {Position: 12}}})
@@ -185,8 +217,8 @@ func runSemanticMatrixM12CurveLossPolicy(run *semanticMatrixRun) {
 	beat := &summary.Tracks[0].Measures[0].Voices[0].Beats[0]
 	beat.Effect.TremoloBar = &BendEffect{Kind: BendTypeDive, Value: 25, Points: []BendPoint{{Position: 0, Vibrato: true}, {Position: 12, Value: -2}}}
 	beat.Notes[0].Effect.Bend = &BendEffect{Kind: BendTypePrebend, Value: 50, Points: []BendPoint{{Position: 0, Vibrato: true}, {Position: 12, Value: 2}}}
-	run.Field("BendEffect.Kind", beat.Notes[0].Effect.Bend.Kind, BendTypePrebend)
-	run.Field("BendEffect.Value", beat.Notes[0].Effect.Bend.Value, int16(50))
+	run.Omitted("BendEffect.Kind", beat.Notes[0].Effect.Bend.Kind, BendTypePrebend)
+	run.Omitted("BendEffect.Value", beat.Notes[0].Effect.Bend.Value, int16(50))
 	run.Field("BendPoint.Vibrato", beat.Notes[0].Effect.Bend.Points[0].Vibrato, true)
 	report := PreflightExport(summary, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.omit.bend-summary", "gp8.omit.whammy-summary", "gp8.omit.bend-point-vibrato", "gp8.omit.whammy-point-vibrato"} {

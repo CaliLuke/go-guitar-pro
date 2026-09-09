@@ -52,34 +52,84 @@ func runSemanticMatrixM14ChordDefinitions(run *semanticMatrixRun) {
 		NewFormat:  &newFormat,
 		Show:       &show,
 	}
-	run.Field("Chord.Name", chord.Name, "C#13/Eb")
-	run.Field("Chord.Length", chord.Length, uint8(6))
-	run.Field("Chord.Strings", chord.Strings, []int8{3, -1, 0, 5, 4, 3})
-	run.Field("Chord.FirstFret", *chord.FirstFret, uint8(3))
-	run.Field("Chord.Barres", chord.Barres, []Barre{{Fret: 3, Start: 1, End: 3}, {Fret: 5, Start: 4, End: 6}})
-	run.Field("Barre.Fret", []int8{chord.Barres[0].Fret, chord.Barres[1].Fret}, []int8{3, 5})
-	run.Field("Barre.Start", []int8{chord.Barres[0].Start, chord.Barres[1].Start}, []int8{1, 4})
-	run.Field("Barre.End", []int8{chord.Barres[0].End, chord.Barres[1].End}, []int8{3, 6})
-	run.Field("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle})
-	run.Field("Chord.Omissions", chord.Omissions, []bool{true, false, true, false, false, true, false})
-	run.Field("Chord.Root", *chord.Root, root)
-	run.Field("Chord.Bass", *chord.Bass, bass)
-	run.Field("Chord.Kind", *chord.Kind, ChordType(2))
-	run.Field("Chord.Extension", *chord.Extension, ChordExtensionThirteenth)
-	run.Field("Chord.Fifth", *chord.Fifth, ChordAlterationAugmented)
-	run.Field("Chord.Ninth", *chord.Ninth, ChordAlterationDiminished)
-	run.Field("Chord.Eleventh", *chord.Eleventh, ChordAlterationPerfect)
-	run.Field("Chord.Tonality", *chord.Tonality, ChordAlterationDiminished)
-	run.Field("Chord.Add", *chord.Add, true)
-	run.Field("Chord.Sharp", *chord.Sharp, false)
-	run.Field("Chord.NewFormat", *chord.NewFormat, false)
-	run.Field("Chord.Show", *chord.Show, false)
+	run.Preserved("Chord.Name", chord.Name, "C#13/Eb")
+	run.Preserved("Chord.Length", chord.Length, uint8(6))
+	run.Preserved("Chord.Strings", chord.Strings, []int8{3, -1, 0, 5, 4, 3})
+	run.Preserved("Chord.FirstFret", *chord.FirstFret, uint8(3))
+	run.Omitted("Chord.Barres", chord.Barres, []Barre{{Fret: 3, Start: 1, End: 3}, {Fret: 5, Start: 4, End: 6}})
+	run.Preserved("Barre.Fret", []int8{chord.Barres[0].Fret, chord.Barres[1].Fret}, []int8{3, 5})
+	run.Preserved("Barre.Start", []int8{chord.Barres[0].Start, chord.Barres[1].Start}, []int8{1, 4})
+	run.Preserved("Barre.End", []int8{chord.Barres[0].End, chord.Barres[1].End}, []int8{3, 6})
+	run.Omitted("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle})
+	run.Omitted("Chord.Omissions", chord.Omissions, []bool{true, false, true, false, false, true, false})
+	run.Omitted("Chord.Root", *chord.Root, root)
+	run.Omitted("Chord.Bass", *chord.Bass, bass)
+	run.Omitted("Chord.Kind", *chord.Kind, ChordType(2))
+	run.Omitted("Chord.Extension", *chord.Extension, ChordExtensionThirteenth)
+	run.Omitted("Chord.Fifth", *chord.Fifth, ChordAlterationAugmented)
+	run.Omitted("Chord.Ninth", *chord.Ninth, ChordAlterationDiminished)
+	run.Omitted("Chord.Eleventh", *chord.Eleventh, ChordAlterationPerfect)
+	run.Omitted("Chord.Tonality", *chord.Tonality, ChordAlterationDiminished)
+	run.Omitted("Chord.Add", *chord.Add, true)
+	run.Omitted("Chord.Sharp", *chord.Sharp, false)
+	run.Omitted("Chord.NewFormat", *chord.NewFormat, false)
+	run.Omitted("Chord.Show", *chord.Show, false)
 	for prefix, pitch := range map[string]PitchClass{"root": root, "bass": bass} {
 		run.Field("PitchClass.Note", prefix+":"+pitch.Note, prefix+":"+map[string]string{"root": "C#", "bass": "Eb"}[prefix])
 		run.Field("PitchClass.Just", pitch.Just, map[string]int8{"root": 0, "bass": 4}[prefix])
 		run.Field("PitchClass.Accidental", pitch.Accidental, map[string]int8{"root": 1, "bass": -1}[prefix])
 		run.Field("PitchClass.Value", pitch.Value, map[string]int8{"root": 1, "bass": 3}[prefix])
 		run.Field("PitchClass.Sharp", pitch.Sharp, prefix == "root")
+	}
+	for _, test := range []struct {
+		member string
+		apply  func(*Chord)
+	}{
+		{"ChordAlteration.ChordAlterationPerfect", func(chord *Chord) { value := ChordAlterationPerfect; chord.Fifth = &value }},
+		{"ChordAlteration.ChordAlterationDiminished", func(chord *Chord) { value := ChordAlterationDiminished; chord.Fifth = &value }},
+		{"ChordAlteration.ChordAlterationAugmented", func(chord *Chord) { value := ChordAlterationAugmented; chord.Fifth = &value }},
+		{"ChordExtension.ChordExtensionNone", func(chord *Chord) { value := ChordExtensionNone; chord.Extension = &value }},
+		{"ChordExtension.ChordExtensionNinth", func(chord *Chord) { value := ChordExtensionNinth; chord.Extension = &value }},
+		{"ChordExtension.ChordExtensionEleventh", func(chord *Chord) { value := ChordExtensionEleventh; chord.Extension = &value }},
+		{"ChordExtension.ChordExtensionThirteenth", func(chord *Chord) { value := ChordExtensionThirteenth; chord.Extension = &value }},
+	} {
+		probe := semanticValidPitchedGP8Song(t)
+		probeChord := &Chord{Name: "C", Length: 6, Strings: []int8{0, 1, 0, 2, 3, -1}}
+		test.apply(probeChord)
+		probe.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = probeChord
+		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
+		run.Enum(test.member, hasExportCode(probeReport, "gp8.omit.chord-legacy-details"), true)
+	}
+	for _, field := range []struct {
+		name string
+		set  func(*Chord)
+	}{
+		{"root", func(chord *Chord) { value := root; chord.Root = &value }},
+		{"bass", func(chord *Chord) { value := bass; chord.Bass = &value }},
+		{"kind", func(chord *Chord) { value := kind; chord.Kind = &value }},
+		{"extension", func(chord *Chord) { value := extension; chord.Extension = &value }},
+		{"fifth", func(chord *Chord) { value := fifth; chord.Fifth = &value }},
+		{"ninth", func(chord *Chord) { value := ninth; chord.Ninth = &value }},
+		{"eleventh", func(chord *Chord) { value := eleventh; chord.Eleventh = &value }},
+		{"tonality", func(chord *Chord) { value := tonality; chord.Tonality = &value }},
+		{"add", func(chord *Chord) { value := add; chord.Add = &value }},
+		{"sharp", func(chord *Chord) { value := sharp; chord.Sharp = &value }},
+		{"new format", func(chord *Chord) { value := newFormat; chord.NewFormat = &value }},
+		{"show", func(chord *Chord) { value := show; chord.Show = &value }},
+	} {
+		t.Run("isolated "+field.name+" loss", func(t *testing.T) {
+			probe := semanticValidPitchedGP8Song(t)
+			probeChord := &Chord{Name: "C", Length: 6, Strings: []int8{0, 1, 0, 2, 3, -1}}
+			field.set(probeChord)
+			probe.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = probeChord
+			if report := PreflightExport(probe, ExportFormatGP8, ExportOptions{}); !hasExportCode(report, "gp8.omit.chord-legacy-details") {
+				t.Fatalf("isolated %s report = %#v, want gp8.omit.chord-legacy-details", field.name, report.Entries)
+			}
+			data, _, err := ExportWithReport(probe, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+			if len(data) != 0 || err == nil {
+				t.Fatalf("isolated %s strict export = %d bytes, %v", field.name, len(data), err)
+			}
+		})
 	}
 
 	song := semanticValidPitchedGP8Song(t)
@@ -240,7 +290,7 @@ func runSemanticMatrixM14ChordScopeAndIsolation(run *semanticMatrixRun) {
 	if len(upper) != 5 || len(lower) != 2 {
 		t.Fatalf("scoped beats = %d, %d; want 5, 2", len(upper), len(lower))
 	}
-	run.Field("BeatEffects.Chord", []string{upper[0].Effect.Chord.Name, upper[1].Effect.Chord.Name, lower[0].Effect.Chord.Name, lower[1].Effect.Chord.Name}, []string{"Upper", "Track", "Lower", "Track"})
+	run.Preserved("BeatEffects.Chord", []string{upper[0].Effect.Chord.Name, upper[1].Effect.Chord.Name, lower[0].Effect.Chord.Name, lower[1].Effect.Chord.Name}, []string{"Upper", "Track", "Lower", "Track"})
 	run.Field("Chord.Strings", []int8{upper[0].Effect.Chord.Strings[0], lower[0].Effect.Chord.Strings[0]}, []int8{1, 2})
 	if upper[3].Effect.Chord == upper[4].Effect.Chord || !reflect.DeepEqual(*upper[3].Effect.Chord, *upper[4].Effect.Chord) {
 		t.Fatalf("equal definitions = %#v, %#v; want equal content and independent occurrences", upper[3].Effect.Chord, upper[4].Effect.Chord)

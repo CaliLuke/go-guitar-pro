@@ -25,28 +25,28 @@ func runSemanticMatrixM07MasterBars(run *semanticMatrixRun) {
 	song := semanticM07Song(t)
 	headers := song.MeasureHeaders
 
-	run.Field("Song.MeasureHeaders", len(headers), 4)
-	run.Field("MeasureHeader.Number", []uint16{headers[0].Number, headers[1].Number, headers[2].Number, headers[3].Number}, []uint16{1, 2, 3, 4})
-	run.Field("MeasureHeader.KeySignature", []KeySignature{headers[0].KeySignature, headers[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
-	run.Field("KeySignature.Key", []int8{headers[0].KeySignature.Key, headers[2].KeySignature.Key}, []int8{-7, 7})
-	run.Field("KeySignature.IsMinor", []bool{headers[0].KeySignature.IsMinor, headers[2].KeySignature.IsMinor}, []bool{false, true})
-	run.Field("MeasureHeader.TimeSignature", []TimeSignature{headers[0].TimeSignature, headers[2].TimeSignature}, []TimeSignature{
+	run.Preserved("Song.MeasureHeaders", len(headers), 4)
+	run.Preserved("MeasureHeader.Number", []uint16{headers[0].Number, headers[1].Number, headers[2].Number, headers[3].Number}, []uint16{1, 2, 3, 4})
+	run.Preserved("MeasureHeader.KeySignature", []KeySignature{headers[0].KeySignature, headers[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
+	run.Preserved("KeySignature.Key", []int8{headers[0].KeySignature.Key, headers[2].KeySignature.Key}, []int8{-7, 7})
+	run.Preserved("KeySignature.IsMinor", []bool{headers[0].KeySignature.IsMinor, headers[2].KeySignature.IsMinor}, []bool{false, true})
+	run.Preserved("MeasureHeader.TimeSignature", []TimeSignature{headers[0].TimeSignature, headers[2].TimeSignature}, []TimeSignature{
 		{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}},
 		{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}},
 	})
-	run.Field("TimeSignature.Numerator", []int8{headers[0].TimeSignature.Numerator, headers[2].TimeSignature.Numerator, headers[3].TimeSignature.Numerator}, []int8{1, 7, 127})
-	run.Field("TimeSignature.Denominator", []uint16{headers[0].TimeSignature.Denominator.Value, headers[2].TimeSignature.Denominator.Value, headers[3].TimeSignature.Denominator.Value}, []uint16{1, 8, 128})
-	run.Field("TimeSignature.Beams", []([4]uint8){headers[0].TimeSignature.Beams, headers[2].TimeSignature.Beams}, []([4]uint8){{1, 0, 0, 0}, {3, 2, 2, 0}})
+	run.Preserved("TimeSignature.Numerator", []int8{headers[0].TimeSignature.Numerator, headers[2].TimeSignature.Numerator, headers[3].TimeSignature.Numerator}, []int8{1, 7, 127})
+	run.Preserved("TimeSignature.Denominator", []uint16{headers[0].TimeSignature.Denominator.Value, headers[2].TimeSignature.Denominator.Value, headers[3].TimeSignature.Denominator.Value}, []uint16{1, 8, 128})
+	run.Omitted("TimeSignature.Beams", []([4]uint8){headers[0].TimeSignature.Beams, headers[2].TimeSignature.Beams}, []([4]uint8){{1, 0, 0, 0}, {3, 2, 2, 0}})
 	run.Field("MeasureHeader.Marker", []string{headers[0].Marker.Title, headers[2].Marker.Title}, []string{"A <&>", "Coda Ω"})
 	run.Field("Marker.Title", headers[2].Marker.Title, "Coda Ω")
-	run.Field("MeasureHeader.RepeatOpen", headers[0].RepeatOpen, true)
-	run.Field("MeasureHeader.RepeatClose", []int8{headers[1].RepeatClose, headers[2].RepeatClose, headers[3].RepeatClose}, []int8{0, 5, 127})
-	run.Field("MeasureHeader.RepeatAlternative", []uint8{headers[0].RepeatAlternative, headers[2].RepeatAlternative}, []uint8{1, 0b10000001})
-	run.Field("MeasureHeader.TripletFeel", []TripletFeel{headers[0].TripletFeel, headers[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
-	run.Field("MeasureHeader.DoubleBar", headers[2].DoubleBar, true)
-	run.Field("MeasureHeader.Tempo", []int32{headers[0].Tempo, headers[2].Tempo}, []int32{90, 120})
-	run.Field("Measure.KeySignature", []KeySignature{song.Tracks[0].Measures[0].KeySignature, song.Tracks[0].Measures[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
-	run.Field("Measure.TimeSignature", []int8{song.Tracks[0].Measures[0].TimeSignature.Numerator, song.Tracks[0].Measures[2].TimeSignature.Numerator}, []int8{1, 7})
+	run.Preserved("MeasureHeader.RepeatOpen", headers[0].RepeatOpen, true)
+	run.Preserved("MeasureHeader.RepeatClose", []int8{headers[1].RepeatClose, headers[2].RepeatClose, headers[3].RepeatClose}, []int8{0, 5, 127})
+	run.Preserved("MeasureHeader.RepeatAlternative", []uint8{headers[0].RepeatAlternative, headers[2].RepeatAlternative}, []uint8{1, 0b10000001})
+	run.Preserved("MeasureHeader.TripletFeel", []TripletFeel{headers[0].TripletFeel, headers[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
+	run.Preserved("MeasureHeader.DoubleBar", headers[2].DoubleBar, true)
+	run.Omitted("MeasureHeader.Tempo", []int32{headers[0].Tempo, headers[2].Tempo}, []int32{90, 120})
+	run.Normalized("Measure.KeySignature", []KeySignature{song.Tracks[0].Measures[0].KeySignature, song.Tracks[0].Measures[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
+	run.Normalized("Measure.TimeSignature", []int8{song.Tracks[0].Measures[0].TimeSignature.Numerator, song.Tracks[0].Measures[2].TimeSignature.Numerator}, []int8{1, 7})
 	run.Field("Measure.HasDoubleBar", song.Tracks[0].Measures[2].HasDoubleBar, true)
 
 	for value := DirectionSignCoda; value <= DirectionSignDaDoubleCoda; value++ {
@@ -54,11 +54,12 @@ func runSemanticMatrixM07MasterBars(run *semanticMatrixRun) {
 		probe.Tracks[0].Settings.Notation = true
 		direction := value
 		probe.MeasureHeaders[0].Direction = &direction
-		run.Field("MeasureHeader.Direction", *probe.MeasureHeaders[0].Direction, value)
+		run.Omitted("MeasureHeader.Direction", *probe.MeasureHeaders[0].Direction, value)
 		report := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
 		if !hasExportCode(report, "gp8.omit.measure-direction") {
 			t.Errorf("direction %d report = %#v, want omission", value, report.Entries)
 		}
+		run.Enum(m07DirectionSignMember(value), hasExportCode(report, "gp8.omit.measure-direction"), true)
 	}
 	var directionBytes bytes.Buffer
 	for value := int16(1); value <= int16(DirectionSignDaDoubleCoda)+1; value++ {
@@ -126,8 +127,42 @@ func runSemanticMatrixM07MasterBars(run *semanticMatrixRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Dispatch("parseGPIFWithContext:mb.TripletFeel", []TripletFeel{roundTrip.MeasureHeaders[0].TripletFeel, roundTrip.MeasureHeaders[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
-	run.Field("Measure.Clef", []MeasureClef{roundTrip.Tracks[0].Measures[0].Clef, roundTrip.Tracks[0].Measures[1].Clef, roundTrip.Tracks[0].Measures[2].Clef, roundTrip.Tracks[0].Measures[3].Clef}, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto, MeasureClefTenor})
+	variantSong := parseTestFixture(t, "testdata/gp7/triplet-feel.gp")
+	tripletFeels := []TripletFeel{
+		roundTrip.MeasureHeaders[0].TripletFeel,
+		roundTrip.MeasureHeaders[2].TripletFeel,
+		variantSong.MeasureHeaders[2].TripletFeel,
+		variantSong.MeasureHeaders[3].TripletFeel,
+		variantSong.MeasureHeaders[4].TripletFeel,
+		variantSong.MeasureHeaders[5].TripletFeel,
+	}
+	wantTripletFeels := []TripletFeel{
+		TripletFeelEighth,
+		TripletFeelSixteenth,
+		TripletFeelDottedEighth,
+		TripletFeelDottedSixteenth,
+		TripletFeelScottishEighth,
+		TripletFeelScottishSixteenth,
+	}
+	run.Dispatch("parseGPIFWithContext:mb.TripletFeel", tripletFeels, wantTripletFeels)
+	run.Enum("TripletFeel.TripletFeelNone", roundTrip.MeasureHeaders[1].TripletFeel, TripletFeelNone)
+	for index, member := range []string{
+		"TripletFeel.TripletFeelEighth",
+		"TripletFeel.TripletFeelSixteenth",
+		"TripletFeel.TripletFeelDottedEighth",
+		"TripletFeel.TripletFeelDottedSixteenth",
+		"TripletFeel.TripletFeelScottishEighth",
+		"TripletFeel.TripletFeelScottishSixteenth",
+	} {
+		run.Enum(member, tripletFeels[index], wantTripletFeels[index])
+	}
+	run.Preserved("MeasureHeader.TripletFeel", tripletFeels, wantTripletFeels)
+	clefs := []MeasureClef{roundTrip.Tracks[0].Measures[0].Clef, roundTrip.Tracks[0].Measures[1].Clef, roundTrip.Tracks[0].Measures[2].Clef, roundTrip.Tracks[0].Measures[3].Clef}
+	run.Preserved("Measure.Clef", clefs, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto, MeasureClefTenor})
+	run.Enum("MeasureClef.MeasureClefTreble", clefs[0], MeasureClefTreble)
+	run.Enum("MeasureClef.MeasureClefBass", clefs[1], MeasureClefBass)
+	run.Enum("MeasureClef.MeasureClefAlto", clefs[2], MeasureClefAlto)
+	run.Enum("MeasureClef.MeasureClefTenor", clefs[3], MeasureClefTenor)
 	run.Field("MeasureHeader.Direction", roundTrip.MeasureHeaders[0].Direction, (*DirectionSign)(nil))
 	run.Field("MeasureHeader.Tempo", roundTrip.MeasureHeaders[0].Tempo, int32(0))
 	run.Field("TimeSignature.Beams", roundTrip.MeasureHeaders[0].TimeSignature.Beams, [4]uint8{2, 2, 2, 2})
@@ -139,6 +174,30 @@ func runSemanticMatrixM07MasterBars(run *semanticMatrixRun) {
 	}
 	neutral := extractM07Wire(t, percussionData)
 	run.Wire("gpifBar.Clef", neutral.clefs[0], "Neutral")
+}
+
+func m07DirectionSignMember(value DirectionSign) string {
+	return []string{
+		"DirectionSign.DirectionSignCoda",
+		"DirectionSign.DirectionSignDoubleCoda",
+		"DirectionSign.DirectionSignSegno",
+		"DirectionSign.DirectionSignSegnoSegno",
+		"DirectionSign.DirectionSignFine",
+		"DirectionSign.DirectionSignDaCapo",
+		"DirectionSign.DirectionSignDaCapoAlCoda",
+		"DirectionSign.DirectionSignDaCapoAlDoubleCoda",
+		"DirectionSign.DirectionSignDaCapoAlFine",
+		"DirectionSign.DirectionSignDaSegno",
+		"DirectionSign.DirectionSignDaSegnoAlCoda",
+		"DirectionSign.DirectionSignDaSegnoAlDoubleCoda",
+		"DirectionSign.DirectionSignDaSegnoAlFine",
+		"DirectionSign.DirectionSignDaSegnoSegno",
+		"DirectionSign.DirectionSignDaSegnoSegnoAlCoda",
+		"DirectionSign.DirectionSignDaSegnoSegnoAlDoubleCoda",
+		"DirectionSign.DirectionSignDaSegnoSegnoAlFine",
+		"DirectionSign.DirectionSignDaCoda",
+		"DirectionSign.DirectionSignDaDoubleCoda",
+	}[int(value)]
 }
 
 func TestSemanticMatrixM07AuthorityAndBoundaries(t *testing.T) {

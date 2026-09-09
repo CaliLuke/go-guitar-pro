@@ -42,18 +42,18 @@ func runSemanticMatrixM09NoteRepresentation(run *semanticMatrixRun) {
 	if err := FinalizeSong(song); err != nil {
 		t.Fatal(err)
 	}
-	run.Field("Beat.Notes", len(song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes), 1)
+	run.Preserved("Beat.Notes", len(song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes), 1)
 	for index := range notes {
 		note := song.Tracks[0].Measures[0].Voices[0].Beats[index].Notes[0]
-		run.Field("Note.Value", note.Value, notes[index].Value)
-		run.Field("Note.String", note.String, notes[index].String)
-		run.Field("Note.Kind", note.Kind, notes[index].Kind)
-		run.Field("Note.TieOrigin", note.TieOrigin, notes[index].TieOrigin)
-		run.Field("Note.SwapAccidentals", note.SwapAccidentals, notes[index].SwapAccidentals)
-		run.Field("Note.DurationPercent", note.DurationPercent, notes[index].DurationPercent)
-		run.Field("Note.HasPercussionArticulation", note.HasPercussionArticulation, false)
-		run.Field("Note.PercussionArticulation", note.PercussionArticulation, 0)
-		run.Field("Note.Velocity", note.Velocity, Forte)
+		run.Preserved("Note.Value", note.Value, notes[index].Value)
+		run.Preserved("Note.String", note.String, notes[index].String)
+		run.Preserved("Note.Kind", note.Kind, notes[index].Kind)
+		run.Preserved("Note.TieOrigin", note.TieOrigin, notes[index].TieOrigin)
+		run.Omitted("Note.SwapAccidentals", note.SwapAccidentals, notes[index].SwapAccidentals)
+		run.Omitted("Note.DurationPercent", note.DurationPercent, notes[index].DurationPercent)
+		run.Preserved("Note.HasPercussionArticulation", note.HasPercussionArticulation, false)
+		run.Preserved("Note.PercussionArticulation", note.PercussionArticulation, 0)
+		run.Preserved("Note.Velocity", note.Velocity, Forte)
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.omit.swap-accidentals", "gp8.omit.note-duration-percent"} {
@@ -81,6 +81,14 @@ func runSemanticMatrixM09NoteRepresentation(run *semanticMatrixRun) {
 		run.Field("Note.String", got.String, notes[index].String)
 		run.Field("Note.Kind", got.Kind, notes[index].Kind)
 		run.Field("Note.TieOrigin", got.TieOrigin, notes[index].TieOrigin)
+		switch notes[index].Kind {
+		case NoteTypeNormal:
+			run.Enum("NoteType.NoteTypeNormal", got.Kind, NoteTypeNormal)
+		case NoteTypeTie:
+			run.Enum("NoteType.NoteTypeTie", got.Kind, NoteTypeTie)
+		case NoteTypeDead:
+			run.Enum("NoteType.NoteTypeDead", got.Kind, NoteTypeDead)
+		}
 	}
 	run.Field("Note.SwapAccidentals", gotBeats[4].Notes[0].SwapAccidentals, false)
 	run.Field("Note.DurationPercent", gotBeats[5].Notes[0].DurationPercent, float32(1))
@@ -211,8 +219,12 @@ func runSemanticMatrixM09NoteValidation(run *semanticMatrixRun) {
 			note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
 			test.mutate(note)
 			report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-			if !slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Disposition == ExportDispositionRejected }) {
+			rejected := slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Disposition == ExportDispositionRejected })
+			if !rejected {
 				t.Fatalf("report = %#v, want rejected %s", report.Entries, test.want)
+			}
+			if test.name == "rest note" {
+				run.Enum("NoteType.NoteTypeRest", rejected, true)
 			}
 		})
 	}

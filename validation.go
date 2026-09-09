@@ -111,7 +111,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if header.Direction != nil && (*header.Direction < DirectionSignCoda || *header.Direction > DirectionSignDaDoubleCoda) {
 			add("score.measure.direction", ScoreDiagnosticValue, location, "direction %d is not defined", *header.Direction)
 		}
-		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelSixteenth {
+		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelScottishSixteenth {
 			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)
 		}
 	}
@@ -260,6 +260,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.ExactStart != nil && beat.ExactStart.Compare(expected) != 0 {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.exact-start", Kind: ScoreDiagnosticTiming, Location: location, Reason: fmt.Sprintf("exact start %d/%d does not match finalized start %d/%d", beat.ExactStart.Numerator(), beat.ExactStart.Denominator(), expected.Numerator(), expected.Denominator())})
 			}
+			if beat.Dynamics < 0 || beat.Dynamics > 127 {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.dynamics", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat dynamics %d must be absent (0) or within MIDI velocity 1..127", beat.Dynamics)})
+			}
 			duration, err := beat.Duration.ExactScoreTime()
 			if err != nil {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.duration", Kind: ScoreDiagnosticTiming, Location: location, Reason: err.Error()})
@@ -286,9 +289,15 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.right-hand-fingering", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("right-hand fingering %d is not defined", note.Effect.RightHandFinger)})
 				}
 				for _, slide := range note.Effect.Slides {
-					if slide < SlideIntoFromAbove || slide > SlideOutUpwards {
+					if slide < SlideIntoFromAbove || slide > SlidePickSlideUp {
 						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.slide", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("slide %d is not defined", slide)})
 					}
+				}
+				if note.Effect.VibratoStrength > NoteVibratoWide {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.vibrato", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("note vibrato %d is not defined", note.Effect.VibratoStrength)})
+				}
+				if note.Effect.Accent > NoteAccentTenuto {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.accent", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("note accent %d is not defined", note.Effect.Accent)})
 				}
 				if percussion && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.percussion-reference", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("articulation %d is outside 0..%d", note.PercussionArticulation, len(track.PercussionArticulations)-1)})
@@ -325,7 +334,7 @@ func validateHarmonicEffect(effect *HarmonicEffect, location ScoreLocation, diag
 	if effect == nil {
 		return
 	}
-	if effect.Kind < HarmonicTypeNatural || effect.Kind > HarmonicTypeSemi {
+	if effect.Kind < HarmonicTypeNatural || effect.Kind > HarmonicTypeFeedback {
 		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.harmonic.kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("harmonic kind %d is not defined", effect.Kind)})
 	}
 	if effect.Fret != nil && *effect.Fret < 0 {

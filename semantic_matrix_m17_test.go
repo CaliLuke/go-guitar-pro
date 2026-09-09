@@ -75,13 +75,13 @@ func runSemanticMatrixM17AutomationSemantics(run *semanticMatrixRun) {
 		run.Field("SoundAutomation.Position", automation.Position, []float64{0, 0.75, 0.25}[index])
 		run.Field("SoundAutomation.Sound", automation.Sound, []int{0, 1, 0}[index])
 	}
-	run.Field("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
+	run.Omitted("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
 	for index, automation := range song.VolumeAutomations {
-		run.Field("VolumeAutomation.Track", automation.Track, 0)
-		run.Field("VolumeAutomation.Bar", automation.Bar, index)
-		run.Field("VolumeAutomation.Position", automation.Position, []float64{0, 1}[index])
-		run.Field("VolumeAutomation.Value", automation.Value, []float64{0.25, 0.875}[index])
-		run.Field("VolumeAutomation.Linear", automation.Linear, index == 1)
+		run.Preserved("VolumeAutomation.Track", automation.Track, 0)
+		run.Preserved("VolumeAutomation.Bar", automation.Bar, index)
+		run.Preserved("VolumeAutomation.Position", automation.Position, []float64{0, 1}[index])
+		run.Preserved("VolumeAutomation.Value", automation.Value, []float64{0.25, 0.875}[index])
+		run.Preserved("VolumeAutomation.Linear", automation.Linear, index == 1)
 	}
 	assertM17MixTableFields(run, track.Measures[0].Voices[0].Beats[0].Effect.MixTableChange, change)
 
@@ -143,33 +143,33 @@ func runSemanticMatrixM17AutomationSemantics(run *semanticMatrixRun) {
 }
 
 func assertM17MixTableFields(run *semanticMatrixRun, got, want *MixTableChange) {
-	run.Field("BeatEffects.MixTableChange", got, want)
-	run.Field("MixTableChange.Tremolo", got.Tremolo, want.Tremolo)
-	run.Field("MixTableChange.Volume", got.Volume, want.Volume)
-	run.Field("MixTableChange.Balance", got.Balance, want.Balance)
-	run.Field("MixTableChange.Chorus", got.Chorus, want.Chorus)
-	run.Field("MixTableChange.Reverb", got.Reverb, want.Reverb)
-	run.Field("MixTableChange.Instrument", got.Instrument, want.Instrument)
-	run.Field("MixTableChange.Phaser", got.Phaser, want.Phaser)
-	run.Field("MixTableChange.Tempo", got.Tempo, want.Tempo)
-	run.Field("MixTableChange.Wah", got.Wah, want.Wah)
-	run.Field("MixTableChange.TempoName", got.TempoName, want.TempoName)
-	run.Field("MixTableChange.Rse", got.Rse, want.Rse)
-	run.Field("MixTableChange.HideTempo", got.HideTempo, want.HideTempo)
-	run.Field("MixTableChange.UseRse", got.UseRse, want.UseRse)
+	run.Omitted("BeatEffects.MixTableChange", got, want)
+	run.Preserved("MixTableChange.Tremolo", got.Tremolo, want.Tremolo)
+	run.Preserved("MixTableChange.Volume", got.Volume, want.Volume)
+	run.Preserved("MixTableChange.Balance", got.Balance, want.Balance)
+	run.Preserved("MixTableChange.Chorus", got.Chorus, want.Chorus)
+	run.Preserved("MixTableChange.Reverb", got.Reverb, want.Reverb)
+	run.Preserved("MixTableChange.Instrument", got.Instrument, want.Instrument)
+	run.Preserved("MixTableChange.Phaser", got.Phaser, want.Phaser)
+	run.Preserved("MixTableChange.Tempo", got.Tempo, want.Tempo)
+	run.Preserved("MixTableChange.Wah", got.Wah, want.Wah)
+	run.Preserved("MixTableChange.TempoName", got.TempoName, want.TempoName)
+	run.Preserved("MixTableChange.Rse", got.Rse, want.Rse)
+	run.Preserved("MixTableChange.HideTempo", got.HideTempo, want.HideTempo)
+	run.Preserved("MixTableChange.UseRse", got.UseRse, want.UseRse)
 	items := []*MixTableItem{got.Tremolo, got.Volume, got.Balance, got.Chorus, got.Reverb, got.Instrument, got.Phaser, got.Tempo}
 	wantItems := []*MixTableItem{want.Tremolo, want.Volume, want.Balance, want.Chorus, want.Reverb, want.Instrument, want.Phaser, want.Tempo}
 	for index, item := range items {
 		if item == nil || wantItems[index] == nil {
 			continue
 		}
-		run.Field("MixTableItem.Value", item.Value, wantItems[index].Value)
-		run.Field("MixTableItem.Duration", item.Duration, wantItems[index].Duration)
-		run.Field("MixTableItem.AllTracks", item.AllTracks, wantItems[index].AllTracks)
+		run.Preserved("MixTableItem.Value", item.Value, wantItems[index].Value)
+		run.Preserved("MixTableItem.Duration", item.Duration, wantItems[index].Duration)
+		run.Preserved("MixTableItem.AllTracks", item.AllTracks, wantItems[index].AllTracks)
 	}
 	if got.Wah != nil && want.Wah != nil {
-		run.Field("WahEffect.Value", got.Wah.Value, want.Wah.Value)
-		run.Field("WahEffect.Display", got.Wah.Display, want.Wah.Display)
+		run.Preserved("WahEffect.Value", got.Wah.Value, want.Wah.Value)
+		run.Preserved("WahEffect.Display", got.Wah.Display, want.Wah.Display)
 	}
 }
 

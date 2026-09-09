@@ -355,7 +355,7 @@ func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 		curves := [][]BendPoint{
 			{{Position: 0, Value: 0}, {Position: 12, Value: 2}},
 			{{Position: 0, Value: 0}, {Position: 6, Value: 2}, {Position: 12, Value: 0}},
-			{{Position: 0, Value: 0}, {Position: 3, Value: 0}, {Position: 9, Value: 2}, {Position: 12, Value: 2}},
+			{{Position: 0, Value: 0}, {Position: 3, Value: 2}, {Position: 9, Value: 2}, {Position: 12, Value: 0}},
 		}
 		for _, points := range curves {
 			song := semanticExportProbeSong(t)
@@ -371,7 +371,9 @@ func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 				t.Fatal(err)
 			}
 			bend := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend
-			if bend == nil || !reflect.DeepEqual(bend.Points, points) {
+			// GPIF can duplicate one coincident middle control to identify a
+			// standard bend-release gesture. Compare the canonical public curve.
+			if bend == nil || !reflect.DeepEqual(simplifyBendPoints(bend.Points), simplifyBendPoints(points)) {
 				t.Fatalf("%d-point round-trip = %#v, want %#v", len(points), bend, points)
 			}
 		}
@@ -401,9 +403,9 @@ func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 				{Position: 9, Value: 2}, {Position: 12, Value: 0},
 			}}
 		}},
-		{name: "unrepresentable bend midpoint", code: "gp8.normalize.bend-curve", set: func(song *Song) {
+		{name: "unrepresentable bend initial hold", code: "gp8.normalize.bend-curve", set: func(song *Song) {
 			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Points: []BendPoint{
-				{Position: 0, Value: 0}, {Position: 12, Value: 1},
+				{Position: 0, Value: 2}, {Position: 3, Value: 2}, {Position: 12, Value: 0},
 			}}
 		}},
 	}

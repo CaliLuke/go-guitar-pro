@@ -33,6 +33,9 @@ non-default values, oracle, and limits. Register one focused executor in
 `semantic_matrix_test.go`. Use its assertion recorder for every exact field,
 wire field, or dispatch that the case covers.
 
+For each public field, use one disposition-specific runtime assertion. The
+assertion disposition must match the complete field partition.
+
 Run the semantic matrix inventory. Check that the covered total increases by
 the intended amount. Do not set the matrix `complete` flag until every uncovered
 set is empty. Run `./conformance/check.sh` after each completed family.
@@ -89,3 +92,10 @@ an open issue. Do not hide a difference with broad normalization.
 ## Commits and Pull Requests
 
 Use a short imperative subject. The history uses prefixes such as `feat:`, `test:`, and `build:`. In each pull request, state the affected formats and the public API changes. Include the results of `go test ./...`, `go vet ./...`, and `golangci-lint run`.
+
+Before you close a ticket, review the exact current commit against the latest
+acceptance criteria and its open dependency tickets. Do not close a ticket from
+example fixes or coverage counts alone. Require each blocker to have a
+reproducible, scoped failure. Treat free-form review suggestions as new scope,
+not as acceptance criteria. After you fix the blockers, run the same acceptance
+checklist once more.

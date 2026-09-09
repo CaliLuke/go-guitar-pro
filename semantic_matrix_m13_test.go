@@ -19,26 +19,63 @@ func TestSemanticMatrixM13HarmonicVariants(t *testing.T) {
 
 func runSemanticMatrixM13HarmonicVariants(run *semanticMatrixRun) {
 	t := run.t
+	for _, source := range []struct {
+		value byte
+		want  HarmonicType
+	}{{1, HarmonicTypeNatural}, {3, HarmonicTypeTapped}, {4, HarmonicTypePinch}, {5, HarmonicTypeSemi}, {15, HarmonicTypeArtificial}, {17, HarmonicTypeArtificial}, {22, HarmonicTypeArtificial}} {
+		effect, err := (&Song{}).readHarmonic(newCursor([]byte{source.value}), &Note{Value: 6})
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("readHarmonic:kind", effect.Kind, source.want)
+	}
+	for _, source := range []struct {
+		bytes []byte
+		want  HarmonicType
+	}{{[]byte{1}, HarmonicTypeNatural}, {[]byte{2, 1, 0, 0}, HarmonicTypeArtificial}, {[]byte{3, 12}, HarmonicTypeTapped}, {[]byte{4}, HarmonicTypePinch}, {[]byte{5}, HarmonicTypeSemi}} {
+		effect, err := (&Song{}).readHarmonicV5(newCursor(source.bytes))
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Dispatch("readHarmonicV5ForNote:kind", effect.Kind, source.want)
+	}
+	for _, unknown := range []struct {
+		code  string
+		parse func(*cursor) error
+	}{
+		{"Binary.Note.Harmonic.Kind.Unsupported", func(cursor *cursor) error { _, err := (&Song{}).readHarmonic(cursor, &Note{}); return err }},
+		{"Binary.Note.HarmonicV5.Kind.Unsupported", func(cursor *cursor) error { _, err := (&Song{}).readHarmonicV5(cursor); return err }},
+	} {
+		context := &parseContext{format: "GP5"}
+		if err := unknown.parse(newCursorWithContext([]byte{99}, context)); err != nil {
+			t.Fatal(err)
+		}
+		if diagnostic := m20DiagnosticByCode(context.diagnostics, unknown.code); diagnostic == nil || diagnostic.Kind != ParseDiagnosticUnsupportedFeature {
+			t.Fatalf("%s diagnostics = %#v", unknown.code, context.diagnostics)
+		}
+	}
 	legacyFret := int8(2)
 	exactFret := 2.4
 	for _, test := range []struct {
-		name string
-		kind HarmonicType
-		wire string
+		name   string
+		member string
+		kind   HarmonicType
+		wire   string
 	}{
-		{name: "natural", kind: HarmonicTypeNatural, wire: "Natural"},
-		{name: "artificial", kind: HarmonicTypeArtificial, wire: "Artificial"},
-		{name: "pinch", kind: HarmonicTypePinch, wire: "Pinch"},
-		{name: "tapped", kind: HarmonicTypeTapped, wire: "Tap"},
-		{name: "semi", kind: HarmonicTypeSemi, wire: "Semi"},
+		{name: "natural", member: "HarmonicTypeNatural", kind: HarmonicTypeNatural, wire: "Natural"},
+		{name: "artificial", member: "HarmonicTypeArtificial", kind: HarmonicTypeArtificial, wire: "Artificial"},
+		{name: "pinch", member: "HarmonicTypePinch", kind: HarmonicTypePinch, wire: "Pinch"},
+		{name: "tapped", member: "HarmonicTypeTapped", kind: HarmonicTypeTapped, wire: "Tap"},
+		{name: "semi", member: "HarmonicTypeSemi", kind: HarmonicTypeSemi, wire: "Semi"},
+		{name: "feedback", member: "HarmonicTypeFeedback", kind: HarmonicTypeFeedback, wire: "Feedback"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			song := m13Song(t)
 			harmonic := &HarmonicEffect{Kind: test.kind, Fret: &legacyFret, FretFloat: &exactFret}
 			m13FirstNote(song).Effect.Harmonic = harmonic
-			run.Field("HarmonicEffect.Kind", harmonic.Kind, test.kind)
-			run.Field("HarmonicEffect.Fret", *harmonic.Fret, legacyFret)
-			run.Field("HarmonicEffect.FretFloat", *harmonic.FretFloat, exactFret)
+			run.Preserved("HarmonicEffect.Kind", harmonic.Kind, test.kind)
+			run.Normalized("HarmonicEffect.Fret", *harmonic.Fret, legacyFret)
+			run.Preserved("HarmonicEffect.FretFloat", *harmonic.FretFloat, exactFret)
 			if got := gp8HarmonicType(test.kind); got != test.wire {
 				t.Errorf("gp8HarmonicType(%d) = %q, want %q", test.kind, got, test.wire)
 			}
@@ -51,6 +88,11 @@ func runSemanticMatrixM13HarmonicVariants(run *semanticMatrixRun) {
 			run.Wire("gpifProperty.HFret", m13WireValue(properties, "HarmonicFret", "HFret"), "2.4")
 			run.Wire("gpifProperty.Float", m13WireValue(properties, "HarmonicFret", "Float"), "")
 			run.Wire("gpifProperty.Name", m13HarmonicPropertyNames(properties), []string{"HarmonicType", "HarmonicFret"})
+			parsed, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			run.Enum("HarmonicType."+test.member, m13FirstNote(parsed).Effect.Harmonic.Kind, test.kind)
 		})
 	}
 	if got := gp8HarmonicType(HarmonicType(99)); got != "" {
@@ -86,13 +128,13 @@ func runSemanticMatrixM13HarmonicVariants(run *semanticMatrixRun) {
 		song := m13Song(t)
 		harmonic := &HarmonicEffect{Kind: HarmonicTypeArtificial, Pitch: &pitch, Octave: &octave, Fret: &legacyFret, FretFloat: &exactFret}
 		m13FirstNote(song).Effect.Harmonic = harmonic
-		run.Field("HarmonicEffect.Pitch", *harmonic.Pitch, pitch)
-		run.Field("HarmonicEffect.Octave", *harmonic.Octave, octave)
-		run.Field("PitchClass.Note", harmonic.Pitch.Note, pitch.Note)
-		run.Field("PitchClass.Just", harmonic.Pitch.Just, pitch.Just)
-		run.Field("PitchClass.Accidental", harmonic.Pitch.Accidental, pitch.Accidental)
-		run.Field("PitchClass.Value", harmonic.Pitch.Value, pitch.Value)
-		run.Field("PitchClass.Sharp", harmonic.Pitch.Sharp, pitch.Sharp)
+		run.Omitted("HarmonicEffect.Pitch", *harmonic.Pitch, pitch)
+		run.Omitted("HarmonicEffect.Octave", *harmonic.Octave, octave)
+		run.Preserved("PitchClass.Note", harmonic.Pitch.Note, pitch.Note)
+		run.Preserved("PitchClass.Just", harmonic.Pitch.Just, pitch.Just)
+		run.Preserved("PitchClass.Accidental", harmonic.Pitch.Accidental, pitch.Accidental)
+		run.Preserved("PitchClass.Value", harmonic.Pitch.Value, pitch.Value)
+		run.Preserved("PitchClass.Sharp", harmonic.Pitch.Sharp, pitch.Sharp)
 		report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 		if !hasExportCode(report, "gp8.omit.harmonic-pitch") {
 			t.Fatalf("pitch report = %#v, want harmonic pitch omission", report.Entries)
@@ -103,6 +145,30 @@ func runSemanticMatrixM13HarmonicVariants(run *semanticMatrixRun) {
 			t.Fatalf("strict pitch export = %d bytes, %#v, %v", len(data), strictReport.Entries, err)
 		}
 	})
+	for _, field := range []struct {
+		name string
+		set  func(*HarmonicEffect)
+	}{
+		{"pitch", func(harmonic *HarmonicEffect) {
+			value := PitchClass{Note: "C#", Value: 1, Sharp: true}
+			harmonic.Pitch = &value
+		}},
+		{"octave", func(harmonic *HarmonicEffect) { value := OctaveOttava; harmonic.Octave = &value }},
+	} {
+		t.Run("isolated "+field.name+" loss", func(t *testing.T) {
+			song := m13Song(t)
+			harmonic := &HarmonicEffect{Kind: HarmonicTypeNatural, Fret: &legacyFret, FretFloat: &exactFret}
+			field.set(harmonic)
+			m13FirstNote(song).Effect.Harmonic = harmonic
+			if report := PreflightExport(song, ExportFormatGP8, ExportOptions{}); !hasExportCode(report, "gp8.omit.harmonic-pitch") {
+				t.Fatalf("isolated %s report = %#v, want gp8.omit.harmonic-pitch", field.name, report.Entries)
+			}
+			data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+			if len(data) != 0 || err == nil {
+				t.Fatalf("isolated %s strict export = %d bytes, %v", field.name, len(data), err)
+			}
+		})
+	}
 
 	t.Run("binary pitch source", func(t *testing.T) {
 		legacy, err := (&Song{}).readHarmonic(newCursor([]byte{15}), &Note{Value: 6})
@@ -161,16 +227,13 @@ func runSemanticMatrixM13GPIFCompatibilityAndDiagnostics(run *semanticMatrixRun)
 		{source: "Pinch", want: HarmonicTypePinch},
 		{source: "Tap", want: HarmonicTypeTapped},
 		{source: "Semi", want: HarmonicTypeSemi},
-		{source: "Feedback", want: HarmonicTypeSemi},
+		{source: "Feedback", want: HarmonicTypeFeedback},
 	} {
 		t.Run(test.source, func(t *testing.T) {
 			context := &parseContext{format: "GPIF"}
 			gpifAuditNoteProperty(context, "n1", `/GPIF/Notes/Note[@id="n1"]`, gpifProperty{Name: "HarmonicType", HType: &test.source}, nil)
 			gotDisposition := "preserved"
 			wantDisposition := "preserved"
-			if test.source == "Feedback" {
-				wantDisposition = string(ParseDiagnosticLossyProjection)
-			}
 			if len(context.diagnostics) != 0 {
 				gotDisposition = string(context.diagnostics[0].Kind)
 			}
@@ -262,15 +325,20 @@ func runSemanticMatrixM13GPIFCompatibilityAndDiagnostics(run *semanticMatrixRun)
 		})
 	}
 
-	t.Run("feedback loss stays visible", func(t *testing.T) {
-		result := assertM13StrictDiagnostic(t,
-			`<Property name="HarmonicType"><HType>Feedback</HType></Property><Property name="HarmonicFret"><HFret>12</HFret></Property>`,
-			"GPIF.Note.Property.HarmonicType.Feedback", ParseDiagnosticLossyProjection)
+	t.Run("feedback remains distinct", func(t *testing.T) {
+		data := m13DiagnosticFixture(t, func(gpif string) string {
+			return insertFirstNoteProperty(t, gpif,
+				`<Property name="HarmonicType"><HType>Feedback</HType></Property><Property name="HarmonicFret"><HFret>12</HFret></Property>`)
+		})
+		result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+		if err != nil {
+			t.Fatal(err)
+		}
 		harmonic := m13FirstNote(result.Song).Effect.Harmonic
 		if harmonic == nil {
 			t.Fatal("feedback harmonic was dropped entirely")
 		}
-		run.Dispatch("gpifNoteToNote:p.HType", harmonic.Kind, HarmonicTypeSemi)
+		run.Dispatch("gpifNoteToNote:p.HType", harmonic.Kind, HarmonicTypeFeedback)
 	})
 }
 
