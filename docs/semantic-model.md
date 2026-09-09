@@ -45,6 +45,12 @@ fret counts, connection ports, twelve-string flags, and banjo flags as
 omissions. It also reports a custom line count on a pitched staff. Percussion
 staff line counts remain supported.
 
+GP8 export preserves the selected MIDI program, primary and effect channels,
+volume, balance, mute state, solo state, sound definitions, and sound changes.
+It reports bank and effect controllers as one scoped MIDI omission. It also
+reports each legacy master or track RSE record as one scoped omission. The RSE
+tests assert every descendant covered by those parent reports.
+
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
 quantizes values only at a target boundary.

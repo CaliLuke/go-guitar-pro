@@ -448,6 +448,9 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 
 func (builder *gp8Builder) buildScore() gpifScore {
 	song := builder.song
+	if song.MasterEffect.Volume != 0 || song.MasterEffect.Reverb != 0 || song.MasterEffect.Equalizer.Gain != 0 || len(song.MasterEffect.Equalizer.Knobs) != 0 {
+		builder.addReport("gp8.omit.master-rse", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit the legacy master RSE effect")
+	}
 	if song.PageSetup != (PageSetup{}) {
 		builder.addReport("gp8.omit.page-setup", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit page dimensions, margins, header selections, or text templates")
 	}
@@ -610,6 +613,12 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	if track.BanjoTrack {
 		builder.addReport("gp8.omit.track-banjo", "staff-ownership", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy banjo track flag")
 	}
+	if track.UseRse {
+		builder.addReport("gp8.omit.track-use-rse", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy UseRse flag")
+	}
+	if track.Rse.Humanize != 0 || track.Rse.AutoAccentuation != AccentuationNone || track.Rse.Equalizer.Gain != 0 || len(track.Rse.Equalizer.Knobs) != 0 || track.Rse.Instrument != (RseInstrument{}) {
+		builder.addReport("gp8.omit.track-rse", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy track RSE record")
+	}
 	if track.IndicateTuning {
 		builder.addReport("gp8.omit.track-indicate-tuning", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the tuning-display preference")
 	}
@@ -628,6 +637,9 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	} else if track.PercussionTrack {
 		channel.Channel = DefaultPercussionChannel
 		channel.EffectChannel = DefaultPercussionChannel
+	}
+	if channel.Bank != 0 || channel.Chorus != 0 || channel.Reverb != 0 || channel.Phaser != 0 || channel.Tremolo != 0 {
+		builder.addReport("gp8.omit.midi-effects", "score-core", ExportDispositionOmitted, location, "GP8 writer emits channel, program, volume, and balance but not the legacy bank and effect controllers")
 	}
 
 	red := (uint32(track.Color) >> 16) & 0xff
