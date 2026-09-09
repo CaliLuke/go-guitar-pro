@@ -53,6 +53,11 @@ The `complete` flag stays false while the report has uncovered constructs. Set
 it to true only when all three uncovered sets are empty. The test then enforces
 that state for future fields and dispatches.
 
+Ownership cases compare ordered track, staff, bar, voice, beat, and note paths.
+They do not use aggregate counts as semantic evidence. The compatibility case
+also checks the same staff 0 authority rule through finalization, validation,
+and export.
+
 The ledger also names focused public API tests for each represented feature.
 Each feature links to a pinned AlphaTab test. This gives the contract an
 independent consumer. The verifier fails if a named test is removed or if a

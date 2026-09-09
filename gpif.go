@@ -809,16 +809,13 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			measure.HasDoubleBar = mh.DoubleBar
 			return measure
 		}
-		for trackIdx := range song.Tracks {
+		for trackIdx := 0; trackIdx < len(song.Tracks) && barIndex < len(barIDs); {
 			track := &song.Tracks[trackIdx]
-			for staffIdx := range track.Staves {
-				if barIndex >= len(barIDs) {
-					break
-				}
+			for staffIdx := 0; staffIdx < len(track.Staves) && barIndex < len(barIDs); staffIdx++ {
 				barID := barIDs[barIndex]
 				barIndex++
 				if barID == "-1" {
-					for skippedStaffIdx := range track.Staves {
+					for skippedStaffIdx := staffIdx; skippedStaffIdx < len(track.Staves); skippedStaffIdx++ {
 						measure := newMeasure(trackIdx, skippedStaffIdx)
 						track.Staves[skippedStaffIdx].Measures = append(track.Staves[skippedStaffIdx].Measures, measure)
 					}
@@ -830,9 +827,15 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if bar, ok := barMap[barID]; ok {
 					m.Clef = gpifMeasureClef(bar.Clef)
 					voiceIDs := splitIDs(bar.Voices)
+					pendingVoicePlaceholders := 0
 					for _, voiceID := range voiceIDs {
 						if voiceID == "-1" {
+							pendingVoicePlaceholders++
 							continue
+						}
+						for pendingVoicePlaceholders > 0 {
+							m.Voices = append(m.Voices, Voice{})
+							pendingVoicePlaceholders--
 						}
 						voice := Voice{}
 						var pendingGrace []gpifPendingGrace
@@ -911,6 +914,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 				staff.Measures = append(staff.Measures, m)
 			}
+			trackIdx++
 			track.Measures = track.Staves[0].Measures
 			track.Strings = track.Staves[0].Strings
 		}
@@ -1204,8 +1208,51 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	for index, masterBar := range doc.MasterBars.MasterBars {
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
 	}
+	gpifAuditMasterBarCardinality(doc, context)
 
 	gpifAuditReferences(doc, context)
+}
+
+func gpifAuditMasterBarCardinality(doc gpifDocument, context *parseContext) {
+	staffCounts := make(map[string]int, len(doc.Tracks.Tracks))
+	for _, track := range doc.Tracks.Tracks {
+		staffCounts[track.ID] = max(1, len(track.Staves.Staff))
+	}
+	trackIDs := splitIDs(doc.MasterTrack.Tracks)
+	for masterBarIndex, masterBar := range doc.MasterBars.MasterBars {
+		trackIndex := 0
+		staffIndex := 0
+		invalid := false
+		for _, barID := range splitIDs(masterBar.Bars) {
+			if trackIndex >= len(trackIDs) {
+				invalid = true
+				break
+			}
+			if barID == "-1" {
+				if staffIndex != 0 {
+					invalid = true
+				}
+				trackIndex++
+				staffIndex = 0
+				continue
+			}
+			staffIndex++
+			if staffIndex >= staffCounts[trackIDs[trackIndex]] {
+				trackIndex++
+				staffIndex = 0
+			}
+		}
+		if trackIndex != len(trackIDs) || staffIndex != 0 {
+			invalid = true
+		}
+		if invalid {
+			path := fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Bars", masterBarIndex)
+			context.add(diagnosticSource("GPIF.MasterBar.Bars.Cardinality", "staff-ownership", ParseDiagnosticInvalidData), ParseDiagnostic{
+				Kind: ParseDiagnosticInvalidData, SourcePath: path, Feature: "staff-ownership",
+				Reason: "bar references do not match the ordered track and staff layout",
+			})
+		}
+	}
 }
 func gpifAuditTrackProperty(context *parseContext, trackID, path string, property gpifStaffProperty) {
 	gpifAuditOwnedStaffProperty(

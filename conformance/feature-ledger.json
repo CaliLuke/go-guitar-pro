@@ -37,7 +37,10 @@
       {"id":"M01-BINARY-CLIPBOARD","family":"M01","test":"TestSemanticMatrixM01BinaryClipboard","formats":["GP5"],"stages":["import"],"values":["nonzero start and stop values","SubBarCopy true"],"oracle":"Hand-authored little-endian clipboard record.","limitations":[]},
       {"id":"M01-ORACLE-METADATA","family":"M01","test":"TestSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct","formats":["GP6","GP7","GP8"],"stages":["oracle"],"values":["distinct Author and Writer sentinels"],"oracle":"Pinned AlphaTab Score.music adapter contract.","limitations":["AlphaTab exposes GPIF Music but not a separate binary Writer field."]},
       {"id":"M02-DISPLAY-EXPORT","family":"M02","test":"TestSemanticMatrixM02DisplayExportPolicy","formats":["GP8"],"stages":["programmatic","validation","preflight","export","policy","read-only"],"values":["all display flags true","all display flags false","each direction endpoint","non-default page values","Unicode section text","visible and hidden track"],"oracle":"Independent GPIF XML extraction and binary layout flag extraction.","limitations":["Page setup, marker color, voice direction, beat display, line breaks, and most track display settings are reported omissions."]},
-      {"id":"M02-PAGE-SETUP-IMPORT","family":"M02","test":"TestSemanticMatrixM02PageSetupImport","formats":["GP5"],"stages":["import"],"values":["all header and footer templates","all margins","page dimensions","score scale","all visibility bits"],"oracle":"Actual upstream GP5 score-info fixture and pinned AlphaTab string framing grammar.","limitations":["The public model retains visibility as the original bit mask."]}
+      {"id":"M02-PAGE-SETUP-IMPORT","family":"M02","test":"TestSemanticMatrixM02PageSetupImport","formats":["GP5"],"stages":["import"],"values":["all header and footer templates","all margins","page dimensions","score scale","all visibility bits"],"oracle":"Actual upstream GP5 score-info fixture and pinned AlphaTab string framing grammar.","limitations":["The public model retains visibility as the original bit mask."]},
+      {"id":"M03-OWNERSHIP-IMPORT","family":"M03","test":"TestSemanticMatrixM03OwnershipImport","formats":["GP6","GP7","GP8"],"stages":["import","oracle"],"values":["three ordered tracks","two staves before and after one staff","distinct tuning and clefs","four voices","interior empty voice","reused definitions"],"oracle":"Hand-authored GPIF plus an independent XML token extractor and the pinned AlphaTab ownership grammar.","limitations":[]},
+      {"id":"M03-COMPATIBILITY-AUTHORITY","family":"M03","test":"TestSemanticMatrixM03CompatibilityAuthority","formats":["programmatic","GP8"],"stages":["programmatic","finalization","validation","export"],"values":["nil legacy view","replacement legacy view","in-place edit","conflicting staff 0 replacement","later staff isolation"],"oracle":"Direct alias, deep-value, and GP8 reimport checks.","limitations":["A non-nil legacy compatibility slice is authoritative for staff 0."]},
+      {"id":"M03-BAR-CARDINALITY","family":"M03","test":"TestSemanticMatrixM03BarCardinalityDiagnostics","formats":["GP6","GP7","GP8"],"stages":["import","policy"],"values":["short bar list","long bar list","misplaced whole-track placeholder"],"oracle":"Pinned AlphaTab vertical track and staff traversal grammar.","limitations":[]}
     ],
     "fieldCases": {
       "Song.Name":["M01-GPIF-METADATA-IMPORT","M01-METADATA-CORPUS","M01-GP8-METADATA-EXPORT"],
@@ -113,7 +116,22 @@
       "BeatDisplay.TupletBracket":["M02-DISPLAY-EXPORT"],
       "BeatDisplay.BreakSecondary":["M02-DISPLAY-EXPORT"],
       "BeatDisplay.BreakSecondaryTuplet":["M02-DISPLAY-EXPORT"],
-      "BeatDisplay.ForceBracket":["M02-DISPLAY-EXPORT"]
+      "BeatDisplay.ForceBracket":["M02-DISPLAY-EXPORT"],
+      "Song.Tracks":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Track.Name":["M03-OWNERSHIP-IMPORT"],
+      "Track.Number":["M03-OWNERSHIP-IMPORT"],
+      "Track.Staves":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Track.Measures":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Track.Strings":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Staff.Measures":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Staff.Strings":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Measure.Number":["M03-OWNERSHIP-IMPORT"],
+      "Measure.TrackIndex":["M03-OWNERSHIP-IMPORT"],
+      "Measure.StaffIndex":["M03-OWNERSHIP-IMPORT"],
+      "Measure.HeaderIndex":["M03-OWNERSHIP-IMPORT"],
+      "Measure.Voices":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"],
+      "Voice.MeasureIndex":["M03-OWNERSHIP-IMPORT"],
+      "Voice.Beats":["M03-OWNERSHIP-IMPORT","M03-COMPATIBILITY-AUTHORITY"]
     },
     "wireFieldCases": {
       "gpifDocument.GPVersion":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
@@ -128,7 +146,17 @@
       "gpifScore.Instructions":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
       "gpifScore.Notices":["M01-GPIF-METADATA-IMPORT","M01-GP8-METADATA-EXPORT"],
       "gpifSection.Text":["M02-DISPLAY-EXPORT"],
-      "gpifTrack.Color":["M02-DISPLAY-EXPORT"]
+      "gpifTrack.Color":["M02-DISPLAY-EXPORT"],
+      "gpifMasterTrack.Tracks":["M03-OWNERSHIP-IMPORT"],
+      "gpifTrack.ID":["M03-OWNERSHIP-IMPORT"],
+      "gpifTrack.Name":["M03-OWNERSHIP-IMPORT"],
+      "gpifTrack.Staves":["M03-OWNERSHIP-IMPORT"],
+      "gpifStaves.Staff":["M03-OWNERSHIP-IMPORT"],
+      "gpifMasterBar.Bars":["M03-OWNERSHIP-IMPORT","M03-BAR-CARDINALITY"],
+      "gpifBar.ID":["M03-OWNERSHIP-IMPORT"],
+      "gpifBar.Voices":["M03-OWNERSHIP-IMPORT"],
+      "gpifVoice.ID":["M03-OWNERSHIP-IMPORT"],
+      "gpifVoice.Beats":["M03-OWNERSHIP-IMPORT"]
     },
     "dispatchCases": {}
   },
@@ -621,6 +649,12 @@
     "feature": "note-and-beat-semantics",
     "disposition": "invalid-data",
     "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.MasterBar.Bars.Cardinality",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track."
   },
   {
     "source": "GPIF.MasterBar.Bars.Reference",

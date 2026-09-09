@@ -31,9 +31,14 @@ Each parsed beat and note is an independent occurrence. Reused GPIF definitions
 do not share mutable effect data.
 
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
-are compatibility views of the first staff. GP8 export honors replacement of
-non-nil compatibility slices. `FinalizeSong` reconnects those slices to the
-first staff. New multi-staff code must use `Track.Staves` for other staves.
+are compatibility views of the first staff. A non-nil compatibility slice is
+the authority for staff 0. This rule applies to finalization, validation, and
+GP8 export. Clear the matching compatibility slice before you replace staff 0
+directly. Later staves are always authoritative and remain independent.
+
+GPIF master-bar references list bars by track, then by staff. An interior `-1`
+voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole
+track. The parser reports a short, long, or misplaced bar list as invalid data.
 
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter

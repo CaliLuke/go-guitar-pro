@@ -60,6 +60,9 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct": runSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct,
 	"TestSemanticMatrixM02DisplayExportPolicy":                runSemanticMatrixM02DisplayExportPolicy,
 	"TestSemanticMatrixM02PageSetupImport":                    runSemanticMatrixM02PageSetupImport,
+	"TestSemanticMatrixM03OwnershipImport":                    runSemanticMatrixM03OwnershipImport,
+	"TestSemanticMatrixM03CompatibilityAuthority":             runSemanticMatrixM03CompatibilityAuthority,
+	"TestSemanticMatrixM03BarCardinalityDiagnostics":          runSemanticMatrixM03BarCardinalityDiagnostics,
 }
 
 func semanticValidGP8Song(t *testing.T) *Song {
