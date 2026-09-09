@@ -843,7 +843,7 @@ func normalizeGoScore(song *Song) any {
 		"schemaVersion": 1,
 		"metadata": map[string]any{
 			"title": song.Name, "subtitle": song.Subtitle, "artist": song.Artist, "album": song.Album,
-			"words": song.Words, "music": song.Writer, "copyright": song.Copyright, "instructions": song.Instructions,
+			"words": song.Words, "music": song.Author, "copyright": song.Copyright, "instructions": song.Instructions,
 		},
 		"masterBars":       masterBars,
 		"tempoAutomations": tempoAutomations,

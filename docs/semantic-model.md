@@ -55,6 +55,19 @@ keeps its permissive behavior.
 policy rejects normalized or omitted values unless its code is in the explicit
 allowlist.
 
+`Song.Author` is the GPIF `Music` value. `Song.Writer` is the separate legacy
+binary writer value. GP8 export preserves `Author` and reports a nonempty
+`Writer` as omitted.
+
+`Version` records source-format provenance. GP8 output uses the writer version.
+Export reports this version change as a normalization. Clipboard ranges are
+binary source data, so GP8 export reports them as omitted.
+
+Measure headers own key and triplet-feel values during GP8 export. Non-default
+legacy values on `Song` produce normalization reports. Embedded newlines in one
+notice item also produce a report because GPIF stores one newline-separated
+text value.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.

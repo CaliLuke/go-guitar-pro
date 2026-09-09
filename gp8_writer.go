@@ -419,6 +419,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		percussionElements: make([][]gpifElement, len(song.Tracks)),
 		report:             report,
 	}
+	score := builder.buildScore()
 	builder.doc = gpifDocument{
 		GPVersion: gp8DocumentVersion,
 		GPRevision: gpifRevision{
@@ -427,18 +428,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 			Value:       gp8Revision,
 		},
 		Encoding: gpifEncoding{Description: "GP8"},
-		Score: gpifScore{
-			Title:        song.Name,
-			SubTitle:     song.Subtitle,
-			Artist:       song.Artist,
-			Album:        song.Album,
-			Words:        song.Words,
-			Music:        song.Author,
-			Copyright:    song.Copyright,
-			Tabber:       song.Transcriber,
-			Instructions: song.Instructions,
-			Notices:      strings.Join(song.Notice, "\n"),
-		},
+		Score:    score,
 	}
 	builder.doc.MasterTrack.Tracks = sequentialIDs(len(song.Tracks))
 	if song.Anacrusis {
@@ -454,6 +444,49 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		return gpifDocument{}, err
 	}
 	return builder.doc, nil
+}
+
+func (builder *gp8Builder) buildScore() gpifScore {
+	song := builder.song
+	if song.Writer != "" {
+		builder.addReport("gp8.omit.writer", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 has no separate destination for the legacy writer field")
+	}
+	if song.Comments != "" {
+		builder.addReport("gp8.omit.comments", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit score comments")
+	}
+	if song.Date != "" {
+		builder.addReport("gp8.omit.date", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit the score date")
+	}
+	if song.Version.Data != "" || song.Version.Number != [3]byte{} || song.Version.Clipboard {
+		builder.addReport("gp8.normalize.source-version", "score-core", ExportDispositionNormalized, ScoreLocation{}, "GP8 output uses the writer version instead of source-format provenance")
+	}
+	if song.Clipboard != nil {
+		builder.addReport("gp8.omit.clipboard-range", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 output is a score and does not emit a clipboard range")
+	}
+	for _, notice := range song.Notice {
+		if strings.Contains(notice, "\n") {
+			builder.addReport("gp8.normalize.notice-lines", "score-core", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item")
+			break
+		}
+	}
+	if song.Key != (KeySignature{}) {
+		builder.addReport("gp8.normalize.song-key-authority", "score-core", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores keys on master bars and does not emit the legacy song-level key")
+	}
+	if song.TripletFeel != TripletFeelNone {
+		builder.addReport("gp8.normalize.song-triplet-feel-authority", "rhythm", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores triplet feel on master bars and does not emit the legacy song-level value")
+	}
+	return gpifScore{
+		Title:        song.Name,
+		SubTitle:     song.Subtitle,
+		Artist:       song.Artist,
+		Album:        song.Album,
+		Words:        song.Words,
+		Music:        song.Author,
+		Copyright:    song.Copyright,
+		Tabber:       song.Transcriber,
+		Instructions: song.Instructions,
+		Notices:      strings.Join(song.Notice, "\n"),
+	}
 }
 
 func buildGP8TempoAutomations(song *Song) gpifAutomations {

@@ -27,6 +27,31 @@ type semanticContractLedger struct {
 		SourceDispatches      []semanticDispatchContract  `json:"sourceDispatches"`
 		WireFieldDispositions map[string][]string         `json:"wireFieldDispositions"`
 	} `json:"semanticContracts"`
+	SemanticMatrix struct {
+		Complete       bool                         `json:"complete"`
+		Families       []semanticMatrixFamily       `json:"families"`
+		Cases          []semanticMatrixCaseContract `json:"cases"`
+		FieldCases     map[string][]string          `json:"fieldCases"`
+		WireFieldCases map[string][]string          `json:"wireFieldCases"`
+		DispatchCases  map[string][]string          `json:"dispatchCases"`
+	} `json:"semanticMatrix"`
+}
+
+type semanticMatrixFamily struct {
+	ID     string `json:"id"`
+	Title  string `json:"title"`
+	Reason string `json:"reason"`
+}
+
+type semanticMatrixCaseContract struct {
+	ID          string   `json:"id"`
+	Family      string   `json:"family"`
+	Test        string   `json:"test"`
+	Formats     []string `json:"formats"`
+	Stages      []string `json:"stages"`
+	Values      []string `json:"values"`
+	Oracle      string   `json:"oracle"`
+	Limitations []string `json:"limitations"`
 }
 
 type semanticModelTypeContract struct {
@@ -157,6 +182,125 @@ func TestSemanticContractInventory(t *testing.T) {
 		if _, ok := inventory.dispatches[key]; !ok {
 			t.Errorf("source dispatch contract %s does not resolve", key)
 		}
+	}
+}
+
+func TestSemanticMatrixInventory(t *testing.T) {
+	ledger := readSemanticContractLedger(t)
+	inventory := discoverSemanticGoInventory(t)
+	wantFamilies := make([]string, 25)
+	for index := range wantFamilies {
+		wantFamilies[index] = fmt.Sprintf("M%02d", index+1)
+	}
+	gotFamilies := make([]string, 0, len(ledger.SemanticMatrix.Families))
+	for _, family := range ledger.SemanticMatrix.Families {
+		gotFamilies = append(gotFamilies, family.ID)
+		if family.Title == "" || family.Reason == "" {
+			t.Errorf("semantic matrix family %s has no title or reason", family.ID)
+		}
+	}
+	assertExactSemanticSet(t, "semantic matrix families", wantFamilies, gotFamilies)
+
+	cases := make(map[string]semanticMatrixCaseContract, len(ledger.SemanticMatrix.Cases))
+	for _, contract := range ledger.SemanticMatrix.Cases {
+		if _, duplicate := cases[contract.ID]; duplicate {
+			t.Errorf("duplicate semantic matrix case %s", contract.ID)
+		}
+		cases[contract.ID] = contract
+		if !slices.Contains(gotFamilies, contract.Family) {
+			t.Errorf("semantic matrix case %s has unknown family %s", contract.ID, contract.Family)
+		}
+		if contract.Test == "" || len(contract.Formats) == 0 || len(contract.Stages) == 0 || len(contract.Values) == 0 || contract.Oracle == "" {
+			t.Errorf("semantic matrix case %s has incomplete executable evidence", contract.ID)
+		}
+	}
+
+	var modelFields []string
+	for typeName, fields := range inventory.modelTypes {
+		for _, field := range fields {
+			modelFields = append(modelFields, typeName+"."+field)
+		}
+	}
+	missingFields := assertSemanticCaseAssignments(t, "semantic matrix public fields", modelFields, ledger.SemanticMatrix.FieldCases, cases)
+	missingWireFields := assertSemanticCaseAssignments(t, "semantic matrix GPIF wire fields", inventory.wireFields, ledger.SemanticMatrix.WireFieldCases, cases)
+	var dispatches []string
+	for key := range inventory.dispatches {
+		dispatches = append(dispatches, key)
+	}
+	missingDispatches := assertSemanticCaseAssignments(t, "semantic matrix source dispatches", dispatches, ledger.SemanticMatrix.DispatchCases, cases)
+	assertSemanticMatrixEvidence(t, ledger, cases)
+	if ledger.SemanticMatrix.Complete && (len(missingFields) != 0 || len(missingWireFields) != 0 || len(missingDispatches) != 0) {
+		t.Errorf("complete semantic matrix has %d public fields, %d GPIF wire fields, and %d source dispatches without cases", len(missingFields), len(missingWireFields), len(missingDispatches))
+	}
+	if !ledger.SemanticMatrix.Complete {
+		t.Logf("semantic matrix progress: %d/%d public fields, %d/%d GPIF wire fields, and %d/%d source dispatches assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches))
+	}
+}
+
+func assertSemanticCaseAssignments(
+	t *testing.T,
+	label string,
+	discovered []string,
+	assignments map[string][]string,
+	cases map[string]semanticMatrixCaseContract,
+) []string {
+	t.Helper()
+	discoveredSet := make(map[string]struct{}, len(discovered))
+	for _, construct := range discovered {
+		discoveredSet[construct] = struct{}{}
+	}
+	for construct, caseIDs := range assignments {
+		if _, ok := discoveredSet[construct]; !ok {
+			t.Errorf("%s classifies unknown construct %s", label, construct)
+		}
+		if len(caseIDs) == 0 {
+			t.Errorf("%s %s has no executable case", label, construct)
+		}
+		for _, caseID := range caseIDs {
+			if _, ok := cases[caseID]; !ok {
+				t.Errorf("%s %s references unknown case %s", label, construct, caseID)
+			}
+		}
+	}
+	var missing []string
+	for _, construct := range discovered {
+		if _, ok := assignments[construct]; !ok {
+			missing = append(missing, construct)
+		}
+	}
+	sort.Strings(missing)
+	return missing
+}
+
+func assertSemanticMatrixEvidence(t *testing.T, ledger semanticContractLedger, cases map[string]semanticMatrixCaseContract) {
+	t.Helper()
+	want := make(map[string][]string, len(cases))
+	for construct, caseIDs := range ledger.SemanticMatrix.FieldCases {
+		for _, caseID := range caseIDs {
+			want[caseID] = append(want[caseID], "field:"+construct)
+		}
+	}
+	for construct, caseIDs := range ledger.SemanticMatrix.WireFieldCases {
+		for _, caseID := range caseIDs {
+			want[caseID] = append(want[caseID], "wire:"+construct)
+		}
+	}
+	for construct, caseIDs := range ledger.SemanticMatrix.DispatchCases {
+		for _, caseID := range caseIDs {
+			want[caseID] = append(want[caseID], "dispatch:"+construct)
+		}
+	}
+	for caseID, contract := range cases {
+		executor, ok := semanticMatrixExecutors[contract.Test]
+		if !ok {
+			t.Errorf("semantic matrix case %s names unregistered test %s", caseID, contract.Test)
+			continue
+		}
+		t.Run("evidence/"+caseID, func(t *testing.T) {
+			run := newSemanticMatrixRun(t)
+			executor(run)
+			assertExactSemanticSet(t, "semantic assertions for "+caseID, run.constructs(), want[caseID])
+		})
 	}
 }
 

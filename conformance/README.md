@@ -39,6 +39,20 @@ Each public field has one target disposition. Each source case has one source
 disposition and one behavioral evidence link. Automation cases also identify
 the consumer dispatch or diagnostic that handles the case.
 
+The same ledger contains the M01 through M25 semantic matrix. Each matrix case
+names its formats, stages, values, oracle, and limits. A registered test executes
+the case and records each exact field, wire field, or dispatch that it checks.
+The inventory rejects a case assignment when the matching assertion does not
+run. Run the progress report with:
+
+```sh
+go test -v -run '^TestSemanticMatrixInventory$' .
+```
+
+The `complete` flag stays false while the report has uncovered constructs. Set
+it to true only when all three uncovered sets are empty. The test then enforces
+that state for future fields and dispatches.
+
 The ledger also names focused public API tests for each represented feature.
 Each feature links to a pinned AlphaTab test. This gives the contract an
 independent consumer. The verifier fails if a named test is removed or if a

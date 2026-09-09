@@ -108,8 +108,8 @@ const mutations = [
     id: 'field-disposition-evidence',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":[', after: '"preserved":["Chord.Barres",' },
-      { before: '"omitted":["Chord.Barres",', after: '"omitted":[' }
+      { before: '"preserved":["Song.Album"', after: '"preserved":["Chord.Barres","Song.Album"' },
+      { before: '"Clipboard.SubBarCopy","Chord.Barres","Note.DurationPercent"', after: '"Clipboard.SubBarCopy","Note.DurationPercent"' }
     ],
     command: 'verify',
     want: 'Chord.Barres evidence proves omitted, but the field partition claims preserved'

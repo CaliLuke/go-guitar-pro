@@ -17,6 +17,7 @@ This repository is one Go package. The root files contain the public data types 
 - `go vet ./...` finds common Go errors.
 - `golangci-lint run` runs the configured static checks.
 - `go fmt ./...` formats all Go source files.
+- `go test -v -run '^TestSemanticMatrixInventory$' .` shows semantic matrix coverage.
 
 The full gate covers build, vet, goimports, module-tidy drift, golangci-lint,
 duplication, race-enabled tests, and an 80% statement-coverage floor. This
@@ -24,6 +25,17 @@ repository is a library, so reachability-based `deadcode` is intentionally not
 used for exported APIs.
 
 The repository contains a library. It does not contain a command-line program.
+
+## Semantic Matrix Workflow
+
+Add the case to `conformance/feature-ledger.json`. Record its formats, stages,
+non-default values, oracle, and limits. Register one focused executor in
+`semantic_matrix_test.go`. Use its assertion recorder for every exact field,
+wire field, or dispatch that the case covers.
+
+Run the semantic matrix inventory. Check that the covered total increases by
+the intended amount. Do not set the matrix `complete` flag until every uncovered
+set is empty. Run `./conformance/check.sh` after each completed family.
 
 ## External References
 

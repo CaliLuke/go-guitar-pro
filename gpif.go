@@ -540,7 +540,11 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		Tempo:     120,
 		TempoName: "Moderate",
 	}
-	song.Version = gpifVersion(doc.GPVersion)
+	version := doc.GPVersion
+	if version == "" && context != nil && context.format == "GP6" {
+		version = "6"
+	}
+	song.Version = gpifVersion(version)
 	song.Anacrusis = doc.MasterTrack.Anacrusis != nil
 
 	// Score info

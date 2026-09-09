@@ -224,9 +224,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 306 |
-| `normalized` | 11 |
-| `omitted` | 19 |
+| `preserved` | 289 |
+| `normalized` | 16 |
+| `omitted` | 31 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
