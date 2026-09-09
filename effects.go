@@ -72,17 +72,21 @@ type TrillEffect struct {
 
 // NoteEffect contains all effects which can be applied to one note.
 type NoteEffect struct {
-	Bend                 *BendEffect
-	Trill                *TrillEffect
-	Graces               []GraceEffect
-	TremoloPicking       *TremoloPickingEffect
-	Harmonic             *HarmonicEffect
-	Slides               []SlideType
-	LetRing              bool
-	LeftHandFinger       Fingering
-	AccentuatedNote      bool
-	PalmMute             bool
-	RightHandFinger      Fingering
+	Bend           *BendEffect
+	Trill          *TrillEffect
+	Graces         []GraceEffect
+	TremoloPicking *TremoloPickingEffect
+	Harmonic       *HarmonicEffect
+	Slides         []SlideType
+	LetRing        bool
+	LeftHandFinger Fingering
+	// HasLeftHandFinger distinguishes an authored zero-valued thumb from an absent fingering.
+	HasLeftHandFinger bool
+	AccentuatedNote   bool
+	PalmMute          bool
+	RightHandFinger   Fingering
+	// HasRightHandFinger distinguishes an authored zero-valued thumb from an absent fingering.
+	HasRightHandFinger   bool
 	HeavyAccentuatedNote bool
 	Staccato             bool
 	Hammer               bool

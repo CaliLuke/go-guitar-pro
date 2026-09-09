@@ -43,7 +43,22 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.MasterTrack.Automation.Tempo.Invalid` | `tempo-automations` | `invalid-data` | The opening tempo must be finite and positive. |
 | `GPIF.MasterTrack.Automation.Tempo.LegacyOverflow` | `tempo-automations` | `lossy-projection` | The exact opening BPM is preserved but cannot be projected into the legacy int16 field. |
 | `GPIF.MasterTrack.Automation.Tempo.Reference.Invalid` | `tempo-automations` | `invalid-data` | Applying the authored tempo reference unit must produce a finite positive BPM. |
+| `GPIF.MasterTrack.Automation.Tempo.Linear` | `tempo-automations` | `lossy-projection` | TempoAutomation has no interpolation field. |
+| `GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid` | `score-core` | `invalid-data` | A sync point must contain a valid non-negative frame offset and score location. |
+| `GPIF.Track.Automation.Sound.Linear` | `score-core` | `lossy-projection` | SoundAutomation has no interpolation field. |
 | `GPIF.Note.Accent.Tenuto` | `note-and-beat-semantics` | `unsupported-feature` | Song has no destination for the GPIF tenuto accent bit. |
+| `GPIF.Note.Property.Muted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The muted property must contain its Enable payload. |
+| `GPIF.Note.Property.PalmMuted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The palm-muted property must contain its Enable payload. |
+| `GPIF.Note.Property.Tapped.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The tapped property must contain its Enable payload. |
+| `GPIF.Note.Property.HopoOrigin.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The hammer origin property must contain its Enable payload. |
+| `GPIF.Note.Property.HopoDestination.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The hammer destination property must contain its Enable payload. |
+| `GPIF.Note.Property.LeftHandTapped.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The left-hand-tapped property must contain its Enable payload. |
+| `GPIF.Note.Property.Slide.InvalidFlags` | `note-and-beat-semantics` | `invalid-data` | Slide flags must be a non-negative integer. |
+| `GPIF.Note.Property.Slide.UnknownFlags` | `note-and-beat-semantics` | `unsupported-feature` | The slide flag contains a bit that the public enum does not define. |
+| `GPIF.Note.Property.BendNumber.Invalid` | `note-and-beat-semantics` | `invalid-data` | A bend number must be finite and inside the public curve range. |
+| `GPIF.Note.Property.BendNumber.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public bend curve uses a narrower integer scale. |
+| `GPIF.Beat.Whammy.Invalid` | `note-and-beat-semantics` | `invalid-data` | A whammy number must be finite and inside the public curve range. |
+| `GPIF.Beat.Whammy.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public whammy curve uses a narrower integer scale. |
 | `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Note.Property.TransposedPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Chord.Diagram.Fingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -202,7 +217,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
 | `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and duration. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
-| `NoteEffect` | `note-and-beat-semantics` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques. |
+| `NoteEffect` | `note-and-beat-semantics` | 19 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend point contains authored curve data. |
 | `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
@@ -227,7 +242,7 @@ Every field also has one target conversion disposition. The gate compares this p
 | --- | --- |
 | `preserved` | 201 |
 | `normalized` | 33 |
-| `omitted` | 102 |
+| `omitted` | 104 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |

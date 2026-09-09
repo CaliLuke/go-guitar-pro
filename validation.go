@@ -212,10 +212,23 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.duration", Kind: ScoreDiagnosticTiming, Location: location, Reason: addErr.Error()})
 				}
 			}
+			validateBendEffect(beat.Effect.TremoloBar, "score.beat.whammy", location, diagnostics)
 			for noteIndex, note := range beat.Notes {
 				noteLocation := location
 				noteLocation.Note = noteIndex
 				percussion := track.PercussionTrack || staff.PercussionTrack
+				validateBendEffect(note.Effect.Bend, "score.note.bend", noteLocation, diagnostics)
+				if note.Effect.LeftHandFinger < FingeringOpen || note.Effect.LeftHandFinger > FingeringLittle {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.left-hand-fingering", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("left-hand fingering %d is not defined", note.Effect.LeftHandFinger)})
+				}
+				if note.Effect.RightHandFinger < FingeringOpen || note.Effect.RightHandFinger > FingeringLittle {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.right-hand-fingering", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("right-hand fingering %d is not defined", note.Effect.RightHandFinger)})
+				}
+				for _, slide := range note.Effect.Slides {
+					if slide < SlideIntoFromAbove || slide > SlideOutUpwards {
+						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.slide", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("slide %d is not defined", slide)})
+					}
+				}
 				if percussion && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.percussion-reference", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("articulation %d is outside 0..%d", note.PercussionArticulation, len(track.PercussionArticulations)-1)})
 				}
@@ -236,6 +249,23 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				}
 				tiedNotes[voiceIndex][note.String] = note.Value
 			}
+		}
+	}
+}
+
+func validateBendEffect(effect *BendEffect, codePrefix string, location ScoreLocation, diagnostics *[]ScoreDiagnostic) {
+	if effect == nil {
+		return
+	}
+	if effect.Kind < BendTypeNone || effect.Kind > BendTypeReleaseDown {
+		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend kind %d is not defined", effect.Kind)})
+	}
+	for index, point := range effect.Points {
+		if point.Position > uint8(BendEffectMaxPosition) {
+			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".position", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d position %d is outside 0..%d", index, point.Position, uint8(BendEffectMaxPosition))})
+		}
+		if index > 0 && point.Position < effect.Points[index-1].Position {
+			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".order", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d position %d precedes position %d", index, point.Position, effect.Points[index-1].Position)})
 		}
 	}
 }

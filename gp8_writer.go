@@ -516,15 +516,9 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 	}
 	if !hasInitial {
 		if openingTempo > 0 {
-			tempos = append(tempos, TempoAutomation{Tempo: openingTempo})
+			tempos = append([]TempoAutomation{{Tempo: openingTempo}}, tempos...)
 		}
 	}
-	slices.SortFunc(tempos, func(a, b TempoAutomation) int {
-		if order := cmp.Compare(a.Bar, b.Bar); order != 0 {
-			return order
-		}
-		return cmp.Compare(a.Position, b.Position)
-	})
 
 	automations := gpifAutomations{Automations: make([]gpifAutomation, 0, len(tempos))}
 	for index, tempo := range tempos {
@@ -1017,8 +1011,25 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.MixTableChange != nil {
 		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
 	}
-	if beat.Effect.Chord != nil && len(beat.Effect.Chord.Barres) != 0 {
-		builder.addReport("gp8.omit.chord-barres", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit explicit chord barre ranges")
+	if chord := beat.Effect.Chord; chord != nil {
+		if len(chord.Barres) != 0 {
+			builder.addReport("gp8.omit.chord-barres", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit explicit chord barre ranges")
+		}
+		if len(chord.Fingerings) != 0 {
+			builder.addReport("gp8.omit.chord-fingerings", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit authored chord finger assignments")
+		}
+		if len(chord.Omissions) != 0 {
+			builder.addReport("gp8.omit.chord-omissions", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit legacy chord interval-omission flags")
+		}
+		if chord.Root != nil || chord.Bass != nil || chord.Kind != nil || chord.Extension != nil || chord.Fifth != nil || chord.Ninth != nil || chord.Eleventh != nil || chord.Tonality != nil || chord.Add != nil || chord.Sharp != nil || chord.NewFormat != nil || chord.Show != nil {
+			builder.addReport("gp8.omit.chord-legacy-details", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer emits the diagram but not the authored legacy chord spelling, quality, alteration, format, or display fields")
+		}
+		if chord.FirstFret != nil && *chord.FirstFret == 0 {
+			builder.addReport("gp8.normalize.chord-first-fret", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF represents an explicit chord first fret 0 as first fret 1")
+		}
+		if chord.Length != 0 && len(chord.Strings) != 0 && int(chord.Length) != len(chord.Strings) {
+			builder.addReport("gp8.normalize.chord-length", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF derives chord diagram length from the number of string states")
+		}
 	}
 	if beat.Effect.HasRasgueado {
 		builder.addReport("gp8.omit.rasgueado", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit rasgueado")
@@ -1035,8 +1046,12 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Value != uint16(DurationEighth) {
 		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")
 	}
-	if beat.Effect.TremoloBar != nil && len(beat.Effect.TremoloBar.Points) > 4 {
-		builder.addReport("gp8.omit.whammy-curve", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer cannot emit a whammy curve with more than four points")
+	if whammy := beat.Effect.TremoloBar; whammy != nil {
+		conversion := gp8ConvertWhammy(whammy)
+		builder.reportCurveConversion(whammy, conversion.omitted, conversion.normalized, location, curveReportSpec{
+			omittedCode: "gp8.omit.whammy-curve", normalizedCode: "gp8.normalize.whammy-curve",
+			summaryCode: "gp8.omit.whammy-summary", vibratoCode: "gp8.omit.whammy-point-vibrato", name: "whammy",
+		})
 	}
 	for noteIndex := range beat.Notes {
 		noteLocation := location
@@ -1055,29 +1070,18 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	if note.Effect.TremoloPicking != nil {
 		builder.addReport("gp8.omit.tremolo-picking", "tremolo-picking", ExportDispositionOmitted, location, "GP8 writer does not emit tremolo picking")
 	}
-	if note.Effect.LeftHandFinger != FingeringOpen && note.Effect.LeftHandFinger != FingeringThumb {
+	if note.Effect.HasLeftHandFinger || (note.Effect.LeftHandFinger != FingeringOpen && note.Effect.LeftHandFinger != FingeringThumb) {
 		builder.addReport("gp8.omit.left-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit left-hand fingering")
 	}
-	if note.Effect.RightHandFinger != FingeringOpen && note.Effect.RightHandFinger != FingeringThumb {
+	if note.Effect.HasRightHandFinger || (note.Effect.RightHandFinger != FingeringOpen && note.Effect.RightHandFinger != FingeringThumb) {
 		builder.addReport("gp8.omit.right-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit right-hand fingering")
 	}
 	if bend := note.Effect.Bend; bend != nil {
 		conversion := gp8ConvertBend(bend)
-		if conversion.omitted {
-			builder.addReport("gp8.omit.bend-curve", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer supports bend curves with two through four points")
-		}
-		if conversion.normalized {
-			builder.addReport("gp8.normalize.bend-curve", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF uses one value for both middle bend points")
-		}
-		if bend.Kind != BendTypeNone || bend.Value != 0 {
-			builder.addReport("gp8.omit.bend-summary", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer derives the bend from points and omits the summary fields")
-		}
-		for _, point := range bend.Points {
-			if point.Vibrato {
-				builder.addReport("gp8.omit.bend-point-vibrato", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit bend-point vibrato")
-				break
-			}
-		}
+		builder.reportCurveConversion(bend, conversion.omitted, conversion.normalized, location, curveReportSpec{
+			omittedCode: "gp8.omit.bend-curve", normalizedCode: "gp8.normalize.bend-curve",
+			summaryCode: "gp8.omit.bend-summary", vibratoCode: "gp8.omit.bend-point-vibrato", name: "bend",
+		})
 	}
 	if trill := note.Effect.Trill; trill != nil {
 		canonical := defaultDuration()
@@ -1092,6 +1096,32 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	for _, grace := range note.Effect.Graces {
 		if grace.Transition == GraceEffectTransitionBend {
 			builder.addReport("gp8.omit.grace-bend-transition", "grace-relationships", ExportDispositionOmitted, location, "GP8 writer does not emit a bend transition from a grace note")
+			break
+		}
+	}
+}
+
+type curveReportSpec struct {
+	omittedCode    string
+	normalizedCode string
+	summaryCode    string
+	vibratoCode    string
+	name           string
+}
+
+func (builder *gp8Builder) reportCurveConversion(effect *BendEffect, omitted, normalized bool, location ScoreLocation, spec curveReportSpec) {
+	if omitted {
+		builder.addReport(spec.omittedCode, "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer supports "+spec.name+" curves with two through four non-collinear points")
+	}
+	if normalized {
+		builder.addReport(spec.normalizedCode, "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF uses one value for both middle "+spec.name+" points")
+	}
+	if effect.Kind != BendTypeNone || effect.Value != 0 {
+		builder.addReport(spec.summaryCode, "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer derives the "+spec.name+" from points and omits the summary fields")
+	}
+	for _, point := range effect.Points {
+		if point.Vibrato {
+			builder.addReport(spec.vibratoCode, "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit "+spec.name+"-point vibrato")
 			break
 		}
 	}
@@ -1495,12 +1525,22 @@ func gp8HarmonicType(kind HarmonicType) string {
 }
 
 func gp8Whammy(bend *BendEffect) *gpifWhammy {
-	if bend == nil || len(bend.Points) == 0 || len(bend.Points) > 4 {
-		return nil
+	return gp8ConvertWhammy(bend).whammy
+}
+
+type gp8WhammyConversion struct {
+	whammy     *gpifWhammy
+	omitted    bool
+	normalized bool
+}
+
+func gp8ConvertWhammy(bend *BendEffect) gp8WhammyConversion {
+	if bend == nil {
+		return gp8WhammyConversion{}
 	}
-	points := slices.Clone(bend.Points)
-	if len(points) == 1 {
-		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition), Value: points[0].Value})
+	points := simplifyBendPoints(slices.Clone(bend.Points))
+	if len(points) < 2 || len(points) > 4 {
+		return gp8WhammyConversion{omitted: len(points) != 0}
 	}
 	origin := points[0]
 	destination := points[len(points)-1]
@@ -1517,7 +1557,7 @@ func gp8Whammy(bend *BendEffect) *gpifWhammy {
 		}
 		middle2 = middle1
 	}
-	return &gpifWhammy{
+	whammy := &gpifWhammy{
 		OriginValue:       gp8WhammyValue(origin.Value),
 		MiddleValue:       gp8WhammyValue(middle1.Value),
 		DestinationValue:  gp8WhammyValue(destination.Value),
@@ -1525,6 +1565,16 @@ func gp8Whammy(bend *BendEffect) *gpifWhammy {
 		MiddleOffset1:     gp8WhammyOffset(middle1.Position),
 		MiddleOffset2:     gp8WhammyOffset(middle2.Position),
 		DestinationOffset: gp8WhammyOffset(destination.Position),
+	}
+	encoded := []BendPoint{
+		{Position: origin.Position, Value: origin.Value},
+		{Position: middle1.Position, Value: middle1.Value},
+		{Position: middle2.Position, Value: middle1.Value},
+		{Position: destination.Position, Value: destination.Value},
+	}
+	return gp8WhammyConversion{
+		whammy:     whammy,
+		normalized: !slices.Equal(simplifyBendPoints(encoded), points),
 	}
 }
 
@@ -1546,33 +1596,34 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 	if bend == nil {
 		return gp8BendConversion{}
 	}
-	if len(bend.Points) < 2 || len(bend.Points) > 4 {
-		return gp8BendConversion{omitted: len(bend.Points) != 0}
+	points := simplifyBendPoints(slices.Clone(bend.Points))
+	if len(points) < 2 || len(points) > 4 {
+		return gp8BendConversion{omitted: len(points) != 0}
 	}
-	origin := bend.Points[0]
-	destination := bend.Points[len(bend.Points)-1]
+	origin := points[0]
+	destination := points[len(points)-1]
 	var middle1, middle2 BendPoint
-	switch len(bend.Points) {
+	switch len(points) {
 	case 4:
-		if bend.Points[0].Value == bend.Points[1].Value && bend.Points[2].Value == bend.Points[3].Value {
+		if points[0].Value == points[1].Value && points[2].Value == points[3].Value {
 			// GPIF keeps the destination value through the end of the note. Encode
 			// an initial hold and release by ending the explicit curve where the
 			// final value is reached.
-			middle1 = bend.Points[1]
-			middle2 = bend.Points[1]
-			destination = bend.Points[2]
+			middle1 = points[1]
+			middle2 = points[1]
+			destination = points[2]
 		} else {
-			middle1 = bend.Points[1]
-			middle2 = bend.Points[2]
+			middle1 = points[1]
+			middle2 = points[2]
 		}
 	case 3:
-		middle1 = bend.Points[1]
-		if bend.Points[1].Value == bend.Points[2].Value {
+		middle1 = points[1]
+		if points[1].Value == points[2].Value {
 			// A destination before the end denotes a bend followed by a hold.
-			destination = bend.Points[1]
-			middle2 = bend.Points[2]
+			destination = points[1]
+			middle2 = points[2]
 		} else {
-			middle2 = bend.Points[1]
+			middle2 = points[1]
 		}
 	default:
 		middle1 = BendPoint{
@@ -1604,7 +1655,7 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 	}
 	return gp8BendConversion{
 		properties: properties,
-		normalized: !slices.Equal(encoded.effect().Points, bend.Points),
+		normalized: !slices.Equal(encoded.effect().Points, points),
 	}
 }
 

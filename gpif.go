@@ -1200,6 +1200,9 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		default:
 			gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Fadding.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Fadding, []string{"", "FadeIn", "FadeOut", "VolumeSwell"}, path+"/Fadding", beat.ID, "note-and-beat-semantics")
 		}
+		if beat.Whammy != nil {
+			gpifAuditWhammy(context, beat.ID, path+"/Whammy", beat.Whammy)
+		}
 	}
 
 	for _, rhythm := range doc.Rhythms.Rhythms {
@@ -1398,6 +1401,23 @@ var gpifNotePropertySources = map[string]parseDiagnosticSource{
 	"Octave":                diagnosticSource("GPIF.Note.Property.Octave", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 }
 
+var gpifTechniqueMissingPayloadSources = map[string]parseDiagnosticSource{
+	"Muted":           diagnosticSource("GPIF.Note.Property.Muted.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"PalmMuted":       diagnosticSource("GPIF.Note.Property.PalmMuted.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Tapped":          diagnosticSource("GPIF.Note.Property.Tapped.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"HopoOrigin":      diagnosticSource("GPIF.Note.Property.HopoOrigin.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"HopoDestination": diagnosticSource("GPIF.Note.Property.HopoDestination.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"LeftHandTapped":  diagnosticSource("GPIF.Note.Property.LeftHandTapped.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+}
+
+var (
+	gpifNoteBendInvalidSource        = diagnosticSource("GPIF.Note.Property.BendNumber.Invalid", "note-and-beat-semantics", ParseDiagnosticInvalidData)
+	gpifNoteBendQuantizedSource      = diagnosticSource("GPIF.Note.Property.BendNumber.Quantized", "note-and-beat-semantics", ParseDiagnosticLossyProjection)
+	gpifWhammyInvalidSource          = diagnosticSource("GPIF.Beat.Whammy.Invalid", "note-and-beat-semantics", ParseDiagnosticInvalidData)
+	gpifWhammyQuantizedSource        = diagnosticSource("GPIF.Beat.Whammy.Quantized", "note-and-beat-semantics", ParseDiagnosticLossyProjection)
+	gpifTempoAutomationInvalidSource = diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Invalid", "tempo-automations", ParseDiagnosticInvalidData)
+)
+
 var gpifRedundantPitchSources = map[string]parseDiagnosticSource{
 	"ConcertPitch":    diagnosticSource("GPIF.Note.Property.ConcertPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"TransposedPitch": diagnosticSource("GPIF.Note.Property.TransposedPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
@@ -1436,11 +1456,34 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Midi.MissingPayload", "percussion-articulations", ParseDiagnosticInvalidData), property.Number != nil, propertyPath, noteID, "percussion-articulations", "Number")
 	case "BendOriginOffset", "BendOriginValue", "BendMiddleOffset1", "BendMiddleOffset2", "BendMiddleValue", "BendDestinationOffset", "BendDestinationValue":
 		gpifAuditPropertyPayload(context, gpifNotePropertySources[property.Name], property.Float != nil, propertyPath, noteID, "note-and-beat-semantics", "Float")
+		if property.Float != nil {
+			gpifAuditBendNumber(context, *property.Float, strings.Contains(property.Name, "Offset"), propertyPath+"/Float", ParseLocation{NoteID: noteID}, noteID, gpifNoteBendInvalidSource, gpifNoteBendQuantizedSource)
+		}
 	case "Slide":
-		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Slide.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData), property.Flags != nil, propertyPath, noteID, "note-and-beat-semantics", "Flags")
-	case "Muted", "Bended", "PalmMuted", "Harmonic", "ShowStringNumber":
+		if property.Flags == nil {
+			gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Slide.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData), false, propertyPath, noteID, "note-and-beat-semantics", "Flags")
+			return
+		}
+		flags, err := strconv.Atoi(*property.Flags)
+		if err != nil || flags < 0 {
+			context.add(diagnosticSource("GPIF.Note.Property.Slide.InvalidFlags", "note-and-beat-semantics", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: propertyPath + "/Flags", ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
+				Reason: fmt.Sprintf("slide flags %q are not a non-negative integer", *property.Flags),
+			})
+			return
+		}
+		if flags & ^0x3f != 0 {
+			context.add(diagnosticSource("GPIF.Note.Property.Slide.UnknownFlags", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				SourcePath: propertyPath + "/Flags", ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
+				Reason: fmt.Sprintf("slide flags %d contain unknown bits", flags),
+			})
+		}
+	case "Muted", "PalmMuted":
+		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
+	case "Bended", "Harmonic", "ShowStringNumber":
 		return
 	case "Tapped", "HopoOrigin", "HopoDestination", "LeftHandTapped":
+		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
 		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
 			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
 			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
@@ -1528,6 +1571,47 @@ func gpifAuditPropertyPayload(context *parseContext, source parseDiagnosticSourc
 		Kind: ParseDiagnosticInvalidData, SourcePath: path, ObjectID: objectID,
 		Feature: feature, Reason: fmt.Sprintf("GPIF property has no %s payload", payload),
 	})
+}
+
+func gpifAuditWhammy(context *parseContext, beatID, path string, whammy *gpifWhammy) {
+	values := []struct {
+		name   string
+		value  string
+		offset bool
+	}{
+		{name: "originValue", value: whammy.OriginValue},
+		{name: "middleValue", value: whammy.MiddleValue},
+		{name: "destinationValue", value: whammy.DestinationValue},
+		{name: "originOffset", value: whammy.OriginOffset, offset: true},
+		{name: "middleOffset1", value: whammy.MiddleOffset1, offset: true},
+		{name: "middleOffset2", value: whammy.MiddleOffset2, offset: true},
+		{name: "destinationOffset", value: whammy.DestinationOffset, offset: true},
+	}
+	for _, value := range values {
+		gpifAuditBendNumber(context, value.value, value.offset, path+"/@"+value.name, ParseLocation{BeatID: beatID}, beatID, gpifWhammyInvalidSource, gpifWhammyQuantizedSource)
+	}
+}
+
+func gpifAuditBendNumber(context *parseContext, raw string, offset bool, path string, location ParseLocation, objectID string, invalidSource, quantizedSource parseDiagnosticSource) {
+	parsed, valid := gpifParseBendNumber(raw, offset)
+	if !valid {
+		minimum, maximum := gpifBendNumberBounds(offset)
+		context.add(invalidSource, ParseDiagnostic{
+			SourcePath: path, ObjectID: objectID, Location: location,
+			Reason: fmt.Sprintf("bend number %q must be finite and inside %g..%g", raw, minimum, maximum),
+		})
+		return
+	}
+	projected := parsed / float64(GPBendSemitone)
+	if offset {
+		projected = parsed * float64(BendEffectMaxPosition) / 100
+	}
+	if math.Abs(projected-math.Round(projected)) > 0.000001 {
+		context.add(quantizedSource, ParseDiagnostic{
+			SourcePath: path, ObjectID: objectID, Location: location,
+			Reason: fmt.Sprintf("bend number %q requires quantization to the public curve scale", raw),
+		})
+	}
 }
 
 func gpifAuditBeatProperty(context *parseContext, beatID, path string, property gpifProperty) {
@@ -1992,8 +2076,23 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 func gpifAuditMasterAutomations(automations []gpifAutomation, context *parseContext) {
 	for index, automation := range automations {
 		switch automation.Type {
-		case "Tempo", "SyncPoint":
-			// Both automation types have represented destinations and dedicated readers.
+		case "Tempo":
+			if automation.Linear {
+				context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Linear", "tempo-automations", ParseDiagnosticLossyProjection), ParseDiagnostic{
+					SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Linear", index),
+					Feature:    "tempo",
+					Reason:     "linear tempo interpolation has no TempoAutomation destination",
+				})
+			}
+			if strings.TrimSpace(automation.Value.Text) == "" {
+				context.add(gpifTempoAutomationInvalidSource, ParseDiagnostic{
+					SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
+					Feature:    "tempo",
+					Reason:     "tempo automation value is missing",
+				})
+			}
+		case "SyncPoint":
+			gpifAuditSyncPointAutomation(automation, index, context)
 		default:
 			context.add(diagnosticSource("GPIF.MasterTrack.Automation.Type.Unknown", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
 				SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Type", index),
@@ -2004,11 +2103,74 @@ func gpifAuditMasterAutomations(automations []gpifAutomation, context *parseCont
 	}
 }
 
+func gpifAuditSyncPointAutomation(automation gpifAutomation, index int, context *parseContext) {
+	path := fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]", index)
+	invalid := func(reason string) {
+		context.add(diagnosticSource("GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+			SourcePath: path + "/Value",
+			Reason:     reason,
+		})
+	}
+	frameOffsetText := strings.TrimSpace(automation.Value.FrameOffset)
+	if frameOffsetText == "" {
+		frameOffsetText = strings.TrimSpace(automation.Value.Text)
+	}
+	frameOffset, err := strconv.ParseInt(frameOffsetText, 10, 64)
+	if err != nil || frameOffset < 0 {
+		invalid(fmt.Sprintf("sync-point frame offset %q must be a non-negative integer", frameOffsetText))
+		return
+	}
+	if _, err := NewBarPositionFromFloat64(automation.Position); err != nil {
+		invalid(fmt.Sprintf("sync-point position %v must be finite and within 0..1", automation.Position))
+		return
+	}
+	bar := automation.Bar
+	if text := strings.TrimSpace(automation.Value.BarIndex); text != "" {
+		parsed, parseErr := strconv.Atoi(text)
+		if parseErr != nil {
+			invalid(fmt.Sprintf("sync-point bar index %q must be a non-negative integer", automation.Value.BarIndex))
+			return
+		}
+		bar = parsed
+	}
+	if bar < 0 {
+		invalid(fmt.Sprintf("sync-point bar index %d must be non-negative", bar))
+		return
+	}
+	if text := strings.TrimSpace(automation.Value.BarOccurrence); text != "" {
+		value, parseErr := strconv.Atoi(text)
+		if parseErr != nil || value < 0 {
+			invalid(fmt.Sprintf("sync-point bar occurrence %q must be a non-negative integer", automation.Value.BarOccurrence))
+			return
+		}
+	}
+	for _, value := range []struct{ name, text string }{
+		{name: "modified tempo", text: automation.Value.ModifiedTempo},
+		{name: "original tempo", text: automation.Value.OriginalTempo},
+	} {
+		name, text := value.name, value.text
+		if strings.TrimSpace(text) == "" {
+			continue
+		}
+		value, parseErr := strconv.ParseFloat(strings.TrimSpace(text), 64)
+		if parseErr != nil || math.IsNaN(value) || math.IsInf(value, 0) {
+			invalid(fmt.Sprintf("sync-point %s %q must be finite", name, text))
+			return
+		}
+	}
+}
+
 func gpifAuditTrackAutomations(track gpifTrack, context *parseContext) {
 	for index, automation := range track.Automations.Automations {
 		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/Automations/Automation[%d]", track.ID, index)
 		switch automation.Type {
 		case "Sound":
+			if automation.Linear {
+				context.add(diagnosticSource("GPIF.Track.Automation.Sound.Linear", "score-core", ParseDiagnosticLossyProjection), ParseDiagnostic{
+					SourcePath: path + "/Linear", ObjectID: track.ID,
+					Reason: "linear sound interpolation has no SoundAutomation destination",
+				})
+			}
 			resolved := false
 			for _, sound := range track.Sounds.Sounds {
 				if automation.Value.Text == sound.Path+";"+sound.Name+";"+sound.Role {
@@ -2149,7 +2311,11 @@ func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
 		if automation.Type != "SyncPoint" {
 			continue
 		}
-		frameOffset, err := strconv.ParseInt(strings.TrimSpace(automation.Value.FrameOffset), 10, 64)
+		frameOffsetText := strings.TrimSpace(automation.Value.FrameOffset)
+		if frameOffsetText == "" {
+			frameOffsetText = strings.TrimSpace(automation.Value.Text)
+		}
+		frameOffset, err := strconv.ParseInt(frameOffsetText, 10, 64)
 		if err != nil {
 			continue
 		}
@@ -2202,7 +2368,7 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song, context 
 			if song.InitialTempo.State == SourceValueMissing {
 				song.InitialTempo = UnknownSourceValue[BPM](parts[0])
 			}
-			context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Invalid", "tempo-automations", ParseDiagnosticInvalidData), ParseDiagnostic{
+			context.add(gpifTempoAutomationInvalidSource, ParseDiagnostic{
 				SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
 				Feature:    "tempo",
 				Reason:     fmt.Sprintf("tempo %q must be finite and positive", parts[0]),
@@ -2286,9 +2452,9 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 		}
 		bend := &BendEffect{}
 		for _, point := range values {
-			position, positionErr := strconv.ParseFloat(point.position, 64)
-			value, valueErr := strconv.ParseFloat(point.value, 64)
-			if positionErr != nil || valueErr != nil {
+			position, positionValid := gpifParseBendNumber(point.position, true)
+			value, valueValid := gpifParseBendNumber(point.value, false)
+			if !positionValid || !valueValid {
 				continue
 			}
 			bend.Points = append(bend.Points, BendPoint{
@@ -2790,25 +2956,45 @@ func simplifyBendPoints(points []BendPoint) []BendPoint {
 }
 
 func gpifBendPosition(value *string) uint8 {
-	if value == nil {
-		return 0
-	}
-	parsed, err := strconv.ParseFloat(*value, 64)
-	if err != nil {
+	parsed, valid := gpifParseBendNumberPointer(value, true)
+	if !valid {
 		return 0
 	}
 	return uint8(math.Round(parsed * float64(BendEffectMaxPosition) / 100))
 }
 
 func gpifBendValue(value *string) int8 {
-	if value == nil {
-		return 0
-	}
-	parsed, err := strconv.ParseFloat(*value, 64)
-	if err != nil {
+	parsed, valid := gpifParseBendNumberPointer(value, false)
+	if !valid {
 		return 0
 	}
 	return int8(math.Round(parsed / float64(GPBendSemitone)))
+}
+
+func gpifParseBendNumberPointer(value *string, offset bool) (float64, bool) {
+	if value == nil {
+		return 0, false
+	}
+	return gpifParseBendNumber(*value, offset)
+}
+
+func gpifParseBendNumber(value string, offset bool) (float64, bool) {
+	parsed, err := strconv.ParseFloat(value, 64)
+	if err != nil || math.IsNaN(parsed) || math.IsInf(parsed, 0) {
+		return 0, false
+	}
+	minimum, maximum := gpifBendNumberBounds(offset)
+	if parsed < minimum || parsed > maximum {
+		return 0, false
+	}
+	return parsed, true
+}
+
+func gpifBendNumberBounds(offset bool) (float64, float64) {
+	if offset {
+		return 0, 100
+	}
+	return float64(math.MinInt8) * float64(GPBendSemitone), float64(math.MaxInt8) * float64(GPBendSemitone)
 }
 
 func gpifMeasureClef(value string) MeasureClef {

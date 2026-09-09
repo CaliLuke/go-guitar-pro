@@ -114,11 +114,13 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 			return err
 		}
 		note.Effect.LeftHandFinger = Fingering(lf)
+		note.Effect.HasLeftHandFinger = true
 		rf, err := c.readSignedByte()
 		if err != nil {
 			return err
 		}
 		note.Effect.RightHandFinger = Fingering(rf)
+		note.Effect.HasRightHandFinger = true
 	}
 	if (flags & 0x08) == 0x08 {
 		if s.Version.Number == [3]byte{3, 0, 0} {
@@ -182,11 +184,13 @@ func (s *Song) readNoteV5(c *cursor, note *Note, guitarString GuitarString, trac
 			return leftFingerErr
 		}
 		note.Effect.LeftHandFinger = Fingering(lf)
+		note.Effect.HasLeftHandFinger = true
 		rf, rightFingerErr := c.readSignedByte()
 		if rightFingerErr != nil {
 			return rightFingerErr
 		}
 		note.Effect.RightHandFinger = Fingering(rf)
+		note.Effect.HasRightHandFinger = true
 	}
 	if (flags & 0x01) == 0x01 {
 		dp, durationPercentErr := c.readDouble()

@@ -146,6 +146,36 @@ an eighth-note stroke duration. Export reports a different source duration. It
 also reports rasgueado, pick stroke, slap effects, and beat vibrato because the
 writer does not emit them.
 
+GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
+boolean vibrato, hammer origin, slide flags, harmonic kind, and trill fret.
+The writer reports fingerings and tremolo picking because GP8 export does not
+emit them. This rule includes an authored thumb value.
+Use `HasLeftHandFinger` or `HasRightHandFinger` to mark an authored `Thumb` or
+`Open` value. Nonzero named fingers remain compatible without these markers.
+
+GPIF can distinguish vibrato strength, tenuto, hammer endpoints, and tapping
+variants. The public model stores less precise values. Parse diagnostics record
+each collapsed distinction before import removes it. Validation rejects unknown
+fingering and slide enum values. Parse diagnostics reject a missing technique
+payload and classify unknown slide bits.
+
+GP8 preserves bend and whammy curves when the target can keep their shape.
+The writer can remove a collinear point without changing the curve. It reports
+unequal middle values, point vibrato, and summary fields. Strict export rejects
+each unapproved change. Parse diagnostics check GPIF curve numbers before they
+enter narrow legacy fields.
+
+GP8 preserves a chord name, string pattern, and representable first fret. It
+reports barres, fingerings, omissions, and legacy chord descriptions. Imported
+chord occurrences own separate mutable slices and pointers. Track and staff
+definition scopes remain separate when they use the same local identifier.
+
+GP8 keeps the authored order of tempo and sound automations. It does not sort
+same-bar events by position. Parse diagnostics report missing values, broken
+sound references, unknown automation types, and unsupported channel-strip
+types. They also report linear tempo or sound interpolation because the public
+records do not contain an interpolation field.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.

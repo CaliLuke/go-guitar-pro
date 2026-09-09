@@ -74,6 +74,19 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM09NoteValidation":                     runSemanticMatrixM09NoteValidation,
 	"TestSemanticMatrixM10BeatSemantics":                      runSemanticMatrixM10BeatSemantics,
 	"TestSemanticMatrixM10BeatEffects":                        runSemanticMatrixM10BeatEffects,
+	"TestSemanticMatrixM11TechniqueDispositions":              runSemanticMatrixM11TechniqueDispositions,
+	"TestSemanticMatrixM11SourceDistinctions":                 runSemanticMatrixM11SourceDistinctions,
+	"TestSemanticMatrixM11Validation":                         runSemanticMatrixM11Validation,
+	"TestSemanticMatrixM12CurvePreservation":                  runSemanticMatrixM12CurvePreservation,
+	"TestSemanticMatrixM12CurveLossPolicy":                    runSemanticMatrixM12CurveLossPolicy,
+	"TestSemanticMatrixM12CurveValidation":                    runSemanticMatrixM12CurveValidation,
+	"TestSemanticMatrixM14ChordDefinitions":                   runSemanticMatrixM14ChordDefinitions,
+	"TestSemanticMatrixM14ChordDefaultsAndLength":             runSemanticMatrixM14ChordDefaultsAndLength,
+	"TestSemanticMatrixM14ChordScopeAndIsolation":             runSemanticMatrixM14ChordScopeAndIsolation,
+	"TestSemanticMatrixM17AutomationSemantics":                runSemanticMatrixM17AutomationSemantics,
+	"TestSemanticMatrixM17SourceDispatchAndDiagnostics":       runSemanticMatrixM17SourceDispatchAndDiagnostics,
+	"TestSemanticMatrixM17AutomationValidation":               runSemanticMatrixM17AutomationValidation,
+	"TestSemanticMatrixM17BinaryMixTable":                     runSemanticMatrixM17BinaryMixTable,
 }
 
 func semanticValidGP8Song(t *testing.T) *Song {
