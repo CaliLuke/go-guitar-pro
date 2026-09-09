@@ -35,6 +35,24 @@
   ],
   "diagnosticReceipts": [
   {
+    "source": "GPIF.ChannelStrip.Automation.Type.Unknown",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The channel-strip automation type is not recognized."
+  },
+  {
+    "source": "GPIF.ChannelStrip.Automation.Unsupported",
+    "feature": "score-core",
+    "disposition": "unsupported-feature",
+    "reason": "The channel-strip automation has no Song destination."
+  },
+  {
+    "source": "GPIF.MasterTrack.Automation.Type.Unknown",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The master-track automation type is not recognized."
+  },
+  {
     "source": "GPIF.MasterTrack.Automation.Tempo.Invalid",
     "feature": "tempo-automations",
     "disposition": "invalid-data",
@@ -667,6 +685,24 @@
     "reason": "The source object must have a non-empty ID."
   },
   {
+    "source": "GPIF.Track.Automation.Sound.Reference",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "The sound automation must reference a sound in its track."
+  },
+  {
+    "source": "GPIF.Track.Automation.SustainPedal",
+    "feature": "score-core",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no destination for sustain-pedal automation."
+  },
+  {
+    "source": "GPIF.Track.Automation.Type.Unknown",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The track automation type is not recognized."
+  },
+  {
     "source": "GPIF.Track.Transpose",
     "feature": "staff-ownership",
     "disposition": "unsupported-feature",
@@ -937,7 +973,10 @@
       {"function":"gpifAuditNoteProperty","selector":"property.Name","feature":"note-and-beat-semantics","cases":["BendDestinationOffset","BendDestinationValue","BendMiddleOffset1","BendMiddleOffset2","BendMiddleValue","BendOriginOffset","BendOriginValue","Bended","ConcertPitch","Element","Fret","Harmonic","HarmonicFret","HarmonicType","HopoDestination","HopoOrigin","LeftHandTapped","Midi","Muted","Octave","PalmMuted","ShowStringNumber","Slide","String","Tapped","Tone","TransposedPitch","Variation"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each named note property before import."},
       {"function":"gpifAuditBeatProperty","selector":"property.Name","feature":"note-and-beat-semantics","cases":["BarreFret","BarreString","Brush","PickStroke","Popped","PrimaryPickupTone","PrimaryPickupVolume","Rasgueado","Slapped","VibratoWTremBar","WhammyBar","WhammyBarDestinationOffset","WhammyBarDestinationValue","WhammyBarExtend","WhammyBarMiddleOffset1","WhammyBarMiddleOffset2","WhammyBarMiddleValue","WhammyBarOriginOffset","WhammyBarOriginValue"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each named beat property before import."},
       {"function":"gpifApplyBeatEffects","selector":"p.Name","feature":"note-and-beat-semantics","cases":["Brush","PickStroke","Popped","Slapped","VibratoWTremBar"],"defaultDisposition":"delegated-to-audit","reason":"The importer maps represented beat properties after the audit classifies all names."},
-      {"function":"gpifNoteToNote","selector":"p.Name","feature":"note-and-beat-semantics","cases":["BendDestinationOffset","BendDestinationValue","BendMiddleOffset1","BendMiddleOffset2","BendMiddleValue","BendOriginOffset","BendOriginValue","Bended","Fret","HarmonicFret","HarmonicType","HopoOrigin","LeftHandTapped","Midi","Muted","PalmMuted","Slide","String","Tapped"],"defaultDisposition":"delegated-to-audit","reason":"The importer maps represented note properties after the audit classifies all names."}
+      {"function":"gpifNoteToNote","selector":"p.Name","feature":"note-and-beat-semantics","cases":["BendDestinationOffset","BendDestinationValue","BendMiddleOffset1","BendMiddleOffset2","BendMiddleValue","BendOriginOffset","BendOriginValue","Bended","Fret","HarmonicFret","HarmonicType","HopoOrigin","LeftHandTapped","Midi","Muted","PalmMuted","Slide","String","Tapped"],"defaultDisposition":"delegated-to-audit","reason":"The importer maps represented note properties after the audit classifies all names."},
+      {"function":"gpifAuditMasterAutomations","selector":"automation.Type","feature":"score-core","cases":["SyncPoint","Tempo"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each master-track automation before import."},
+      {"function":"gpifAuditTrackAutomations","selector":"automation.Type","feature":"score-core","cases":["Sound","SustainPedal"],"defaultDisposition":"unknown-syntax","reason":"The audit classifies each track automation and checks sound references before import."},
+      {"function":"gpifAuditChannelStripAutomations","selector":"automation.Type","feature":"score-core","cases":["DSPParam_00","DSPParam_01","DSPParam_11","DSPParam_12"],"defaultDisposition":"unknown-syntax","reason":"The audit preserves volume automation and reports every other recognized channel-strip automation."}
     ]
   }
 }

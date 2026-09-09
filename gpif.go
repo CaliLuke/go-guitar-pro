@@ -558,6 +558,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 
 	gpifReadBackingTrack(doc, song)
+	gpifAuditMasterAutomations(doc.MasterTrack.Automations.Automations, context)
 	gpifReadSyncPoints(doc.MasterTrack.Automations.Automations, song)
 	gpifReadTempoAutomations(doc.MasterTrack.Automations.Automations, song, context)
 
@@ -605,6 +606,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		chordMap := gpifChordScope{}
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
+				gpifAuditTrackAutomations(t, context)
 				track.Name = t.Name
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
@@ -687,6 +689,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				ch.EffectChannel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.SecondaryChannel)
 				if t.RSE != nil {
 					gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
+					gpifAuditChannelStripAutomations(t.RSE.ChannelStrip.Automations.Automations, t.ID, context)
 					gpifReadVolumeAutomations(
 						t.RSE.ChannelStrip.Automations.Automations,
 						len(song.Tracks),
@@ -713,37 +716,52 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		fallbackArticulations[trackIndex].tableLength = len(song.Tracks[trackIndex].PercussionArticulations)
 	}
 	for mbIdx, mb := range doc.MasterBars.MasterBars {
+		if mbIdx >= math.MaxUint16 {
+			return nil, fmt.Errorf("master-bar index %d exceeds legacy uint16 boundary", mbIdx)
+		}
 		mh := defaultMeasureHeader()
 		mh.Number = uint16(mbIdx + 1)
 
 		// Time signature
 		if mb.Time != "" {
 			parts := strings.Split(mb.Time, "/")
-			if len(parts) == 2 {
-				if num, err := strconv.Atoi(parts[0]); err == nil {
-					mh.TimeSignature.Numerator = int8(num)
-				}
-				if den, err := strconv.Atoi(parts[1]); err == nil {
-					mh.TimeSignature.Denominator.Value = uint16(den)
-				}
+			if len(parts) != 2 {
+				return nil, fmt.Errorf("master bar %d has invalid time signature %q", mbIdx, mb.Time)
 			}
+			numerator, numeratorErr := strconv.ParseInt(parts[0], 10, 64)
+			if numeratorErr != nil || numerator <= 0 || numerator > math.MaxInt8 {
+				return nil, fmt.Errorf("master bar %d time-signature numerator %q is outside 1..%d", mbIdx, parts[0], math.MaxInt8)
+			}
+			denominator, denominatorErr := strconv.ParseInt(parts[1], 10, 64)
+			if denominatorErr != nil || denominator <= 0 || denominator > math.MaxUint16 {
+				return nil, fmt.Errorf("master bar %d time-signature denominator %q is outside 1..%d", mbIdx, parts[1], math.MaxUint16)
+			}
+			mh.TimeSignature.Numerator = int8(numerator)
+			mh.TimeSignature.Denominator.Value = uint16(denominator)
 		}
 
 		// Key signature
+		if mb.Key.AccidentalCount < math.MinInt8 || mb.Key.AccidentalCount > math.MaxInt8 {
+			return nil, fmt.Errorf("master bar %d key accidental count %d is outside %d..%d", mbIdx, mb.Key.AccidentalCount, math.MinInt8, math.MaxInt8)
+		}
 		mh.KeySignature.Key = int8(mb.Key.AccidentalCount)
 		mh.KeySignature.IsMinor = mb.Key.Mode == "Minor"
 
 		if mb.Repeat != nil {
 			mh.RepeatOpen = mb.Repeat.Start == "true"
 			if mb.Repeat.End == "true" && mb.Repeat.Count > 0 {
+				if mb.Repeat.Count > math.MaxInt8+1 {
+					return nil, fmt.Errorf("master bar %d repeat count %d is outside 1..%d", mbIdx, mb.Repeat.Count, math.MaxInt8+1)
+				}
 				mh.RepeatClose = int8(mb.Repeat.Count - 1)
 			}
 		}
 		for _, ending := range splitIDs(mb.AlternateEndings) {
 			number, err := strconv.Atoi(ending)
-			if err == nil && number >= 1 && number <= 8 {
-				mh.RepeatAlternative |= 1 << (number - 1)
+			if err != nil || number < 1 || number > 8 {
+				return nil, fmt.Errorf("master bar %d alternate ending %q is outside 1..8", mbIdx, ending)
 			}
+			mh.RepeatAlternative |= 1 << (number - 1)
 		}
 
 		// Section marker
@@ -1762,11 +1780,41 @@ type gpifChordScope struct {
 func (s gpifChordScope) resolve(staffIndex int, id string) (Chord, bool) {
 	if staffIndex >= 0 && staffIndex < len(s.staves) {
 		if chord, ok := s.staves[staffIndex][id]; ok {
-			return chord, true
+			return cloneChordOccurrence(chord), true
 		}
 	}
 	chord, ok := s.track[id]
-	return chord, ok
+	return cloneChordOccurrence(chord), ok
+}
+
+func cloneChordOccurrence(source Chord) Chord {
+	clone := source
+	clone.FirstFret = cloneSemanticPointer(source.FirstFret)
+	clone.Ninth = cloneSemanticPointer(source.Ninth)
+	clone.Root = cloneSemanticPointer(source.Root)
+	clone.Fifth = cloneSemanticPointer(source.Fifth)
+	clone.Extension = cloneSemanticPointer(source.Extension)
+	clone.Bass = cloneSemanticPointer(source.Bass)
+	clone.Tonality = cloneSemanticPointer(source.Tonality)
+	clone.Add = cloneSemanticPointer(source.Add)
+	clone.Sharp = cloneSemanticPointer(source.Sharp)
+	clone.NewFormat = cloneSemanticPointer(source.NewFormat)
+	clone.Kind = cloneSemanticPointer(source.Kind)
+	clone.Eleventh = cloneSemanticPointer(source.Eleventh)
+	clone.Show = cloneSemanticPointer(source.Show)
+	clone.Strings = slices.Clone(source.Strings)
+	clone.Barres = slices.Clone(source.Barres)
+	clone.Omissions = slices.Clone(source.Omissions)
+	clone.Fingerings = slices.Clone(source.Fingerings)
+	return clone
+}
+
+func cloneSemanticPointer[T any](source *T) *T {
+	if source == nil {
+		return nil
+	}
+	clone := *source
+	return &clone
 }
 
 func gpifReadChordMap(track gpifTrack) (gpifChordScope, error) {
@@ -1815,6 +1863,73 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 		}
 	}
 	return nil
+}
+
+func gpifAuditMasterAutomations(automations []gpifAutomation, context *parseContext) {
+	for index, automation := range automations {
+		switch automation.Type {
+		case "Tempo", "SyncPoint":
+			// Both automation types have represented destinations and dedicated readers.
+		default:
+			context.add(diagnosticSource("GPIF.MasterTrack.Automation.Type.Unknown", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+				SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Type", index),
+				ObjectID:   automation.Type,
+				Reason:     fmt.Sprintf("master-track automation type %q is not recognized", automation.Type),
+			})
+		}
+	}
+}
+
+func gpifAuditTrackAutomations(track gpifTrack, context *parseContext) {
+	for index, automation := range track.Automations.Automations {
+		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/Automations/Automation[%d]", track.ID, index)
+		switch automation.Type {
+		case "Sound":
+			resolved := false
+			for _, sound := range track.Sounds.Sounds {
+				if automation.Value.Text == sound.Path+";"+sound.Name+";"+sound.Role {
+					resolved = true
+					break
+				}
+			}
+			if !resolved {
+				context.add(diagnosticSource("GPIF.Track.Automation.Sound.Reference", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Value", ObjectID: track.ID,
+					Reason: fmt.Sprintf("sound automation reference %q does not resolve in its track", automation.Value.Text),
+				})
+			}
+		case "SustainPedal":
+			context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				SourcePath: path + "/Type/SustainPedal", ObjectID: track.ID,
+				Reason: "sustain-pedal automation has no Song destination",
+			})
+		default:
+			context.add(diagnosticSource("GPIF.Track.Automation.Type.Unknown", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+				SourcePath: path + "/Type", ObjectID: track.ID,
+				Reason: fmt.Sprintf("track automation type %q is not recognized", automation.Type),
+			})
+		}
+	}
+}
+
+func gpifAuditChannelStripAutomations(automations []gpifAutomation, trackID string, context *parseContext) {
+	for index, automation := range automations {
+		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/RSE/ChannelStrip/Automations/Automation[%d]", trackID, index)
+		switch automation.Type {
+		case "DSPParam_12":
+			// Volume automation has a represented destination and a dedicated reader.
+		case "DSPParam_00", "DSPParam_01", "DSPParam_11":
+			context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Unsupported", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				SourcePath: path + "/Type", ObjectID: trackID,
+				Reason: fmt.Sprintf("channel-strip automation type %q has no Song destination", automation.Type),
+			})
+		default:
+			context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Type.Unknown", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+				SourcePath: path + "/Type", ObjectID: trackID,
+				Reason: fmt.Sprintf("channel-strip automation type %q is not recognized", automation.Type),
+			})
+		}
+	}
 }
 
 func gpifMIDIChannel(port, channel int) uint8 {

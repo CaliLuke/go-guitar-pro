@@ -54,25 +54,47 @@ func (e *ExportLossError) Error() string {
 // PreflightExport reports target-specific rejections, normalizations, and omissions.
 // It does not mutate the song and does not produce an output artifact.
 func PreflightExport(song *Song, target ExportFormat, options ExportOptions) ExportReport {
+	report, _ := planExport(song, target, options)
+	return report
+}
+
+type gp8ExportPlan struct {
+	document gpifDocument
+}
+
+func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportReport, *gp8ExportPlan) {
 	report := ExportReport{Target: target}
 	add := func(code, feature string, disposition ExportDisposition, location ScoreLocation, reason string) {
 		report.Entries = append(report.Entries, ExportReportEntry{Code: code, Feature: feature, Disposition: disposition, Location: location, Reason: reason})
 	}
 	if song == nil {
 		add("export.reject.nil-song", "score-core", ExportDispositionRejected, ScoreLocation{}, "song is nil")
-		return report
+		return report, nil
 	}
 	if target != ExportFormatGP8 {
 		add("export.reject.target", "score-core", ExportDispositionRejected, ScoreLocation{}, fmt.Sprintf("unsupported target %d", target))
-		return report
+		return report, nil
+	}
+	for _, diagnostic := range authoredScoreDiagnostics(song) {
+		feature := "score-core"
+		if diagnostic.Kind == ScoreDiagnosticTiming {
+			feature = "rhythm"
+		}
+		add("gp8.reject."+diagnostic.Code, feature, ExportDispositionRejected, diagnostic.Location, diagnostic.Reason)
+	}
+	if len(report.Entries) != 0 {
+		return report, nil
 	}
 	if err := validateGP8Song(song); err != nil {
 		add("gp8.reject.score", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())
-		return report
+		return report, nil
 	}
 	if err := validateGP8ExportOptions(options.GP8); err != nil {
 		add("gp8.reject.options", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())
-		return report
+		return report, nil
+	}
+	if _, conflict, err := gp8ResolvedFieldTempo(song); err == nil && conflict {
+		add("gp8.normalize.tempo-compatibility", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the edited legacy Tempo value takes precedence over conflicting InitialTempo data")
 	}
 	if song.BackingTrack != nil {
 		add("gp8.omit.backing-track", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track assets")
@@ -83,30 +105,12 @@ func PreflightExport(song *Song, target ExportFormat, options ExportOptions) Exp
 	for _, automation := range song.VolumeAutomations {
 		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "GP8 writer does not emit this track volume automation")
 	}
-	for trackIndex := range song.Tracks {
-		for staffIndex, staff := range gp8ExportStaves(&song.Tracks[trackIndex]) {
-			for measureIndex := range staff.Measures {
-				for voiceIndex := range staff.Measures[measureIndex].Voices {
-					for beatIndex, beat := range staff.Measures[measureIndex].Voices[voiceIndex].Beats {
-						location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex, Voice: voiceIndex, Beat: beatIndex}
-						if beat.Status == BeatStatusEmpty {
-							add("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
-						}
-						if len(beat.Notes) > 0 {
-							velocity := gpifDynamicToVelocity(gp8VelocityToDynamic(beat.Notes[0].Velocity))
-							for _, note := range beat.Notes {
-								if note.Velocity != velocity {
-									add("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
-									break
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	document, err := buildGP8DocumentWithReport(song, options.GP8, &report)
+	if err != nil {
+		add("gp8.reject.conversion", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())
+		return report, nil
 	}
-	return report
+	return report, &gp8ExportPlan{document: document}
 }
 
 func refusedExportEntries(report ExportReport, policy ExportLossPolicy) []ExportReportEntry {

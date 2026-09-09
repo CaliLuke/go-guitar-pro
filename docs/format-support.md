@@ -35,6 +35,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 
 | Source construct | Feature | Disposition | Reason |
 | --- | --- | --- | --- |
+| `GPIF.ChannelStrip.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The channel-strip automation type is not recognized. |
+| `GPIF.ChannelStrip.Automation.Unsupported` | `score-core` | `unsupported-feature` | The channel-strip automation has no Song destination. |
+| `GPIF.MasterTrack.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The master-track automation type is not recognized. |
 | `GPIF.MasterTrack.Automation.Tempo.Invalid` | `tempo-automations` | `invalid-data` | The opening tempo must be finite and positive. |
 | `GPIF.MasterTrack.Automation.Tempo.LegacyOverflow` | `tempo-automations` | `lossy-projection` | The exact opening BPM is preserved but cannot be projected into the legacy int16 field. |
 | `GPIF.MasterTrack.Automation.Tempo.Reference.Invalid` | `tempo-automations` | `invalid-data` | Applying the authored tempo reference unit must produce a finite positive BPM. |
@@ -140,6 +143,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Rhythm.NoteValue.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Track.DuplicateID` | `staff-ownership` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Track.EmptyID` | `staff-ownership` | `invalid-data` | The source object must have a non-empty ID. |
+| `GPIF.Track.Automation.Sound.Reference` | `score-core` | `invalid-data` | The sound automation must reference a sound in its track. |
+| `GPIF.Track.Automation.SustainPedal` | `score-core` | `unsupported-feature` | Song has no destination for sustain-pedal automation. |
+| `GPIF.Track.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The track automation type is not recognized. |
 | `GPIF.Track.Transpose` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.UnknownAttribute.NoteAndBeat` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.Rhythm` | `rhythm` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
@@ -220,3 +226,6 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
+| `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each master-track automation before import. |
+| `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
+| `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |

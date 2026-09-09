@@ -193,6 +193,67 @@ func TestParseWithOptionsStrictAllowsDeliberateIgnore(t *testing.T) {
 	}
 }
 
+func TestGPIFAutomationDispatchDiagnostics(t *testing.T) {
+	tests := []struct {
+		name         string
+		mutate       func(string) string
+		kind         ParseDiagnosticKind
+		code         string
+		pathContains string
+	}{
+		{
+			name: "unsupported sustain pedal",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<Automations><Automation><Type>SustainPedal</Type><Bar>0</Bar><Position>0</Position><Value>1</Value></Automation></Automations><Staves>`, 1)
+			},
+			kind: ParseDiagnosticUnsupportedFeature, code: "GPIF.Track.Automation.SustainPedal", pathContains: "SustainPedal",
+		},
+		{
+			name: "unknown master automation",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "</MasterTrack>", `<Automations><Automation><Type>FutureFeature</Type><Bar>0</Bar><Position>0</Position><Value>42</Value></Automation></Automations></MasterTrack>`, 1)
+			},
+			kind: ParseDiagnosticUnknownSyntax, code: "GPIF.MasterTrack.Automation.Type.Unknown", pathContains: "MasterTrack",
+		},
+		{
+			name: "unresolved sound reference",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<Automations><Automation><Type>Sound</Type><Bar>0</Bar><Position>0</Position><Value>missing;sound;Default</Value></Automation></Automations><Staves>`, 1)
+			},
+			kind: ParseDiagnosticInvalidData, code: "GPIF.Track.Automation.Sound.Reference", pathContains: "Automations",
+		},
+		{
+			name: "unknown channel strip automation",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<RSE><ChannelStrip><Parameters>0 0 0 0 0 0 0 0 0 0 0.5 0.5 0.5</Parameters><Automations><Automation><Type>FutureDSP</Type><Bar>0</Bar><Position>0</Position><Value>0.5</Value></Automation></Automations></ChannelStrip></RSE><Staves>`, 1)
+			},
+			kind: ParseDiagnosticUnknownSyntax, code: "GPIF.ChannelStrip.Automation.Type.Unknown", pathContains: "ChannelStrip",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			data := conformanceGPIFArchive(t, test.mutate(staffScopedChordGPIF))
+			result, err := ParseWithOptions(data, ParseOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			diagnostic := findParseDiagnostic(result.Diagnostics, test.kind, "score-core")
+			if diagnostic == nil || diagnostic.Code != test.code || !strings.Contains(diagnostic.SourcePath, test.pathContains) {
+				t.Fatalf("diagnostics = %#v, want %s at path containing %q", result.Diagnostics, test.kind, test.pathContains)
+			}
+			if _, compatibilityErr := Parse(data); compatibilityErr != nil {
+				t.Fatalf("legacy Parse rejected permissive input: %v", compatibilityErr)
+			}
+			strictResult, strictErr := ParseWithOptions(data, ParseOptions{Strict: true})
+			var policyErr *StrictParseError
+			if !errors.As(strictErr, &policyErr) || strictResult == nil {
+				t.Fatalf("strict result = %#v, error = %v, want StrictParseError", strictResult, strictErr)
+			}
+		})
+	}
+}
+
 func TestParseWithOptionsKeepsSupportedGPIFClean(t *testing.T) {
 	result, err := ParseWithOptions(diagnosticGP8Fixture(t, func(gpif string) string { return gpif }), ParseOptions{})
 	if err != nil {
@@ -386,6 +447,66 @@ func TestGPIFConversionsRejectValuesThatWouldNarrow(t *testing.T) {
 		{Name: "Midi", Number: &midi},
 	}}}, 6, false); err == nil {
 		t.Fatal("out-of-range MIDI note was accepted")
+	}
+}
+
+func TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries(t *testing.T) {
+	tests := []struct {
+		name      string
+		mutate    func(string) string
+		wantError bool
+		assert    func(*testing.T, *Song)
+	}{
+		{name: "maximum numerator", mutate: func(gpif string) string {
+			return strings.Replace(gpif, "4/4", "127/4", 1)
+		}, assert: func(t *testing.T, song *Song) {
+			if song.MeasureHeaders[0].TimeSignature.Numerator != 127 {
+				t.Fatalf("numerator = %d, want 127", song.MeasureHeaders[0].TimeSignature.Numerator)
+			}
+		}},
+		{name: "numerator overflow", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "4/4", "128/4", 1)
+		}},
+		{name: "modulo numerator", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "4/4", "260/4", 1)
+		}},
+		{name: "denominator overflow", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "4/4", "4/65536", 1)
+		}},
+		{name: "key overflow", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "<MasterBar><Time>", "<MasterBar><Key><AccidentalCount>128</AccidentalCount></Key><Time>", 1)
+		}},
+		{name: "maximum repeat count", mutate: func(gpif string) string {
+			return strings.Replace(gpif, "<Bars>0 1</Bars>", `<Repeat end="true" count="128"/><Bars>0 1</Bars>`, 1)
+		}, assert: func(t *testing.T, song *Song) {
+			if song.MeasureHeaders[0].RepeatClose != 127 {
+				t.Fatalf("repeat close = %d, want 127", song.MeasureHeaders[0].RepeatClose)
+			}
+		}},
+		{name: "repeat overflow", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "<Bars>0 1</Bars>", `<Repeat end="true" count="130"/><Bars>0 1</Bars>`, 1)
+		}},
+		{name: "alternate ending overflow", wantError: true, mutate: func(gpif string) string {
+			return strings.Replace(gpif, "<Bars>0 1</Bars>", "<AlternateEndings>9</AlternateEndings><Bars>0 1</Bars>", 1)
+		}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := ParseWithOptions(conformanceGPIFArchive(t, test.mutate(staffScopedChordGPIF)), ParseOptions{Strict: true})
+			if test.wantError {
+				if err == nil {
+					t.Fatalf("strict parse succeeded with song %#v", result.Song.MeasureHeaders[0])
+				}
+				return
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if test.assert != nil {
+				test.assert(t, result.Song)
+			}
+		})
 	}
 }
 

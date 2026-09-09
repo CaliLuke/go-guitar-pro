@@ -43,6 +43,41 @@ func TestGPIFChordIDsAreScopedPerStaff(t *testing.T) {
 	}
 }
 
+func TestRepeatedGPIFChordOccurrencesOwnMutablePayloads(t *testing.T) {
+	gpif := strings.Replace(staffScopedChordGPIF, `<Beats>0</Beats>`, `<Beats>0 0</Beats>`, 1)
+	result, err := ParseWithOptions(conformanceGPIFArchive(t, gpif), ParseOptions{Strict: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	beats := result.Song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats
+	if len(beats) != 2 {
+		t.Fatalf("beats = %d, want 2", len(beats))
+	}
+	first := beats[0].Effect.Chord
+	second := beats[1].Effect.Chord
+	if first == nil || second == nil || first == second || first.FirstFret == nil || second.FirstFret == nil {
+		t.Fatalf("chord occurrences = %#v, %#v", first, second)
+	}
+	first.Strings[0] = 7
+	*first.FirstFret = 5
+	if second.Strings[0] != 1 || *second.FirstFret != 1 {
+		t.Fatalf("second chord changed through first occurrence: %#v", second)
+	}
+
+	data, err := Export(result.Song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTripBeats := roundTrip.Tracks[0].Staves[0].Measures[0].Voices[0].Beats
+	if roundTripBeats[0].Effect.Chord.Strings[0] != 7 || roundTripBeats[1].Effect.Chord.Strings[0] != 1 {
+		t.Fatalf("round-trip chord strings = %v, %v", roundTripBeats[0].Effect.Chord.Strings, roundTripBeats[1].Effect.Chord.Strings)
+	}
+}
+
 func TestGPIFRejectsOversizedChordDiagramBeforeAllocation(t *testing.T) {
 	data := strings.Replace(staffScopedChordGPIF, `stringCount="1"`, `stringCount="1000"`, 1)
 	if _, err := parseGPIF([]byte(data)); err == nil {

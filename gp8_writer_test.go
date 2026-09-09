@@ -930,7 +930,7 @@ func TestExportGP8EmitsEnabledMutedAndHammerOnProperties(t *testing.T) {
 func TestExportGP8RejectsInvalidSoundAutomation(t *testing.T) {
 	song := syntheticGP8Song()
 	song.Tracks[0].SoundAutomations = []SoundAutomation{{Bar: 0, Sound: 1}}
-	if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "sound index") {
+	if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "sound automation 0 references sound 1") {
 		t.Fatalf("Export error = %v, want invalid sound index", err)
 	}
 }
@@ -1071,7 +1071,7 @@ func TestExportRejectsInvalidPercussionArticulationIdentity(t *testing.T) {
 		note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
 		note.PercussionArticulation = 1
 		note.HasPercussionArticulation = true
-		if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "percussion articulation 1 with 1 definitions") {
+		if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "articulation 1 is outside 0..0") {
 			t.Fatalf("Export error = %v, want invalid articulation identity", err)
 		}
 	})

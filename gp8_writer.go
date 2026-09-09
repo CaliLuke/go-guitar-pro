@@ -78,7 +78,7 @@ func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) (
 // ExportWithReport preflights and serializes through one conversion decision path.
 // A strict loss-policy failure returns no output bytes and the complete report.
 func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([]byte, ExportReport, error) {
-	report := PreflightExport(song, target, options)
+	report, plan := planExport(song, target, options)
 	for _, entry := range report.Entries {
 		if entry.Disposition == ExportDispositionRejected {
 			return nil, report, fmt.Errorf("exporting Guitar Pro file: %s", entry.Reason)
@@ -87,12 +87,10 @@ func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([
 	if refused := refusedExportEntries(report, options.LossPolicy); len(refused) != 0 {
 		return nil, report, &ExportLossError{Entries: refused}
 	}
-
-	doc, err := buildGP8Document(song, options.GP8)
-	if err != nil {
-		return nil, report, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
+	if plan == nil {
+		return nil, report, fmt.Errorf("exporting Guitar Pro file: conversion plan is unavailable")
 	}
-	gpif, err := xml.MarshalIndent(doc, "", "  ")
+	gpif, err := xml.MarshalIndent(plan.document, "", "  ")
 	if err != nil {
 		return nil, report, fmt.Errorf("marshaling GPIF XML: %w", err)
 	}
@@ -262,7 +260,11 @@ func validateGP8Song(song *Song) error {
 	if len(song.MeasureHeaders) == 0 {
 		return fmt.Errorf("song has no measure headers")
 	}
-	hasPositiveTempo := song.Tempo > 0
+	openingTempo, _, tempoErr := gp8ResolvedFieldTempo(song)
+	if tempoErr != nil {
+		return tempoErr
+	}
+	hasPositiveTempo := openingTempo > 0
 	for _, tempo := range song.TempoAutomations {
 		hasPositiveTempo = hasPositiveTempo || tempo.Tempo > 0
 	}
@@ -404,9 +406,14 @@ type gp8Builder struct {
 	chordIDs           []map[*Chord]string
 	articulationIDs    []map[int16]int
 	percussionElements [][]gpifElement
+	report             *ExportReport
 }
 
 func buildGP8Document(song *Song, options GP8ExportOptions) (gpifDocument, error) {
+	return buildGP8DocumentWithReport(song, options, nil)
+}
+
+func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *ExportReport) (gpifDocument, error) {
 	builder := gp8Builder{
 		song:               song,
 		options:            options,
@@ -414,6 +421,7 @@ func buildGP8Document(song *Song, options GP8ExportOptions) (gpifDocument, error
 		chordIDs:           make([]map[*Chord]string, len(song.Tracks)),
 		articulationIDs:    make([]map[int16]int, len(song.Tracks)),
 		percussionElements: make([][]gpifElement, len(song.Tracks)),
+		report:             report,
 	}
 	builder.doc = gpifDocument{
 		GPVersion: gp8DocumentVersion,
@@ -461,10 +469,10 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 			break
 		}
 	}
-	if !hasInitial && song.InitialTempo.State == SourceValueKnown && song.InitialTempo.Value > 0 {
-		tempos = append(tempos, TempoAutomation{Tempo: float64(song.InitialTempo.Value)})
-	} else if !hasInitial && song.Tempo > 0 {
-		tempos = append(tempos, TempoAutomation{Tempo: float64(song.Tempo)})
+	if !hasInitial {
+		if openingTempo, _, err := gp8ResolvedFieldTempo(song); err == nil && openingTempo > 0 {
+			tempos = append(tempos, TempoAutomation{Tempo: openingTempo})
+		}
 	}
 	slices.SortFunc(tempos, func(a, b TempoAutomation) int {
 		if order := cmp.Compare(a.Bar, b.Bar); order != 0 {
@@ -493,6 +501,30 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 		})
 	}
 	return automations
+}
+
+func gp8ResolvedFieldTempo(song *Song) (float64, bool, error) {
+	if song.InitialTempo.State == SourceValueKnown {
+		exact, exactErr := NewBPM(float64(song.InitialTempo.Value))
+		if song.Tempo > 0 {
+			if exactErr != nil {
+				return float64(song.Tempo), true, nil
+			}
+			legacy, legacyErr := exact.LegacyTempo()
+			if legacyErr == nil && legacy == song.Tempo {
+				return float64(exact), false, nil
+			}
+			return float64(song.Tempo), true, nil
+		}
+		if exactErr != nil {
+			return 0, false, fmt.Errorf("song has invalid initial tempo: %w", exactErr)
+		}
+		return float64(exact), false, nil
+	}
+	if song.Tempo > 0 {
+		return float64(song.Tempo), false, nil
+	}
+	return 0, false, nil
 }
 
 func (builder *gp8Builder) prepareTrack(trackIndex int) {
@@ -769,6 +801,8 @@ func (builder *gp8Builder) buildScoreGraph() error {
 					voiceIDs = append(voiceIDs, voiceID)
 					beatIDs := make([]string, 0, len(voice.Beats))
 					for beatIndex := range voice.Beats {
+						location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex, Voice: voiceIndex, Beat: beatIndex}
+						builder.reportBeatConversion(&voice.Beats[beatIndex], location)
 						graceIDs, err := builder.addGraceBeats(trackIndex, staff.Strings, &voice.Beats[beatIndex])
 						if err != nil {
 							return fmt.Errorf("track %d staff %d measure %d voice %d beat %d grace notes: %w", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, err)
@@ -791,6 +825,86 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		builder.doc.MasterBars.MasterBars = append(builder.doc.MasterBars.MasterBars, gp8MasterBar(header, strings.Join(barIDs, " ")))
 	}
 	return nil
+}
+
+func (builder *gp8Builder) addReport(code, feature string, disposition ExportDisposition, location ScoreLocation, reason string) {
+	if builder.report == nil {
+		return
+	}
+	builder.report.Entries = append(builder.report.Entries, ExportReportEntry{
+		Code: code, Feature: feature, Disposition: disposition, Location: location, Reason: reason,
+	})
+}
+
+func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocation) {
+	if beat.Status == BeatStatusEmpty {
+		builder.addReport("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
+	}
+	if len(beat.Notes) > 0 {
+		velocity := gpifDynamicToVelocity(gp8VelocityToDynamic(beat.Notes[0].Velocity))
+		for _, note := range beat.Notes {
+			if note.Velocity != velocity {
+				builder.addReport("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
+				break
+			}
+		}
+	}
+	if beat.Effect.MixTableChange != nil {
+		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
+	}
+	if beat.Effect.HasRasgueado {
+		builder.addReport("gp8.omit.rasgueado", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit rasgueado")
+	}
+	if beat.Effect.PickStroke != BeatStrokeDirectionNone {
+		builder.addReport("gp8.omit.pick-stroke", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit pick-stroke direction")
+	}
+	if beat.Effect.SlapEffect != SlapEffectNone {
+		builder.addReport("gp8.omit.slap-effect", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit slap, pop, or tap effects")
+	}
+	if beat.Effect.Vibrato {
+		builder.addReport("gp8.omit.beat-vibrato", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-wide vibrato")
+	}
+	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Value != uint16(DurationEighth) {
+		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")
+	}
+	for noteIndex := range beat.Notes {
+		noteLocation := location
+		noteLocation.Note = noteIndex
+		builder.reportNoteConversion(&beat.Notes[noteIndex], noteLocation)
+	}
+}
+
+func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocation) {
+	if note.Effect.TremoloPicking != nil {
+		builder.addReport("gp8.omit.tremolo-picking", "tremolo-picking", ExportDispositionOmitted, location, "GP8 writer does not emit tremolo picking")
+	}
+	if note.Effect.LeftHandFinger != FingeringOpen && note.Effect.LeftHandFinger != FingeringThumb {
+		builder.addReport("gp8.omit.left-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit left-hand fingering")
+	}
+	if note.Effect.RightHandFinger != FingeringOpen && note.Effect.RightHandFinger != FingeringThumb {
+		builder.addReport("gp8.omit.right-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit right-hand fingering")
+	}
+	if bend := note.Effect.Bend; bend != nil {
+		if bend.Kind != BendTypeNone || bend.Value != 0 {
+			builder.addReport("gp8.omit.bend-summary", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer derives the bend from points and omits the summary fields")
+		}
+		for _, point := range bend.Points {
+			if point.Vibrato {
+				builder.addReport("gp8.omit.bend-point-vibrato", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit bend-point vibrato")
+				break
+			}
+		}
+	}
+	if trill := note.Effect.Trill; trill != nil {
+		canonical := defaultDuration()
+		canonical.Value = uint16(DurationSixteenth)
+		if trill.Duration != canonical {
+			builder.addReport("gp8.normalize.trill-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the trill with a sixteenth-note duration")
+		}
+	}
+	if harmonic := note.Effect.Harmonic; harmonic != nil && (harmonic.Pitch != nil || harmonic.Octave != nil) {
+		builder.addReport("gp8.omit.harmonic-pitch", "harmonics", ExportDispositionOmitted, location, "GP8 writer emits harmonic kind and fret but not pitch or octave fields")
+	}
 }
 
 func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {

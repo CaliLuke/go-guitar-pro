@@ -118,6 +118,27 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	return diagnostics
 }
 
+func authoredScoreDiagnostics(song *Song) []ScoreDiagnostic {
+	derivedCodes := map[string]struct{}{
+		"score.measure.header-alignment": {},
+		"score.measure.track-ownership":  {},
+		"score.measure.staff-ownership":  {},
+		"score.voice.measure-ownership":  {},
+		"score.measure.start":            {},
+		"score.measure.exact-start":      {},
+		"score.beat.start":               {},
+		"score.beat.exact-start":         {},
+	}
+	diagnostics := ValidateSong(song)
+	authored := make([]ScoreDiagnostic, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		if _, derived := derivedCodes[diagnostic.Code]; !derived {
+			authored = append(authored, diagnostic)
+		}
+	}
+	return authored
+}
+
 func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, diagnostics *[]ScoreDiagnostic) {
 	for voiceIndex := range measure.Voices {
 		expected := scoreTimeOrLegacy(measure.ExactStart, measure.Start)
