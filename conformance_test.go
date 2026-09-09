@@ -186,6 +186,48 @@ func TestAlphaTabComparatorDetectsWireMutations(t *testing.T) {
 	}
 }
 
+func TestStaffOwnershipProjectionDetectsContentMutations(t *testing.T) {
+	baselineSong := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
+	baseline := selectConformanceFeatures(normalizeGoScore(baselineSong), []string{"staff-ownership"})
+
+	pitchSong := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
+	pitchBeats := conformanceStaffBeatsWithNotes(&pitchSong.Tracks[0].Staves[1])
+	if len(pitchBeats) == 0 {
+		t.Fatal("second staff has no notes")
+	}
+	pitchBeats[0].Notes[0].Value++
+	if differences := semanticDifferences(baseline, selectConformanceFeatures(normalizeGoScore(pitchSong), []string{"staff-ownership"})); len(differences) == 0 {
+		t.Fatal("staff-ownership projection did not detect a second-staff pitch mutation")
+	}
+
+	moveSong := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
+	moveBeats := conformanceStaffBeatsWithNotes(&moveSong.Tracks[0].Staves[1])
+	if len(moveBeats) < 2 {
+		t.Fatal("second staff has fewer than two populated beats")
+	}
+	note := moveBeats[0].Notes[0]
+	moveBeats[0].Notes = moveBeats[0].Notes[1:]
+	moveBeats[1].Notes = append(moveBeats[1].Notes, note)
+	if differences := semanticDifferences(baseline, selectConformanceFeatures(normalizeGoScore(moveSong), []string{"staff-ownership"})); len(differences) == 0 {
+		t.Fatal("staff-ownership projection did not detect moving a note between beats")
+	}
+}
+
+func conformanceStaffBeatsWithNotes(staff *Staff) []*Beat {
+	var beats []*Beat
+	for measureIndex := range staff.Measures {
+		for voiceIndex := range staff.Measures[measureIndex].Voices {
+			voice := &staff.Measures[measureIndex].Voices[voiceIndex]
+			for beatIndex := range voice.Beats {
+				if len(voice.Beats[beatIndex].Notes) > 0 {
+					beats = append(beats, &voice.Beats[beatIndex])
+				}
+			}
+		}
+	}
+	return beats
+}
+
 func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
 	requireAlphaTabConformance(t)
 	for _, test := range []struct {
@@ -217,27 +259,6 @@ func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
 				t.Fatalf("multi-staff track ordering differs from AlphaTab:\n%s", formatted)
 			}
 		})
-	}
-}
-
-func TestAlphaTabMultiStaffExportConformance(t *testing.T) {
-	requireAlphaTabConformance(t)
-	song := parseTestFixture(t, "testdata/gp7/grand-staff.gp")
-	data, err := Export(song, ExportFormatGP8)
-	if err != nil {
-		t.Fatal(err)
-	}
-	goScore := selectConformanceFeatures(normalizeGoScore(song), []string{"staff-ownership"})
-	alphaScore := selectConformanceFeatures(
-		readAlphaTabScore(t, writeConformanceFixture(t, data)),
-		[]string{"staff-ownership"},
-	)
-	if differences := semanticDifferences(goScore, alphaScore); len(differences) != 0 {
-		formatted, marshalErr := json.MarshalIndent(differences, "", "  ")
-		if marshalErr != nil {
-			t.Fatal(marshalErr)
-		}
-		t.Fatalf("multi-staff export differs from AlphaTab:\n%s", formatted)
 	}
 }
 
@@ -567,7 +588,7 @@ func selectConformanceFeatures(score any, features []string) any {
 		case "tempo-automations":
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{"tempoAutomations": true}, nil)
 		case "staff-ownership":
-			selected[feature] = conformanceStaffSummary(canonical)
+			selected[feature] = conformanceStaffOwnership(canonical)
 		case "percussion-articulations":
 			selected[feature] = conformancePercussionFacts(canonical)
 		case "score-core":
@@ -644,53 +665,17 @@ func collectConformanceFactsAt(path string, value any, keys map[string]bool, inc
 	}
 }
 
-func conformanceStaffSummary(score any) []any {
+func conformanceStaffOwnership(score any) []any {
 	root, _ := score.(map[string]any)
 	tracks, _ := root["tracks"].([]any)
 	result := make([]any, 0, len(tracks))
-	for trackIndex, item := range tracks {
+	for _, item := range tracks {
 		track, _ := item.(map[string]any)
-		staves, _ := track["staves"].([]any)
-		staffSummaries := make([]any, 0, len(staves))
-		for staffIndex, staffItem := range staves {
-			staff, _ := staffItem.(map[string]any)
-			bars, _ := staff["bars"].([]any)
-			clefs := make([]any, 0, len(bars))
-			for _, barItem := range bars {
-				bar, _ := barItem.(map[string]any)
-				clefs = append(clefs, bar["clef"])
-			}
-			staffSummaries = append(staffSummaries, map[string]any{
-				"index": staffIndex, "barCount": len(bars), "noteCount": countConformanceNotes(staff),
-				"percussion": staff["percussion"], "tuning": staff["tuning"], "clefs": clefs,
-			})
-		}
 		result = append(result, map[string]any{
-			"track": trackIndex, "name": track["name"], "staffCount": len(staves), "staves": staffSummaries,
+			"index": track["index"], "name": track["name"], "staves": track["staves"],
 		})
 	}
 	return result
-}
-
-func countConformanceNotes(value any) int {
-	count := 0
-	switch typed := value.(type) {
-	case map[string]any:
-		for key, child := range typed {
-			if key == "notes" {
-				if notes, ok := child.([]any); ok {
-					count += len(notes)
-				}
-				continue
-			}
-			count += countConformanceNotes(child)
-		}
-	case []any:
-		for _, child := range typed {
-			count += countConformanceNotes(child)
-		}
-	}
-	return count
 }
 
 func conformancePercussionFacts(score any) []any {
@@ -870,7 +855,7 @@ func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 			for _, grace := range pendingGrace {
 				beats = append(beats, normalizeGoBeat(song, measureIndex, track, staff, grace))
 			}
-			voices = append(voices, map[string]any{"beats": beats})
+			voices = append(voices, map[string]any{"index": voiceIndex, "beats": beats})
 		}
 		result = append(result, map[string]any{
 			"index": measureIndex, "clef": goClef(measure.Clef), "voices": voices,
@@ -1209,6 +1194,8 @@ func conformanceExportCase(t *testing.T, id string) *Song {
 		return conformanceExportSong()
 	case "gp8-percussion-export":
 		return parseTestFixture(t, "testdata/gp7/percussion.gp")
+	case "gp8-multi-staff-export":
+		return parseTestFixture(t, "testdata/gp7/grand-staff.gp")
 	default:
 		t.Fatalf("export conformance case %q has no source builder", id)
 		return nil

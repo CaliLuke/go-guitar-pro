@@ -2,5 +2,12 @@
   "schemaVersion": 1,
   "case": "gp7-double-dotted-timing",
   "comparison": "input-go-vs-alphatab",
-  "differences": []
+  "differences": [
+    {
+      "path": "/rhythm/31/value",
+      "feature": "rhythm",
+      "go": "rest",
+      "alphaTab": "normal"
+    }
+  ]
 }

@@ -1912,9 +1912,10 @@
       "path": "testdata/gp7/colors.gp",
       "sha256": "7846a39a10be76244b3fbf44a5c0c6ce86557fbb5cd4e287a052ca11b1da4767",
       "format": "gp7",
-      "disposition": "supported",
-      "reason": "Double-dotted rhythm and finalized timing agree with the pinned AlphaTab oracle.",
+      "disposition": "partial",
+      "reason": "Double-dotted timing agrees with AlphaTab; the remaining rest-status difference is retained in the narrow semantic snapshot.",
       "features": [
+        "rhythm",
         "timing"
       ],
       "semanticSnapshot": true
@@ -2555,9 +2556,10 @@
       "path": "testdata/gp7/notation-legend.gp",
       "sha256": "efe0c38471744dcaaaa73031813291a7ac94d8a8152a88268edb60f17b5d20ef",
       "format": "gp7",
-      "disposition": "supported",
-      "reason": "All five crescendo and three decrescendo beats agree with the pinned AlphaTab snapshot.",
+      "disposition": "partial",
+      "reason": "Hairpins agree with AlphaTab; the legacy harmonic-kind projection is retained in the narrow semantic snapshot.",
       "features": [
+        "harmonics",
         "hairpins"
       ],
       "semanticSnapshot": true

@@ -45,8 +45,8 @@
     {
       "id": "gp7-double-dotted-timing",
       "fixture": "testdata/gp7/colors.gp",
-      "features": ["timing"],
-      "issues": [19]
+      "features": ["rhythm", "timing"],
+      "issues": [19, 20]
     },
     {
       "id": "gp7-tenor-clef",
@@ -69,8 +69,8 @@
     {
       "id": "gp7-notation-legend",
       "fixture": "testdata/gp7/notation-legend.gp",
-      "features": ["hairpins"],
-      "issues": [7]
+      "features": ["harmonics", "hairpins"],
+      "issues": [7, 20]
     },
     {
       "id": "gp7-tempo",
@@ -109,6 +109,11 @@
     {
       "id": "gp8-percussion-export",
       "features": ["percussion-articulations"]
+    },
+    {
+      "id": "gp8-multi-staff-export",
+      "features": ["staff-ownership"],
+      "issues": [18, 20]
     }
   ]
 }

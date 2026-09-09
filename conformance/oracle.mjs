@@ -92,7 +92,7 @@ function normalizeNote(note, staff, graces) {
     midi = staff.track.percussionArticulations[note.percussionArticulation].outputMidiNumber;
   }
   return {
-    string: note.string,
+    string: isPercussion ? note.string : staff.tuning.length - note.string + 1,
     fret: isPercussion ? null : finite(note.fret),
     percussionArticulation: note.percussionArticulation >= 0 ? note.percussionArticulation : null,
     percussionInput: isPercussion ? percussionInput(note, staff) : null,
@@ -179,7 +179,7 @@ function normalizeVoice(voice, staff) {
       notes: graceBeat.notes.map(note => normalizeNote(note, staff, []))
     });
   }
-  return { beats };
+  return { index: voice.index, beats };
 }
 
 function normalizeStaff(staff) {

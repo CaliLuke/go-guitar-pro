@@ -146,6 +146,13 @@ for (const group of ['testCases', 'importerCases', 'modelFields', 'modelSymbols'
     if (!allowedStatuses.has(item.disposition)) fail(`${item.name} has invalid upstream disposition`);
     if (!features.has(item.feature)) fail(`${item.name} references unknown feature ${item.feature}`);
     if (!item.reason) fail(`${item.name} has no upstream disposition reason`);
+    if (group === 'modelSymbols' && ['partial', 'unsupported'].includes(item.disposition)) {
+      const parent = features.get(item.feature);
+      if (parent.status === 'supported') {
+        fail(`${item.name} is ${item.disposition} but parent feature ${item.feature} claims full support`);
+      }
+      if (parent.issues.length === 0) fail(`${item.name} has no issue-linked parent feature`);
+    }
     seen.add(identity);
   }
 }

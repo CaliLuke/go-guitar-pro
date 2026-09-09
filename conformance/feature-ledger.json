@@ -720,9 +720,9 @@
       "goDestination": ["MeasureHeader.TimeSignature", "Beat.Duration", "Beat.Status"],
       "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/time-signatures.gp"],
       "semanticAssertions": ["duration denominator", "duration ticks", "dots", "tuplet ratio", "rest status"],
-      "status": "supported",
-      "reason": "Selected binary and GPIF rhythm fixtures have no unexplained AlphaTab differences.",
-      "issues": []
+      "status": "partial",
+      "reason": "Selected duration, dot, tuplet, time-signature, and rest cases are compared; exact score time and the remaining authored rhythm model are tracked by issues 12 and 15.",
+      "issues": [12, 15]
     },
     {
       "id": "timing",
@@ -733,9 +733,9 @@
       "goDestination": ["MeasureHeader.Start", "Measure.Start", "Beat.Start"],
       "fixtures": ["testdata/gp5/tuplets.gp5", "testdata/gp7/notes.gp", "testdata/gp7/time-signatures.gp", "testdata/gp7/anacrusis.gp", "testdata/gp7/multi-voice.gp", "testdata/gp7/tuplets.gp", "testdata/gp7/grace.gp"],
       "semanticAssertions": ["zero-normalized measure start", "zero-normalized beat start"],
-      "status": "supported",
-      "reason": "Binary and GPIF absolute display starts agree after zero-origin normalization across measures, independent voices, tuplets, empty and populated pickups, and attached or orphan grace notes.",
-      "issues": []
+      "status": "partial",
+      "reason": "Selected absolute display starts agree after zero-origin normalization; exact score time and shared finalized-graph validation are tracked by issues 14 and 15.",
+      "issues": [14, 15]
     },
     {
       "id": "staff-ownership",
@@ -746,9 +746,9 @@
       "goDestination": ["Track.Staves", "Staff.Measures", "Staff.Strings", "Measure.StaffIndex", "Measure.Clef", "Track.Measures", "Track.Strings"],
       "fixtures": ["testdata/gp7/grand-staff.gp"],
       "semanticAssertions": ["staff count", "bar count per staff", "note ownership per staff", "clef", "tuning"],
-      "status": "supported",
-      "reason": "GPIF staff order, measures, voices, notes, clefs, and tuning agree with the pinned AlphaTab grand-staff fixture; legacy track fields expose the first staff.",
-      "issues": []
+      "status": "partial",
+      "reason": "The grand-staff contract compares exact track, staff, bar, voice, beat, and note hierarchy plus authored contents; broader model ownership and legacy projection are tracked by issue 12.",
+      "issues": [12]
     },
     {
       "id": "grace-relationships",
@@ -798,9 +798,9 @@
       "goDestination": ["HarmonicEffect.Kind", "HarmonicEffect.FretFloat"],
       "fixtures": ["testdata/gp7/harmonics.gp"],
       "semanticAssertions": ["harmonic kind", "fractional harmonic fret", "property order"],
-      "status": "supported",
-      "reason": "GPIF HFret values and harmonic kinds agree with AlphaTab on import and GP8 export, including fractional values and property-order variants.",
-      "issues": []
+      "status": "partial",
+      "reason": "GPIF HFret values and common harmonic kinds are compared on import and GP8 export; distinctions that the legacy model collapses are tracked by issue 12.",
+      "issues": [12]
     },
     {
       "id": "hairpins",
@@ -837,9 +837,9 @@
       "goDestination": ["Track.PercussionTrack", "Track.PercussionArticulations", "Staff.StandardNotationLineCount", "Note.PercussionArticulation", "Note.Value"],
       "fixtures": ["testdata/gp7/percussion.gp"],
       "semanticAssertions": ["articulation identity", "input value", "output MIDI", "staff line and technique"],
-      "status": "supported",
-      "reason": "GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI agree with AlphaTab; older format mappings are outside this feature scope.",
-      "issues": []
+      "status": "partial",
+      "reason": "GP7–8 GPIF articulation identity, per-track definitions, notation metadata, input values, and output MIDI are compared; cross-format semantic integration is tracked by issue 12.",
+      "issues": [12]
     }
   ]
 }
