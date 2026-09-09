@@ -88,7 +88,9 @@ func TestTimingAllowsEmptyPickup(t *testing.T) {
 			{HeaderIndex: 1, Voices: []Voice{{Beats: []Beat{defaultBeat()}}}},
 		}}},
 	}
-	song.finalizeTiming()
+	if err := song.finalizeTiming(); err != nil {
+		t.Fatal(err)
+	}
 
 	if got := song.MeasureHeaders[1].Start; got != DurationQuarterTime {
 		t.Fatalf("measure after empty pickup starts at %d, want %d", got, DurationQuarterTime)
@@ -119,7 +121,9 @@ func TestTimingDoesNotAdvanceOrphanGraceBeat(t *testing.T) {
 			Voices:      []Voice{{Beats: beats}},
 		}}}},
 	}
-	song.finalizeTiming()
+	if err := song.finalizeTiming(); err != nil {
+		t.Fatal(err)
+	}
 
 	got := song.Tracks[0].Measures[0].Voices[0].Beats
 	if *got[1].Start != 1920 || *got[2].Start != 1920 {

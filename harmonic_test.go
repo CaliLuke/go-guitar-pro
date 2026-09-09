@@ -42,10 +42,13 @@ func TestParseGPIFRetainsHarmonicFrets(t *testing.T) {
 func TestParseGPIFHarmonicFretBeforeType(t *testing.T) {
 	harmonicFret := "2.4"
 	harmonicType := "Artificial"
-	note := gpifNoteToNote(&gpifNote{Properties: gpifProperties{Properties: []gpifProperty{
+	note, err := gpifNoteToNote(&gpifNote{Properties: gpifProperties{Properties: []gpifProperty{
 		{Name: "HarmonicFret", HFret: &harmonicFret},
 		{Name: "HarmonicType", HType: &harmonicType},
 	}}}, 6, false)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if note.Effect.Harmonic == nil || note.Effect.Harmonic.FretFloat == nil || *note.Effect.Harmonic.FretFloat != 2.4 {
 		t.Fatalf("harmonic = %#v, want artificial at fret 2.4", note.Effect.Harmonic)

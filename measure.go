@@ -11,7 +11,9 @@ type Measure struct {
 	Voices []Voice
 	Number int
 	// Start matches the owning MeasureHeader display-time start in ticks.
-	Start      int64
+	Start int64
+	// ExactStart preserves fractional score ticks before Start is quantized.
+	ExactStart ScoreTime
 	TrackIndex int
 	// StaffIndex is the zero-based staff index within the owning track.
 	StaffIndex    int
@@ -60,54 +62,93 @@ func (s *Song) readMeasures(c *cursor) error {
 	return nil
 }
 
-func (s *Song) finalizeTiming() {
-	start := DurationQuarterTime
+func (s *Song) finalizeTiming() error {
+	start, _ := NewScoreTime(DurationQuarterTime, 1)
 	for headerIndex := range s.MeasureHeaders {
-		s.MeasureHeaders[headerIndex].Start = start
-		contentLength := int64(0)
+		s.MeasureHeaders[headerIndex].ExactStart = start
+		s.MeasureHeaders[headerIndex].Start = start.FloorTicks()
+		contentLength := ScoreTime{}
 		for trackIndex := range s.Tracks {
 			track := &s.Tracks[trackIndex]
 			if len(track.Staves) == 0 {
-				contentLength = max(contentLength, finalizeMeasureTiming(track.Measures, headerIndex, start))
+				trackLength, err := finalizeMeasureTiming(track.Measures, headerIndex, start)
+				if err != nil {
+					return fmt.Errorf("track %d measure timing: %w", trackIndex, err)
+				}
+				contentLength = maxScoreTime(contentLength, trackLength)
 				continue
 			}
 			for staffIndex := range track.Staves {
-				contentLength = max(
+				staffLength, err := finalizeMeasureTiming(track.Staves[staffIndex].Measures, headerIndex, start)
+				if err != nil {
+					return fmt.Errorf("track %d staff %d measure timing: %w", trackIndex, staffIndex, err)
+				}
+				contentLength = maxScoreTime(
 					contentLength,
-					finalizeMeasureTiming(track.Staves[staffIndex].Measures, headerIndex, start),
+					staffLength,
 				)
 			}
 		}
-		measureLength := s.MeasureHeaders[headerIndex].length()
+		measureLength, err := s.MeasureHeaders[headerIndex].ExactLength()
+		if err != nil {
+			return fmt.Errorf("measure header %d length: %w", headerIndex, err)
+		}
 		if headerIndex == 0 && s.Anacrusis {
 			measureLength = contentLength
 		}
-		start += measureLength
+		next, err := start.Add(measureLength)
+		if err != nil {
+			return fmt.Errorf("measure header %d end: %w", headerIndex, err)
+		}
+		start = next
 	}
+	return nil
 }
 
-func finalizeMeasureTiming(measures []Measure, headerIndex int, start int64) int64 {
-	contentLength := int64(0)
+func finalizeMeasureTiming(measures []Measure, headerIndex int, start ScoreTime) (ScoreTime, error) {
+	contentLength := ScoreTime{}
 	for measureIndex := range measures {
 		measure := &measures[measureIndex]
 		if measure.HeaderIndex != headerIndex {
 			continue
 		}
-		measure.Start = start
+		measure.ExactStart = start
+		measure.Start = start.FloorTicks()
 		for voiceIndex := range measure.Voices {
 			voiceStart := start
 			for beatIndex := range measure.Voices[voiceIndex].Beats {
 				beat := &measure.Voices[voiceIndex].Beats[beatIndex]
-				beatStart := voiceStart
+				beatStart := voiceStart.FloorTicks()
 				beat.Start = &beatStart
+				exactBeatStart := voiceStart
+				beat.ExactStart = &exactBeatStart
 				if !beat.isGrace {
-					voiceStart += int64(beat.Duration.time())
+					duration, err := beat.Duration.ExactScoreTime()
+					if err != nil {
+						return ScoreTime{}, fmt.Errorf("measure %d voice %d beat %d duration: %w", measureIndex, voiceIndex, beatIndex, err)
+					}
+					next, err := voiceStart.Add(duration)
+					if err != nil {
+						return ScoreTime{}, fmt.Errorf("measure %d voice %d beat %d end: %w", measureIndex, voiceIndex, beatIndex, err)
+					}
+					voiceStart = next
 				}
 			}
-			contentLength = max(contentLength, voiceStart-start)
+			voiceLength, err := voiceStart.Subtract(start)
+			if err != nil {
+				return ScoreTime{}, fmt.Errorf("measure %d voice %d length: %w", measureIndex, voiceIndex, err)
+			}
+			contentLength = maxScoreTime(contentLength, voiceLength)
 		}
 	}
-	return contentLength
+	return contentLength, nil
+}
+
+func maxScoreTime(left, right ScoreTime) ScoreTime {
+	if left.Compare(right) >= 0 {
+		return left
+	}
+	return right
 }
 
 func (s *Song) readMeasure(c *cursor, measure *Measure, trackIndex int) error {

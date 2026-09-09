@@ -35,6 +35,42 @@
   ],
   "diagnosticReceipts": [
   {
+    "source": "GPIF.MasterTrack.Automation.Tempo.Invalid",
+    "feature": "tempo-automations",
+    "disposition": "invalid-data",
+    "reason": "The opening tempo must be finite and positive."
+  },
+  {
+    "source": "GPIF.MasterTrack.Automation.Tempo.LegacyOverflow",
+    "feature": "tempo-automations",
+    "disposition": "lossy-projection",
+    "reason": "The exact opening BPM is preserved but cannot be projected into the legacy int16 field."
+  },
+  {
+    "source": "GPIF.MasterTrack.Automation.Tempo.Reference.Invalid",
+    "feature": "tempo-automations",
+    "disposition": "invalid-data",
+    "reason": "Applying the authored tempo reference unit must produce a finite positive BPM."
+  },
+  {
+    "source": "GPIF.Note.Accent.Tenuto",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no destination for the GPIF tenuto accent bit."
+  },
+  {
+    "source": "GPIF.Note.Property.ConcertPitch.Redundant",
+    "feature": "note-and-beat-semantics",
+    "disposition": "deliberate-ignore",
+    "reason": "The pitch agrees with the mapped absolute MIDI value."
+  },
+  {
+    "source": "GPIF.Note.Property.TransposedPitch.Redundant",
+    "feature": "note-and-beat-semantics",
+    "disposition": "deliberate-ignore",
+    "reason": "The pitch agrees with the mapped absolute MIDI value."
+  },
+  {
     "source": "GPIF.Chord.Diagram.Fingering",
     "feature": "note-and-beat-semantics",
     "disposition": "unsupported-feature",

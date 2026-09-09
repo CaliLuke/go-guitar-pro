@@ -2,8 +2,6 @@
 
 package goguitarpro
 
-import "math"
-
 // Duration constants use note values from Guitar Pro and internal tick timing.
 const (
 	DurationQuarterTime         int64 = 960
@@ -32,25 +30,35 @@ func defaultDuration() Duration {
 	}
 }
 
-func (d *Duration) convertTime(time uint32) uint32 {
-	if d.TupletEnters == 0 || d.TupletTimes == 0 {
-		return time
-	}
-	return time * uint32(d.TupletTimes) / uint32(d.TupletEnters)
-}
-
 func (d *Duration) time() uint32 {
-	if d.Value == 0 {
+	exact, err := d.ExactScoreTime()
+	if err != nil || exact.FloorTicks() > int64(^uint32(0)) {
 		return 0
 	}
-	result := math.Trunc(float64(DurationQuarterTime) * 4.0 / float64(d.Value))
-	switch {
-	case d.DoubleDotted:
-		result += math.Trunc(result/4.0) * 3.0
-	case d.Dotted:
-		result += math.Trunc(result / 2.0)
+	return uint32(exact.FloorTicks())
+}
+
+// MusicalDuration converts the legacy duration fields to an unambiguous semantic value.
+// If both legacy dot flags are set, the double-dot flag takes precedence.
+func (d Duration) MusicalDuration() (MusicalDuration, error) {
+	dots := DotCount(0)
+	if d.DoubleDotted {
+		dots = 2
+	} else if d.Dotted {
+		dots = 1
 	}
-	return d.convertTime(uint32(result))
+	return NewMusicalDuration(NoteValue(d.Value), dots, TupletRatio{
+		Enters: uint16(d.TupletEnters), Times: uint16(d.TupletTimes),
+	})
+}
+
+// ExactScoreTime evaluates the legacy duration without intermediate tick truncation.
+func (d Duration) ExactScoreTime() (ScoreTime, error) {
+	semantic, err := d.MusicalDuration()
+	if err != nil {
+		return ScoreTime{}, err
+	}
+	return semantic.ExactScoreTime()
 }
 
 // TimeSignature represents a time signature.

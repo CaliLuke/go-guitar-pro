@@ -559,7 +559,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 	gpifReadBackingTrack(doc, song)
 	gpifReadSyncPoints(doc.MasterTrack.Automations.Automations, song)
-	gpifReadTempoAutomations(doc.MasterTrack.Automations.Automations, song)
+	gpifReadTempoAutomations(doc.MasterTrack.Automations.Automations, song, context)
 
 	// Build rhythm lookup
 	rhythmMap := make(map[string]*gpifRhythm)
@@ -598,11 +598,11 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 	// Parse tracks
 	trackIDs := splitIDs(doc.MasterTrack.Tracks)
-	trackChordMaps := make([]map[string]Chord, 0, len(trackIDs))
+	trackChordMaps := make([]gpifChordScope, 0, len(trackIDs))
 	for _, trackID := range trackIDs {
 		track := defaultTrack()
 		track.Number = int32(len(song.Tracks))
-		chordMap := make(map[string]Chord)
+		chordMap := gpifChordScope{}
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
 				track.Name = t.Name
@@ -664,7 +664,11 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 					}
 				}
 				track.Strings = track.Staves[0].Strings
-				chordMap = gpifReadChordMap(t)
+				var chordErr error
+				chordMap, chordErr = gpifReadChordMap(t)
+				if chordErr != nil {
+					return nil, fmt.Errorf("track %q chord collection: %w", t.ID, chordErr)
+				}
 				// Parse color
 				if t.Color != "" {
 					parts := splitIDs(t.Color)
@@ -816,13 +820,17 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 								graceOnBeat := false
 								if b, ok := beatMap[beatID]; ok {
 									if r, ok := rhythmMap[b.Rhythm.Ref]; ok {
-										beat.Duration = gpifRhythmToDuration(r)
+										duration, durationErr := gpifRhythmToDuration(r)
+										if durationErr != nil {
+											return nil, fmt.Errorf("rhythm %q: %w", r.ID, durationErr)
+										}
+										beat.Duration = duration
 									}
 
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
 									beat.Effect.Hairpin = gpifHairpin(b.Hairpin)
 									gpifApplyBeatEffects(b, &beat)
-									if chord, ok := trackChordMaps[trackIdx][b.Chord]; ok {
+									if chord, ok := trackChordMaps[trackIdx].resolve(staffIdx, b.Chord); ok {
 										beat.Effect.Chord = &chord
 									}
 									switch b.GraceNotes {
@@ -840,7 +848,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 											continue
 										}
 										if n, ok := noteMap[noteID]; ok {
-											note := gpifNoteToNote(n, len(staff.Strings), staff.PercussionTrack)
+											note, noteErr := gpifNoteToNote(n, len(staff.Strings), staff.PercussionTrack)
+											if noteErr != nil {
+												return nil, fmt.Errorf("note %q: %w", n.ID, noteErr)
+											}
 											gpifNormalizePercussionArticulation(track, &note, &fallbackArticulations[trackIdx])
 											note.Velocity = velocity
 											beat.Notes = append(beat.Notes, note)
@@ -878,7 +889,9 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		}
 	}
 
-	song.finalizeTiming()
+	if err := song.finalizeTiming(); err != nil {
+		return nil, fmt.Errorf("finalizing GPIF timing: %w", err)
+	}
 
 	return song, nil
 }
@@ -1100,14 +1113,28 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, note := range doc.Notes.Notes {
 		path := gpifObjectPath("Notes/Note", note.ID)
+		var mappedMIDI *int
 		for _, property := range note.Properties.Properties {
-			gpifAuditNoteProperty(context, note.ID, path, property)
+			if property.Name == "Midi" && property.Number != nil && *property.Number >= 0 && *property.Number <= 127 {
+				value := *property.Number
+				mappedMIDI = &value
+			}
+		}
+		for _, property := range note.Properties.Properties {
+			gpifAuditNoteProperty(context, note.ID, path, property, mappedMIDI)
 		}
 		if note.Vibrato != "" && note.Vibrato != "None" {
 			context.add(diagnosticSource("GPIF.Note.Vibrato", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
 				Kind: ParseDiagnosticLossyProjection, SourcePath: path + "/Vibrato", ObjectID: note.ID,
 				Location: ParseLocation{NoteID: note.ID}, Feature: "note-and-beat-semantics",
 				Reason: "Song represents typed note vibrato as a boolean",
+			})
+		}
+		if note.Accent&0x10 != 0 {
+			context.add(diagnosticSource("GPIF.Note.Accent.Tenuto", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				SourcePath: path + "/Accent", ObjectID: note.ID,
+				Location: ParseLocation{NoteID: note.ID}, Feature: "note-and-beat-semantics",
+				Reason: "Song has no destination for the GPIF tenuto accent bit",
 			})
 		}
 	}
@@ -1229,6 +1256,11 @@ var gpifNotePropertySources = map[string]parseDiagnosticSource{
 	"Octave":                diagnosticSource("GPIF.Note.Property.Octave", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 }
 
+var gpifRedundantPitchSources = map[string]parseDiagnosticSource{
+	"ConcertPitch":    diagnosticSource("GPIF.Note.Property.ConcertPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"TransposedPitch": diagnosticSource("GPIF.Note.Property.TransposedPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+}
+
 var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"PrimaryPickupVolume":         diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"PrimaryPickupTone":           diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
@@ -1251,7 +1283,7 @@ var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"Popped.MissingEnable":        diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 }
 
-func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty) {
+func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty, mappedMIDI *int) {
 	propertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)
 	switch property.Name {
 	case "Fret":
@@ -1301,7 +1333,20 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			Location: ParseLocation{NoteID: noteID}, Feature: "percussion-articulations",
 			Reason: fmt.Sprintf("recognized GPIF percussion property %q has no destination in Song", property.Name),
 		})
-	case "ConcertPitch", "TransposedPitch", "Tone", "Octave":
+	case "ConcertPitch", "TransposedPitch":
+		if mappedMIDI != nil && gpifPitchMatchesMIDI(property.Pitch, *mappedMIDI) {
+			context.add(gpifRedundantPitchSources[property.Name], ParseDiagnostic{
+				SourcePath: propertyPath, ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
+				Reason: fmt.Sprintf("GPIF pitch property %q is redundant with the mapped fret or MIDI value", property.Name),
+			})
+			return
+		}
+		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
+			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
+			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
+			Reason: fmt.Sprintf("recognized GPIF pitch property %q has no destination in Song", property.Name),
+		})
+	case "Tone", "Octave":
 		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
 			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
 			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
@@ -1314,6 +1359,23 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			Reason: fmt.Sprintf("unknown GPIF note property %q", property.Name),
 		})
 	}
+}
+
+func gpifPitchMatchesMIDI(pitch *gpifPitch, midi int) bool {
+	if pitch == nil {
+		return false
+	}
+	steps := map[string]int{"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
+	step, ok := steps[pitch.Step]
+	if !ok {
+		return false
+	}
+	alterations := map[string]int{"": 0, "#": 1, "##": 2, "b": -1, "bb": -2}
+	alteration, ok := alterations[pitch.Accidental]
+	if !ok {
+		return false
+	}
+	return (pitch.Octave+1)*12+step+alteration == midi
 }
 
 func gpifAuditPropertyPayload(context *parseContext, source parseDiagnosticSource, present bool, path, objectID, feature, payload string) {
@@ -1389,14 +1451,30 @@ func gpifObjectPath(collection, id string) string {
 func gpifAuditReferences(doc gpifDocument, context *parseContext) {
 	tracks := make(map[string]struct{}, len(doc.Tracks.Tracks))
 	chords := make(map[string]struct{})
+	type chordIDScope struct {
+		track  map[string]struct{}
+		staves []map[string]struct{}
+	}
+	chordScopes := make(map[string]chordIDScope, len(doc.Tracks.Tracks))
 	for _, track := range doc.Tracks.Tracks {
 		trackPath := gpifObjectPath("Tracks/Track", track.ID)
 		gpifAddID(context, diagnosticSource("GPIF.Track.EmptyID", "staff-ownership", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Track.DuplicateID", "staff-ownership", ParseDiagnosticInvalidData), tracks, track.ID, trackPath, "staff-ownership")
-		gpifAuditChordIDs(context, chords, track.Properties, trackPath+"/Properties")
+		trackChords := make(map[string]struct{})
+		gpifAuditChordIDs(context, trackChords, track.Properties, trackPath+"/Properties")
+		for id := range trackChords {
+			chords[id] = struct{}{}
+		}
+		scope := chordIDScope{track: trackChords, staves: make([]map[string]struct{}, len(track.Staves.Staff))}
 		for staffIndex, staff := range track.Staves.Staff {
 			path := fmt.Sprintf("%s/Staves/Staff[%d]/Properties", trackPath, staffIndex)
-			gpifAuditChordIDs(context, chords, staff.Properties, path)
+			staffChords := make(map[string]struct{})
+			scope.staves[staffIndex] = staffChords
+			gpifAuditChordIDs(context, staffChords, staff.Properties, path)
+			for id := range staffChords {
+				chords[id] = struct{}{}
+			}
 		}
+		chordScopes[track.ID] = scope
 	}
 	bars := make(map[string]struct{}, len(doc.Bars.Bars))
 	for _, bar := range doc.Bars.Bars {
@@ -1424,21 +1502,74 @@ func gpifAuditReferences(doc gpifDocument, context *parseContext) {
 	}
 
 	gpifAuditReferenceList(context, diagnosticSource("GPIF.MasterTrack.Tracks.Reference", "staff-ownership", ParseDiagnosticInvalidData), splitIDs(doc.MasterTrack.Tracks), tracks, "/GPIF/MasterTrack/Tracks", "", ParseLocation{}, "staff-ownership")
+	barChordScopes := make(map[string]map[string]struct{})
+	trackByID := make(map[string]gpifTrack, len(doc.Tracks.Tracks))
+	for _, track := range doc.Tracks.Tracks {
+		trackByID[track.ID] = track
+	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.MasterBar.Bars.Reference", "staff-ownership", ParseDiagnosticInvalidData), splitIDs(masterBar.Bars), bars, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Bars", index), "", ParseLocation{}, "staff-ownership")
+		barIDs := splitIDs(masterBar.Bars)
+		barIndex := 0
+		for _, trackID := range splitIDs(doc.MasterTrack.Tracks) {
+			track, exists := trackByID[trackID]
+			if !exists {
+				continue
+			}
+			staffCount := max(1, len(track.Staves.Staff))
+			for staffIndex := 0; staffIndex < staffCount && barIndex < len(barIDs); staffIndex++ {
+				barID := barIDs[barIndex]
+				barIndex++
+				if barID == "-1" {
+					break
+				}
+				scope := make(map[string]struct{})
+				for id := range chordScopes[trackID].track {
+					scope[id] = struct{}{}
+				}
+				if staffIndex < len(chordScopes[trackID].staves) {
+					for id := range chordScopes[trackID].staves[staffIndex] {
+						scope[id] = struct{}{}
+					}
+				}
+				barChordScopes[barID] = scope
+			}
+		}
 	}
+	voiceChordScopes := make(map[string][]map[string]struct{})
 	for _, bar := range doc.Bars.Bars {
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.Bar.Voices.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(bar.Voices), voices, gpifObjectPath("Bars/Bar", bar.ID)+"/Voices", bar.ID, ParseLocation{BarID: bar.ID}, "note-and-beat-semantics")
+		for _, voiceID := range splitIDs(bar.Voices) {
+			if scope, ok := barChordScopes[bar.ID]; ok {
+				voiceChordScopes[voiceID] = append(voiceChordScopes[voiceID], scope)
+			}
+		}
 	}
+	beatChordScopes := make(map[string][]map[string]struct{})
 	for _, voice := range doc.Voices.Voices {
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.Voice.Beats.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(voice.Beats), beats, gpifObjectPath("Voices/Voice", voice.ID)+"/Beats", voice.ID, ParseLocation{VoiceID: voice.ID}, "note-and-beat-semantics")
+		for _, beatID := range splitIDs(voice.Beats) {
+			beatChordScopes[beatID] = append(beatChordScopes[beatID], voiceChordScopes[voice.ID]...)
+		}
 	}
 	for _, beat := range doc.Beats.Beats {
 		location := ParseLocation{BeatID: beat.ID}
 		path := gpifObjectPath("Beats/Beat", beat.ID)
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Notes.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(beat.Notes), notes, path+"/Notes", beat.ID, location, "note-and-beat-semantics")
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Rhythm.Reference", "rhythm", ParseDiagnosticInvalidData), []string{beat.Rhythm.Ref}, rhythms, path+"/Rhythm", beat.ID, location, "rhythm")
-		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Chord.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), []string{beat.Chord}, chords, path+"/Chord", beat.ID, location, "note-and-beat-semantics")
+		targetScopes := beatChordScopes[beat.ID]
+		if len(targetScopes) == 0 {
+			targetScopes = []map[string]struct{}{chords}
+		}
+		for _, targets := range targetScopes {
+			if beat.Chord == "" || beat.Chord == "-1" {
+				break
+			}
+			if _, exists := targets[beat.Chord]; !exists {
+				gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Chord.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), []string{beat.Chord}, targets, path+"/Chord", beat.ID, location, "note-and-beat-semantics")
+				break
+			}
+		}
 	}
 	if doc.BackingTrack != nil {
 		gpifAuditReferenceList(context, diagnosticSource("GPIF.BackingTrack.AssetId.Reference", "score-core", ParseDiagnosticInvalidData), []string{doc.BackingTrack.AssetID}, assets, "/GPIF/BackingTrack/AssetId", "", ParseLocation{}, "score-core")
@@ -1567,9 +1698,18 @@ func gpifGraceEffect(note *Note, duration *Duration, onBeat bool, sequence int) 
 	case len(note.Effect.Slides) > 0:
 		transition = GraceEffectTransitionSlide
 	}
+	var exactFret *Fret
+	legacyFret := int8(0)
+	if fret, err := NewFret(int64(note.Value)); err == nil {
+		exactFret = &fret
+		if fret <= math.MaxInt8 {
+			legacyFret = int8(fret)
+		}
+	}
 	return GraceEffect{
 		Duration:                  uint8(min(uint16(math.MaxUint8), duration.Value)),
-		Fret:                      int8(min(int16(math.MaxInt8), max(int16(math.MinInt8), note.Value))),
+		Fret:                      legacyFret,
+		ExactFret:                 exactFret,
 		PercussionArticulation:    note.PercussionArticulation,
 		HasPercussionArticulation: note.HasPercussionArticulation,
 		IsDead:                    note.Kind == NoteTypeDead,
@@ -1614,16 +1754,36 @@ func gpifReadStaffStrings(staff gpifStaff) []GuitarString {
 	return nil
 }
 
-func gpifReadChordMap(track gpifTrack) map[string]Chord {
-	chords := make(map[string]Chord)
-	gpifReadChordProperties(track.Properties, chords)
-	for _, staff := range track.Staves.Staff {
-		gpifReadChordProperties(staff.Properties, chords)
-	}
-	return chords
+type gpifChordScope struct {
+	track  map[string]Chord
+	staves []map[string]Chord
 }
 
-func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]Chord) {
+func (s gpifChordScope) resolve(staffIndex int, id string) (Chord, bool) {
+	if staffIndex >= 0 && staffIndex < len(s.staves) {
+		if chord, ok := s.staves[staffIndex][id]; ok {
+			return chord, true
+		}
+	}
+	chord, ok := s.track[id]
+	return chord, ok
+}
+
+func gpifReadChordMap(track gpifTrack) (gpifChordScope, error) {
+	scope := gpifChordScope{track: make(map[string]Chord), staves: make([]map[string]Chord, len(track.Staves.Staff))}
+	if err := gpifReadChordProperties(track.Properties, scope.track); err != nil {
+		return gpifChordScope{}, err
+	}
+	for staffIndex, staff := range track.Staves.Staff {
+		scope.staves[staffIndex] = make(map[string]Chord)
+		if err := gpifReadChordProperties(staff.Properties, scope.staves[staffIndex]); err != nil {
+			return gpifChordScope{}, fmt.Errorf("staff %d: %w", staffIndex, err)
+		}
+	}
+	return scope, nil
+}
+
+func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]Chord) error {
 	for _, property := range properties {
 		if (property.Name != "DiagramCollection" && property.Name != "ChordCollection") || property.Items == nil {
 			continue
@@ -1634,6 +1794,9 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 			}
 			chord := Chord{Name: item.Name}
 			if item.Diagram != nil {
+				if item.Diagram.StringCount < 0 || item.Diagram.StringCount > math.MaxUint8 {
+					return fmt.Errorf("diagram %q string count %d is outside 0..255", item.ID, item.Diagram.StringCount)
+				}
 				firstFret := uint8(min(math.MaxUint8, max(0, item.Diagram.BaseFret+1)))
 				chord.FirstFret = &firstFret
 				chord.Length = uint8(item.Diagram.StringCount)
@@ -1651,6 +1814,7 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 			chords[item.ID] = chord
 		}
 	}
+	return nil
 }
 
 func gpifMIDIChannel(port, channel int) uint8 {
@@ -1739,6 +1903,14 @@ func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
 		if err != nil {
 			continue
 		}
+		audioFrame, err := NewAudioFrame(frameOffset)
+		if err != nil {
+			continue
+		}
+		barPosition, err := NewBarPositionFromFloat64(automation.Position)
+		if err != nil {
+			continue
+		}
 		bar := automation.Bar
 		if value := strings.TrimSpace(automation.Value.BarIndex); value != "" {
 			if parsed, parseErr := strconv.Atoi(value); parseErr == nil {
@@ -1751,8 +1923,10 @@ func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
 		song.SyncPoints = append(song.SyncPoints, SyncPoint{
 			Bar:           bar,
 			Position:      automation.Position,
+			BarPosition:   barPosition,
 			BarOccurrence: barOccurrence,
 			FrameOffset:   frameOffset,
+			AudioFrame:    audioFrame,
 			MediaTimeMS:   float64(frameOffset-framePadding) / GPIFBackingTrackSampleRate * 1000,
 			ModifiedTempo: modifiedTempo,
 			OriginalTempo: originalTempo,
@@ -1762,9 +1936,9 @@ func gpifReadSyncPoints(automations []gpifAutomation, song *Song) {
 	}
 }
 
-func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
+func gpifReadTempoAutomations(automations []gpifAutomation, song *Song, context *parseContext) {
 	earliest := -1
-	for _, auto := range automations {
+	for index, auto := range automations {
 		if auto.Type != "Tempo" {
 			continue
 		}
@@ -1773,15 +1947,43 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song) {
 			continue
 		}
 		tempo, err := strconv.ParseFloat(parts[0], 64)
-		if err != nil || tempo <= 0 {
+		bpm, bpmErr := NewBPM(tempo)
+		if err != nil || bpmErr != nil {
+			if song.InitialTempo.State == SourceValueMissing {
+				song.InitialTempo = UnknownSourceValue[BPM](parts[0])
+			}
+			context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Invalid", "tempo-automations", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
+				Feature:    "tempo",
+				Reason:     fmt.Sprintf("tempo %q must be finite and positive", parts[0]),
+			})
 			continue
 		}
-		tempo *= gpifTempoReferenceFactor(parts)
+		tempo = float64(bpm) * gpifTempoReferenceFactor(parts)
+		bpm, bpmErr = NewBPM(tempo)
+		if bpmErr != nil {
+			context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Reference.Invalid", "tempo-automations", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
+				Feature:    "tempo",
+				Reason:     bpmErr.Error(),
+			})
+			continue
+		}
 		change := TempoAutomation{Bar: auto.Bar, Position: auto.Position, Tempo: tempo}
 		song.TempoAutomations = append(song.TempoAutomations, change)
 		if earliest < 0 || gpifAutomationIsBefore(change, song.TempoAutomations[earliest]) {
 			earliest = len(song.TempoAutomations) - 1
-			song.Tempo = int16(math.Round(tempo))
+			song.InitialTempo = KnownSourceValue(bpm)
+			legacyTempo, legacyErr := bpm.LegacyTempo()
+			if legacyErr != nil {
+				context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.LegacyOverflow", "tempo-automations", ParseDiagnosticLossyProjection), ParseDiagnostic{
+					SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
+					Feature:    "tempo",
+					Reason:     legacyErr.Error(),
+				})
+			} else {
+				song.Tempo = legacyTempo
+			}
 			if auto.Text != "" {
 				song.TempoName = auto.Text
 			}
@@ -1973,7 +2175,7 @@ func splitIDs(s string) []string {
 	return strings.Fields(s)
 }
 
-func gpifRhythmToDuration(r *gpifRhythm) Duration {
+func gpifRhythmToDuration(r *gpifRhythm) (Duration, error) {
 	d := defaultDuration()
 	switch r.NoteValue {
 	case "Whole":
@@ -1994,17 +2196,24 @@ func gpifRhythmToDuration(r *gpifRhythm) Duration {
 		d.Value = 128
 	}
 	if r.AugmentationDot != nil {
-		if r.AugmentationDot.Count >= 2 {
-			d.DoubleDotted = true
-		} else if r.AugmentationDot.Count == 1 {
+		switch r.AugmentationDot.Count {
+		case 0:
+		case 1:
 			d.Dotted = true
+		case 2:
+			d.DoubleDotted = true
+		default:
+			return Duration{}, fmt.Errorf("augmentation-dot count %d is outside 0..2", r.AugmentationDot.Count)
 		}
 	}
-	if r.PrimaryTuplet != nil && r.PrimaryTuplet.Num > 0 && r.PrimaryTuplet.Den > 0 {
+	if r.PrimaryTuplet != nil {
+		if r.PrimaryTuplet.Num <= 0 || r.PrimaryTuplet.Num > math.MaxUint8 || r.PrimaryTuplet.Den <= 0 || r.PrimaryTuplet.Den > math.MaxUint8 {
+			return Duration{}, fmt.Errorf("tuplet ratio %d:%d is outside legacy boundary 1..255", r.PrimaryTuplet.Num, r.PrimaryTuplet.Den)
+		}
 		d.TupletEnters = uint8(r.PrimaryTuplet.Num)
 		d.TupletTimes = uint8(r.PrimaryTuplet.Den)
 	}
-	return d
+	return d, nil
 }
 
 type gpifPercussionFallbacks struct {
@@ -2069,10 +2278,13 @@ func gpifSamePercussionArticulation(a, b PercussionArticulation) bool {
 	return true
 }
 
-func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
+func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error) {
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
 	if percussion && n.InstrumentArticulation != nil && *n.InstrumentArticulation >= 0 {
+		if _, err := NewPercussionArticulationID(int64(*n.InstrumentArticulation)); err != nil {
+			return Note{}, err
+		}
 		note.PercussionArticulation = *n.InstrumentArticulation
 		note.HasPercussionArticulation = true
 	}
@@ -2085,7 +2297,16 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 		switch p.Name {
 		case "Fret":
 			if p.Fret != nil {
-				note.Value = int16(*p.Fret)
+				// Numbered-notation GPIF can persist a negative derived fret beside
+				// its usable absolute MIDI value. Let that MIDI property supply Value.
+				if *p.Fret < 0 {
+					continue
+				}
+				fret, err := NewFret(int64(*p.Fret))
+				if err != nil {
+					return Note{}, err
+				}
+				note.Value = int16(fret)
 				hasFret = true
 			}
 		case "String":
@@ -2094,14 +2315,25 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 				if !percussion && sourceString >= 0 && sourceString < stringCount {
 					// GPIF counts from the lowest string while the parser model,
 					// like GP3-5, counts from the highest string.
-					note.String = int8(stringCount - sourceString)
+					modelString := stringCount - sourceString
+					if modelString > math.MaxInt8 {
+						return Note{}, fmt.Errorf("string number %d exceeds legacy int8 boundary", modelString)
+					}
+					note.String = int8(modelString)
 				} else {
+					if sourceString < -1 || sourceString >= math.MaxInt8 {
+						return Note{}, fmt.Errorf("source string index %d exceeds legacy int8 boundary", sourceString)
+					}
 					note.String = int8(sourceString + 1)
 				}
 			}
 		case "Midi":
 			if p.Number != nil && !hasFret {
-				note.Value = int16(*p.Number)
+				midi, err := NewMIDINote(int64(*p.Number))
+				if err != nil {
+					return Note{}, err
+				}
+				note.Value = int16(midi)
 			}
 		case "Muted":
 			note.Kind = NoteTypeDead
@@ -2237,7 +2469,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) Note {
 	// Dynamic → velocity
 	note.Velocity = DefaultVelocity
 
-	return note
+	return note, nil
 }
 
 type gpifBendProperties struct {

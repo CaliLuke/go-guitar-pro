@@ -46,11 +46,13 @@ type BeatEffects struct {
 type Beat struct {
 	// Start is the absolute display-time start in ticks. Voices begin independently
 	// at their measure start. Playback transformations are not applied.
-	Start    *int64
-	Effect   BeatEffects
-	Text     string
-	Notes    []Note
-	Duration Duration
+	Start *int64
+	// ExactStart preserves fractional score ticks before Start is quantized.
+	ExactStart *ScoreTime
+	Effect     BeatEffects
+	Text       string
+	Notes      []Note
+	Duration   Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. GP3-5
 	// stores the value on notes, but the last explicit value applies to the
 	// whole beat during playback.

@@ -3,9 +3,32 @@
 package goguitarpro
 
 import (
+	"slices"
 	"strings"
 	"testing"
 )
+
+func TestExportGP8HonorsReplacedLegacyMeasureView(t *testing.T) {
+	song := parseTestFixture(t, "testdata/gp7/notes.gp")
+	track := &song.Tracks[0]
+	track.Measures = slices.Clone(track.Measures)
+	replacement := defaultBeat()
+	replacement.Notes = []Note{{Value: 17, String: 1, Kind: NoteTypeNormal, Velocity: Forte}}
+	track.Measures[0].Voices = []Voice{{Beats: []Beat{replacement}}}
+
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := roundTrip.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0].Value
+	if got != 17 {
+		t.Fatalf("replaced legacy measure exported fret %d, want 17", got)
+	}
+}
 
 const multiStaffFollowedByTrackGPIF = `<?xml version="1.0" encoding="utf-8"?>
 <GPIF>

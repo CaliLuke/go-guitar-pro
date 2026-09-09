@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "fmt"
+
 // Version holds file version information.
 type Version struct {
 	Data      string
@@ -26,7 +28,9 @@ type MeasureHeader struct {
 	Direction *DirectionSign
 	// Start is the absolute display-time start in ticks. Parsed scores use a
 	// one-quarter-note origin, so the first measure starts at 960.
-	Start             int64
+	Start int64
+	// ExactStart preserves fractional score ticks before Start is quantized.
+	ExactStart        ScoreTime
 	Tempo             int32
 	TimeSignature     TimeSignature
 	Number            uint16
@@ -49,6 +53,18 @@ func defaultMeasureHeader() MeasureHeader {
 
 func (mh *MeasureHeader) length() int64 {
 	return int64(mh.TimeSignature.Numerator) * int64(mh.TimeSignature.Denominator.time())
+}
+
+// ExactLength returns the measure's notated length without tick truncation.
+func (mh *MeasureHeader) ExactLength() (ScoreTime, error) {
+	if mh.TimeSignature.Numerator < 0 {
+		return ScoreTime{}, fmt.Errorf("time-signature numerator %d must be non-negative", mh.TimeSignature.Numerator)
+	}
+	duration, err := mh.TimeSignature.Denominator.ExactScoreTime()
+	if err != nil {
+		return ScoreTime{}, fmt.Errorf("time-signature denominator: %w", err)
+	}
+	return duration.Multiply(int64(mh.TimeSignature.Numerator))
 }
 
 // Marker is a marker annotation for beats.

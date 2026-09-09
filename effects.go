@@ -34,6 +34,8 @@ type BendEffect struct {
 type GraceEffect struct {
 	Duration uint8
 	Fret     int8
+	// ExactFret preserves a non-negative GPIF fret that does not fit Fret.
+	ExactFret *Fret
 	// RawFret preserves the source-format fret byte when Fret is normalized.
 	RawFret *int8
 	// PercussionArticulation is the grace note's track-local articulation index.

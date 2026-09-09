@@ -81,6 +81,9 @@ func TestGP7BackingTrackAndSyncPoints(t *testing.T) {
 	if first.ModifiedTempo != 133.63637 || first.OriginalTempo != 163 || !first.Visible {
 		t.Errorf("first sync tempo metadata = %#v", first)
 	}
+	if first.BarPosition.Ratio().Numerator() != 0 || first.AudioFrame != AudioFrame(0) {
+		t.Errorf("first typed sync values = %d/%d frame %d", first.BarPosition.Ratio().Numerator(), first.BarPosition.Ratio().Denominator(), first.AudioFrame)
+	}
 
 	second := song.SyncPoints[1]
 	if second.Bar != 1 || second.FrameOffset != 79200 {
@@ -88,6 +91,9 @@ func TestGP7BackingTrackAndSyncPoints(t *testing.T) {
 	}
 	if math.Abs(second.MediaTimeMS-2945.5782312925166) > 1e-9 {
 		t.Errorf("second media time = %.12f, want 2945.578231292517", second.MediaTimeMS)
+	}
+	if second.AudioFrame != AudioFrame(79200) {
+		t.Errorf("second typed audio frame = %d, want 79200", second.AudioFrame)
 	}
 }
 

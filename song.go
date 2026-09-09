@@ -42,10 +42,13 @@ type Song struct {
 	Lyrics            Lyrics
 	MasterEffect      RseMasterEffect
 	PageSetup         PageSetup
-	Tempo             int16
-	Key               KeySignature
-	HideTempo         bool
-	TripletFeel       TripletFeel
+	// InitialTempo preserves the authored opening BPM, including fractions. Tempo
+	// remains the rounded legacy compatibility projection.
+	InitialTempo SourceValue[BPM]
+	Tempo        int16
+	Key          KeySignature
+	HideTempo    bool
+	TripletFeel  TripletFeel
 }
 
 // BackingTrack describes the external audio attached to a GPIF score.
@@ -68,10 +71,14 @@ type SyncPoint struct {
 	Bar int
 	// Position is the point position as a fraction of the bar length.
 	Position float64
+	// BarPosition is the checked, exact representation of Position.
+	BarPosition BarPosition
 	// BarOccurrence identifies a particular playback occurrence when repeats are present.
 	BarOccurrence int
 	// FrameOffset is the raw 44.1 kHz project-frame position persisted for the point.
 	FrameOffset int64
+	// AudioFrame is the checked non-negative representation of FrameOffset.
+	AudioFrame AudioFrame
 	// MediaTimeMS is the absolute backing-track position after subtracting FramePadding.
 	MediaTimeMS float64
 	// ModifiedTempo and OriginalTempo are Guitar Pro's persisted derived tempo metadata.
@@ -167,6 +174,7 @@ func (s *Song) readBinary(c *cursor) error {
 		return fmt.Errorf("reading tempo: %w", err)
 	}
 	s.Tempo = int16(tempo)
+	s.InitialTempo = KnownSourceValue(BPM(tempo))
 
 	// GP5.1+: hide tempo
 	if versionGreaterThan(s.Version.Number, [3]byte{5, 0, 0}) {
@@ -252,7 +260,9 @@ func (s *Song) readBinary(c *cursor) error {
 	for trackIndex := range s.Tracks {
 		s.Tracks[trackIndex].populateSingleStaff()
 	}
-	s.finalizeTiming()
+	if err := s.finalizeTiming(); err != nil {
+		return fmt.Errorf("finalizing timing: %w", err)
+	}
 	return nil
 }
 

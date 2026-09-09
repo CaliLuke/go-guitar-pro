@@ -6,6 +6,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"reflect"
 	"regexp"
@@ -112,13 +113,20 @@ func TestCombinedEffectAndPercussionExportSeeds(t *testing.T) {
 	note := &pitched.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
 	note.TieOrigin = true
 	note.Effect.Bend = &BendEffect{Points: []BendPoint{{Position: 0}, {Position: uint8(BendEffectMaxPosition), Value: 2}}}
-	note.Effect.Graces[0].Transition = GraceEffectTransitionBend
 	data, err := Export(pitched, ExportFormatGP8)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, parseErr := Parse(data); parseErr != nil {
 		t.Fatal(parseErr)
+	}
+	pitchedRoundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	gotPitched := &pitchedRoundTrip.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	if !gotPitched.TieOrigin || gotPitched.Effect.Bend == nil || len(gotPitched.Effect.Graces) == 0 {
+		t.Fatalf("grace + tie + bend = %#v", gotPitched)
 	}
 
 	percussion := parseTestFixture(t, "testdata/gp7/percussion.gp")
@@ -139,23 +147,38 @@ func TestCombinedEffectAndPercussionExportSeeds(t *testing.T) {
 }
 
 func FuzzGPIFSemanticPreservingTransforms(f *testing.F) {
-	f.Add(byte(0))
-	f.Add(byte(1))
-	f.Add(byte(2))
-	f.Add(byte(3))
-	f.Fuzz(func(t *testing.T, selector byte) {
-		data, err := Export(conformanceExportSong(), ExportFormatGP8)
-		if err != nil {
-			t.Fatal(err)
+	data, err := Export(conformanceExportSong(), ExportFormatGP8)
+	if err != nil {
+		f.Fatal(err)
+	}
+	baseline, err := Parse(data)
+	if err != nil {
+		f.Fatal(err)
+	}
+	f.Add([]byte{0})
+	f.Add([]byte{1, 0, 3})
+	f.Add([]byte{3, 2, 1, 0})
+	f.Fuzz(func(t *testing.T, plan []byte) {
+		if len(plan) > 16 {
+			t.Skip()
 		}
-		baseline, err := Parse(data)
-		if err != nil {
-			t.Fatal(err)
-		}
-		transforms := []func(string) string{
-			reorderFirstNoteProperties, renameGPIFObjectIDs, reverseGPIFNoteDefinitions, duplicateFirstGPIFRhythm,
-		}
-		transformed := rewriteConformanceGPIF(t, data, transforms[int(selector)%len(transforms)])
+		step := 0
+		transformed := rewriteConformanceGPIF(t, data, func(gpif string) string {
+			for _, operation := range plan {
+				switch operation % 4 {
+				case 0:
+					gpif = reorderFirstNoteProperties(gpif)
+				case 1:
+					gpif = renameGPIFObjectIDs(gpif)
+				case 2:
+					gpif = reverseGPIFNoteDefinitions(gpif)
+				case 3:
+					gpif = duplicateFirstGPIFRhythmWithPrefix(gpif, fmt.Sprintf("fuzz-%d-", step))
+				}
+				step++
+			}
+			return gpif
+		})
 		got, err := Parse(transformed)
 		if err != nil {
 			t.Fatal(err)
@@ -170,6 +193,14 @@ func FuzzParseMalformedClassified(f *testing.F) {
 	f.Add([]byte{})
 	f.Add([]byte("PK\x03\x04"))
 	f.Add([]byte("BCFZ"))
+	valid, err := Export(conformanceExportSong(), ExportFormatGP8)
+	if err != nil {
+		f.Fatal(err)
+	}
+	f.Add(valid)
+	f.Add(rewriteConformanceGPIF(f, valid, func(gpif string) string {
+		return strings.Replace(gpif, `<Rhythm ref="0"`, `<Rhythm ref="missing"`, 1)
+	}))
 	f.Fuzz(func(t *testing.T, data []byte) {
 		if len(data) > 1<<20 {
 			t.Skip()
@@ -187,6 +218,24 @@ func FuzzParseMalformedClassified(f *testing.F) {
 			t.Fatalf("unclassified parse outcome: %T %v", err, err)
 		}
 	})
+}
+
+func TestParseGP8RejectsOversizedGPIFBeforeInflatingIt(t *testing.T) {
+	const limit = 16 << 20
+	archive, err := writeGP8Archive([]struct {
+		name   string
+		method uint16
+		data   []byte
+	}{{
+		name: "Content/score.gpif", method: zip.Deflate,
+		data: append([]byte(strings.Repeat(" ", limit)), []byte(staffScopedChordGPIF)...),
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Parse(archive); err == nil || !strings.Contains(err.Error(), "exceeds") {
+		t.Fatalf("oversized GPIF error = %v, want explicit size-limit rejection", err)
+	}
 }
 
 func reorderFirstNoteProperties(gpif string) string {
@@ -245,12 +294,16 @@ func reverseGPIFNoteDefinitions(gpif string) string {
 }
 
 func duplicateFirstGPIFRhythm(gpif string) string {
+	return duplicateFirstGPIFRhythmWithPrefix(gpif, "duplicate-")
+}
+
+func duplicateFirstGPIFRhythmWithPrefix(gpif, prefix string) string {
 	rhythm := regexp.MustCompile(`(?s)<Rhythm id="([^"]+)">.*?</Rhythm>`)
 	match := rhythm.FindStringSubmatch(gpif)
 	if len(match) == 0 {
 		return gpif
 	}
-	duplicateID := "duplicate-" + match[1]
+	duplicateID := prefix + match[1]
 	duplicate := strings.Replace(match[0], `id="`+match[1]+`"`, `id="`+duplicateID+`"`, 1)
 	gpif = strings.Replace(gpif, "</Rhythms>", duplicate+"</Rhythms>", 1)
 	return strings.Replace(gpif, `<Rhythm ref="`+match[1]+`"`, `<Rhythm ref="`+duplicateID+`"`, 1)

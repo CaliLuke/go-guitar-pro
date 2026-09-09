@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 )
 
+const maxGPIFXMLSize = 16 << 20
+
 func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	r, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
@@ -19,17 +21,23 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	var song *Song
 	for _, f := range r.File {
 		if filepath.Base(f.Name) == "score.gpif" {
+			if f.UncompressedSize64 > maxGPIFXMLSize {
+				return nil, fmt.Errorf("score.gpif size %d exceeds %d-byte limit", f.UncompressedSize64, maxGPIFXMLSize)
+			}
 			rc, err := f.Open()
 			if err != nil {
 				return nil, fmt.Errorf("opening score.gpif: %w", err)
 			}
-			gpifData, err := io.ReadAll(rc)
+			gpifData, err := io.ReadAll(io.LimitReader(rc, maxGPIFXMLSize+1))
 			if err != nil {
 				_ = rc.Close()
 				return nil, fmt.Errorf("reading score.gpif: %w", err)
 			}
 			if closeErr := rc.Close(); closeErr != nil {
 				return nil, fmt.Errorf("closing score.gpif: %w", closeErr)
+			}
+			if len(gpifData) > maxGPIFXMLSize {
+				return nil, fmt.Errorf("score.gpif exceeds %d-byte limit", maxGPIFXMLSize)
 			}
 			song, err = parseGPIFWithContext(gpifData, context)
 			if err != nil {

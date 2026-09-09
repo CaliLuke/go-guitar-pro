@@ -35,6 +35,12 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 
 | Source construct | Feature | Disposition | Reason |
 | --- | --- | --- | --- |
+| `GPIF.MasterTrack.Automation.Tempo.Invalid` | `tempo-automations` | `invalid-data` | The opening tempo must be finite and positive. |
+| `GPIF.MasterTrack.Automation.Tempo.LegacyOverflow` | `tempo-automations` | `lossy-projection` | The exact opening BPM is preserved but cannot be projected into the legacy int16 field. |
+| `GPIF.MasterTrack.Automation.Tempo.Reference.Invalid` | `tempo-automations` | `invalid-data` | Applying the authored tempo reference unit must produce a finite positive BPM. |
+| `GPIF.Note.Accent.Tenuto` | `note-and-beat-semantics` | `unsupported-feature` | Song has no destination for the GPIF tenuto accent bit. |
+| `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
+| `GPIF.Note.Property.TransposedPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Chord.Diagram.Fingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowDiagram` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |

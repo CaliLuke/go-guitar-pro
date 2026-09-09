@@ -356,7 +356,17 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 
 func gp8ExportStaves(track *Track) []Staff {
 	if len(track.Staves) > 0 {
-		return track.Staves
+		staves := slices.Clone(track.Staves)
+		first := staves[0]
+		if track.Measures != nil {
+			first.Measures = track.Measures
+		}
+		if track.Strings != nil {
+			first.Strings = track.Strings
+		}
+		first.PercussionTrack = track.PercussionTrack
+		staves[0] = first
+		return staves
 	}
 	return []Staff{{
 		Measures: track.Measures, Strings: track.Strings,
@@ -441,7 +451,9 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 			break
 		}
 	}
-	if !hasInitial && song.Tempo > 0 {
+	if !hasInitial && song.InitialTempo.State == SourceValueKnown && song.InitialTempo.Value > 0 {
+		tempos = append(tempos, TempoAutomation{Tempo: float64(song.InitialTempo.Value)})
+	} else if !hasInitial && song.Tempo > 0 {
 		tempos = append(tempos, TempoAutomation{Tempo: float64(song.Tempo)})
 	}
 	slices.SortFunc(tempos, func(a, b TempoAutomation) int {
@@ -881,6 +893,9 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 			}
 			graceNote := *note
 			graceNote.Value = int16(grace.Fret)
+			if grace.ExactFret != nil {
+				graceNote.Value = int16(*grace.ExactFret)
+			}
 			graceNote.PercussionArticulation = grace.PercussionArticulation
 			graceNote.HasPercussionArticulation = grace.HasPercussionArticulation
 			if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {

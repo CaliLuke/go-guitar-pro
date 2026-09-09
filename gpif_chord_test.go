@@ -8,6 +8,62 @@ import (
 	"testing"
 )
 
+const staffScopedChordGPIF = `<?xml version="1.0" encoding="utf-8"?>
+<GPIF>
+  <GPVersion>8.0</GPVersion>
+  <Score><Title>Staff chords</Title></Score>
+  <MasterTrack><Tracks>0</Tracks></MasterTrack>
+  <Tracks><Track id="0"><Name>Piano</Name><Staves>
+    <Staff><Properties><Property name="DiagramCollection"><Items><Item id="0" name="Upper"><Diagram stringCount="1" fretCount="4" baseFret="0"><Fret string="0" fret="1"/></Diagram></Item></Items></Property></Properties></Staff>
+    <Staff><Properties><Property name="DiagramCollection"><Items><Item id="0" name="Lower"><Diagram stringCount="1" fretCount="4" baseFret="0"><Fret string="0" fret="2"/></Diagram></Item></Items></Property></Properties></Staff>
+  </Staves><MidiConnection><Port>0</Port><PrimaryChannel>0</PrimaryChannel><SecondaryChannel>1</SecondaryChannel></MidiConnection></Track></Tracks>
+  <MasterBars><MasterBar><Time>4/4</Time><Bars>0 1</Bars></MasterBar></MasterBars>
+  <Bars><Bar id="0"><Clef>G2</Clef><Voices>0</Voices></Bar><Bar id="1"><Clef>F4</Clef><Voices>1</Voices></Bar></Bars>
+  <Voices><Voice id="0"><Beats>0</Beats></Voice><Voice id="1"><Beats>1</Beats></Voice></Voices>
+  <Beats><Beat id="0"><Rhythm ref="0"/><Chord>0</Chord></Beat><Beat id="1"><Rhythm ref="0"/><Chord>0</Chord></Beat></Beats>
+  <Notes/><Rhythms><Rhythm id="0"><NoteValue>Quarter</NoteValue></Rhythm></Rhythms>
+</GPIF>`
+
+func TestGPIFChordIDsAreScopedPerStaff(t *testing.T) {
+	context := &parseContext{format: "GPIF"}
+	song, err := parseGPIFWithContext([]byte(staffScopedChordGPIF), context)
+	if err != nil {
+		t.Fatal(err)
+	}
+	track := &song.Tracks[0]
+	upper := track.Staves[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+	lower := track.Staves[1].Measures[0].Voices[0].Beats[0].Effect.Chord
+	if upper == nil || lower == nil || upper.Name != "Upper" || lower.Name != "Lower" {
+		t.Fatalf("staff chords = %#v, %#v; want Upper, Lower", upper, lower)
+	}
+	for _, diagnostic := range context.diagnostics {
+		if diagnostic.Code == "GPIF.ChordDefinition.DuplicateID" {
+			t.Fatalf("staff-local IDs reported as duplicates: %#v", diagnostic)
+		}
+	}
+}
+
+func TestGPIFRejectsOversizedChordDiagramBeforeAllocation(t *testing.T) {
+	data := strings.Replace(staffScopedChordGPIF, `stringCount="1"`, `stringCount="1000"`, 1)
+	if _, err := parseGPIF([]byte(data)); err == nil {
+		t.Fatal("oversized chord diagram was accepted")
+	}
+}
+
+func TestGPIFChordReferencesUseStaffScope(t *testing.T) {
+	data := strings.Replace(staffScopedChordGPIF, `id="0" name="Lower"`, `id="2" name="Lower"`, 1)
+	context := &parseContext{format: "GPIF"}
+	if _, err := parseGPIFWithContext([]byte(data), context); err != nil {
+		t.Fatal(err)
+	}
+	for _, diagnostic := range context.diagnostics {
+		if diagnostic.Code == "GPIF.Beat.Chord.Reference" {
+			return
+		}
+	}
+	t.Fatalf("diagnostics = %#v, want wrong-staff chord reference", context.diagnostics)
+}
+
 func TestGPIFChordCollectionAndBaseFretRoundTrip(t *testing.T) {
 	firstFret := uint8(5)
 	song := syntheticGP8Song()
