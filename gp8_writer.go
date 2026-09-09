@@ -598,6 +598,18 @@ func (builder *gp8Builder) prepareTrack(trackIndex int) {
 func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	track := &builder.song.Tracks[trackIndex]
 	location := ScoreLocation{Track: trackIndex}
+	if track.FretCount != 0 && track.FretCount != 24 {
+		builder.addReport("gp8.omit.track-fret-count", "staff-ownership", ExportDispositionOmitted, location, "GP8 writer does not emit the authored fret count")
+	}
+	if track.Port != 0 && track.Port != 1 {
+		builder.addReport("gp8.omit.track-port", "staff-ownership", ExportDispositionOmitted, location, "GP8 writer derives the connection port from the selected MIDI channel")
+	}
+	if track.TwelveStringedGuitarTrack {
+		builder.addReport("gp8.omit.track-twelve-stringed", "staff-ownership", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy twelve-string track flag")
+	}
+	if track.BanjoTrack {
+		builder.addReport("gp8.omit.track-banjo", "staff-ownership", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy banjo track flag")
+	}
 	if track.IndicateTuning {
 		builder.addReport("gp8.omit.track-indicate-tuning", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the tuning-display preference")
 	}
@@ -675,6 +687,11 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 
 	staves := gp8ExportStaves(track)
+	for staffIndex := range staves {
+		if !track.PercussionTrack && staves[staffIndex].StandardNotationLineCount != 0 && staves[staffIndex].StandardNotationLineCount != 5 {
+			builder.addReport("gp8.omit.staff-line-count", "staff-ownership", ExportDispositionOmitted, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "GP8 writer emits custom staff line counts only for percussion tracks")
+		}
+	}
 	result.Staves.Staff = make([]gpifStaff, len(staves))
 	for staffIndex := range staves {
 		staff := &staves[staffIndex]

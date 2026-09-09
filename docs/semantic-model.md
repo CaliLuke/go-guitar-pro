@@ -40,6 +40,11 @@ GPIF master-bar references list bars by track, then by staff. An interior `-1`
 voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole
 track. The parser reports a short, long, or misplaced bar list as invalid data.
 
+GP8 export preserves tuning and a common capo. It reports non-default legacy
+fret counts, connection ports, twelve-string flags, and banjo flags as
+omissions. It also reports a custom line count on a pitched staff. Percussion
+staff line counts remain supported.
+
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
 quantizes values only at a target boundary.
