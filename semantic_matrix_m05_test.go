@@ -136,6 +136,15 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 			t.Errorf("channel %d diagnostics = %#v", invalid, diagnostics)
 		}
 	}
+	invalidMixer := *song
+	invalidMixer.Channels = slices.Clone(song.Channels)
+	invalidMixer.Channels[0].Volume = -1
+	if diagnostics := ValidateSong(&invalidMixer); !slices.ContainsFunc(diagnostics, func(d ScoreDiagnostic) bool { return d.Code == "score.channel.volume" }) {
+		t.Fatalf("invalid mixer diagnostics = %#v", diagnostics)
+	}
+	if data, _, err := ExportWithReport(&invalidMixer, ExportFormatGP8, ExportOptions{}); err == nil || len(data) != 0 {
+		t.Fatalf("invalid mixer export = %d bytes, %v", len(data), err)
+	}
 }
 
 func assertM05RSEFields(run *semanticMatrixRun, master RseMasterEffect, track TrackRse) {

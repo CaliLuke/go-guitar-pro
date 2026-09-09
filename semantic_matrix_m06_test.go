@@ -78,12 +78,27 @@ func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 	run.Wire("gpifAutomation.Text", "Fractional", "Fractional")
 	run.Wire("gpifAutomation.Bar", roundTrip.TempoAutomations[1].Bar, 1)
 	run.Wire("gpifAutomation.Position", roundTrip.TempoAutomations[1].Position, 0.75)
-	run.Wire("gpifAutomation.Visible", "true", "true")
+	run.Wire("gpifAutomation.Visible", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Visible"], "true"), 2)
 	run.Wire("gpifAutomation.Linear", false, false)
 
 	for _, invalid := range []float64{0, -1, math.NaN(), math.Inf(1)} {
-		if _, err := NewBPM(invalid); err == nil {
+		if _, bpmErr := NewBPM(invalid); bpmErr == nil {
 			t.Errorf("NewBPM accepted %v", invalid)
 		}
 	}
+	edited := semanticValidPitchedGP8Song(t)
+	edited.Tracks[0].Settings.Notation = true
+	edited.Tempo = 120
+	edited.InitialTempo = KnownSourceValue(BPM(120))
+	edited.TempoAutomations = []TempoAutomation{{Bar: 0, Tempo: 120}}
+	edited.InitialTempo = KnownSourceValue(BPM(132.5))
+	data, _, err = ExportWithReport(edited, ExportFormatGP8, ExportOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	editedRoundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run.Field("Song.InitialTempo", editedRoundTrip.InitialTempo, KnownSourceValue(BPM(132.5)))
 }

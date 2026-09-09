@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"io"
 	"path/filepath"
@@ -48,6 +49,29 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 	if song == nil {
 		return nil, fmt.Errorf("no score.gpif found in ZIP archive")
+	}
+	for _, f := range r.File {
+		if filepath.Base(f.Name) != "LayoutConfiguration" || f.UncompressedSize64 > 1<<20 {
+			continue
+		}
+		rc, openErr := f.Open()
+		if openErr != nil {
+			return nil, fmt.Errorf("opening LayoutConfiguration: %w", openErr)
+		}
+		layout, readErr := io.ReadAll(io.LimitReader(rc, 1<<20))
+		closeErr := rc.Close()
+		if readErr != nil {
+			return nil, fmt.Errorf("reading LayoutConfiguration: %w", readErr)
+		}
+		if closeErr != nil {
+			return nil, fmt.Errorf("closing LayoutConfiguration: %w", closeErr)
+		}
+		if len(layout) >= 6+len(song.Tracks) && binary.BigEndian.Uint32(layout[:4]) == 4 {
+			for index := range song.Tracks {
+				song.Tracks[index].Visible = layout[6+index] != 0
+			}
+		}
+		break
 	}
 	if song.BackingTrack == nil || song.BackingTrack.EmbeddedFilePath == "" {
 		return song, nil

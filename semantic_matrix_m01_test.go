@@ -142,9 +142,13 @@ func runSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct(run *semanticMatrixR
 	song := syntheticGP8Song()
 	song.Author = "author sentinel"
 	song.Writer = "writer sentinel"
-	normalized, ok := normalizeGoScore(song).(map[string]any)
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	normalized, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
 	if !ok {
-		t.Fatalf("normalized score has type %T", normalizeGoScore(song))
+		t.Fatalf("AlphaTab score has type %T", normalized)
 	}
 	metadata, ok := normalized["metadata"].(map[string]any)
 	if !ok {

@@ -52,9 +52,17 @@ reports each legacy master or track RSE record as one scoped omission. The RSE
 tests assert every descendant covered by those parent reports.
 
 `InitialTempo` is the fractional authored value. `Tempo` is its legacy integer
-projection. A later edit to a conflicting nonzero `Tempo` value wins and
-produces a normalization report. GP8 preserves the tempo name and ordered
-automation values. It cannot preserve `HideTempo`, so it reports that omission.
+projection. When an opening automation identifies the stale value, an edit to
+either representation wins and produces a normalization report. GP8 preserves
+the tempo name and ordered automation values. It cannot preserve `HideTempo`,
+so it reports that omission.
+
+GP8 has one playback-state value and one MIDI port per track. Export reports a
+normalization when mute and solo are both true or when the effect channel uses
+a different port. It also reports a default binding for an unbound track.
+String numbers are canonical positions in tuning order. Export reports any
+authored number that differs from that position. The ZIP reader restores track
+visibility from `LayoutConfiguration` when that record is present.
 
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter

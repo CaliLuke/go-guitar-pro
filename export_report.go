@@ -94,7 +94,7 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		return report, nil
 	}
 	if _, conflict, err := gp8ResolvedFieldTempo(song); err == nil && conflict {
-		add("gp8.normalize.tempo-compatibility", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the edited legacy Tempo value takes precedence over conflicting InitialTempo data")
+		add("gp8.normalize.tempo-compatibility", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the edited score tempo representation takes precedence over its stale compatibility value")
 	}
 	if fieldTempo, _, err := gp8ResolvedFieldTempo(song); err == nil && fieldTempo > 0 {
 		for _, automation := range song.TempoAutomations {

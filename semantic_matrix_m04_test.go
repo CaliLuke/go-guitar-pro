@@ -52,6 +52,13 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 		}
 		run.Field("Track.Offset", got.value, test.value)
 	}
+	capoStrings := []GuitarString{{Number: 1, Value: 64}}
+	capoTrack := Track{Offset: 4, Strings: capoStrings}
+	capoNote := Note{String: 1}
+	run.Field("Track.Offset", capoTrack.Offset, int32(4))
+	if sounding := gp8NoteMIDI(&capoTrack, capoStrings, &capoNote) + int(capoTrack.Offset); sounding != 68 {
+		t.Errorf("capo sounding MIDI = %d, want 68", sounding)
+	}
 
 	song := semanticValidPitchedGP8Song(t)
 	track := &song.Tracks[0]

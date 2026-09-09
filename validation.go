@@ -56,6 +56,19 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	add := func(code string, kind ScoreDiagnosticKind, location ScoreLocation, format string, args ...any) {
 		diagnostics = append(diagnostics, ScoreDiagnostic{Code: code, Kind: kind, Location: location, Reason: fmt.Sprintf(format, args...)})
 	}
+	for channelIndex, channel := range song.Channels {
+		if channel.Instrument < 0 || channel.Instrument > 127 {
+			add("score.channel.instrument", ScoreDiagnosticValue, ScoreLocation{}, "channel %d instrument %d is outside 0..127", channelIndex, channel.Instrument)
+		}
+		if channel.Bank > 127 {
+			add("score.channel.bank", ScoreDiagnosticValue, ScoreLocation{}, "channel %d bank %d is outside 0..127", channelIndex, channel.Bank)
+		}
+		for name, value := range map[string]int8{"volume": channel.Volume, "balance": channel.Balance, "chorus": channel.Chorus, "reverb": channel.Reverb, "phaser": channel.Phaser, "tremolo": channel.Tremolo} {
+			if value < 0 {
+				add("score.channel."+name, ScoreDiagnosticValue, ScoreLocation{}, "channel %d %s %d is outside 0..127", channelIndex, name, value)
+			}
+		}
+	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
 		if track.Offset < 0 {

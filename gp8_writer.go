@@ -559,6 +559,19 @@ func gp8ResolvedFieldTempo(song *Song) (float64, bool, error) {
 			if legacyErr == nil && legacy == song.Tempo {
 				return float64(exact), false, nil
 			}
+			for _, automation := range song.TempoAutomations {
+				if automation.Bar != 0 || automation.Position != 0 {
+					continue
+				}
+				automationBPM, automationErr := NewBPM(automation.Tempo)
+				if automationErr == nil {
+					automationLegacy, projectionErr := automationBPM.LegacyTempo()
+					if projectionErr == nil && automationLegacy == song.Tempo && automation.Tempo != float64(exact) {
+						return float64(exact), true, nil
+					}
+				}
+				break
+			}
 			return float64(song.Tempo), true, nil
 		}
 		if exactErr != nil {

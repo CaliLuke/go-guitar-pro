@@ -67,8 +67,8 @@ const mutations = [
   {
     id: 'tempo-compatibility-authority',
     file: 'gp8_writer.go',
-    before: '\t\t\tif legacyErr == nil && legacy == song.Tempo {\n\t\t\t\treturn float64(exact), false, nil\n\t\t\t}\n\t\t\treturn float64(song.Tempo), true, nil\n',
-    after: '\t\t\tif legacyErr == nil && legacy == song.Tempo {\n\t\t\t\treturn float64(exact), false, nil\n\t\t\t}\n\t\t\treturn float64(exact), true, nil\n',
+    before: '\t\t\treturn float64(song.Tempo), true, nil\n',
+    after: '\t\t\treturn float64(exact), true, nil\n',
     test: '^TestGP8ExportReconcilesSemanticAndLegacyTempo$',
     want: 'round-trip tempo'
   },

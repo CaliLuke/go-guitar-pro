@@ -170,6 +170,11 @@ func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 		t.Fatalf("export = %d bytes, %#v, %v", len(data), exported, err)
 	}
 	values := extractGPIFLeafText(t, data)
+	roundTrip, parseErr := Parse(data)
+	if parseErr != nil {
+		t.Fatal(parseErr)
+	}
+	run.Field("Track.Visible", roundTrip.Tracks[0].Visible, false)
 	run.Wire("gpifSection.Text", values["GPIF/MasterBars/MasterBar/Section/Text"], marker.Title)
 	run.Wire("gpifTrack.Color", values["GPIF/Tracks/Track/Color"], "51 102 153")
 
