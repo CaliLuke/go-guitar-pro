@@ -77,11 +77,11 @@ func PreflightExport(song *Song, target ExportFormat, options ExportOptions) Exp
 	if song.BackingTrack != nil {
 		add("gp8.omit.backing-track", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track assets")
 	}
-	if len(song.SyncPoints) != 0 {
-		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track sync points")
+	for _, point := range song.SyncPoints {
+		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, ScoreLocation{Measure: point.Bar}, "GP8 writer does not emit this backing-track sync point")
 	}
-	if len(song.VolumeAutomations) != 0 {
-		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit track volume automations")
+	for _, automation := range song.VolumeAutomations {
+		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "GP8 writer does not emit this track volume automation")
 	}
 	for trackIndex := range song.Tracks {
 		for staffIndex, staff := range gp8ExportStaves(&song.Tracks[trackIndex]) {
@@ -92,11 +92,11 @@ func PreflightExport(song *Song, target ExportFormat, options ExportOptions) Exp
 						if beat.Status == BeatStatusEmpty {
 							add("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
 						}
-						if len(beat.Notes) > 1 {
-							velocity := beat.Notes[0].Velocity
-							for _, note := range beat.Notes[1:] {
+						if len(beat.Notes) > 0 {
+							velocity := gpifDynamicToVelocity(gp8VelocityToDynamic(beat.Notes[0].Velocity))
+							for _, note := range beat.Notes {
 								if note.Velocity != velocity {
-									add("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one dynamic for all notes in a beat")
+									add("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
 									break
 								}
 							}

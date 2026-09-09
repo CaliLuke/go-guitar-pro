@@ -4,6 +4,7 @@ package goguitarpro
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 )
 
@@ -54,6 +55,69 @@ func TestExportStrictLossPolicyUsesStableAllowlist(t *testing.T) {
 	}
 	if roundTrip.BackingTrack != nil {
 		t.Fatalf("independent output retained omitted backing track: %#v", roundTrip.BackingTrack)
+	}
+}
+
+func TestExportStrictLossPolicyReportsVelocityQuantization(t *testing.T) {
+	song := syntheticGP8Song()
+	beat := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
+	for index := range beat.Notes {
+		beat.Notes[index].Velocity = 100
+	}
+
+	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	if !hasExportReportEntry(report, "gp8.normalize.note-velocity") {
+		t.Fatalf("velocity preflight = %#v, want quantization entry", report.Entries)
+	}
+	_, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	var lossErr *ExportLossError
+	if !errors.As(err, &lossErr) {
+		t.Fatalf("strict velocity export error = %v, want ExportLossError", err)
+	}
+}
+
+func TestExportPreflightRejectsUnsupportedBeatDuration(t *testing.T) {
+	song := syntheticGP8Song()
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Duration.Value = 3
+
+	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	entry := exportReportEntry(report, "gp8.reject.score")
+	if entry == nil || entry.Disposition != ExportDispositionRejected {
+		t.Fatalf("duration preflight = %#v, want rejected score entry", report.Entries)
+	}
+	if _, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{}); err == nil {
+		t.Fatal("export accepted a duration rejected by serialization")
+	}
+}
+
+func TestExportPreflightLocatesEachOmittedAutomation(t *testing.T) {
+	song := syntheticGP8Song()
+	song.SyncPoints = []SyncPoint{{Bar: 1}, {Bar: 2}}
+	song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 1}, {Track: 2, Bar: 2}}
+
+	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	want := map[string][]ScoreLocation{
+		"gp8.omit.sync-points": {
+			{Measure: 1},
+			{Measure: 2},
+		},
+		"gp8.omit.volume-automations": {
+			{Track: 0, Measure: 1},
+			{Track: 2, Measure: 2},
+		},
+	}
+	for code, locations := range want {
+		var got []ScoreLocation
+		for _, entry := range report.Entries {
+			if entry.Code == code {
+				got = append(got, entry.Location)
+			}
+		}
+		if !reflect.DeepEqual(got, locations) {
+			t.Errorf("%s locations = %#v, want %#v", code, got, locations)
+		}
 	}
 }
 

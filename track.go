@@ -102,6 +102,26 @@ func (t *Track) populateSingleStaff() {
 	}}
 }
 
+func (t *Track) reconcileFirstStaffCompatibility() {
+	if len(t.Staves) == 0 {
+		t.populateSingleStaff()
+		return
+	}
+	if t.Measures != nil {
+		t.Staves[0].Measures = t.Measures
+	} else {
+		t.Measures = t.Staves[0].Measures
+	}
+	if t.Strings != nil {
+		t.Staves[0].Strings = t.Strings
+	} else {
+		t.Strings = t.Staves[0].Strings
+	}
+	t.Staves[0].PercussionTrack = t.PercussionTrack
+	t.Measures = t.Staves[0].Measures
+	t.Strings = t.Staves[0].Strings
+}
+
 // TrackSound describes one selectable GPIF playback sound.
 type TrackSound struct {
 	Name    string

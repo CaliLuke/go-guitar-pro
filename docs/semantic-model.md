@@ -32,7 +32,8 @@ do not share mutable effect data.
 
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
 are compatibility views of the first staff. GP8 export honors replacement of
-the compatibility slices. New multi-staff code must use `Track.Staves`.
+non-nil compatibility slices. `FinalizeSong` reconnects those slices to the
+first staff. New multi-staff code must use `Track.Staves` for other staves.
 
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
@@ -42,7 +43,9 @@ quantizes values only at a target boundary.
 
 The model preserves ordered grace effects, staff ownership, chord scope,
 percussion articulation identity, fractional tempo, and exact duration ratios.
-The conformance fixtures cover each representation.
+Registered conformance fixtures cover the supported feature slices. Focused
+regression tests cover chord scope, fractional tempo, and checked boundaries.
+The generated conformance ledger identifies partial projections that remain.
 
 `ParseWithOptions` reports source data that the model cannot preserve. Strict
 parse mode rejects selected diagnostic kinds. The default `Parse` function

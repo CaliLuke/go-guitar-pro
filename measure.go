@@ -2,7 +2,10 @@
 
 package goguitarpro
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 const maxVoices = 2
 
@@ -63,6 +66,9 @@ func (s *Song) readMeasures(c *cursor) error {
 }
 
 func (s *Song) finalizeTiming() error {
+	for trackIndex := range s.Tracks {
+		s.Tracks[trackIndex].reconcileFirstStaffCompatibility()
+	}
 	start, _ := NewScoreTime(DurationQuarterTime, 1)
 	for headerIndex := range s.MeasureHeaders {
 		s.MeasureHeaders[headerIndex].ExactStart = start
@@ -70,16 +76,8 @@ func (s *Song) finalizeTiming() error {
 		contentLength := ScoreTime{}
 		for trackIndex := range s.Tracks {
 			track := &s.Tracks[trackIndex]
-			if len(track.Staves) == 0 {
-				trackLength, err := finalizeMeasureTiming(track.Measures, headerIndex, start)
-				if err != nil {
-					return fmt.Errorf("track %d measure timing: %w", trackIndex, err)
-				}
-				contentLength = maxScoreTime(contentLength, trackLength)
-				continue
-			}
 			for staffIndex := range track.Staves {
-				staffLength, err := finalizeMeasureTiming(track.Staves[staffIndex].Measures, headerIndex, start)
+				staffLength, err := finalizeMeasureTiming(track.Staves[staffIndex].Measures, trackIndex, staffIndex, headerIndex, start)
 				if err != nil {
 					return fmt.Errorf("track %d staff %d measure timing: %w", trackIndex, staffIndex, err)
 				}
@@ -105,16 +103,22 @@ func (s *Song) finalizeTiming() error {
 	return nil
 }
 
-func finalizeMeasureTiming(measures []Measure, headerIndex int, start ScoreTime) (ScoreTime, error) {
+func finalizeMeasureTiming(measures []Measure, trackIndex, staffIndex, headerIndex int, start ScoreTime) (ScoreTime, error) {
 	contentLength := ScoreTime{}
 	for measureIndex := range measures {
 		measure := &measures[measureIndex]
 		if measure.HeaderIndex != headerIndex {
 			continue
 		}
+		if measureIndex > math.MaxInt16 {
+			return ScoreTime{}, fmt.Errorf("measure index %d exceeds voice ownership boundary", measureIndex)
+		}
+		measure.TrackIndex = trackIndex
+		measure.StaffIndex = staffIndex
 		measure.ExactStart = start
 		measure.Start = start.FloorTicks()
 		for voiceIndex := range measure.Voices {
+			measure.Voices[voiceIndex].MeasureIndex = int16(measureIndex)
 			voiceStart := start
 			for beatIndex := range measure.Voices[voiceIndex].Beats {
 				beat := &measure.Voices[voiceIndex].Beats[beatIndex]

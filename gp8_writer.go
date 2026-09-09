@@ -330,7 +330,11 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 		}
 		for voiceIndex := range measure.Voices {
 			for beatIndex := range measure.Voices[voiceIndex].Beats {
-				for noteIndex, note := range measure.Voices[voiceIndex].Beats[beatIndex].Notes {
+				beat := &measure.Voices[voiceIndex].Beats[beatIndex]
+				if _, ok := gp8NoteValue(beat.Duration.Value); !ok {
+					return fmt.Errorf("track %d staff %d measure %d voice %d beat %d has unsupported duration value %d", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, beat.Duration.Value)
+				}
+				for noteIndex, note := range beat.Notes {
 					if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d uses percussion articulation %d with %d definitions", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.PercussionArticulation, len(track.PercussionArticulations))
 					}

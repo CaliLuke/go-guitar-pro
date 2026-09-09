@@ -63,11 +63,40 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		}
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
+			if len(staves[staffIndex].Measures) != len(song.MeasureHeaders) {
+				add("score.staff.measure-count", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "measure count %d does not match header count %d", len(staves[staffIndex].Measures), len(song.MeasureHeaders))
+			}
 			for measureIndex := range staves[staffIndex].Measures {
 				measure := &staves[staffIndex].Measures[measureIndex]
 				location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex}
 				if measure.HeaderIndex < 0 || measure.HeaderIndex >= len(song.MeasureHeaders) {
 					add("score.measure.header-reference", ScoreDiagnosticStructural, location, "header index %d is outside 0..%d", measure.HeaderIndex, len(song.MeasureHeaders)-1)
+				} else {
+					header := &song.MeasureHeaders[measure.HeaderIndex]
+					if measure.HeaderIndex != measureIndex {
+						add("score.measure.header-alignment", ScoreDiagnosticStructural, location, "header index %d does not match measure position %d", measure.HeaderIndex, measureIndex)
+					}
+					if measure.Start != header.Start {
+						add("score.measure.start", ScoreDiagnosticTiming, location, "start %d does not match header start %d", measure.Start, header.Start)
+					}
+					measureStart := scoreTimeOrLegacy(measure.ExactStart, measure.Start)
+					headerStart := scoreTimeOrLegacy(header.ExactStart, header.Start)
+					if measureStart.Compare(headerStart) != 0 {
+						add("score.measure.exact-start", ScoreDiagnosticTiming, location, "exact start %d/%d does not match header exact start %d/%d", measureStart.Numerator(), measureStart.Denominator(), headerStart.Numerator(), headerStart.Denominator())
+					}
+				}
+				if measure.TrackIndex != trackIndex {
+					add("score.measure.track-ownership", ScoreDiagnosticStructural, location, "track index %d does not match owner %d", measure.TrackIndex, trackIndex)
+				}
+				if measure.StaffIndex != staffIndex {
+					add("score.measure.staff-ownership", ScoreDiagnosticStructural, location, "staff index %d does not match owner %d", measure.StaffIndex, staffIndex)
+				}
+				for voiceIndex := range measure.Voices {
+					if int(measure.Voices[voiceIndex].MeasureIndex) != measureIndex {
+						voiceLocation := location
+						voiceLocation.Voice = voiceIndex
+						add("score.voice.measure-ownership", ScoreDiagnosticStructural, voiceLocation, "measure index %d does not match owner %d", measure.Voices[voiceIndex].MeasureIndex, measureIndex)
+					}
 				}
 				validateScoreVoices(track, measure, location, &diagnostics)
 			}
@@ -91,10 +120,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 
 func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, diagnostics *[]ScoreDiagnostic) {
 	for voiceIndex := range measure.Voices {
-		expected := measure.ExactStart
-		if expected.Denominator() <= 0 {
-			expected, _ = NewScoreTime(measure.Start, 1)
-		}
+		expected := scoreTimeOrLegacy(measure.ExactStart, measure.Start)
 		for beatIndex := range measure.Voices[voiceIndex].Beats {
 			beat := &measure.Voices[voiceIndex].Beats[beatIndex]
 			location := base
@@ -102,6 +128,9 @@ func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, dia
 			location.Beat = beatIndex
 			if beat.Start != nil && *beat.Start != expected.FloorTicks() {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.start", Kind: ScoreDiagnosticTiming, Location: location, Reason: fmt.Sprintf("start %d does not match finalized start %d", *beat.Start, expected.FloorTicks())})
+			}
+			if beat.ExactStart != nil && beat.ExactStart.Compare(expected) != 0 {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.exact-start", Kind: ScoreDiagnosticTiming, Location: location, Reason: fmt.Sprintf("exact start %d/%d does not match finalized start %d/%d", beat.ExactStart.Numerator(), beat.ExactStart.Denominator(), expected.Numerator(), expected.Denominator())})
 			}
 			duration, err := beat.Duration.ExactScoreTime()
 			if err != nil {
@@ -124,4 +153,15 @@ func validateScoreVoices(track *Track, measure *Measure, base ScoreLocation, dia
 			}
 		}
 	}
+}
+
+func scoreTimeOrLegacy(exact ScoreTime, legacy int64) ScoreTime {
+	if exact != (ScoreTime{}) {
+		return exact
+	}
+	value, err := NewScoreTime(legacy, 1)
+	if err != nil {
+		return ScoreTime{}
+	}
+	return value
 }
