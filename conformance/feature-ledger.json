@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "oracle": "@coderline/alphatab@1.8.4",
   "diagnosticDispositions": [
     {
@@ -915,6 +915,23 @@
     }
   ],
   "semanticContracts": {
+    "behaviorContracts": [
+      {"id":"unclassified-model-field","feature":"score-core","construct":"Public Song graph inventory","test":"TestSemanticContractInventory","mutationSensitive":true,"reason":"A new public field must receive a semantic role before the gate passes."},
+      {"id":"unclassified-source-dispatch","feature":"note-and-beat-semantics","construct":"GPIF named-property dispatch","test":"TestSemanticContractInventory","mutationSensitive":true,"reason":"A new semantic dispatch case must receive a source disposition before the gate passes."},
+      {"id":"automation-dispatch-diagnostic","feature":"score-core","construct":"GPIF Automation.Type dispatch","test":"TestGPIFAutomationDispatchDiagnostics","independentTest":"TestAlphaTabInputConformance","mutationSensitive":true,"reason":"Unknown, unsupported, and invalid automation records remain visible to strict policy."},
+      {"id":"supported-effect-serialization","feature":"hairpins","construct":"BeatEffects.Hairpin GP8 conversion","test":"TestExportGP8PreservesHairpins","independentTest":"TestAlphaTabExportConformance","mutationSensitive":true,"reason":"Non-default hairpins survive GP8 serialization and independent consumption."},
+      {"id":"shared-authored-export-validation","feature":"score-core","construct":"Authored Song invariants at export","test":"TestGP8ExportRejectsSharedAuthoredInvariants","mutationSensitive":true,"reason":"Export uses the same authored-value diagnostics as programmatic validation."},
+      {"id":"tempo-compatibility-authority","feature":"tempo-automations","construct":"Song.InitialTempo and Song.Tempo reconciliation","test":"TestGP8ExportReconcilesSemanticAndLegacyTempo","independentTest":"TestAlphaTabTempoReferences","mutationSensitive":true,"reason":"A post-parse legacy tempo edit remains authoritative and fractional semantic tempo remains exact."},
+      {"id":"chord-occurrence-isolation","feature":"note-and-beat-semantics","construct":"Chord mutable occurrence payloads","test":"TestRepeatedGPIFChordOccurrencesOwnMutablePayloads","mutationSensitive":true,"reason":"Repeated chord references do not alias mutable occurrence data."},
+      {"id":"master-bar-narrowing-boundary","feature":"rhythm","construct":"GPIF master-bar legacy numeric fields","test":"TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries","independentTest":"TestAlphaTabInputConformance","mutationSensitive":true,"reason":"Values are checked before narrowing and modulo aliases are rejected."},
+      {"id":"reported-effect-loss","feature":"note-and-beat-semantics","construct":"GP8 beat and note effect omissions","test":"TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects","independentTest":"TestAlphaTabExportConformance","reason":"Each represented non-default effect is emitted or produces a stable conversion decision."},
+      {"id":"grace-order-preservation","feature":"grace-relationships","construct":"Ordered attached grace-note occurrences","test":"TestExportGP8PreservesOrderedMultipleGraceNotes","independentTest":"TestAlphaTabExportConformance","reason":"Grace order and attachment survive GP8 conversion."},
+      {"id":"timing-finalization","feature":"timing","construct":"Exact measure and beat timing","test":"TestFinalizeSongIsIdempotentAndAcceptsSpecialStructures","independentTest":"TestAlphaTabGPIFTiming","reason":"Finalization is stable and exact timing agrees with the independent consumer."},
+      {"id":"staff-ownership","feature":"staff-ownership","construct":"Track and staff ownership","test":"TestParseGPIFPreservesGrandStaff","independentTest":"TestAlphaTabMultiStaffTrackOrdering","reason":"Grand-staff ownership and ordering survive public parsing."},
+      {"id":"tremolo-import","feature":"tremolo-picking","construct":"TremoloPickingEffect.Duration import","test":"TestParseGPIFRetainsTremoloPicking","independentTest":"TestAlphaTabInputConformance","reason":"Non-default tremolo subdivisions agree with the independent consumer on import."},
+      {"id":"harmonic-conversion","feature":"harmonics","construct":"HarmonicEffect GP8 conversion","test":"TestExportGP8PreservesHarmonicsAndWhammyCurves","independentTest":"TestAlphaTabExportConformance","reason":"Represented harmonic values survive GP8 conversion."},
+      {"id":"percussion-identity","feature":"percussion-articulations","construct":"Track-local percussion articulation identity","test":"TestGPIFPercussionPreservesArticulations","independentTest":"TestAlphaTabInputConformance","reason":"Percussion identity and notation metadata agree with the independent consumer."}
+    ],
     "modelTypes": [
       {"type":"Song","feature":"score-core","fields":["Album","Anacrusis","Artist","Author","BackingTrack","Channels","Clipboard","Comments","Copyright","Date","HideTempo","InitialTempo","Instructions","Key","Lyrics","MasterEffect","MeasureHeaders","Name","Notice","PageSetup","Subtitle","SyncPoints","Tempo","TempoAutomations","TempoName","Tracks","Transcriber","TripletFeel","Version","VolumeAutomations","Words","Writer"],"compatibility":["Tempo"],"reason":"The root contains authored score data. Tempo is the legacy view of InitialTempo."},
       {"type":"Version","feature":"score-core","fields":["Clipboard","Data","Number"],"derived":["Number"],"reason":"The source version is preserved. Number is parsed from Data."},

@@ -229,3 +229,25 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each master-track automation before import. |
 | `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
+
+## Behavioral contracts
+
+Each represented feature has a public-API test and pinned independent-consumer evidence. Mutation-sensitive contracts are exercised by `conformance/sensitivity.mjs`.
+
+| Contract | Feature | Public API test | Independent test | Mutation check | Reason |
+| --- | --- | --- | --- | --- | --- |
+| `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
+| `unclassified-source-dispatch` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A new semantic dispatch case must receive a source disposition before the gate passes. |
+| `automation-dispatch-diagnostic` | `score-core` | `TestGPIFAutomationDispatchDiagnostics` | `TestAlphaTabInputConformance` | yes | Unknown, unsupported, and invalid automation records remain visible to strict policy. |
+| `supported-effect-serialization` | `hairpins` | `TestExportGP8PreservesHairpins` | `TestAlphaTabExportConformance` | yes | Non-default hairpins survive GP8 serialization and independent consumption. |
+| `shared-authored-export-validation` | `score-core` | `TestGP8ExportRejectsSharedAuthoredInvariants` | none | yes | Export uses the same authored-value diagnostics as programmatic validation. |
+| `tempo-compatibility-authority` | `tempo-automations` | `TestGP8ExportReconcilesSemanticAndLegacyTempo` | `TestAlphaTabTempoReferences` | yes | A post-parse legacy tempo edit remains authoritative and fractional semantic tempo remains exact. |
+| `chord-occurrence-isolation` | `note-and-beat-semantics` | `TestRepeatedGPIFChordOccurrencesOwnMutablePayloads` | none | yes | Repeated chord references do not alias mutable occurrence data. |
+| `master-bar-narrowing-boundary` | `rhythm` | `TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries` | `TestAlphaTabInputConformance` | yes | Values are checked before narrowing and modulo aliases are rejected. |
+| `reported-effect-loss` | `note-and-beat-semantics` | `TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects` | `TestAlphaTabExportConformance` | no | Each represented non-default effect is emitted or produces a stable conversion decision. |
+| `grace-order-preservation` | `grace-relationships` | `TestExportGP8PreservesOrderedMultipleGraceNotes` | `TestAlphaTabExportConformance` | no | Grace order and attachment survive GP8 conversion. |
+| `timing-finalization` | `timing` | `TestFinalizeSongIsIdempotentAndAcceptsSpecialStructures` | `TestAlphaTabGPIFTiming` | no | Finalization is stable and exact timing agrees with the independent consumer. |
+| `staff-ownership` | `staff-ownership` | `TestParseGPIFPreservesGrandStaff` | `TestAlphaTabMultiStaffTrackOrdering` | no | Grand-staff ownership and ordering survive public parsing. |
+| `tremolo-import` | `tremolo-picking` | `TestParseGPIFRetainsTremoloPicking` | `TestAlphaTabInputConformance` | no | Non-default tremolo subdivisions agree with the independent consumer on import. |
+| `harmonic-conversion` | `harmonics` | `TestExportGP8PreservesHarmonicsAndWhammyCurves` | `TestAlphaTabExportConformance` | no | Represented harmonic values survive GP8 conversion. |
+| `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |

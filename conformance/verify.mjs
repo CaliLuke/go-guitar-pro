@@ -17,8 +17,8 @@ const cases = read('conformance/cases.json');
 const fixtures = read('conformance/fixture-inventory.json');
 const upstream = read('conformance/upstream-inventory.json');
 
-if (ledger.schemaVersion !== 3) {
-  fail(`unsupported feature-ledger schema ${ledger.schemaVersion}; want 3`);
+if (ledger.schemaVersion !== 4) {
+  fail(`unsupported feature-ledger schema ${ledger.schemaVersion}; want 4`);
 }
 
 execFileSync('node', ['conformance/oracle-contract.mjs'], { cwd: root, stdio: 'inherit' });
@@ -148,6 +148,34 @@ for (const contract of ledger.semanticContracts.sourceDispatches) {
   sourceDispatchContracts.add(key);
 }
 
+const goTests = new Set();
+for (const file of fs.readdirSync(root).filter(file => file.endsWith('_test.go'))) {
+  const contents = fs.readFileSync(path.join(root, file), 'utf8');
+  for (const match of contents.matchAll(/func\s+(Test[A-Za-z0-9_]+)\s*\(/g)) goTests.add(match[1]);
+}
+const behaviorContracts = new Set();
+const behavioralFeatures = new Map([...features.keys()].map(feature => [feature, { publicAPI: false, independent: false }]));
+for (const contract of ledger.semanticContracts.behaviorContracts) {
+  if (!contract.id || behaviorContracts.has(contract.id)) fail(`duplicate or empty behavior contract ${contract.id}`);
+  if (!features.has(contract.feature)) fail(`${contract.id} has unknown feature ${contract.feature}`);
+  if (!contract.construct || !contract.reason) fail(`${contract.id} has no construct or reason`);
+  if (!goTests.has(contract.test)) fail(`${contract.id} references missing test ${contract.test}`);
+  if (contract.independentTest && !goTests.has(contract.independentTest)) {
+    fail(`${contract.id} references missing independent test ${contract.independentTest}`);
+  }
+  if (contract.mutationSensitive !== undefined && typeof contract.mutationSensitive !== 'boolean') {
+    fail(`${contract.id}.mutationSensitive is not a boolean`);
+  }
+  behaviorContracts.add(contract.id);
+  behavioralFeatures.get(contract.feature).publicAPI = true;
+  behavioralFeatures.get(contract.feature).independent ||= Boolean(contract.independentTest);
+}
+for (const [feature, evidence] of behavioralFeatures) {
+  if (!evidence.publicAPI || !evidence.independent) {
+    fail(`${feature} lacks public-API or independent-consumer behavioral evidence`);
+  }
+}
+
 const allCases = [...cases.inputCases, ...cases.exportCases];
 const caseIDs = new Set();
 for (const item of allCases) {
@@ -244,6 +272,9 @@ function supportDocument() {
   const dispatchRows = ledger.semanticContracts.sourceDispatches.map(contract =>
     `| \`${contract.function}:${contract.selector}\` | \`${contract.feature}\` | ${contract.cases.length} | \`${contract.defaultDisposition}\` | ${contract.reason} |`
   );
+  const behaviorRows = ledger.semanticContracts.behaviorContracts.map(contract =>
+    `| \`${contract.id}\` | \`${contract.feature}\` | \`${contract.test}\` | ${contract.independentTest ? `\`${contract.independentTest}\`` : 'none'} | ${contract.mutationSensitive ? 'yes' : 'no'} | ${contract.reason} |`
+  );
   return `# Guitar Pro semantic support\n\n` +
     `Generated from [\`conformance/feature-ledger.json\`](../conformance/feature-ledger.json). Do not edit these tables by hand.\n\n` +
     `AlphaTab oracle: \`${oracle.package}@${oracle.version}\`, source \`${oracle.sourceRevision}\`.\n\n` +
@@ -255,7 +286,9 @@ function supportDocument() {
     `## Public model inventory\n\nThe inventory starts at \`Song\`. Unlisted roles are authored values. Compatibility and derived fields have explicit roles.\n\n` +
     `| Type | Feature | Field roles | Reason |\n| --- | --- | --- | --- |\n${modelRows.join('\n')}\n\n` +
     `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +
-    `| Dispatch | Feature | Cases | Default | Reason |\n| --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n`;
+    `| Dispatch | Feature | Cases | Default | Reason |\n| --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n\n` +
+    `## Behavioral contracts\n\nEach represented feature has a public-API test and pinned independent-consumer evidence. Mutation-sensitive contracts are exercised by \`conformance/sensitivity.mjs\`.\n\n` +
+    `| Contract | Feature | Public API test | Independent test | Mutation check | Reason |\n| --- | --- | --- | --- | --- | --- |\n${behaviorRows.join('\n')}\n`;
 }
 
 const docsPath = path.join(root, 'docs/format-support.md');

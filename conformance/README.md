@@ -36,10 +36,29 @@ reachable public structure and field. It compares that set with the model
 inventory in `feature-ledger.json`. The gate also inventories named GPIF source
 dispatch cases. A new field or dispatch case fails until its contract is added.
 
+The ledger also names focused public API tests for each represented feature.
+Each feature links to a pinned AlphaTab test. This gives the contract an
+independent consumer. The verifier fails if a named test is removed or if a
+feature loses either form of evidence.
+
+`sensitivity.mjs` applies a fixed set of valid defects through Go overlays. Each
+defect must make its focused test fail for the expected reason. The set covers
+model and dispatch inventory, automation diagnostics, effect serialization,
+shared validation, tempo authority, mutable chord isolation, and checked
+numeric narrowing. This is selective mutation testing. It measures whether the
+tests detect realistic faults. Statement coverage measures execution breadth.
+Use both signals. Neither signal proves that the code has no defects.
+
 Run the gate with:
 
 ```sh
 ./conformance/check.sh
+```
+
+Run only the mutation checks with:
+
+```sh
+node conformance/sensitivity.mjs
 ```
 
 Refresh expected snapshots only after classifying every changed path in

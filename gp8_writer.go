@@ -409,10 +409,6 @@ type gp8Builder struct {
 	report             *ExportReport
 }
 
-func buildGP8Document(song *Song, options GP8ExportOptions) (gpifDocument, error) {
-	return buildGP8DocumentWithReport(song, options, nil)
-}
-
 func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *ExportReport) (gpifDocument, error) {
 	builder := gp8Builder{
 		song:               song,
@@ -508,7 +504,7 @@ func gp8ResolvedFieldTempo(song *Song) (float64, bool, error) {
 		exact, exactErr := NewBPM(float64(song.InitialTempo.Value))
 		if song.Tempo > 0 {
 			if exactErr != nil {
-				return float64(song.Tempo), true, nil
+				return gp8LegacyTempo(song.Tempo, true)
 			}
 			legacy, legacyErr := exact.LegacyTempo()
 			if legacyErr == nil && legacy == song.Tempo {
@@ -525,6 +521,10 @@ func gp8ResolvedFieldTempo(song *Song) (float64, bool, error) {
 		return float64(song.Tempo), false, nil
 	}
 	return 0, false, nil
+}
+
+func gp8LegacyTempo(tempo int16, conflict bool) (float64, bool, error) {
+	return float64(tempo), conflict, nil
 }
 
 func (builder *gp8Builder) prepareTrack(trackIndex int) {

@@ -150,7 +150,15 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		if strings.HasSuffix(file, "_test.go") {
 			continue
 		}
-		parsed, parseErr := parser.ParseFile(fileSet, file, nil, 0)
+		var source any
+		if overlay := os.Getenv("SEMANTIC_INVENTORY_OVERLAY"); overlay != "" && os.Getenv("SEMANTIC_INVENTORY_FILE") == file {
+			contents, readErr := os.ReadFile(overlay)
+			if readErr != nil {
+				t.Fatal(readErr)
+			}
+			source = contents
+		}
+		parsed, parseErr := parser.ParseFile(fileSet, file, source, 0)
 		if parseErr != nil {
 			t.Fatal(parseErr)
 		}
