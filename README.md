@@ -107,6 +107,25 @@ data, err := guitarpro.ExportWithOptions(song, guitarpro.ExportFormatGP8, guitar
 families are filled, X, circle-X, and heavy-X. Playback soundbanks, RSE
 selectors, and MIDI values remain canonical regardless of the visual override.
 
+Use `PreflightExport` to inspect target-specific changes before export. The
+report lists each normalized, omitted, or rejected value with a stable code and
+score location.
+
+Use `ExportWithReport` when the report and output must use one conversion path.
+Set `ExportOptions.LossPolicy.RequirePreservation` to reject lossy conversions.
+Add accepted report codes to `AllowedCodes` to permit a bounded set of changes.
+The exporter returns no bytes when the loss policy rejects a conversion.
+
+```go
+options := guitarpro.ExportOptions{
+	LossPolicy: guitarpro.ExportLossPolicy{
+		RequirePreservation: true,
+		AllowedCodes:        []string{"gp8.normalize.note-velocity"},
+	},
+}
+data, report, err := guitarpro.ExportWithReport(song, guitarpro.ExportFormatGP8, options)
+```
+
 GP8 export preserves score metadata, tempo changes, track metadata and MIDI
 channels, measure structure, time and key signatures, sections, repeats,
 alternate endings, double bars, pickup status, voices, rests, chord diagrams,

@@ -35,7 +35,8 @@ const (
 
 // ExportOptions configures format-specific serialization behavior.
 type ExportOptions struct {
-	GP8 GP8ExportOptions
+	GP8        GP8ExportOptions
+	LossPolicy ExportLossPolicy
 }
 
 // GP8ExportOptions configures native Guitar Pro 8 serialization.
@@ -70,26 +71,30 @@ func Export(song *Song, target ExportFormat) ([]byte, error) {
 // ExportWithOptions serializes song in target format using options and returns
 // the complete file bytes. It does not mutate song or options.
 func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) ([]byte, error) {
-	if song == nil {
-		return nil, fmt.Errorf("exporting Guitar Pro file: song is nil")
+	data, _, err := ExportWithReport(song, target, options)
+	return data, err
+}
+
+// ExportWithReport preflights and serializes through one conversion decision path.
+// A strict loss-policy failure returns no output bytes and the complete report.
+func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([]byte, ExportReport, error) {
+	report := PreflightExport(song, target, options)
+	for _, entry := range report.Entries {
+		if entry.Disposition == ExportDispositionRejected {
+			return nil, report, fmt.Errorf("exporting Guitar Pro file: %s", entry.Reason)
+		}
 	}
-	if target != ExportFormatGP8 {
-		return nil, fmt.Errorf("exporting Guitar Pro file: unsupported target %d", target)
-	}
-	if err := validateGP8Song(song); err != nil {
-		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
-	}
-	if err := validateGP8ExportOptions(options.GP8); err != nil {
-		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
+	if refused := refusedExportEntries(report, options.LossPolicy); len(refused) != 0 {
+		return nil, report, &ExportLossError{Entries: refused}
 	}
 
 	doc, err := buildGP8Document(song, options.GP8)
 	if err != nil {
-		return nil, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
+		return nil, report, fmt.Errorf("exporting Guitar Pro 8 file: %w", err)
 	}
 	gpif, err := xml.MarshalIndent(doc, "", "  ")
 	if err != nil {
-		return nil, fmt.Errorf("marshaling GPIF XML: %w", err)
+		return nil, report, fmt.Errorf("marshaling GPIF XML: %w", err)
 	}
 	gpif = append(append([]byte(xml.Header), gpif...), '\n')
 
@@ -106,7 +111,8 @@ func ExportWithOptions(song *Song, target ExportFormat, options ExportOptions) (
 		{name: "Content/LayoutConfiguration", method: zip.Deflate, data: buildGP8LayoutConfiguration(song)},
 		{name: "Content/score.gpif", method: zip.Deflate, data: gpif},
 	}
-	return writeGP8Archive(entries)
+	data, err := writeGP8Archive(entries)
+	return data, report, err
 }
 
 func writeGP8Archive(entries []struct {
