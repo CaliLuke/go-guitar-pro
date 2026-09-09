@@ -51,6 +51,11 @@ It reports bank and effect controllers as one scoped MIDI omission. It also
 reports each legacy master or track RSE record as one scoped omission. The RSE
 tests assert every descendant covered by those parent reports.
 
+`InitialTempo` is the fractional authored value. `Tempo` is its legacy integer
+projection. A later edit to a conflicting nonzero `Tempo` value wins and
+produces a normalization report. GP8 preserves the tempo name and ordered
+automation values. It cannot preserve `HideTempo`, so it reports that omission.
+
 The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
 quantizes values only at a target boundary.

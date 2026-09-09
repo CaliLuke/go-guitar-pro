@@ -481,6 +481,9 @@ func (builder *gp8Builder) buildScore() gpifScore {
 	if song.TripletFeel != TripletFeelNone {
 		builder.addReport("gp8.normalize.song-triplet-feel-authority", "rhythm", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores triplet feel on master bars and does not emit the legacy song-level value")
 	}
+	if song.HideTempo {
+		builder.addReport("gp8.omit.tempo-visibility", "tempo-automations", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer emits the opening tempo as visible")
+	}
 	return gpifScore{
 		Title:        song.Name,
 		SubTitle:     song.Subtitle,
