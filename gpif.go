@@ -107,22 +107,23 @@ type gpifTracks struct {
 }
 
 type gpifTrack struct {
-	ID               string             `xml:"id,attr"`
-	Name             string             `xml:"Name"`
-	Color            string             `xml:"Color,omitempty"`
-	Instrument       *gpifInstrument    `xml:"Instrument,omitempty"`
-	InstrumentSet    *gpifInstrumentSet `xml:"InstrumentSet,omitempty"`
-	NotationPatch    *gpifInstrumentSet `xml:"NotationPatch,omitempty"`
-	GeneralMidi      *gpifGeneralMidi   `xml:"GeneralMidi,omitempty"`
-	Staves           gpifStaves         `xml:"Staves"`
-	Sounds           gpifSounds         `xml:"Sounds"`
-	Automations      gpifAutomations    `xml:"Automations"`
-	Transpose        *gpifTranspose     `xml:"Transpose,omitempty"`
-	RSE              *gpifTrackRSE      `xml:"RSE,omitempty"`
-	MidiConnection   gpifMidiConnection `xml:"MidiConnection"`
-	PlaybackState    string             `xml:"PlaybackState,omitempty"`
-	AudioEngineState string             `xml:"AudioEngineState,omitempty"`
-	Lyrics           *gpifLyrics        `xml:"Lyrics,omitempty"`
+	ID               string              `xml:"id,attr"`
+	Name             string              `xml:"Name"`
+	Color            string              `xml:"Color,omitempty"`
+	Instrument       *gpifInstrument     `xml:"Instrument,omitempty"`
+	InstrumentSet    *gpifInstrumentSet  `xml:"InstrumentSet,omitempty"`
+	NotationPatch    *gpifInstrumentSet  `xml:"NotationPatch,omitempty"`
+	GeneralMidi      *gpifGeneralMidi    `xml:"GeneralMidi,omitempty"`
+	Staves           gpifStaves          `xml:"Staves"`
+	Properties       []gpifStaffProperty `xml:"Properties>Property"`
+	Sounds           gpifSounds          `xml:"Sounds"`
+	Automations      gpifAutomations     `xml:"Automations"`
+	Transpose        *gpifTranspose      `xml:"Transpose,omitempty"`
+	RSE              *gpifTrackRSE       `xml:"RSE,omitempty"`
+	MidiConnection   gpifMidiConnection  `xml:"MidiConnection"`
+	PlaybackState    string              `xml:"PlaybackState,omitempty"`
+	AudioEngineState string              `xml:"AudioEngineState,omitempty"`
+	Lyrics           *gpifLyrics         `xml:"Lyrics,omitempty"`
 }
 
 type gpifLyrics struct {
@@ -604,9 +605,13 @@ func parseGPIF(data []byte) (*Song, error) {
 				if t.NotationPatch != nil && t.NotationPatch.LineCount > 0 {
 					lineCount = t.NotationPatch.LineCount
 				}
+				trackStrings := append([]GuitarString(nil), track.Strings...)
+				if parsed := gpifReadStaffStrings(gpifStaff{Properties: t.Properties}); parsed != nil {
+					trackStrings = parsed
+				}
 				track.Staves = make([]Staff, staffCount)
 				for staffIndex := range track.Staves {
-					strings := append([]GuitarString(nil), track.Strings...)
+					strings := append([]GuitarString(nil), trackStrings...)
 					if staffIndex < len(t.Staves.Staff) {
 						if parsed := gpifReadStaffStrings(t.Staves.Staff[staffIndex]); parsed != nil {
 							strings = parsed
@@ -619,7 +624,7 @@ func parseGPIF(data []byte) (*Song, error) {
 					}
 				}
 				track.Strings = track.Staves[0].Strings
-				chordMap = gpifReadChordMap(t.Staves)
+				chordMap = gpifReadChordMap(t)
 				// Parse color
 				if t.Color != "" {
 					parts := splitIDs(t.Color)
@@ -942,36 +947,43 @@ func gpifReadStaffStrings(staff gpifStaff) []GuitarString {
 	return nil
 }
 
-func gpifReadChordMap(staves gpifStaves) map[string]Chord {
+func gpifReadChordMap(track gpifTrack) map[string]Chord {
 	chords := make(map[string]Chord)
-	for _, staff := range staves.Staff {
-		for _, property := range staff.Properties {
-			if property.Name != "DiagramCollection" || property.Items == nil {
-				continue
-			}
-			for _, item := range property.Items.Items {
-				if item.ID == "" {
-					continue
-				}
-				chord := Chord{Name: item.Name}
-				if item.Diagram != nil {
-					chord.Length = uint8(item.Diagram.StringCount)
-					chord.Strings = make([]int8, item.Diagram.StringCount)
-					for index := range chord.Strings {
-						chord.Strings[index] = -1
-					}
-					for _, fret := range item.Diagram.Frets {
-						index := item.Diagram.StringCount - fret.String - 1
-						if index >= 0 && index < len(chord.Strings) {
-							chord.Strings[index] = int8(fret.Fret)
-						}
-					}
-				}
-				chords[item.ID] = chord
-			}
-		}
+	gpifReadChordProperties(track.Properties, chords)
+	for _, staff := range track.Staves.Staff {
+		gpifReadChordProperties(staff.Properties, chords)
 	}
 	return chords
+}
+
+func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]Chord) {
+	for _, property := range properties {
+		if (property.Name != "DiagramCollection" && property.Name != "ChordCollection") || property.Items == nil {
+			continue
+		}
+		for _, item := range property.Items.Items {
+			if item.ID == "" {
+				continue
+			}
+			chord := Chord{Name: item.Name}
+			if item.Diagram != nil {
+				firstFret := uint8(min(math.MaxUint8, max(0, item.Diagram.BaseFret+1)))
+				chord.FirstFret = &firstFret
+				chord.Length = uint8(item.Diagram.StringCount)
+				chord.Strings = make([]int8, item.Diagram.StringCount)
+				for index := range chord.Strings {
+					chord.Strings[index] = -1
+				}
+				for _, fret := range item.Diagram.Frets {
+					index := item.Diagram.StringCount - fret.String - 1
+					if index >= 0 && index < len(chord.Strings) {
+						chord.Strings[index] = int8(min(math.MaxInt8, max(0, item.Diagram.BaseFret+fret.Fret)))
+					}
+				}
+			}
+			chords[item.ID] = chord
+		}
+	}
 }
 
 func gpifMIDIChannel(port, channel int) uint8 {

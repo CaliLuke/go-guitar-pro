@@ -678,13 +678,17 @@ func gp8ChordItem(id string, chord *Chord, fallbackStringCount int) gpifItem {
 	if stringCount == 0 {
 		stringCount = fallbackStringCount
 	}
-	diagram := &gpifDiagram{StringCount: stringCount, FretCount: 5}
-	if chord.FirstFret != nil {
-		diagram.BaseFret = int(*chord.FirstFret)
+	baseFret := 0
+	if chord.FirstFret != nil && *chord.FirstFret > 0 {
+		baseFret = int(*chord.FirstFret) - 1
 	}
+	diagram := &gpifDiagram{StringCount: stringCount, FretCount: 5, BaseFret: baseFret}
 	for index, fret := range chord.Strings {
 		if fret >= 0 {
-			diagram.Frets = append(diagram.Frets, gpifDiagramFret{String: stringCount - index - 1, Fret: int(fret)})
+			diagram.Frets = append(diagram.Frets, gpifDiagramFret{
+				String: stringCount - index - 1,
+				Fret:   int(fret) - baseFret,
+			})
 		}
 	}
 	return gpifItem{ID: id, Name: chord.Name, Diagram: diagram, Chord: &struct{}{}}
