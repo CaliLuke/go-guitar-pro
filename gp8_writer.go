@@ -448,6 +448,9 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 
 func (builder *gp8Builder) buildScore() gpifScore {
 	song := builder.song
+	if song.PageSetup != (PageSetup{}) {
+		builder.addReport("gp8.omit.page-setup", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit page dimensions, margins, header selections, or text templates")
+	}
 	if song.Writer != "" {
 		builder.addReport("gp8.omit.writer", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 has no separate destination for the legacy writer field")
 	}
@@ -594,6 +597,19 @@ func (builder *gp8Builder) prepareTrack(trackIndex int) {
 
 func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	track := &builder.song.Tracks[trackIndex]
+	location := ScoreLocation{Track: trackIndex}
+	if track.IndicateTuning {
+		builder.addReport("gp8.omit.track-indicate-tuning", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the tuning-display preference")
+	}
+	unsupportedSettings := track.Settings
+	unsupportedSettings.Tablature = false
+	unsupportedSettings.Notation = false
+	if unsupportedSettings != (TrackSettings{}) {
+		builder.addReport("gp8.omit.track-display-settings", "score-core", ExportDispositionOmitted, location, "GP8 writer emits notation and tablature selection but not the remaining track display settings")
+	}
+	if !track.PercussionTrack && !track.Settings.Tablature && !track.Settings.Notation {
+		builder.addReport("gp8.normalize.track-view", "score-core", ExportDispositionNormalized, location, "GP8 requires a pitched track view and defaults to standard notation")
+	}
 	channel := defaultMidiChannel()
 	if track.ChannelIndex >= 0 && track.ChannelIndex < len(builder.song.Channels) {
 		channel = builder.song.Channels[track.ChannelIndex]
@@ -823,18 +839,33 @@ func gp8ChordItem(id string, chord *Chord, fallbackStringCount int) gpifItem {
 func (builder *gp8Builder) buildScoreGraph() error {
 	for measureIndex := range builder.song.MeasureHeaders {
 		header := &builder.song.MeasureHeaders[measureIndex]
+		if header.Marker != nil && header.Marker.Color != 0 {
+			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, ScoreLocation{Measure: measureIndex}, "GP8 writer emits section text but not marker color")
+		}
 		barIDs := make([]string, 0, len(builder.song.Tracks))
 		for trackIndex := range builder.song.Tracks {
 			track := &builder.song.Tracks[trackIndex]
 			staves := gp8ExportStaves(track)
 			for staffIndex := range staves {
 				staff := &staves[staffIndex]
+				location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex}
 				barID := strconv.Itoa(len(builder.doc.Bars.Bars))
 				barIDs = append(barIDs, barID)
 				measure := &staff.Measures[measureIndex]
+				if measure.LineBreak != LineBreakNone {
+					builder.addReport("gp8.omit.measure-line-break", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit measure line-break preferences")
+				}
+				if measure.HasDoubleBar && !header.DoubleBar {
+					builder.addReport("gp8.normalize.measure-double-bar-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar double-bar value instead of the compatibility measure value")
+				}
 				voiceIDs := make([]string, 0, 4)
 				for voiceIndex := range measure.Voices {
 					voice := &measure.Voices[voiceIndex]
+					if voice.Direction != VoiceDirectionNone {
+						voiceLocation := location
+						voiceLocation.Voice = voiceIndex
+						builder.addReport("gp8.omit.voice-direction", "score-core", ExportDispositionOmitted, voiceLocation, "GP8 writer does not emit the voice beam direction")
+					}
 					if len(voice.Beats) == 0 {
 						continue
 					}
@@ -878,6 +909,9 @@ func (builder *gp8Builder) addReport(code, feature string, disposition ExportDis
 }
 
 func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocation) {
+	if beat.Display != (BeatDisplay{}) {
+		builder.addReport("gp8.omit.beat-display", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit beat beam and tuplet display overrides")
+	}
 	if beat.Status == BeatStatusEmpty {
 		builder.addReport("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
 	}

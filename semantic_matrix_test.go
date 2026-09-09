@@ -58,4 +58,59 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM01MetadataExportPolicy":               runSemanticMatrixM01MetadataExportPolicy,
 	"TestSemanticMatrixM01BinaryClipboard":                    runSemanticMatrixM01BinaryClipboard,
 	"TestSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct": runSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct,
+	"TestSemanticMatrixM02DisplayExportPolicy":                runSemanticMatrixM02DisplayExportPolicy,
+	"TestSemanticMatrixM02PageSetupImport":                    runSemanticMatrixM02PageSetupImport,
+}
+
+func semanticValidGP8Song(t *testing.T) *Song {
+	t.Helper()
+	song := syntheticGP8Song()
+	for index := range song.Tracks[0].Measures {
+		song.Tracks[0].Measures[index].HeaderIndex = index
+	}
+	if err := FinalizeSong(song); err != nil {
+		t.Fatal(err)
+	}
+	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
+		t.Fatalf("semantic matrix baseline is invalid: %#v", diagnostics)
+	}
+	return song
+}
+
+func semanticValidPitchedGP8Song(t *testing.T) *Song {
+	t.Helper()
+	song := syntheticGP8Song()
+	track := &song.Tracks[0]
+	track.PercussionTrack = false
+	track.FretCount = 24
+	track.Strings = []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
+	track.PercussionArticulations = nil
+	song.Channels[0] = MidiChannel{Channel: 0, EffectChannel: 1, Instrument: 25, Volume: 100, Balance: 64}
+	for measureIndex := range track.Measures {
+		track.Measures[measureIndex].HeaderIndex = measureIndex
+		for voiceIndex := range track.Measures[measureIndex].Voices {
+			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
+				beat := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex]
+				for noteIndex := range beat.Notes {
+					beat.Notes[noteIndex].Value = int16(noteIndex + 2)
+					beat.Notes[noteIndex].String = int8(noteIndex%6 + 1)
+					beat.Notes[noteIndex].HasPercussionArticulation = false
+					beat.Notes[noteIndex].PercussionArticulation = 0
+					for graceIndex := range beat.Notes[noteIndex].Effect.Graces {
+						beat.Notes[noteIndex].Effect.Graces[graceIndex].Fret = 1
+						fret := Fret(1)
+						beat.Notes[noteIndex].Effect.Graces[graceIndex].ExactFret = &fret
+						beat.Notes[noteIndex].Effect.Graces[graceIndex].HasPercussionArticulation = false
+					}
+				}
+			}
+		}
+	}
+	if err := FinalizeSong(song); err != nil {
+		t.Fatal(err)
+	}
+	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
+		t.Fatalf("semantic matrix pitched baseline is invalid: %#v", diagnostics)
+	}
+	return song
 }

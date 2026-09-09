@@ -59,43 +59,43 @@ func (s *Song) readPageSetup(c *cursor) error {
 		return err
 	}
 	s.PageSetup.HeaderAndFooter = uint16(hf)
-	s.PageSetup.Title, err = c.readIntSizeString()
+	s.PageSetup.Title, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.Subtitle, err = c.readIntSizeString()
+	s.PageSetup.Subtitle, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.Artist, err = c.readIntSizeString()
+	s.PageSetup.Artist, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.Album, err = c.readIntSizeString()
+	s.PageSetup.Album, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.Words, err = c.readIntSizeString()
+	s.PageSetup.Words, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.Music, err = c.readIntSizeString()
+	s.PageSetup.Music, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	s.PageSetup.WordAndMusic, err = c.readIntSizeString()
+	s.PageSetup.WordAndMusic, err = c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	copy1, err := c.readIntSizeString()
+	copy1, err := c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
-	copy2, err := c.readIntSizeString()
+	copy2, err := c.readIntByteSizeString()
 	if err != nil {
 		return err
 	}
 	s.PageSetup.Copyright = copy1 + "\n" + copy2
-	s.PageSetup.PageNumber, err = c.readIntSizeString()
+	s.PageSetup.PageNumber, err = c.readIntByteSizeString()
 	return err
 }

@@ -434,6 +434,7 @@ func semanticExportProbeSong(t *testing.T) *Song {
 		Channels: []MidiChannel{{Channel: 0, EffectChannel: 1, Instrument: 25, Volume: 100, Balance: 64}},
 		Tracks: []Track{{
 			Name: "Guitar", ChannelIndex: 0, Visible: true,
+			Settings: TrackSettings{Notation: true},
 			Strings:  []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}},
 			Measures: []Measure{measure},
 		}},

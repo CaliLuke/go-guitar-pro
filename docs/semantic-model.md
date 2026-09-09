@@ -68,6 +68,14 @@ legacy values on `Song` produce normalization reports. Embedded newlines in one
 notice item also produce a report because GPIF stores one newline-separated
 text value.
 
+GP8 stores track visibility outside GPIF. It stores notation and tablature view
+flags in the part configuration. The writer reports other non-default track and
+beat display settings. It also reports page setup, marker color, voice direction,
+and line-break data that it cannot emit.
+
+Master bars own double-bar output. A non-default `Measure.HasDoubleBar` value
+that conflicts with its header produces a normalization report.
+
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.
