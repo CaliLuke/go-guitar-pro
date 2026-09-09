@@ -164,6 +164,17 @@ func ParseWithOptions(data []byte, options ParseOptions) (result *ParseResult, e
 	if parseErr != nil {
 		return nil, &ParseError{Err: parseErr}
 	}
+	for _, diagnostic := range ValidateSong(song) {
+		kind := ParseDiagnosticInvalidData
+		feature := "score-core"
+		if diagnostic.Kind == ScoreDiagnosticTiming {
+			feature = "timing"
+		}
+		context.diagnostics = append(context.diagnostics, ParseDiagnostic{
+			Code: diagnostic.Code, Kind: kind, Format: context.format, Feature: feature,
+			Reason: fmt.Sprintf("%s at track=%d staff=%d measure=%d voice=%d beat=%d note=%d", diagnostic.Reason, diagnostic.Location.Track, diagnostic.Location.Staff, diagnostic.Location.Measure, diagnostic.Location.Voice, diagnostic.Location.Beat, diagnostic.Location.Note),
+		})
+	}
 	result = &ParseResult{Song: song, Diagnostics: context.diagnostics}
 	if options.Strict {
 		rejected := strictDiagnostics(result.Diagnostics, options.StrictKinds)
