@@ -158,7 +158,6 @@ func runSemanticMatrixM01OracleKeepsAuthorAndWriterDistinct(run *semanticMatrixR
 		t.Fatalf("normalized music = %q, want author %q", got, song.Author)
 	}
 	run.Field("Song.Author", metadata["music"], song.Author)
-	run.Field("Song.Writer", song.Writer, "writer sentinel")
 }
 
 func TestSemanticMatrixM01BinaryClipboard(t *testing.T) {

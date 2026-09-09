@@ -43,7 +43,7 @@ func TestSemanticMatrixM02DisplayExportPolicy(t *testing.T) {
 func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 	t := run.t
 	song := semanticValidPitchedGP8Song(t)
-	song.PageSetup = PageSetup{
+	wantPageSetup := PageSetup{
 		Words: "Words template", Music: "Music template", PageNumber: "Page %N%/%P%",
 		Copyright: "Copyright template", WordAndMusic: "Both template", Artist: "Artist template",
 		Album: "Album template", Title: "Title template", Subtitle: "Subtitle template",
@@ -51,30 +51,33 @@ func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 		MarginBottom: 41, MarginTop: 42, MarginRight: 43, MarginLeft: 44,
 		HeaderAndFooter: 0x155,
 	}
+	song.PageSetup = wantPageSetup
 	marker := song.MeasureHeaders[0].Marker
 	marker.Title = "Section & 名"
 	marker.Color = 0x123456
 	track := &song.Tracks[0]
 	track.Visible = false
 	track.IndicateTuning = true
-	track.Settings = TrackSettings{
+	wantSettings := TrackSettings{
 		Tablature: true, Notation: true, DiagramAreBelow: true, ShowRhythm: true,
 		ForceHorizontal: true, ForceChannels: true, DiagramList: true, DiagramInScore: true,
 		AutoLetRing: true, AutoBrush: true, ExtendRhythmic: true,
 	}
+	track.Settings = wantSettings
 	measure := &track.Staves[0].Measures[0]
 	measure.LineBreak = LineBreakProtect
 	measure.HasDoubleBar = true
 	voice := &measure.Voices[0]
 	voice.Direction = VoiceDirectionDown
 	beat := &voice.Beats[0]
-	beat.Display = BeatDisplay{
+	wantBeatDisplay := BeatDisplay{
 		BreakBeam: true, ForceBeam: true, BeamDirection: VoiceDirectionUp,
 		TupletBracket: TupletBracketEnd, BreakSecondary: 3,
 		BreakSecondaryTuplet: true, ForceBracket: true,
 	}
+	beat.Display = wantBeatDisplay
 
-	run.Field("Song.PageSetup", song.PageSetup, song.PageSetup)
+	run.Field("Song.PageSetup", song.PageSetup, wantPageSetup)
 	run.Field("PageSetup.Words", song.PageSetup.Words, "Words template")
 	run.Field("PageSetup.Music", song.PageSetup.Music, "Music template")
 	run.Field("PageSetup.PageNumber", song.PageSetup.PageNumber, "Page %N%/%P%")
@@ -98,7 +101,7 @@ func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 	run.Field("Track.Visible", track.Visible, false)
 	run.Field("Track.Color", track.Color, int32(0x336699))
 	run.Field("Track.IndicateTuning", track.IndicateTuning, true)
-	run.Field("Track.Settings", track.Settings, track.Settings)
+	run.Field("Track.Settings", track.Settings, wantSettings)
 	run.Field("TrackSettings.Tablature", track.Settings.Tablature, true)
 	run.Field("TrackSettings.Notation", track.Settings.Notation, true)
 	run.Field("TrackSettings.DiagramAreBelow", track.Settings.DiagramAreBelow, true)
@@ -113,7 +116,7 @@ func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 	run.Field("Measure.LineBreak", measure.LineBreak, LineBreakProtect)
 	run.Field("Measure.HasDoubleBar", measure.HasDoubleBar, true)
 	run.Field("Voice.Direction", voice.Direction, VoiceDirectionDown)
-	run.Field("Beat.Display", beat.Display, beat.Display)
+	run.Field("Beat.Display", beat.Display, wantBeatDisplay)
 	run.Field("BeatDisplay.BreakBeam", beat.Display.BreakBeam, true)
 	run.Field("BeatDisplay.ForceBeam", beat.Display.ForceBeam, true)
 	run.Field("BeatDisplay.BeamDirection", beat.Display.BeamDirection, VoiceDirectionUp)
@@ -121,18 +124,18 @@ func runSemanticMatrixM02DisplayExportPolicy(run *semanticMatrixRun) {
 	run.Field("BeatDisplay.BreakSecondary", beat.Display.BreakSecondary, uint8(3))
 	run.Field("BeatDisplay.BreakSecondaryTuplet", beat.Display.BreakSecondaryTuplet, true)
 	run.Field("BeatDisplay.ForceBracket", beat.Display.ForceBracket, true)
-	for _, direction := range []VoiceDirection{VoiceDirectionNone, VoiceDirectionUp, VoiceDirectionDown} {
-		run.Field("Voice.Direction", direction, direction)
-		run.Field("BeatDisplay.BeamDirection", direction, direction)
+	for index, direction := range []VoiceDirection{VoiceDirectionNone, VoiceDirectionUp, VoiceDirectionDown} {
+		run.Field("Voice.Direction", int(direction), index)
+		run.Field("BeatDisplay.BeamDirection", int(direction), index)
 	}
-	for _, bracket := range []TupletBracket{TupletBracketNone, TupletBracketStart, TupletBracketEnd} {
-		run.Field("BeatDisplay.TupletBracket", bracket, bracket)
+	for index, bracket := range []TupletBracket{TupletBracketNone, TupletBracketStart, TupletBracketEnd} {
+		run.Field("BeatDisplay.TupletBracket", int(bracket), index)
 	}
-	for _, lineBreak := range []LineBreak{LineBreakNone, LineBreakBreak, LineBreakProtect} {
-		run.Field("Measure.LineBreak", lineBreak, lineBreak)
+	for index, lineBreak := range []LineBreak{LineBreakNone, LineBreakBreak, LineBreakProtect} {
+		run.Field("Measure.LineBreak", int(lineBreak), index)
 	}
-	for _, secondary := range []uint8{0, 3, 255} {
-		run.Field("BeatDisplay.BreakSecondary", secondary, secondary)
+	for index, secondary := range []uint8{0, 3, 255} {
+		run.Field("BeatDisplay.BreakSecondary", secondary, []uint8{0, 3, 255}[index])
 	}
 
 	want := map[string]ScoreLocation{

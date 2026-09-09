@@ -27,11 +27,13 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 		Channel: 18, EffectChannel: 19, Instrument: 42, Bank: 2,
 		Volume: 101, Balance: 33, Chorus: 12, Reverb: 23, Phaser: 34, Tremolo: 45,
 	}
-	track.Sounds = []TrackSound{
+	wantSounds := []TrackSound{
 		{Name: "Clean", Label: "A", Path: "factory/clean", Role: "main", Program: 42},
 		{Name: "Lead", Label: "B", Path: "factory/lead", Role: "solo", Program: 81},
 	}
-	track.SoundAutomations = []SoundAutomation{{Bar: 0, Position: 0.5, Sound: 1}}
+	track.Sounds = slices.Clone(wantSounds)
+	wantSoundAutomations := []SoundAutomation{{Bar: 0, Position: 0.5, Sound: 1}}
+	track.SoundAutomations = slices.Clone(wantSoundAutomations)
 	track.Rse = TrackRse{
 		Humanize: 3, AutoAccentuation: AccentuationStrong,
 		Equalizer:  RseEqualizer{Knobs: []float32{0.25, -0.5}, Gain: 1.5},
@@ -58,8 +60,8 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 	run.Field("Track.Mute", track.Mute, true)
 	run.Field("Track.Solo", track.Solo, false)
 	run.Field("Track.UseRse", track.UseRse, true)
-	run.Field("Track.Sounds", track.Sounds, track.Sounds)
-	run.Field("Track.SoundAutomations", track.SoundAutomations, track.SoundAutomations)
+	run.Field("Track.Sounds", track.Sounds, wantSounds)
+	run.Field("Track.SoundAutomations", track.SoundAutomations, wantSoundAutomations)
 	for index := range track.Sounds {
 		sound := track.Sounds[index]
 		run.Field("TrackSound.Name", sound.Name, []string{"Clean", "Lead"}[index])
@@ -148,17 +150,20 @@ func runSemanticMatrixM05PlaybackRouting(run *semanticMatrixRun) {
 }
 
 func assertM05RSEFields(run *semanticMatrixRun, master RseMasterEffect, track TrackRse) {
-	run.Field("Song.MasterEffect", master, master)
-	run.Field("RseMasterEffect.Equalizer", master.Equalizer, master.Equalizer)
+	wantMaster := RseMasterEffect{Equalizer: RseEqualizer{Knobs: []float32{0.5, -0.25}, Gain: 2.5}, Volume: 0.75, Reverb: 0.4}
+	wantTrack := TrackRse{Humanize: 3, AutoAccentuation: AccentuationStrong, Equalizer: RseEqualizer{Knobs: []float32{0.25, -0.5}, Gain: 1.5}, Instrument: RseInstrument{EffectCategory: "Delay", Effect: "Echo", Instrument: 7, Unknown: 8, SoundBank: 9, EffectNumber: 10}}
+	run.Field("Song.MasterEffect", master, wantMaster)
+	run.Field("RseMasterEffect.Equalizer", master.Equalizer, wantMaster.Equalizer)
 	run.Field("RseMasterEffect.Volume", master.Volume, float32(0.75))
 	run.Field("RseMasterEffect.Reverb", master.Reverb, float32(0.4))
-	for _, equalizer := range []RseEqualizer{master.Equalizer, track.Equalizer} {
-		run.Field("RseEqualizer.Knobs", equalizer.Knobs, equalizer.Knobs)
-		run.Field("RseEqualizer.Gain", equalizer.Gain, equalizer.Gain)
+	for index, equalizer := range []RseEqualizer{master.Equalizer, track.Equalizer} {
+		want := []RseEqualizer{wantMaster.Equalizer, wantTrack.Equalizer}[index]
+		run.Field("RseEqualizer.Knobs", equalizer.Knobs, want.Knobs)
+		run.Field("RseEqualizer.Gain", equalizer.Gain, want.Gain)
 	}
-	run.Field("Track.Rse", track, track)
-	run.Field("TrackRse.Instrument", track.Instrument, track.Instrument)
-	run.Field("TrackRse.Equalizer", track.Equalizer, track.Equalizer)
+	run.Field("Track.Rse", track, wantTrack)
+	run.Field("TrackRse.Instrument", track.Instrument, wantTrack.Instrument)
+	run.Field("TrackRse.Equalizer", track.Equalizer, wantTrack.Equalizer)
 	run.Field("TrackRse.Humanize", track.Humanize, uint8(3))
 	run.Field("TrackRse.AutoAccentuation", track.AutoAccentuation, AccentuationStrong)
 	run.Field("RseInstrument.EffectCategory", track.Instrument.EffectCategory, "Delay")

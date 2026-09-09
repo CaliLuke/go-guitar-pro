@@ -100,11 +100,15 @@ func runSemanticMatrixM03OwnershipImport(run *semanticMatrixRun) {
 			run.Field("Measure.TrackIndex", measure.TrackIndex, trackIndex)
 			run.Field("Measure.StaffIndex", measure.StaffIndex, staffIndex)
 			run.Field("Measure.HeaderIndex", measure.HeaderIndex, 0)
-			run.Field("Measure.Voices", measure.Voices, measure.Voices)
+			run.Field("Measure.Voices", len(measure.Voices), []int{4, 1, 1, 1, 1}[trackIndex+staffIndex])
 			for voiceIndex := range measure.Voices {
 				voice := &measure.Voices[voiceIndex]
 				run.Field("Voice.MeasureIndex", voice.MeasureIndex, int16(0))
-				run.Field("Voice.Beats", voice.Beats, voice.Beats)
+				wantBeats := 1
+				if trackIndex == 0 && staffIndex == 0 && voiceIndex == 1 {
+					wantBeats = 0
+				}
+				run.Field("Voice.Beats", len(voice.Beats), wantBeats)
 			}
 		}
 	}
@@ -170,7 +174,7 @@ func runSemanticMatrixM03CompatibilityAuthority(run *semanticMatrixRun) {
 	if !reflect.DeepEqual(track.Staves[1], laterBefore) {
 		t.Fatal("staff 0 reconciliation changed a later staff")
 	}
-	run.Field("Track.Staves", track.Staves, track.Staves)
+	run.Field("Track.Staves", len(track.Staves), 2)
 	run.Field("Staff.Measures", track.Staves[0].Measures, legacyMeasures)
 	run.Field("Staff.Strings", track.Staves[0].Strings, legacyStrings)
 

@@ -3,8 +3,11 @@
 package goguitarpro
 
 import (
+	"archive/zip"
+	"bytes"
 	"errors"
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -28,9 +31,15 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 			}
 		}
 	}
-	run.Dispatch("gpifReadStaffStrings:property.Name", "Tuning", "Tuning")
-	run.Dispatch("gpifReadCapo:property.Name", "CapoFret", "CapoFret")
-	run.Dispatch("gpifAuditOwnedStaffProperty:property.Name", []string{"CapoFret", "ChordCollection", "DiagramCollection", "Tuning"}, []string{"CapoFret", "ChordCollection", "DiagramCollection", "Tuning"})
+	run.Dispatch("gpifReadStaffStrings:property.Name", gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 64"}}}), []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 40}})
+	capoValue := 4
+	readCapo, foundCapo, readCapoErr := gpifReadCapo([]gpifStaffProperty{{Name: "CapoFret", Fret: &capoValue}})
+	run.Dispatch("gpifReadCapo:property.Name", []any{readCapo, foundCapo, readCapoErr}, []any{int32(4), true, error(nil)})
+	auditContext := &parseContext{format: "GP8"}
+	for _, property := range []gpifStaffProperty{{Name: "Tuning", Pitches: "40 64"}, {Name: "CapoFret", Fret: &capoValue}, {Name: "ChordCollection"}, {Name: "DiagramCollection"}} {
+		gpifAuditTrackProperty(auditContext, "t0", "/GPIF/Tracks/Track", property)
+	}
+	run.Dispatch("gpifAuditOwnedStaffProperty:property.Name", len(auditContext.diagnostics), 0)
 
 	capo := func(value int) gpifStaffProperty { return gpifStaffProperty{Name: "CapoFret", Fret: &value} }
 	tests := []struct {
@@ -106,7 +115,11 @@ func runSemanticMatrixM04InstrumentContext(run *semanticMatrixRun) {
 		t.Fatal(err)
 	}
 	run.Field("Track.Offset", roundTrip.Tracks[0].Offset, int32(4))
-	run.Wire("gpifStaffProperty.Name", "CapoFret", "CapoFret")
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	run.Wire("gpifStaffProperty.Name", strings.Contains(string(readZipMember(t, archive, "Content/score.gpif")), `name="CapoFret"`), true)
 	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].Offset, int32(4))
 	run.Wire("gpifStaffProperty.Pitches", roundTrip.Tracks[0].Strings, track.Strings)
 }

@@ -27,8 +27,12 @@ func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 		}
 		run.Field("TempoAutomation.Tempo", song.TempoAutomations[0].Tempo, source.want)
 	}
-	run.Dispatch("gpifReadTempoAutomations:auto.Type", "Tempo", "Tempo")
-	run.Dispatch("gpifAuditMasterAutomations:automation.Type", []string{"SyncPoint", "Tempo"}, []string{"SyncPoint", "Tempo"})
+	dispatchSong := &Song{Tempo: 120}
+	gpifReadTempoAutomations([]gpifAutomation{{Type: "Tempo", Value: gpifAutomationValue{Text: "90 2"}}}, dispatchSong, nil)
+	run.Dispatch("gpifReadTempoAutomations:auto.Type", dispatchSong.TempoAutomations, []TempoAutomation{{Tempo: 90}})
+	auditContext := &parseContext{format: "GP8"}
+	gpifAuditMasterAutomations([]gpifAutomation{{Type: "Tempo", Value: gpifAutomationValue{Text: "90 2"}}, {Type: "SyncPoint", Value: gpifAutomationValue{Text: "0"}}}, auditContext)
+	run.Dispatch("gpifAuditMasterAutomations:automation.Type", len(auditContext.diagnostics), 0)
 
 	song := semanticValidPitchedGP8Song(t)
 	song.Tracks[0].Settings.Notation = true
@@ -73,13 +77,13 @@ func runSemanticMatrixM06TempoAuthority(run *semanticMatrixRun) {
 	}
 	run.Field("Song.TempoAutomations", roundTrip.TempoAutomations[1:], song.TempoAutomations)
 	values := extractGPIFLeafText(t, data)
-	run.Wire("gpifAutomation.Type", "Tempo", "Tempo")
+	run.Wire("gpifAutomation.Type", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Type"], "Tempo"), 2)
 	run.Wire("gpifAutomation.Value", strings.Contains(values["GPIF/MasterTrack/Automations/Automation/Value"], "90 2"), true)
-	run.Wire("gpifAutomation.Text", "Fractional", "Fractional")
+	run.Wire("gpifAutomation.Text", values["GPIF/MasterTrack/Automations/Automation/Text"], "Fractional")
 	run.Wire("gpifAutomation.Bar", roundTrip.TempoAutomations[1].Bar, 1)
 	run.Wire("gpifAutomation.Position", roundTrip.TempoAutomations[1].Position, 0.75)
 	run.Wire("gpifAutomation.Visible", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Visible"], "true"), 2)
-	run.Wire("gpifAutomation.Linear", false, false)
+	run.Wire("gpifAutomation.Linear", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Linear"], "false"), 2)
 
 	for _, invalid := range []float64{0, -1, math.NaN(), math.Inf(1)} {
 		if _, bpmErr := NewBPM(invalid); bpmErr == nil {

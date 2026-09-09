@@ -3,9 +3,11 @@
 package goguitarpro
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"go/ast"
+	"go/format"
 	"go/parser"
 	"go/token"
 	"os"
@@ -186,6 +188,7 @@ func TestSemanticContractInventory(t *testing.T) {
 }
 
 func TestSemanticMatrixInventory(t *testing.T) {
+	assertSemanticMatrixAssertionsIndependent(t)
 	ledger := readSemanticContractLedger(t)
 	inventory := discoverSemanticGoInventory(t)
 	wantFamilies := make([]string, 25)
@@ -234,6 +237,39 @@ func TestSemanticMatrixInventory(t *testing.T) {
 	}
 	if !ledger.SemanticMatrix.Complete {
 		t.Logf("semantic matrix progress: %d/%d public fields, %d/%d GPIF wire fields, and %d/%d source dispatches assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches))
+	}
+}
+
+func assertSemanticMatrixAssertionsIndependent(t *testing.T) {
+	t.Helper()
+	files, err := filepath.Glob("semantic_matrix_m*_test.go")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, path := range files {
+		fileSet := token.NewFileSet()
+		parsed, parseErr := parser.ParseFile(fileSet, path, nil, 0)
+		if parseErr != nil {
+			t.Fatal(parseErr)
+		}
+		ast.Inspect(parsed, func(node ast.Node) bool {
+			call, ok := node.(*ast.CallExpr)
+			if !ok || len(call.Args) != 3 {
+				return true
+			}
+			selector, ok := call.Fun.(*ast.SelectorExpr)
+			if !ok || !slices.Contains([]string{"Field", "Wire", "Dispatch"}, selector.Sel.Name) {
+				return true
+			}
+			var gotSource, wantSource bytes.Buffer
+			if format.Node(&gotSource, fileSet, call.Args[1]) != nil || format.Node(&wantSource, fileSet, call.Args[2]) != nil {
+				return true
+			}
+			if gotSource.String() == wantSource.String() {
+				t.Errorf("%s:%d semantic %s assertion compares an expression with itself", path, fileSet.Position(call.Pos()).Line, selector.Sel.Name)
+			}
+			return true
+		})
 	}
 }
 
