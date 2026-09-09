@@ -2323,12 +2323,12 @@
       "path": "testdata/gp7/key-signatures-c4.gp",
       "sha256": "4f8b5beb3ab00f98eeef1027c4fdff2251dad92c61aebcd4bce6a7322e1a2df9",
       "format": "gp7",
-      "disposition": "partial",
-      "reason": "Parser-corpus fixture mapped to score-core; a dedicated semantic snapshot is pending.",
+      "disposition": "supported",
+      "reason": "Tenor clef identity agrees with the pinned AlphaTab oracle.",
       "features": [
-        "score-core"
+        "staff-ownership"
       ],
-      "semanticSnapshot": false
+      "semanticSnapshot": true
     },
     {
       "path": "testdata/gp7/key-signatures-f4.gp",

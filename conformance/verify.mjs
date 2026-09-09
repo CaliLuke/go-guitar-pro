@@ -17,6 +17,8 @@ const cases = read('conformance/cases.json');
 const fixtures = read('conformance/fixture-inventory.json');
 const upstream = read('conformance/upstream-inventory.json');
 
+execFileSync('node', ['conformance/oracle-contract.mjs'], { cwd: root, stdio: 'inherit' });
+
 if (oracle.version !== lock.packages['node_modules/@coderline/alphatab'].version) {
   fail('AlphaTab package-lock version does not match oracle.json');
 }

@@ -49,6 +49,12 @@
       "issues": [19]
     },
     {
+      "id": "gp7-tenor-clef",
+      "fixture": "testdata/gp7/key-signatures-c4.gp",
+      "features": ["staff-ownership"],
+      "issues": [21]
+    },
+    {
       "id": "gp7-tremolo-picking",
       "fixture": "testdata/gp7/tremolo-picking.gp",
       "features": ["tremolo-picking"],

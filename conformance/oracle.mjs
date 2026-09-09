@@ -1,11 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import * as alphaTab from '@coderline/alphatab';
 
 const oracle = JSON.parse(fs.readFileSync(new URL('./oracle.json', import.meta.url), 'utf8'));
 alphaTab.Logger.logLevel = alphaTab.LogLevel.None;
 
-function enumName(values, value) {
+export function enumName(values, value) {
   const name = values?.[value];
   return typeof name === 'string' ? name.toLowerCase() : String(value);
 }
@@ -28,7 +29,7 @@ function normalizeArticulation(articulation) {
   };
 }
 
-function normalizeAutomation(automation, bar) {
+export function normalizeAutomation(automation, bar) {
   return {
     bar,
     position: finite(automation.ratioPosition) ?? 0,
@@ -38,7 +39,7 @@ function normalizeAutomation(automation, bar) {
   };
 }
 
-function normalizeBend(points) {
+export function normalizeBend(points) {
   if (!points || points.length === 0) {
     return null;
   }
@@ -48,17 +49,20 @@ function normalizeBend(points) {
   }));
 }
 
-function normalizeClef(value) {
+export function normalizeClef(value) {
   switch (value) {
     case alphaTab.model.Clef.F4:
       return 'bass';
     case alphaTab.model.Clef.C3:
       return 'alto';
     case alphaTab.model.Clef.C4:
+      return 'tenor';
     case alphaTab.model.Clef.G2:
-    case alphaTab.model.Clef.Neutral:
-    default:
       return 'treble';
+    case alphaTab.model.Clef.Neutral:
+      return 'neutral';
+    default:
+      return `unknown:${value}`;
   }
 }
 
@@ -235,14 +239,20 @@ function normalizeScore(score) {
   };
 }
 
-const fixture = process.argv[2];
-if (!fixture) {
-  console.error('usage: node oracle.mjs FIXTURE');
-  process.exit(2);
+function main() {
+  const fixture = process.argv[2];
+  if (!fixture) {
+    console.error('usage: node oracle.mjs FIXTURE');
+    process.exit(2);
+  }
+
+  const settings = new alphaTab.Settings();
+  Object.assign(settings.importer, oracle.importerSettings);
+  const bytes = new Uint8Array(fs.readFileSync(path.resolve(fixture)));
+  const score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings);
+  process.stdout.write(`${JSON.stringify(normalizeScore(score), null, 2)}\n`);
 }
 
-const settings = new alphaTab.Settings();
-Object.assign(settings.importer, oracle.importerSettings);
-const bytes = new Uint8Array(fs.readFileSync(path.resolve(fixture)));
-const score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings);
-process.stdout.write(`${JSON.stringify(normalizeScore(score), null, 2)}\n`);
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}

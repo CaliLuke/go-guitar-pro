@@ -1067,6 +1067,23 @@ func goClef(clef MeasureClef) string {
 	}
 }
 
+func TestGoClefNormalizationContract(t *testing.T) {
+	tests := []struct {
+		clef MeasureClef
+		want string
+	}{
+		{MeasureClefTreble, "treble"},
+		{MeasureClefBass, "bass"},
+		{MeasureClefTenor, "tenor"},
+		{MeasureClefAlto, "alto"},
+	}
+	for _, test := range tests {
+		if got := goClef(test.clef); got != test.want {
+			t.Errorf("goClef(%d) = %q, want %q", test.clef, got, test.want)
+		}
+	}
+}
+
 func goAccent(effect NoteEffect) string {
 	if effect.HeavyAccentuatedNote {
 		return "heavy"
