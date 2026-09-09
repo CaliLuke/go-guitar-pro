@@ -102,8 +102,16 @@ flags in the part configuration. The writer reports other non-default track and
 beat display settings. It also reports page setup, marker color, voice direction,
 and line-break data that it cannot emit.
 
-Master bars own double-bar output. A non-default `Measure.HasDoubleBar` value
-that conflicts with its header produces a normalization report.
+Master bars own key, meter, and double-bar output. A non-default compatibility
+value on `Measure` produces a normalization report when it conflicts with its
+header.
+
+GP8 export preserves master-bar key changes, meter values, section text,
+repeats, alternate endings, triplet feel, and double bars. It preserves treble,
+bass, alto, tenor, and percussion clefs. It does not write legacy navigation
+directions, header-local tempo, or authored meter beam groups. Export reports
+each of these omissions. Import and export reject an invalid meter or repeat
+count before a value can wrap to a smaller integer type.
 
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains

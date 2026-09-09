@@ -902,8 +902,18 @@ func gp8ChordItem(id string, chord *Chord, fallbackStringCount int) gpifItem {
 func (builder *gp8Builder) buildScoreGraph() error {
 	for measureIndex := range builder.song.MeasureHeaders {
 		header := &builder.song.MeasureHeaders[measureIndex]
+		headerLocation := ScoreLocation{Measure: measureIndex}
 		if header.Marker != nil && header.Marker.Color != 0 {
-			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, ScoreLocation{Measure: measureIndex}, "GP8 writer emits section text but not marker color")
+			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer emits section text but not marker color")
+		}
+		if header.Direction != nil {
+			builder.addReport("gp8.omit.measure-direction", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer does not emit legacy navigation directions")
+		}
+		if header.Tempo != 0 {
+			builder.addReport("gp8.omit.measure-tempo", "tempo-automations", ExportDispositionOmitted, headerLocation, "GP8 writer does not emit the legacy measure-header tempo field")
+		}
+		if header.TimeSignature.Beams != defaultTimeSignature().Beams {
+			builder.addReport("gp8.omit.time-signature-beams", "rhythm", ExportDispositionOmitted, headerLocation, "GP8 writer emits the meter but not its authored beam grouping")
 		}
 		barIDs := make([]string, 0, len(builder.song.Tracks))
 		for trackIndex := range builder.song.Tracks {
@@ -920,6 +930,12 @@ func (builder *gp8Builder) buildScoreGraph() error {
 				}
 				if measure.HasDoubleBar != header.DoubleBar {
 					builder.addReport("gp8.normalize.measure-double-bar-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar double-bar value instead of the compatibility measure value")
+				}
+				if measure.KeySignature != (KeySignature{}) && measure.KeySignature != header.KeySignature {
+					builder.addReport("gp8.normalize.measure-key-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar key instead of the compatibility measure value")
+				}
+				if measure.TimeSignature != (TimeSignature{}) && measure.TimeSignature != header.TimeSignature {
+					builder.addReport("gp8.normalize.measure-time-authority", "rhythm", ExportDispositionNormalized, location, "GP8 writer uses the master-bar time signature instead of the compatibility measure value")
 				}
 				voiceIDs := make([]string, 0, 4)
 				for voiceIndex := range measure.Voices {

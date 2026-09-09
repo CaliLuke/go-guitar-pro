@@ -69,6 +69,25 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			}
 		}
 	}
+	for measureIndex := range song.MeasureHeaders {
+		header := &song.MeasureHeaders[measureIndex]
+		location := ScoreLocation{Measure: measureIndex}
+		if header.TimeSignature.Numerator <= 0 {
+			add("score.measure.time-signature", ScoreDiagnosticValue, location, "time-signature numerator %d must be positive", header.TimeSignature.Numerator)
+		}
+		if _, err := header.TimeSignature.Denominator.MusicalDuration(); err != nil {
+			add("score.measure.time-signature", ScoreDiagnosticValue, location, "time-signature denominator: %v", err)
+		}
+		if header.RepeatClose < -1 {
+			add("score.measure.repeat-close", ScoreDiagnosticValue, location, "repeat-close value %d is outside -1..127", header.RepeatClose)
+		}
+		if header.Direction != nil && (*header.Direction < DirectionSignCoda || *header.Direction > DirectionSignDaDoubleCoda) {
+			add("score.measure.direction", ScoreDiagnosticValue, location, "direction %d is not defined", *header.Direction)
+		}
+		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelSixteenth {
+			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)
+		}
+	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
 		if track.Offset < 0 {
