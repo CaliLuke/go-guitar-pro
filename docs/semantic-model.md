@@ -165,16 +165,40 @@ unequal middle values, point vibrato, and summary fields. Strict export rejects
 each unapproved change. Parse diagnostics check GPIF curve numbers before they
 enter narrow legacy fields.
 
+`HarmonicEffect.FretFloat` is authoritative when both harmonic fret fields are
+present. GP8 reports a conflicting legacy `Fret` value as a normalization. It
+also reports harmonic pitch spelling and octave because the target does not
+emit them. Import rejects malformed, non-finite, and out-of-range harmonic
+frets. A GPIF feedback harmonic maps to semi and produces a loss diagnostic.
+
 GP8 preserves a chord name, string pattern, and representable first fret. It
 reports barres, fingerings, omissions, and legacy chord descriptions. Imported
 chord occurrences own separate mutable slices and pointers. Track and staff
 definition scopes remain separate when they use the same local identifier.
+
+Grace notes keep their order, exact fret, articulation identity, dead state,
+placement, transition, and supported duration. GP8 reports a raw source fret,
+an unsupported duration, a conflicting legacy fret, a noncanonical velocity,
+or a bend transition. Reused grace definitions produce independent occurrence
+data.
+
+Percussion articulations retain separate notation and playback identities even
+when two definitions use the same output MIDI value. GP8 also creates builtin
+fallback definitions for identity-free main and grace notes. Import and public
+validation reject invalid articulation identities and MIDI ranges. Notehead
+options change only the requested output notation.
 
 GP8 keeps the authored order of tempo and sound automations. It does not sort
 same-bar events by position. Parse diagnostics report missing values, broken
 sound references, unknown automation types, and unsupported channel-strip
 types. They also report linear tempo or sound interpolation because the public
 records do not contain an interpolation field.
+
+Score lyrics and track lyrics have separate scopes. GP8 preserves ordered track
+lyrics and their offsets, but it does not emit binary score lyrics. Export
+reports the score-level omission. Beat text remains separate and is preserved
+on rests. An undispatched GPIF lyric source produces a loss diagnostic because
+the public model does not retain that source state.
 
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains

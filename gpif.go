@@ -1124,6 +1124,13 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, track := range doc.Tracks.Tracks {
 		path := gpifObjectPath("Tracks/Track", track.ID)
+		if track.Lyrics != nil && !track.Lyrics.Dispatched {
+			context.add(diagnosticSource("GPIF.Track.Lyrics.Undispatched", "score-core", ParseDiagnosticLossyProjection), ParseDiagnostic{
+				SourcePath: path + "/Lyrics/@dispatched", ObjectID: track.ID,
+				Location: ParseLocation{TrackID: track.ID}, Feature: "score-core",
+				Reason: "the public lyric model does not retain the source dispatch state",
+			})
+		}
 		if track.Transpose != nil {
 			context.add(diagnosticSource("GPIF.Track.Transpose", "staff-ownership", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path + "/Transpose",
@@ -1145,6 +1152,13 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, note := range doc.Notes.Notes {
 		path := gpifObjectPath("Notes/Note", note.ID)
+		if note.InstrumentArticulation != nil && *note.InstrumentArticulation < 0 {
+			context.add(diagnosticSource("GPIF.Note.InstrumentArticulation.Invalid", "percussion-articulations", ParseDiagnosticInvalidData), ParseDiagnostic{
+				SourcePath: path + "/InstrumentArticulation", ObjectID: note.ID,
+				Location: ParseLocation{NoteID: note.ID}, Feature: "percussion-articulations",
+				Reason: fmt.Sprintf("percussion articulation identity %d must be non-negative", *note.InstrumentArticulation),
+			})
+		}
 		var mappedMIDI *int
 		for _, property := range note.Properties.Properties {
 			if property.Name == "Midi" && property.Number != nil && *property.Number >= 0 && *property.Number <= 127 {
@@ -1512,6 +1526,18 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 		}
 	case "HarmonicFret":
 		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.HarmonicFret.MissingPayload", "harmonics", ParseDiagnosticInvalidData), property.HFret != nil || property.Float != nil, propertyPath, noteID, "harmonics", "HFret or Float")
+		raw, element := property.HFret, "HFret"
+		if raw == nil {
+			raw, element = property.Float, "Float"
+		}
+		if raw != nil {
+			if _, valid := gpifHarmonicFret(raw); !valid {
+				context.add(diagnosticSource("GPIF.Note.Property.HarmonicFret.Invalid", "harmonics", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: propertyPath + "/" + element, ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
+					Reason: fmt.Sprintf("harmonic fret %q is not finite or outside 0..%d", *raw, math.MaxInt8),
+				})
+			}
+		}
 	case "Element", "Variation":
 		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
 			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
@@ -2800,10 +2826,8 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 			if value == nil {
 				value = p.Float
 			}
-			if value != nil {
-				if parsed, err := strconv.ParseFloat(*value, 64); err == nil {
-					harmonicFret = &parsed
-				}
+			if parsed, valid := gpifHarmonicFret(value); valid {
+				harmonicFret = parsed
 			}
 		case "Slide":
 			if p.Flags != nil {
@@ -2886,6 +2910,17 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	note.Velocity = DefaultVelocity
 
 	return note, nil
+}
+
+func gpifHarmonicFret(raw *string) (*float64, bool) {
+	if raw == nil {
+		return nil, false
+	}
+	value, err := strconv.ParseFloat(*raw, 64)
+	if err != nil || math.IsNaN(value) || math.IsInf(value, 0) || value < 0 || value > math.MaxInt8 {
+		return nil, false
+	}
+	return &value, true
 }
 
 type gpifBendProperties struct {

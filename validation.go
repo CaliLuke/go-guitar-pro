@@ -96,6 +96,19 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if track.ChannelIndex < -1 || track.ChannelIndex >= len(song.Channels) {
 			add("score.track.channel-reference", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "channel index %d is outside -1..%d", track.ChannelIndex, len(song.Channels)-1)
 		}
+		if track.PercussionTrack {
+			for articulationIndex, articulation := range track.PercussionArticulations {
+				location := ScoreLocation{Track: trackIndex}
+				if articulation.OutputMIDINumber < 0 || articulation.OutputMIDINumber > 127 {
+					add("score.percussion-articulation.output-midi", ScoreDiagnosticValue, location, "percussion articulation %d output MIDI value %d is outside 0..127", articulationIndex, articulation.OutputMIDINumber)
+				}
+				for inputIndex, input := range articulation.InputMIDINumbers {
+					if input < 0 || input > 127 {
+						add("score.percussion-articulation.input-midi", ScoreDiagnosticValue, location, "percussion articulation %d input MIDI value %d at index %d is outside 0..127", articulationIndex, input, inputIndex)
+					}
+				}
+			}
+		}
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
 			tiedNotes := make(map[int]map[int8]int16)
@@ -218,6 +231,7 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				noteLocation.Note = noteIndex
 				percussion := track.PercussionTrack || staff.PercussionTrack
 				validateBendEffect(note.Effect.Bend, "score.note.bend", noteLocation, diagnostics)
+				validateHarmonicEffect(note.Effect.Harmonic, noteLocation, diagnostics)
 				if note.Effect.LeftHandFinger < FingeringOpen || note.Effect.LeftHandFinger > FingeringLittle {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.left-hand-fingering", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("left-hand fingering %d is not defined", note.Effect.LeftHandFinger)})
 				}
@@ -231,6 +245,13 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				}
 				if percussion && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.percussion-reference", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("articulation %d is outside 0..%d", note.PercussionArticulation, len(track.PercussionArticulations)-1)})
+				}
+				if percussion {
+					for graceIndex, grace := range note.Effect.Graces {
+						if grace.HasPercussionArticulation && (grace.PercussionArticulation < 0 || grace.PercussionArticulation >= len(track.PercussionArticulations)) {
+							*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.grace.percussion-reference", Kind: ScoreDiagnosticStructural, Location: noteLocation, Reason: fmt.Sprintf("grace %d uses percussion articulation %d with %d definitions", graceIndex, grace.PercussionArticulation, len(track.PercussionArticulations))})
+						}
+					}
 				}
 				if math.IsNaN(float64(note.DurationPercent)) || math.IsInf(float64(note.DurationPercent), 0) || note.DurationPercent < 0 {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.duration-percent", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("duration percent %v must be finite and non-negative", note.DurationPercent)})
@@ -249,6 +270,24 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				}
 				tiedNotes[voiceIndex][note.String] = note.Value
 			}
+		}
+	}
+}
+
+func validateHarmonicEffect(effect *HarmonicEffect, location ScoreLocation, diagnostics *[]ScoreDiagnostic) {
+	if effect == nil {
+		return
+	}
+	if effect.Kind < HarmonicTypeNatural || effect.Kind > HarmonicTypeSemi {
+		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.harmonic.kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("harmonic kind %d is not defined", effect.Kind)})
+	}
+	if effect.Fret != nil && *effect.Fret < 0 {
+		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.harmonic.fret", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("harmonic fret %d must be non-negative", *effect.Fret)})
+	}
+	if effect.FretFloat != nil {
+		fret := *effect.FretFloat
+		if math.IsNaN(fret) || math.IsInf(fret, 0) || fret < 0 || fret > math.MaxInt8 {
+			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.harmonic.fret-float", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("exact harmonic fret %v must be finite and within 0..%d", fret, math.MaxInt8)})
 		}
 	}
 }

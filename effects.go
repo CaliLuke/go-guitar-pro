@@ -52,9 +52,13 @@ type GraceEffect struct {
 
 // HarmonicEffect represents a harmonic note effect.
 type HarmonicEffect struct {
-	Pitch     *PitchClass
-	Octave    *Octave
-	Fret      *int8
+	Pitch  *PitchClass
+	Octave *Octave
+	// Fret is the legacy integer view of FretFloat. GPIF import truncates
+	// a fractional authored fret toward zero after checking the int8 boundary.
+	Fret *int8
+	// FretFloat preserves the authored GPIF harmonic fret and takes precedence
+	// over Fret during GP8 export.
 	FretFloat *float64
 	Kind      HarmonicType
 }

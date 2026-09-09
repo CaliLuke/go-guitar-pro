@@ -1090,14 +1090,54 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 			builder.addReport("gp8.normalize.trill-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the trill with a sixteenth-note duration")
 		}
 	}
-	if harmonic := note.Effect.Harmonic; harmonic != nil && (harmonic.Pitch != nil || harmonic.Octave != nil) {
-		builder.addReport("gp8.omit.harmonic-pitch", "harmonics", ExportDispositionOmitted, location, "GP8 writer emits harmonic kind and fret but not pitch or octave fields")
-	}
-	for _, grace := range note.Effect.Graces {
-		if grace.Transition == GraceEffectTransitionBend {
-			builder.addReport("gp8.omit.grace-bend-transition", "grace-relationships", ExportDispositionOmitted, location, "GP8 writer does not emit a bend transition from a grace note")
-			break
+	if harmonic := note.Effect.Harmonic; harmonic != nil {
+		if harmonic.Pitch != nil || harmonic.Octave != nil {
+			builder.addReport("gp8.omit.harmonic-pitch", "harmonics", ExportDispositionOmitted, location, "GP8 writer emits harmonic kind and fret but not pitch or octave fields")
 		}
+		if harmonic.Fret != nil && harmonic.FretFloat != nil && int8(*harmonic.FretFloat) != *harmonic.Fret {
+			builder.addReport("gp8.normalize.harmonic-fret-authority", "harmonics", ExportDispositionNormalized, location, "the exact harmonic fret takes precedence over its conflicting legacy integer view")
+		}
+	}
+	graceDurationChanged := false
+	graceFretChanged := false
+	graceRawFretOmitted := false
+	graceVelocityChanged := false
+	graceBendOmitted := false
+	for _, grace := range note.Effect.Graces {
+		if _, supported := gp8NoteValue(uint16(grace.Duration)); !supported {
+			graceDurationChanged = true
+		}
+		if grace.ExactFret != nil && int64(*grace.ExactFret) != int64(grace.Fret) {
+			graceFretChanged = true
+		}
+		if grace.RawFret != nil {
+			graceRawFretOmitted = true
+		}
+		velocity := grace.Velocity
+		if velocity == 0 {
+			velocity = DefaultVelocity
+		}
+		if grace.Velocity == 0 || gpifDynamicToVelocity(gp8VelocityToDynamic(velocity)) != velocity {
+			graceVelocityChanged = true
+		}
+		if grace.Transition == GraceEffectTransitionBend {
+			graceBendOmitted = true
+		}
+	}
+	if graceDurationChanged {
+		builder.addReport("gp8.normalize.grace-duration", "grace-relationships", ExportDispositionNormalized, location, "GP8 uses a thirty-second note for an unsupported grace duration")
+	}
+	if graceFretChanged {
+		builder.addReport("gp8.normalize.grace-fret-authority", "grace-relationships", ExportDispositionNormalized, location, "ExactFret is authoritative when it conflicts with the legacy grace Fret")
+	}
+	if graceRawFretOmitted {
+		builder.addReport("gp8.omit.grace-raw-fret", "grace-relationships", ExportDispositionOmitted, location, "GP8 does not preserve the source-format raw grace fret byte")
+	}
+	if graceVelocityChanged {
+		builder.addReport("gp8.normalize.grace-velocity", "grace-relationships", ExportDispositionNormalized, location, "GPIF stores grace velocity as one canonical dynamic")
+	}
+	if graceBendOmitted {
+		builder.addReport("gp8.omit.grace-bend-transition", "grace-relationships", ExportDispositionOmitted, location, "GP8 writer does not emit a bend transition from a grace note")
 	}
 }
 
@@ -1831,17 +1871,33 @@ func gp8PercussionElements(track *Track, options GP8ExportOptions) []gpifElement
 
 	values := make([]int16, 0)
 	seen := make(map[int16]struct{})
+	addFallback := func(value int16) {
+		if _, ok := seen[value]; ok {
+			return
+		}
+		seen[value] = struct{}{}
+		values = append(values, value)
+	}
 	for measureIndex := range track.Measures {
 		for voiceIndex := range track.Measures[measureIndex].Voices {
 			for beatIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats {
 				for noteIndex := range track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes {
 					note := &track.Measures[measureIndex].Voices[voiceIndex].Beats[beatIndex].Notes[noteIndex]
-					if _, ok := gp8PercussionArticulationIndex(track, note); ok {
-						continue
+					if _, ok := gp8PercussionArticulationIndex(track, note); !ok {
+						addFallback(note.Value)
 					}
-					if _, ok := seen[note.Value]; !ok {
-						seen[note.Value] = struct{}{}
-						values = append(values, note.Value)
+					for graceIndex := range note.Effect.Graces {
+						grace := &note.Effect.Graces[graceIndex]
+						graceNote := Note{Value: int16(grace.Fret), HasPercussionArticulation: grace.HasPercussionArticulation, PercussionArticulation: grace.PercussionArticulation}
+						if grace.ExactFret != nil {
+							graceNote.Value = int16(*grace.ExactFret)
+						}
+						if graceNote.Value < 27 || graceNote.Value > 87 {
+							graceNote.Value = note.Value
+						}
+						if _, ok := gp8PercussionArticulationIndex(track, &graceNote); !ok {
+							addFallback(graceNote.Value)
+						}
 					}
 				}
 			}

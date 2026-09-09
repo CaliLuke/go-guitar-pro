@@ -132,6 +132,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.MasterTrack.Tracks.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Note.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Note.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
+| `GPIF.Note.InstrumentArticulation.Invalid` | `percussion-articulations` | `invalid-data` | A percussion articulation identity must be non-negative before conversion. |
 | `GPIF.Note.Property.BendDestinationOffset.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendDestinationValue.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendMiddleOffset1.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
@@ -142,6 +143,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.ConcertPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Element` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Fret.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
+| `GPIF.Note.Property.HarmonicFret.Invalid` | `harmonics` | `invalid-data` | A harmonic fret must be finite and within the public harmonic-fret range. |
 | `GPIF.Note.Property.HarmonicFret.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.Feedback` | `harmonics` | `lossy-projection` | Song retains a less precise value than this source construct. |
 | `GPIF.Note.Property.HarmonicType.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
@@ -167,6 +169,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Automation.Sound.Reference` | `score-core` | `invalid-data` | The sound automation must reference a sound in its track. |
 | `GPIF.Track.Automation.SustainPedal` | `score-core` | `unsupported-feature` | Song has no destination for sustain-pedal automation. |
 | `GPIF.Track.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The track automation type is not recognized. |
+| `GPIF.Track.Lyrics.Undispatched` | `score-core` | `lossy-projection` | The public lyric model keeps the lines but not the source dispatch state. |
 | `GPIF.Track.Transpose` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.UnknownAttribute.NoteAndBeat` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.Rhythm` | `rhythm` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
