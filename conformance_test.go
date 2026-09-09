@@ -157,6 +157,36 @@ func TestAlphaTabExportConformance(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesInspectedCapo(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := semanticExportProbeSong(t)
+	source.Tracks[0].Offset = 2
+	data, err := Export(source, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	score, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	if !ok {
+		t.Fatal("AlphaTab score is not an object")
+	}
+	tracks, ok := score["tracks"].([]any)
+	if !ok || len(tracks) != 1 {
+		t.Fatalf("AlphaTab tracks = %#v", score["tracks"])
+	}
+	track, ok := tracks[0].(map[string]any)
+	if !ok {
+		t.Fatalf("AlphaTab track = %#v", tracks[0])
+	}
+	staves, ok := track["staves"].([]any)
+	if !ok || len(staves) != 1 {
+		t.Fatalf("AlphaTab staves = %#v", track["staves"])
+	}
+	staff, ok := staves[0].(map[string]any)
+	if !ok || staff["capo"] != float64(2) {
+		t.Fatalf("AlphaTab capo = %#v, want 2", staff["capo"])
+	}
+}
+
 func TestAlphaTabComparatorDetectsWireMutations(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceExportSong()
@@ -603,7 +633,7 @@ func selectConformanceFeatures(score any, features []string) any {
 		case "note-and-beat-semantics":
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{
 				"status": true, "dynamic": true, "text": true, "string": true, "fret": true,
-				"kind": true, "tieOrigin": true, "tieDestination": true, "effects": true,
+				"kind": true, "durationPercent": true, "tieOrigin": true, "tieDestination": true, "effects": true,
 			}, nil)
 		default:
 			panic("unhandled conformance feature " + feature)
@@ -829,6 +859,7 @@ func normalizeGoStaves(song *Song, trackIndex int) []any {
 		staff := &staves[staffIndex]
 		result = append(result, map[string]any{
 			"index":                     staffIndex,
+			"capo":                      track.Offset,
 			"percussion":                staff.PercussionTrack,
 			"standardNotationLineCount": staff.StandardNotationLineCount,
 			"tuning":                    normalizeGoTuning(staff.Strings),
@@ -935,7 +966,8 @@ func normalizeGoNote(track *Track, staff *Staff, note *Note) any {
 	return map[string]any{
 		"string": note.String, "fret": fret, "percussionArticulation": articulation, "percussionInput": percussionInput, "midi": midi,
 		"kind": goNoteKind(note.Kind), "dynamic": goDynamic(note.Velocity), "tieOrigin": note.TieOrigin,
-		"tieDestination": note.Kind == NoteTypeTie,
+		"durationPercent": note.DurationPercent,
+		"tieDestination":  note.Kind == NoteTypeTie,
 		"effects": map[string]any{
 			"accent": goAccent(note.Effect), "ghost": note.Effect.GhostNote, "hammerOrigin": note.Effect.Hammer,
 			"letRing": note.Effect.LetRing, "palmMute": note.Effect.PalmMute, "staccato": note.Effect.Staccato,
@@ -1167,6 +1199,7 @@ func conformanceExportSong() *Song {
 	song := syntheticGP8Song()
 	track := &song.Tracks[0]
 	track.Name = "Guitar"
+	track.Offset = 2
 	track.PercussionTrack = false
 	track.Strings = []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	song.Channels[0].Channel = 0

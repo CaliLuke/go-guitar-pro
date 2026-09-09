@@ -25,6 +25,22 @@ const mutations = [
     want: 'SemanticMutationProbe'
   },
   {
+    id: 'unclassified-semantic-selector',
+    file: 'gpif.go',
+    before: '\t\t\t\t\t\t\t\t\tswitch b.GraceNotes {\n',
+    after: '\t\t\t\t\t\t\t\t\tswitch b.GraceNotes {\n\t\t\t\t\t\t\t\t\tcase "ReviewUnclassifiedGrace":\n\t\t\t\t\t\t\t\t\t\tisGrace = true\n',
+    test: '^TestSemanticContractInventory$',
+    want: 'ReviewUnclassifiedGrace'
+  },
+  {
+    id: 'unclassified-gpif-wire-field',
+    file: 'gpif.go',
+    before: '\tGraceNotes string         `xml:"GraceNotes,omitempty"`\n',
+    after: '\tGraceNotes string         `xml:"GraceNotes,omitempty"`\n\tReviewIgnoredText string       `xml:"ReviewIgnoredText,omitempty"`\n',
+    test: '^TestSemanticContractInventory$',
+    want: 'gpifBeat.ReviewIgnoredText'
+  },
+  {
     id: 'automation-dispatch-diagnostic',
     file: 'gpif.go',
     before: '\t\tcase "SustainPedal":\n',
@@ -79,6 +95,24 @@ const mutations = [
     after: '\t\t\tif denominatorErr != nil || denominator <= 0 {\n',
     test: '^TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries$',
     want: 'denominator_modulo_overflow'
+  },
+  {
+    id: 'inspected-note-duration-percent',
+    file: 'gp8_writer.go',
+    before: '\tif note.DurationPercent != 1 {\n\t\tbuilder.addReport("gp8.omit.note-duration-percent", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 has no note duration-percent field")\n\t}\n',
+    after: '',
+    test: '^TestGP8StrictExportCoversInspectedSemanticFields$',
+    want: 'note_duration_percent'
+  },
+  {
+    id: 'field-disposition-evidence',
+    file: 'conformance/feature-ledger.json',
+    replacements: [
+      { before: '"preserved":[', after: '"preserved":["Chord.Barres",' },
+      { before: '"omitted":["Chord.Barres",', after: '"omitted":[' }
+    ],
+    command: 'verify',
+    want: 'Chord.Barres evidence proves omitted, but the field partition claims preserved'
   }
 ];
 
@@ -98,22 +132,35 @@ try {
   for (const mutation of mutations) {
     const original = path.join(root, mutation.file);
     const source = fs.readFileSync(original, 'utf8');
-    const occurrences = source.split(mutation.before).length - 1;
-    if (occurrences !== 1) {
-      throw new Error(`${mutation.id} expected one source match in ${mutation.file}, found ${occurrences}`);
+    const replacements = mutation.replacements ?? [{ before: mutation.before, after: mutation.after }];
+    let mutatedSource = source;
+    for (const replacement of replacements) {
+      const occurrences = mutatedSource.split(replacement.before).length - 1;
+      if (occurrences !== 1) {
+        throw new Error(`${mutation.id} expected one source match in ${mutation.file}, found ${occurrences}`);
+      }
+      mutatedSource = mutatedSource.replace(replacement.before, replacement.after);
     }
     const mutated = path.join(temporary, `${mutation.id}-${path.basename(mutation.file)}`);
-    fs.writeFileSync(mutated, source.replace(mutation.before, mutation.after));
-    const overlay = path.join(temporary, `${mutation.id}-overlay.json`);
-    fs.writeFileSync(overlay, JSON.stringify({ Replace: { [original]: mutated } }));
-    const result = spawnSync('go', ['test', '-count=1', '-overlay', overlay, '-run', mutation.test, '.'], {
-      cwd: root,
-      encoding: 'utf8',
-      env: { ...process.env, SEMANTIC_INVENTORY_OVERLAY: mutated, SEMANTIC_INVENTORY_FILE: mutation.file }
-    });
+    fs.writeFileSync(mutated, mutatedSource);
+    let result;
+    if (mutation.command === 'verify') {
+      result = spawnSync('node', ['conformance/verify.mjs'], {
+        cwd: root, encoding: 'utf8', env: { ...process.env, SEMANTIC_LEDGER_OVERLAY: mutated }
+      });
+    } else {
+      const overlay = path.join(temporary, `${mutation.id}-overlay.json`);
+      fs.writeFileSync(overlay, JSON.stringify({ Replace: { [original]: mutated } }));
+      result = spawnSync('go', ['test', '-count=1', '-overlay', overlay, '-run', mutation.test, '.'], {
+        cwd: root,
+        encoding: 'utf8',
+        env: { ...process.env, SEMANTIC_INVENTORY_OVERLAY: mutated, SEMANTIC_INVENTORY_FILE: mutation.file }
+      });
+    }
     const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
-    if (result.status === 0) throw new Error(`${mutation.id} survived ${mutation.test}`);
-    if (!output.includes('--- FAIL:') || !output.includes(mutation.want)) {
+    if (result.status === 0) throw new Error(`${mutation.id} survived ${mutation.test ?? mutation.command}`);
+    const expectedFailure = mutation.command === 'verify' || output.includes('--- FAIL:');
+    if (!expectedFailure || !output.includes(mutation.want)) {
       throw new Error(`${mutation.id} failed for an unexpected reason:\n${output}`);
     }
     process.stdout.write(`killed ${mutation.id}\n`);

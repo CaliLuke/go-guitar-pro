@@ -1142,14 +1142,14 @@ func syntheticGP8Song() *Song {
 		{
 			Number: 1,
 			Voices: []Voice{{Beats: []Beat{
-				{Duration: eighth, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: Forte, Kind: NoteTypeNormal, Effect: NoteEffect{Graces: []GraceEffect{grace}, AccentuatedNote: true}}, {Value: 42, Velocity: Forte, Kind: NoteTypeNormal}}},
-				{Duration: eighth, Status: BeatStatusNormal, Effect: BeatEffects{Chord: chord}, Notes: []Note{{Value: 36, String: 1, Velocity: Forte, Kind: NoteTypeNormal}, {Value: 42, String: 1, Velocity: Forte, Kind: NoteTypeNormal}}},
+				{Duration: eighth, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: Forte, DurationPercent: 1, Kind: NoteTypeNormal, Effect: NoteEffect{Graces: []GraceEffect{grace}, AccentuatedNote: true}}, {Value: 42, Velocity: Forte, DurationPercent: 1, Kind: NoteTypeNormal}}},
+				{Duration: eighth, Status: BeatStatusNormal, Effect: BeatEffects{Chord: chord}, Notes: []Note{{Value: 36, String: 1, Velocity: Forte, DurationPercent: 1, Kind: NoteTypeNormal}, {Value: 42, String: 1, Velocity: Forte, DurationPercent: 1, Kind: NoteTypeNormal}}},
 				{Duration: quarter, Status: BeatStatusRest},
 			}}},
 		},
 		{
 			Number: 2,
-			Voices: []Voice{{Beats: []Beat{{Duration: dottedQuarter, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: MinVelocity + VelocityIncrement*6, Kind: NoteTypeNormal, Effect: NoteEffect{HeavyAccentuatedNote: true}}}}}}},
+			Voices: []Voice{{Beats: []Beat{{Duration: dottedQuarter, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: MinVelocity + VelocityIncrement*6, DurationPercent: 1, Kind: NoteTypeNormal, Effect: NoteEffect{HeavyAccentuatedNote: true}}}}}}},
 		},
 		{
 			Number: 3,

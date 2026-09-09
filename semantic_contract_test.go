@@ -22,9 +22,10 @@ type semanticContractLedger struct {
 		ID string `json:"id"`
 	} `json:"features"`
 	SemanticContracts struct {
-		FieldDispositions map[string][]string         `json:"fieldDispositions"`
-		ModelTypes        []semanticModelTypeContract `json:"modelTypes"`
-		SourceDispatches  []semanticDispatchContract  `json:"sourceDispatches"`
+		FieldDispositions     map[string][]string         `json:"fieldDispositions"`
+		ModelTypes            []semanticModelTypeContract `json:"modelTypes"`
+		SourceDispatches      []semanticDispatchContract  `json:"sourceDispatches"`
+		WireFieldDispositions map[string][]string         `json:"wireFieldDispositions"`
 	} `json:"semanticContracts"`
 }
 
@@ -51,6 +52,7 @@ type semanticDispatchContract struct {
 type semanticGoInventory struct {
 	modelTypes map[string][]string
 	dispatches map[string][]string
+	wireFields []string
 }
 
 func TestSemanticContractInventory(t *testing.T) {
@@ -112,6 +114,16 @@ func TestSemanticContractInventory(t *testing.T) {
 		classifiedFields = append(classifiedFields, fields...)
 	}
 	assertExactSemanticSet(t, "model field dispositions", inventoriedFields, classifiedFields)
+
+	allowedWireDispositions := []string{"preserved", "normalized", "omitted", "rejected", "schema"}
+	var classifiedWireFields []string
+	for disposition, fields := range ledger.SemanticContracts.WireFieldDispositions {
+		if !slices.Contains(allowedWireDispositions, disposition) {
+			t.Errorf("unknown GPIF wire field disposition %q", disposition)
+		}
+		classifiedWireFields = append(classifiedWireFields, fields...)
+	}
+	assertExactSemanticSet(t, "GPIF wire field dispositions", inventory.wireFields, classifiedWireFields)
 
 	dispatchContracts := make(map[string]semanticDispatchContract, len(ledger.SemanticContracts.SourceDispatches))
 	for _, contract := range ledger.SemanticContracts.SourceDispatches {
@@ -200,6 +212,27 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 	}
 
 	modelTypes := make(map[string][]string)
+	var wireFields []string
+	for typeName, expression := range typeExpressions {
+		if !strings.HasPrefix(typeName, "gpif") {
+			continue
+		}
+		structure, ok := expression.(*ast.StructType)
+		if !ok {
+			continue
+		}
+		for _, field := range structure.Fields.List {
+			if field.Tag == nil {
+				continue
+			}
+			for _, name := range field.Names {
+				if name.IsExported() {
+					wireFields = append(wireFields, typeName+"."+name.Name)
+				}
+			}
+		}
+	}
+	sort.Strings(wireFields)
 	queued := []string{"Song"}
 	seen := make(map[string]struct{})
 	for len(queued) > 0 {
@@ -239,10 +272,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 	}
 
 	dispatchSets := make(map[string]map[string]struct{})
-	for file, parsed := range parsedFiles {
-		if file != "gpif.go" {
-			continue
-		}
+	for _, parsed := range parsedFiles {
 		for _, declaration := range parsed.Decls {
 			function, ok := declaration.(*ast.FuncDecl)
 			if !ok || function.Body == nil {
@@ -265,10 +295,10 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 					if statement.Op != token.EQL && statement.Op != token.NEQ {
 						return true
 					}
-					if selector := semanticSelectorName(statement.X); selector != "" {
+					if selector := semanticBinarySelectorName(statement.X); selector != "" {
 						addSemanticDispatchLiteral(t, dispatchSets, function.Name.Name, selector, statement.Y)
 					}
-					if selector := semanticSelectorName(statement.Y); selector != "" {
+					if selector := semanticBinarySelectorName(statement.Y); selector != "" {
 						addSemanticDispatchLiteral(t, dispatchSets, function.Name.Name, selector, statement.X)
 					}
 				}
@@ -283,7 +313,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		}
 		sort.Strings(dispatches[key])
 	}
-	return semanticGoInventory{modelTypes: modelTypes, dispatches: dispatches}
+	return semanticGoInventory{modelTypes: modelTypes, dispatches: dispatches, wireFields: wireFields}
 }
 
 func semanticSelectorName(expression ast.Expr) string {
@@ -291,7 +321,7 @@ func semanticSelectorName(expression ast.Expr) string {
 		return semanticSelectorName(pointer.X)
 	}
 	selector, ok := expression.(*ast.SelectorExpr)
-	if !ok || (selector.Sel.Name != "Name" && selector.Sel.Name != "Type" && selector.Sel.Name != "HType") {
+	if !ok {
 		return ""
 	}
 	prefix := semanticExpressionName(selector.X)
@@ -299,6 +329,18 @@ func semanticSelectorName(expression ast.Expr) string {
 		return ""
 	}
 	return prefix + "." + selector.Sel.Name
+}
+
+func semanticBinarySelectorName(expression ast.Expr) string {
+	selector := semanticSelectorName(expression)
+	if selector == "" {
+		return ""
+	}
+	name := selector[strings.LastIndex(selector, ".")+1:]
+	if name != "Name" && name != "Type" && name != "HType" {
+		return ""
+	}
+	return selector
 }
 
 func semanticExpressionName(expression ast.Expr) string {

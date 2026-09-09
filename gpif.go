@@ -608,6 +608,24 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			if t.ID == trackID {
 				gpifAuditTrackAutomations(t, context)
 				track.Name = t.Name
+				capo, found, capoErr := gpifReadCapo(t.Properties)
+				if capoErr != nil {
+					return nil, fmt.Errorf("track %s capo: %w", trackID, capoErr)
+				}
+				if found {
+					track.Offset = capo
+				} else {
+					for staffIndex, staff := range t.Staves.Staff {
+						capo, found, capoErr = gpifReadCapo(staff.Properties)
+						if capoErr != nil {
+							return nil, fmt.Errorf("track %s staff %d capo: %w", trackID, staffIndex, capoErr)
+						}
+						if found {
+							track.Offset = capo
+							break
+						}
+					}
+				}
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
 					track.PercussionArticulations = gpifReadPercussionArticulations(t.InstrumentSet, t.NotationPatch)
@@ -1127,6 +1145,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 				gpifAuditStaffProperty(context, track.ID, propertyPath, property)
 			}
 		}
+		gpifAuditStaffCapoConflict(track, context, path)
 	}
 
 	for _, note := range doc.Notes.Notes {
@@ -1202,7 +1221,8 @@ func gpifAuditTrackProperty(context *parseContext, trackID, path string, propert
 		context, trackID, path, property, "track",
 		diagnosticSource("GPIF.Track.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Track.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
-		diagnosticSource("GPIF.Track.Property.CapoFret", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Track.Property.CapoFret.MissingFret", "staff-ownership", ParseDiagnosticInvalidData),
+		diagnosticSource("GPIF.Track.Property.CapoFret.Negative", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Track.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
 	)
 }
@@ -1212,7 +1232,8 @@ func gpifAuditStaffProperty(context *parseContext, trackID, path string, propert
 		context, trackID, path, property, "staff",
 		diagnosticSource("GPIF.Staff.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Staff.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
-		diagnosticSource("GPIF.Staff.Property.CapoFret", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Staff.Property.CapoFret.MissingFret", "staff-ownership", ParseDiagnosticInvalidData),
+		diagnosticSource("GPIF.Staff.Property.CapoFret.Negative", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Staff.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
 	)
 }
@@ -1222,7 +1243,7 @@ func gpifAuditOwnedStaffProperty(
 	trackID, path string,
 	property gpifStaffProperty,
 	owner string,
-	tuningMissingSource, tuningLabelSource, capoSource, unknownSource parseDiagnosticSource,
+	tuningMissingSource, tuningLabelSource, capoMissingSource, capoNegativeSource, unknownSource parseDiagnosticSource,
 ) {
 	propertyPath := fmt.Sprintf("%s[@name=%q]", path, property.Name)
 	switch property.Name {
@@ -1242,16 +1263,65 @@ func gpifAuditOwnedStaffProperty(
 	case "DiagramCollection", "ChordCollection":
 		return
 	case "CapoFret":
-		context.add(capoSource, ParseDiagnostic{
-			SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
-			Reason: "Staff has no capo destination",
-		})
+		if property.Fret == nil {
+			context.add(capoMissingSource, ParseDiagnostic{
+				SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+				Reason: owner + " capo property has no fret",
+			})
+		} else if *property.Fret < 0 {
+			context.add(capoNegativeSource, ParseDiagnostic{
+				SourcePath: propertyPath + "/Fret", ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+				Reason: owner + " capo fret is negative",
+			})
+		}
 	default:
 		context.add(unknownSource, ParseDiagnostic{
 			SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
 			Reason: fmt.Sprintf("unknown GPIF %s property %q", owner, property.Name),
 		})
 	}
+}
+
+func gpifAuditStaffCapoConflict(track gpifTrack, context *parseContext, path string) {
+	trackCapo, trackHasCapo, err := gpifReadCapo(track.Properties)
+	if err != nil || len(track.Staves.Staff) < 2 {
+		return
+	}
+	base := trackCapo
+	if !trackHasCapo {
+		base = 0
+	}
+	first := base
+	for staffIndex, staff := range track.Staves.Staff {
+		capo := base
+		if staffCapo, found, readErr := gpifReadCapo(staff.Properties); readErr == nil && found {
+			capo = staffCapo
+		}
+		if staffIndex == 0 {
+			first = capo
+			continue
+		}
+		if capo != first {
+			context.add(diagnosticSource("GPIF.Track.CapoFret.StaffConflict", "staff-ownership", ParseDiagnosticLossyProjection), ParseDiagnostic{
+				SourcePath: path + "/Staves", ObjectID: track.ID, Location: ParseLocation{TrackID: track.ID},
+				Reason: "staff capo values differ and Track.Offset stores one value",
+			})
+			return
+		}
+	}
+}
+
+func gpifReadCapo(properties []gpifStaffProperty) (int32, bool, error) {
+	for _, property := range properties {
+		if property.Name == "CapoFret" && property.Fret != nil {
+			value := int64(*property.Fret)
+			if value < math.MinInt32 || value > math.MaxInt32 {
+				return 0, false, fmt.Errorf("fret %d is outside %d..%d", value, math.MinInt32, math.MaxInt32)
+			}
+			return int32(value), true, nil
+		}
+	}
+	return 0, false, nil
 }
 
 var gpifNotePropertySources = map[string]parseDiagnosticSource{

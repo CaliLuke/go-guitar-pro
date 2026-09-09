@@ -9,6 +9,7 @@ import (
 
 func TestValidateSongReportsStructuralAndTimingDiagnostics(t *testing.T) {
 	song := syntheticGP8Song()
+	song.Tracks[0].Offset = -1
 	song.Tracks[0].ChannelIndex = len(song.Channels) + 1
 	song.Tracks[0].Measures[0].HeaderIndex = 9
 	song.Tracks[0].Measures[0].Voices[0].Beats[0].Duration.TupletEnters = 0
@@ -17,6 +18,7 @@ func TestValidateSongReportsStructuralAndTimingDiagnostics(t *testing.T) {
 
 	diagnostics := ValidateSong(song)
 	for _, code := range []string{
+		"score.track.capo",
 		"score.track.channel-reference",
 		"score.measure.header-reference",
 		"score.beat.duration",

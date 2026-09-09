@@ -12,7 +12,9 @@ const fail = message => {
 const oracle = read('conformance/oracle.json');
 const packageJSON = read('conformance/package.json');
 const lock = read('conformance/package-lock.json');
-const ledger = read('conformance/feature-ledger.json');
+const ledger = process.env.SEMANTIC_LEDGER_OVERLAY
+  ? JSON.parse(fs.readFileSync(process.env.SEMANTIC_LEDGER_OVERLAY, 'utf8'))
+  : read('conformance/feature-ledger.json');
 const cases = read('conformance/cases.json');
 const fixtures = read('conformance/fixture-inventory.json');
 const upstream = read('conformance/upstream-inventory.json');
@@ -139,6 +141,7 @@ for (const contract of ledger.semanticContracts.modelTypes) {
 }
 const allowedFieldDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected', 'derived', 'out-of-scope']);
 const classifiedModelFields = new Set();
+const modelFieldDisposition = new Map();
 for (const [disposition, fields] of Object.entries(ledger.semanticContracts.fieldDispositions)) {
   if (!allowedFieldDispositions.has(disposition)) fail(`invalid model field disposition ${disposition}`);
   if (!Array.isArray(fields)) fail(`model field disposition ${disposition} is not an array`);
@@ -146,10 +149,22 @@ for (const [disposition, fields] of Object.entries(ledger.semanticContracts.fiel
     if (classifiedModelFields.has(field)) fail(`${field} has more than one model field disposition`);
     if (!inventoriedModelFields.has(field)) fail(`${field} has a disposition but is not inventoried`);
     classifiedModelFields.add(field);
+    modelFieldDisposition.set(field, disposition);
   }
 }
 for (const field of inventoriedModelFields) {
   if (!classifiedModelFields.has(field)) fail(`${field} has no preservation, normalization, omission, rejection, derived, or out-of-scope disposition`);
+}
+
+const allowedWireFieldDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected', 'schema']);
+const classifiedWireFields = new Set();
+for (const [disposition, fields] of Object.entries(ledger.semanticContracts.wireFieldDispositions)) {
+  if (!allowedWireFieldDispositions.has(disposition)) fail(`invalid GPIF wire field disposition ${disposition}`);
+  if (!Array.isArray(fields)) fail(`GPIF wire field disposition ${disposition} is not an array`);
+  for (const field of fields) {
+    if (classifiedWireFields.has(field)) fail(`${field} has more than one GPIF wire field disposition`);
+    classifiedWireFields.add(field);
+  }
 }
 
 const sourceDispatchContracts = new Map();
@@ -194,6 +209,20 @@ for (const [feature, evidence] of behavioralFeatures) {
   if (!evidence.publicAPI || !evidence.independent) {
     fail(`${feature} lacks public-API or independent-consumer behavioral evidence`);
   }
+}
+const evidencedFields = new Set();
+for (const evidence of ledger.semanticContracts.fieldEvidence) {
+  if (!classifiedModelFields.has(evidence.field)) fail(`${evidence.field} has evidence but is not an inventoried model field`);
+  if (evidencedFields.has(evidence.field)) fail(`${evidence.field} has more than one field evidence record`);
+  if (evidence.disposition !== modelFieldDisposition.get(evidence.field)) {
+    fail(`${evidence.field} evidence proves ${evidence.disposition}, but the field partition claims ${modelFieldDisposition.get(evidence.field)}`);
+  }
+  if (!behaviorContracts.has(evidence.behavior)) fail(`${evidence.field} references missing behavior contract ${evidence.behavior}`);
+  if (!evidence.assertion) fail(`${evidence.field} has no field-level assertion`);
+  evidencedFields.add(evidence.field);
+}
+for (const field of ['Track.Offset', 'Note.DurationPercent', 'Chord.Barres', 'BendEffect.Points']) {
+  if (!evidencedFields.has(field)) fail(`${field} lacks inspected field-level behavioral evidence`);
 }
 for (const contract of ledger.semanticContracts.sourceDispatches) {
   if (!behaviorContracts.has(contract.evidence)) {
@@ -315,6 +344,12 @@ function supportDocument() {
   const fieldDispositionRows = Object.entries(ledger.semanticContracts.fieldDispositions).map(([disposition, fields]) =>
     `| \`${disposition}\` | ${fields.length} |`
   );
+  const fieldEvidenceRows = ledger.semanticContracts.fieldEvidence.map(evidence =>
+    `| \`${evidence.field}\` | \`${evidence.disposition}\` | \`${evidence.behavior}\` | ${evidence.assertion} |`
+  );
+  const wireFieldRows = Object.entries(ledger.semanticContracts.wireFieldDispositions).map(([disposition, fields]) =>
+    `| \`${disposition}\` | ${fields.length} |`
+  );
   const dispatchRows = ledger.semanticContracts.sourceDispatches.map(contract =>
     `| \`${contract.function}:${contract.selector}\` | \`${contract.feature}\` | ${Object.keys(contract.cases).length} | \`${contract.evidence}\` | \`${contract.defaultDisposition}\` | ${contract.reason} |`
   );
@@ -333,6 +368,10 @@ function supportDocument() {
     `| Type | Feature | Field roles | Reason |\n| --- | --- | --- | --- |\n${modelRows.join('\n')}\n\n` +
     `Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.\n\n` +
     `| Target disposition | Fields |\n| --- | --- |\n${fieldDispositionRows.join('\n')}\n\n` +
+    `The following inspected fields have focused behavioral evidence. The assertion states the tested non-default value or limit.\n\n` +
+    `| Field | Disposition | Behavior contract | Assertion |\n| --- | --- | --- | --- |\n${fieldEvidenceRows.join('\n')}\n\n` +
+    `## GPIF wire inventory\n\nThe schema inventory records every decoded GPIF field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.\n\n` +
+    `| Wire role | Fields |\n| --- | --- |\n${wireFieldRows.join('\n')}\n\n` +
     `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +
     `| Dispatch | Feature | Cases | Evidence | Default | Reason |\n| --- | --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n\n` +
     `## Behavioral contracts\n\nEach represented feature has a public-API test and pinned independent-consumer evidence. Mutation-sensitive contracts are exercised by \`conformance/sensitivity.mjs\`.\n\n` +

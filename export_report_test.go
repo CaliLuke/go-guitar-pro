@@ -214,6 +214,9 @@ func TestGP8ExportRejectsSharedAuthoredInvariants(t *testing.T) {
 		{name: "channel reference", code: "gp8.reject.score.track.channel-reference", set: func(song *Song) {
 			song.Tracks[0].ChannelIndex = len(song.Channels)
 		}},
+		{name: "negative capo", code: "gp8.reject.score.track.capo", set: func(song *Song) {
+			song.Tracks[0].Offset = -1
+		}},
 		{name: "sound reference", code: "gp8.reject.score.sound-automation.reference", set: func(song *Song) {
 			song.Tracks[0].SoundAutomations = []SoundAutomation{{Bar: 0, Sound: 4}}
 		}},
@@ -327,6 +330,121 @@ func TestGP8StrictExportReportsScoreLyricsOmission(t *testing.T) {
 	if len(data) != 0 || !errors.As(err, &lossErr) || !hasExportReportEntry(report, "gp8.omit.score-lyrics") {
 		t.Fatalf("strict export = %d bytes, %#v, %v", len(data), report.Entries, err)
 	}
+}
+
+func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
+	t.Run("track capo", func(t *testing.T) {
+		song := semanticExportProbeSong(t)
+		song.Tracks[0].Offset = 2
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+			LossPolicy: ExportLossPolicy{RequirePreservation: true},
+		})
+		if err != nil || len(data) == 0 {
+			t.Fatalf("strict export = %d bytes, %#v, %v", len(data), report.Entries, err)
+		}
+		roundTrip, err := Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if roundTrip.Tracks[0].Offset != 2 {
+			t.Fatalf("round-trip capo = %d, want 2", roundTrip.Tracks[0].Offset)
+		}
+	})
+
+	t.Run("supported bend curves", func(t *testing.T) {
+		curves := [][]BendPoint{
+			{{Position: 0, Value: 0}, {Position: 12, Value: 2}},
+			{{Position: 0, Value: 0}, {Position: 6, Value: 2}, {Position: 12, Value: 0}},
+			{{Position: 0, Value: 0}, {Position: 3, Value: 0}, {Position: 9, Value: 2}, {Position: 12, Value: 2}},
+		}
+		for _, points := range curves {
+			song := semanticExportProbeSong(t)
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Points: points}
+			data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+				LossPolicy: ExportLossPolicy{RequirePreservation: true},
+			})
+			if err != nil || len(data) == 0 {
+				t.Fatalf("%d-point strict export = %d bytes, %#v, %v", len(points), len(data), report.Entries, err)
+			}
+			roundTrip, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			bend := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend
+			if bend == nil || !reflect.DeepEqual(bend.Points, points) {
+				t.Fatalf("%d-point round-trip = %#v, want %#v", len(points), bend, points)
+			}
+		}
+	})
+
+	tests := []struct {
+		name string
+		code string
+		set  func(*Song)
+	}{
+		{name: "note duration percent", code: "gp8.omit.note-duration-percent", set: func(song *Song) {
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent = 0.5
+		}},
+		{name: "zero note duration percent", code: "gp8.omit.note-duration-percent", set: func(song *Song) {
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent = 0
+		}},
+		{name: "chord barres", code: "gp8.omit.chord-barres", set: func(song *Song) {
+			firstFret := uint8(3)
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = &Chord{
+				Name: "barre", FirstFret: &firstFret, Strings: []int8{3, 3, 4, 5, 5, 3},
+				Barres: []Barre{{Fret: 3, Start: 1, End: 6}},
+			}
+		}},
+		{name: "five point bend", code: "gp8.omit.bend-curve", set: func(song *Song) {
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Points: []BendPoint{
+				{Position: 0, Value: 0}, {Position: 3, Value: 2}, {Position: 6, Value: 0},
+				{Position: 9, Value: 2}, {Position: 12, Value: 0},
+			}}
+		}},
+		{name: "unrepresentable bend midpoint", code: "gp8.normalize.bend-curve", set: func(song *Song) {
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Points: []BendPoint{
+				{Position: 0, Value: 0}, {Position: 12, Value: 1},
+			}}
+		}},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			song := semanticExportProbeSong(t)
+			test.set(song)
+			data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+				LossPolicy: ExportLossPolicy{RequirePreservation: true},
+			})
+			var lossErr *ExportLossError
+			if len(data) != 0 || !errors.As(err, &lossErr) || !hasExportReportEntry(report, test.code) {
+				t.Fatalf("strict export = %d bytes, %#v, %v", len(data), report.Entries, err)
+			}
+		})
+	}
+}
+
+func semanticExportProbeSong(t *testing.T) *Song {
+	t.Helper()
+	header := defaultMeasureHeader()
+	measure := Measure{HeaderIndex: 0, Voices: []Voice{{Beats: []Beat{{
+		Duration: defaultDuration(), Status: BeatStatusNormal, Dynamics: Forte,
+		Notes: []Note{{Value: 3, String: 1, DurationPercent: 1, Kind: NoteTypeNormal, Velocity: Forte}},
+	}}}}}
+	song := &Song{
+		Tempo: 120, MeasureHeaders: []MeasureHeader{header},
+		Channels: []MidiChannel{{Channel: 0, EffectChannel: 1, Instrument: 25, Volume: 100, Balance: 64}},
+		Tracks: []Track{{
+			Name: "Guitar", ChannelIndex: 0, Visible: true,
+			Strings:  []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}},
+			Measures: []Measure{measure},
+		}},
+	}
+	if err := FinalizeSong(song); err != nil {
+		t.Fatal(err)
+	}
+	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
+		t.Fatalf("probe song diagnostics = %#v", diagnostics)
+	}
+	return song
 }
 
 func hasExportReportEntry(report ExportReport, code string) bool {

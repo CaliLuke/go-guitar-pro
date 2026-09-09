@@ -99,6 +99,7 @@ function normalizeNote(note, staff, graces) {
     midi,
     kind: note.isDead ? 'dead' : note.isTieDestination ? 'tie' : 'normal',
     dynamic: enumName(alphaTab.model.DynamicValue, note.dynamics),
+    durationPercent: finite(note.durationPercent),
     tieOrigin: Boolean(note.tieDestination),
     tieDestination: Boolean(note.isTieDestination),
     effects: {
@@ -185,6 +186,7 @@ function normalizeVoice(voice, staff) {
 function normalizeStaff(staff) {
   return {
     index: staff.index,
+    capo: finite(staff.capo),
     percussion: Boolean(staff.isPercussion),
     standardNotationLineCount: staff.standardNotationLineCount,
     tuning: Array.from(staff.tuning ?? []),

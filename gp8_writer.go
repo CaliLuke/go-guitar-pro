@@ -592,6 +592,10 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		PlaybackState:    "Default",
 		AudioEngineState: "MIDI",
 	}
+	if track.Offset != 0 {
+		capo := int(track.Offset)
+		result.Properties = append(result.Properties, gpifStaffProperty{Name: "CapoFret", Fret: &capo})
+	}
 	if len(track.Sounds) > 0 {
 		result.Sounds.Sounds = make([]gpifSound, 0, len(track.Sounds))
 		for _, sound := range track.Sounds {
@@ -856,6 +860,9 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.MixTableChange != nil {
 		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
 	}
+	if beat.Effect.Chord != nil && len(beat.Effect.Chord.Barres) != 0 {
+		builder.addReport("gp8.omit.chord-barres", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit explicit chord barre ranges")
+	}
 	if beat.Effect.HasRasgueado {
 		builder.addReport("gp8.omit.rasgueado", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit rasgueado")
 	}
@@ -882,6 +889,9 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 }
 
 func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocation) {
+	if note.DurationPercent != 1 {
+		builder.addReport("gp8.omit.note-duration-percent", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 has no note duration-percent field")
+	}
 	if note.Effect.TremoloPicking != nil {
 		builder.addReport("gp8.omit.tremolo-picking", "tremolo-picking", ExportDispositionOmitted, location, "GP8 writer does not emit tremolo picking")
 	}
@@ -892,6 +902,13 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 		builder.addReport("gp8.omit.right-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit right-hand fingering")
 	}
 	if bend := note.Effect.Bend; bend != nil {
+		conversion := gp8ConvertBend(bend)
+		if conversion.omitted {
+			builder.addReport("gp8.omit.bend-curve", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer supports bend curves with two through four points")
+		}
+		if conversion.normalized {
+			builder.addReport("gp8.normalize.bend-curve", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF uses one value for both middle bend points")
+		}
 		if bend.Kind != BendTypeNone || bend.Value != 0 {
 			builder.addReport("gp8.omit.bend-summary", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer derives the bend from points and omits the summary fields")
 		}
@@ -1181,7 +1198,7 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 	}
 	articulation := 0
 	result := gpifNote{ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
-	result.Properties.Properties = append(result.Properties.Properties, gp8BendProperties(note.Effect.Bend)...)
+	result.Properties.Properties = append(result.Properties.Properties, gp8ConvertBend(note.Effect.Bend).properties...)
 	if note.Effect.Harmonic != nil {
 		harmonicType := gp8HarmonicType(note.Effect.Harmonic.Kind)
 		if harmonicType != "" {
@@ -1355,9 +1372,18 @@ func gp8WhammyValue(value int8) string {
 	return strconv.FormatFloat(float64(value)*float64(GPBendSemitone), 'f', 6, 64)
 }
 
-func gp8BendProperties(bend *BendEffect) []gpifProperty {
-	if bend == nil || len(bend.Points) < 2 || len(bend.Points) > 4 {
-		return nil
+type gp8BendConversion struct {
+	properties []gpifProperty
+	omitted    bool
+	normalized bool
+}
+
+func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
+	if bend == nil {
+		return gp8BendConversion{}
+	}
+	if len(bend.Points) < 2 || len(bend.Points) > 4 {
+		return gp8BendConversion{omitted: len(bend.Points) != 0}
 	}
 	origin := bend.Points[0]
 	destination := bend.Points[len(bend.Points)-1]
@@ -1392,7 +1418,7 @@ func gp8BendProperties(bend *BendEffect) []gpifProperty {
 		middle2 = middle1
 	}
 	enable := ""
-	return []gpifProperty{
+	properties := []gpifProperty{
 		{Name: "Bended", Enable: &enable},
 		{Name: "BendDestinationOffset", Float: gp8BendOffset(destination.Position)},
 		{Name: "BendDestinationValue", Float: gp8BendValue(destination.Value)},
@@ -1401,6 +1427,20 @@ func gp8BendProperties(bend *BendEffect) []gpifProperty {
 		{Name: "BendMiddleValue", Float: gp8BendValue(middle1.Value)},
 		{Name: "BendOriginOffset", Float: gp8BendOffset(origin.Position)},
 		{Name: "BendOriginValue", Float: gp8BendValue(origin.Value)},
+	}
+	encoded := gpifBendProperties{
+		enabled:             true,
+		originPosition:      origin.Position,
+		originValue:         origin.Value,
+		middlePosition1:     middle1.Position,
+		middlePosition2:     middle2.Position,
+		middleValue:         middle1.Value,
+		destinationPosition: destination.Position,
+		destinationValue:    destination.Value,
+	}
+	return gp8BendConversion{
+		properties: properties,
+		normalized: !slices.Equal(encoded.effect().Points, bend.Points),
 	}
 }
 

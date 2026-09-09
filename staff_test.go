@@ -3,6 +3,7 @@
 package goguitarpro
 
 import (
+	"errors"
 	"slices"
 	"strings"
 	"testing"
@@ -130,6 +131,48 @@ func TestParseGPIFAssignsBarsAcrossStavesBeforeAdvancingTrack(t *testing.T) {
 	if &song.Tracks[0].Strings[0] != &song.Tracks[0].Staves[0].Strings[0] {
 		t.Error("legacy tuning does not view the first staff")
 	}
+}
+
+func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
+	t.Run("staff fallback", func(t *testing.T) {
+		gpif := strings.Replace(multiStaffFollowedByTrackGPIF,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property></Properties></Staff>`,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property><Property name="CapoFret"><Fret>2</Fret></Property></Properties></Staff>`, 1)
+		song, err := parseGPIF([]byte(gpif))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if song.Tracks[0].Offset != 2 {
+			t.Fatalf("staff capo = %d, want 2", song.Tracks[0].Offset)
+		}
+	})
+
+	t.Run("narrowing boundary", func(t *testing.T) {
+		gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",
+			`<Name>Piano</Name><Properties><Property name="CapoFret"><Fret>2147483648</Fret></Property></Properties>`, 1)
+		if _, err := parseGPIF([]byte(gpif)); err == nil {
+			t.Fatal("parse accepted a capo fret above int32")
+		}
+	})
+
+	t.Run("different staff values", func(t *testing.T) {
+		gpif := strings.Replace(multiStaffFollowedByTrackGPIF,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property></Properties></Staff>`,
+			`<Staff><Properties><Property name="Tuning"><Pitches>40 45</Pitches></Property><Property name="CapoFret"><Fret>2</Fret></Property></Properties></Staff>`, 1)
+		gpif = strings.Replace(gpif,
+			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property></Properties></Staff>`,
+			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
+		result, err := ParseWithOptions(conformanceGPIFArchive(t, gpif), ParseOptions{Strict: true})
+		var strictErr *StrictParseError
+		if !errors.As(err, &strictErr) || result == nil {
+			t.Fatalf("strict parse = %#v, %v, want StrictParseError", result, err)
+		}
+		if !slices.ContainsFunc(result.Diagnostics, func(diagnostic ParseDiagnostic) bool {
+			return diagnostic.Code == "GPIF.Track.CapoFret.StaffConflict"
+		}) {
+			t.Fatalf("diagnostics = %#v, want staff capo conflict", result.Diagnostics)
+		}
+	})
 }
 
 func TestParseGPIFInvalidBarSkipsWholeTrack(t *testing.T) {

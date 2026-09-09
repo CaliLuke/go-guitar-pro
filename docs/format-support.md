@@ -51,12 +51,15 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Staff.Property.CapoFret` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Staff.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Staff.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
+| `GPIF.Staff.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
 | `GPIF.Staff.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
 | `GPIF.Staff.Property.Unknown` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Track.Property.CapoFret` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Track.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Track.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
+| `GPIF.Track.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
+| `GPIF.Track.CapoFret.StaffConflict` | `staff-ownership` | `lossy-projection` | Track.Offset cannot preserve different capo values for individual staves. |
 | `GPIF.Track.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
 | `GPIF.Track.Property.Unknown` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.ScoreCore` | `score-core` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
@@ -221,12 +224,29 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 309 |
-| `normalized` | 10 |
-| `omitted` | 17 |
+| `preserved` | 306 |
+| `normalized` | 11 |
+| `omitted` | 19 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
+
+The following inspected fields have focused behavioral evidence. The assertion states the tested non-default value or limit.
+
+| Field | Disposition | Behavior contract | Assertion |
+| --- | --- | --- | --- |
+| `Track.Offset` | `preserved` | `inspected-track-capo` | A nonzero capo survives GP8 export, Go reimport, and pinned AlphaTab consumption. |
+| `Note.DurationPercent` | `omitted` | `inspected-note-duration-percent` | A non-default duration percentage produces gp8.omit.note-duration-percent and strict export refuses bytes. |
+| `Chord.Barres` | `omitted` | `inspected-chord-barres` | Explicit barre ranges produce gp8.omit.chord-barres and strict export refuses bytes. |
+| `BendEffect.Points` | `normalized` | `inspected-bend-points` | GP8 preserves representable curves with two through four points. Strict export refuses other nonempty shapes and shared-middle-value normalization. |
+
+## GPIF wire inventory
+
+The schema inventory records every decoded GPIF field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.
+
+| Wire role | Fields |
+| --- | --- |
+| `schema` | 223 |
 
 ## Source dispatch inventory
 
@@ -234,7 +254,7 @@ The gate compares these cases with the source switches. Each default has an expl
 
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
-| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `staff-ownership` | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `inspected-track-capo` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
@@ -254,6 +274,16 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditDiagnostics:property.Name` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The audit uses valid MIDI properties when it checks percussion fallbacks. |
 | `isPercussionTrack:t.InstrumentSet.Type` | `percussion-articulations` | 3 | `percussion-identity` | `delegated-to-audit` | Known instrument-set spellings map to one percussion-track value. |
 | `gpifNormalizePercussionArticulation:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | Percussion elements use their authored articulation identity. |
+| `gpifRhythmToDuration:r.NoteValue` | `rhythm` | 8 | `timing-finalization` | `unsupported-feature` | The importer maps each supported GPIF note value to one public duration. |
+| `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `inspected-track-capo` | `delegated-to-audit` | The importer maps the classified capo property to Track.Offset. |
+| `gpifXMLAuditStart:element.Name.Local` | `score-core` | 5 | `unclassified-gpif-wire-field` | `delegated-to-audit` | The XML audit records graph object identifiers for diagnostic locations. |
+| `gpifApplyBeatEffects:p.Direction` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps both supported brush directions. |
+| `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 2 | `timing-finalization` | `delegated-to-audit` | The importer maps the supported master-bar triplet-feel values. |
+| `validateGP8Staff:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The exporter validates percussion articulation MIDI boundaries. |
+| `parseGPIFWithContext:b.GraceNotes` | `grace-relationships` | 2 | `grace-order-preservation` | `unsupported-feature` | The importer preserves supported before-beat and on-beat grace ordering. |
+| `gpifAuditDiagnostics:beat.Fadding` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `unsupported-feature` | The audit classifies each fading value before the importer maps it. |
+| `gpifApplyBeatEffects:b.Ottavia` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps each supported octave-shift value. |
+| `gpifApplyBeatEffects:b.Arpeggio` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps each supported arpeggio direction. |
 
 ## Behavioral contracts
 
@@ -278,3 +308,10 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |
 | `gpif-property-dispatch` | `note-and-beat-semantics` | `TestParseWithOptionsReportsGPIFContentLoss` | `TestAlphaTabInputConformance` | no | Named properties are preserved or produce explicit parse diagnostics. |
 | `master-bar-denominator-boundary` | `rhythm` | `TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries` | `TestAlphaTabInputConformance` | yes | A denominator that exceeds uint16 cannot wrap to a valid value. |
+| `unclassified-semantic-selector` | `grace-relationships` | `TestSemanticContractInventory` | none | yes | A case on any selector switch must receive a source disposition. |
+| `unclassified-gpif-wire-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new decoded GPIF field must receive a source disposition. |
+| `inspected-track-capo` | `staff-ownership` | `TestGP8StrictExportCoversInspectedSemanticFields` | `TestAlphaTabPreservesInspectedCapo` | no | A nonzero capo survives GP8 conversion and independent consumption. |
+| `inspected-note-duration-percent` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | yes | Strict export reports a non-default duration percentage before it emits bytes. |
+| `inspected-chord-barres` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | Strict export reports explicit barre ranges before it emits bytes. |
+| `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
+| `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |

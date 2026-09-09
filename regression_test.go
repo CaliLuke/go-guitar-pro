@@ -112,13 +112,6 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 			kind: ParseDiagnosticInvalidData, feature: "score-core", pathContains: "AssetId",
 		},
 		{
-			name: "unsupported track capo",
-			mutate: func(gpif string) string {
-				return strings.Replace(gpif, "<Staves>", `<Properties><Property name="CapoFret"><Fret>2</Fret></Property></Properties><Staves>`, 1)
-			},
-			kind: ParseDiagnosticUnsupportedFeature, feature: "staff-ownership", pathContains: "CapoFret",
-		},
-		{
 			name: "unknown score element",
 			mutate: func(gpif string) string {
 				return strings.Replace(gpif, "<Score>", "<Score><FutureScoreField/>", 1)
@@ -152,6 +145,34 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 			}
 			if _, compatibilityErr := Parse(data); compatibilityErr != nil {
 				t.Fatalf("legacy Parse rejected permissive input: %v", compatibilityErr)
+			}
+		})
+	}
+}
+
+func TestStrictGPIFParsingRejectsMalformedCapo(t *testing.T) {
+	tests := []struct {
+		name string
+		code string
+		body string
+	}{
+		{name: "missing fret", code: "GPIF.Track.Property.CapoFret.MissingFret", body: `<Property name="CapoFret"/>`},
+		{name: "negative fret", code: "GPIF.Track.Property.CapoFret.Negative", body: `<Property name="CapoFret"><Fret>-1</Fret></Property>`},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			data := diagnosticGP8Fixture(t, func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", "<Properties>"+test.body+"</Properties><Staves>", 1)
+			})
+			result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+			var strictErr *StrictParseError
+			if !errors.As(err, &strictErr) || result == nil {
+				t.Fatalf("strict parse = %#v, %v, want StrictParseError", result, err)
+			}
+			if !slices.ContainsFunc(result.Diagnostics, func(diagnostic ParseDiagnostic) bool {
+				return diagnostic.Code == test.code && diagnostic.Kind == ParseDiagnosticInvalidData
+			}) {
+				t.Fatalf("diagnostics = %#v, want %s", result.Diagnostics, test.code)
 			}
 		})
 	}

@@ -58,6 +58,9 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
+		if track.Offset < 0 {
+			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.Offset)
+		}
 		if track.ChannelIndex < -1 || track.ChannelIndex >= len(song.Channels) {
 			add("score.track.channel-reference", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "channel index %d is outside -1..%d", track.ChannelIndex, len(song.Channels)-1)
 		}
