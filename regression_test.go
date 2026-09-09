@@ -14,6 +14,271 @@ import (
 	"testing"
 )
 
+func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
+	tests := []struct {
+		name         string
+		mutate       func(string) string
+		kind         ParseDiagnosticKind
+		feature      string
+		pathContains string
+	}{
+		{
+			name: "unknown note property",
+			mutate: func(gpif string) string {
+				return insertFirstNoteProperty(t, gpif, `<Property name="FutureTechnique"><Enable/></Property>`)
+			},
+			kind: ParseDiagnosticUnknownSyntax, feature: "note-and-beat-semantics", pathContains: "FutureTechnique",
+		},
+		{
+			name: "known unsupported transpose",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", "<Transpose><Chromatic>2</Chromatic><Octave>1</Octave></Transpose><Staves>", 1)
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "staff-ownership", pathContains: "Transpose",
+		},
+		{
+			name: "unsupported harmonic enum",
+			mutate: func(gpif string) string {
+				return insertFirstNoteProperty(t, gpif, `<Property name="HarmonicType"><HType>FutureHarmonic</HType></Property>`)
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "harmonics", pathContains: "HarmonicType",
+		},
+		{
+			name: "invalid rhythm reference",
+			mutate: func(gpif string) string {
+				return replaceFirstGPIFReference(t, gpif, "<Rhythm ref=\"", "missing-rhythm")
+			},
+			kind: ParseDiagnosticInvalidData, feature: "rhythm", pathContains: "Rhythm",
+		},
+		{
+			name: "unknown note element",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Notes>", "</Note>", "<FutureTechnique/>")
+			},
+			kind: ParseDiagnosticUnknownSyntax, feature: "note-and-beat-semantics", pathContains: "FutureTechnique",
+		},
+		{
+			name: "unknown note attribute",
+			mutate: func(gpif string) string {
+				start := strings.LastIndex(gpif, "<Notes>")
+				if start < 0 {
+					t.Fatal("GPIF has no Notes element")
+				}
+				return gpif[:start] + strings.Replace(gpif[start:], `<Note id="`, `<Note future="x" id="`, 1)
+			},
+			kind: ParseDiagnosticUnknownSyntax, feature: "note-and-beat-semantics", pathContains: "@future",
+		},
+		{
+			name: "unsupported beat wah",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Wah>Open</Wah>")
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "note-and-beat-semantics", pathContains: "Wah",
+		},
+		{
+			name: "invalid beat dynamic",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Dynamic>FutureDynamic</Dynamic>")
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "note-and-beat-semantics", pathContains: "Dynamic",
+		},
+		{
+			name: "invalid pick stroke payload",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Properties><Property name=\"PickStroke\"/></Properties>")
+			},
+			kind: ParseDiagnosticInvalidData, feature: "note-and-beat-semantics", pathContains: "PickStroke",
+		},
+		{
+			name: "recognized whammy property",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Properties><Property name=\"WhammyBar\"><Enable/></Property></Properties>")
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "note-and-beat-semantics", pathContains: "WhammyBar",
+		},
+		{
+			name: "invalid chord reference",
+			mutate: func(gpif string) string {
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Chord>missing-chord</Chord>")
+			},
+			kind: ParseDiagnosticInvalidData, feature: "note-and-beat-semantics", pathContains: "Chord",
+		},
+		{
+			name: "invalid backing asset reference",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<MasterTrack>", "<BackingTrack><AssetId>missing-asset</AssetId></BackingTrack><MasterTrack>", 1)
+			},
+			kind: ParseDiagnosticInvalidData, feature: "score-core", pathContains: "AssetId",
+		},
+		{
+			name: "unsupported track capo",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Staves>", `<Properties><Property name="CapoFret"><Fret>2</Fret></Property></Properties><Staves>`, 1)
+			},
+			kind: ParseDiagnosticUnsupportedFeature, feature: "staff-ownership", pathContains: "CapoFret",
+		},
+		{
+			name: "unknown score element",
+			mutate: func(gpif string) string {
+				return strings.Replace(gpif, "<Score>", "<Score><FutureScoreField/>", 1)
+			},
+			kind: ParseDiagnosticUnknownSyntax, feature: "score-core", pathContains: "FutureScoreField",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			data := diagnosticGP8Fixture(t, test.mutate)
+			result, err := ParseWithOptions(data, ParseOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.Song == nil {
+				t.Fatal("song = nil")
+			}
+			diagnostic := findParseDiagnostic(result.Diagnostics, test.kind, test.feature)
+			if diagnostic == nil {
+				t.Fatalf("diagnostics = %#v, want %s for %s", result.Diagnostics, test.kind, test.feature)
+			}
+			if diagnostic.Format != "GP8" {
+				t.Errorf("diagnostic format = %q, want GP8", diagnostic.Format)
+			}
+			if !strings.Contains(diagnostic.SourcePath, test.pathContains) || diagnostic.Reason == "" {
+				t.Errorf("diagnostic = %#v, want source path containing %q and a reason", diagnostic, test.pathContains)
+			}
+			if diagnostic.Code == "" {
+				t.Errorf("diagnostic = %#v, want stable source code", diagnostic)
+			}
+			if _, compatibilityErr := Parse(data); compatibilityErr != nil {
+				t.Fatalf("legacy Parse rejected permissive input: %v", compatibilityErr)
+			}
+		})
+	}
+}
+
+func TestParseWithOptionsStrictRejectsSelectedLoss(t *testing.T) {
+	data := diagnosticGP8Fixture(t, func(gpif string) string {
+		return insertFirstNoteProperty(t, gpif, `<Property name="FutureTechnique"><Enable/></Property>`)
+	})
+	result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+	var strictErr *StrictParseError
+	if !errors.As(err, &strictErr) {
+		t.Fatalf("error = %v, want StrictParseError", err)
+	}
+	if result == nil || result.Song == nil || len(result.Diagnostics) == 0 {
+		t.Fatalf("strict result = %#v, want parsed song and diagnostics", result)
+	}
+	selected, selectedErr := ParseWithOptions(data, ParseOptions{
+		Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticInvalidData},
+	})
+	if selectedErr != nil {
+		t.Fatalf("strict invalid-data filter rejected unknown syntax: %v", selectedErr)
+	}
+	if selected == nil || len(selected.Diagnostics) == 0 {
+		t.Fatal("selected strict result omitted permissive diagnostics")
+	}
+}
+func TestParseWithOptionsStrictAllowsDeliberateIgnore(t *testing.T) {
+	data := diagnosticGP8Fixture(t, func(gpif string) string {
+		return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", `<Properties><Property name="PrimaryPickupVolume"><Float>0.5</Float></Property></Properties>`)
+	})
+	result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	diagnostic := findParseDiagnostic(result.Diagnostics, ParseDiagnosticDeliberateIgnore, "note-and-beat-semantics")
+	if diagnostic == nil || diagnostic.Code == "" {
+		t.Fatalf("diagnostics = %#v, want coded deliberate ignore", result.Diagnostics)
+	}
+}
+
+func TestParseWithOptionsKeepsSupportedGPIFClean(t *testing.T) {
+	result, err := ParseWithOptions(diagnosticGP8Fixture(t, func(gpif string) string { return gpif }), ParseOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Diagnostics) != 0 {
+		t.Fatalf("diagnostics = %#v, want none", result.Diagnostics)
+	}
+}
+
+func TestParseWithOptionsReportsBinaryOffsets(t *testing.T) {
+	result, err := ParseFileWithOptions("testdata/gp5/other-effects.gp5", ParseOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, diagnostic := range result.Diagnostics {
+		if diagnostic.BinaryOffset == nil {
+			continue
+		}
+		if diagnostic.Format != "GP5" || diagnostic.SourcePath != "" || *diagnostic.BinaryOffset < 0 {
+			t.Fatalf("binary diagnostic = %#v, want GP5 offset without XML path", diagnostic)
+		}
+		if diagnostic.Code == "" {
+			t.Fatalf("binary diagnostic = %#v, want stable source code", diagnostic)
+		}
+		return
+	}
+	t.Fatalf("diagnostics = %#v, want binary offset", result.Diagnostics)
+}
+func diagnosticGP8Fixture(t *testing.T, mutate func(string) string) []byte {
+	t.Helper()
+	data, err := Export(syntheticGP8Song(), ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return rewriteConformanceGPIF(t, data, mutate)
+}
+
+func insertFirstNoteProperty(t *testing.T, gpif, property string) string {
+	t.Helper()
+	start := strings.LastIndex(gpif, "<Notes>")
+	if start < 0 {
+		t.Fatal("GPIF has no Notes element")
+	}
+	suffix := strings.Replace(gpif[start:], "<Properties>", "<Properties>"+property, 1)
+	if suffix == gpif[start:] {
+		t.Fatal("first GPIF note has no Properties element")
+	}
+	return gpif[:start] + suffix
+}
+
+func insertFirstGPIFObjectChild(t *testing.T, gpif, collection, closing, child string) string {
+	t.Helper()
+	start := strings.LastIndex(gpif, collection)
+	if start < 0 {
+		t.Fatalf("GPIF has no %s element", collection)
+	}
+	suffix := strings.Replace(gpif[start:], closing, child+closing, 1)
+	if suffix == gpif[start:] {
+		t.Fatalf("GPIF %s has no %s element", collection, closing)
+	}
+	return gpif[:start] + suffix
+}
+func replaceFirstGPIFReference(t *testing.T, gpif, prefix, replacement string) string {
+	t.Helper()
+	start := strings.Index(gpif, prefix)
+	if start < 0 {
+		t.Fatalf("GPIF has no %q reference", prefix)
+	}
+	valueStart := start + len(prefix)
+	valueEnd := strings.IndexByte(gpif[valueStart:], '"')
+	if valueEnd < 0 {
+		t.Fatalf("GPIF %q reference has no closing quote", prefix)
+	}
+	valueEnd += valueStart
+	return gpif[:valueStart] + replacement + gpif[valueEnd:]
+}
+
+func findParseDiagnostic(diagnostics []ParseDiagnostic, kind ParseDiagnosticKind, feature string) *ParseDiagnostic {
+	for index := range diagnostics {
+		if diagnostics[index].Kind == kind && diagnostics[index].Feature == feature {
+			return &diagnostics[index]
+		}
+	}
+	return nil
+}
+
 func TestDurationTime(t *testing.T) {
 	tests := []struct {
 		name string

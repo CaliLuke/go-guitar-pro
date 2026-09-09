@@ -3,9 +3,14 @@
 package goguitarpro
 
 import (
+	"bytes"
 	"encoding/xml"
+	"errors"
 	"fmt"
+	"io"
 	"math"
+	"reflect"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -170,6 +175,8 @@ type gpifStaff struct {
 type gpifStaffProperty struct {
 	Name    string     `xml:"name,attr"`
 	Pitches string     `xml:"Pitches,omitempty"`
+	Label   string     `xml:"Label,omitempty"`
+	Fret    *int       `xml:"Fret,omitempty"`
 	Items   *gpifItems `xml:"Items,omitempty"`
 }
 
@@ -185,15 +192,32 @@ type gpifItem struct {
 }
 
 type gpifDiagram struct {
-	StringCount int               `xml:"stringCount,attr,omitempty"`
-	FretCount   int               `xml:"fretCount,attr,omitempty"`
-	BaseFret    int               `xml:"baseFret,attr,omitempty"`
-	Frets       []gpifDiagramFret `xml:"Fret"`
+	StringCount int                   `xml:"stringCount,attr,omitempty"`
+	FretCount   int                   `xml:"fretCount,attr,omitempty"`
+	BaseFret    int                   `xml:"baseFret,attr,omitempty"`
+	Frets       []gpifDiagramFret     `xml:"Fret"`
+	Fingering   *gpifDiagramFingering `xml:"Fingering,omitempty"`
+	Properties  []gpifDiagramProperty `xml:"Property"`
 }
 
 type gpifDiagramFret struct {
 	String int `xml:"string,attr"`
 	Fret   int `xml:"fret,attr"`
+}
+
+type gpifDiagramFingering struct {
+	Positions []gpifDiagramPosition `xml:"Position"`
+}
+
+type gpifDiagramPosition struct {
+	Fret   int    `xml:"fret,attr"`
+	Finger string `xml:"finger,attr"`
+}
+
+type gpifDiagramProperty struct {
+	Name  string `xml:"name,attr"`
+	Type  string `xml:"type,attr"`
+	Value string `xml:"value,attr"`
 }
 
 type gpifInstrumentSet struct {
@@ -491,10 +515,26 @@ type gpifTuplet struct {
 
 // parseGPIF parses a GPIF (Guitar Pro Interchange Format) XML document into a Song.
 func parseGPIF(data []byte) (*Song, error) {
+	return parseGPIFWithContext(data, nil)
+}
+
+func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
+	if err := gpifAuditXML(data, context); err != nil {
+		return nil, fmt.Errorf("parsing GPIF XML: %w", err)
+	}
 	var doc gpifDocument
 	if err := xml.Unmarshal(data, &doc); err != nil {
 		return nil, fmt.Errorf("parsing GPIF XML: %w", err)
 	}
+	if context != nil && context.format != "GP6" {
+		switch {
+		case strings.HasPrefix(doc.GPVersion, "7"):
+			context.setFormat("GP7")
+		case strings.HasPrefix(doc.GPVersion, "8"):
+			context.setFormat("GP8")
+		}
+	}
+	gpifAuditDiagnostics(doc, context)
 
 	song := &Song{
 		Tempo:     120,
@@ -841,6 +881,633 @@ func parseGPIF(data []byte) (*Song, error) {
 	song.finalizeTiming()
 
 	return song, nil
+}
+
+type gpifXMLSchemaNode struct {
+	children   map[string]*gpifXMLSchemaNode
+	attributes map[string]struct{}
+}
+
+var gpifXMLSchema = gpifBuildXMLSchema()
+
+func gpifBuildXMLSchema() *gpifXMLSchemaNode {
+	root := &gpifXMLSchemaNode{children: make(map[string]*gpifXMLSchemaNode)}
+	document := &gpifXMLSchemaNode{}
+	root.children["GPIF"] = document
+	gpifPopulateXMLSchema(document, reflect.TypeOf(gpifDocument{}))
+	return root
+}
+
+func gpifPopulateXMLSchema(node *gpifXMLSchemaNode, valueType reflect.Type) {
+	for valueType.Kind() == reflect.Pointer || valueType.Kind() == reflect.Slice {
+		valueType = valueType.Elem()
+	}
+	if valueType.Kind() != reflect.Struct || valueType == reflect.TypeOf(xml.Name{}) {
+		return
+	}
+	for fieldIndex := range valueType.NumField() {
+		field := valueType.Field(fieldIndex)
+		tag := field.Tag.Get("xml")
+		if tag == "-" || field.Type == reflect.TypeOf(xml.Name{}) {
+			continue
+		}
+		parts := strings.Split(tag, ",")
+		name := parts[0]
+		if name == "" {
+			name = field.Name
+		}
+		if slices.Contains(parts[1:], "attr") {
+			if node.attributes == nil {
+				node.attributes = make(map[string]struct{})
+			}
+			node.attributes[name] = struct{}{}
+			continue
+		}
+		if slices.Contains(parts[1:], "chardata") || slices.Contains(parts[1:], "innerxml") {
+			continue
+		}
+		current := node
+		path := strings.Split(name, ">")
+		for _, element := range path {
+			if current.children == nil {
+				current.children = make(map[string]*gpifXMLSchemaNode)
+			}
+			child := current.children[element]
+			if child == nil {
+				child = &gpifXMLSchemaNode{}
+				current.children[element] = child
+			}
+			current = child
+		}
+		gpifPopulateXMLSchema(current, field.Type)
+	}
+}
+
+type gpifXMLAuditFrame struct {
+	schema   *gpifXMLSchemaNode
+	path     string
+	location ParseLocation
+	objectID string
+	unknown  bool
+}
+
+func gpifAuditXML(data []byte, context *parseContext) error {
+	if context == nil {
+		return nil
+	}
+	decoder := xml.NewDecoder(bytes.NewReader(data))
+	stack := []gpifXMLAuditFrame{{schema: gpifXMLSchema}}
+	for {
+		token, err := decoder.Token()
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		switch value := token.(type) {
+		case xml.StartElement:
+			parent := stack[len(stack)-1]
+			frame := gpifXMLAuditStart(context, parent, value)
+			stack = append(stack, frame)
+		case xml.EndElement:
+			stack = stack[:len(stack)-1]
+		}
+	}
+}
+
+func gpifXMLAuditStart(context *parseContext, parent gpifXMLAuditFrame, element xml.StartElement) gpifXMLAuditFrame {
+	path := parent.path + "/" + element.Name.Local
+	location := parent.location
+	objectID := parent.objectID
+	for _, attribute := range element.Attr {
+		if attribute.Name.Local != "id" {
+			continue
+		}
+		objectID = attribute.Value
+		switch element.Name.Local {
+		case "Track":
+			location.TrackID = attribute.Value
+		case "Bar":
+			location.BarID = attribute.Value
+		case "Voice":
+			location.VoiceID = attribute.Value
+		case "Beat":
+			location.BeatID = attribute.Value
+		case "Note":
+			location.NoteID = attribute.Value
+		}
+		path += fmt.Sprintf("[@id=%q]", attribute.Value)
+		break
+	}
+	if element.Name.Local == "Property" {
+		for _, attribute := range element.Attr {
+			if attribute.Name.Local == "name" {
+				path += fmt.Sprintf("[@name=%q]", attribute.Value)
+				break
+			}
+		}
+	}
+
+	frame := gpifXMLAuditFrame{path: path, location: location, objectID: objectID, unknown: parent.unknown}
+	if !parent.unknown && parent.schema != nil {
+		frame.schema = parent.schema.children[element.Name.Local]
+		if frame.schema == nil {
+			frame.unknown = true
+			feature := gpifDiagnosticFeature(path)
+			source := diagnosticSource("GPIF.UnknownElement.NoteAndBeat", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax)
+			switch feature {
+			case "rhythm":
+				source = diagnosticSource("GPIF.UnknownElement.Rhythm", "rhythm", ParseDiagnosticUnknownSyntax)
+			case "staff-ownership":
+				source = diagnosticSource("GPIF.UnknownElement.StaffOwnership", "staff-ownership", ParseDiagnosticUnknownSyntax)
+			case "score-core":
+				source = diagnosticSource("GPIF.UnknownElement.ScoreCore", "score-core", ParseDiagnosticUnknownSyntax)
+			}
+			context.add(source, ParseDiagnostic{
+				Kind: ParseDiagnosticUnknownSyntax, SourcePath: path, ObjectID: objectID,
+				Location: location, Feature: feature,
+				Reason: fmt.Sprintf("unknown GPIF element %q", element.Name.Local),
+			})
+		}
+	}
+	if frame.schema != nil && !frame.unknown {
+		for _, attribute := range element.Attr {
+			if attribute.Name.Space == "xmlns" || attribute.Name.Local == "xmlns" {
+				continue
+			}
+			if _, exists := frame.schema.attributes[attribute.Name.Local]; !exists {
+				feature := gpifDiagnosticFeature(path)
+				source := diagnosticSource("GPIF.UnknownAttribute.NoteAndBeat", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax)
+				switch feature {
+				case "rhythm":
+					source = diagnosticSource("GPIF.UnknownAttribute.Rhythm", "rhythm", ParseDiagnosticUnknownSyntax)
+				case "staff-ownership":
+					source = diagnosticSource("GPIF.UnknownAttribute.StaffOwnership", "staff-ownership", ParseDiagnosticUnknownSyntax)
+				case "score-core":
+					source = diagnosticSource("GPIF.UnknownAttribute.ScoreCore", "score-core", ParseDiagnosticUnknownSyntax)
+				}
+				context.add(source, ParseDiagnostic{
+					Kind: ParseDiagnosticUnknownSyntax, SourcePath: path + "/@" + attribute.Name.Local,
+					ObjectID: objectID, Location: location, Feature: feature,
+					Reason: fmt.Sprintf("unknown GPIF attribute %q", attribute.Name.Local),
+				})
+			}
+		}
+	}
+	return frame
+}
+
+func gpifDiagnosticFeature(path string) string {
+	switch {
+	case strings.Contains(path, "/Rhythms/") || strings.HasSuffix(path, "/Rhythm"):
+		return "rhythm"
+	case strings.Contains(path, "/Diagram") || strings.Contains(path, "/Chord"):
+		return "note-and-beat-semantics"
+	case strings.Contains(path, "/Tracks/") || strings.Contains(path, "/Bars/") || strings.Contains(path, "/MasterBars/"):
+		return "staff-ownership"
+	case path == "/GPIF" || strings.Contains(path, "/Score") || strings.Contains(path, "/MasterTrack") || strings.Contains(path, "/Assets") || strings.Contains(path, "/BackingTrack"):
+		return "score-core"
+	default:
+		return "note-and-beat-semantics"
+	}
+}
+
+func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
+	if context == nil {
+		return
+	}
+
+	for _, track := range doc.Tracks.Tracks {
+		path := gpifObjectPath("Tracks/Track", track.ID)
+		if track.Transpose != nil {
+			context.add(diagnosticSource("GPIF.Track.Transpose", "staff-ownership", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path + "/Transpose",
+				ObjectID: track.ID, Location: ParseLocation{TrackID: track.ID}, Feature: "staff-ownership",
+				Reason: "track transposition has no destination in Song",
+			})
+		}
+		for propertyIndex, property := range track.Properties {
+			gpifAuditTrackProperty(context, track.ID, fmt.Sprintf("%s/Properties/Property[%d]", path, propertyIndex), property)
+		}
+		for staffIndex, staff := range track.Staves.Staff {
+			for propertyIndex, property := range staff.Properties {
+				propertyPath := fmt.Sprintf("%s/Staves/Staff[%d]/Properties/Property[%d]", path, staffIndex, propertyIndex)
+				gpifAuditStaffProperty(context, track.ID, propertyPath, property)
+			}
+		}
+	}
+
+	for _, note := range doc.Notes.Notes {
+		path := gpifObjectPath("Notes/Note", note.ID)
+		for _, property := range note.Properties.Properties {
+			gpifAuditNoteProperty(context, note.ID, path, property)
+		}
+		if note.Vibrato != "" && note.Vibrato != "None" {
+			context.add(diagnosticSource("GPIF.Note.Vibrato", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
+				Kind: ParseDiagnosticLossyProjection, SourcePath: path + "/Vibrato", ObjectID: note.ID,
+				Location: ParseLocation{NoteID: note.ID}, Feature: "note-and-beat-semantics",
+				Reason: "Song represents typed note vibrato as a boolean",
+			})
+		}
+	}
+
+	for _, beat := range doc.Beats.Beats {
+		path := gpifObjectPath("Beats/Beat", beat.ID)
+		for _, property := range beat.Properties.Properties {
+			gpifAuditBeatProperty(context, beat.ID, path, property)
+		}
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.GraceNotes.InvalidValue", "grace-relationships", ParseDiagnosticUnsupportedFeature), beat.GraceNotes, []string{"", "OnBeat", "BeforeBeat"}, path+"/GraceNotes", beat.ID, "grace-relationships")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Arpeggio.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Arpeggio, []string{"", "Up", "Down"}, path+"/Arpeggio", beat.ID, "note-and-beat-semantics")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Hairpin.InvalidValue", "hairpins", ParseDiagnosticUnsupportedFeature), beat.Hairpin, []string{"", "Crescendo", "Decrescendo", "Diminuendo"}, path+"/Hairpin", beat.ID, "hairpins")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Ottavia.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Ottavia, []string{"", "8va", "8vb", "15ma", "15mb"}, path+"/Ottavia", beat.ID, "note-and-beat-semantics")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Tremolo.InvalidValue", "tremolo-picking", ParseDiagnosticUnsupportedFeature), beat.Tremolo, []string{"", "1/2", "1/4", "1/8"}, path+"/Tremolo", beat.ID, "tremolo-picking")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Dynamic.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Dynamic, []string{"", "PPP", "PP", "P", "MP", "MF", "F", "FF", "FFF"}, path+"/Dynamic", beat.ID, "note-and-beat-semantics")
+		if beat.Wah != "" {
+			context.add(diagnosticSource("GPIF.Beat.Wah", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path + "/Wah", ObjectID: beat.ID,
+				Location: ParseLocation{BeatID: beat.ID}, Feature: "note-and-beat-semantics",
+				Reason: "beat wah has no destination in Song",
+			})
+		}
+		switch beat.Fadding {
+		case "", "FadeIn":
+		case "FadeOut", "VolumeSwell":
+			context.add(diagnosticSource("GPIF.Beat.Fadding.Lossy", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
+				Kind: ParseDiagnosticLossyProjection, SourcePath: path + "/Fadding", ObjectID: beat.ID,
+				Location: ParseLocation{BeatID: beat.ID}, Feature: "note-and-beat-semantics",
+				Reason: "Song combines fade-out and volume-swell values into FadeIn",
+			})
+		default:
+			gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Fadding.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Fadding, []string{"", "FadeIn", "FadeOut", "VolumeSwell"}, path+"/Fadding", beat.ID, "note-and-beat-semantics")
+		}
+	}
+
+	for _, rhythm := range doc.Rhythms.Rhythms {
+		gpifAuditEnum(context, diagnosticSource("GPIF.Rhythm.NoteValue.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), rhythm.NoteValue, []string{"Whole", "Half", "Quarter", "Eighth", "16th", "32nd", "64th", "128th"}, gpifObjectPath("Rhythms/Rhythm", rhythm.ID)+"/NoteValue", rhythm.ID, "rhythm")
+	}
+	for index, masterBar := range doc.MasterBars.MasterBars {
+		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
+	}
+
+	gpifAuditReferences(doc, context)
+}
+func gpifAuditTrackProperty(context *parseContext, trackID, path string, property gpifStaffProperty) {
+	gpifAuditOwnedStaffProperty(
+		context, trackID, path, property, "track",
+		diagnosticSource("GPIF.Track.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
+		diagnosticSource("GPIF.Track.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Track.Property.CapoFret", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Track.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
+	)
+}
+
+func gpifAuditStaffProperty(context *parseContext, trackID, path string, property gpifStaffProperty) {
+	gpifAuditOwnedStaffProperty(
+		context, trackID, path, property, "staff",
+		diagnosticSource("GPIF.Staff.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
+		diagnosticSource("GPIF.Staff.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Staff.Property.CapoFret", "staff-ownership", ParseDiagnosticUnsupportedFeature),
+		diagnosticSource("GPIF.Staff.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
+	)
+}
+
+func gpifAuditOwnedStaffProperty(
+	context *parseContext,
+	trackID, path string,
+	property gpifStaffProperty,
+	owner string,
+	tuningMissingSource, tuningLabelSource, capoSource, unknownSource parseDiagnosticSource,
+) {
+	propertyPath := fmt.Sprintf("%s[@name=%q]", path, property.Name)
+	switch property.Name {
+	case "Tuning":
+		if property.Pitches == "" {
+			context.add(tuningMissingSource, ParseDiagnostic{
+				SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+				Reason: owner + " tuning property has no pitches",
+			})
+		}
+		if property.Label != "" {
+			context.add(tuningLabelSource, ParseDiagnostic{
+				SourcePath: propertyPath + "/Label", ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+				Reason: "Song has no tuning label destination",
+			})
+		}
+	case "DiagramCollection", "ChordCollection":
+		return
+	case "CapoFret":
+		context.add(capoSource, ParseDiagnostic{
+			SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+			Reason: "Staff has no capo destination",
+		})
+	default:
+		context.add(unknownSource, ParseDiagnostic{
+			SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
+			Reason: fmt.Sprintf("unknown GPIF %s property %q", owner, property.Name),
+		})
+	}
+}
+
+var gpifNotePropertySources = map[string]parseDiagnosticSource{
+	"BendOriginOffset":      diagnosticSource("GPIF.Note.Property.BendOriginOffset.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendOriginValue":       diagnosticSource("GPIF.Note.Property.BendOriginValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendMiddleOffset1":     diagnosticSource("GPIF.Note.Property.BendMiddleOffset1.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendMiddleOffset2":     diagnosticSource("GPIF.Note.Property.BendMiddleOffset2.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendMiddleValue":       diagnosticSource("GPIF.Note.Property.BendMiddleValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendDestinationOffset": diagnosticSource("GPIF.Note.Property.BendDestinationOffset.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BendDestinationValue":  diagnosticSource("GPIF.Note.Property.BendDestinationValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Tapped":                diagnosticSource("GPIF.Note.Property.Tapped", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
+	"HopoOrigin":            diagnosticSource("GPIF.Note.Property.HopoOrigin", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
+	"HopoDestination":       diagnosticSource("GPIF.Note.Property.HopoDestination", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
+	"LeftHandTapped":        diagnosticSource("GPIF.Note.Property.LeftHandTapped", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
+	"Element":               diagnosticSource("GPIF.Note.Property.Element", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
+	"Variation":             diagnosticSource("GPIF.Note.Property.Variation", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
+	"ConcertPitch":          diagnosticSource("GPIF.Note.Property.ConcertPitch", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"TransposedPitch":       diagnosticSource("GPIF.Note.Property.TransposedPitch", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Tone":                  diagnosticSource("GPIF.Note.Property.Tone", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Octave":                diagnosticSource("GPIF.Note.Property.Octave", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+}
+
+var gpifBeatPropertySources = map[string]parseDiagnosticSource{
+	"PrimaryPickupVolume":         diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"PrimaryPickupTone":           diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"WhammyBar":                   diagnosticSource("GPIF.Beat.Property.WhammyBar", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarExtend":             diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarOriginValue":        diagnosticSource("GPIF.Beat.Property.WhammyBarOriginValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarOriginOffset":       diagnosticSource("GPIF.Beat.Property.WhammyBarOriginOffset", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarMiddleValue":        diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarMiddleOffset1":      diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleOffset1", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarMiddleOffset2":      diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleOffset2", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarDestinationValue":   diagnosticSource("GPIF.Beat.Property.WhammyBarDestinationValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarDestinationOffset":  diagnosticSource("GPIF.Beat.Property.WhammyBarDestinationOffset", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"BarreFret":                   diagnosticSource("GPIF.Beat.Property.BarreFret", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"BarreString":                 diagnosticSource("GPIF.Beat.Property.BarreString", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Brush.MissingDirection":      diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"PickStroke.MissingDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Brush.InvalidDirection":      diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"PickStroke.InvalidDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Slapped.MissingEnable":       diagnosticSource("GPIF.Beat.Property.Slapped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Popped.MissingEnable":        diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+}
+
+func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty) {
+	propertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)
+	switch property.Name {
+	case "Fret":
+		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Fret.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData), property.Fret != nil, propertyPath, noteID, "note-and-beat-semantics", "Fret")
+	case "String":
+		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.String.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData), property.String != nil, propertyPath, noteID, "note-and-beat-semantics", "String")
+	case "Midi":
+		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Midi.MissingPayload", "percussion-articulations", ParseDiagnosticInvalidData), property.Number != nil, propertyPath, noteID, "percussion-articulations", "Number")
+	case "BendOriginOffset", "BendOriginValue", "BendMiddleOffset1", "BendMiddleOffset2", "BendMiddleValue", "BendDestinationOffset", "BendDestinationValue":
+		gpifAuditPropertyPayload(context, gpifNotePropertySources[property.Name], property.Float != nil, propertyPath, noteID, "note-and-beat-semantics", "Float")
+	case "Slide":
+		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.Slide.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData), property.Flags != nil, propertyPath, noteID, "note-and-beat-semantics", "Flags")
+	case "Muted", "Bended", "PalmMuted", "Harmonic", "ShowStringNumber":
+		return
+	case "Tapped", "HopoOrigin", "HopoDestination", "LeftHandTapped":
+		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
+			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
+			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
+			Reason: "Song combines authored hammer and tapping relationships into Hammer",
+		})
+	case "HarmonicType":
+		if property.HType == nil {
+			gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.HarmonicType.MissingPayload", "harmonics", ParseDiagnosticInvalidData), false, propertyPath, noteID, "harmonics", "HType")
+			return
+		}
+		switch *property.HType {
+		case "NoHarmonic", "Natural", "Artificial", "Pinch", "Tap", "Semi":
+			return
+		case "Feedback":
+			context.add(diagnosticSource("GPIF.Note.Property.HarmonicType.Feedback", "harmonics", ParseDiagnosticLossyProjection), ParseDiagnostic{
+				Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
+				Location: ParseLocation{NoteID: noteID}, Feature: "harmonics",
+				Reason: "Song combines feedback and semi harmonics",
+			})
+		default:
+			context.add(diagnosticSource("GPIF.Note.Property.HarmonicType.Unsupported", "harmonics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
+				Location: ParseLocation{NoteID: noteID}, Feature: "harmonics",
+				Reason: fmt.Sprintf("unsupported harmonic type %q", *property.HType),
+			})
+		}
+	case "HarmonicFret":
+		gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.HarmonicFret.MissingPayload", "harmonics", ParseDiagnosticInvalidData), property.HFret != nil || property.Float != nil, propertyPath, noteID, "harmonics", "HFret or Float")
+	case "Element", "Variation":
+		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
+			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
+			Location: ParseLocation{NoteID: noteID}, Feature: "percussion-articulations",
+			Reason: fmt.Sprintf("recognized GPIF percussion property %q has no destination in Song", property.Name),
+		})
+	case "ConcertPitch", "TransposedPitch", "Tone", "Octave":
+		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
+			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
+			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
+			Reason: fmt.Sprintf("recognized GPIF pitch property %q has no destination in Song", property.Name),
+		})
+	default:
+		context.add(diagnosticSource("GPIF.Note.Property.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+			Kind: ParseDiagnosticUnknownSyntax, SourcePath: propertyPath, ObjectID: noteID,
+			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
+			Reason: fmt.Sprintf("unknown GPIF note property %q", property.Name),
+		})
+	}
+}
+
+func gpifAuditPropertyPayload(context *parseContext, source parseDiagnosticSource, present bool, path, objectID, feature, payload string) {
+	if present {
+		return
+	}
+	context.add(source, ParseDiagnostic{
+		Kind: ParseDiagnosticInvalidData, SourcePath: path, ObjectID: objectID,
+		Feature: feature, Reason: fmt.Sprintf("GPIF property has no %s payload", payload),
+	})
+}
+
+func gpifAuditBeatProperty(context *parseContext, beatID, path string, property gpifProperty) {
+	propertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)
+	switch property.Name {
+	case "Brush", "PickStroke":
+		if property.Direction == nil {
+			gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingDirection"], false, propertyPath, beatID, "note-and-beat-semantics", "Direction")
+			return
+		}
+		gpifAuditEnum(context, gpifBeatPropertySources[property.Name+".InvalidDirection"], *property.Direction, []string{"Up", "Down"}, propertyPath+"/Direction", beatID, "note-and-beat-semantics")
+	case "Slapped", "Popped":
+		gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingEnable"], property.Enable != nil, propertyPath, beatID, "note-and-beat-semantics", "Enable")
+	case "VibratoWTremBar":
+		context.add(diagnosticSource("GPIF.Beat.Property.VibratoWTremBar", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
+			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: beatID,
+			Location: ParseLocation{BeatID: beatID}, Feature: "note-and-beat-semantics",
+			Reason: "Song represents typed beat vibrato as a boolean",
+		})
+	case "PrimaryPickupVolume", "PrimaryPickupTone":
+		context.add(gpifBeatPropertySources[property.Name], ParseDiagnostic{
+			SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
+			Reason: "primary pickup playback metadata is intentionally outside the notation-focused Song model",
+		})
+		return
+	case "WhammyBar", "WhammyBarExtend", "WhammyBarOriginValue", "WhammyBarOriginOffset", "WhammyBarMiddleValue", "WhammyBarMiddleOffset1", "WhammyBarMiddleOffset2", "WhammyBarDestinationValue", "WhammyBarDestinationOffset":
+		gpifAuditUnsupportedBeatProperty(context, gpifBeatPropertySources[property.Name], beatID, propertyPath, property.Name)
+	case "BarreFret", "BarreString":
+		gpifAuditUnsupportedBeatProperty(context, gpifBeatPropertySources[property.Name], beatID, propertyPath, property.Name)
+	case "Rasgueado":
+		gpifAuditUnsupportedBeatProperty(context, diagnosticSource("GPIF.Beat.Property.Rasgueado", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beatID, propertyPath, property.Name)
+	default:
+		context.add(diagnosticSource("GPIF.Beat.Property.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
+			Kind: ParseDiagnosticUnknownSyntax, SourcePath: propertyPath, ObjectID: beatID,
+			Location: ParseLocation{BeatID: beatID}, Feature: "note-and-beat-semantics",
+			Reason: fmt.Sprintf("unknown GPIF beat property %q", property.Name),
+		})
+	}
+}
+
+func gpifAuditUnsupportedBeatProperty(context *parseContext, source parseDiagnosticSource, beatID, path, name string) {
+	context.add(source, ParseDiagnostic{
+		Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path, ObjectID: beatID,
+		Location: ParseLocation{BeatID: beatID}, Feature: "note-and-beat-semantics",
+		Reason: fmt.Sprintf("recognized GPIF beat property %q has no lossless Song destination", name),
+	})
+}
+func gpifAuditEnum(context *parseContext, source parseDiagnosticSource, value string, allowed []string, path, objectID, feature string) {
+	for _, candidate := range allowed {
+		if value == candidate {
+			return
+		}
+	}
+	context.add(source, ParseDiagnostic{
+		Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path, ObjectID: objectID,
+		Feature: feature, Reason: fmt.Sprintf("unsupported GPIF value %q", value),
+	})
+}
+func gpifObjectPath(collection, id string) string {
+	return fmt.Sprintf("/GPIF/%s[@id=%q]", collection, id)
+}
+
+func gpifAuditReferences(doc gpifDocument, context *parseContext) {
+	tracks := make(map[string]struct{}, len(doc.Tracks.Tracks))
+	chords := make(map[string]struct{})
+	for _, track := range doc.Tracks.Tracks {
+		trackPath := gpifObjectPath("Tracks/Track", track.ID)
+		gpifAddID(context, diagnosticSource("GPIF.Track.EmptyID", "staff-ownership", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Track.DuplicateID", "staff-ownership", ParseDiagnosticInvalidData), tracks, track.ID, trackPath, "staff-ownership")
+		gpifAuditChordIDs(context, chords, track.Properties, trackPath+"/Properties")
+		for staffIndex, staff := range track.Staves.Staff {
+			path := fmt.Sprintf("%s/Staves/Staff[%d]/Properties", trackPath, staffIndex)
+			gpifAuditChordIDs(context, chords, staff.Properties, path)
+		}
+	}
+	bars := make(map[string]struct{}, len(doc.Bars.Bars))
+	for _, bar := range doc.Bars.Bars {
+		gpifAddID(context, diagnosticSource("GPIF.Bar.EmptyID", "staff-ownership", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Bar.DuplicateID", "staff-ownership", ParseDiagnosticInvalidData), bars, bar.ID, gpifObjectPath("Bars/Bar", bar.ID), "staff-ownership")
+	}
+	voices := make(map[string]struct{}, len(doc.Voices.Voices))
+	for _, voice := range doc.Voices.Voices {
+		gpifAddID(context, diagnosticSource("GPIF.Voice.EmptyID", "note-and-beat-semantics", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Voice.DuplicateID", "note-and-beat-semantics", ParseDiagnosticInvalidData), voices, voice.ID, gpifObjectPath("Voices/Voice", voice.ID), "note-and-beat-semantics")
+	}
+	beats := make(map[string]struct{}, len(doc.Beats.Beats))
+	for _, beat := range doc.Beats.Beats {
+		gpifAddID(context, diagnosticSource("GPIF.Beat.EmptyID", "note-and-beat-semantics", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Beat.DuplicateID", "note-and-beat-semantics", ParseDiagnosticInvalidData), beats, beat.ID, gpifObjectPath("Beats/Beat", beat.ID), "note-and-beat-semantics")
+	}
+	notes := make(map[string]struct{}, len(doc.Notes.Notes))
+	for _, note := range doc.Notes.Notes {
+		gpifAddID(context, diagnosticSource("GPIF.Note.EmptyID", "note-and-beat-semantics", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Note.DuplicateID", "note-and-beat-semantics", ParseDiagnosticInvalidData), notes, note.ID, gpifObjectPath("Notes/Note", note.ID), "note-and-beat-semantics")
+	}
+	rhythms := make(map[string]struct{}, len(doc.Rhythms.Rhythms))
+	for _, rhythm := range doc.Rhythms.Rhythms {
+		gpifAddID(context, diagnosticSource("GPIF.Rhythm.EmptyID", "rhythm", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Rhythm.DuplicateID", "rhythm", ParseDiagnosticInvalidData), rhythms, rhythm.ID, gpifObjectPath("Rhythms/Rhythm", rhythm.ID), "rhythm")
+	}
+	assets := make(map[string]struct{}, len(doc.Assets.Assets))
+	for _, asset := range doc.Assets.Assets {
+		gpifAddID(context, diagnosticSource("GPIF.Asset.EmptyID", "score-core", ParseDiagnosticInvalidData), diagnosticSource("GPIF.Asset.DuplicateID", "score-core", ParseDiagnosticInvalidData), assets, asset.ID, gpifObjectPath("Assets/Asset", asset.ID), "score-core")
+	}
+
+	gpifAuditReferenceList(context, diagnosticSource("GPIF.MasterTrack.Tracks.Reference", "staff-ownership", ParseDiagnosticInvalidData), splitIDs(doc.MasterTrack.Tracks), tracks, "/GPIF/MasterTrack/Tracks", "", ParseLocation{}, "staff-ownership")
+	for index, masterBar := range doc.MasterBars.MasterBars {
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.MasterBar.Bars.Reference", "staff-ownership", ParseDiagnosticInvalidData), splitIDs(masterBar.Bars), bars, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Bars", index), "", ParseLocation{}, "staff-ownership")
+	}
+	for _, bar := range doc.Bars.Bars {
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.Bar.Voices.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(bar.Voices), voices, gpifObjectPath("Bars/Bar", bar.ID)+"/Voices", bar.ID, ParseLocation{BarID: bar.ID}, "note-and-beat-semantics")
+	}
+	for _, voice := range doc.Voices.Voices {
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.Voice.Beats.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(voice.Beats), beats, gpifObjectPath("Voices/Voice", voice.ID)+"/Beats", voice.ID, ParseLocation{VoiceID: voice.ID}, "note-and-beat-semantics")
+	}
+	for _, beat := range doc.Beats.Beats {
+		location := ParseLocation{BeatID: beat.ID}
+		path := gpifObjectPath("Beats/Beat", beat.ID)
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Notes.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), splitIDs(beat.Notes), notes, path+"/Notes", beat.ID, location, "note-and-beat-semantics")
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Rhythm.Reference", "rhythm", ParseDiagnosticInvalidData), []string{beat.Rhythm.Ref}, rhythms, path+"/Rhythm", beat.ID, location, "rhythm")
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.Beat.Chord.Reference", "note-and-beat-semantics", ParseDiagnosticInvalidData), []string{beat.Chord}, chords, path+"/Chord", beat.ID, location, "note-and-beat-semantics")
+	}
+	if doc.BackingTrack != nil {
+		gpifAuditReferenceList(context, diagnosticSource("GPIF.BackingTrack.AssetId.Reference", "score-core", ParseDiagnosticInvalidData), []string{doc.BackingTrack.AssetID}, assets, "/GPIF/BackingTrack/AssetId", "", ParseLocation{}, "score-core")
+	}
+}
+
+var gpifDiagramPropertySources = map[string]parseDiagnosticSource{
+	"ShowName":      diagnosticSource("GPIF.Chord.Diagram.Property.ShowName", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"ShowDiagram":   diagnosticSource("GPIF.Chord.Diagram.Property.ShowDiagram", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"ShowFingering": diagnosticSource("GPIF.Chord.Diagram.Property.ShowFingering", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+}
+
+func gpifAuditChordIDs(context *parseContext, chords map[string]struct{}, properties []gpifStaffProperty, path string) {
+	for propertyIndex, property := range properties {
+		if property.Items == nil || (property.Name != "DiagramCollection" && property.Name != "ChordCollection") {
+			continue
+		}
+		for itemIndex, item := range property.Items.Items {
+			itemPath := fmt.Sprintf("%s/Property[%d]/Items/Item[%d]", path, propertyIndex, itemIndex)
+			gpifAddID(context,
+				diagnosticSource("GPIF.ChordDefinition.EmptyID", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+				diagnosticSource("GPIF.ChordDefinition.DuplicateID", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+				chords, item.ID, itemPath, "note-and-beat-semantics")
+			if item.Diagram == nil {
+				continue
+			}
+			if item.Diagram.Fingering != nil {
+				context.add(diagnosticSource("GPIF.Chord.Diagram.Fingering", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
+					SourcePath: itemPath + "/Diagram/Fingering", ObjectID: item.ID,
+					Reason: "Chord does not preserve GPIF diagram finger positions",
+				})
+			}
+			for diagramPropertyIndex, diagramProperty := range item.Diagram.Properties {
+				propertyPath := fmt.Sprintf("%s/Diagram/Property[%d][@name=%q]", itemPath, diagramPropertyIndex, diagramProperty.Name)
+				source, known := gpifDiagramPropertySources[diagramProperty.Name]
+				if !known {
+					source = diagnosticSource("GPIF.Chord.Diagram.Property.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax)
+				}
+				context.add(source, ParseDiagnostic{
+					SourcePath: propertyPath, ObjectID: item.ID,
+					Reason: fmt.Sprintf("Chord does not preserve GPIF diagram property %q", diagramProperty.Name),
+				})
+			}
+		}
+	}
+}
+func gpifAddID(context *parseContext, emptySource, duplicateSource parseDiagnosticSource, ids map[string]struct{}, id, path, feature string) {
+	if id == "" {
+		context.add(emptySource, ParseDiagnostic{Kind: ParseDiagnosticInvalidData, SourcePath: path, Feature: feature, Reason: "GPIF object has an empty ID"})
+		return
+	}
+	if _, exists := ids[id]; exists {
+		context.add(duplicateSource, ParseDiagnostic{Kind: ParseDiagnosticInvalidData, SourcePath: path, ObjectID: id, Feature: feature, Reason: fmt.Sprintf("duplicate GPIF object ID %q", id)})
+	}
+	ids[id] = struct{}{}
+}
+
+func gpifAuditReferenceList(context *parseContext, source parseDiagnosticSource, references []string, targets map[string]struct{}, path, objectID string, location ParseLocation, feature string) {
+	for _, reference := range references {
+		if reference == "" || reference == "-1" {
+			continue
+		}
+		if _, exists := targets[reference]; !exists {
+			context.add(source, ParseDiagnostic{
+				Kind: ParseDiagnosticInvalidData, SourcePath: path, ObjectID: objectID, Location: location,
+				Feature: feature, Reason: fmt.Sprintf("GPIF reference %q does not exist", reference),
+			})
+		}
+	}
 }
 
 type gpifPendingGrace struct {

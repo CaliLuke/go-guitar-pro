@@ -45,6 +45,66 @@ for (const feature of ledger.features) {
   features.set(feature.id, feature);
 }
 
+const allowedDiagnosticDispositions = new Set([
+  'invalid-data',
+  'unknown-syntax',
+  'unsupported-feature',
+  'lossy-projection',
+  'deliberate-default',
+  'deliberate-ignore'
+]);
+const diagnosticDispositions = new Map();
+for (const disposition of ledger.diagnosticDispositions) {
+  if (!allowedDiagnosticDispositions.has(disposition.id)) fail(`invalid diagnostic disposition ${disposition.id}`);
+  if (diagnosticDispositions.has(disposition.id)) fail(`duplicate diagnostic disposition ${disposition.id}`);
+  if (typeof disposition.strict !== 'boolean') fail(`${disposition.id}.strict is not a boolean`);
+  if (!disposition.description) fail(`${disposition.id} has no description`);
+  diagnosticDispositions.set(disposition.id, disposition);
+}
+
+const receiptBySource = new Map();
+for (const receipt of ledger.diagnosticReceipts) {
+  if (!receipt.source || receipt.source.includes('*') || receipt.source === 'GPIF') {
+    fail(`diagnostic receipt has a blanket source: ${receipt.source}`);
+  }
+  if (receiptBySource.has(receipt.source)) fail(`duplicate diagnostic receipt ${receipt.source}`);
+  if (!features.has(receipt.feature)) fail(`${receipt.source} has unknown feature ${receipt.feature}`);
+  if (!diagnosticDispositions.has(receipt.disposition)) {
+    fail(`${receipt.source} has unknown disposition ${receipt.disposition}`);
+  }
+  if (!receipt.reason) fail(`${receipt.source} has no reason`);
+  receiptBySource.set(receipt.source, receipt);
+}
+
+const diagnosticKindDisposition = new Map([
+  ['ParseDiagnosticInvalidData', 'invalid-data'],
+  ['ParseDiagnosticUnknownSyntax', 'unknown-syntax'],
+  ['ParseDiagnosticUnsupportedFeature', 'unsupported-feature'],
+  ['ParseDiagnosticLossyProjection', 'lossy-projection'],
+  ['ParseDiagnosticDeliberateDefault', 'deliberate-default'],
+  ['ParseDiagnosticDeliberateIgnore', 'deliberate-ignore']
+]);
+const sourceDeclaration = /diagnosticSource\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*,\s*(ParseDiagnostic[A-Za-z]+)\s*\)/g;
+const declaredSources = new Map();
+for (const file of fs.readdirSync(root).filter(file => file.endsWith('.go'))) {
+  const contents = fs.readFileSync(path.join(root, file), 'utf8');
+  for (const match of contents.matchAll(sourceDeclaration)) {
+    const [, source, feature, kind] = match;
+    const disposition = diagnosticKindDisposition.get(kind);
+    if (!disposition) fail(`${file} declares ${source} with unknown diagnostic kind ${kind}`);
+    if (declaredSources.has(source)) fail(`duplicate diagnostic source declaration ${source}`);
+    declaredSources.set(source, { feature, disposition });
+  }
+}
+for (const [source, declaration] of declaredSources) {
+  const receipt = receiptBySource.get(source);
+  if (!receipt) fail(`${source} has no diagnostic receipt`);
+  if (receipt.feature !== declaration.feature) fail(`${source} changed feature to ${declaration.feature}`);
+  if (receipt.disposition !== declaration.disposition) fail(`${source} changed disposition to ${declaration.disposition}`);
+}
+for (const source of receiptBySource.keys()) {
+  if (!declaredSources.has(source)) fail(`${source} receipt has no source declaration`);
+}
 const allCases = [...cases.inputCases, ...cases.exportCases];
 const caseIDs = new Set();
 for (const item of allCases) {
@@ -120,10 +180,20 @@ function supportDocument() {
     const issues = feature.issues.length > 0 ? feature.issues.map(issue => `[#${issue}](https://github.com/CaliLuke/go-guitar-pro/issues/${issue})`).join(', ') : 'none';
     return `| \`${feature.id}\` | ${feature.formats.join(', ')} | ${feature.status} | ${issues} | ${feature.reason} |`;
   });
+  const dispositionRows = ledger.diagnosticDispositions.map(disposition =>
+    `| \`${disposition.id}\` | ${disposition.strict ? 'yes' : 'no'} | ${disposition.description} |`
+  );
+  const receiptRows = ledger.diagnosticReceipts.map(receipt =>
+    `| \`${receipt.source}\` | \`${receipt.feature}\` | \`${receipt.disposition}\` | ${receipt.reason} |`
+  );
   return `# Guitar Pro semantic support\n\n` +
-    `Generated from [\`conformance/feature-ledger.json\`](../conformance/feature-ledger.json). Do not edit this table by hand.\n\n` +
+    `Generated from [\`conformance/feature-ledger.json\`](../conformance/feature-ledger.json). Do not edit these tables by hand.\n\n` +
     `AlphaTab oracle: \`${oracle.package}@${oracle.version}\`, source \`${oracle.sourceRevision}\`.\n\n` +
-    `| Feature | Formats | Status | Issues | Reason |\n| --- | --- | --- | --- | --- |\n${rows.join('\n')}\n`;
+    `| Feature | Formats | Status | Issues | Reason |\n| --- | --- | --- | --- | --- |\n${rows.join('\n')}\n\n` +
+    `## Parse diagnostics\n\nThe diagnostic disposition is separate from semantic feature support. Strict parsing rejects only dispositions marked Yes.\n\n` +
+    `| Disposition | Strict rejection | Meaning |\n| --- | --- | --- |\n${dispositionRows.join('\n')}\n\n` +
+    `Each diagnostic receipt names one source construct. Its feature value uses an ID from the semantic support table.\n\n` +
+    `| Source construct | Feature | Disposition | Reason |\n| --- | --- | --- | --- |\n${receiptRows.join('\n')}\n`;
 }
 
 const docsPath = path.join(root, 'docs/format-support.md');

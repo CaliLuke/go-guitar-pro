@@ -42,6 +42,7 @@ func (s *Song) readRseMasterEffect(c *cursor) (RseMasterEffect, error) {
 		}
 		me.Volume = float32(vol)
 		// skip unknown int
+		c.report(diagnosticSource("Binary.RSE.MasterMetadata", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnosticUnsupportedFeature, "score-core", "binary RSE master metadata field has no Song destination")
 		if _, readErr := c.readInt(); readErr != nil {
 			return me, readErr
 		}
@@ -73,6 +74,7 @@ func (s *Song) readTrackRse(c *cursor, track *Track) error {
 	}
 	track.Rse.Humanize = h
 	// Skip 24 bytes (6 ints)
+	c.report(diagnosticSource("Binary.RSE.TrackMetadata", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnosticUnsupportedFeature, "score-core", "binary RSE track metadata fields have no Song destination")
 	if skipErr := c.skip(24); skipErr != nil {
 		return skipErr
 	}

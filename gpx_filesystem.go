@@ -210,8 +210,7 @@ func (br *bitReader) readByte() (byte, error) {
 	return byte(val), err
 }
 
-// parseGPX parses a GP6 (GPX) format file.
-func parseGPX(data []byte) (*Song, error) {
+func parseGPXWithContext(data []byte, context *parseContext) (*Song, error) {
 	files, err := gpxReadFiles(data)
 	if err != nil {
 		return nil, fmt.Errorf("reading GPX filesystem: %w", err)
@@ -220,5 +219,5 @@ func parseGPX(data []byte) (*Song, error) {
 	if !ok {
 		return nil, fmt.Errorf("no score.gpif found in GPX container")
 	}
-	return parseGPIF(gpifData)
+	return parseGPIFWithContext(gpifData, context)
 }

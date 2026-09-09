@@ -1,6 +1,702 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "oracle": "@coderline/alphatab@1.8.4",
+  "diagnosticDispositions": [
+    {
+      "id": "invalid-data",
+      "strict": true,
+      "description": "The source contains a malformed value, duplicate object ID, or broken object reference."
+    },
+    {
+      "id": "unknown-syntax",
+      "strict": true,
+      "description": "The source contains syntax that the GPIF audit does not recognize."
+    },
+    {
+      "id": "unsupported-feature",
+      "strict": true,
+      "description": "The parser recognizes the source content but cannot represent it in Song."
+    },
+    {
+      "id": "lossy-projection",
+      "strict": true,
+      "description": "The parser maps the source content to a less precise Song value."
+    },
+    {
+      "id": "deliberate-default",
+      "strict": false,
+      "description": "The parser applies a documented default when the source omits a value."
+    },
+    {
+      "id": "deliberate-ignore",
+      "strict": false,
+      "description": "The parser intentionally excludes source metadata that is outside the Song contract."
+    }
+  ],
+  "diagnosticReceipts": [
+  {
+    "source": "GPIF.Chord.Diagram.Fingering",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Chord.Diagram.Property.ShowDiagram",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Chord.Diagram.Property.ShowFingering",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Chord.Diagram.Property.ShowName",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Chord.Diagram.Property.Unknown",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unknown-syntax",
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.Staff.Property.CapoFret",
+    "feature": "staff-ownership",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Staff.Property.Tuning.Label",
+    "feature": "staff-ownership",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Staff.Property.Tuning.MissingPitches",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The recognized source construct is missing its required payload."
+  },
+  {
+    "source": "GPIF.Staff.Property.Unknown",
+    "feature": "staff-ownership",
+    "disposition": "unknown-syntax",
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.Track.Property.CapoFret",
+    "feature": "staff-ownership",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Track.Property.Tuning.Label",
+    "feature": "staff-ownership",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Track.Property.Tuning.MissingPitches",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The recognized source construct is missing its required payload."
+  },
+  {
+    "source": "GPIF.Track.Property.Unknown",
+    "feature": "staff-ownership",
+    "disposition": "unknown-syntax",
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownAttribute.ScoreCore",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownElement.ScoreCore",
+    "feature": "score-core",
+    "disposition": "unknown-syntax",
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "Binary.Note.TimeIndependentDuration",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "Binary.RSE.MasterMetadata",
+    "feature": "score-core",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "Binary.RSE.TrackMetadata",
+    "feature": "score-core",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Asset.DuplicateID",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Asset.EmptyID",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.BackingTrack.AssetId.Reference",
+    "feature": "score-core",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Bar.DuplicateID",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Bar.EmptyID",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Bar.Voices.Reference",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Beat.Arpeggio.InvalidValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Chord.Reference",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Beat.DuplicateID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Beat.Dynamic.InvalidValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.EmptyID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Beat.Fadding.InvalidValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Fadding.Lossy",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Beat.GraceNotes.InvalidValue",
+    "feature": "grace-relationships",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Hairpin.InvalidValue",
+    "feature": "hairpins",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Notes.Reference",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Beat.Ottavia.InvalidValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.BarreFret",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.BarreString",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.Brush.InvalidDirection",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.Brush.MissingDirection",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Beat.Property.PickStroke.InvalidDirection",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.PickStroke.MissingDirection",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Beat.Property.Popped.MissingEnable",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Beat.Property.PrimaryPickupTone",
+    "feature": "note-and-beat-semantics",
+    "disposition": "deliberate-ignore",
+    "reason": "The notation-focused Song model intentionally excludes this playback metadata."
+  },
+  {
+    "source": "GPIF.Beat.Property.PrimaryPickupVolume",
+    "feature": "note-and-beat-semantics",
+    "disposition": "deliberate-ignore",
+    "reason": "The notation-focused Song model intentionally excludes this playback metadata."
+  },
+  {
+    "source": "GPIF.Beat.Property.Rasgueado",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.Slapped.MissingEnable",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Beat.Property.Unknown",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.VibratoWTremBar",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBar",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarDestinationOffset",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarDestinationValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarExtend",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarMiddleOffset1",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarMiddleOffset2",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarMiddleValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarOriginOffset",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Property.WhammyBarOriginValue",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Rhythm.Reference",
+    "feature": "rhythm",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Beat.Tremolo.InvalidValue",
+    "feature": "tremolo-picking",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Beat.Wah",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.ChordDefinition.DuplicateID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.ChordDefinition.EmptyID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.MasterBar.Bars.Reference",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.MasterBar.TripletFeel.InvalidValue",
+    "feature": "rhythm",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.MasterTrack.Tracks.Reference",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Note.DuplicateID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Note.EmptyID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Note.Property.BendDestinationOffset.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendDestinationValue.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendMiddleOffset1.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendMiddleOffset2.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendMiddleValue.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendOriginOffset.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.BendOriginValue.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.ConcertPitch",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Element",
+    "feature": "percussion-articulations",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Fret.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.HarmonicFret.MissingPayload",
+    "feature": "harmonics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.HarmonicType.Feedback",
+    "feature": "harmonics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.HarmonicType.MissingPayload",
+    "feature": "harmonics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.HarmonicType.Unsupported",
+    "feature": "harmonics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.HopoDestination",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.HopoOrigin",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.LeftHandTapped",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Midi.MissingPayload",
+    "feature": "percussion-articulations",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.Octave",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Slide.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.String.MissingPayload",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The property must contain its required typed payload."
+  },
+  {
+    "source": "GPIF.Note.Property.Tapped",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Tone",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.TransposedPitch",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Unknown",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.Note.Property.Variation",
+    "feature": "percussion-articulations",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Note.Vibrato",
+    "feature": "note-and-beat-semantics",
+    "disposition": "lossy-projection",
+    "reason": "Song retains a less precise value than this source construct."
+  },
+  {
+    "source": "GPIF.Rhythm.DuplicateID",
+    "feature": "rhythm",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Rhythm.EmptyID",
+    "feature": "rhythm",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Rhythm.NoteValue.InvalidValue",
+    "feature": "rhythm",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.Track.DuplicateID",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Track.EmptyID",
+    "feature": "staff-ownership",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  },
+  {
+    "source": "GPIF.Track.Transpose",
+    "feature": "staff-ownership",
+    "disposition": "unsupported-feature",
+    "reason": "Song has no lossless destination for this recognized source construct."
+  },
+  {
+    "source": "GPIF.UnknownAttribute.NoteAndBeat",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownAttribute.Rhythm",
+    "feature": "rhythm",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownAttribute.StaffOwnership",
+    "feature": "staff-ownership",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownElement.NoteAndBeat",
+    "feature": "note-and-beat-semantics",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownElement.Rhythm",
+    "feature": "rhythm",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.UnknownElement.StaffOwnership",
+    "feature": "staff-ownership",
+    "disposition": "unknown-syntax",
+    "family": true,
+    "reason": "The GPIF audit does not recognize this source construct."
+  },
+  {
+    "source": "GPIF.Voice.Beats.Reference",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source reference must resolve to an object of the requested type."
+  },
+  {
+    "source": "GPIF.Voice.DuplicateID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object ID must be unique within its collection."
+  },
+  {
+    "source": "GPIF.Voice.EmptyID",
+    "feature": "note-and-beat-semantics",
+    "disposition": "invalid-data",
+    "reason": "The source object must have a non-empty ID."
+  }
+],
   "features": [
     {
       "id": "score-core",

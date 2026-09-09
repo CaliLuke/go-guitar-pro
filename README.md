@@ -45,6 +45,34 @@ func main() {
 
 If the parser must read the file, use `guitarpro.ParseFile(path)`.
 
+Use `ParseWithOptions` to inspect content that the parser cannot preserve:
+
+```go
+result, err := guitarpro.ParseWithOptions(data, guitarpro.ParseOptions{})
+if err != nil {
+	panic(err)
+}
+for _, diagnostic := range result.Diagnostics {
+	fmt.Printf("%s %s: %s\\n", diagnostic.Code, diagnostic.SourcePath, diagnostic.Reason)
+}
+```
+
+The zero-value options are permissive. The parser returns the song and its
+diagnostics. Each diagnostic has a stable source code, format, feature, reason,
+and object location. GPIF diagnostics have an XML source path. Binary
+diagnostics have a byte offset.
+
+Set `ParseOptions.Strict` to reject invalid, unknown, unsupported, or lossy
+source content. Deliberate defaults and deliberate ignores do not cause a
+default strict rejection. Set `ParseOptions.StrictKinds` to reject only
+selected kinds. A strict error has type `StrictParseError`. The result still
+contains the parsed song and diagnostics.
+
+`Parse` and `ParseFile` keep their existing behavior. They discard permissive
+diagnostics. New conversion tools can use `ParseWithOptions` or
+`ParseFileWithOptions` without changing existing callers. The parser does not
+write diagnostic messages to a log.
+
 ## Export
 
 Export a `Song` to native Guitar Pro 8 `.gp` bytes:

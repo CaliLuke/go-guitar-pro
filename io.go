@@ -12,12 +12,24 @@ import (
 
 // cursor provides sequential binary reading from a byte slice.
 type cursor struct {
-	data []byte
-	pos  int
+	data    []byte
+	pos     int
+	context *parseContext
 }
 
 func newCursor(data []byte) *cursor {
 	return &cursor{data: data, pos: 0}
+}
+
+func newCursorWithContext(data []byte, context *parseContext) *cursor {
+	return &cursor{data: data, context: context}
+}
+func (c *cursor) report(source parseDiagnosticSource, kind ParseDiagnosticKind, feature, reason string) {
+	if c.context == nil {
+		return
+	}
+	offset := int64(c.pos)
+	c.context.add(source, ParseDiagnostic{Kind: kind, Feature: feature, Reason: reason, BinaryOffset: &offset})
 }
 
 func (c *cursor) remaining() int {

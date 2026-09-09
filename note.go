@@ -78,6 +78,7 @@ func (s *Song) readNote(c *cursor, note *Note, guitarString GuitarString, trackI
 		note.Kind = NoteType(kind)
 	}
 	if (flags & 0x01) == 0x01 {
+		c.report(diagnosticSource("Binary.Note.TimeIndependentDuration", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnosticUnsupportedFeature, "note-and-beat-semantics", "binary time-independent note duration has no Song destination")
 		// time-independent duration
 		if _, err := c.readSignedByte(); err != nil {
 			return err

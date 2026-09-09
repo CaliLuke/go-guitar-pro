@@ -10,8 +10,7 @@ import (
 	"path/filepath"
 )
 
-// parseGP7Zip parses a GP7/8 format file (ZIP archive containing score.gpif).
-func parseGP7Zip(data []byte) (*Song, error) {
+func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	r, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
 		return nil, fmt.Errorf("opening ZIP: %w", err)
@@ -32,7 +31,7 @@ func parseGP7Zip(data []byte) (*Song, error) {
 			if closeErr := rc.Close(); closeErr != nil {
 				return nil, fmt.Errorf("closing score.gpif: %w", closeErr)
 			}
-			song, err = parseGPIF(gpifData)
+			song, err = parseGPIFWithContext(gpifData, context)
 			if err != nil {
 				return nil, err
 			}
