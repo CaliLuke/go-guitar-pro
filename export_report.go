@@ -96,6 +96,14 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 	if _, conflict, err := gp8ResolvedFieldTempo(song); err == nil && conflict {
 		add("gp8.normalize.tempo-compatibility", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the edited legacy Tempo value takes precedence over conflicting InitialTempo data")
 	}
+	if fieldTempo, _, err := gp8ResolvedFieldTempo(song); err == nil && fieldTempo > 0 {
+		for _, automation := range song.TempoAutomations {
+			if automation.Bar == 0 && automation.Position == 0 && automation.Tempo != fieldTempo {
+				add("gp8.normalize.tempo-automation-authority", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the authored opening automation takes precedence over conflicting score tempo fields")
+				break
+			}
+		}
+	}
 	if song.BackingTrack != nil {
 		add("gp8.omit.backing-track", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track assets")
 	}

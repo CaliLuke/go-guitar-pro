@@ -475,6 +475,9 @@ func (builder *gp8Builder) buildScore() gpifScore {
 			break
 		}
 	}
+	if len(song.Notice) == 1 && song.Notice[0] == "" {
+		builder.addReport("gp8.omit.empty-notice", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 cannot distinguish one empty notice from no notices")
+	}
 	if song.Key != (KeySignature{}) {
 		builder.addReport("gp8.normalize.song-key-authority", "score-core", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores keys on master bars and does not emit the legacy song-level key")
 	}
@@ -619,6 +622,9 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	if track.UseRse {
 		builder.addReport("gp8.omit.track-use-rse", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy UseRse flag")
 	}
+	if track.Mute && track.Solo {
+		builder.addReport("gp8.normalize.playback-state", "score-core", ExportDispositionNormalized, location, "GP8 stores mute and solo as one exclusive playback state, so mute takes precedence")
+	}
 	if track.Rse.Humanize != 0 || track.Rse.AutoAccentuation != AccentuationNone || track.Rse.Equalizer.Gain != 0 || len(track.Rse.Equalizer.Knobs) != 0 || track.Rse.Instrument != (RseInstrument{}) {
 		builder.addReport("gp8.omit.track-rse", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy track RSE record")
 	}
@@ -643,6 +649,12 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 	if channel.Bank != 0 || channel.Chorus != 0 || channel.Reverb != 0 || channel.Phaser != 0 || channel.Tremolo != 0 {
 		builder.addReport("gp8.omit.midi-effects", "score-core", ExportDispositionOmitted, location, "GP8 writer emits channel, program, volume, and balance but not the legacy bank and effect controllers")
+	}
+	if track.ChannelIndex == -1 {
+		builder.addReport("gp8.normalize.channel-binding", "score-core", ExportDispositionNormalized, location, "GP8 output binds an unbound track to a default channel")
+	}
+	if channel.Channel/16 != channel.EffectChannel/16 {
+		builder.addReport("gp8.normalize.effect-channel-port", "score-core", ExportDispositionNormalized, location, "GP8 stores one port for both primary and effect channels")
 	}
 
 	red := (uint32(track.Color) >> 16) & 0xff
@@ -705,6 +717,12 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	for staffIndex := range staves {
 		if !track.PercussionTrack && staves[staffIndex].StandardNotationLineCount != 0 && staves[staffIndex].StandardNotationLineCount != 5 {
 			builder.addReport("gp8.omit.staff-line-count", "staff-ownership", ExportDispositionOmitted, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "GP8 writer emits custom staff line counts only for percussion tracks")
+		}
+		for stringIndex, guitarString := range staves[staffIndex].Strings {
+			if guitarString.Number != int8(stringIndex+1) {
+				builder.addReport("gp8.normalize.string-number", "staff-ownership", ExportDispositionNormalized, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "GP8 derives string numbers from tuning order")
+				break
+			}
 		}
 	}
 	result.Staves.Staff = make([]gpifStaff, len(staves))
@@ -887,7 +905,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 				if measure.LineBreak != LineBreakNone {
 					builder.addReport("gp8.omit.measure-line-break", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit measure line-break preferences")
 				}
-				if measure.HasDoubleBar && !header.DoubleBar {
+				if measure.HasDoubleBar != header.DoubleBar {
 					builder.addReport("gp8.normalize.measure-double-bar-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar double-bar value instead of the compatibility measure value")
 				}
 				voiceIDs := make([]string, 0, 4)
@@ -899,6 +917,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 						builder.addReport("gp8.omit.voice-direction", "score-core", ExportDispositionOmitted, voiceLocation, "GP8 writer does not emit the voice beam direction")
 					}
 					if len(voice.Beats) == 0 {
+						voiceIDs = append(voiceIDs, "-1")
 						continue
 					}
 					voiceID := strconv.Itoa(len(builder.doc.Voices.Voices))

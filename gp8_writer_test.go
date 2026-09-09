@@ -1152,8 +1152,9 @@ func syntheticGP8Song() *Song {
 			Voices: []Voice{{Beats: []Beat{{Duration: dottedQuarter, Status: BeatStatusNormal, Notes: []Note{{Value: 38, String: 1, Velocity: MinVelocity + VelocityIncrement*6, DurationPercent: 1, Kind: NoteTypeNormal, Effect: NoteEffect{HeavyAccentuatedNote: true}}}}}}},
 		},
 		{
-			Number: 3,
-			Voices: []Voice{{Beats: []Beat{{Duration: quarter, Status: BeatStatusRest}}}},
+			Number:       3,
+			HasDoubleBar: true,
+			Voices:       []Voice{{Beats: []Beat{{Duration: quarter, Status: BeatStatusRest}}}},
 		},
 	}
 
