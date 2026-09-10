@@ -211,17 +211,30 @@ It also reports rasgueado, pick stroke, slap effects, and beat vibrato because
 the writer does not emit them.
 
 GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
-boolean vibrato, hammer origin, slide flags, harmonic kind, and trill fret.
+hammer origin, tapping flags, slide flags, harmonic kind, and trill fret.
+`NoteEffect.Accent` is authoritative when it is nonzero and emits the exact
+normal, heavy, or tenuto GPIF flag; tenuto uses `0x10`. When `Accent` is
+`NoteAccentNone`, `AccentuatedNote` and `HeavyAccentuatedNote` are compatibility
+fallbacks. A conflicting typed and legacy accent produces a normalization
+report, and the typed value wins. `NoteEffect.VibratoStrength` is likewise
+authoritative when nonzero and preserves `Slight` and `Wide` exactly. A true
+legacy `Vibrato` value falls back to `Slight` when the typed strength is absent.
+Beat-level `BeatEffects.Vibrato` remains a separate GP8 export omission.
+
+`NoteEffect.Hammer`, `Tapped`, and `LeftHandTapped` retain the GPIF
+`HopoOrigin`, `Tapped`, and `LeftHandTapped` properties independently, including
+when more than one is set. GP8 export writes each property independently. GPIF
+`HopoDestination` remains a lossy derived destination because `Song` has no
+authored hammer-destination field.
+
 The writer reports fingerings and tremolo picking because GP8 export does not
 emit them. This rule includes an authored thumb value.
 Use `HasLeftHandFinger` or `HasRightHandFinger` to mark an authored `Thumb` or
 `Open` value. Nonzero named fingers remain compatible without these markers.
 
-GPIF can distinguish vibrato strength, tenuto, hammer endpoints, and tapping
-variants. The public model stores less precise values. Parse diagnostics record
-each collapsed distinction before import removes it. Validation rejects unknown
-fingering and slide enum values. Parse diagnostics reject a missing technique
-payload and classify unknown slide bits.
+Validation rejects unknown fingering, accent, vibrato-strength, and slide enum
+values. Parse diagnostics reject a missing technique payload and classify
+unknown slide bits.
 
 GP8 preserves bend and whammy curves when the target can keep their shape.
 The writer can remove a collinear point without changing the curve. It reports

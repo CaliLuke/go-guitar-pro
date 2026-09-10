@@ -84,13 +84,18 @@ Simile marks are a separate feature. Commit `339113c` now preserves all four var
 The refreshed probe and independent consumer assertion confirm the resolved slice; the existing [issue 39](https://github.com/CaliLuke/go-guitar-pro/issues/39) is closed and no duplicate implementation ticket is filed.
 Expanded repeat and jump traversal remains outside the documented authored-score scope.
 
-Note vibrato strength, tenuto, and separate tapping flags also exist in the current implementation.
-The probe found no differences in the exercised cases: 21 vibrato inputs, one tenuto input, and one tapping input.
-Those counts do not prove all combinations.
+Note vibrato strength, normal, heavy, and tenuto accents, and the independent
+hammer and tapping flags are documented against their current typed authority,
+compatibility fallbacks, and GP8 wire behavior. The probe found no differences
+in the exercised cases: 21 vibrato inputs, one tenuto input, and one tapping
+input. Those counts do not prove all combinations, so the catalog keeps the
+existing stage assessments and points to the focused executable cases.
 
-Some paragraphs in `docs/semantic-model.md` still describe their previous lossy representations.
-Some diagnostic-source declarations also retain old disposition labels even when the current dispatch no longer emits that loss.
-Future work must review executable behavior and current fields alongside the prose.
+The inactive lossy diagnostic declarations for `Tapped`, `HopoOrigin`, and
+`LeftHandTapped` have been removed. Their missing-payload diagnostics remain.
+`HopoDestination` also remains a genuine lossy diagnostic because the public
+model has no authored hammer-destination field. Beat-level vibrato remains an
+explicit GP8 export omission.
 
 ## Runtime audit
 

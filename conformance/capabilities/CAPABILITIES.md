@@ -309,9 +309,9 @@ Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Slight and Wide now have an explicit VibratoStrength field and distinct GPIF output. The semantic-model prose still describes the former boolean collapse.
+NoteEffect.VibratoStrength preserves Slight and Wide and is authoritative when nonzero. A true legacy Vibrato value falls back to Slight, while beat-level vibrato remains a separate export omission.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep Slight and Wide distinct through import, typed model edits, GP8 output, and pinned AlphaTab consumption while retaining the documented legacy Slight fallback.
 
 ### pick-stroke: Pick stroke direction
 
@@ -693,9 +693,9 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Normal/heavy accents retain distinct flags. Tenuto is a separate loss.
+NoteEffect.Accent preserves normal, heavy, and tenuto values. A nonzero typed value is authoritative; legacy normal and heavy booleans are fallbacks, and a conflict produces a scoped normalization report.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep all three typed accent values exact through GPIF import and GP8 output, preserve the legacy fallback, and report typed-versus-legacy conflicts without changing stage support.
 
 ### accidentals: Authored pitch spelling and accidentals
 
@@ -815,9 +815,9 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Tapped and LeftHandTapped now have separate public booleans and GPIF output. Earlier documentation still describes their collapse.
+NoteEffect.Hammer, Tapped, and LeftHandTapped preserve three independent source properties and GP8 writes each one independently. HopoDestination remains lossy because the public model has no authored destination field.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep Hammer, Tapped, and LeftHandTapped independent through GPIF import, model edits, and GP8 output while retaining the narrow HopoDestination diagnostic.
 
 ### tenuto: Tenuto accent
 
@@ -825,9 +825,9 @@ Notes. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-The current NoteAccent enum preserves Tenuto and exports its flag. Older semantic-model prose is stale. AlphaTab has no separate staccatissimo note field.
+NoteAccentTenuto is preserved and exports the exact 0x10 GPIF flag under the typed accent authority policy. AlphaTab has no separate staccatissimo note field.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep tenuto distinct through GPIF import, typed model edits, exact 0x10 GP8 output, and pinned AlphaTab consumption; do not infer staccatissimo support.
 
 ### trill: Trill fret and speed
 

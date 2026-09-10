@@ -1498,19 +1498,7 @@
     "source": "GPIF.Note.Property.HopoDestination",
     "feature": "note-and-beat-semantics",
     "disposition": "lossy-projection",
-    "reason": "Song retains a less precise value than this source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.HopoOrigin",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "Song retains a less precise value than this source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.LeftHandTapped",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "Song retains a less precise value than this source construct."
+    "reason": "Song derives hammer destinations and has no authored field for the GPIF HopoDestination marker."
   },
   {
     "source": "GPIF.Note.Property.Midi.MissingPayload",
@@ -1535,12 +1523,6 @@
     "feature": "note-and-beat-semantics",
     "disposition": "invalid-data",
     "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.Tapped",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "Song retains a less precise value than this source construct."
   },
   {
     "source": "GPIF.Note.Property.Tone",

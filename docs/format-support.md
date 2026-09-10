@@ -148,14 +148,11 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.HarmonicFret.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.Unsupported` | `harmonics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Note.Property.HopoDestination` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
-| `GPIF.Note.Property.HopoOrigin` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
-| `GPIF.Note.Property.LeftHandTapped` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
+| `GPIF.Note.Property.HopoDestination` | `note-and-beat-semantics` | `lossy-projection` | Song derives hammer destinations and has no authored field for the GPIF HopoDestination marker. |
 | `GPIF.Note.Property.Midi.MissingPayload` | `percussion-articulations` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.Octave` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Slide.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.String.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
-| `GPIF.Note.Property.Tapped` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
 | `GPIF.Note.Property.Tone` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.TransposedPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
