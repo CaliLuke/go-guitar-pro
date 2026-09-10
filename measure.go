@@ -28,7 +28,9 @@ type Measure struct {
 	KeySignature  KeySignature
 	HasDoubleBar  bool
 	Clef          MeasureClef
-	LineBreak     LineBreak
+	// SimileMark preserves a one- or two-measure repeat symbol on this measure.
+	SimileMark SimileMark
+	LineBreak  LineBreak
 }
 
 func defaultMeasure() Measure {

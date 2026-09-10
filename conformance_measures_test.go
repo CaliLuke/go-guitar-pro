@@ -122,6 +122,7 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Wire("gpifMasterBar.DoubleBar", wires.masterBars[2].doubleBar, true)
 	run.Wire("gpifMasterBar.TripletFeel", []string{wires.masterBars[0].tripletFeel, wires.masterBars[2].tripletFeel}, []string{"Triplet8th", "Triplet16th"})
 	run.Wire("gpifBar.Clef", wires.clefs, []string{"G2", "F4", "C3", "C4"})
+	run.Wire("gpifBar.SimileMark", wires.simileMarks, []string{"", "Simple", "FirstOfDouble", "SecondOfDouble"})
 
 	roundTrip, err := Parse(data)
 	if err != nil {
@@ -159,6 +160,17 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Preserved("MeasureHeader.TripletFeel", tripletFeels, wantTripletFeels)
 	clefs := []MeasureClef{roundTrip.Tracks[0].Measures[0].Clef, roundTrip.Tracks[0].Measures[1].Clef, roundTrip.Tracks[0].Measures[2].Clef, roundTrip.Tracks[0].Measures[3].Clef}
 	run.Preserved("Measure.Clef", clefs, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto, MeasureClefTenor})
+	simileMarks := []SimileMark{roundTrip.Tracks[0].Measures[0].SimileMark, roundTrip.Tracks[0].Measures[1].SimileMark, roundTrip.Tracks[0].Measures[2].SimileMark, roundTrip.Tracks[0].Measures[3].SimileMark}
+	wantSimileMarks := []SimileMark{SimileMarkNone, SimileMarkSimple, SimileMarkFirstOfDouble, SimileMarkSecondOfDouble}
+	run.Preserved("Measure.SimileMark", simileMarks, wantSimileMarks)
+	for index, member := range []string{
+		"SimileMark.SimileMarkNone",
+		"SimileMark.SimileMarkSimple",
+		"SimileMark.SimileMarkFirstOfDouble",
+		"SimileMark.SimileMarkSecondOfDouble",
+	} {
+		run.Enum(member, simileMarks[index], wantSimileMarks[index])
+	}
 	run.Enum("MeasureClef.MeasureClefTreble", clefs[0], MeasureClefTreble)
 	run.Enum("MeasureClef.MeasureClefBass", clefs[1], MeasureClefBass)
 	run.Enum("MeasureClef.MeasureClefAlto", clefs[2], MeasureClefAlto)
@@ -293,6 +305,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 		{name: "zero numerator", mutate: func(song *Song) { song.MeasureHeaders[0].TimeSignature.Numerator = 0 }, want: "numerator 0 must be positive"},
 		{name: "undefined direction", mutate: func(song *Song) { value := DirectionSign(99); song.MeasureHeaders[0].Direction = &value }, want: "direction 99 is not defined"},
 		{name: "undefined triplet feel", mutate: func(song *Song) { song.MeasureHeaders[0].TripletFeel = TripletFeel(9) }, want: "triplet feel 9 is not defined"},
+		{name: "undefined simile mark", mutate: func(song *Song) { song.Tracks[0].Measures[0].SimileMark = SimileMark(9) }, want: "simile mark 9 is not defined"},
 	} {
 		t.Run(invalid.name, func(t *testing.T) {
 			song := semanticValidPitchedGP8Song(t)
@@ -344,11 +357,12 @@ func conformanceMeasureSong(t *testing.T) *Song {
 		doubleBar   bool
 		tempo       int32
 		clef        MeasureClef
+		simile      SimileMark
 	}{
-		{TimeSignature{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}}, KeySignature{Key: -7}, "A <&>", true, 0, 1, TripletFeelEighth, false, 90, MeasureClefTreble},
-		{defaultTimeSignature(), KeySignature{}, "", false, 1, 0, TripletFeelNone, false, 0, MeasureClefBass},
-		{TimeSignature{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}}, KeySignature{Key: 7, IsMinor: true}, "Coda Ω", false, 6, 0b10000001, TripletFeelSixteenth, true, 120, MeasureClefAlto},
-		{TimeSignature{Numerator: 127, Denominator: Duration{Value: 128, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{2, 2, 2, 2}}, KeySignature{Key: -1, IsMinor: true}, "", false, 128, 0, TripletFeelNone, false, 0, MeasureClefTenor},
+		{TimeSignature{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}}, KeySignature{Key: -7}, "A <&>", true, 0, 1, TripletFeelEighth, false, 90, MeasureClefTreble, SimileMarkNone},
+		{defaultTimeSignature(), KeySignature{}, "", false, 1, 0, TripletFeelNone, false, 0, MeasureClefBass, SimileMarkSimple},
+		{TimeSignature{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}}, KeySignature{Key: 7, IsMinor: true}, "Coda Ω", false, 6, 0b10000001, TripletFeelSixteenth, true, 120, MeasureClefAlto, SimileMarkFirstOfDouble},
+		{TimeSignature{Numerator: 127, Denominator: Duration{Value: 128, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{2, 2, 2, 2}}, KeySignature{Key: -1, IsMinor: true}, "", false, 128, 0, TripletFeelNone, false, 0, MeasureClefTenor, SimileMarkSecondOfDouble},
 	}
 	for index, value := range values {
 		header := &song.MeasureHeaders[index]
@@ -371,6 +385,7 @@ func conformanceMeasureSong(t *testing.T) *Song {
 		measure.KeySignature = value.key
 		measure.HasDoubleBar = value.doubleBar
 		measure.Clef = value.clef
+		measure.SimileMark = value.simile
 	}
 	track.Staves[0].Measures = track.Measures
 	if err := FinalizeSong(song); err != nil {
@@ -417,8 +432,9 @@ type conformanceMeasureWireMasterBar struct {
 }
 
 type conformanceMeasureWireScore struct {
-	masterBars []conformanceMeasureWireMasterBar
-	clefs      []string
+	masterBars  []conformanceMeasureWireMasterBar
+	clefs       []string
+	simileMarks []string
 }
 
 func extractMeasureWire(t *testing.T, data []byte) conformanceMeasureWireScore {
@@ -455,6 +471,9 @@ func extractMeasureWire(t *testing.T, data []byte) conformanceMeasureWireScore {
 		switch value := token.(type) {
 		case xml.StartElement:
 			path = append(path, value.Name.Local)
+			if strings.Join(path, "/") == "GPIF/Bars/Bar" {
+				result.simileMarks = append(result.simileMarks, "")
+			}
 			if strings.Join(path, "/") == "GPIF/MasterBars/MasterBar" {
 				result.masterBars = append(result.masterBars, conformanceMeasureWireMasterBar{})
 			}
@@ -482,6 +501,10 @@ func extractMeasureWire(t *testing.T, data []byte) conformanceMeasureWireScore {
 			joined := strings.Join(path, "/")
 			if joined == "GPIF/Bars/Bar/Clef" {
 				result.clefs = append(result.clefs, text)
+				continue
+			}
+			if joined == "GPIF/Bars/Bar/SimileMark" {
+				result.simileMarks[len(result.simileMarks)-1] = text
 				continue
 			}
 			if len(result.masterBars) == 0 {

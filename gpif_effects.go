@@ -667,3 +667,29 @@ func gpifMeasureClef(value string) MeasureClef {
 		return MeasureClefTreble
 	}
 }
+
+func gpifSimileMark(value string) SimileMark {
+	switch value {
+	case "Simple":
+		return SimileMarkSimple
+	case "FirstOfDouble":
+		return SimileMarkFirstOfDouble
+	case "SecondOfDouble":
+		return SimileMarkSecondOfDouble
+	default:
+		return SimileMarkNone
+	}
+}
+
+func gp8SimileMark(value SimileMark) string {
+	switch value {
+	case SimileMarkSimple:
+		return "Simple"
+	case SimileMarkFirstOfDouble:
+		return "FirstOfDouble"
+	case SimileMarkSecondOfDouble:
+		return "SecondOfDouble"
+	default:
+		return ""
+	}
+}

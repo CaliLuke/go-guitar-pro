@@ -110,7 +110,7 @@ func selectConformanceFeatures(score any, features []string) any {
 		case "rhythm":
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{
 				"timeSignature": true, "pickup": true, "status": true, "duration": true, "durationTicks": true,
-				"dots": true, "tuplet": true,
+				"dots": true, "tuplet": true, "simileMark": true,
 			}, nil)
 		case "timing":
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{"start": true}, nil)

@@ -44,6 +44,21 @@ const (
 	MeasureClefAlto
 )
 
+// SimileMark identifies a measure-repeat symbol attached to one bar.
+type SimileMark int8
+
+// Simile mark values preserve GPIF's one-bar and two-bar repeat symbols.
+const (
+	// SimileMarkNone indicates that the measure contains its authored notation.
+	SimileMarkNone SimileMark = iota
+	// SimileMarkSimple repeats the preceding measure.
+	SimileMarkSimple
+	// SimileMarkFirstOfDouble is the first half of a two-measure repeat symbol.
+	SimileMarkFirstOfDouble
+	// SimileMarkSecondOfDouble is the second half of a two-measure repeat symbol.
+	SimileMarkSecondOfDouble
+)
+
 // LineBreak represents a line break directive.
 type LineBreak int8
 

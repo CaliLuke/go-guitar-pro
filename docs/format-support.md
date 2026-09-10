@@ -125,6 +125,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Wah` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.ChordDefinition.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.ChordDefinition.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
+| `GPIF.Bar.SimileMark.InvalidValue` | `rhythm` | `unsupported-feature` | Unknown simile-mark text has no defined public enum value. |
 | `GPIF.MasterBar.Bars.Cardinality` | `staff-ownership` | `invalid-data` | The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track. |
 | `GPIF.MasterBar.Bars.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.MasterBar.TripletFeel.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -217,7 +218,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
 | `RseInstrument` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The RSE instrument contains authored playback values. |
 | `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
-| `Measure` | `timing` | 8 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
+| `Measure` | `timing` | 9 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
 | `Beat` | `note-and-beat-semantics` | 8 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
@@ -247,7 +248,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 189 |
+| `preserved` | 190 |
 | `normalized` | 34 |
 | `omitted` | 118 |
 | `rejected` | 0 |
@@ -258,7 +259,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 71 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 139 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 71 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -266,7 +267,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 227 |
+| `schema` | 228 |
 
 ## Source dispatch inventory
 
@@ -321,6 +322,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
 | `unclassified-source-dispatch` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A new semantic dispatch case must receive a source disposition before the gate passes. |
 | `automation-dispatch-diagnostic` | `score-core` | `TestGPIFAutomationDispatchDiagnostics` | `TestAlphaTabInputConformance` | yes | Unknown, unsupported, and invalid automation records remain visible to strict policy. |

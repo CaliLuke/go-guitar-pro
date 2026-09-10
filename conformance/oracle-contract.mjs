@@ -16,6 +16,7 @@ import {
   normalizeNoteKind,
   normalizeNotePitch,
   normalizeOttavia,
+	  normalizeSimileMark,
   normalizeSlideIn,
   normalizeSlideOut,
   normalizeTuning,
@@ -46,6 +47,18 @@ for (const [value, expected] of clefCases) {
   assert.equal(normalizeClef(value), expected);
 }
 assert.equal(normalizeClef(999), 'unknown:999');
+
+const simileMarkCases = [
+  [alphaTab.model.SimileMark.None, 'none'],
+  [alphaTab.model.SimileMark.Simple, 'simple'],
+  [alphaTab.model.SimileMark.FirstOfDouble, 'first-of-double'],
+  [alphaTab.model.SimileMark.SecondOfDouble, 'second-of-double']
+];
+assert.equal(new Set(simileMarkCases.map(([value]) => value)).size, simileMarkCases.length, 'simile-mark enum values must remain distinct');
+for (const [value, expected] of simileMarkCases) {
+  assert.equal(normalizeSimileMark(value), expected);
+}
+assert.equal(normalizeSimileMark(999), 'unknown:999');
 
 const enumCases = [
   [normalizeHarmonicKind, alphaTab.model.HarmonicType, [

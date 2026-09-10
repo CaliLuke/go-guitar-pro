@@ -162,9 +162,24 @@ func normalizeGoBars(song *Song, track *Track, staff *Staff) []any {
 		if staff.PercussionTrack {
 			clef = "neutral"
 		}
-		result = append(result, map[string]any{"index": measureIndex, "clef": clef, "voices": voices})
+		result = append(result, map[string]any{"index": measureIndex, "clef": clef, "simileMark": goSimileMark(measure.SimileMark), "voices": voices})
 	}
 	return result
+}
+
+func goSimileMark(mark SimileMark) string {
+	switch mark {
+	case SimileMarkNone:
+		return "none"
+	case SimileMarkSimple:
+		return "simple"
+	case SimileMarkFirstOfDouble:
+		return "first-of-double"
+	case SimileMarkSecondOfDouble:
+		return "second-of-double"
+	default:
+		return fmt.Sprintf("unknown:%d", mark)
+	}
 }
 
 func goVoiceHasContent(voice *Voice) bool {

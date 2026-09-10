@@ -249,6 +249,10 @@ export function normalizeClef(value) {
   }
 }
 
+export function normalizeSimileMark(value) {
+	return enumName(alphaTab.model.SimileMark, value).replaceAll('ofdouble', '-of-double');
+}
+
 function percussionInput(note, staff) {
   return note.percussionArticulation >= 0 && note.percussionArticulation < staff.track.percussionArticulations.length
     ? staff.track.percussionArticulations[note.percussionArticulation].id
@@ -415,6 +419,7 @@ function normalizeStaff(staff) {
     bars: staff.bars.map(bar => ({
       index: bar.index,
       clef: normalizeClef(bar.clef),
+	  simileMark: normalizeSimileMark(bar.simileMark),
       voices: bar.voices.filter(voice => !voice.isEmpty).map(voice => normalizeVoice(voice, staff))
     }))
   };

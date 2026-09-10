@@ -152,6 +152,11 @@ reports a normalization. The legacy 0:0 tuplet means 1:1. GP8 emits the
 canonical representation and reports that normalization. Invalid durations
 are rejected before export.
 
+`Measure.SimileMark` preserves GPIF's one-measure repeat symbol and both halves
+of its two-measure repeat symbol. The value belongs to each staff measure, not
+the shared measure header, because different staves may repeat independently.
+Unknown source text and undefined programmatic enum values are rejected.
+
 A pitched note uses `String` 1 through the staff string count for a fret. A
 `String` value of 0 makes `Value` an absolute MIDI note. Validation rejects an
 invalid string, note kind, MIDI result, or duration percentage. It also reports

@@ -43,6 +43,12 @@
       "issues": [4]
     },
     {
+      "id": "gp7-simile-marks",
+      "fixture": "testdata/gp7/simile-mark.gp",
+      "features": ["score-core", "rhythm"],
+      "issues": [39]
+    },
+    {
       "id": "gp7-double-dotted-timing",
       "fixture": "testdata/gp7/colors.gp",
       "features": ["rhythm", "timing"],

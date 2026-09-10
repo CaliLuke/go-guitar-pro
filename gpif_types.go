@@ -399,9 +399,10 @@ type gpifBars struct {
 }
 
 type gpifBar struct {
-	ID     string `xml:"id,attr"`
-	Voices string `xml:"Voices"`
-	Clef   string `xml:"Clef"`
+	ID         string `xml:"id,attr"`
+	Voices     string `xml:"Voices"`
+	Clef       string `xml:"Clef"`
+	SimileMark string `xml:"SimileMark,omitempty"`
 }
 
 type gpifVoices struct {

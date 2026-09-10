@@ -11997,10 +11997,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 243,
+          "count": 240,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "5ad15747f902cd6dcd0c451ff4cb885cda3db852c10913c2ef894c838f0035ea"
+          "locationsSha256": "dcdd8884a0b649c4617ea6aee533037b6991a217852005690461f760a805a64b"
         },
         {
           "code": "score.note.tie-destination",
@@ -14626,7 +14626,8 @@
     {
       "path": "testdata/gp7/simile-mark.gp",
       "features": [
-        "score-core"
+        "score-core",
+        "rhythm"
       ],
       "diagnostics": [
         {
@@ -14702,10 +14703,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 48,
+          "count": 39,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "3cbfd87963ee314c5565ec9ad01c9348534e587e4979090b28b73ac06671c105"
+          "locationsSha256": "2bf62bd597b1ba5e0aa9bec7ed2fec2e8e2f6958fd89b6343bb9e173a5534002"
         }
       ],
       "differences": null
@@ -14838,10 +14839,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 62,
+          "count": 60,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d2dd8a727350364b799f41cf2a718f5cf5dddee31004a1f4a2dd37c5c588ce50"
+          "locationsSha256": "8f45c60aaecec4f19b2f0136d089117a80056d7e9272c403ff0ea83d87d1787d"
         }
       ],
       "differences": null

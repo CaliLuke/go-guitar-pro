@@ -181,6 +181,34 @@ func TestAlphaTabPreservesInspectedCapo(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesSimileMarks(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformanceMeasureSong(t)
+	data, err := Export(source, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	score, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	if !ok {
+		t.Fatal("AlphaTab score is not an object")
+	}
+	tracks, ok := score["tracks"].([]any)
+	if !ok || len(tracks) != 1 {
+		t.Fatalf("AlphaTab tracks = %#v", score["tracks"])
+	}
+	track := tracks[0].(map[string]any)
+	staff := track["staves"].([]any)[0].(map[string]any)
+	bars := staff["bars"].([]any)
+	got := make([]string, len(bars))
+	for index, item := range bars {
+		got[index] = item.(map[string]any)["simileMark"].(string)
+	}
+	want := []string{"none", "simple", "first-of-double", "second-of-double"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("AlphaTab simile marks = %v, want %v", got, want)
+	}
+}
+
 func TestAlphaTabGPIFCapoPrecedence(t *testing.T) {
 	requireAlphaTabConformance(t)
 	gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",

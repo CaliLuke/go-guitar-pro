@@ -2864,9 +2864,10 @@
       "disposition": "partial",
       "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "rhythm"
       ],
-      "semanticSnapshot": false
+      "semanticSnapshot": true
     },
     {
       "path": "testdata/gp7/slash.gp",

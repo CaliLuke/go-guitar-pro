@@ -175,6 +175,9 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 				if measure.StaffIndex != staffIndex {
 					add("score.measure.staff-ownership", ScoreDiagnosticStructural, location, "staff index %d does not match owner %d", measure.StaffIndex, staffIndex)
 				}
+				if measure.SimileMark < SimileMarkNone || measure.SimileMark > SimileMarkSecondOfDouble {
+					add("score.measure.simile-mark", ScoreDiagnosticValue, location, "simile mark %d is not defined", measure.SimileMark)
+				}
 				for voiceIndex := range measure.Voices {
 					if int(measure.Voices[voiceIndex].MeasureIndex) != measureIndex {
 						voiceLocation := location

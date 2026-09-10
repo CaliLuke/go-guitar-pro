@@ -331,6 +331,9 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	for _, rhythm := range doc.Rhythms.Rhythms {
 		gpifAuditEnum(context, diagnosticSource("GPIF.Rhythm.NoteValue.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), rhythm.NoteValue, []string{"Whole", "Half", "Quarter", "Eighth", "16th", "32nd", "64th", "128th"}, gpifObjectPath("Rhythms/Rhythm", rhythm.ID)+"/NoteValue", rhythm.ID, "rhythm")
 	}
+	for _, bar := range doc.Bars.Bars {
+		gpifAuditEnum(context, diagnosticSource("GPIF.Bar.SimileMark.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), bar.SimileMark, []string{"", "Simple", "FirstOfDouble", "SecondOfDouble"}, gpifObjectPath("Bars/Bar", bar.ID)+"/SimileMark", bar.ID, "rhythm")
+	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th", "Dotted8th", "Dotted16th", "Scottish8th", "Scottish16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
 	}

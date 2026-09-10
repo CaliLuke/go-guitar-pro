@@ -347,6 +347,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 				if bar, ok := barMap[barID]; ok {
 					m.Clef = gpifMeasureClef(bar.Clef)
+					m.SimileMark = gpifSimileMark(bar.SimileMark)
 					voiceIDs := splitIDs(bar.Voices)
 					pendingVoicePlaceholders := 0
 					for _, voiceID := range voiceIDs {
