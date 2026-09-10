@@ -1648,7 +1648,7 @@ func gp8ConvertWhammy(bend *BendEffect) gp8WhammyConversion {
 	}
 	return gp8WhammyConversion{
 		whammy:     whammy,
-		normalized: !slices.Equal(simplifyBendPoints(encoded), points),
+		normalized: !slices.Equal(simplifyBendPoints(canonicalizeStandardWhammyPoints(simplifyBendPoints(encoded))), points),
 	}
 }
 

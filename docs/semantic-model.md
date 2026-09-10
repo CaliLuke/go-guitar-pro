@@ -180,6 +180,11 @@ unequal middle values, point vibrato, and summary fields. Strict export rejects
 each unapproved change. Parse diagnostics check GPIF curve numbers before they
 enter narrow legacy fields.
 
+GPIF consumers interpret some monotonic whammy controls as one standard
+gesture. Export reports normalization when that interpretation removes an
+interior hold or changes a noncollinear intermediate rate. The report is based
+on the interpreted target curve, not only the emitted XML coordinates.
+
 Standard bends use three or four wire control points to identify one gesture.
 Import converts these controls to the canonical public gesture. It does not
 change a custom curve or remove a point that has vibrato. A missing GPIF bend

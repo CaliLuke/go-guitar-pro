@@ -258,7 +258,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 70 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 139 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 71 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 139 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -352,6 +352,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |
 | `whammy-corpus-projection` | `note-and-beat-semantics` | `TestWhammyProjectionAdaptersExposeBeatCurves` | `TestAlphaTabWhammyCorpusConformance` | yes | Both corpus adapters must expose whammy curves so semantic comparison can detect regressions. |
+| `whammy-target-interpretation` | `note-and-beat-semantics` | `TestGP8WhammyMiddleHoldReportsInterpretedLoss` | `TestAlphaTabGP8WhammyTargetInterpretation` | yes | Loss reporting must compare the authored curve with the curve consumers interpret, not only the raw GPIF controls. |
 | `octave-variant-conformance` | `note-and-beat-semantics` | `TestSemanticMatrixM10BeatEffects` | none | yes | Each octave variant must survive GP8 export, Go reimport, and independent consumption. |
 | `semantic-wire-requires-behavior` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A structural schema round trip cannot satisfy a semantic wire-field obligation. |
 | `semantic-wire-executable-assertion` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A semantic wire mapping must have an exact executable assertion in its focused case. |

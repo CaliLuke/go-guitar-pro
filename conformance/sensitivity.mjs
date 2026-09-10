@@ -359,6 +359,16 @@ const mutations = [
     want: 'bar 0 AlphaTab whammy'
   },
   {
+    id: 'whammy-raw-point-only-preservation',
+    contract: 'whammy-target-interpretation',
+    category: 'loss-report',
+    file: 'gp8_writer.go',
+    before: '\t\tnormalized: !slices.Equal(simplifyBendPoints(canonicalizeStandardWhammyPoints(simplifyBendPoints(encoded))), points),\n',
+    after: '\t\tnormalized: !slices.Equal(simplifyBendPoints(encoded), points),\n',
+    test: '^TestGP8WhammyMiddleHoldReportsInterpretedLoss$',
+    want: 'want target GP8 and codes [gp8.normalize.whammy-curve]'
+  },
+  {
     id: 'octave-variant-conformance',
     category: 'serialization',
     file: 'gp8_writer.go',

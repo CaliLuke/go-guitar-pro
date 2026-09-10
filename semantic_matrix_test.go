@@ -122,6 +122,7 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM11Validation":                         runSemanticMatrixM11Validation,
 	"TestSemanticMatrixM12CurvePreservation":                  runSemanticMatrixM12CurvePreservation,
 	"TestSemanticMatrixM12WhammyContexts":                     runSemanticMatrixM12WhammyContexts,
+	"TestGP8WhammyMiddleHoldReportsInterpretedLoss":           runSemanticMatrixM12WhammyTargetInterpretation,
 	"TestSemanticMatrixM12CurveLossPolicy":                    runSemanticMatrixM12CurveLossPolicy,
 	"TestSemanticMatrixM12CurveValidation":                    runSemanticMatrixM12CurveValidation,
 	"TestSemanticMatrixM13HarmonicVariants":                   runSemanticMatrixM13HarmonicVariants,

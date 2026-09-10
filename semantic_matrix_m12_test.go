@@ -154,6 +154,19 @@ func runSemanticMatrixM12WhammyContexts(run *semanticMatrixRun) {
 	}
 }
 
+func runSemanticMatrixM12WhammyTargetInterpretation(run *semanticMatrixRun) {
+	song := m12Song(run.t)
+	m12SetCurve(song, "whammy", &BendEffect{Points: []BendPoint{
+		{Position: 0}, {Position: 3, Value: -4}, {Position: 9, Value: -4}, {Position: 12, Value: -8},
+	}})
+	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	var code string
+	if len(report.Entries) == 1 {
+		code = report.Entries[0].Code
+	}
+	run.Field("BeatEffects.TremoloBar", code, "gp8.normalize.whammy-curve")
+}
+
 func TestSemanticMatrixM12CurveLossPolicy(t *testing.T) {
 	runSemanticMatrixM12CurveLossPolicy(newSemanticMatrixRun(t))
 }
