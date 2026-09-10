@@ -20,6 +20,9 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		Time: fmt.Sprintf("%d/%d", header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value),
 		Bars: bars,
 	}
+	if header.FreeTime {
+		result.FreeTime = &struct{}{}
+	}
 	if len(header.Fermatas) > 0 {
 		result.Fermatas = &gpifFermatas{Fermatas: make([]gpifFermata, 0, len(header.Fermatas))}
 		for _, fermata := range header.Fermatas {

@@ -5,8 +5,8 @@
   "title": "Preserve free-time bars without inventing a meter",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -62,8 +62,8 @@
     },
     {
       "kind": "source",
-      "reference": "gpif_types.go",
-      "detail": "Reviewed implementation or documented contract."
+      "reference": "conformance_free_time_test.go",
+      "detail": "Focused public, exact wire, meter-timing, post-parse edit, strict export, and pinned AlphaTab evidence."
     },
     {
       "kind": "probe",
@@ -72,9 +72,14 @@
     }
   ],
   "shared_files": [
-    "gpif_types.go"
+    "headers.go",
+    "gpif_types.go",
+    "gpif_parser.go",
+    "gp8_notation.go",
+    "conformance_free_time_test.go",
+    "conformance/feature-ledger.json"
   ],
-  "resolution": null,
+  "resolution": "MeasureHeader.FreeTime now preserves the authored GPIF presence marker independently on every master bar. Import treats element presence as true without inheriting or interpreting text payloads. Non-pickup finalization continues to use exact numeric meter length even when free-time voice content is empty, shorter, or longer; only the existing opening anacrusis rule uses content. GP8 emits FreeTime exactly when true without a loss report. Focused fixture, timing, exact wire, Go reimport, post-parse edit, strict export, and pinned AlphaTab evidence covers the scoped behavior.",
   "verification": [],
   "issue": {
     "number": 48,

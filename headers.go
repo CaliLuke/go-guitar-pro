@@ -27,6 +27,9 @@ type Clipboard struct {
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
 	Marker *Marker
+	// FreeTime reports whether this master bar has the authored GPIF free-time
+	// marker. The numeric time signature remains authoritative for timing.
+	FreeTime bool
 	// Fermatas contains the authored holds on this master bar. Each value owns
 	// its exact measure-relative offset, symbol type, and length. Beat-level
 	// association is derived by consumers and is not a second mutable copy.

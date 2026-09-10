@@ -130,6 +130,15 @@ legacy values on `Song` produce normalization reports. Embedded newlines in one
 notice item also produce a report because GPIF stores one newline-separated
 text value.
 
+`MeasureHeader.FreeTime` preserves the GPIF marker on its exact master bar.
+The marker is present or absent independently on every bar; it does not inherit
+and it does not replace the numeric `TimeSignature`. Finalization therefore uses
+the exact notated meter length for every non-pickup bar, even when a free-time
+bar has empty, shorter, or longer voice content. Only the existing opening
+`Song.Anacrusis` rule uses content length. GP8 writes `<FreeTime>` only when the
+flag is true. GPIF defines this as element presence, so even a source spelling
+such as `<FreeTime>false</FreeTime>` means true.
+
 GP8 stores track visibility outside GPIF. It stores notation and tablature view
 flags in the part configuration. The writer reports other non-default track and
 beat display settings. It also reports page setup, marker color, voice direction,

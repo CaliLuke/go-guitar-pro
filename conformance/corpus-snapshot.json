@@ -8558,10 +8558,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "29049cf2c6bc61e5ad7557d1b3ed1c7356403b9618d7b681d31a62b0d6be8f68"
+          "locationsSha256": "27d6e77a07e6bb465e7a8ca1f1c96ab346bc738a58fa0103d7979aa6a7b87f92"
         }
       ],
       "differences": null

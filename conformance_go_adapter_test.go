@@ -17,6 +17,7 @@ func normalizeGoScore(song *Song) any {
 			"index":            index,
 			"start":            header.Start - DurationQuarterTime,
 			"timeSignature":    []any{header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value},
+			"freeTime":         header.FreeTime,
 			"repeatStart":      header.RepeatStart,
 			"repeatCount":      header.RepeatCount,
 			"alternateEndings": header.RepeatAlternative,

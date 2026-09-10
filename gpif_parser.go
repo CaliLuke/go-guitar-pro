@@ -301,6 +301,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 		// Double bar
 		mh.DoubleBar = mb.DoubleBar != nil
+		mh.FreeTime = mb.FreeTime != nil
 
 		if mb.Directions != nil {
 			for _, target := range mb.Directions.Targets {

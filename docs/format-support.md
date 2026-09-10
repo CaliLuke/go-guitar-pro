@@ -12,6 +12,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
 | `clef-octave` | gp6, gp7, gp8 | supported | none | Every GPIF bar-level clef octave survives import, post-parse editing, GP8 export, and pinned AlphaTab consumption independently from Beat.Octave. |
 | `fermata` | gp6, gp7, gp8 | supported | none | GPIF fermata offsets, types, and lengths survive import, post-parse editing, GP8 export, and pinned AlphaTab consumption. Beat association remains derived from the authoritative master-bar records. |
+| `free-time` | gp6, gp7, gp8 | supported | none | The authored GPIF FreeTime marker survives exact master-bar import, post-parse editing, GP8 export, and pinned AlphaTab consumption without replacing numeric meter timing. |
 | `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix inventories and tests public note and beat fields, effects, strict export decisions, and independent consumption; audited upstream-only model surface is recorded by issue 34. |
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
@@ -207,7 +208,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
 | `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
 | `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
-| `MeasureHeader` | `rhythm` | 12 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. |
+| `MeasureHeader` | `rhythm` | 13 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
 | `Fermata` | `fermata` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The fermata preserves one authored master-bar offset, symbol type, and finite length. |
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
@@ -252,7 +253,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 204 |
+| `preserved` | 205 |
 | `normalized` | 34 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -263,7 +264,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 76 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 77 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -271,7 +272,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 237 |
+| `schema` | 238 |
 
 ## Source dispatch inventory
 
@@ -330,6 +331,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
 | `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | Every supported fermata symbol, exact master-bar offset, and finite length survives as an independent authored value while beat association remains consumer-derived. |
+| `free-time-preservation` | `free-time` | `TestConformanceFreeTime` | `TestAlphaTabPreservesFreeTime` | no | Every authored free-time marker survives on its exact master bar without changing numeric meter timing. |
 | `direction-preservation` | `score-core` | `TestConformanceDirections` | `TestAlphaTabPreservesDirections` | no | Every navigation target and jump survives as one canonical set, including simultaneous markers and documented legacy pointer reconciliation. |
 | `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
 | `unclassified-source-dispatch` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A new semantic dispatch case must receive a source disposition before the gate passes. |

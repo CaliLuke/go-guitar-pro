@@ -113,6 +113,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceDirections":                         runConformanceDirections,
 	"TestConformanceClefOctave":                         runConformanceClefOctave,
 	"TestConformanceFermatas":                           runConformanceFermatas,
+	"TestConformanceFreeTime":                           runConformanceFreeTime,
 	"TestConformanceAuthorityAndBoundaries":             runConformanceAuthorityAndBoundaries,
 	"TestConformanceDurations":                          runConformanceDurations,
 	"TestConformanceExactTiming":                        runConformanceExactTiming,

@@ -342,20 +342,20 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF FreeTime has no model destination. Fixed meter timing cannot express the authored free-time flag.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "MeasureHeader.FreeTime preserves exact GPIF master-bar presence independently from numeric meter and GP8 exports the marker without loss.",
+      "acceptance": "Covered by TestConformanceFreeTime and TestAlphaTabPreservesFreeTime, including fixture locations, meter-driven timing, post-parse edits, and presence semantics.",
       "upstream": [
         "MasterBar.isFreeTime"
       ],
       "evidence": [
         {
           "kind": "source",
-          "reference": "gpif_types.go",
-          "detail": "Reviewed implementation or documented contract."
+          "reference": "conformance_free_time_test.go",
+          "detail": "Public import, timing, exact wire, post-parse edit, strict export, and pinned-consumer assertions."
         },
         {
           "kind": "probe",

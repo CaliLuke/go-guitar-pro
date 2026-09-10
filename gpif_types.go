@@ -382,6 +382,7 @@ type gpifMasterBar struct {
 	Section          *gpifSection    `xml:"Section,omitempty"`
 	Key              gpifKey         `xml:"Key"`
 	Time             string          `xml:"Time"`
+	FreeTime         *struct{}       `xml:"FreeTime,omitempty"`
 	Fermatas         *gpifFermatas   `xml:"Fermatas,omitempty"`
 	Bars             string          `xml:"Bars"`
 	AlternateEndings string          `xml:"AlternateEndings,omitempty"`

@@ -494,6 +494,7 @@ export function normalizeScore(score) {
       index: masterBar.index,
       start: masterBar.start,
       timeSignature: [masterBar.timeSignatureNumerator, masterBar.timeSignatureDenominator],
+      freeTime: Boolean(masterBar.isFreeTime),
       repeatStart: Boolean(masterBar.isRepeatStart),
       repeatCount: masterBar.repeatCount,
       alternateEndings: masterBar.alternateEndings,
