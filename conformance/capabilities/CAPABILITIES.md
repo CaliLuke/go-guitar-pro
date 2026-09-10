@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 47 | 27 | 25 | 2 |
-| model | 47 | 27 | 26 | 1 |
-| export | 31 | 22 | 46 | 2 |
+| import | 48 | 27 | 24 | 2 |
+| model | 48 | 27 | 25 | 1 |
+| export | 32 | 22 | 45 | 2 |
 
-All three stages have a supported rating in 28 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 29 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -51,7 +51,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Authored note duration percentage | 6 | 4 | 26 |
 | Fermata placement, kind and length | 4 | 4 | 26 |
 | Multiple-bar rest preferences | 4 | 4 | 26 |
-| One-bar and two-bar simile marks | 4 | 4 | 26 |
 | Volume automation events | 8 | 4 | 26 |
 | Chord name, diagram and fingering visibility | 3 | 3 | 26 |
 | Numbered staff notation | 3 | 3 | 26 |
@@ -75,6 +74,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Fade in | 17 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
+| One-bar and two-bar simile marks | 4 | 0 | 26 |
 | Repeat starts and displayed pass counts | 28 | 0 | 26 |
 | String tuning and tuning labels | 360 | 0 | 26 |
 | Tenuto accent | 1 | 0 | 26 |
@@ -1097,13 +1097,11 @@ Completion criterion: Keep direct public values for 0, 1, 2, 6, and 128 across a
 
 Structure. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF Bar.SimileMark has no wire or public destination. The previous-bar repeat symbol is distinct from a repeat section.
+GPIF simile marks now preserve None, Simple, FirstOfDouble and SecondOfDouble through Measure.SimileMark and GP8 export. Commit 339113c adds exact import, independent AlphaTab export and invalid-value evidence. This represents authored repeat symbols; it does not expand playback traversal.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
-
-Bounded work: [Preserve single and double simile marks](work-items/simile.json).
+Completion criterion: Maintain all four values at the owning measure/staff, exact independent GP8 export, and unknown-source/undefined-authored-value checks.
 
 ### double-bar: Double bar lines
 

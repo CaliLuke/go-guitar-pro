@@ -248,7 +248,7 @@ def index_body(items, meta):
              'Implementation tickets have bounded observable requirements. Investigation tickets first classify unresolved behavior and record follow-up defects or explicit limits.', '',
              f"[Database and agent workflow]({BASE}/blob/main/conformance/capabilities/README.md) · [Inventory]({BASE}/blob/main/conformance/capabilities/CAPABILITIES.md) · [Backlog]({BASE}/blob/main/conformance/capabilities/BACKLOG.md)", '',
              'Run `python3 conformance/capabilities/manage.py ready` after checkout. Honor hard dependencies and coordinate shared files. Each ticket contains its evidence and acceptance checklist. Do not close from a passing self-round-trip or coverage count.', '',
-             'Ordinary repeat count semantics already have #38 and are not duplicated here. Simile marks and navigation directions have separate tickets.', '']
+             'Ordinary repeat count semantics already have #38. Simile support landed in commit 339113c under #39 and passed the audit recheck. Neither is duplicated here; navigation directions remain a separate task.', '']
     for kind in ('implementation', 'investigation'):
         lines += [f'## {kind.capitalize()}', '']
         lines += [f"- [{'x' if w['status'] == 'done' else ' '}] {link(w)} — {w['title']} (P{w['priority']})" for w in order(items) if w['kind'] == kind]

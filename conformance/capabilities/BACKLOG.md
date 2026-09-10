@@ -2,7 +2,7 @@
 
 Generated from `work-items/*.json`. Regenerate with `manage.py refresh`.
 
-78 work items: 47 implementation tasks and 31 investigations.
+77 work items: 46 implementation tasks and 31 investigations.
 Investigation closure records a decision; it does not certify capability support.
 
 Use `manage.py ready` for work without unfinished dependencies. Check shared files before dispatching concurrent work.
@@ -22,7 +22,6 @@ Use `manage.py ready` for work without unfinished dependencies. Check shared fil
 | [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json) | implementation | 1 | todo | — | `midi-bank` |
 | [Preserve pan automation independently from static balance](work-items/pan-automation.json) | implementation | 1 | blocked | `automation-detail` | `pan-automation` |
 | [Export valid percussion notes currently rejected by GP8](work-items/percussion.json) | implementation | 1 | todo | — | `percussion` |
-| [Preserve single and double simile marks](work-items/simile.json) | implementation | 1 | todo | — | `simile` |
 | [Preserve sustain pedal down, hold and release markers](work-items/sustain-pedal.json) | implementation | 1 | todo | — | `sustain-pedal` |
 | [Export authored backing-track synchronization points](work-items/sync-points.json) | implementation | 1 | blocked | `backing-track` | `sync-points` |
 | [Preserve sounding and display transposition separately](work-items/transposition.json) | implementation | 1 | todo | — | `transposition` |

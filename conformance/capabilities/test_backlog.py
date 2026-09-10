@@ -17,7 +17,7 @@ class BacklogTests(unittest.TestCase):
         self.meta = {'published': False}
 
     def test_uncovered_gap_is_rejected(self):
-        items = [w for w in self.items if w['capability'] != 'simile']
+        items = [w for w in self.items if w['capability'] != 'directions']
         with self.assertRaisesRegex(ValueError, 'Uncovered'):
             backlog.validate(items, self.catalog, self.meta)
 
@@ -69,10 +69,10 @@ class BacklogTests(unittest.TestCase):
             self.assertNotIn('sync-points', ready)
             con.execute("UPDATE work_item SET status='done' WHERE id='backing-track'")
             self.assertIn('sync-points', {r[0] for r in con.execute('SELECT id FROM ready_work')})
-            con.execute("UPDATE work_item SET status='in_progress',owner='agent' WHERE id='simile'")
+            con.execute("UPDATE work_item SET status='in_progress',owner='agent' WHERE id='fermata'")
             con.execute("UPDATE work_item SET issue_state='CLOSED' WHERE id='key'")
             ready = {r[0] for r in con.execute('SELECT id FROM ready_work')}
-            self.assertNotIn('simile', ready)
+            self.assertNotIn('fermata', ready)
             self.assertNotIn('key', ready)
             self.assertEqual(con.execute("SELECT id FROM backlog_state_drift WHERE id='key'").fetchone(), ('key',))
 

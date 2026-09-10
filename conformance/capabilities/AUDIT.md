@@ -1,7 +1,7 @@
 # AlphaTab capability audit
 
 Review date: September 10, 2026.
-Library commit: `0c3890b`.
+Initial library review: `0c3890b`. Refreshed after simile support in `339113c`.
 Oracle: AlphaTab 1.8.4, revision `022a45c8e42370f9e12e68949d11eada370da83d`.
 
 The library has substantial remaining capability gaps. A complete existing semantic matrix does not establish AlphaTab parity.
@@ -31,11 +31,11 @@ This preserves the connection between capability planning and executable contrac
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| Import | 47 | 27 | 25 | 2 |
-| Public model | 47 | 27 | 26 | 1 |
-| GP8 export | 31 | 22 | 46 | 2 |
+| Import | 48 | 27 | 24 | 2 |
+| Public model | 48 | 27 | 25 | 1 |
+| GP8 export | 32 | 22 | 45 | 2 |
 
-Only 28 rows have a supported rating across all three stages.
+Only 29 rows have a supported rating across all three stages.
 These are checklist counts with different feature sizes. They are not a percentage of all musical behavior.
 Ratings apply to each row's stated scope, bounds, and format qualifications.
 
@@ -43,7 +43,6 @@ Ratings apply to each row's stated scope, bounds, and format qualifications.
 
 | Capability | Finding | Reproduction or evidence |
 | --- | --- | --- |
-| Simile marks | One-bar and two-bar repeat symbols have no public or GPIF destination. | Four probe inputs lose non-default simile marks. See `simile`. |
 | Navigation | GPIF targets and jumps disappear. GP5 allows only one public direction per header. GP8 omits it. | Eight inputs lose directions. See `directions`. |
 | Fermatas | Hold type, duration, and position are absent from the public model. | Four inputs lose fermatas. See `fermata`. |
 | Free time | The free-time flag disappears. Fixed meter alone cannot preserve it. | `testdata/gp7/free-time.gp`, master bars 1, 2, and 6. |
@@ -81,7 +80,8 @@ The public maximum is 128. Binary offsets remain inside the codecs.
 The public API test and measure conformance cases cover the current contract.
 The broad probe found no repeat-count differences across 28 inputs with non-default repeat values.
 
-Simile marks are a separate feature. They still lack support.
+Simile marks are a separate feature. Commit `339113c` now preserves all four variants through `Measure.SimileMark` and GP8 export.
+The refreshed probe and independent consumer assertion confirm the resolved slice; the existing [issue 39](https://github.com/CaliLuke/go-guitar-pro/issues/39) is closed and no duplicate implementation ticket is filed.
 Expanded repeat and jump traversal remains outside the documented authored-score scope.
 
 Note vibrato strength, tenuto, and separate tapping flags also exist in the current implementation.
@@ -105,7 +105,7 @@ Matching by content avoids treating a renamed local fixture as missing.
 
 Both consumer projections completed for 338 inputs.
 The receipt contains 19,656 capability comparisons, including 2,544 comparisons with non-default source values.
-It records 1,710 raw differences across 43 capability groups.
+It records 1,706 raw differences across 42 capability groups.
 These are capability-per-input differences, not counts of independent defects.
 
 The remaining inputs had explicit blockers:
@@ -152,7 +152,7 @@ The initial audit left issue states unchanged. The follow-up [backlog](BACKLOG.m
 ## Suggested implementation order
 
 1. Fix the lowercase key-mode bug and add the missing upstream fixture cases to focused tests.
-2. Add simile marks, navigation collections, fermatas, free time, and clef octave values.
+2. Add navigation collections, fermatas, free time, and clef octave values.
 3. Preserve transposition, bank changes, sustain pedal data, and per-staff instrument context.
 4. Close export-only technique and automation gaps.
 5. Add the remaining notation and stylesheet fields.
@@ -164,8 +164,8 @@ The database makes the remaining scope visible and keeps the evidence connected.
 
 ## Agent readiness
 
-The follow-up review defines 78 bounded work items for the 73 incomplete capability rows.
-There are 47 implementation tasks and 31 investigations.
+The follow-up review defines 77 bounded work items for the 72 incomplete capability rows.
+There are 46 implementation tasks and 31 investigations.
 Five additional tasks separate export validation failures, an oracle inflater failure, and stale documentation from broader capability work.
 Each task has acceptance criteria, source evidence, a reproduction path, and explicit dependencies.
 The database exposes ready work, blocked work, issue-state drift, and potential shared-file conflicts.

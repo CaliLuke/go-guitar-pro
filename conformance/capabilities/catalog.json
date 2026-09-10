@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "reviewed_at": "2026-09-10",
-  "reviewed_commit": "0c3890b62a0671fd162a3e3f0c5a1c8a97970325",
+  "reviewed_commit": "339113c",
   "capabilities": [
     {
       "id": "repeat-count",
@@ -136,12 +136,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Bar.SimileMark has no wire or public destination. The previous-bar repeat symbol is distinct from a repeat section.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GPIF simile marks now preserve None, Simple, FirstOfDouble and SecondOfDouble through Measure.SimileMark and GP8 export. Commit 339113c adds exact import, independent AlphaTab export and invalid-value evidence. This represents authored repeat symbols; it does not expand playback traversal.",
+      "acceptance": "Maintain all four values at the owning measure/staff, exact independent GP8 export, and unknown-source/undefined-authored-value checks.",
       "upstream": [
         "Bar.simileMark",
         "SimileMark.*"
@@ -149,13 +149,48 @@
       "evidence": [
         {
           "kind": "source",
-          "reference": "gpif_types.go",
-          "detail": "Reviewed implementation or documented contract."
+          "reference": "measure.go",
+          "detail": "Simile support reviewed in commit 339113c."
         },
         {
-          "kind": "probe",
-          "reference": "testdata/gp7/slash.gp:simile",
-          "detail": "Reproduced at tracks[0].staves[0].bars[2].simileMark. Source and target values are stored in probe_comparison."
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Simile support reviewed in commit 339113c."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Simile support reviewed in commit 339113c."
+        },
+        {
+          "kind": "source",
+          "reference": "validation.go",
+          "detail": "Simile support reviewed in commit 339113c."
+        },
+        {
+          "kind": "field",
+          "reference": "Measure.SimileMark",
+          "detail": "Semantic matrix records each exported simile enum member separately."
+        },
+        {
+          "kind": "test",
+          "reference": "TestParseGPIFPreservesSimileMarks",
+          "detail": "Exact import, invalid source or independent consumer evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestParseGPIFRejectsUnknownSimileMarkInStrictMode",
+          "detail": "Exact import, invalid source or independent consumer evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesSimileMarks",
+          "detail": "Exact import, invalid source or independent consumer evidence."
+        },
+        {
+          "kind": "issue",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/39",
+          "detail": "Closed after simile implementation in 339113c; independently rechecked for this audit."
         }
       ]
     },
@@ -4906,6 +4941,13 @@
       "title": "Replace count-minus-one repeat fields with a semantic repeat API",
       "url": "https://github.com/CaliLuke/go-guitar-pro/issues/38",
       "checked_at": "2026-09-10"
+    },
+    {
+      "number": 39,
+      "state": "CLOSED",
+      "url": "https://github.com/CaliLuke/go-guitar-pro/issues/39",
+      "title": "Preserve GPIF simile measure repeats",
+      "checked_at": "2026-09-10T18:55:30.317693+00:00"
     }
   ],
   "website_mapping": {

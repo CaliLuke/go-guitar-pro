@@ -40,9 +40,9 @@ Useful queries:
 -- Compare our stages with each row in the public format documentation.
 SELECT * FROM website_comparison WHERE format='gp8';
 
--- Find the exact values lost in a simile example.
+-- Find the exact values lost in a navigation example.
 SELECT * FROM observed_differences
-WHERE title='One-bar and two-bar simile marks';
+WHERE title='Navigation targets and jumps';
 
 -- Find source fields that still need an explicit capability association.
 SELECT name,path,line FROM unreviewed_constructs
@@ -160,7 +160,7 @@ The remaining AlphaTab products, such as rendering and playback, remain explicit
 python3 conformance/capabilities/backlog.py sync
 python3 conformance/capabilities/manage.py refresh
 python3 conformance/capabilities/manage.py ready
-python3 conformance/capabilities/backlog.py show simile
+python3 conformance/capabilities/backlog.py show key
 ```
 
 `sync` reads GitHub issue states and saves them locally. It sends no messages and changes no issue state.
@@ -200,7 +200,7 @@ Integrate changes serially when they share the catalog, semantic ledger, or gene
 ```sql
 SELECT id,kind,priority,title,issue_url FROM ready_work ORDER BY priority,id;
 SELECT * FROM blocked_work;
-SELECT * FROM work_conflicts WHERE work_id='simile' OR other_work_id='simile';
+SELECT * FROM work_conflicts WHERE work_id='fermata' OR other_work_id='fermata';
 SELECT * FROM uncovered_gaps;
 SELECT * FROM unticketed_work;
 SELECT * FROM backlog_state_drift;
