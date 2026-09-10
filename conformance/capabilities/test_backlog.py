@@ -1,6 +1,8 @@
 """Protect work dispatch, evidence requirements, and publication identity."""
 
 import copy
+import base64
+import json
 import sqlite3
 import unittest
 from contextlib import closing
@@ -82,6 +84,15 @@ class BacklogTests(unittest.TestCase):
         self.assertIsNone(backlog.find_existing(issues, 'directions'))
         with self.assertRaisesRegex(ValueError, 'Duplicate GitHub markers'):
             backlog.find_existing(issues * 2, 'simile')
+
+    def test_github_control_byte_display_is_lossless_and_does_not_mutate_evidence(self):
+        value = {'text': chr(0) + 'Intro' + chr(0), 'other': 'Verse\nChorus'}
+        shown = backlog.display_evidence(value)
+        self.assertEqual(shown['text']['encoding'], 'base64-utf8')
+        self.assertEqual(base64.b64decode(shown['text']['data']).decode(), value['text'])
+        self.assertEqual(shown['other'], value['other'])
+        self.assertTrue(value['text'].startswith(chr(0)))
+        self.assertNotIn('\\u0000', json.dumps(shown))
 
     def test_unprobed_capability_has_no_phantom_blocked_comparison(self):
         with closing(sqlite3.connect(':memory:')) as con:

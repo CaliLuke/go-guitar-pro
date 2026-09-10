@@ -2,6 +2,7 @@
 """Validate, inspect, and publish bounded capability work items."""
 
 import argparse
+import base64
 import collections
 from datetime import datetime, timezone
 import json
@@ -141,6 +142,17 @@ def marker(name):
     return f'<!-- go-guitar-pro-capability-work:{name} -->'
 
 
+def display_evidence(value):
+    """Keep GitHub from rewriting control bytes in JSON code blocks."""
+    if isinstance(value, str) and any(ord(c) < 32 and c not in '\r\n\t' for c in value):
+        return {'encoding': 'base64-utf8', 'data': base64.b64encode(value.encode()).decode()}
+    if isinstance(value, list):
+        return [display_evidence(v) for v in value]
+    if isinstance(value, dict):
+        return {k: display_evidence(v) for k, v in value.items()}
+    return value
+
+
 def issue_body(w, items, meta):
     by_id = {i['id']: i for i in items}
     oracle = read(ROOT / 'conformance/oracle.json')
@@ -161,13 +173,15 @@ def issue_body(w, items, meta):
     repro = w['reproduction']
     if repro['kind'] == 'runtime-candidate':
         lines += [f"Fixture: `{repro['fixture']}`. Probe capability: `{repro['capability']}`.", '',
-                  'Saved observed differences (absence is distinct from a null value):', '', '```json', json.dumps(repro['differences'], indent=2), '```', '',
+                  'Saved observed differences (absence is distinct from a null value):', '', '```json', json.dumps(display_evidence(repro['differences']), indent=2), '```', '',
                   'Inspect the complete receipt with:', '', '```sh',
                   'python3 conformance/capabilities/manage.py query ' + json.dumps("SELECT * FROM probe_comparison WHERE capability_id='" + repro['capability'] + "' AND fixture_path='" + repro['fixture'].replace("'", "''") + "'"), '```', '',
                   'For a `packages/alphatab/test-data/...` path, obtain the original from the pinned reference checkout. Synthetic fixture construction is recorded in `conformance/capabilities/probe.mjs`.']
     else:
         lines += ['This starts from a source review. Construct a valid non-default fixture that exercises the acceptance criteria; the lack of a saved probe is not evidence of support.']
     lines.append('')
+    if display_evidence(repro.get('differences')) != repro.get('differences'):
+        lines += ['Strings with control bytes use an explicit base64-utf8 wrapper above because GitHub rewrites those bytes. The database stores the exact original strings.', '']
     for e in w['evidence']:
         if e['kind'] == 'upstream-source':
             lines.append(f"- AlphaTab [{e['symbol']}]({e['url']})")

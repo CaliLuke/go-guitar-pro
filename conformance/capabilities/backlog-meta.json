@@ -1,6 +1,11 @@
 {
   "schema_version": 1,
-  "baseline_commit": null,
-  "published": false,
-  "index_issue": null
+  "baseline_commit": "30436b08bf7f342ceda0d97c5ddd2c085db1b4f1",
+  "published": true,
+  "index_issue": {
+    "number": 40,
+    "url": "https://github.com/CaliLuke/go-guitar-pro/issues/40",
+    "state": "OPEN",
+    "checked_at": "2026-09-10T18:55:53.125042+00:00"
+  }
 }

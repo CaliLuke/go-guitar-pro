@@ -86,5 +86,10 @@
   ],
   "resolution": null,
   "verification": [],
-  "issue": null
+  "issue": {
+    "number": 65,
+    "url": "https://github.com/CaliLuke/go-guitar-pro/issues/65",
+    "state": "OPEN",
+    "checked_at": "2026-09-10T19:00:04.741456+00:00"
+  }
 }

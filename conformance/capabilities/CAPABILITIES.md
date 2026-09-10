@@ -93,7 +93,7 @@ The corpus oracle omits many authored fields. Zero current differences only desc
 
 Completion criterion: Extend independent comparisons for each new public capability with valid non-default fixtures and narrow normalization rules.
 
-Bounded work: [Make broad capability comparisons reliable acceptance evidence](work-items/oracle-breadth.json); [Isolate pinned AlphaTab inflater failures in transposition fixtures](work-items/oracle-inflater.json).
+Bounded work: [Make broad capability comparisons reliable acceptance evidence](https://github.com/CaliLuke/go-guitar-pro/issues/67); [Isolate pinned AlphaTab inflater failures in transposition fixtures](https://github.com/CaliLuke/go-guitar-pro/issues/68).
 
 ### upstream-discovery: Complete upstream capability discovery
 
@@ -105,7 +105,7 @@ Old inventory spans nine primary model files, omits related classes/enums and mi
 
 Completion criterion: Review every unlinked upstream construct and new documentation row. Preserve explicit scope and independent stage evidence.
 
-Bounded work: [Correct stale semantic documentation and diagnostic labels](work-items/documentation-contract-drift.json); [Reconcile expanded source inventory with executable obligations](work-items/upstream-discovery.json).
+Bounded work: [Correct stale semantic documentation and diagnostic labels](https://github.com/CaliLuke/go-guitar-pro/issues/46); [Reconcile expanded source inventory with executable obligations](https://github.com/CaliLuke/go-guitar-pro/issues/71).
 
 ### chord-diagram: Chord diagrams, barres and fingering
 
@@ -117,7 +117,7 @@ Name, string pattern and representable first fret survive. GP8 omits barres, fin
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json).
+Bounded work: [Preserve representable chord diagram barres and fingerings](https://github.com/CaliLuke/go-guitar-pro/issues/79).
 
 ### chord-name: Chord names and scoped definitions
 
@@ -139,7 +139,7 @@ GPIF diagram display properties are audited but not retained as independent publ
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve independent chord display flags](work-items/chord-display.json).
+Bounded work: [Preserve independent chord display flags](https://github.com/CaliLuke/go-guitar-pro/issues/104).
 
 ### bends: Bend curves and styles
 
@@ -151,7 +151,7 @@ Common gestures and curves work. Narrow point units, target hold interpretation 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Define exact bend precision and style boundaries](work-items/bends.json); [Investigate parsed bend point order rejected by export](work-items/export-curve-order.json).
+Bounded work: [Define exact bend precision and style boundaries](https://github.com/CaliLuke/go-guitar-pro/issues/60); [Investigate parsed bend point order rejected by export](https://github.com/CaliLuke/go-guitar-pro/issues/62).
 
 ### dynamics: Beat dynamics and note velocities
 
@@ -163,7 +163,7 @@ Eight GPIF dynamics and binary velocities are modeled. GP8 quantizes the beat an
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Establish target limits for per-note dynamics and velocities](work-items/dynamics.json).
+Bounded work: [Establish target limits for per-note dynamics and velocities](https://github.com/CaliLuke/go-guitar-pro/issues/61).
 
 ### grace: Ordered grace notes and transitions
 
@@ -175,7 +175,7 @@ Ordered note-level graces preserve several fields. Full beat-level grace chords,
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Bound remaining grace chord and transition semantics](work-items/grace.json).
+Bounded work: [Bound remaining grace chord and transition semantics](https://github.com/CaliLuke/go-guitar-pro/issues/65).
 
 ### tremolo: Tremolo picking and stroke styles
 
@@ -187,7 +187,7 @@ Legacy durations parse. GPIF durations project into legacy note effects. GP8 omi
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export tremolo picking and preserve supported stroke variants](work-items/tremolo.json).
+Bounded work: [Export tremolo picking and preserve supported stroke variants](https://github.com/CaliLuke/go-guitar-pro/issues/57).
 
 ### whammy: Whammy curves and styles
 
@@ -199,7 +199,7 @@ Curve normalization and strict loss reports are tested. Target gesture interpret
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Classify remaining whammy curve and style losses](work-items/whammy.json).
+Bounded work: [Classify remaining whammy curve and style losses](https://github.com/CaliLuke/go-guitar-pro/issues/72).
 
 ### barre: Beat barre fret and shape
 
@@ -211,7 +211,7 @@ BarreFret and BarreString properties are audited as omissions. Chord diagram bar
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve beat barre fret and shape](work-items/barre.json).
+Bounded work: [Preserve beat barre fret and shape](https://github.com/CaliLuke/go-guitar-pro/issues/74).
 
 ### beat-octave: Beat octave shifts
 
@@ -233,7 +233,7 @@ GPIF strength collapses into BeatEffects.Vibrato. GP8 omits beat vibrato.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve and export beat vibrato strength](work-items/beat-vibrato.json).
+Bounded work: [Preserve and export beat vibrato strength](https://github.com/CaliLuke/go-guitar-pro/issues/77).
 
 ### brush: Brush and arpeggio timing
 
@@ -245,7 +245,7 @@ Direction survives. GPIF brush duration XProperty is not retained. The GP8 write
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored brush and arpeggio timing](work-items/brush.json).
+Bounded work: [Preserve authored brush and arpeggio timing](https://github.com/CaliLuke/go-guitar-pro/issues/78).
 
 ### dead-slap: Dead-slapped beats
 
@@ -257,7 +257,7 @@ GPIF DeadSlapped is absent. Existing oracle normalization treats an empty dead s
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve dead-slapped beats without reducing them to rests](work-items/dead-slap.json).
+Bounded work: [Preserve dead-slapped beats without reducing them to rests](https://github.com/CaliLuke/go-guitar-pro/issues/80).
 
 ### fade-in: Fade in
 
@@ -279,7 +279,7 @@ Only a FadeIn boolean is exposed. Other GPIF Fadding variants produce lossy-proj
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve fade-out and volume-swell beat effects](work-items/fade-other.json).
+Bounded work: [Preserve fade-out and volume-swell beat effects](https://github.com/CaliLuke/go-guitar-pro/issues/81).
 
 ### golpe: Golpe thumb and finger marks
 
@@ -291,7 +291,7 @@ GPIF Golpe is absent from wire and public beat types.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve thumb and finger golpe marks](work-items/golpe.json).
+Bounded work: [Preserve thumb and finger golpe marks](https://github.com/CaliLuke/go-guitar-pro/issues/83).
 
 ### hairpins: Crescendo and decrescendo
 
@@ -323,7 +323,7 @@ Pick stroke parses into the public model, but GP8 export reports it as omitted.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export existing pick stroke directions](work-items/pick-stroke.json).
+Bounded work: [Export existing pick stroke directions](https://github.com/CaliLuke/go-guitar-pro/issues/88).
 
 ### rasgueado: Rasgueado patterns
 
@@ -335,7 +335,7 @@ Legacy boolean data exists. GPIF named finger patterns do not have a public repr
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve named rasgueado finger patterns](work-items/rasgueado.json).
+Bounded work: [Preserve named rasgueado finger patterns](https://github.com/CaliLuke/go-guitar-pro/issues/89).
 
 ### tap-slap-pop: Tap, slap and pop distinctions
 
@@ -347,7 +347,7 @@ Slap and pop share one SlapEffect value and cannot coexist. Separate note Tapped
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json).
+Bounded work: [Preserve independent tap, slap and pop beat techniques](https://github.com/CaliLuke/go-guitar-pro/issues/93).
 
 ### wah: Wah pedal state
 
@@ -359,7 +359,7 @@ Legacy mix-table Wah data exists. GPIF Beat.Wah is explicitly unsupported and th
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve wah pedal state through GPIF and GP8](work-items/wah.json).
+Bounded work: [Preserve wah pedal state through GPIF and GP8](https://github.com/CaliLuke/go-guitar-pro/issues/94).
 
 ### container: GP3-GP8 containers and file APIs
 
@@ -381,7 +381,7 @@ No decryption support. The format website also lists this as unsupported by Alph
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Decide scope and oracle for password-protected Guitar Pro files](work-items/password.json).
+Bounded work: [Decide scope and oracle for password-protected Guitar Pro files](https://github.com/CaliLuke/go-guitar-pro/issues/116).
 
 ### absolute-pitch: Non-stringed MIDI pitch
 
@@ -403,7 +403,7 @@ A common track capo survives. Public Staff has no independent capo value. Differ
 
 Completion criterion: Use two staves with distinct nonzero capos. Assert sounding pitches and per-staff values before and after export.
 
-Bounded work: [Preserve independent capo values on multiple staves](work-items/capo.json).
+Bounded work: [Preserve independent capo values on multiple staves](https://github.com/CaliLuke/go-guitar-pro/issues/43).
 
 ### clef: Treble, bass, alto, tenor and percussion clefs
 
@@ -425,7 +425,7 @@ GPIF Bar.Ottavia is not decoded. Beat.Ottavia is supported but cannot replace th
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve bar-level clef octave shifts](work-items/clef-octave.json).
+Bounded work: [Preserve bar-level clef octave shifts](https://github.com/CaliLuke/go-guitar-pro/issues/44).
 
 ### percussion: Percussion identities and notation
 
@@ -437,7 +437,7 @@ Separate articulation identities and MIDI output survive. Some notation resource
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export valid percussion notes currently rejected by GP8](work-items/percussion.json).
+Bounded work: [Export valid percussion notes currently rejected by GP8](https://github.com/CaliLuke/go-guitar-pro/issues/53).
 
 ### transposition: Concert and display transposition
 
@@ -449,7 +449,7 @@ GPIF Transpose produces an unsupported-feature diagnostic. PartSounding and inde
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve sounding and display transposition separately](work-items/transposition.json).
+Bounded work: [Preserve sounding and display transposition separately](https://github.com/CaliLuke/go-guitar-pro/issues/56).
 
 ### tuning: String tuning and tuning labels
 
@@ -461,7 +461,7 @@ MIDI tuning values survive. AlphaTab stringTuning also stores authored labels th
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve tuning labels independently from pitches](work-items/tuning.json).
+Bounded work: [Preserve tuning labels independently from pitches](https://github.com/CaliLuke/go-guitar-pro/issues/58).
 
 ### legacy-instrument: Fret count, twelve strings and banjo
 
@@ -473,7 +473,7 @@ Legacy instrument flags parse. GP8 reports fret count, twelve-string and banjo f
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve GP8 support for legacy instrument flags](work-items/legacy-instrument.json).
+Bounded work: [Resolve GP8 support for legacy instrument flags](https://github.com/CaliLuke/go-guitar-pro/issues/97).
 
 ### partial-capo: Partial capo across selected strings
 
@@ -485,7 +485,7 @@ No per-string capo model. Website lists this as unsupported in AlphaTab too; kee
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Decide the supported scope for partial capos](work-items/partial-capo.json).
+Bounded work: [Decide the supported scope for partial capos](https://github.com/CaliLuke/go-guitar-pro/issues/115).
 
 ### metadata: Score identity and credits
 
@@ -497,7 +497,7 @@ Most score metadata survives. Binary Writer, Comments, Date and clipboard proven
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Classify GP8 limits for binary-only score metadata](work-items/metadata.json).
+Bounded work: [Classify GP8 limits for binary-only score metadata](https://github.com/CaliLuke/go-guitar-pro/issues/99).
 
 ### short-name: Track short names
 
@@ -509,7 +509,7 @@ GPIF ShortName is absent from the decoded track and public Track.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored track short names](work-items/short-name.json).
+Bounded work: [Preserve authored track short names](https://github.com/CaliLuke/go-guitar-pro/issues/91).
 
 ### track-identity: Track name and color
 
@@ -531,7 +531,7 @@ Binary display flags exist. GPIF XProperties and stem-direction elements are abs
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored beam groups and stem overrides](work-items/beaming.json).
+Bounded work: [Preserve authored beam groups and stem overrides](https://github.com/CaliLuke/go-guitar-pro/issues/75).
 
 ### notation-visibility: Track visibility and standard/tab flags
 
@@ -543,7 +543,7 @@ ZIP import reads LayoutConfiguration visibility but does not read PartConfigurat
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Read and preserve per-staff part notation settings](work-items/notation-visibility.json).
+Bounded work: [Read and preserve per-staff part notation settings](https://github.com/CaliLuke/go-guitar-pro/issues/86).
 
 ### slash: Slashed beats and slash staff notation
 
@@ -555,7 +555,7 @@ GPIF Slashed and per-staff slash notation lack lossless public destinations.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve slashed beats and slash staff notation separately](work-items/slash.json).
+Bounded work: [Preserve slashed beats and slash staff notation separately](https://github.com/CaliLuke/go-guitar-pro/issues/92).
 
 ### display-duration-override: Independent display-duration override
 
@@ -567,7 +567,7 @@ AlphaTab Beat.overrideDisplayDuration has no equivalent public field. Its applic
 
 Completion criterion: Find a valid Guitar Pro source for an independent display duration or document that this is exclusive to other formats.
 
-Bounded work: [Determine whether GP input authors independent display duration](work-items/display-duration-override.json).
+Bounded work: [Determine whether GP input authors independent display duration](https://github.com/CaliLuke/go-guitar-pro/issues/111).
 
 ### layout: System layout and forced line breaks
 
@@ -579,7 +579,7 @@ Legacy line breaks parse. GPIF system layouts and bar/master-bar scale lack publ
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Bound system layout, scale and line-break preservation](work-items/layout.json).
+Bounded work: [Bound system layout, scale and line-break preservation](https://github.com/CaliLuke/go-guitar-pro/issues/112).
 
 ### multi-rest: Multiple-bar rest preferences
 
@@ -591,7 +591,7 @@ No public score/track multirest display preferences corresponding to the AlphaTa
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve score and track multirest preferences](work-items/multi-rest.json).
+Bounded work: [Preserve score and track multirest preferences](https://github.com/CaliLuke/go-guitar-pro/issues/105).
 
 ### note-display: Note visibility and notehead overrides
 
@@ -603,7 +603,7 @@ Pitched-note visibility, custom noteheads and note style are absent. Percussion 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Determine GP source support for note visibility and noteheads](work-items/note-display.json).
+Bounded work: [Determine GP source support for note visibility and noteheads](https://github.com/CaliLuke/go-guitar-pro/issues/113).
 
 ### numbered: Numbered staff notation
 
@@ -615,7 +615,7 @@ The public staff settings do not represent AlphaTab numbered notation.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve numbered notation per staff](work-items/numbered.json).
+Bounded work: [Preserve numbered notation per staff](https://github.com/CaliLuke/go-guitar-pro/issues/106).
 
 ### page-setup: Page setup, headers and footer templates
 
@@ -627,7 +627,7 @@ Legacy PageSetup is modeled and omitted on GP8 export. Pinned AlphaTab also expo
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve page and header/footer preservation scope](work-items/page-setup.json).
+Bounded work: [Resolve page and header/footer preservation scope](https://github.com/CaliLuke/go-guitar-pro/issues/114).
 
 ### show-string: Explicit note string-number display
 
@@ -639,7 +639,7 @@ ShowStringNumber is recognized by the audit but omitted from the public note.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve explicit string-number display requests](work-items/show-string.json).
+Bounded work: [Preserve explicit string-number display requests](https://github.com/CaliLuke/go-guitar-pro/issues/107).
 
 ### stylesheet: Stylesheet, brackets and track-name policies
 
@@ -651,7 +651,7 @@ Legacy page and track settings partially parse. BinaryStylesheet authored polici
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Split remaining authored stylesheet gaps into scoped contracts](work-items/stylesheet.json).
+Bounded work: [Split remaining authored stylesheet gaps into scoped contracts](https://github.com/CaliLuke/go-guitar-pro/issues/117).
 
 ### timer: Authored timer marks
 
@@ -663,7 +663,7 @@ GPIF Timer and explicit/derived timer visibility have no public destination.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored timer marks and visibility](work-items/timer.json).
+Bounded work: [Preserve authored timer marks and visibility](https://github.com/CaliLuke/go-guitar-pro/issues/108).
 
 ### legato-slurs: Legato and authored slurs
 
@@ -675,7 +675,7 @@ Beat.Legato and independent slur endpoints lack public destinations. Hammer or s
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored legato and slur endpoints](work-items/legato-slurs.json).
+Bounded work: [Preserve authored legato and slur endpoints](https://github.com/CaliLuke/go-guitar-pro/issues/50).
 
 ### ties: Tie markers and origin validation
 
@@ -707,7 +707,7 @@ Pitch is projected to MIDI/fret. Concert/transposed spelling and explicit accide
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored pitch spelling and accidental choices](work-items/accidentals.json).
+Bounded work: [Preserve authored pitch spelling and accidental choices](https://github.com/CaliLuke/go-guitar-pro/issues/73).
 
 ### dead-ghost: Dead notes and ghost notes
 
@@ -729,7 +729,7 @@ Presence markers distinguish authored thumb/open from absence. GP8 omits both fi
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export existing left and right hand fingerings](work-items/fingering.json).
+Bounded work: [Export existing left and right hand fingerings](https://github.com/CaliLuke/go-guitar-pro/issues/82).
 
 ### hammer: Hammer-on and pull-off endpoints
 
@@ -741,7 +741,7 @@ Hammer origin is modeled, but explicit destination distinction and full connecti
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve explicit hammer and pull-off destination markers](work-items/hammer.json).
+Bounded work: [Preserve explicit hammer and pull-off destination markers](https://github.com/CaliLuke/go-guitar-pro/issues/84).
 
 ### harmonics: Natural, artificial and feedback harmonics
 
@@ -753,7 +753,7 @@ Harmonic kinds and fractional fret survive. GP8 reports spelling/octave and conf
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve harmonic spelling and octave target limits](work-items/harmonics.json).
+Bounded work: [Resolve harmonic spelling and octave target limits](https://github.com/CaliLuke/go-guitar-pro/issues/96).
 
 ### ornaments: Turns and mordents
 
@@ -765,7 +765,7 @@ GPIF Note.Ornament is absent. All four upstream turn/mordent variants lack a pub
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve turns and mordents through GPIF and GP8](work-items/ornaments.json).
+Bounded work: [Preserve turns and mordents through GPIF and GP8](https://github.com/CaliLuke/go-guitar-pro/issues/87).
 
 ### palm-let-ring: Palm mute and let ring
 
@@ -797,7 +797,7 @@ Legacy DurationPercent parses and validates, but GP8 emits no independent durati
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Determine GP8 support for authored note-duration percentages](work-items/sound-duration.json).
+Bounded work: [Determine GP8 support for authored note-duration percentages](https://github.com/CaliLuke/go-guitar-pro/issues/102).
 
 ### staccato: Staccato
 
@@ -839,7 +839,7 @@ Fret and duration parse. GP8 preserves fret but reports non-target trill duratio
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Determine supported GP8 trill-speed encoding](work-items/trill.json).
+Bounded work: [Determine supported GP8 trill-speed encoding](https://github.com/CaliLuke/go-guitar-pro/issues/103).
 
 ### automation-detail: Automation interpolation and annotations
 
@@ -851,7 +851,7 @@ Tempo/sound event records lack full linear, text, visibility and occurrence stat
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored tempo and sound automation details](work-items/automation-detail.json).
+Bounded work: [Preserve authored tempo and sound automation details](https://github.com/CaliLuke/go-guitar-pro/issues/41).
 
 ### backing-track: Embedded audio backing tracks
 
@@ -863,7 +863,7 @@ Embedded asset data and enabled backing-track references parse. GP8 does not emi
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export embedded audio backing-track assets](work-items/backing-track.json).
+Bounded work: [Export embedded audio backing-track assets](https://github.com/CaliLuke/go-guitar-pro/issues/42).
 
 ### midi-bank: MIDI bank selection and bank changes
 
@@ -875,7 +875,7 @@ Sound MSB/LSB do not exist in gpifSound. Legacy bank/controller data has an omis
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json).
+Bounded work: [Preserve MIDI bank selection and bank changes](https://github.com/CaliLuke/go-guitar-pro/issues/51).
 
 ### midi-routing: MIDI program, channels and mixer
 
@@ -887,7 +887,7 @@ Selected program, channels, volume, balance and mute/solo are retained. Conflict
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Classify parsed invalid MIDI programs that block export](work-items/export-invalid-program.json); [Classify conflicting MIDI port and playback-state limits](work-items/midi-routing.json).
+Bounded work: [Classify parsed invalid MIDI programs that block export](https://github.com/CaliLuke/go-guitar-pro/issues/63); [Classify conflicting MIDI port and playback-state limits](https://github.com/CaliLuke/go-guitar-pro/issues/66).
 
 ### pan-automation: Pan and balance automation events
 
@@ -899,7 +899,7 @@ Legacy mix-table balance changes parse. There is no general pan automation colle
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve pan automation independently from static balance](work-items/pan-automation.json).
+Bounded work: [Preserve pan automation independently from static balance](https://github.com/CaliLuke/go-guitar-pro/issues/52).
 
 ### sound-automation: Sound definitions and program changes
 
@@ -911,7 +911,7 @@ Ordered sound definitions and references are modeled. GPIF bank selections and l
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve negative sound automation positions in grace fixtures](work-items/export-negative-sound-position.json); [Verify sound-definition selection and ordered event fidelity](work-items/sound-automation.json).
+Bounded work: [Resolve negative sound automation positions in grace fixtures](https://github.com/CaliLuke/go-guitar-pro/issues/64); [Verify sound-definition selection and ordered event fidelity](https://github.com/CaliLuke/go-guitar-pro/issues/69).
 
 ### sustain-pedal: Sustain pedal markers
 
@@ -923,7 +923,7 @@ AlphaTab parses SustainPedal automation into bar markers. The Go model and write
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve sustain pedal down, hold and release markers](work-items/sustain-pedal.json).
+Bounded work: [Preserve sustain pedal down, hold and release markers](https://github.com/CaliLuke/go-guitar-pro/issues/54).
 
 ### sync-points: Audio synchronization points
 
@@ -935,7 +935,7 @@ Authored bar occurrence, frame offsets, tempo and visibility are modeled. GP8 om
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export authored backing-track synchronization points](work-items/sync-points.json).
+Bounded work: [Export authored backing-track synchronization points](https://github.com/CaliLuke/go-guitar-pro/issues/55).
 
 ### tempo: Tempo values, event order and names
 
@@ -947,7 +947,7 @@ Fractional opening tempo and ordered tempo events survive. HideTempo cannot be e
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored tempo visibility where GP8 supports it](work-items/tempo.json).
+Bounded work: [Preserve authored tempo visibility where GP8 supports it](https://github.com/CaliLuke/go-guitar-pro/issues/70).
 
 ### volume-automation: Volume automation events
 
@@ -959,7 +959,7 @@ Song.VolumeAutomations preserves channel-strip volume events and linear flags. G
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Export authored channel-strip volume automation](work-items/volume-automation.json).
+Bounded work: [Export authored channel-strip volume automation](https://github.com/CaliLuke/go-guitar-pro/issues/59).
 
 ### mix-table: Legacy mix-table changes and effects
 
@@ -971,7 +971,7 @@ Legacy instrument, tempo and controller changes are modeled. Beat-local mix tabl
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Project supported legacy mix-table events into GP8 automation](work-items/mix-table.json).
+Bounded work: [Project supported legacy mix-table events into GP8 automation](https://github.com/CaliLuke/go-guitar-pro/issues/85).
 
 ### rse: RSE settings and proprietary effects
 
@@ -983,7 +983,7 @@ Legacy RSE records and some GPIF engine/sound state parse. GP8 omits legacy RSE 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Bound RSE data preservation against real GP8 consumers](work-items/rse.json).
+Bounded work: [Bound RSE data preservation against real GP8 consumers](https://github.com/CaliLuke/go-guitar-pro/issues/101).
 
 ### bounds: Checked boundaries and malformed input
 
@@ -1025,7 +1025,7 @@ GP5 exposes only one Direction pointer per header. GPIF Directions is absent and
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve navigation targets and jumps on each measure](work-items/directions.json).
+Bounded work: [Preserve navigation targets and jumps on each measure](https://github.com/CaliLuke/go-guitar-pro/issues/45).
 
 ### fermata: Fermata placement, kind and length
 
@@ -1037,7 +1037,7 @@ GPIF Fermatas and the public fermata model are absent. Holds disappear from the 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve fermata position, type and length](work-items/fermata.json).
+Bounded work: [Preserve fermata position, type and length](https://github.com/CaliLuke/go-guitar-pro/issues/47).
 
 ### free-time: Free-time bars
 
@@ -1049,7 +1049,7 @@ GPIF FreeTime has no model destination. Fixed meter timing cannot express the au
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve free-time bars without inventing a meter](work-items/free-time.json).
+Bounded work: [Preserve free-time bars without inventing a meter](https://github.com/CaliLuke/go-guitar-pro/issues/48).
 
 ### key: Key signatures and key mode spelling
 
@@ -1061,7 +1061,7 @@ Standard Major/Minor values work. A generated valid lowercase minor fixture impo
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve lowercase GPIF minor key modes](work-items/key.json).
+Bounded work: [Preserve lowercase GPIF minor key modes](https://github.com/CaliLuke/go-guitar-pro/issues/49).
 
 ### meter: Meter numerator and denominator
 
@@ -1113,7 +1113,7 @@ Ordinary double bars are emitted. AlphaTab GPIF import clears the final bar Doub
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve final-bar double-line consumer differences](work-items/double-bar.json).
+Bounded work: [Resolve final-bar double-line consumer differences](https://github.com/CaliLuke/go-guitar-pro/issues/95).
 
 ### sections: Separate section marker and text
 
@@ -1125,7 +1125,7 @@ GPIF Letter and Text collapse into Marker.Title. A section containing both loses
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Keep section letters separate from section text](work-items/sections.json).
+Bounded work: [Keep section letters separate from section text](https://github.com/CaliLuke/go-guitar-pro/issues/90).
 
 ### barlines: Extended barline and bar-number controls
 
@@ -1137,7 +1137,7 @@ Only double bars have a dedicated public contract. Dashed/heavy/tick/custom bar 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Determine GPIF representations for extended barlines and numbering](work-items/barlines.json).
+Bounded work: [Determine GPIF representations for extended barlines and numbering](https://github.com/CaliLuke/go-guitar-pro/issues/109).
 
 ### common-time: Common-time and cut-time notation
 
@@ -1149,7 +1149,7 @@ Public TimeSignature contains numeric meter and beam groups, but no common-time 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Determine Guitar Pro support for common and cut time](work-items/common-time.json).
+Bounded work: [Determine Guitar Pro support for common and cut time](https://github.com/CaliLuke/go-guitar-pro/issues/110).
 
 ### beat-lyrics: Lyrics authored directly on a beat
 
@@ -1161,7 +1161,7 @@ GPIF Beat.Lyrics has no dedicated public destination. FreeText and track lyrics 
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json).
+Bounded work: [Preserve lyrics authored directly on beats](https://github.com/CaliLuke/go-guitar-pro/issues/76).
 
 ### lyrics: Score and track lyrics
 
@@ -1173,7 +1173,7 @@ Ordered score/track lyric text and offsets parse. GP8 preserves track lyrics but
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Resolve GP8 export of legacy score-level lyrics](work-items/lyrics.json).
+Bounded work: [Resolve GP8 export of legacy score-level lyrics](https://github.com/CaliLuke/go-guitar-pro/issues/98).
 
 ### text: Beat text including rests
 
@@ -1225,7 +1225,7 @@ Rests survive. An explicit empty beat becomes a rest on GP8 export with a normal
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Establish whether GP8 can preserve explicit empty beats](work-items/rests.json).
+Bounded work: [Establish whether GP8 can preserve explicit empty beats](https://github.com/CaliLuke/go-guitar-pro/issues/100).
 
 ### triplet-feel: Triplet, dotted and Scottish feel
 
