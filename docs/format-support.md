@@ -11,6 +11,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
 | `clef-octave` | gp6, gp7, gp8 | supported | none | Every GPIF bar-level clef octave survives import, post-parse editing, GP8 export, and pinned AlphaTab consumption independently from Beat.Octave. |
+| `legato-slurs` | gp6, gp7, gp8 | supported | none | The matrix preserves the complete authored beat-level Legato element. Separate note-level slur symbols remain outside this contract because no distinct authored source evidence was found. |
 | `fermata` | gp6, gp7, gp8 | supported | none | GPIF fermata offsets, types, and lengths survive import, post-parse editing, GP8 export, and pinned AlphaTab consumption. Beat association remains derived from the authoritative master-bar records. |
 | `free-time` | gp6, gp7, gp8 | supported | none | The authored GPIF FreeTime marker survives exact master-bar import, post-parse editing, GP8 export, and pinned AlphaTab consumption without replacing numeric meter timing. |
 | `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
@@ -104,6 +105,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Fadding.Lossy` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
 | `GPIF.Beat.GraceNotes.InvalidValue` | `grace-relationships` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Hairpin.InvalidValue` | `hairpins` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Beat.Legato.InvalidDestination` | `legato-slurs` | `invalid-data` | An authored beat-level legato destination attribute must contain the exact GPIF boolean true or false. |
+| `GPIF.Beat.Legato.InvalidOrigin` | `legato-slurs` | `invalid-data` | An authored beat-level legato origin attribute must contain the exact GPIF boolean true or false. |
 | `GPIF.Beat.Notes.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.Ottavia.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Property.BarreFret` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -226,7 +229,8 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
 | `Measure` | `timing` | 10 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 8 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. |
+| `Beat` | `note-and-beat-semantics` | 9 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Legato owns the authored beat-level phrase endpoints. |
+| `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
 | `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and note-value duration. |
@@ -254,7 +258,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 205 |
+| `preserved` | 208 |
 | `normalized` | 34 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -265,7 +269,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 78 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 79 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -273,7 +277,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 238 |
+| `schema` | 241 |
 
 ## Source dispatch inventory
 
@@ -365,6 +369,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `structural-export-resilience` | `staff-ownership` | `TestConformanceStructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
 | `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
+| `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |
 | `whammy-corpus-projection` | `note-and-beat-semantics` | `TestWhammyProjectionAdaptersExposeBeatCurves` | `TestAlphaTabWhammyCorpusConformance` | yes | Both corpus adapters must expose whammy curves so semantic comparison can detect regressions. |

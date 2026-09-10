@@ -3575,12 +3575,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Beat.Legato and independent slur endpoints lack public destinations. Hammer or slide flags do not replace authored slurs.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Beat.Legato preserves authored origin and destination endpoints as an occurrence-owned record. No separate note-level slur contract is inferred without source evidence.",
+      "acceptance": "Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption.",
       "upstream": [
         "Beat.isLegatoOrigin",
         "Note.isSlurDestination",
@@ -3611,6 +3611,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/numbered.gp:legato-slurs",
           "detail": "Reproduced at tracks[0].staves[0].bars[39].voices[0].beats[0].isLegatoOrigin. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceLegato",
+          "detail": "Exact public endpoints, occurrence ownership, excerpt boundaries, malformed attributes, GP8 wire values, and reimport behavior."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesLegato",
+          "detail": "Pinned AlphaTab consumes Go GP8 output and exposes exact origin plus derived destination state for the numbered fixture chain and a post-parse edit."
         }
       ]
     },

@@ -610,6 +610,36 @@ export function loadKeyFacts(fixture) {
   }));
 }
 
+export function loadLegatoFacts(fixture) {
+  const facts = [];
+  const score = loadScore(fixture);
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (let beatIndex = 0; beatIndex < voice.beats.length; beatIndex++) {
+            const beat = voice.beats[beatIndex];
+            const origin = Boolean(beat.isLegatoOrigin);
+            const destination = Boolean(beat.isLegatoDestination);
+            if (origin || destination) {
+              facts.push({
+                track: track.index,
+                staff: staff.index,
+                bar: bar.index,
+                voice: voice.index,
+                beat: beatIndex,
+                origin,
+                destination
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -638,6 +668,10 @@ function main() {
   }
   if (args[0] === '--keys' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadKeyFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--legato' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadLegatoFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

@@ -459,11 +459,17 @@ type gpifBeat struct {
 	Tremolo    string         `xml:"Tremolo,omitempty"`
 	Arpeggio   string         `xml:"Arpeggio,omitempty"`
 	Hairpin    string         `xml:"Hairpin,omitempty"`
+	Legato     *gpifLegato    `xml:"Legato,omitempty"`
 	FreeText   string         `xml:"FreeText,omitempty"`
 	Ottavia    string         `xml:"Ottavia,omitempty"`
 	Wah        string         `xml:"Wah,omitempty"`
 	Whammy     *gpifWhammy    `xml:"Whammy,omitempty"`
 	Properties gpifProperties `xml:"Properties"`
+}
+
+type gpifLegato struct {
+	Origin      string `xml:"origin,attr"`
+	Destination string `xml:"destination,attr"`
 }
 
 type gpifWhammy struct {

@@ -240,6 +240,12 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
 	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
+	if beat.Legato != nil {
+		result.Legato = &gpifLegato{
+			Origin:      strconv.FormatBool(beat.Legato.Origin),
+			Destination: strconv.FormatBool(beat.Legato.Destination),
+		}
+	}
 	if beat.isGrace {
 		result.GraceNotes = "BeforeBeat"
 		if beat.graceOnBeat {

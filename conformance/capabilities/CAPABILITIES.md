@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 55 | 23 | 21 | 2 |
-| model | 55 | 23 | 22 | 1 |
-| export | 36 | 23 | 40 | 2 |
+| import | 56 | 23 | 20 | 2 |
+| model | 56 | 23 | 21 | 1 |
+| export | 37 | 23 | 39 | 2 |
 
-All three stages have a supported rating in 34 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 35 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -56,7 +56,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Beat barre fret and shape | 2 | 2 | 26 |
 | Dead-slapped beats | 2 | 2 | 26 |
 | Golpe thumb and finger marks | 2 | 2 | 26 |
-| Legato and authored slurs | 2 | 2 | 26 |
 | Explicit note string-number display | 1 | 1 | 26 |
 | Fade out and volume swell | 1 | 1 | 26 |
 | Key signatures and key mode spelling | 44 | 1 | 26 |
@@ -71,6 +70,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Fermata placement, kind and length | 4 | 0 | 26 |
 | Free-time bars | 1 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
+| Legato and authored slurs | 2 | 0 | 26 |
 | Navigation targets and jumps | 8 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
 | Octave shifts attached to clefs | 2 | 0 | 26 |
@@ -669,11 +669,11 @@ Bounded work: [Preserve authored timer marks and visibility](https://github.com/
 
 Notes. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Beat.Legato and independent slur endpoints lack public destinations. Hammer or slide flags do not replace authored slurs.
+Beat.Legato preserves authored origin and destination endpoints as an occurrence-owned record. No separate note-level slur contract is inferred without source evidence.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption.
 
 Bounded work: [Preserve authored legato and slur endpoints](https://github.com/CaliLuke/go-guitar-pro/issues/50).
 

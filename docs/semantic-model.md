@@ -230,6 +230,16 @@ one quantized dynamic for the complete beat, so export reports note velocities
 that differ from the selected target dynamic. Text remains valid on rests.
 GP8 changes an explicit empty beat to a rest and reports that normalization.
 
+`Beat.Legato` preserves the authored GPIF beat-level origin and destination
+flags. The pointer is absent when the source has no `Legato` element. Every
+parsed occurrence owns an independent record, including occurrences created
+from one reused GPIF beat definition. Origin-only and destination-only records
+are valid excerpt boundaries. The library does not derive missing endpoints or
+reuse hammer and slide fields for this relationship. GP8 writes both authored
+attributes. The pinned consumer retains origins and derives each destination
+from the preceding origin, so exact wire and Go reimport checks cover a
+destination that begins before an excerpt.
+
 GP8 preserves fade-in, hairpin, octave, and stroke direction.
 `BeatStroke.Duration` is a note-value denominator, not a tick count. The target
 uses an eighth-note stroke duration. Export reports a different source duration.

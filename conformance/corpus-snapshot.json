@@ -12319,10 +12319,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 484,
+          "count": 480,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "c305d61a6fab1fb19560f180905555922ad48370ce9c3c93417ee19419fee038"
+          "locationsSha256": "8359a6b4635382f49c86365e5f7136716580b1514de4d61de46cb17c56d92c4b"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

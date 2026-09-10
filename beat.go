@@ -22,6 +22,15 @@ type BeatStroke struct {
 	Duration NoteValue
 }
 
+// BeatLegato preserves the authored endpoints of a beat-level legato phrase.
+// A destination can be present without an origin when the phrase begins before
+// an imported excerpt, and an origin can be present without a destination when
+// it continues beyond the excerpt.
+type BeatLegato struct {
+	Origin      bool
+	Destination bool
+}
+
 // Voice contains multiple beats.
 type Voice struct {
 	Beats []Beat
@@ -52,9 +61,13 @@ type Beat struct {
 	// ExactStart preserves fractional score ticks before Start is quantized.
 	ExactStart *ScoreTime
 	Effect     BeatEffects
-	Text       string
-	Notes      []Note
-	Duration   Duration
+	// Legato is nil when the source has no authored beat-level legato marker.
+	// Each parsed beat owns its own record, including when GPIF reuses a beat
+	// definition in more than one score occurrence.
+	Legato   *BeatLegato
+	Text     string
+	Notes    []Note
+	Duration Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
 	// absent and lets export use the first note velocity. A nonzero value must be
 	// within 1..127. GP3-5 stores the value on notes, but the last explicit value

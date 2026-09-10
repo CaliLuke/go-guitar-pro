@@ -10,6 +10,13 @@ import (
 )
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
+	if b.Legato != nil {
+		beat.Legato = &BeatLegato{
+			Origin:      b.Legato.Origin == "true",
+			Destination: b.Legato.Destination == "true",
+		}
+	}
+
 	if b.Whammy != nil {
 		values := []struct {
 			position string

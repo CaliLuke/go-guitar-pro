@@ -5,8 +5,8 @@
   "title": "Preserve authored legato and slur endpoints",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -92,10 +92,15 @@
     }
   ],
   "shared_files": [
+    "beat.go",
+    "gp8_notation.go",
+    "gpif_audit.go",
+    "gpif_effects.go",
     "gpif_types.go",
-    "note.go"
+    "conformance_legato_test.go",
+    "conformance/feature-ledger.json"
   ],
-  "resolution": null,
+  "resolution": "Beat.Legato now preserves GPIF beat-level origin and destination endpoints in an occurrence-owned BeatLegato record, including origin-only and destination-only excerpt boundaries. GP8 writes both exact attributes, malformed or missing attributes produce scoped invalid-data diagnostics, and focused tests cover the numbered fixture chain, reused beat definitions, post-parse edits, Go reimport, exact wire values, and pinned AlphaTab origin plus derived-destination consumption. No note-level slur field was added because the scoped source review found no separate authored source contract.",
   "verification": [],
   "issue": {
     "number": 50,
