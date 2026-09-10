@@ -21,7 +21,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve GPIF bend control roles with nonmonotonic offsets](work-items/export-curve-order.json) | implementation | 1 | blocked | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) | [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) |
 | [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | todo | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |
 | [Preserve authored opening sound-event preroll](work-items/export-negative-sound-position.json) | implementation | 1 | blocked | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#64](https://github.com/CaliLuke/go-guitar-pro/issues/64) |
-| [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | todo | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
+| [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | in_progress | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
 | [Preserve free-time bars without inventing a meter](work-items/free-time.json) | implementation | 1 | todo | — | [#48](https://github.com/CaliLuke/go-guitar-pro/issues/48) |
 | [Preserve lowercase GPIF minor key modes](work-items/key.json) | implementation | 1 | todo | — | [#49](https://github.com/CaliLuke/go-guitar-pro/issues/49) |
 | [Preserve authored legato and slur endpoints](work-items/legato-slurs.json) | implementation | 1 | todo | — | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) |

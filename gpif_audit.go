@@ -336,6 +336,39 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th", "Dotted8th", "Dotted16th", "Scottish8th", "Scottish16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
+		if masterBar.Fermatas != nil {
+			path := fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Fermatas", index)
+			validOffsets := make([]ScoreTime, 0, len(masterBar.Fermatas.Fermatas))
+			for fermataIndex, fermata := range masterBar.Fermatas.Fermatas {
+				fermataPath := fmt.Sprintf("%s/Fermata[%d]", path, fermataIndex)
+				gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.Fermata.Type.InvalidValue", "fermata", ParseDiagnosticUnsupportedFeature), fermata.Type, []string{"Short", "Medium", "Long"}, fermataPath+"/Type", "", "fermata")
+				length, err := strconv.ParseFloat(fermata.Length, 64)
+				if err != nil || math.IsNaN(length) || math.IsInf(length, 0) || length < 0 {
+					context.add(diagnosticSource("GPIF.MasterBar.Fermata.Length.InvalidValue", "fermata", ParseDiagnosticInvalidData), ParseDiagnostic{
+						SourcePath: fermataPath + "/Length",
+						Reason:     fmt.Sprintf("fermata length %q must be finite and non-negative", fermata.Length),
+					})
+				}
+				offset, ok := gpifFermataOffset(fermata.Offset)
+				if !ok {
+					context.add(diagnosticSource("GPIF.MasterBar.Fermata.Offset.InvalidValue", "fermata", ParseDiagnosticInvalidData), ParseDiagnostic{
+						SourcePath: fermataPath + "/Offset",
+						Reason:     fmt.Sprintf("fermata offset %q must be a non-negative rational score position", fermata.Offset),
+					})
+					continue
+				}
+				for _, earlier := range validOffsets {
+					if offset.Compare(earlier) == 0 {
+						context.add(diagnosticSource("GPIF.MasterBar.Fermata.Offset.Duplicate", "fermata", ParseDiagnosticInvalidData), ParseDiagnostic{
+							SourcePath: fermataPath + "/Offset",
+							Reason:     fmt.Sprintf("fermata offset %q duplicates an earlier record", fermata.Offset),
+						})
+						break
+					}
+				}
+				validOffsets = append(validOffsets, offset)
+			}
+		}
 		if masterBar.Directions != nil {
 			path := fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Directions", index)
 			for targetIndex, target := range masterBar.Directions.Targets {

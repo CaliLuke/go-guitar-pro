@@ -382,12 +382,23 @@ type gpifMasterBar struct {
 	Section          *gpifSection    `xml:"Section,omitempty"`
 	Key              gpifKey         `xml:"Key"`
 	Time             string          `xml:"Time"`
+	Fermatas         *gpifFermatas   `xml:"Fermatas,omitempty"`
 	Bars             string          `xml:"Bars"`
 	AlternateEndings string          `xml:"AlternateEndings,omitempty"`
 	DoubleBar        *struct{}       `xml:"DoubleBar,omitempty"`
 	TripletFeel      string          `xml:"TripletFeel,omitempty"`
 	Repeat           *gpifRepeat     `xml:"Repeat,omitempty"`
 	Directions       *gpifDirections `xml:"Directions,omitempty"`
+}
+
+type gpifFermatas struct {
+	Fermatas []gpifFermata `xml:"Fermata"`
+}
+
+type gpifFermata struct {
+	Type   string `xml:"Type"`
+	Offset string `xml:"Offset"`
+	Length string `xml:"Length"`
 }
 
 type gpifDirections struct {

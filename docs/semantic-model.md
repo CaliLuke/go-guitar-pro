@@ -156,6 +156,16 @@ It is independent from `Beat.Octave`, which applies only to its beat. The normal
 first-staff `Track.Measures` compatibility rule applies to post-parse edits;
 later staff measures remain independently authoritative.
 
+`MeasureHeader.Fermatas` is the authoritative set of authored holds for one
+master bar. Each `Fermata` keeps an exact measure-relative `ScoreTime` offset,
+the Short, Medium, or Long symbol, and a finite non-negative length. Offsets
+must be unique and earlier than the exact notated measure length. GPIF rational
+offsets remain exact, including sub-tick values, and GP8 export writes the
+reduced rational quarter-note position. A consumer can associate a fermata with
+a beat at the same offset, but `Beat` does not contain a second mutable copy.
+GP3 through GP5 fermatas and playback-duration stretching are outside this
+contract.
+
 GP8 export preserves master-bar key changes, meter values, section text,
 repeats, alternate endings, triplet feel, and double bars. It preserves treble,
 bass, alto, tenor, and percussion clefs, including 8va, 8vb, 15ma, and 15mb

@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 52 | 24 | 23 | 2 |
-| model | 52 | 24 | 24 | 1 |
-| export | 35 | 22 | 42 | 2 |
+| import | 53 | 24 | 22 | 2 |
+| model | 53 | 24 | 23 | 1 |
+| export | 36 | 22 | 41 | 2 |
 
-All three stages have a supported rating in 32 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 33 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -47,7 +47,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Slashed beats and slash staff notation | 8 | 8 | 26 |
 | Lyrics authored directly on a beat | 5 | 5 | 26 |
 | Authored note duration percentage | 6 | 4 | 26 |
-| Fermata placement, kind and length | 4 | 4 | 26 |
 | Multiple-bar rest preferences | 4 | 4 | 26 |
 | Volume automation events | 8 | 4 | 26 |
 | Chord name, diagram and fingering visibility | 3 | 3 | 26 |
@@ -70,6 +69,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Beat octave shifts | 10 | 0 | 26 |
 | Common and per-staff capo | 1 | 0 | 26 |
 | Fade in | 17 | 0 | 26 |
+| Fermata placement, kind and length | 4 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
 | Navigation targets and jumps | 8 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
@@ -1031,11 +1031,11 @@ Bounded work: [Preserve navigation targets and jumps on each measure](https://gi
 
 Structure. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF Fermatas and the public fermata model are absent. Holds disappear from the semantic score and export.
+MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 export retains the authored master-bar records; beat association is consumer-derived.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport, malformed-value diagnostics and pinned AlphaTab consumer locations covered.
 
 Bounded work: [Preserve fermata position, type and length](https://github.com/CaliLuke/go-guitar-pro/issues/47).
 

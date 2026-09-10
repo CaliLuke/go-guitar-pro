@@ -5,8 +5,8 @@
   "title": "Preserve fermata position, type and length",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -83,7 +83,7 @@
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "MeasureHeader.Fermatas now preserves authoritative GPIF master-bar holds as independent values with exact ScoreTime offsets, Short, Medium, and Long types, and finite non-negative lengths. Import audits malformed types, lengths, rational offsets, overflow, and duplicates before conversion; validation rejects undefined types, invalid lengths, duplicate offsets, and offsets outside the exact measure. GP8 emits reduced rational offsets, exact lengths, and types without adding a mutable Beat copy. Focused public, wire, reimport, post-parse edit, fixture, and pinned AlphaTab evidence covers authored master-bar locations and derived consumer beat association. Playback stretching and GP3 through GP5 remain out of scope.",
   "verification": [],
   "issue": {
     "number": 47,

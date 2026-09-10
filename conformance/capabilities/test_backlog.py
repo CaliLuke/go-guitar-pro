@@ -19,7 +19,9 @@ class BacklogTests(unittest.TestCase):
         self.meta = {'published': False}
 
     def test_uncovered_gap_is_rejected(self):
-        items = [w for w in self.items if w['capability'] != 'fermata']
+        gap = next(c['id'] for c in self.catalog['capabilities']
+                   if c['scope'] == 'guitar-pro' and any(stage != 'supported' for stage in c['stages'].values()))
+        items = [w for w in self.items if w['capability'] != gap]
         with self.assertRaisesRegex(ValueError, 'Uncovered'):
             backlog.validate(items, self.catalog, self.meta)
 

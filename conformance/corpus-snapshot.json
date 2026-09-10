@@ -6777,10 +6777,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "3a2a62e859f089bc974d08df2252999208a3017d4135702bc95d15895de653f9"
+          "locationsSha256": "8facd0de1f53ab35c7b8ff7025c4df888f832750458938a9b6672e5a0ab9393b"
         }
       ],
       "differences": null
@@ -8136,10 +8136,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 50,
+          "count": 46,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "c4648acc09d8865230bd903ac35e258bc98c15e0f120c9e83a0165eaf30494e6"
+          "locationsSha256": "082200e82c7f6d53234cf967be9c781be623d852ca026798c8894c6a1075128b"
         }
       ],
       "differences": null
@@ -11990,10 +11990,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 240,
+          "count": 239,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "dcdd8884a0b649c4617ea6aee533037b6991a217852005690461f760a805a64b"
+          "locationsSha256": "0979c8b1a2ae8e5bd80c6d6dc269a7b694a332dd511e7788cfde448ab584da6a"
         },
         {
           "code": "score.note.tie-destination",
@@ -14825,10 +14825,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 60,
+          "count": 59,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "8f45c60aaecec4f19b2f0136d089117a80056d7e9272c403ff0ea83d87d1787d"
+          "locationsSha256": "46cd60780c6e2047ca7e7b4bb314fdff00a46fb65c7fe01fbed440037c350ec5"
         }
       ],
       "differences": null

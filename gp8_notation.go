@@ -4,6 +4,7 @@ package goguitarpro
 
 import (
 	"fmt"
+	"math/big"
 	"slices"
 	"strconv"
 	"strings"
@@ -18,6 +19,15 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		Key:  gpifKey{Mode: mode, AccidentalCount: int(header.KeySignature.Key)},
 		Time: fmt.Sprintf("%d/%d", header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value),
 		Bars: bars,
+	}
+	if len(header.Fermatas) > 0 {
+		result.Fermatas = &gpifFermatas{Fermatas: make([]gpifFermata, 0, len(header.Fermatas))}
+		for _, fermata := range header.Fermatas {
+			result.Fermatas.Fermatas = append(result.Fermatas.Fermatas, gpifFermata{
+				Type: gp8FermataType(fermata.Type), Offset: gp8FermataOffset(fermata.Offset),
+				Length: strconv.FormatFloat(fermata.Length, 'g', -1, 64),
+			})
+		}
 	}
 	for _, direction := range header.resolvedDirections() {
 		if token, ok := directionTargetToken(direction); ok {
@@ -72,6 +82,27 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		result.TripletFeel = "Scottish16th"
 	}
 	return result
+}
+
+func gp8FermataType(value FermataType) string {
+	switch value {
+	case FermataTypeShort:
+		return "Short"
+	case FermataTypeMedium:
+		return "Medium"
+	case FermataTypeLong:
+		return "Long"
+	default:
+		return ""
+	}
+}
+
+func gp8FermataOffset(offset ScoreTime) string {
+	numerator := big.NewInt(offset.Numerator())
+	denominator := big.NewInt(offset.Denominator())
+	denominator.Mul(denominator, big.NewInt(DurationQuarterTime))
+	ratio := new(big.Rat).SetFrac(numerator, denominator)
+	return ratio.Num().String() + "/" + ratio.Denom().String()
 }
 
 type gp8GraceGroup struct {

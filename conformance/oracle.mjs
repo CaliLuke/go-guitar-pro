@@ -564,6 +564,42 @@ export function loadBackingTrackFacts(fixture) {
   };
 }
 
+export function loadFermataFacts(fixture) {
+  const score = loadScore(fixture);
+  const normalizeFermata = fermata => ({
+    type: enumName(alphaTab.model.FermataType, fermata.type),
+    length: finite(fermata.length)
+  });
+  return score.masterBars.map(masterBar => {
+    const authored = Array.from(masterBar.fermata ?? [], ([offset, fermata]) => ({
+      offset,
+      ...normalizeFermata(fermata)
+    }));
+    const derivedBeats = [];
+    for (const track of score.tracks) {
+      for (const staff of track.staves) {
+        const bar = staff.bars[masterBar.index];
+        if (!bar) continue;
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (beat.fermata) {
+              derivedBeats.push({
+                track: track.index,
+                staff: staff.index,
+                voice: voice.index,
+                beat: beat.index,
+                offset: beat.playbackStart,
+                ...normalizeFermata(beat.fermata)
+              });
+            }
+          }
+        }
+      }
+    }
+    return { authored, derivedBeats };
+  });
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -584,6 +620,10 @@ function main() {
   }
   if (args[0] === '--backing-track' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBackingTrackFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--fermatas' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadFermataFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

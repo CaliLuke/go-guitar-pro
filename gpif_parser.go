@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"math"
+	"math/big"
 	"strconv"
 	"strings"
 )
@@ -315,6 +316,16 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		}
 		mh.markDirectionCompatibility()
 
+		if mb.Fermatas != nil {
+			for _, raw := range mb.Fermatas.Fermatas {
+				fermata, ok := gpifParseFermata(raw)
+				if !ok {
+					continue
+				}
+				mh.Fermatas = append(mh.Fermatas, fermata)
+			}
+		}
+
 		// Triplet feel
 		switch mb.TripletFeel {
 		case "Triplet8th":
@@ -474,4 +485,43 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+func gpifParseFermata(raw gpifFermata) (Fermata, bool) {
+	fermataType, typeOK := gpifFermataType(raw.Type)
+	offset, offsetOK := gpifFermataOffset(raw.Offset)
+	length, lengthErr := strconv.ParseFloat(raw.Length, 64)
+	if !typeOK || !offsetOK || lengthErr != nil || math.IsNaN(length) || math.IsInf(length, 0) || length < 0 {
+		return Fermata{}, false
+	}
+	return Fermata{Offset: offset, Type: fermataType, Length: length}, true
+}
+
+func gpifFermataType(value string) (FermataType, bool) {
+	switch value {
+	case "Short":
+		return FermataTypeShort, true
+	case "Medium":
+		return FermataTypeMedium, true
+	case "Long":
+		return FermataTypeLong, true
+	default:
+		return 0, false
+	}
+}
+
+func gpifFermataOffset(value string) (ScoreTime, bool) {
+	if strings.Count(value, "/") != 1 || strings.TrimSpace(value) != value {
+		return ScoreTime{}, false
+	}
+	ratio, ok := new(big.Rat).SetString(value)
+	if !ok || ratio.Sign() < 0 || ratio.Denom().Sign() <= 0 {
+		return ScoreTime{}, false
+	}
+	ratio.Mul(ratio, big.NewRat(DurationQuarterTime, 1))
+	if !ratio.Num().IsInt64() || !ratio.Denom().IsInt64() {
+		return ScoreTime{}, false
+	}
+	offset, err := NewScoreTime(ratio.Num().Int64(), ratio.Denom().Int64())
+	return offset, err == nil
 }

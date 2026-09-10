@@ -116,6 +116,24 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelScottishSixteenth {
 			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)
 		}
+		measureLength, measureLengthErr := header.ExactLength()
+		for fermataIndex, fermata := range header.Fermatas {
+			if fermata.Type < FermataTypeShort || fermata.Type > FermataTypeLong {
+				add("score.measure.fermata-type", ScoreDiagnosticValue, location, "fermata %d type %d is not defined", fermataIndex, fermata.Type)
+			}
+			if math.IsNaN(fermata.Length) || math.IsInf(fermata.Length, 0) || fermata.Length < 0 {
+				add("score.measure.fermata-length", ScoreDiagnosticValue, location, "fermata %d length %v must be finite and non-negative", fermataIndex, fermata.Length)
+			}
+			if fermata.Offset.Numerator() < 0 || fermata.Offset.Denominator() <= 0 || measureLengthErr == nil && fermata.Offset.Compare(measureLength) >= 0 {
+				add("score.measure.fermata-offset", ScoreDiagnosticTiming, location, "fermata %d offset %d/%d must be within the measure", fermataIndex, fermata.Offset.Numerator(), fermata.Offset.Denominator())
+			}
+			for earlierIndex := 0; earlierIndex < fermataIndex; earlierIndex++ {
+				if fermata.Offset.Compare(header.Fermatas[earlierIndex].Offset) == 0 {
+					add("score.measure.fermata-offset", ScoreDiagnosticTiming, location, "fermata %d duplicates offset %d/%d", fermataIndex, fermata.Offset.Numerator(), fermata.Offset.Denominator())
+					break
+				}
+			}
+		}
 	}
 	if len(song.Lyrics.Lines) != 0 && (song.Lyrics.TrackIndex < -1 || song.Lyrics.TrackIndex >= len(song.Tracks)) {
 		add("score.lyrics.track-reference", ScoreDiagnosticStructural, ScoreLocation{Track: song.Lyrics.TrackIndex}, "lyrics track index %d is outside -1..%d", song.Lyrics.TrackIndex, len(song.Tracks)-1)

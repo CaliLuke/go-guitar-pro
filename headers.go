@@ -27,6 +27,10 @@ type Clipboard struct {
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
 	Marker *Marker
+	// Fermatas contains the authored holds on this master bar. Each value owns
+	// its exact measure-relative offset, symbol type, and length. Beat-level
+	// association is derived by consumers and is not a second mutable copy.
+	Fermatas []Fermata
 	// Directions contains the complete set of navigation targets and jumps on
 	// this measure. GP8 export writes the values in canonical DirectionSign
 	// order and removes duplicates without changing this slice.
