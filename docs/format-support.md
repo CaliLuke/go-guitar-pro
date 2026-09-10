@@ -71,7 +71,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Track.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Track.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
-| `GPIF.Track.CapoFret.StaffConflict` | `staff-ownership` | `lossy-projection` | Track.CapoFret cannot preserve different capo values for individual staves. |
 | `GPIF.Track.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
 | `GPIF.Track.Property.Unknown` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.ScoreCore` | `score-core` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
@@ -205,8 +204,8 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `MeasureHeader` | `rhythm` | 11 authored, 0 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. |
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
-| `Track` | `staff-ownership` | 22 authored, 2 compatibility, 0 derived, 0 out-of-scope | The track owns staves. Measures and Strings are first-staff compatibility views. |
-| `Staff` | `staff-ownership` | 3 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns measures and tuning. PercussionTrack mirrors its track. |
+| `Track` | `staff-ownership` | 21 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
+| `Staff` | `staff-ownership` | 4 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, measures, and tuning. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
 | `TrackSound` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition is authored playback data. |
@@ -246,7 +245,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 196 |
+| `preserved` | 197 |
 | `normalized` | 34 |
 | `omitted` | 118 |
 | `rejected` | 0 |
@@ -257,7 +256,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 72 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 73 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -346,6 +345,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |
+| `independent-staff-capos` | `staff-ownership` | `TestConformanceStaffCapo` | `TestAlphaTabPreservesIndependentStaffCapos` | no | Distinct authored staff capos and their sounding pitches survive GP8 export without collapsing to the legacy track scalar. |
 | `structural-export-resilience` | `staff-ownership` | `TestConformanceStructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
 | `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |

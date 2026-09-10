@@ -326,10 +326,6 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		PlaybackState:    "Default",
 		AudioEngineState: "MIDI",
 	}
-	if track.CapoFret != 0 {
-		capo := int(track.CapoFret)
-		result.Properties = append(result.Properties, gpifStaffProperty{Name: "CapoFret", Fret: &capo})
-	}
 	if len(track.Sounds) > 0 {
 		result.Sounds.Sounds = make([]gpifSound, 0, len(track.Sounds))
 		for _, sound := range track.Sounds {
@@ -388,16 +384,21 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	result.Staves.Staff = make([]gpifStaff, len(staves))
 	for staffIndex := range staves {
 		staff := &staves[staffIndex]
-		if len(staff.Strings) == 0 {
-			continue
+		capo := int(staff.CapoFret)
+		result.Staves.Staff[staffIndex].Properties = append(
+			result.Staves.Staff[staffIndex].Properties,
+			gpifStaffProperty{Name: "CapoFret", Fret: &capo},
+		)
+		if len(staff.Strings) != 0 {
+			pitches := make([]string, 0, len(staff.Strings))
+			for index := len(staff.Strings) - 1; index >= 0; index-- {
+				pitches = append(pitches, strconv.Itoa(int(staff.Strings[index].Value)))
+			}
+			result.Staves.Staff[staffIndex].Properties = append(
+				result.Staves.Staff[staffIndex].Properties,
+				gpifStaffProperty{Name: "Tuning", Pitches: strings.Join(pitches, " ")},
+			)
 		}
-		pitches := make([]string, 0, len(staff.Strings))
-		for index := len(staff.Strings) - 1; index >= 0; index-- {
-			pitches = append(pitches, strconv.Itoa(int(staff.Strings[index].Value)))
-		}
-		result.Staves.Staff[staffIndex].Properties = []gpifStaffProperty{{
-			Name: "Tuning", Pitches: strings.Join(pitches, " "),
-		}}
 	}
 	if len(builder.chordIDs[trackIndex]) > 0 {
 		items := make([]gpifItem, 0, len(builder.chordIDs[trackIndex]))

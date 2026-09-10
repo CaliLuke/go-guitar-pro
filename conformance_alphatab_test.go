@@ -181,6 +181,49 @@ func TestAlphaTabPreservesInspectedCapo(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesIndependentStaffCapos(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformanceStaffCapoSong(t, 2, 5)
+	data, report, err := ExportWithReport(source, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("two-staff capo export = %v, %#v", err, report.Entries)
+	}
+	score, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	if !ok {
+		t.Fatal("AlphaTab score is not an object")
+	}
+	tracks, ok := score["tracks"].([]any)
+	if !ok || len(tracks) != 1 {
+		t.Fatalf("AlphaTab tracks = %#v", score["tracks"])
+	}
+	track, ok := tracks[0].(map[string]any)
+	if !ok {
+		t.Fatalf("AlphaTab track = %#v", tracks[0])
+	}
+	staves, ok := track["staves"].([]any)
+	if !ok || len(staves) != 2 {
+		t.Fatalf("AlphaTab staves = %#v", track["staves"])
+	}
+	for staffIndex, want := range []struct {
+		capo float64
+		midi float64
+	}{{capo: 2, midi: 69}, {capo: 5, midi: 57}} {
+		staff, staffOK := staves[staffIndex].(map[string]any)
+		if !staffOK || staff["capo"] != want.capo {
+			t.Fatalf("AlphaTab staff %d capo = %#v, want %v", staffIndex, staff["capo"], want.capo)
+		}
+		bars := staff["bars"].([]any)
+		voices := bars[0].(map[string]any)["voices"].([]any)
+		beats := voices[0].(map[string]any)["beats"].([]any)
+		notes := beats[0].(map[string]any)["notes"].([]any)
+		if midi := notes[0].(map[string]any)["midi"]; midi != want.midi {
+			t.Fatalf("AlphaTab staff %d sounding MIDI = %#v, want %v", staffIndex, midi, want.midi)
+		}
+	}
+}
+
 func TestAlphaTabPreservesSimileMarks(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceMeasureSong(t)

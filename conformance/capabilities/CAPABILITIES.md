@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 49 | 26 | 24 | 2 |
-| model | 49 | 26 | 25 | 1 |
-| export | 32 | 23 | 44 | 2 |
+| import | 50 | 25 | 24 | 2 |
+| model | 50 | 25 | 25 | 1 |
+| export | 33 | 22 | 44 | 2 |
 
-All three stages have a supported rating in 29 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 30 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -397,11 +397,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Instrument. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-A common track capo survives. Public Staff has no independent capo value. Differing staff capos need explicit evidence and a reconciliation contract.
+Staff.CapoFret preserves independent authored capo values. Track.CapoFret remains a documented first-staff compatibility scalar with deterministic edit precedence.
 
-Completion criterion: Use two staves with distinct nonzero capos. Assert sounding pitches and per-staff values before and after export.
+Completion criterion: Two staves with capos 2 and 5 retain both values and sounding pitches through GP8 and the pinned consumer. Zero, negative, and int32 boundaries plus legacy/direct edit precedence have exact evidence.
 
 Bounded work: [Preserve independent capo values on multiple staves](https://github.com/CaliLuke/go-guitar-pro/issues/43).
 

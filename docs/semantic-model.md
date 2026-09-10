@@ -46,14 +46,21 @@ directly. Later staves are always authoritative and remain independent.
 
 `Track.Number`, `MeasureHeader.Number`, and `Measure.Number` are one-based
 ordinals. Fields whose names end in `Index` are zero-based references.
-`Track.CapoFret` is the non-negative fret where the capo is placed. Tuning
+`Staff.CapoFret` is the non-negative authored capo fret and is the authority for
+each staff. `Track.CapoFret` is the legacy first-staff compatibility scalar. On
+a parsed score, direct staff edits are authoritative while the track scalar is
+unchanged. Changing the parsed track scalar applies that value to every staff
+at export; if both views changed, the legacy track edit wins. For a
+programmatic score, any nonzero staff capo makes the staff values authoritative.
+When every staff capo is zero, a nonzero legacy scalar applies to every staff.
+Export computes this reconciliation without mutating the authored score. Tuning
 values are absolute MIDI note numbers for open strings.
 
 GPIF master-bar references list bars by track, then by staff. An interior `-1`
 voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole
 track. The parser reports a short, long, or misplaced bar list as invalid data.
 
-GP8 export preserves tuning and a common capo. It reports non-default legacy
+GP8 export preserves each staff's tuning and capo. It reports non-default legacy
 fret counts, connection ports, twelve-string flags, and banjo flags as
 omissions. It also reports a custom line count on a pitched staff. Percussion
 staff line counts remain supported.

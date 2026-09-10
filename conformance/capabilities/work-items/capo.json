@@ -5,8 +5,8 @@
   "title": "Preserve independent capo values on multiple staves",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -58,16 +58,21 @@
       "detail": "Public contract; linked matrix cases are in obligation."
     },
     {
+      "kind": "field",
+      "reference": "Staff.CapoFret",
+      "detail": "Authoritative per-staff public capo value."
+    },
+    {
       "kind": "test",
-      "reference": "TestConformanceInstrumentContext",
-      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+      "reference": "TestConformanceStaffCapo",
+      "detail": "Exact model, reconciliation, boundary, GP8 wire, round-trip, sounding-pitch, and pinned AlphaTab evidence."
     }
   ],
   "shared_files": [
     "gpif_parser.go",
     "track.go"
   ],
-  "resolution": null,
+  "resolution": "Staff.CapoFret now owns each staff's non-negative capo value. GPIF import and GP8 export preserve distinct staff capos, sounding pitches, zero, and the int32 maximum; negative values are rejected before output. Track.CapoFret remains a first-staff compatibility scalar: an edit that changes its parsed value applies uniformly and wins a simultaneous staff edit, while unchanged parsed scalars leave direct staff edits authoritative. Programmatic nonzero staff values are authoritative; a legacy scalar applies uniformly only when all staff capos are zero.",
   "verification": [],
   "issue": {
     "number": 43,

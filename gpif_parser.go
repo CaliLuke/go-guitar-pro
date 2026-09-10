@@ -116,11 +116,6 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			if t.ID == trackID {
 				gpifAuditTrackAutomations(t, context)
 				track.Name = t.Name
-				capo, capoErr := gpifResolveCapo(t)
-				if capoErr != nil {
-					return nil, fmt.Errorf("track %s capo: %w", trackID, capoErr)
-				}
-				track.CapoFret = capo.value
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
 					track.PercussionArticulations = gpifReadPercussionArticulations(t.InstrumentSet, t.NotationPatch)
@@ -154,6 +149,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if t.Instrument != nil && (strings.HasSuffix(t.Instrument.Ref, "-gs") || strings.HasSuffix(t.Instrument.Ref, "GrandStaff")) {
 					staffCount = max(2, staffCount)
 				}
+				capos, capoErr := gpifResolveStaffCapos(t, staffCount)
+				if capoErr != nil {
+					return nil, fmt.Errorf("track %s capo: %w", trackID, capoErr)
+				}
+				track.CapoFret = capos[0]
+				track.markCapoFretCompatibility()
 				lineCount := 5
 				if t.InstrumentSet != nil && t.InstrumentSet.LineCount > 0 {
 					lineCount = t.InstrumentSet.LineCount
@@ -177,6 +178,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 						Strings:                   strings,
 						PercussionTrack:           track.PercussionTrack,
 						StandardNotationLineCount: lineCount,
+						CapoFret:                  capos[staffIndex],
 					}
 				}
 				track.Strings = track.Staves[0].Strings

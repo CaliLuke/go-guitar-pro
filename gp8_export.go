@@ -410,6 +410,10 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 func gp8ExportStaves(track *Track) []Staff {
 	if len(track.Staves) > 0 {
 		staves := slices.Clone(track.Staves)
+		capos := track.resolvedStaffCapos()
+		for index := range staves {
+			staves[index].CapoFret = capos[index]
+		}
 		first := staves[0]
 		if track.Measures != nil {
 			first.Measures = track.Measures
@@ -423,7 +427,7 @@ func gp8ExportStaves(track *Track) []Staff {
 	}
 	return []Staff{{
 		Measures: track.Measures, Strings: track.Strings,
-		PercussionTrack: track.PercussionTrack, StandardNotationLineCount: 5,
+		PercussionTrack: track.PercussionTrack, StandardNotationLineCount: 5, CapoFret: track.CapoFret,
 	}}
 }
 

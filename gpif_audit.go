@@ -267,7 +267,6 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 				gpifAuditStaffProperty(context, track.ID, propertyPath, property)
 			}
 		}
-		gpifAuditStaffCapoConflict(track, context, path)
 	}
 
 	for _, note := range doc.Notes.Notes {
@@ -473,17 +472,6 @@ func gpifAuditOwnedStaffProperty(
 	}
 }
 
-func gpifAuditStaffCapoConflict(track gpifTrack, context *parseContext, path string) {
-	capo, err := gpifResolveCapo(track)
-	if err != nil || capo.common {
-		return
-	}
-	context.add(diagnosticSource("GPIF.Track.CapoFret.StaffConflict", "staff-ownership", ParseDiagnosticLossyProjection), ParseDiagnostic{
-		SourcePath: path + "/Staves", ObjectID: track.ID, Location: ParseLocation{TrackID: track.ID},
-		Reason: "staff capo values differ and Track.CapoFret stores one value",
-	})
-}
-
 func gpifReadCapo(properties []gpifStaffProperty) (int32, bool, error) {
 	var value int32
 	found := false
@@ -506,29 +494,40 @@ type gpifCapoResolution struct {
 }
 
 func gpifResolveCapo(track gpifTrack) (gpifCapoResolution, error) {
-	base, _, err := gpifReadCapo(track.Properties)
+	values, err := gpifResolveStaffCapos(track, max(1, len(track.Staves.Staff)))
 	if err != nil {
 		return gpifCapoResolution{}, err
 	}
-	if len(track.Staves.Staff) == 0 {
-		return gpifCapoResolution{value: base, common: true}, nil
-	}
-	first := base
 	common := true
-	for staffIndex, staff := range track.Staves.Staff {
-		value := base
-		if override, found, readErr := gpifReadCapo(staff.Properties); readErr != nil {
-			return gpifCapoResolution{}, fmt.Errorf("staff %d: %w", staffIndex, readErr)
-		} else if found {
-			value = override
-		}
-		if staffIndex == 0 {
-			first = value
-		} else if value != first {
+	for _, value := range values[1:] {
+		if value != values[0] {
 			common = false
+			break
 		}
 	}
-	return gpifCapoResolution{value: first, common: common}, nil
+	return gpifCapoResolution{value: values[0], common: common}, nil
+}
+
+func gpifResolveStaffCapos(track gpifTrack, staffCount int) ([]int32, error) {
+	base, _, err := gpifReadCapo(track.Properties)
+	if err != nil {
+		return nil, err
+	}
+	values := make([]int32, staffCount)
+	for index := range values {
+		values[index] = base
+	}
+	for staffIndex, staff := range track.Staves.Staff {
+		if staffIndex >= len(values) {
+			break
+		}
+		if override, found, readErr := gpifReadCapo(staff.Properties); readErr != nil {
+			return nil, fmt.Errorf("staff %d: %w", staffIndex, readErr)
+		} else if found {
+			values[staffIndex] = override
+		}
+	}
+	return values, nil
 }
 
 var gpifNotePropertySources = map[string]parseDiagnosticSource{

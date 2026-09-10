@@ -1180,12 +1180,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "partial"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "A common track capo survives. Public Staff has no independent capo value. Differing staff capos need explicit evidence and a reconciliation contract.",
-      "acceptance": "Use two staves with distinct nonzero capos. Assert sounding pitches and per-staff values before and after export.",
+      "finding": "Staff.CapoFret preserves independent authored capo values. Track.CapoFret remains a documented first-staff compatibility scalar with deterministic edit precedence.",
+      "acceptance": "Two staves with capos 2 and 5 retain both values and sounding pitches through GP8 and the pinned consumer. Zero, negative, and int32 boundaries plus legacy/direct edit precedence have exact evidence.",
       "upstream": [
         "Staff.capo"
       ],
@@ -1206,9 +1206,14 @@
           "detail": "Public contract; linked matrix cases are in obligation."
         },
         {
+          "kind": "field",
+          "reference": "Staff.CapoFret",
+          "detail": "Authoritative per-staff public capo value."
+        },
+        {
           "kind": "test",
-          "reference": "TestConformanceInstrumentContext",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceStaffCapo",
+          "detail": "Exact model, reconciliation, boundary, GP8 wire, round-trip, sounding-pitch, and pinned AlphaTab evidence."
         }
       ]
     },

@@ -27,6 +27,8 @@ type Staff struct {
 	PercussionTrack bool
 	// StandardNotationLineCount is the number of rendered lines in standard notation.
 	StandardNotationLineCount int
+	// CapoFret is the non-negative fret at which this staff's capo is placed.
+	CapoFret int32
 }
 
 // Track represents a track.
@@ -47,7 +49,7 @@ type Track struct {
 	// ChannelIndex is the index of the track channel in Song.Channels.
 	// A value of -1 means that the file does not bind the track to a channel.
 	ChannelIndex int
-	// CapoFret is the non-negative fret at which the track's capo is placed.
+	// CapoFret is the legacy first-staff capo view. A changed parsed value applies to every staff during export.
 	CapoFret int32
 	// Number is the one-based ordinal of the track in the score.
 	Number int32
@@ -64,6 +66,8 @@ type Track struct {
 	PercussionTrack           bool
 	Visible                   bool
 	Solo                      bool
+	capoFretCompatibility     int32
+	capoFretCompatibilitySet  bool
 }
 
 // PercussionArticulation describes one track-local GPIF percussion definition.
@@ -102,6 +106,7 @@ func (t *Track) populateSingleStaff() {
 		Strings:                   t.Strings,
 		PercussionTrack:           t.PercussionTrack,
 		StandardNotationLineCount: 5,
+		CapoFret:                  t.CapoFret,
 	}}
 }
 
@@ -123,6 +128,31 @@ func (t *Track) reconcileFirstStaffCompatibility() {
 	t.Staves[0].PercussionTrack = t.PercussionTrack
 	t.Measures = t.Staves[0].Measures
 	t.Strings = t.Staves[0].Strings
+}
+
+func (t *Track) markCapoFretCompatibility() {
+	t.capoFretCompatibility = t.CapoFret
+	t.capoFretCompatibilitySet = true
+}
+
+func (t *Track) resolvedStaffCapos() []int32 {
+	if len(t.Staves) == 0 {
+		return []int32{t.CapoFret}
+	}
+	capos := make([]int32, len(t.Staves))
+	staffHasNonZero := false
+	for index := range t.Staves {
+		capos[index] = t.Staves[index].CapoFret
+		staffHasNonZero = staffHasNonZero || capos[index] != 0
+	}
+	legacyEdit := t.capoFretCompatibilitySet && t.CapoFret != t.capoFretCompatibility
+	legacyOnlyProgrammaticValue := !t.capoFretCompatibilitySet && !staffHasNonZero && t.CapoFret != 0
+	if legacyEdit || legacyOnlyProgrammaticValue {
+		for index := range capos {
+			capos[index] = t.CapoFret
+		}
+	}
+	return capos
 }
 
 // TrackSound describes one selectable GPIF playback sound.

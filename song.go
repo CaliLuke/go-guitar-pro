@@ -271,6 +271,7 @@ func (s *Song) readBinary(c *cursor) error {
 	}
 	for trackIndex := range s.Tracks {
 		s.Tracks[trackIndex].populateSingleStaff()
+		s.Tracks[trackIndex].markCapoFretCompatibility()
 	}
 	if err := s.finalizeTiming(); err != nil {
 		return fmt.Errorf("finalizing timing: %w", err)

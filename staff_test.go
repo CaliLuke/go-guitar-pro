@@ -3,7 +3,6 @@
 package goguitarpro
 
 import (
-	"errors"
 	"slices"
 	"strings"
 	"testing"
@@ -181,14 +180,15 @@ func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
 			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property></Properties></Staff>`,
 			`<Staff><Properties><Property name="Tuning"><Pitches>36 43</Pitches></Property><Property name="CapoFret"><Fret>4</Fret></Property></Properties></Staff>`, 1)
 		result, err := ParseWithOptions(conformanceGPIFArchive(t, gpif), ParseOptions{Strict: true})
-		var strictErr *StrictParseError
-		if !errors.As(err, &strictErr) || result == nil {
-			t.Fatalf("strict parse = %#v, %v, want StrictParseError", result, err)
+		if err != nil {
+			t.Fatal(err)
 		}
-		if !slices.ContainsFunc(result.Diagnostics, func(diagnostic ParseDiagnostic) bool {
-			return diagnostic.Code == "GPIF.Track.CapoFret.StaffConflict"
-		}) {
-			t.Fatalf("diagnostics = %#v, want staff capo conflict", result.Diagnostics)
+		if len(result.Diagnostics) != 0 {
+			t.Fatalf("diagnostics = %#v, want none", result.Diagnostics)
+		}
+		track := &result.Song.Tracks[0]
+		if track.CapoFret != 2 || len(track.Staves) != 2 || track.Staves[0].CapoFret != 2 || track.Staves[1].CapoFret != 4 {
+			t.Fatalf("capos = track %d staves %#v, want track 2 staves [2 4]", track.CapoFret, track.Staves)
 		}
 	})
 }
