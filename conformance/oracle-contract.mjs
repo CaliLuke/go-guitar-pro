@@ -9,6 +9,7 @@ import {
   normalizeBend,
   normalizeClef,
   normalizeDynamic,
+  normalizeDirection,
   normalizeGrace,
   normalizeHairpin,
   normalizeHarmonicKind,
@@ -88,6 +89,18 @@ const enumCases = [
   ]],
   [normalizeOttavia, alphaTab.model.Ottavia, [
     ['_15ma', '15ma'], ['_8va', '8va'], ['Regular', 'none'], ['_8vb', '8vb'], ['_15mb', '15mb']
+  ]],
+  [normalizeDirection, alphaTab.model.Direction, [
+    ['TargetCoda', 'Coda'], ['TargetDoubleCoda', 'DoubleCoda'], ['TargetSegno', 'Segno'],
+    ['TargetSegnoSegno', 'SegnoSegno'], ['TargetFine', 'Fine'], ['JumpDaCapo', 'DaCapo'],
+    ['JumpDaCapoAlCoda', 'DaCapoAlCoda'], ['JumpDaCapoAlDoubleCoda', 'DaCapoAlDoubleCoda'],
+    ['JumpDaCapoAlFine', 'DaCapoAlFine'], ['JumpDalSegno', 'DaSegno'],
+    ['JumpDalSegnoAlCoda', 'DaSegnoAlCoda'], ['JumpDalSegnoAlDoubleCoda', 'DaSegnoAlDoubleCoda'],
+    ['JumpDalSegnoAlFine', 'DaSegnoAlFine'], ['JumpDalSegnoSegno', 'DaSegnoSegno'],
+    ['JumpDalSegnoSegnoAlCoda', 'DaSegnoSegnoAlCoda'],
+    ['JumpDalSegnoSegnoAlDoubleCoda', 'DaSegnoSegnoAlDoubleCoda'],
+    ['JumpDalSegnoSegnoAlFine', 'DaSegnoSegnoAlFine'], ['JumpDaCoda', 'DaCoda'],
+    ['JumpDaDoubleCoda', 'DaDoubleCoda']
   ]]
 ];
 for (const [normalize, values, cases] of enumCases) {

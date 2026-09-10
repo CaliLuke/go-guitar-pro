@@ -127,6 +127,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Bar.Ottavia.InvalidValue` | `clef-octave` | `unsupported-feature` | Unknown clef-octave text has no defined public enum value. |
 | `GPIF.MasterBar.Bars.Cardinality` | `staff-ownership` | `invalid-data` | The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track. |
 | `GPIF.MasterBar.Bars.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
+| `GPIF.MasterBar.Directions.Jump.InvalidValue` | `score-core` | `unsupported-feature` | Unknown navigation-jump text has no defined public enum value. |
+| `GPIF.MasterBar.Directions.Target.InvalidValue` | `score-core` | `unsupported-feature` | Unknown navigation-target text has no defined public enum value. |
 | `GPIF.MasterBar.TripletFeel.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.MasterTrack.Tracks.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Note.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
@@ -203,7 +205,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
 | `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
 | `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
-| `MeasureHeader` | `rhythm` | 11 authored, 0 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. |
+| `MeasureHeader` | `rhythm` | 11 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. |
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
 | `Track` | `staff-ownership` | 21 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
@@ -247,9 +249,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 198 |
+| `preserved` | 200 |
 | `normalized` | 34 |
-| `omitted` | 118 |
+| `omitted` | 117 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -258,7 +260,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 74 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 75 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -266,7 +268,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 229 |
+| `schema` | 232 |
 
 ## Source dispatch inventory
 
@@ -324,6 +326,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | --- | --- | --- | --- | --- | --- |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
+| `direction-preservation` | `score-core` | `TestConformanceDirections` | `TestAlphaTabPreservesDirections` | no | Every navigation target and jump survives as one canonical set, including simultaneous markers and documented legacy pointer reconciliation. |
 | `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
 | `unclassified-source-dispatch` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A new semantic dispatch case must receive a source disposition before the gate passes. |
 | `automation-dispatch-diagnostic` | `score-core` | `TestGPIFAutomationDispatchDiagnostics` | `TestAlphaTabInputConformance` | yes | Unknown, unsupported, and invalid automation records remain visible to strict policy. |

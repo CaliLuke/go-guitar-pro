@@ -21,6 +21,7 @@ func normalizeGoScore(song *Song) any {
 			"repeatCount":      header.RepeatCount,
 			"alternateEndings": header.RepeatAlternative,
 			"tripletFeel":      goTripletFeel(header.TripletFeel),
+			"directions":       conformanceDirectionNames(header.resolvedDirections()),
 			"pickup":           index == 0 && song.Anacrusis,
 		})
 	}
@@ -64,6 +65,25 @@ func normalizeGoScore(song *Song) any {
 		"tempoAutomations": tempoAutomations,
 		"tracks":           tracks,
 	}
+}
+
+func conformanceDirectionName(direction DirectionSign) string {
+	if token, ok := directionTargetToken(direction); ok {
+		return token
+	}
+	if token, ok := directionJumpToken(direction); ok {
+		return token
+	}
+	return fmt.Sprintf("unknown:%d", direction)
+}
+
+func conformanceDirectionNames(directions []DirectionSign) []string {
+	result := make([]string, len(directions))
+	for index, direction := range directions {
+		result[index] = conformanceDirectionName(direction)
+	}
+	slices.Sort(result)
+	return result
 }
 
 func normalizeGoTuning(strings []GuitarString) []any {

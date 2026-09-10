@@ -336,6 +336,15 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th", "Dotted8th", "Dotted16th", "Scottish8th", "Scottish16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
+		if masterBar.Directions != nil {
+			path := fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Directions", index)
+			for targetIndex, target := range masterBar.Directions.Targets {
+				gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.Directions.Target.InvalidValue", "score-core", ParseDiagnosticUnsupportedFeature), target, []string{"Coda", "DoubleCoda", "Segno", "SegnoSegno", "Fine"}, fmt.Sprintf("%s/Target[%d]", path, targetIndex), "", "score-core")
+			}
+			for jumpIndex, jump := range masterBar.Directions.Jumps {
+				gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.Directions.Jump.InvalidValue", "score-core", ParseDiagnosticUnsupportedFeature), jump, []string{"DaCapo", "DaCapoAlCoda", "DaCapoAlDoubleCoda", "DaCapoAlFine", "DaSegno", "DaSegnoAlCoda", "DaSegnoAlDoubleCoda", "DaSegnoAlFine", "DaSegnoSegno", "DaSegnoSegnoAlCoda", "DaSegnoSegnoAlDoubleCoda", "DaSegnoSegnoAlFine", "DaCoda", "DaDoubleCoda"}, fmt.Sprintf("%s/Jump[%d]", path, jumpIndex), "", "score-core")
+			}
+		}
 	}
 	gpifAuditMasterBarCardinality(doc, context)
 

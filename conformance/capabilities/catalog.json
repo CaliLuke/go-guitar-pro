@@ -207,12 +207,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GP5 exposes only one Direction pointer per header. GPIF Directions is absent and GP8 omits it. Multiple targets/jumps cannot share a header.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "MeasureHeader.Directions preserves the complete canonical marker set from GP5 and GPIF. The legacy Direction pointer has a documented post-parse edit contract, and GP8 emits every target and jump.",
+      "acceptance": "Public, exact-wire, GP8 reimport, malformed-source, post-parse edit, and pinned AlphaTab checks cover all 19 markers and simultaneous sets.",
       "upstream": [
         "MasterBar.directions",
         "Direction.*"
@@ -239,9 +239,19 @@
           "detail": "Public contract; linked matrix cases are in obligation."
         },
         {
+          "kind": "field",
+          "reference": "MeasureHeader.Directions",
+          "detail": "Complete authored navigation-marker set with documented legacy reconciliation."
+        },
+        {
           "kind": "test",
-          "reference": "TestConformanceMasterBars",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceDirections",
+          "detail": "Exact GP5 and GPIF import, wire export, validation, and edit-authority evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesDirections",
+          "detail": "Pinned AlphaTab reads exact GP5, GPIF, and simultaneous programmatic marker sets after GP8 export."
         },
         {
           "kind": "probe",

@@ -16,7 +16,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve exact authored bend offsets](work-items/bends.json) | implementation | 1 | todo | — | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) |
 | [Preserve independent capo values on multiple staves](work-items/capo.json) | implementation | 1 | in_progress | — | [#43](https://github.com/CaliLuke/go-guitar-pro/issues/43) |
 | [Preserve bar-level clef octave shifts](work-items/clef-octave.json) | implementation | 1 | in_progress | — | [#44](https://github.com/CaliLuke/go-guitar-pro/issues/44) |
-| [Preserve navigation targets and jumps on each measure](work-items/directions.json) | implementation | 1 | todo | — | [#45](https://github.com/CaliLuke/go-guitar-pro/issues/45) |
+| [Preserve navigation targets and jumps on each measure](work-items/directions.json) | implementation | 1 | in_progress | — | [#45](https://github.com/CaliLuke/go-guitar-pro/issues/45) |
 | [Correct stale semantic documentation and diagnostic labels](work-items/documentation-contract-drift.json) | implementation | 1 | todo | — | [#46](https://github.com/CaliLuke/go-guitar-pro/issues/46) |
 | [Preserve GPIF bend control roles with nonmonotonic offsets](work-items/export-curve-order.json) | implementation | 1 | blocked | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) | [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) |
 | [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | todo | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |

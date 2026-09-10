@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 51 | 25 | 23 | 2 |
-| model | 51 | 25 | 24 | 1 |
-| export | 34 | 22 | 43 | 2 |
+| import | 52 | 24 | 23 | 2 |
+| model | 52 | 24 | 24 | 1 |
+| export | 35 | 22 | 42 | 2 |
 
-All three stages have a supported rating in 31 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 32 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -44,7 +44,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord diagrams, barres and fingering | 11 | 11 | 26 |
 | Pick stroke direction | 11 | 11 | 26 |
 | Wah pedal state | 11 | 11 | 26 |
-| Navigation targets and jumps | 8 | 8 | 26 |
 | Slashed beats and slash staff notation | 8 | 8 | 26 |
 | Lyrics authored directly on a beat | 5 | 5 | 26 |
 | Authored note duration percentage | 6 | 4 | 26 |
@@ -72,6 +71,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Common and per-staff capo | 1 | 0 | 26 |
 | Fade in | 17 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
+| Navigation targets and jumps | 8 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
 | Octave shifts attached to clefs | 2 | 0 | 26 |
 | One-bar and two-bar simile marks | 4 | 0 | 26 |
@@ -1019,11 +1019,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Structure. Priority 1. Formats: gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GP5 exposes only one Direction pointer per header. GPIF Directions is absent and GP8 omits it. Multiple targets/jumps cannot share a header.
+MeasureHeader.Directions preserves the complete canonical marker set from GP5 and GPIF. The legacy Direction pointer has a documented post-parse edit contract, and GP8 emits every target and jump.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Public, exact-wire, GP8 reimport, malformed-source, post-parse edit, and pinned AlphaTab checks cover all 19 markers and simultaneous sets.
 
 Bounded work: [Preserve navigation targets and jumps on each measure](https://github.com/CaliLuke/go-guitar-pro/issues/45).
 

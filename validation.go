@@ -108,8 +108,10 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if header.RepeatCount > maxRepeatCount {
 			add("score.measure.repeat-count", ScoreDiagnosticValue, location, "repeat count %d is outside 0..%d", header.RepeatCount, maxRepeatCount)
 		}
-		if header.Direction != nil && (*header.Direction < DirectionSignCoda || *header.Direction > DirectionSignDaDoubleCoda) {
-			add("score.measure.direction", ScoreDiagnosticValue, location, "direction %d is not defined", *header.Direction)
+		for _, direction := range header.resolvedDirections() {
+			if direction < DirectionSignCoda || direction > DirectionSignDaDoubleCoda {
+				add("score.measure.direction", ScoreDiagnosticValue, location, "direction %d is not defined", direction)
+			}
 		}
 		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelScottishSixteenth {
 			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)

@@ -139,6 +139,18 @@ Master bars own key, meter, and double-bar output. A non-default compatibility
 value on `Measure` produces a normalization report when it conflicts with its
 header.
 
+`MeasureHeader.Directions` is the complete authored set of navigation targets
+and jumps. GP5 and GPIF import canonicalize it in `DirectionSign` order and
+remove duplicates. `MeasureHeader.Direction` remains the legacy single-marker
+view and receives the final marker in canonical order after import. On a parsed
+score, an unchanged legacy pointer leaves `Directions`
+authoritative. Changing the pointer replaces the set with that singleton, and
+clearing it removes all directions; this rule also wins when both views change.
+For a programmatic score, a non-nil `Directions` slice is authoritative, and a
+nil slice falls back to `Direction`. Validation and GP8 export reconcile and
+canonicalize these views without modifying the score. Navigation playback and
+repeat traversal remain outside the library contract.
+
 `Measure.ClefOctave` is the authored octave shift attached to that staff's clef.
 It is independent from `Beat.Octave`, which applies only to its beat. The normal
 first-staff `Track.Measures` compatibility rule applies to post-parse edits;
@@ -147,10 +159,10 @@ later staff measures remain independently authoritative.
 GP8 export preserves master-bar key changes, meter values, section text,
 repeats, alternate endings, triplet feel, and double bars. It preserves treble,
 bass, alto, tenor, and percussion clefs, including 8va, 8vb, 15ma, and 15mb
-clef shifts. It does not write legacy navigation
-directions, header-local tempo, or authored meter beam groups. Export reports
-each of these omissions. Import and export reject an invalid meter or repeat
-count before a value can wrap to a smaller integer type.
+clef shifts. It also preserves every navigation target and jump on a master
+bar. It does not write header-local tempo or authored meter beam groups. Export
+reports each of these omissions. Import and export reject an invalid meter or
+repeat count before a value can wrap to a smaller integer type.
 
 `MeasureHeader.RepeatStart` marks the start of a repeat section.
 `MeasureHeader.RepeatCount` is the total number of passes displayed at the

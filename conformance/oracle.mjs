@@ -189,6 +189,51 @@ export function normalizeOttavia(value) {
   }
 }
 
+export function normalizeDirection(value) {
+  switch (value) {
+    case alphaTab.model.Direction.TargetCoda:
+      return 'Coda';
+    case alphaTab.model.Direction.TargetDoubleCoda:
+      return 'DoubleCoda';
+    case alphaTab.model.Direction.TargetSegno:
+      return 'Segno';
+    case alphaTab.model.Direction.TargetSegnoSegno:
+      return 'SegnoSegno';
+    case alphaTab.model.Direction.TargetFine:
+      return 'Fine';
+    case alphaTab.model.Direction.JumpDaCapo:
+      return 'DaCapo';
+    case alphaTab.model.Direction.JumpDaCapoAlCoda:
+      return 'DaCapoAlCoda';
+    case alphaTab.model.Direction.JumpDaCapoAlDoubleCoda:
+      return 'DaCapoAlDoubleCoda';
+    case alphaTab.model.Direction.JumpDaCapoAlFine:
+      return 'DaCapoAlFine';
+    case alphaTab.model.Direction.JumpDalSegno:
+      return 'DaSegno';
+    case alphaTab.model.Direction.JumpDalSegnoAlCoda:
+      return 'DaSegnoAlCoda';
+    case alphaTab.model.Direction.JumpDalSegnoAlDoubleCoda:
+      return 'DaSegnoAlDoubleCoda';
+    case alphaTab.model.Direction.JumpDalSegnoAlFine:
+      return 'DaSegnoAlFine';
+    case alphaTab.model.Direction.JumpDalSegnoSegno:
+      return 'DaSegnoSegno';
+    case alphaTab.model.Direction.JumpDalSegnoSegnoAlCoda:
+      return 'DaSegnoSegnoAlCoda';
+    case alphaTab.model.Direction.JumpDalSegnoSegnoAlDoubleCoda:
+      return 'DaSegnoSegnoAlDoubleCoda';
+    case alphaTab.model.Direction.JumpDalSegnoSegnoAlFine:
+      return 'DaSegnoSegnoAlFine';
+    case alphaTab.model.Direction.JumpDaCoda:
+      return 'DaCoda';
+    case alphaTab.model.Direction.JumpDaDoubleCoda:
+      return 'DaDoubleCoda';
+    default:
+      return `unknown:${value}`;
+  }
+}
+
 export function normalizeBeatStatus(beat) {
   // Dead-slap changes AlphaTab's playback/display rest predicate, but it does
   // not turn the source beat into an authored note-bearing beat.
@@ -453,6 +498,7 @@ export function normalizeScore(score) {
       repeatCount: masterBar.repeatCount,
       alternateEndings: masterBar.alternateEndings,
       tripletFeel: normalizeTripletFeel(masterBar.tripletFeel),
+      directions: Array.from(masterBar.directions ?? []).map(normalizeDirection).sort(),
       pickup: Boolean(masterBar.isAnacrusis)
     })),
     tempoAutomations,

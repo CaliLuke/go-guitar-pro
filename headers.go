@@ -26,8 +26,22 @@ type Clipboard struct {
 
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
-	Marker    *Marker
+	Marker *Marker
+	// Directions contains the complete set of navigation targets and jumps on
+	// this measure. GP8 export writes the values in canonical DirectionSign
+	// order and removes duplicates without changing this slice.
+	Directions []DirectionSign
+	// Direction is the legacy single-marker compatibility view. Import selects
+	// the final marker in canonical order. For a parsed score, changing this
+	// pointer replaces Directions during export, including clearing the set when
+	// it becomes nil. If both views change, Direction wins.
+	// For a programmatic score, a non-nil Directions slice is authoritative;
+	// otherwise Direction supplies the optional singleton value.
 	Direction *DirectionSign
+
+	directionCompatibility    *DirectionSign
+	directionsCompatibility   []DirectionSign
+	directionCompatibilitySet bool
 	// Start is the absolute display-time start in ticks. Parsed scores use a
 	// one-quarter-note origin, so the first measure starts at 960.
 	Start int64
@@ -147,18 +161,21 @@ func (s *Song) readMeasureHeadersV5(c *cursor, measureCount int, signs, fromSign
 		prev := s.MeasureHeaders[len(s.MeasureHeaders)-1]
 		previous = &prev
 	}
-	// Apply directions
-	for sign, measure := range signs {
+	// Apply directions in the same stable order as the source table.
+	for _, sign := range directionSignOrder {
+		measure := signs[sign]
 		if measure > 0 && int(measure)-1 < len(s.MeasureHeaders) {
-			d := sign
-			s.MeasureHeaders[measure-1].Direction = &d
+			s.MeasureHeaders[measure-1].Directions = append(s.MeasureHeaders[measure-1].Directions, sign)
 		}
 	}
-	for sign, measure := range fromSigns {
+	for _, sign := range directionJumpOrder {
+		measure := fromSigns[sign]
 		if measure > 0 && int(measure)-1 < len(s.MeasureHeaders) {
-			d := sign
-			s.MeasureHeaders[measure-1].Direction = &d
+			s.MeasureHeaders[measure-1].Directions = append(s.MeasureHeaders[measure-1].Directions, sign)
 		}
+	}
+	for index := range s.MeasureHeaders {
+		s.MeasureHeaders[index].markDirectionCompatibility()
 	}
 	return nil
 }
@@ -324,24 +341,14 @@ func (s *Song) readDirections(c *cursor) (map[DirectionSign]int16, map[Direction
 	signs := make(map[DirectionSign]int16)
 	fromSigns := make(map[DirectionSign]int16)
 
-	signOrder := []DirectionSign{
-		DirectionSignCoda, DirectionSignDoubleCoda, DirectionSignSegno, DirectionSignSegnoSegno, DirectionSignFine,
-	}
-	fromSignOrder := []DirectionSign{
-		DirectionSignDaCapo, DirectionSignDaCapoAlCoda, DirectionSignDaCapoAlDoubleCoda, DirectionSignDaCapoAlFine,
-		DirectionSignDaSegno, DirectionSignDaSegnoAlCoda, DirectionSignDaSegnoAlDoubleCoda, DirectionSignDaSegnoAlFine,
-		DirectionSignDaSegnoSegno, DirectionSignDaSegnoSegnoAlCoda, DirectionSignDaSegnoSegnoAlDoubleCoda, DirectionSignDaSegnoSegnoAlFine,
-		DirectionSignDaCoda, DirectionSignDaDoubleCoda,
-	}
-
-	for _, sign := range signOrder {
+	for _, sign := range directionSignOrder {
 		val, err := c.readShort()
 		if err != nil {
 			return nil, nil, err
 		}
 		signs[sign] = val
 	}
-	for _, sign := range fromSignOrder {
+	for _, sign := range directionJumpOrder {
 		val, err := c.readShort()
 		if err != nil {
 			return nil, nil, err

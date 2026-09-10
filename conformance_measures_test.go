@@ -49,18 +49,6 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Normalized("Measure.TimeSignature", []int8{song.Tracks[0].Measures[0].TimeSignature.Numerator, song.Tracks[0].Measures[2].TimeSignature.Numerator}, []int8{1, 7})
 	run.Field("Measure.HasDoubleBar", song.Tracks[0].Measures[2].HasDoubleBar, true)
 
-	for value := DirectionSignCoda; value <= DirectionSignDaDoubleCoda; value++ {
-		probe := semanticValidPitchedGP8Song(t)
-		probe.Tracks[0].Settings.Notation = true
-		direction := value
-		probe.MeasureHeaders[0].Direction = &direction
-		run.Omitted("MeasureHeader.Direction", *probe.MeasureHeaders[0].Direction, value)
-		report := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
-		if !hasExportCode(report, "gp8.omit.measure-direction") {
-			t.Errorf("direction %d report = %#v, want omission", value, report.Entries)
-		}
-		run.Enum(conformanceMeasureDirectionSignMember(value), hasExportCode(report, "gp8.omit.measure-direction"), true)
-	}
 	var directionBytes bytes.Buffer
 	for value := int16(1); value <= int16(DirectionSignDaDoubleCoda)+1; value++ {
 		if err := binary.Write(&directionBytes, binary.LittleEndian, value); err != nil {
@@ -78,12 +66,27 @@ func runConformanceMasterBars(run *conformanceRun) {
 		}
 		run.Field("MeasureHeader.Direction", got, int16(value)+1)
 	}
+	for value := DirectionSignCoda; value <= DirectionSignDaDoubleCoda; value++ {
+		probe := semanticValidPitchedGP8Song(t)
+		direction := value
+		probe.MeasureHeaders[0].Direction = &direction
+		data, exportErr := Export(probe, ExportFormatGP8)
+		if exportErr != nil {
+			t.Fatal(exportErr)
+		}
+		parsed, parseErr := Parse(data)
+		if parseErr != nil {
+			t.Fatal(parseErr)
+		}
+		run.Preserved("MeasureHeader.Direction", *parsed.MeasureHeaders[0].Direction, value)
+		run.Enum(conformanceMeasureDirectionSignMember(value), parsed.MeasureHeaders[0].Directions, []DirectionSign{value})
+	}
 	if _, _, truncatedErr := (&Song{}).readDirections(newCursor(directionBytes.Bytes()[:len(directionBytes.Bytes())-1])); truncatedErr == nil {
 		t.Fatal("truncated GP5 directions were accepted")
 	}
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.measure-direction", "gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"} {
+	for _, code := range []string{"gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
@@ -93,7 +96,7 @@ func runConformanceMasterBars(run *conformanceRun) {
 	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
 		t.Fatalf("strict export = %d bytes, %v", len(strictData), strictErr)
 	}
-	allowed := []string{"gp8.omit.measure-direction", "gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"}
+	allowed := []string{"gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"}
 	data, allowedReport, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
 	if err != nil {
 		t.Fatal(err)
@@ -175,7 +178,7 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Enum("MeasureClef.MeasureClefBass", clefs[1], MeasureClefBass)
 	run.Enum("MeasureClef.MeasureClefAlto", clefs[2], MeasureClefAlto)
 	run.Enum("MeasureClef.MeasureClefTenor", clefs[3], MeasureClefTenor)
-	run.Field("MeasureHeader.Direction", roundTrip.MeasureHeaders[0].Direction, (*DirectionSign)(nil))
+	run.Field("MeasureHeader.Direction", *roundTrip.MeasureHeaders[0].Direction, DirectionSignCoda)
 	run.Field("MeasureHeader.Tempo", roundTrip.MeasureHeaders[0].Tempo, int32(0))
 	run.Field("TimeSignature.Beams", roundTrip.MeasureHeaders[0].TimeSignature.Beams, [4]uint8{2, 2, 2, 2})
 

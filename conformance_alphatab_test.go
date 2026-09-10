@@ -255,6 +255,55 @@ func TestAlphaTabPreservesClefOctaves(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesDirections(t *testing.T) {
+	requireAlphaTabConformance(t)
+
+	for _, test := range []struct {
+		name string
+		path string
+		want map[int][]DirectionSign
+	}{
+		{
+			name: "GP5 complete marker set",
+			path: "testdata/gp5/Directions.gp5",
+			want: map[int][]DirectionSign{
+				0: {DirectionSignCoda}, 1: {DirectionSignDoubleCoda}, 2: {DirectionSignSegno}, 3: {DirectionSignSegnoSegno}, 4: {DirectionSignFine},
+				5: {DirectionSignDaCapo}, 6: {DirectionSignDaCapoAlCoda}, 7: {DirectionSignDaCapoAlDoubleCoda}, 8: {DirectionSignDaCapoAlFine},
+				9: {DirectionSignDaSegno}, 10: {DirectionSignDaSegnoSegno}, 11: {DirectionSignDaSegnoAlCoda}, 12: {DirectionSignDaSegnoAlDoubleCoda},
+				13: {DirectionSignDaSegnoSegnoAlCoda}, 14: {DirectionSignDaSegnoSegnoAlDoubleCoda}, 15: {DirectionSignDaSegnoAlFine},
+				16: {DirectionSignDaSegnoSegnoAlFine}, 17: {DirectionSignDaCoda}, 18: {DirectionSignDaDoubleCoda},
+			},
+		},
+		{name: "GPIF targets and jumps", path: "testdata/gp7/timer.gp", want: map[int][]DirectionSign{3: {DirectionSignFine}, 7: {DirectionSignDaCapoAlFine}}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			source := parseTestFixture(t, test.path)
+			data, err := Export(source, ExportFormatGP8)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got := conformanceAlphaTabDirections(t, data)
+			for index, want := range test.want {
+				if !slices.Equal(got[index], conformanceDirectionNames(want)) {
+					t.Fatalf("AlphaTab measure %d directions = %v, want %v", index, got[index], conformanceDirectionNames(want))
+				}
+			}
+		})
+	}
+
+	programmatic := semanticValidPitchedGP8Song(t)
+	programmatic.Tracks[0].Settings.Notation = true
+	all := append(slices.Clone(directionSignOrder), directionJumpOrder...)
+	programmatic.MeasureHeaders[0].Directions = all
+	data, report, err := ExportWithReport(programmatic, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("simultaneous directions export = %v, %#v", err, report.Entries)
+	}
+	if got := conformanceAlphaTabDirections(t, data)[0]; !slices.Equal(got, conformanceDirectionNames(all)) {
+		t.Fatalf("AlphaTab simultaneous directions = %v", got)
+	}
+}
+
 func TestAlphaTabPreservesSimileMarks(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceMeasureSong(t)

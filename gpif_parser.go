@@ -301,6 +301,20 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		// Double bar
 		mh.DoubleBar = mb.DoubleBar != nil
 
+		if mb.Directions != nil {
+			for _, target := range mb.Directions.Targets {
+				if direction, ok := directionFromTargetToken(target); ok {
+					mh.Directions = append(mh.Directions, direction)
+				}
+			}
+			for _, jump := range mb.Directions.Jumps {
+				if direction, ok := directionFromJumpToken(jump); ok {
+					mh.Directions = append(mh.Directions, direction)
+				}
+			}
+		}
+		mh.markDirectionCompatibility()
+
 		// Triplet feel
 		switch mb.TripletFeel {
 		case "Triplet8th":

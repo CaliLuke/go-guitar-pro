@@ -5,8 +5,8 @@
   "title": "Preserve navigation targets and jumps on each measure",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp5",
     "gp6",
@@ -101,7 +101,7 @@
     "gpif_types.go",
     "headers.go"
   ],
-  "resolution": null,
+  "resolution": "MeasureHeader.Directions now preserves the complete canonical navigation-marker set while Direction remains a documented legacy singleton view. GP5 collects all 19 table entries in stable order, GPIF imports and audits repeated Target and Jump values, validation follows the reconciled edit authority, and GP8 emits exact direction tokens without mutating authored slices. Focused tests cover real GP5 and GPIF fixtures, simultaneous markers, duplicate removal, post-parse slice and legacy edits, invalid values, exact XML, GP8 reimport, and pinned AlphaTab consumption. Playback traversal remains out of scope.",
   "verification": [],
   "issue": {
     "number": 45,

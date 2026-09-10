@@ -19,7 +19,7 @@ class BacklogTests(unittest.TestCase):
         self.meta = {'published': False}
 
     def test_uncovered_gap_is_rejected(self):
-        items = [w for w in self.items if w['capability'] != 'directions']
+        items = [w for w in self.items if w['capability'] != 'fermata']
         with self.assertRaisesRegex(ValueError, 'Uncovered'):
             backlog.validate(items, self.catalog, self.meta)
 

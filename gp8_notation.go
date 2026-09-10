@@ -19,6 +19,19 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		Time: fmt.Sprintf("%d/%d", header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value),
 		Bars: bars,
 	}
+	for _, direction := range header.resolvedDirections() {
+		if token, ok := directionTargetToken(direction); ok {
+			if result.Directions == nil {
+				result.Directions = &gpifDirections{}
+			}
+			result.Directions.Targets = append(result.Directions.Targets, token)
+		} else if token, ok := directionJumpToken(direction); ok {
+			if result.Directions == nil {
+				result.Directions = &gpifDirections{}
+			}
+			result.Directions.Jumps = append(result.Directions.Jumps, token)
+		}
+	}
 	if header.Marker != nil {
 		result.Section = &gpifSection{Text: header.Marker.Title}
 	}

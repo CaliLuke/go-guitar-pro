@@ -379,14 +379,20 @@ type gpifMasterBars struct {
 }
 
 type gpifMasterBar struct {
-	Section          *gpifSection `xml:"Section,omitempty"`
-	Key              gpifKey      `xml:"Key"`
-	Time             string       `xml:"Time"`
-	Bars             string       `xml:"Bars"`
-	AlternateEndings string       `xml:"AlternateEndings,omitempty"`
-	DoubleBar        *struct{}    `xml:"DoubleBar,omitempty"`
-	TripletFeel      string       `xml:"TripletFeel,omitempty"`
-	Repeat           *gpifRepeat  `xml:"Repeat,omitempty"`
+	Section          *gpifSection    `xml:"Section,omitempty"`
+	Key              gpifKey         `xml:"Key"`
+	Time             string          `xml:"Time"`
+	Bars             string          `xml:"Bars"`
+	AlternateEndings string          `xml:"AlternateEndings,omitempty"`
+	DoubleBar        *struct{}       `xml:"DoubleBar,omitempty"`
+	TripletFeel      string          `xml:"TripletFeel,omitempty"`
+	Repeat           *gpifRepeat     `xml:"Repeat,omitempty"`
+	Directions       *gpifDirections `xml:"Directions,omitempty"`
+}
+
+type gpifDirections struct {
+	Targets []string `xml:"Target"`
+	Jumps   []string `xml:"Jump"`
 }
 
 type gpifKey struct {

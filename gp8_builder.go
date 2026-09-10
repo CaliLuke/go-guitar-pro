@@ -550,9 +550,6 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		if header.Marker != nil && header.Marker.Color != 0 {
 			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer emits section text but not marker color")
 		}
-		if header.Direction != nil {
-			builder.addReport("gp8.omit.measure-direction", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer does not emit legacy navigation directions")
-		}
 		if header.Tempo != 0 {
 			builder.addReport("gp8.omit.measure-tempo", "tempo-automations", ExportDispositionOmitted, headerLocation, "GP8 writer does not emit the legacy measure-header tempo field")
 		}
