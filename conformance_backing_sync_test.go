@@ -9,6 +9,7 @@ import (
 	"errors"
 	"io"
 	"math"
+	"os"
 	"reflect"
 	"slices"
 	"strings"
@@ -70,7 +71,7 @@ func runConformanceBackingAssetsAndSyncPoints(run *conformanceRun) {
 		t.Fatal("parsed backing track is nil")
 	}
 	backing := result.Song.BackingTrack
-	run.Omitted("Song.BackingTrack", backing != nil, true)
+	run.Preserved("Song.BackingTrack", backing != nil, true)
 	run.Preserved("BackingTrack.Name", backing.Name, "Selected audio")
 	run.Preserved("BackingTrack.Source", backing.Source, "Local")
 	run.Preserved("BackingTrack.AssetID", backing.AssetID, "asset-b")
@@ -257,9 +258,8 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	if hasExportCode(report, "gp8.normalize.sync-point-frame-authority") || hasExportCode(report, "gp8.normalize.sync-point-position-authority") {
 		t.Fatalf("agreeing sync points report = %#v", report.Entries)
 	}
-	backingEntry := conformanceBackingExportEntries(report, "gp8.omit.backing-track")
-	if len(backingEntry) != 1 || backingEntry[0].Location != (ScoreLocation{}) {
-		t.Fatalf("backing omission = %#v, want one score-scoped entry", backingEntry)
+	if backingEntries := conformanceBackingExportEntries(report, "gp8.omit.backing-track"); len(backingEntries) != 0 {
+		t.Fatalf("implemented backing track report = %#v, want no omission", backingEntries)
 	}
 	syncEntries := conformanceBackingExportEntries(report, "gp8.omit.sync-points")
 	wantLocations := []ScoreLocation{{Measure: 0}, {Measure: 1}}
@@ -277,7 +277,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}
 	data, _, err = ExportWithReport(valid, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
 		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.backing-track", "gp8.omit.sync-points"},
+		AllowedCodes:        []string{"gp8.omit.sync-points"},
 	}})
 	if err != nil {
 		t.Fatal(err)
@@ -299,11 +299,24 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}) bool {
 		return automation.Type == "SyncPoint"
 	})
-	run.Wire("gpifDocument.BackingTrack", outputWire.BackingTrack != nil, false)
-	run.Wire("gpifDocument.Assets", len(outputWire.Assets.Items), 0)
+	run.Wire("gpifDocument.BackingTrack", outputWire.BackingTrack != nil, true)
+	run.Wire("gpifDocument.Assets", len(outputWire.Assets.Items), 1)
 	run.Wire("gpifAutomation.Type", hasSyncPoint, false)
-	if outputWire.BackingTrack != nil || len(outputWire.Assets.Items) != 0 || hasSyncPoint {
-		t.Fatalf("independent GPIF retained omitted backing data: %#v", outputWire)
+	if outputWire.BackingTrack == nil || len(outputWire.Assets.Items) != 1 || hasSyncPoint {
+		t.Fatalf("independent GPIF backing data = %#v", outputWire)
+	}
+	if got := outputWire.BackingTrack; got.Name != valid.BackingTrack.Name || got.Enabled != valid.BackingTrack.Enabled || got.Source != valid.BackingTrack.Source || got.AssetID != valid.BackingTrack.AssetID || got.FramePadding != "-22050" {
+		t.Fatalf("exported backing track = %#v, want %#v", got, valid.BackingTrack)
+	}
+	if got := outputWire.Assets.Items[0]; got.ID != valid.BackingTrack.AssetID || got.OriginalFilePath != valid.BackingTrack.OriginalFilePath || got.OriginalFileSHA1 != valid.BackingTrack.OriginalFileSHA1 || got.EmbeddedFilePath != valid.BackingTrack.EmbeddedFilePath {
+		t.Fatalf("exported backing asset = %#v, want %#v", got, valid.BackingTrack)
+	}
+	archive, archiveErr := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if archiveErr != nil {
+		t.Fatal(archiveErr)
+	}
+	if got := readZipMember(t, archive, valid.BackingTrack.EmbeddedFilePath); !bytes.Equal(got, valid.BackingTrack.AudioData) {
+		t.Fatalf("exported audio = %v, want %v", got, valid.BackingTrack.AudioData)
 	}
 
 	conflict := conformanceBackingProgrammaticSong(t)
@@ -322,7 +335,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}
 	data, _, err = ExportWithReport(conflict, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
 		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.backing-track", "gp8.omit.sync-points"},
+		AllowedCodes:        []string{"gp8.omit.sync-points"},
 	}})
 	if len(data) != 0 || !errors.As(err, &lossErr) {
 		t.Fatalf("strict compatibility export = %d bytes, %v, want refusal", len(data), err)
@@ -360,6 +373,89 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 			preflight := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 			if !hasExportCode(preflight, "gp8.reject."+test.code) {
 				t.Errorf("preflight = %#v, want %s rejection", preflight.Entries, test.code)
+			}
+		})
+	}
+}
+
+func TestConformanceBackingTrackExport(t *testing.T) {
+	runConformanceBackingTrackExport(newConformanceRun(t))
+}
+
+func runConformanceBackingTrackExport(run *conformanceRun) {
+	t := run.t
+	song := conformanceBackingProgrammaticSong(t)
+	song.SyncPoints = nil
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("strict backing-track export = %d bytes, %#v, %v", len(data), report.Entries, err)
+	}
+	result, err := ParseWithOptions(data, ParseOptions{Strict: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Song.BackingTrack == nil || !reflect.DeepEqual(*result.Song.BackingTrack, *song.BackingTrack) {
+		t.Fatalf("round-trip backing track = %#v, want %#v", result.Song.BackingTrack, song.BackingTrack)
+	}
+	run.Preserved("Song.BackingTrack", *result.Song.BackingTrack, *song.BackingTrack)
+	run.Preserved("BackingTrack.AssetID", result.Song.BackingTrack.AssetID, song.BackingTrack.AssetID)
+	run.Preserved("BackingTrack.AudioData", result.Song.BackingTrack.AudioData, song.BackingTrack.AudioData)
+	run.Preserved("BackingTrack.EmbeddedFilePath", result.Song.BackingTrack.EmbeddedFilePath, song.BackingTrack.EmbeddedFilePath)
+	run.Preserved("BackingTrack.Enabled", result.Song.BackingTrack.Enabled, song.BackingTrack.Enabled)
+	run.Preserved("BackingTrack.FramePadding", result.Song.BackingTrack.FramePadding, song.BackingTrack.FramePadding)
+	run.Preserved("BackingTrack.Name", result.Song.BackingTrack.Name, song.BackingTrack.Name)
+	run.Preserved("BackingTrack.OriginalFilePath", result.Song.BackingTrack.OriginalFilePath, song.BackingTrack.OriginalFilePath)
+	run.Preserved("BackingTrack.OriginalFileSHA1", result.Song.BackingTrack.OriginalFileSHA1, song.BackingTrack.OriginalFileSHA1)
+	run.Preserved("BackingTrack.Source", result.Song.BackingTrack.Source, song.BackingTrack.Source)
+
+	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+		facts := readAlphaTabBackingTrackFacts(t, writeConformanceFixture(t, data))
+		wantFacts := alphaTabBackingTrackFacts{Enabled: true, AudioBytes: []int{1, 2, 3, 4}}
+		if !reflect.DeepEqual(facts, wantFacts) {
+			t.Fatalf("AlphaTab backing track = %#v, want %#v", facts, wantFacts)
+		}
+	}
+}
+
+func TestGP8BackingTrackExportRejectsInvalidAssets(t *testing.T) {
+	for _, framePadding := range []int64{-1 << 31, 1<<31 - 1} {
+		song := conformanceBackingProgrammaticSong(t)
+		song.SyncPoints = nil
+		song.BackingTrack.FramePadding = framePadding
+		if data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}}); err != nil || len(data) == 0 || len(report.Entries) != 0 {
+			t.Errorf("valid frame boundary %d export = %d bytes, %#v, %v", framePadding, len(data), report.Entries, err)
+		}
+	}
+	for _, test := range []struct {
+		name   string
+		mutate func(*BackingTrack)
+	}{
+		{name: "missing asset ID", mutate: func(backing *BackingTrack) { backing.AssetID = "" }},
+		{name: "missing embedded path", mutate: func(backing *BackingTrack) { backing.EmbeddedFilePath = "" }},
+		{name: "reserved embedded path", mutate: func(backing *BackingTrack) { backing.EmbeddedFilePath = "Content/score.gpif" }},
+		{name: "empty audio", mutate: func(backing *BackingTrack) { backing.AudioData = nil }},
+		{name: "frame below target boundary", mutate: func(backing *BackingTrack) { backing.FramePadding = -1<<31 - 1 }},
+		{name: "frame above target boundary", mutate: func(backing *BackingTrack) { backing.FramePadding = 1 << 31 }},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			song := conformanceBackingProgrammaticSong(t)
+			song.SyncPoints = nil
+			test.mutate(song.BackingTrack)
+			data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+			if err == nil || len(data) != 0 || !hasExportCode(report, "gp8.reject.score") {
+				t.Fatalf("invalid export = %d bytes, %#v, %v", len(data), report.Entries, err)
+			}
+
+			path := t.TempDir() + "/existing.gp"
+			if writeErr := os.WriteFile(path, []byte("sentinel"), 0o600); writeErr != nil {
+				t.Fatal(writeErr)
+			}
+			if fileErr := ExportFile(path, song, ExportFormatGP8); fileErr == nil {
+				t.Fatal("invalid file export succeeded")
+			}
+			contents, readErr := os.ReadFile(path)
+			if readErr != nil || string(contents) != "sentinel" {
+				t.Fatalf("existing output after rejection = %q, %v", contents, readErr)
 			}
 		})
 	}
@@ -466,6 +562,18 @@ func conformanceBackingExportEntries(report ExportReport, code string) []ExportR
 		}
 	}
 	return entries
+}
+
+type alphaTabBackingTrackFacts struct {
+	Enabled    bool  `json:"enabled"`
+	AudioBytes []int `json:"audioBytes"`
+}
+
+func readAlphaTabBackingTrackFacts(t *testing.T, fixture string) alphaTabBackingTrackFacts {
+	t.Helper()
+	var facts alphaTabBackingTrackFacts
+	readAlphaTabOracleFacts(t, "--backing-track", fixture, &facts)
+	return facts
 }
 
 func readBackingGPIF(t *testing.T, data []byte) []byte {

@@ -47,6 +47,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		builder.doc.MasterTrack.Anacrusis = &struct{}{}
 	}
 	builder.doc.MasterTrack.Automations = buildGP8TempoAutomations(song)
+	buildGP8BackingTrack(song.BackingTrack, &builder.doc)
 
 	for trackIndex := range song.Tracks {
 		builder.prepareTrack(trackIndex)
@@ -56,6 +57,29 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		return gpifDocument{}, err
 	}
 	return builder.doc, nil
+}
+
+func gp8EmbedsBackingTrack(backingTrack *BackingTrack) bool {
+	return backingTrack != nil && backingTrack.Enabled && backingTrack.Source == "Local"
+}
+
+func buildGP8BackingTrack(backingTrack *BackingTrack, document *gpifDocument) {
+	if !gp8EmbedsBackingTrack(backingTrack) {
+		return
+	}
+	document.BackingTrack = &gpifBackingTrack{
+		Name:         backingTrack.Name,
+		Enabled:      backingTrack.Enabled,
+		Source:       backingTrack.Source,
+		AssetID:      backingTrack.AssetID,
+		FramePadding: strconv.FormatInt(backingTrack.FramePadding, 10),
+	}
+	document.Assets = gpifAssets{Assets: []gpifAsset{{
+		ID:               backingTrack.AssetID,
+		OriginalFilePath: backingTrack.OriginalFilePath,
+		OriginalFileSHA1: backingTrack.OriginalFileSHA1,
+		EmbeddedFilePath: backingTrack.EmbeddedFilePath,
+	}}}
 }
 
 func (builder *gp8Builder) buildScore() gpifScore {

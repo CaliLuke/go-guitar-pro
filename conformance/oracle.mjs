@@ -509,6 +509,14 @@ export function loadAutomationFacts(fixture) {
   return { tempo, sound };
 }
 
+export function loadBackingTrackFacts(fixture) {
+  const backingTrack = loadScore(fixture).backingTrack;
+  return {
+    enabled: Boolean(backingTrack),
+    audioBytes: backingTrack?.rawAudioFile ? Array.from(backingTrack.rawAudioFile) : []
+  };
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -525,6 +533,10 @@ function main() {
   }
   if (args[0] === '--automations' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadAutomationFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--backing-track' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadBackingTrackFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

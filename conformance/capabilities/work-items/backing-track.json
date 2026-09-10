@@ -5,8 +5,8 @@
   "title": "Export embedded audio backing-track assets",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp8"
   ],
@@ -69,7 +69,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": null,
+  "resolution": "GP8 export now writes enabled Local backing-track metadata and the referenced nonempty audio bytes at the authored asset path. Strict preflight rejects missing asset IDs, missing or reserved archive paths, empty audio, and frame padding outside the signed 32-bit target range before file output. Disabled and non-local records remain explicit target omissions; sync-point export remains separately scoped in #55.",
   "verification": [],
   "issue": {
     "number": 42,

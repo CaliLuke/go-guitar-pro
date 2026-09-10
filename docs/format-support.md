@@ -246,9 +246,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 195 |
+| `preserved` | 196 |
 | `normalized` | 34 |
-| `omitted` | 119 |
+| `omitted` | 118 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -257,7 +257,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 71 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 72 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
 
 ## GPIF wire inventory
 

@@ -94,11 +94,7 @@ func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([
 	}
 	gpif = append(append([]byte(xml.Header), gpif...), '\n')
 
-	entries := []struct {
-		name   string
-		method uint16
-		data   []byte
-	}{
+	entries := []gp8ArchiveEntry{
 		{name: "VERSION", method: zip.Store, data: []byte(gp8ContainerVersion)},
 		{name: "meta.json", method: zip.Deflate, data: []byte("{\n}\n")},
 		{name: "Content/", method: zip.Store},
@@ -107,15 +103,24 @@ func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([
 		{name: "Content/LayoutConfiguration", method: zip.Deflate, data: buildGP8LayoutConfiguration(song)},
 		{name: "Content/score.gpif", method: zip.Deflate, data: gpif},
 	}
+	if plan.backingTrackAsset != nil {
+		entries = append(entries, gp8ArchiveEntry{
+			name:   plan.backingTrackAsset.name,
+			method: zip.Store,
+			data:   plan.backingTrackAsset.data,
+		})
+	}
 	data, err := writeGP8Archive(entries)
 	return data, report, err
 }
 
-func writeGP8Archive(entries []struct {
+type gp8ArchiveEntry = struct {
 	name   string
 	method uint16
 	data   []byte
-}) ([]byte, error) {
+}
+
+func writeGP8Archive(entries []gp8ArchiveEntry) ([]byte, error) {
 	var output bytes.Buffer
 	archive := zip.NewWriter(&output)
 	for _, entry := range entries {
@@ -269,6 +274,9 @@ func validateGP8Song(song *Song) error {
 	if !hasPositiveTempo {
 		return fmt.Errorf("song has no positive tempo")
 	}
+	if err := validateGP8BackingTrack(song.BackingTrack); err != nil {
+		return err
+	}
 	for measureIndex, header := range song.MeasureHeaders {
 		if header.TimeSignature.Numerator <= 0 || header.TimeSignature.Denominator.Value == 0 {
 			return fmt.Errorf("measure %d has invalid time signature %d/%d", measureIndex, header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value)
@@ -320,6 +328,41 @@ func validateGP8Song(song *Song) error {
 		}
 	}
 	return nil
+}
+
+func validateGP8BackingTrack(backingTrack *BackingTrack) error {
+	if !gp8EmbedsBackingTrack(backingTrack) {
+		return nil
+	}
+	if backingTrack.AssetID == "" {
+		return fmt.Errorf("enabled local backing track has no asset ID")
+	}
+	if backingTrack.EmbeddedFilePath == "" {
+		return fmt.Errorf("enabled local backing track asset %q has no embedded file path", backingTrack.AssetID)
+	}
+	if gp8ReservedArchiveMember(backingTrack.EmbeddedFilePath) {
+		return fmt.Errorf("enabled local backing track asset %q uses reserved archive path %q", backingTrack.AssetID, backingTrack.EmbeddedFilePath)
+	}
+	if len(backingTrack.AudioData) == 0 {
+		return fmt.Errorf("enabled local backing track asset %q has no audio data", backingTrack.AssetID)
+	}
+	const (
+		minGP8FramePadding = int64(-1 << 31)
+		maxGP8FramePadding = int64(1<<31 - 1)
+	)
+	if backingTrack.FramePadding < minGP8FramePadding || backingTrack.FramePadding > maxGP8FramePadding {
+		return fmt.Errorf("backing-track frame padding %d is outside the signed 32-bit GP8 range", backingTrack.FramePadding)
+	}
+	return nil
+}
+
+func gp8ReservedArchiveMember(name string) bool {
+	switch name {
+	case "VERSION", "meta.json", "Content/", "Content/BinaryStylesheet", "Content/PartConfiguration", "Content/LayoutConfiguration", "Content/score.gpif":
+		return true
+	default:
+		return false
+	}
 }
 
 func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) error {

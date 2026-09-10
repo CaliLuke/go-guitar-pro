@@ -435,16 +435,21 @@ func conformanceAutomationGPIFSource() string {
 
 func readAlphaTabAutomationFacts(t *testing.T, fixture string) any {
 	t.Helper()
-	command := exec.Command("node", alphaTabOracleScript(), "--automations", fixture)
+	var facts any
+	readAlphaTabOracleFacts(t, "--automations", fixture, &facts)
+	return facts
+}
+
+func readAlphaTabOracleFacts(t *testing.T, mode, fixture string, destination any) {
+	t.Helper()
+	command := exec.Command("node", alphaTabOracleScript(), mode, fixture)
 	output, err := command.CombinedOutput()
 	if err != nil {
-		t.Fatalf("AlphaTab automation oracle: %v\n%s", err, output)
+		t.Fatalf("AlphaTab %s oracle: %v\n%s", mode, err, output)
 	}
-	var facts any
-	if err := json.Unmarshal(output, &facts); err != nil {
-		t.Fatalf("decoding AlphaTab automation facts: %v\n%s", err, output)
+	if err := json.Unmarshal(output, destination); err != nil {
+		t.Fatalf("decoding AlphaTab %s facts: %v\n%s", mode, err, output)
 	}
-	return facts
 }
 
 type conformanceAutomationWireAutomation struct {

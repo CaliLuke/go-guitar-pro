@@ -264,7 +264,12 @@ a loss diagnostic because the public model does not retain that source state.
 An enabled local backing track must refer to an archive entry with audio data.
 Its frame padding must fit in a signed 64-bit frame count. Sync points preserve
 their authored bar, position, tempo, visibility, frame, and media-time values.
-GP8 export reports backing tracks and sync points because it does not emit them.
+GP8 export embeds enabled `Local` backing tracks, using the public record as the
+edit authority for asset metadata, path, bytes, and padding. The GP8 target uses
+a signed 32-bit frame-padding field, so export rejects values outside that range.
+Asset paths that collide with fixed GP8 archive members are also rejected.
+Disabled and non-local backing-track records remain explicit omissions. Sync
+points remain a separate export omission.
 
 The GPIF source audit accounts for every known wire field and named dispatch.
 It rejects conflicting duplicate properties. It also keeps an explicit source

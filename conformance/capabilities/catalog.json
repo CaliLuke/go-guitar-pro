@@ -1948,10 +1948,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Embedded asset data and enabled backing-track references parse. GP8 does not emit audio assets. Website status conflicts with pinned source/tests.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GP8 embeds enabled Local backing-track metadata and exact audio bytes. Disabled and non-local records remain explicit target omissions.",
+      "acceptance": "Enabled Local assets have exact public-model, GPIF, archive-byte, strict-policy, and pinned AlphaTab evidence. Missing identity/path/data, reserved archive paths, and out-of-range frame padding are rejected before output.",
       "upstream": [
         "Score.backingTrack",
         "BackingTrack.*"
@@ -1974,13 +1974,13 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceBackingAssetsAndSyncPoints",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceBackingTrackExport",
+          "detail": "Exact GP8 archive round trip and pinned AlphaTab consumption."
         },
         {
-          "kind": "source",
-          "reference": "export_report.go",
-          "detail": "Target omission reports."
+          "kind": "test",
+          "reference": "TestGP8BackingTrackExportRejectsInvalidAssets",
+          "detail": "Strict preflight and file-output rejection boundaries."
         }
       ]
     },

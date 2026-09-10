@@ -133,8 +133,9 @@ note durations and tuplets, percussion articulations, beat dynamics,
 grace-note pitch, duration, velocity and placement, accents, ties, and the
 supported note effects represented in GPIF.
 
+Enabled local backing audio and its asset metadata are embedded in GP8 output.
 Fields not listed above are intentionally not serialized. In particular, GP8
-export currently omits backing audio and sync points, volume automations,
+export currently omits sync points, volume automations,
 lyrics, page and RSE settings, bend/tremolo/mix-table effects, detailed chord
 harmony and fingering metadata, trill subdivisions, and grace-note bend
 transitions. GPIF stores dynamics at beat level, so differing note velocities

@@ -51,7 +51,10 @@ type Song struct {
 	TripletFeel  TripletFeel
 }
 
-// BackingTrack describes the external audio attached to a GPIF score.
+// BackingTrack describes the external audio attached to a GPIF score. Its
+// fields are the export authority after parsing. GP8 export embeds enabled
+// Local assets whose audio data is nonempty and whose frame padding fits the
+// target's signed 32-bit frame range.
 type BackingTrack struct {
 	Name             string
 	Source           string

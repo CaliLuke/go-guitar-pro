@@ -60,11 +60,14 @@ class BacklogTests(unittest.TestCase):
         self.assertEqual(self.catalog, before)
 
     def test_dispatch_respects_dependencies_ownership_and_issue_state(self):
+        items = copy.deepcopy(self.items)
+        backing_track = next(w for w in items if w['id'] == 'backing-track')
+        backing_track.update(status='todo', owner=None)
         with closing(sqlite3.connect(':memory:')) as con:
             con.executescript((manage.HERE / 'schema.sql').read_text())
             for c in self.catalog['capabilities']:
                 con.execute('INSERT INTO capability VALUES (?,?,?,?,?,?,?,?)', (c['id'], c['domain'], c['title'], c['scope'], c['priority'], '[]', c['finding'], c['acceptance']))
-            with patch.object(backlog, 'load', return_value=self.items):
+            with patch.object(backlog, 'load', return_value=items):
                 backlog.populate(con, self.catalog)
             ready = {r[0] for r in con.execute('SELECT id FROM ready_work')}
             self.assertIn('backing-track', ready)

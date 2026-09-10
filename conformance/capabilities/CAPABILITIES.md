@@ -15,7 +15,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 49 | 26 | 24 | 2 |
 | model | 49 | 26 | 25 | 1 |
-| export | 32 | 22 | 45 | 2 |
+| export | 32 | 23 | 44 | 2 |
 
 All three stages have a supported rating in 29 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -857,11 +857,11 @@ Bounded work: [Preserve authored tempo and sound automation details](https://git
 
 Playback data. Priority 1. Formats: gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Embedded asset data and enabled backing-track references parse. GP8 does not emit audio assets. Website status conflicts with pinned source/tests.
+GP8 embeds enabled Local backing-track metadata and exact audio bytes. Disabled and non-local records remain explicit target omissions.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Enabled Local assets have exact public-model, GPIF, archive-byte, strict-policy, and pinned AlphaTab evidence. Missing identity/path/data, reserved archive paths, and out-of-range frame padding are rejected before output.
 
 Bounded work: [Export embedded audio backing-track assets](https://github.com/CaliLuke/go-guitar-pro/issues/42).
 

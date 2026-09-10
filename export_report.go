@@ -59,7 +59,13 @@ func PreflightExport(song *Song, target ExportFormat, options ExportOptions) Exp
 }
 
 type gp8ExportPlan struct {
-	document gpifDocument
+	document          gpifDocument
+	backingTrackAsset *gp8BackingTrackAsset
+}
+
+type gp8BackingTrackAsset struct {
+	name string
+	data []byte
 }
 
 func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportReport, *gp8ExportPlan) {
@@ -104,7 +110,7 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 			}
 		}
 	}
-	if song.BackingTrack != nil {
+	if song.BackingTrack != nil && !gp8EmbedsBackingTrack(song.BackingTrack) {
 		add("gp8.omit.backing-track", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track assets")
 	}
 	if len(song.Lyrics.Lines) != 0 {
@@ -135,7 +141,14 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		add("gp8.reject.conversion", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())
 		return report, nil
 	}
-	return report, &gp8ExportPlan{document: document}
+	plan := &gp8ExportPlan{document: document}
+	if gp8EmbedsBackingTrack(song.BackingTrack) {
+		plan.backingTrackAsset = &gp8BackingTrackAsset{
+			name: song.BackingTrack.EmbeddedFilePath,
+			data: song.BackingTrack.AudioData,
+		}
+	}
+	return report, plan
 }
 
 func refusedExportEntries(report ExportReport, policy ExportLossPolicy) []ExportReportEntry {
