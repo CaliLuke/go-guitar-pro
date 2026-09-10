@@ -2,9 +2,25 @@
 
 ## Project Structure
 
-This repository is one Go package. The root files contain the public data types and format readers. `parser.go` detects the file format. `goguitarpro.go` provides the file-based API. Format-specific logic uses focused files such as `gpif.go`, `gpx_filesystem.go`, and `gp7_zip.go`.
+This repository contains one Go package. Root Go files contain the public types
+and format readers. `parser.go` detects the file format. `file_api.go` provides
+the file-based API.
 
-`goguitarpro_test.go` runs the compatibility suite. Test files are grouped by version in `testdata/gp3/` through `testdata/gp8/`. Keep known unsupported fixtures in the corpus. If the parser does not support a fixture, add its path to `knownUnsupportedFixtures`. When the parser supports the fixture, remove its path.
+The `gpif_*.go` files contain GPIF types, parsing, audits, and model conversion.
+The `gp8_*.go` files contain the GP8 export pipeline and target conversion.
+
+Tests that exercise only exported behavior live in `integration/` and import the
+library as a user would. White-box tests that require parser or writer internals
+stay beside the source in the `goguitarpro` package. Name test files after a
+stable feature or responsibility. Do not use issue numbers or semantic-matrix
+family numbers in filenames.
+
+`integration/compatibility_test.go` runs the compatibility suite. Test files are
+grouped by version in `testdata/gp3/` through `testdata/gp8/`.
+
+Keep known unsupported fixtures in the corpus. If the parser does not support a
+fixture, add its path to `knownUnsupportedFixtures`. When support is complete,
+remove the fixture path from `knownUnsupportedFixtures`.
 
 ## Build and Test Commands
 
@@ -30,8 +46,10 @@ The repository contains a library. It does not contain a command-line program.
 
 Add the case to `conformance/feature-ledger.json`. Record its formats, stages,
 non-default values, oracle, and limits. Register one focused executor in
-`semantic_matrix_test.go`. Use its assertion recorder for every exact field,
-wire field, or dispatch that the case covers.
+`conformance_harness_test.go`. Put the test in the applicable domain-named
+`conformance_*_test.go` file. Use the assertion recorder for every exact field,
+wire field, or dispatch that the case covers. Matrix IDs such as `M12` are
+stable ledger identifiers, not source-file organization.
 
 For each public field, use one disposition-specific runtime assertion. The
 assertion disposition must match the complete field partition.

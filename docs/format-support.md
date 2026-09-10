@@ -346,14 +346,14 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |
-| `structural-export-resilience` | `staff-ownership` | `TestSemanticMatrixM25StructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
-| `audio-engine-state` | `score-core` | `TestSemanticMatrixM20SourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
-| `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestSemanticMatrixM10DynamicQuantization` | `TestTicket33AlphaTabReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
+| `structural-export-resilience` | `staff-ownership` | `TestConformanceStructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
+| `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
+| `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |
 | `whammy-corpus-projection` | `note-and-beat-semantics` | `TestWhammyProjectionAdaptersExposeBeatCurves` | `TestAlphaTabWhammyCorpusConformance` | yes | Both corpus adapters must expose whammy curves so semantic comparison can detect regressions. |
 | `whammy-target-interpretation` | `note-and-beat-semantics` | `TestGP8WhammyMiddleHoldReportsInterpretedLoss` | `TestAlphaTabGP8WhammyTargetInterpretation` | yes | Loss reporting must compare the authored curve with the curve consumers interpret, not only the raw GPIF controls. |
-| `octave-variant-conformance` | `note-and-beat-semantics` | `TestSemanticMatrixM10BeatEffects` | none | yes | Each octave variant must survive GP8 export, Go reimport, and independent consumption. |
+| `octave-variant-conformance` | `note-and-beat-semantics` | `TestConformanceBeatEffects` | none | yes | Each octave variant must survive GP8 export, Go reimport, and independent consumption. |
 | `semantic-wire-requires-behavior` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A structural schema round trip cannot satisfy a semantic wire-field obligation. |
 | `semantic-wire-executable-assertion` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A semantic wire mapping must have an exact executable assertion in its focused case. |
 | `semantic-obligation-shape` | `score-core` | `TestSemanticMatrixInventory` | none | yes | Every executable case must declare the dimensions needed to interpret its evidence. |
@@ -361,6 +361,6 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `percussion-resource-order` | `staff-ownership` | `TestGP8PercussionUsesEveryResolvedStaff` | none | yes | Staves precede InstrumentSet so the pinned consumer has staff context for percussion resources. |
 | `percussion-articulation-lookup` | `percussion-articulations` | `TestGP8PercussionRejectsMissingArticulationResource` | none | yes | A missing exported percussion resource is an error. |
 | `percussion-line-count-policy` | `staff-ownership` | `TestGP8PercussionLineCountPolicy` | none | yes | A later conflicting line count is reported and refused by strict export. |
-| `isolated-midi-controller-report` | `score-core` | `TestSemanticMatrixM05PlaybackRouting` | none | yes | Each grouped MIDI-effect loss condition is exercised with only one controller set. |
-| `isolated-harmonic-member-report` | `harmonics` | `TestSemanticMatrixM13HarmonicVariants` | none | yes | Pitch and octave each trigger the shared harmonic omission report in isolation. |
-| `isolated-chord-legacy-report` | `note-and-beat-semantics` | `TestSemanticMatrixM14ChordDefinitions` | none | yes | Every legacy chord field triggers the shared omission report in isolation. |
+| `isolated-midi-controller-report` | `score-core` | `TestConformancePlaybackRouting` | none | yes | Each grouped MIDI-effect loss condition is exercised with only one controller set. |
+| `isolated-harmonic-member-report` | `harmonics` | `TestConformanceHarmonicVariants` | none | yes | Pitch and octave each trigger the shared harmonic omission report in isolation. |
+| `isolated-chord-legacy-report` | `note-and-beat-semantics` | `TestConformanceChordDefinitions` | none | yes | Every legacy chord field triggers the shared omission report in isolation. |

@@ -103,7 +103,7 @@ ALPHATAB_CONFORMANCE=1 ALPHATAB_CONFORMANCE_UPDATE=1 go test -run '^TestAlphaTab
 Refresh the whole-corpus receipt with:
 
 ```sh
-ALPHATAB_CONFORMANCE=1 ALPHATAB_CORPUS_UPDATE=1 go test -run '^TestSemanticMatrixM23WholeCorpusAccounting$' .
+ALPHATAB_CONFORMANCE=1 ALPHATAB_CORPUS_UPDATE=1 go test -run '^TestConformanceWholeCorpusAccounting$' .
 ```
 
 This command retains classifications only for unchanged fixture, difference,

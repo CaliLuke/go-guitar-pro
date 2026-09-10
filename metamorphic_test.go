@@ -74,11 +74,11 @@ func TestGPIFMetamorphicSensitivity(t *testing.T) {
 	}
 }
 
-func TestM25AdapterMutationSensitivity(t *testing.T) {
-	testM25AdapterMutationSensitivity(t)
+func TestResilienceAdapterMutationSensitivity(t *testing.T) {
+	testResilienceAdapterMutationSensitivity(t)
 }
 
-func testM25AdapterMutationSensitivity(t *testing.T) {
+func testResilienceAdapterMutationSensitivity(t *testing.T) {
 	t.Helper()
 	if goSlide(SlideIntoFromAbove) == goSlide(SlideIntoFromBelow) {
 		t.Fatal("slide adapter collapsed distinct enum values")
@@ -88,25 +88,25 @@ func testM25AdapterMutationSensitivity(t *testing.T) {
 	}
 }
 
-func TestSemanticMatrixM25StructuralResilience(t *testing.T) {
-	runSemanticMatrixM25StructuralResilience(newSemanticMatrixRun(t))
+func TestConformanceStructuralResilience(t *testing.T) {
+	runConformanceStructuralResilience(newConformanceRun(t))
 }
 
-func runSemanticMatrixM25StructuralResilience(run *semanticMatrixRun) {
+func runConformanceStructuralResilience(run *conformanceRun) {
 	t := run.t
-	t.Run("adapter sensitivity", testM25AdapterMutationSensitivity)
+	t.Run("adapter sensitivity", testResilienceAdapterMutationSensitivity)
 	data, err := Export(conformanceExportSong(), ExportFormatGP8)
 	if err != nil {
 		t.Fatal(err)
 	}
 	for operation := range 7 {
 		t.Run(fmt.Sprintf("malformed GPIF %d", operation), func(t *testing.T) {
-			assertM25MalformedGPIF(t, data, []byte{byte(operation)})
+			assertResilienceMalformedGPIF(t, data, []byte{byte(operation)})
 		})
 	}
 	for _, shape := range [][4]int{{1, 1, 1, 1}, {2, 2, 2, 2}, {3, 1, 2, 3}} {
 		t.Run(fmt.Sprintf("public Song %d-%d-%d-%d", shape[0], shape[1], shape[2], shape[3]), func(t *testing.T) {
-			assertM25ValidPublicSong(t, shape[0], shape[1], shape[2], shape[3])
+			assertResilienceValidPublicSong(t, shape[0], shape[1], shape[2], shape[3])
 		})
 	}
 }
@@ -278,7 +278,7 @@ func FuzzGPIFMalformedStructures(f *testing.F) {
 		if len(plan) == 0 || len(plan) > 8 {
 			t.Skip()
 		}
-		assertM25MalformedGPIF(t, data, plan)
+		assertResilienceMalformedGPIF(t, data, plan)
 	})
 }
 
@@ -291,11 +291,11 @@ func FuzzValidPublicSongStructures(f *testing.F) {
 		staffCount := 1 + int(staffSeed%3)
 		voiceCount := 1 + int(voiceSeed%3)
 		beatCount := 1 + int(beatSeed%3)
-		assertM25ValidPublicSong(t, trackCount, staffCount, voiceCount, beatCount)
+		assertResilienceValidPublicSong(t, trackCount, staffCount, voiceCount, beatCount)
 	})
 }
 
-func assertM25MalformedGPIF(t *testing.T, data, plan []byte) {
+func assertResilienceMalformedGPIF(t *testing.T, data, plan []byte) {
 	t.Helper()
 	malformed := rewriteConformanceGPIF(t, data, func(gpif string) string {
 		for _, operation := range plan {
@@ -337,16 +337,16 @@ func assertM25MalformedGPIF(t *testing.T, data, plan []byte) {
 	}
 }
 
-func assertM25ValidPublicSong(t *testing.T, trackCount, staffCount, voiceCount, beatCount int) {
+func assertResilienceValidPublicSong(t *testing.T, trackCount, staffCount, voiceCount, beatCount int) {
 	t.Helper()
-	song := m25ValidPublicSong(trackCount, staffCount, voiceCount, beatCount)
+	song := conformanceResilienceValidPublicSong(trackCount, staffCount, voiceCount, beatCount)
 	if err := FinalizeSong(song); err != nil {
 		t.Fatalf("finalizing %d/%d/%d/%d structure: %v", trackCount, staffCount, voiceCount, beatCount, err)
 	}
 	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
 		t.Fatalf("valid %d/%d/%d/%d structure diagnostics: %#v", trackCount, staffCount, voiceCount, beatCount, diagnostics)
 	}
-	assertM25PublicSongShape(t, song, trackCount, staffCount, voiceCount, beatCount)
+	assertResiliencePublicSongShape(t, song, trackCount, staffCount, voiceCount, beatCount)
 	preflight := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	allowedCodes := make([]string, 0, len(preflight.Entries))
 	for _, entry := range preflight.Entries {
@@ -368,10 +368,10 @@ func assertM25ValidPublicSong(t *testing.T, trackCount, staffCount, voiceCount, 
 	if err != nil {
 		t.Fatalf("reimporting %d/%d/%d/%d structure: %v", trackCount, staffCount, voiceCount, beatCount, err)
 	}
-	assertM25PublicSongShape(t, roundTrip, trackCount, staffCount, voiceCount, beatCount)
+	assertResiliencePublicSongShape(t, roundTrip, trackCount, staffCount, voiceCount, beatCount)
 }
 
-func assertM25PublicSongShape(t *testing.T, song *Song, trackCount, staffCount, voiceCount, beatCount int) {
+func assertResiliencePublicSongShape(t *testing.T, song *Song, trackCount, staffCount, voiceCount, beatCount int) {
 	t.Helper()
 	if len(song.Tracks) != trackCount {
 		t.Fatalf("track count = %d, want %d", len(song.Tracks), trackCount)
@@ -541,7 +541,7 @@ func duplicateSecondGPIFNoteID(gpif string) string {
 	return gpif[:secondIDStart] + firstID + gpif[secondIDEnd:]
 }
 
-func m25ValidPublicSong(trackCount, staffCount, voiceCount, beatCount int) *Song {
+func conformanceResilienceValidPublicSong(trackCount, staffCount, voiceCount, beatCount int) *Song {
 	song := &Song{Tempo: 120, MeasureHeaders: []MeasureHeader{defaultMeasureHeader()}}
 	for trackIndex := range trackCount {
 		track := defaultTrack()

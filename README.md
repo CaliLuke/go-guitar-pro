@@ -172,6 +172,24 @@ voice advances independently by its played duration, including tuplets; pickup
 measures advance by their authored content length. Playback transformations such
 as repeats and grace-note scheduling are not folded into these display starts.
 
+## Repository layout
+
+Production Go files stay in the repository root because this module contains one
+package. White-box unit tests stay beside the source files because they require
+unexported parser or writer details.
+
+The other files use these directories and names:
+
+- `integration/` contains black-box tests that import the public API.
+- `gpif_*.go` files contain GPIF types, parsing, audits, and model conversion.
+- `gp8_*.go` files contain the GP8 export pipeline and target-specific conversion.
+- `conformance_<domain>_test.go` files contain domain cases from the semantic contract.
+- `conformance/` contains the ledger, AlphaTab adapter, mutation runner, and snapshots.
+- `testdata/` contains the compatibility corpus, grouped by source format.
+
+Matrix IDs such as `M12` are stable ledger keys. They do not define filenames or
+package structure.
+
 ## Develop
 
 ```sh
