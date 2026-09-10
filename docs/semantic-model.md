@@ -11,6 +11,9 @@ The semantic matrix traces each public field, GPIF wire field, source dispatch,
 and public enum member to an executable case. Each case records its stage,
 format, value shapes, evidence role, and evidence source. Structural schema
 evidence proves XML shape only. It cannot close a semantic behavior obligation.
+Enum discovery uses Go type information across the package, so inferred
+constants and aliases cannot bypass the matrix. Every exported member name has
+its own executable obligation, even when two members have the same value.
 
 ## Processing stages
 

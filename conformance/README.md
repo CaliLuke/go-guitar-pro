@@ -57,8 +57,10 @@ The `complete` flag stays false while the report has uncovered constructs or
 behavioral obligations. Set it to true only when all uncovered sets are empty.
 An XML schema round trip has a structural role. It cannot satisfy a semantic
 leaf, dispatch, public field, or public enum obligation. The inventory also
-discovers new typed constants, so an added enum member fails until a focused
-case executes its behavior.
+resolves exported constant types across the complete Go package. Explicit
+types, conversions, typed arithmetic, iota repetition, and type aliases are
+covered. Each exported constant name, including a same-valued alias, fails
+until a focused case executes its behavior.
 
 Ownership cases compare ordered track, staff, bar, voice, beat, and note paths.
 They do not use aggregate counts as semantic evidence. The compatibility case

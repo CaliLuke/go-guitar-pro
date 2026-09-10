@@ -1522,15 +1522,7 @@ var gpifRedundantPitchSources = map[string]parseDiagnosticSource{
 var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"PrimaryPickupVolume":         diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"PrimaryPickupTone":           diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"WhammyBar":                   diagnosticSource("GPIF.Beat.Property.WhammyBar", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarExtend":             diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarOriginValue":        diagnosticSource("GPIF.Beat.Property.WhammyBarOriginValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarOriginOffset":       diagnosticSource("GPIF.Beat.Property.WhammyBarOriginOffset", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarMiddleValue":        diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarMiddleOffset1":      diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleOffset1", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarMiddleOffset2":      diagnosticSource("GPIF.Beat.Property.WhammyBarMiddleOffset2", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarDestinationValue":   diagnosticSource("GPIF.Beat.Property.WhammyBarDestinationValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"WhammyBarDestinationOffset":  diagnosticSource("GPIF.Beat.Property.WhammyBarDestinationOffset", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"WhammyBarExtend":             diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"BarreFret":                   diagnosticSource("GPIF.Beat.Property.BarreFret", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"BarreString":                 diagnosticSource("GPIF.Beat.Property.BarreString", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Brush.MissingDirection":      diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
@@ -1741,8 +1733,18 @@ func gpifAuditBeatProperty(context *parseContext, beatID, path string, property 
 			Reason: "primary pickup playback metadata is intentionally outside the notation-focused Song model",
 		})
 		return
-	case "WhammyBar", "WhammyBarExtend", "WhammyBarOriginValue", "WhammyBarOriginOffset", "WhammyBarMiddleValue", "WhammyBarMiddleOffset1", "WhammyBarMiddleOffset2", "WhammyBarDestinationValue", "WhammyBarDestinationOffset":
-		gpifAuditUnsupportedBeatProperty(context, gpifBeatPropertySources[property.Name], beatID, propertyPath, property.Name)
+	case "WhammyBar":
+		return
+	case "WhammyBarOriginValue", "WhammyBarOriginOffset", "WhammyBarMiddleValue", "WhammyBarMiddleOffset1", "WhammyBarMiddleOffset2", "WhammyBarDestinationValue", "WhammyBarDestinationOffset":
+		gpifAuditPropertyPayload(context, gpifWhammyInvalidSource, property.Float != nil, propertyPath, beatID, "note-and-beat-semantics", "Float")
+		if property.Float != nil {
+			gpifAuditBendNumber(context, *property.Float, strings.Contains(property.Name, "Offset"), propertyPath+"/Float", ParseLocation{BeatID: beatID}, beatID, gpifWhammyInvalidSource, gpifWhammyQuantizedSource)
+		}
+	case "WhammyBarExtend":
+		context.add(gpifBeatPropertySources[property.Name], ParseDiagnostic{
+			SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
+			Reason: "the GPIF whammy extension marker has no documented playback or notation effect",
+		})
 	case "BarreFret", "BarreString":
 		gpifAuditUnsupportedBeatProperty(context, gpifBeatPropertySources[property.Name], beatID, propertyPath, property.Name)
 	case "Rasgueado":
@@ -2576,8 +2578,11 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			})
 		}
 		if len(bend.Points) > 0 {
+			bend.Points = canonicalizeStandardWhammyPoints(bend.Points)
 			beat.Effect.TremoloBar = bend
 		}
+	} else if bend := gpifBeatWhammyProperties(b.Properties.Properties); bend != nil {
+		beat.Effect.TremoloBar = bend
 	}
 
 	// Arpeggio / brush stroke
@@ -2640,6 +2645,57 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			}
 		}
 	}
+}
+
+// gpifBeatWhammyProperties decodes the named-property representation used by
+// GP6. Later GPIF revisions use the Whammy element handled above instead.
+func gpifBeatWhammyProperties(properties []gpifProperty) *BendEffect {
+	enabled := false
+	origin := BendPoint{}
+	destination := BendPoint{Position: uint8(BendEffectMaxPosition)}
+	var middleValue int8
+	var middleOffset1, middleOffset2 uint8
+	var middleValueSet, middleOffset1Set, middleOffset2Set bool
+
+	for _, property := range properties {
+		switch property.Name {
+		case "WhammyBar":
+			enabled = true
+		case "WhammyBarOriginValue":
+			origin.Value = gpifBendValue(property.Float)
+		case "WhammyBarOriginOffset":
+			origin.Position = gpifBendPosition(property.Float)
+		case "WhammyBarMiddleValue":
+			middleValue = gpifBendValue(property.Float)
+			middleValueSet = property.Float != nil
+		case "WhammyBarMiddleOffset1":
+			middleOffset1 = gpifBendPosition(property.Float)
+			middleOffset1Set = property.Float != nil
+		case "WhammyBarMiddleOffset2":
+			middleOffset2 = gpifBendPosition(property.Float)
+			middleOffset2Set = property.Float != nil
+		case "WhammyBarDestinationValue":
+			destination.Value = gpifBendValue(property.Float)
+		case "WhammyBarDestinationOffset":
+			destination.Position = gpifBendPosition(property.Float)
+		}
+	}
+	if !enabled {
+		return nil
+	}
+
+	points := []BendPoint{origin}
+	if middleOffset1Set && middleValueSet {
+		points = append(points, BendPoint{Position: middleOffset1, Value: middleValue})
+	}
+	if middleOffset2Set && middleValueSet {
+		points = append(points, BendPoint{Position: middleOffset2, Value: middleValue})
+	}
+	if !middleOffset1Set && !middleOffset2Set && middleValueSet {
+		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition / 2), Value: middleValue})
+	}
+	points = append(points, destination)
+	return &BendEffect{Points: canonicalizeStandardWhammyPoints(points)}
 }
 
 func gpifApplyTremoloPicking(value string, notes []Note) {

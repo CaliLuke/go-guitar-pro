@@ -91,11 +91,11 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 			kind: ParseDiagnosticInvalidData, feature: "note-and-beat-semantics", pathContains: "PickStroke",
 		},
 		{
-			name: "recognized whammy property",
+			name: "malformed whammy property",
 			mutate: func(gpif string) string {
-				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Properties><Property name=\"WhammyBar\"><Enable/></Property></Properties>")
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Properties><Property name=\"WhammyBar\"><Enable/></Property><Property name=\"WhammyBarMiddleValue\"/></Properties>")
 			},
-			kind: ParseDiagnosticUnsupportedFeature, feature: "note-and-beat-semantics", pathContains: "WhammyBar",
+			kind: ParseDiagnosticInvalidData, feature: "note-and-beat-semantics", pathContains: "WhammyBarMiddleValue",
 		},
 		{
 			name: "invalid chord reference",

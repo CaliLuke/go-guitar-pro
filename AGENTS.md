@@ -36,6 +36,11 @@ wire field, or dispatch that the case covers.
 For each public field, use one disposition-specific runtime assertion. The
 assertion disposition must match the complete field partition.
 
+Treat each exported enum constant name as a separate obligation, including
+constants typed by conversion, arithmetic, iota repetition, or a type alias.
+Give a same-valued alias its own behavior evidence instead of assuming that its
+numeric value inherits another member's contract.
+
 Run the semantic matrix inventory. Check that the covered total increases by
 the intended amount. Do not set the matrix `complete` flag until every uncovered
 set is empty. Run `./conformance/check.sh` after each completed family.

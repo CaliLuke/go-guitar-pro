@@ -381,7 +381,8 @@
     {
       "path": "testdata/gp4/tremolo.gp4",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [],
       "differences": null
@@ -1725,7 +1726,8 @@
     {
       "path": "testdata/gp5/tremolo.gp5",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [
         {
@@ -2213,38 +2215,6 @@
           "locationsSha256": "fc88e5e317aedd5f36bbb2352a6c0b7581ac3ddee2a8c3f86e7c7ba5b02cce06"
         },
         {
-          "code": "GPIF.Beat.Property.WhammyBar",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"30\"]/Properties/Property[@name=\"WhammyBar\"]",
-          "objectId": "30",
-          "locationsSha256": "cf99c969f5789db40bc799831a76a468429fde54ca6138b8e7816e556a298ea7"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarDestinationValue",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"30\"]/Properties/Property[@name=\"WhammyBarDestinationValue\"]",
-          "objectId": "30",
-          "locationsSha256": "eee260f14bded3afc2bcd02d5a6f7ae4406c0fd92299d76ef0fb0c303fecec29"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarMiddleValue",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"30\"]/Properties/Property[@name=\"WhammyBarMiddleValue\"]",
-          "objectId": "30",
-          "locationsSha256": "3d63d54f8d8d327e2567d45ce86f5c585d378e8b52acaf669621412d36b4740b"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarOriginValue",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"30\"]/Properties/Property[@name=\"WhammyBarOriginValue\"]",
-          "objectId": "30",
-          "locationsSha256": "983e40ae90a63a18de9bdd185d4166e78692612ba2631f9931abde1a0459e744"
-        },
-        {
           "code": "GPIF.Beat.Wah",
           "kind": "unsupported-feature",
           "count": 1,
@@ -2420,30 +2390,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.Property.WhammyBarDestinationValue",
-          "kind": "unsupported-feature",
-          "count": 727,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarDestinationValue\"]",
-          "objectId": "0",
-          "locationsSha256": "7a8f28bfa105e9fd51622c79f0ae6fd432ee8fced0534d3e1692df5e6ad8d76b"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarMiddleValue",
-          "kind": "unsupported-feature",
-          "count": 727,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarMiddleValue\"]",
-          "objectId": "0",
-          "locationsSha256": "35198ff8bf73444b2c594d8dd9333cec772cd1f2de775c6b3966bdae72533728"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarOriginValue",
-          "kind": "unsupported-feature",
-          "count": 727,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarOriginValue\"]",
-          "objectId": "0",
-          "locationsSha256": "763a94ed5cf8f4ce7d37bf3f6b386533b92b706fc9d05c4e9be6f352f975303a"
-        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -3819,64 +3765,17 @@
     {
       "path": "testdata/gp6/tremolo.gpx",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Property.WhammyBar",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBar\"]",
-          "objectId": "0",
-          "locationsSha256": "0a9ceecb2778f803b4aeb475ad3200525500643510ab94024a80a3fffa2cc493"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarDestinationOffset",
-          "kind": "unsupported-feature",
+          "code": "GPIF.Beat.Whammy.Quantized",
+          "kind": "lossy-projection",
           "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"3\"]/Properties/Property[@name=\"WhammyBarDestinationOffset\"]",
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"3\"]/Properties/Property[@name=\"WhammyBarMiddleOffset2\"]/Float",
           "objectId": "3",
-          "locationsSha256": "78061377157f01eb9815d0e72e2dbbdede671746cdd3097bfcc80eb12aa8dba7"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarDestinationValue",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarDestinationValue\"]",
-          "objectId": "0",
-          "locationsSha256": "f650525f06679e52845bcb2960eda94e61275dd08cdd7e68a1ef22128faf3e7d"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarMiddleOffset1",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"1\"]/Properties/Property[@name=\"WhammyBarMiddleOffset1\"]",
-          "objectId": "1",
-          "locationsSha256": "85681092f891de230eb5dc89898d11efa8704ec765caa1e9c63e53eece58ec78"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarMiddleOffset2",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"1\"]/Properties/Property[@name=\"WhammyBarMiddleOffset2\"]",
-          "objectId": "1",
-          "locationsSha256": "bca9d71986c51ea95d7b9cf9ef23f44103d5fa950df8c609c1158bb7e802a77b"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarMiddleValue",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarMiddleValue\"]",
-          "objectId": "0",
-          "locationsSha256": "ba1899b55ec3c9275c399582aa8f64a5eb9fff34c615b19b8aa79e24c27fe376"
-        },
-        {
-          "code": "GPIF.Beat.Property.WhammyBarOriginValue",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"WhammyBarOriginValue\"]",
-          "objectId": "0",
-          "locationsSha256": "dd339471d41d578178b0033b5c31ab277b582b9739eb2731c1688656a91f5a5a"
+          "locationsSha256": "963dd53cd7f20bb933848eb18d198dcd00f80ad3c47d7fcf16f0ff232bf05be5"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -16947,7 +16846,8 @@
     {
       "path": "testdata/gp7/tremolo-bar.gp",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [
         {
@@ -17248,7 +17148,8 @@
     {
       "path": "testdata/gp7/tremolo.gp",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [
         {
@@ -18025,7 +17926,8 @@
     {
       "path": "testdata/gp7/whammy-advanced.gp",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "diagnostics": [
         {

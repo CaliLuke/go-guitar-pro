@@ -121,7 +121,8 @@ func unpackVelocity(v int16) int16 {
 	return MinVelocity + VelocityIncrement*v - VelocityIncrement
 }
 
-// readBendEffect reads a bend effect.
+// readBendEffect reads the shared binary bend-point record without applying
+// note- or beat-specific gesture semantics.
 func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
 	kindByte, err := c.readSignedByte()
 	if err != nil {
@@ -158,10 +159,18 @@ func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
 		be.Points = append(be.Points, bp)
 	}
 	if count > 0 {
-		be.Points = canonicalizeStandardBendPoints(be.Points)
 		return be, nil
 	}
 	return nil, nil
+}
+
+func (s *Song) readNoteBendEffect(c *cursor) (*BendEffect, error) {
+	bend, err := s.readBendEffect(c)
+	if err != nil || bend == nil {
+		return bend, err
+	}
+	bend.Points = canonicalizeStandardBendPoints(bend.Points)
+	return bend, nil
 }
 
 // canonicalizeStandardBendPoints removes the control points that Guitar Pro
@@ -188,6 +197,42 @@ func canonicalizeStandardBendPoints(points []BendPoint) []BendPoint {
 			return []BendPoint{origin, middle, middle, destination}
 		}
 		return []BendPoint{origin, destination}
+	}
+	return points
+}
+
+// canonicalizeStandardWhammyPoints removes only the GPIF control points that
+// identify standard whammy gestures. Binary whammy curves do not use this
+// context and must retain their authored extrema and hold boundaries.
+func canonicalizeStandardWhammyPoints(points []BendPoint) []BendPoint {
+	if len(points) == 4 {
+		origin, middle1, middle2, destination := points[0], points[1], points[2], points[3]
+		if middle1.Vibrato || middle2.Vibrato || middle1.Value != middle2.Value {
+			return points
+		}
+		switch {
+		case origin.Value < middle1.Value && middle1.Value < destination.Value,
+			origin.Value > middle1.Value && middle1.Value > destination.Value,
+			origin.Value == middle1.Value && middle1.Value == destination.Value:
+			return []BendPoint{origin, destination}
+		case (origin.Value > middle1.Value && middle1.Value < destination.Value) ||
+			(origin.Value < middle1.Value && middle1.Value > destination.Value):
+			if middle1.Position == middle2.Position {
+				return []BendPoint{origin, middle1, destination}
+			}
+		}
+		return points
+	}
+	if len(points) == 3 {
+		origin, middle, destination := points[0], points[1], points[2]
+		if middle.Vibrato {
+			return points
+		}
+		if origin.Value < middle.Value && middle.Value < destination.Value ||
+			origin.Value > middle.Value && middle.Value > destination.Value ||
+			origin.Value == middle.Value && middle.Value == destination.Value {
+			return []BendPoint{origin, destination}
+		}
 	}
 	return points
 }

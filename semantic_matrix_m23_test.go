@@ -6,9 +6,11 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"os"
 	"os/exec"
 	"reflect"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -111,6 +113,8 @@ func verifyM23CorpusSnapshot(t *testing.T) error {
 		}
 		goFeatures := selectConformanceFeatures(normalizeGoScore(result.Song), fixture.Features)
 		alphaFeatures := selectConformanceFeatures(alphaScore, fixture.Features)
+		goFeatures = m23ApplyOracleLimitations(fixture.Path, goFeatures)
+		alphaFeatures = m23ApplyOracleLimitations(fixture.Path, alphaFeatures)
 		differences := semanticDifferences(goFeatures, alphaFeatures)
 		for _, difference := range differences {
 			difference.Feature = conformanceFeature(difference.Path)
@@ -165,6 +169,61 @@ func verifyM23CorpusSnapshot(t *testing.T) error {
 		}
 	}
 	return nil
+}
+
+// m23ApplyOracleLimitations removes only facts that the pinned independent
+// consumer cannot expose. AlphaTab 1.8.4 does not expose GP3 beat whammy data;
+// TestAlphaTabGP3WhammyOracleLimitation pins that behavior independently.
+func m23ApplyOracleLimitations(fixture string, features any) any {
+	if fixture != "testdata/gp3/Effects.gp3" {
+		return features
+	}
+	featureMap, ok := features.(map[string]any)
+	if !ok {
+		return features
+	}
+	facts, ok := featureMap["note-and-beat-semantics"].([]any)
+	if !ok {
+		return features
+	}
+	filtered := slices.DeleteFunc(slices.Clone(facts), func(value any) bool {
+		fact, ok := value.(map[string]any)
+		path, pathOK := fact["path"].(string)
+		return ok && pathOK && m23LimitedGP3WhammyPath(path)
+	})
+	result := maps.Clone(featureMap)
+	result["note-and-beat-semantics"] = filtered
+	return result
+}
+
+func m23LimitedGP3WhammyPath(path string) bool {
+	switch path {
+	case "/tracks/0/staves/0/bars/8/voices/0/beats/0/whammy",
+		"/tracks/0/staves/0/bars/9/voices/0/beats/0/whammy",
+		"/tracks/0/staves/0/bars/10/voices/0/beats/0/whammy",
+		"/tracks/0/staves/0/bars/11/voices/0/beats/0/whammy":
+		return true
+	default:
+		return false
+	}
+}
+
+func TestM23GP3WhammyOracleLimitationIsNarrow(t *testing.T) {
+	probe := map[string]any{"note-and-beat-semantics": []any{
+		map[string]any{"path": "/tracks/0/staves/0/bars/8/voices/0/beats/0/whammy", "value": []any{}},
+		map[string]any{"path": "/tracks/0/staves/0/bars/12/voices/0/beats/0/whammy", "value": []any{}},
+		map[string]any{"path": "/tracks/0/staves/0/bars/8/voices/0/beats/0/effects", "value": map[string]any{}},
+	}}
+	limited := m23ApplyOracleLimitations("testdata/gp3/Effects.gp3", probe).(map[string]any)
+	if got := limited["note-and-beat-semantics"].([]any); len(got) != 2 || !strings.Contains(got[0].(map[string]any)["path"].(string), "/bars/12/") || !strings.HasSuffix(got[1].(map[string]any)["path"].(string), "/effects") {
+		t.Fatalf("GP3 oracle limitation = %#v, want only the four named whammy paths removed", got)
+	}
+	if got := m23ApplyOracleLimitations("testdata/gp4/Effects.gp4", probe); !reflect.DeepEqual(got, probe) {
+		t.Fatalf("GP4 facts changed by GP3-only limitation: %#v", got)
+	}
+	if facts := probe["note-and-beat-semantics"].([]any); len(facts) != 3 {
+		t.Fatalf("oracle limitation mutated its input: %#v", facts)
+	}
 }
 
 func m23SemanticPath(differencePath string, scores ...any) string {
@@ -228,7 +287,7 @@ func m23DifferenceKey(fixture string, difference m23DifferenceReceipt) string {
 }
 
 func readM23OracleScores(paths []string) (map[string]any, error) {
-	args := append([]string{"conformance/oracle.mjs", "--batch"}, paths...)
+	args := append([]string{alphaTabOracleScript(), "--batch"}, paths...)
 	output, err := exec.Command("node", args...).CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("AlphaTab batch oracle: %w\n%s", err, output)

@@ -871,13 +871,26 @@ func TestExportGP8PreservesHarmonicsAndWhammyCurves(t *testing.T) {
 	if !foundHFret {
 		t.Error("GPIF fractional harmonic is not encoded as <HFret>2.4</HFret>")
 	}
+	var wireWhammy *gpifWhammy
+	for index := range document.Beats.Beats {
+		if document.Beats.Beats[index].Whammy != nil {
+			wireWhammy = document.Beats.Beats[index].Whammy
+			break
+		}
+	}
+	if wireWhammy == nil || wireWhammy.OriginOffset != "0.000000" || wireWhammy.MiddleOffset1 != "50.000000" ||
+		wireWhammy.MiddleOffset2 != "50.000000" || wireWhammy.DestinationOffset != "100.000000" ||
+		wireWhammy.OriginValue != "0.000000" || wireWhammy.MiddleValue != "-800.000000" || wireWhammy.DestinationValue != "0.000000" {
+		t.Fatalf("GPIF whammy controls = %#v, want four exact source-wire control values", wireWhammy)
+	}
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	beat := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0]
-	if beat.Effect.TremoloBar == nil || len(beat.Effect.TremoloBar.Points) != 4 {
-		t.Fatalf("round-trip whammy = %#v, want four GPIF control points", beat.Effect.TremoloBar)
+	wantWhammy := song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.TremoloBar
+	if beat.Effect.TremoloBar == nil || !reflect.DeepEqual(beat.Effect.TremoloBar.Points, wantWhammy.Points) {
+		t.Fatalf("round-trip whammy = %#v, want canonical public gesture %#v", beat.Effect.TremoloBar, wantWhammy)
 	}
 	parsedHarmonic := beat.Notes[0].Effect.Harmonic
 	if parsedHarmonic == nil || parsedHarmonic.Kind != HarmonicTypeArtificial || parsedHarmonic.FretFloat == nil || *parsedHarmonic.FretFloat != harmonicFret {

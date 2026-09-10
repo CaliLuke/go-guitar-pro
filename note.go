@@ -242,7 +242,7 @@ func (s *Song) readNoteEffectsV3(c *cursor, note *Note) error {
 	note.Effect.Hammer = (flags & 0x02) == 0x02
 	note.Effect.LetRing = (flags & 0x08) == 0x08
 	if (flags & 0x01) == 0x01 {
-		bend, err := s.readBendEffect(c)
+		bend, err := s.readNoteBendEffect(c)
 		if err != nil {
 			return err
 		}
@@ -280,7 +280,7 @@ func (s *Song) readNoteEffectsV4(c *cursor, note *Note) error {
 	}
 
 	if (flags1 & 0x01) == 0x01 {
-		bend, err := s.readBendEffect(c)
+		bend, err := s.readNoteBendEffect(c)
 		if err != nil {
 			return err
 		}

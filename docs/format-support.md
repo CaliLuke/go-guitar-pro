@@ -119,15 +119,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Property.Slapped.MissingEnable` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Beat.Property.VibratoWTremBar` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
-| `GPIF.Beat.Property.WhammyBar` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarDestinationOffset` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarDestinationValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarExtend` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarMiddleOffset1` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarMiddleOffset2` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarMiddleValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarOriginOffset` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.WhammyBarOriginValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Beat.Property.WhammyBarExtend` | `note-and-beat-semantics` | `deliberate-ignore` | The GPIF extension marker has no documented playback or notation effect. |
 | `GPIF.Beat.Rhythm.Reference` | `rhythm` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.Tremolo.InvalidValue` | `tremolo-picking` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Wah` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -266,7 +258,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 68 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 121 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 70 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 139 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -285,6 +277,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `capo-precedence` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
+| `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
@@ -357,6 +350,8 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `audio-engine-state` | `score-core` | `TestSemanticMatrixM20SourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestSemanticMatrixM10DynamicQuantization` | `TestTicket33AlphaTabReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
+| `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |
+| `whammy-corpus-projection` | `note-and-beat-semantics` | `TestWhammyProjectionAdaptersExposeBeatCurves` | `TestAlphaTabWhammyCorpusConformance` | yes | Both corpus adapters must expose whammy curves so semantic comparison can detect regressions. |
 | `octave-variant-conformance` | `note-and-beat-semantics` | `TestSemanticMatrixM10BeatEffects` | none | yes | Each octave variant must survive GP8 export, Go reimport, and independent consumption. |
 | `semantic-wire-requires-behavior` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A structural schema round trip cannot satisfy a semantic wire-field obligation. |
 | `semantic-wire-executable-assertion` | `score-core` | `TestSemanticMatrixInventory` | none | yes | A semantic wire mapping must have an exact executable assertion in its focused case. |

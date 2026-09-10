@@ -121,6 +121,7 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM11SourceDistinctions":                 runSemanticMatrixM11SourceDistinctions,
 	"TestSemanticMatrixM11Validation":                         runSemanticMatrixM11Validation,
 	"TestSemanticMatrixM12CurvePreservation":                  runSemanticMatrixM12CurvePreservation,
+	"TestSemanticMatrixM12WhammyContexts":                     runSemanticMatrixM12WhammyContexts,
 	"TestSemanticMatrixM12CurveLossPolicy":                    runSemanticMatrixM12CurveLossPolicy,
 	"TestSemanticMatrixM12CurveValidation":                    runSemanticMatrixM12CurveValidation,
 	"TestSemanticMatrixM13HarmonicVariants":                   runSemanticMatrixM13HarmonicVariants,
@@ -163,6 +164,7 @@ var semanticMatrixExecutors = map[string]func(*semanticMatrixRun){
 	"TestSemanticMatrixM22LegacyEditAuthority":                runSemanticMatrixM22LegacyEditAuthority,
 	"TestSemanticMatrixM23WholeCorpusAccounting":              runSemanticMatrixM23WholeCorpusAccounting,
 	"TestSemanticMatrixM24OracleCorrectness":                  runSemanticMatrixM24OracleCorrectness,
+	"TestSemanticMatrixM25PublicAPIEnums":                     runSemanticMatrixM25PublicAPIEnums,
 	"TestSemanticMatrixM25StructuralResilience":               runSemanticMatrixM25StructuralResilience,
 }
 

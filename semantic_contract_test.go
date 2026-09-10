@@ -9,8 +9,10 @@ import (
 	"fmt"
 	"go/ast"
 	"go/format"
+	"go/importer"
 	"go/parser"
 	"go/token"
+	"go/types"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -194,6 +196,11 @@ func TestSemanticContractInventory(t *testing.T) {
 			t.Errorf("source dispatch contract %s does not resolve", key)
 		}
 	}
+	classifiedEnumMembers := make([]string, 0, len(ledger.SemanticMatrix.EnumCases))
+	for member := range ledger.SemanticMatrix.EnumCases {
+		classifiedEnumMembers = append(classifiedEnumMembers, member)
+	}
+	assertExactSemanticSet(t, "public enum members", inventory.enumMembers, classifiedEnumMembers)
 }
 
 func TestSemanticMatrixInventory(t *testing.T) {
@@ -309,9 +316,7 @@ func TestSemanticMatrixInventory(t *testing.T) {
 			t.Logf("missing enum members: %s", strings.Join(missingEnumMembers, ", "))
 		}
 	}
-	if !ledger.SemanticMatrix.Complete {
-		t.Logf("semantic matrix progress: %d/%d public fields, %d/%d GPIF wire fields, and %d/%d source dispatches assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches))
-	}
+	t.Logf("semantic matrix coverage: %d/%d public fields, %d/%d GPIF wire fields, %d/%d source dispatches, and %d/%d enum members assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches), len(inventory.enumMembers)-len(missingEnumMembers), len(inventory.enumMembers))
 }
 
 func missingSemanticBehaviorAssignments(discovered []string, assignments map[string][]string, cases map[string]semanticMatrixCaseContract, structural map[string]string) []string {
@@ -485,6 +490,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 	fileSet := token.NewFileSet()
 	typeExpressions := make(map[string]ast.Expr)
 	parsedFiles := make(map[string]*ast.File)
+	parsedFileList := make([]*ast.File, 0, len(files))
 	for _, file := range files {
 		if strings.HasSuffix(file, "_test.go") {
 			continue
@@ -502,6 +508,7 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 			t.Fatal(parseErr)
 		}
 		parsedFiles[file] = parsed
+		parsedFileList = append(parsedFileList, parsed)
 		for _, declaration := range parsed.Decls {
 			general, ok := declaration.(*ast.GenDecl)
 			if !ok || general.Tok != token.TYPE {
@@ -574,36 +581,10 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		modelTypes[typeName] = fields
 	}
 
-	var enumMembers []string
-	for _, parsed := range parsedFiles {
-		for _, declaration := range parsed.Decls {
-			general, ok := declaration.(*ast.GenDecl)
-			if !ok || general.Tok != token.CONST {
-				continue
-			}
-			lastType := ""
-			for _, specification := range general.Specs {
-				value := specification.(*ast.ValueSpec)
-				if identifier, ok := value.Type.(*ast.Ident); ok {
-					lastType = identifier.Name
-				} else if len(value.Values) != 0 {
-					lastType = ""
-				}
-				if _, reachable := seen[lastType]; !reachable {
-					continue
-				}
-				if expression, ok := typeExpressions[lastType]; !ok || !isSemanticEnumUnderlyingType(expression) {
-					continue
-				}
-				for _, name := range value.Names {
-					if name.IsExported() {
-						enumMembers = append(enumMembers, lastType+"."+name.Name)
-					}
-				}
-			}
-		}
+	enumMembers, err := discoverSemanticEnumMembers(fileSet, parsedFileList, "github.com/CaliLuke/go-guitar-pro")
+	if err != nil {
+		t.Fatal(err)
 	}
-	sort.Strings(enumMembers)
 
 	dispatchSets := make(map[string]map[string]struct{})
 	for _, parsed := range parsedFiles {
@@ -682,17 +663,53 @@ func discoverStructuralWireCandidates() []string {
 	return candidates
 }
 
-func isSemanticEnumUnderlyingType(expression ast.Expr) bool {
-	identifier, ok := expression.(*ast.Ident)
-	if !ok {
-		return false
+func discoverSemanticEnumMembers(fileSet *token.FileSet, files []*ast.File, packagePath string) ([]string, error) {
+	info := types.Info{Defs: make(map[*ast.Ident]types.Object)}
+	configuration := types.Config{Importer: semanticInventoryImporter{delegate: importer.Default()}, IgnoreFuncBodies: true}
+	checkedPackage, err := configuration.Check(packagePath, fileSet, files, &info)
+	if err != nil {
+		return nil, fmt.Errorf("type-checking semantic enum inventory: %w", err)
 	}
-	switch identifier.Name {
-	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "string":
-		return true
-	default:
-		return false
+
+	// Every exported constant name is a distinct semantic obligation, including
+	// same-valued aliases. Resolve aliases to the local defined type so the
+	// inventory has one stable owner regardless of declaration syntax.
+	members := make([]string, 0)
+	for _, object := range info.Defs {
+		constant, ok := object.(*types.Const)
+		if !ok || !constant.Exported() {
+			continue
+		}
+		named, ok := types.Unalias(constant.Type()).(*types.Named)
+		if !ok || named.Obj().Pkg() != checkedPackage || !named.Obj().Exported() {
+			continue
+		}
+		underlying, ok := named.Underlying().(*types.Basic)
+		if !ok || underlying.Info()&(types.IsInteger|types.IsString) == 0 {
+			continue
+		}
+		members = append(members, named.Obj().Name()+"."+constant.Name())
 	}
+	sort.Strings(members)
+	return members, nil
+}
+
+type semanticInventoryImporter struct {
+	delegate types.Importer
+}
+
+func (i semanticInventoryImporter) Import(importPath string) (*types.Package, error) {
+	imported, err := i.delegate.Import(importPath)
+	if err == nil {
+		return imported, nil
+	}
+	// The package under test has already been compiled by go test. A dependency
+	// used only inside ignored function bodies does not need export data for the
+	// declaration-only inventory pass.
+	name := importPath[strings.LastIndex(importPath, "/")+1:]
+	placeholder := types.NewPackage(importPath, name)
+	placeholder.MarkComplete()
+	return placeholder, nil
 }
 
 func semanticSelectorName(expression ast.Expr) string {

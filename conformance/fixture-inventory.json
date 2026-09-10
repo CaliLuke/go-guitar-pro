@@ -485,9 +485,10 @@
       "sha256": "5a9f000f6cbdd8597ccc6dfb4e2a469a175eecc0209dd9906f681610735b0b0c",
       "format": "gp4",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },
@@ -1138,9 +1139,10 @@
       "sha256": "da2fcc6757a6fb4da9ac106e9f603290f4fff325cde96b6f52f2698f944a350c",
       "format": "gp5",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },
@@ -1560,9 +1562,10 @@
       "sha256": "d29fd12e0dbca4e20eaa90ef1c4e94c5016c85af3dda6e308b051bcc7767dd9d",
       "format": "gp6",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },
@@ -3158,9 +3161,10 @@
       "sha256": "588911bea90f8f9e369017bbc86b64e5fa3056b8b132331fd8798bae4ca06b2e",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },
@@ -3191,9 +3195,10 @@
       "sha256": "1d449d098c15a0da7627ac66e6cb63dbe92f94faaf5158c86fd0b11adb53a8e1",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },
@@ -3280,9 +3285,10 @@
       "sha256": "55d458d6068cf411eb2595f273256787cca101f8e69a6f1b9fed635bfe00f9be",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "reason": "Whole-corpus receipt covers score-core and note-and-beat-semantics; the declared slices have no current AlphaTab difference.",
       "features": [
-        "score-core"
+        "score-core",
+        "note-and-beat-semantics"
       ],
       "semanticSnapshot": false
     },

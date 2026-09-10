@@ -541,7 +541,7 @@ func verifyFixtureHash(t *testing.T, path string) {
 
 func readAlphaTabScore(t *testing.T, fixture string) any {
 	t.Helper()
-	command := exec.Command("node", "conformance/oracle.mjs", fixture)
+	command := exec.Command("node", alphaTabOracleScript(), fixture)
 	output, err := command.CombinedOutput()
 	if err != nil {
 		t.Fatalf("AlphaTab oracle: %v\n%s", err, output)
@@ -551,6 +551,13 @@ func readAlphaTabScore(t *testing.T, fixture string) any {
 		t.Fatalf("decoding AlphaTab snapshot: %v\n%s", err, output)
 	}
 	return score
+}
+
+func alphaTabOracleScript() string {
+	if overlay := os.Getenv("ALPHATAB_ORACLE_OVERLAY"); overlay != "" {
+		return overlay
+	}
+	return "conformance/oracle.mjs"
 }
 
 func assertDifferenceSnapshot(t *testing.T, id, comparison string, goScore, alphaScore any) {
@@ -667,7 +674,7 @@ func conformanceFeature(path string) string {
 		{[]string{"/timing", "/start", "/durationTicks"}, "timing"},
 		{[]string{"/rhythm", "/duration", "/tuplet", "/timeSignature", "/pickup"}, "rhythm"},
 		{[]string{"/percussion", "/percussionArticulation", "/percussionInput", "/midi"}, "percussion-articulations"},
-		{[]string{"/effects", "/kind", "/dynamic", "/status", "/notes", "/voices", "/bars"}, "note-and-beat-semantics"},
+		{[]string{"/effects", "/kind", "/dynamic", "/status", "/whammy", "/notes", "/voices", "/bars"}, "note-and-beat-semantics"},
 		{[]string{"/metadata", "/program", "/primaryChannel", "/name", "/index", "/repeat", "/alternateEndings", "/tripletFeel", "/text", "/schemaVersion", "/string", "/fret"}, "score-core"},
 	}
 	for _, classification := range classifications {
@@ -719,7 +726,7 @@ func selectConformanceFeatures(score any, features []string) any {
 			selected[feature] = collectConformanceFacts(canonical, map[string]bool{
 				"status": true, "dynamic": true, "text": true, "string": true, "fret": true,
 				"kind": true, "durationPercent": true, "tieOrigin": true, "tieDestination": true, "effects": true,
-				"octave": true,
+				"octave": true, "whammy": true,
 			}, nil)
 		default:
 			panic("unhandled conformance feature " + feature)
@@ -1025,6 +1032,7 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 		"octave":         goOctave(beat.Octave),
 		"hairpin":        goHairpin(beat.Effect.Hairpin),
 		"tremoloPicking": goTremoloPicking(beat.Notes),
+		"whammy":         normalizeGoBend(beat.Effect.TremoloBar),
 		"notes":          notes,
 	}
 }

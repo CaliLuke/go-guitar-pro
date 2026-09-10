@@ -274,8 +274,89 @@ const mutations = [
     file: 'enums.go',
     before: '\tNoteTypeDead   NoteType = 3\n',
     after: '\tNoteTypeDead   NoteType = 3\n\tNoteTypeReviewUnclassified NoteType = 99\n',
-    test: '^TestSemanticMatrixInventory$',
+    test: '^TestSemanticContractInventory$',
     want: 'NoteType.NoteTypeReviewUnclassified'
+  },
+  {
+    id: 'unclassified-public-enum-conversion',
+    contract: 'unclassified-public-enum-member',
+    category: 'inventory',
+    file: 'enums.go',
+    before: '\tNoteTypeDead   NoteType = 3\n',
+    after: '\tNoteTypeDead   NoteType = 3\n\tNoteTypeReviewConversion = NoteType(99)\n',
+    test: '^TestSemanticContractInventory$',
+    want: 'NoteType.NoteTypeReviewConversion'
+  },
+  {
+    id: 'unclassified-public-enum-arithmetic',
+    contract: 'unclassified-public-enum-member',
+    category: 'inventory',
+    file: 'enums.go',
+    before: '\tNoteTypeDead   NoteType = 3\n',
+    after: '\tNoteTypeDead   NoteType = 3\n\tNoteTypeReviewArithmetic = NoteTypeDead + 1\n',
+    test: '^TestSemanticContractInventory$',
+    want: 'NoteType.NoteTypeReviewArithmetic'
+  },
+  {
+    id: 'unclassified-public-enum-alias',
+    contract: 'unclassified-public-enum-member',
+    category: 'inventory',
+    file: 'enums.go',
+    before: '\tNoteTypeDead   NoteType = 3\n',
+    after: '\tNoteTypeDead   NoteType = 3\n\tNoteTypeReviewAlias = NoteTypeDead\n',
+    test: '^TestSemanticContractInventory$',
+    want: 'NoteType.NoteTypeReviewAlias'
+  },
+  {
+    id: 'binary-whammy-note-canonicalizer',
+    contract: 'whammy-owner-context',
+    category: 'ownership',
+    file: 'beat.go',
+    before: '\t\tbend, err := s.readBendEffect(c)\n',
+    after: '\t\tbend, err := s.readNoteBendEffect(c)\n',
+    test: '^TestParseBinaryWhammyPreservesDipsAndHolds$',
+    want: 'bar 0 whammy points'
+  },
+  {
+    id: 'negative-whammy-point-discard',
+    contract: 'whammy-owner-context',
+    category: 'curve-preservation',
+    file: 'effects.go',
+    before: '\t\tbe.Points = append(be.Points, bp)\n',
+    after: '\t\tif bp.Value >= 0 {\n\t\t\tbe.Points = append(be.Points, bp)\n\t\t}\n',
+    test: '^(TestParseBinaryWhammyPreservesDipsAndHolds|TestParseGP3TremoloUsesItsSeparateEncoding)$',
+    want: 'whammy'
+  },
+  {
+    id: 'gpif-whammy-note-canonicalizer',
+    contract: 'whammy-owner-context',
+    category: 'ownership',
+    file: 'gpif.go',
+    before: '\treturn &BendEffect{Points: canonicalizeStandardWhammyPoints(points)}\n',
+    after: '\treturn &BendEffect{Points: canonicalizeStandardBendPoints(points)}\n',
+    test: '^TestSemanticMatrixM12WhammyContexts$',
+    want: 'dispatch:gpifBeatWhammyProperties:property.Name'
+  },
+  {
+    id: 'go-whammy-adapter-drop',
+    contract: 'whammy-corpus-projection',
+    category: 'adapter',
+    file: 'conformance_test.go',
+    before: '\t\t"whammy":         normalizeGoBend(beat.Effect.TremoloBar),\n',
+    after: '\t\t"whammy":         nil,\n',
+    test: '^TestWhammyProjectionAdaptersExposeBeatCurves$',
+    want: 'Go corpus whammy projection'
+  },
+  {
+    id: 'alpha-whammy-adapter-drop',
+    contract: 'whammy-corpus-projection',
+    category: 'adapter',
+    file: 'conformance/oracle.mjs',
+    before: '      tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,\n      whammy: normalizeBend(beat.whammyBarPoints),\n      notes\n',
+    after: '      tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,\n      whammy: null,\n      notes\n',
+    command: 'oracle-test',
+    test: '^TestAlphaTabBinaryWhammyProjection$',
+    want: 'bar 0 AlphaTab whammy'
   },
   {
     id: 'octave-variant-conformance',
@@ -425,6 +506,7 @@ for (const id of declared) {
 }
 
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'go-guitar-pro-mutants-'));
+const oracleMutationPath = path.join(root, 'conformance', `.sensitivity-oracle-${process.pid}.mjs`);
 try {
   for (const mutation of mutations) {
     const original = path.join(root, mutation.file);
@@ -438,12 +520,20 @@ try {
       }
       mutatedSource = mutatedSource.replace(replacement.before, replacement.after);
     }
-    const mutated = path.join(temporary, `${mutation.id}-${path.basename(mutation.file)}`);
+    const mutated = mutation.command === 'oracle-test'
+      ? oracleMutationPath
+      : path.join(temporary, `${mutation.id}-${path.basename(mutation.file)}`);
     fs.writeFileSync(mutated, mutatedSource);
     let result;
     if (mutation.command === 'verify') {
       result = spawnSync('node', ['conformance/verify.mjs'], {
         cwd: root, encoding: 'utf8', env: { ...process.env, SEMANTIC_LEDGER_OVERLAY: mutated }
+      });
+    } else if (mutation.command === 'oracle-test') {
+      result = spawnSync('go', ['test', '-count=1', '-run', mutation.test, '.'], {
+        cwd: root,
+        encoding: 'utf8',
+        env: { ...process.env, ALPHATAB_CONFORMANCE: '1', ALPHATAB_ORACLE_OVERLAY: mutated }
       });
     } else if (mutation.command === 'ledger-test') {
       result = spawnSync('go', ['test', '-count=1', '-run', mutation.test, '.'], {
@@ -468,4 +558,5 @@ try {
   }
 } finally {
   fs.rmSync(temporary, { recursive: true, force: true });
+  fs.rmSync(oracleMutationPath, { force: true });
 }

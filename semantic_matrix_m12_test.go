@@ -120,6 +120,40 @@ func runSemanticMatrixM12CurvePreservation(run *semanticMatrixRun) {
 	}
 }
 
+func TestSemanticMatrixM12WhammyContexts(t *testing.T) {
+	runSemanticMatrixM12WhammyContexts(newSemanticMatrixRun(t))
+}
+
+func runSemanticMatrixM12WhammyContexts(run *semanticMatrixRun) {
+	t := run.t
+	value := func(raw string) *string { return &raw }
+	properties := []gpifProperty{
+		{Name: "WhammyBar", Enable: value("")},
+		{Name: "WhammyBarOriginValue", Float: value("-100")},
+		{Name: "WhammyBarOriginOffset", Float: value("0")},
+		{Name: "WhammyBarMiddleValue", Float: value("-300")},
+		{Name: "WhammyBarMiddleOffset1", Float: value("25")},
+		{Name: "WhammyBarMiddleOffset2", Float: value("50")},
+		{Name: "WhammyBarDestinationValue", Float: value("0")},
+		{Name: "WhammyBarDestinationOffset", Float: value("75")},
+	}
+	want := []BendPoint{{Position: 0, Value: -4}, {Position: 3, Value: -12}, {Position: 6, Value: -12}, {Position: 9}}
+	decoded := gpifBeatWhammyProperties(properties)
+	if decoded == nil {
+		t.Fatal("GP6 named-property whammy is nil")
+	}
+	run.Dispatch("gpifBeatWhammyProperties:property.Name", decoded.Points, want)
+
+	binaryBeat := []BendPoint{{Position: 0}, {Position: 6, Value: -4}, {Position: 12}}
+	if got := canonicalizeStandardWhammyPoints(slices.Clone(binaryBeat)); !slices.Equal(got, binaryBeat) {
+		t.Fatalf("beat whammy owner context = %#v, want %#v", got, binaryBeat)
+	}
+	wantNote := []BendPoint{{Position: 0}, {Position: 12}}
+	if got := canonicalizeStandardBendPoints(slices.Clone(binaryBeat)); !slices.Equal(got, wantNote) {
+		t.Fatalf("note bend owner context = %#v, want %#v", got, wantNote)
+	}
+}
+
 func TestSemanticMatrixM12CurveLossPolicy(t *testing.T) {
 	runSemanticMatrixM12CurveLossPolicy(newSemanticMatrixRun(t))
 }

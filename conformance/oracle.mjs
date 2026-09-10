@@ -379,6 +379,7 @@ function normalizeVoice(voice, staff) {
       octave: normalizeOttavia(beat.ottava),
       hairpin: normalizeHairpin(beat.crescendo),
       tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,
+      whammy: normalizeBend(beat.whammyBarPoints),
       notes
     });
   }
@@ -397,6 +398,7 @@ function normalizeVoice(voice, staff) {
       octave: normalizeOttavia(graceBeat.ottava),
       hairpin: 'none',
       tremoloPicking: null,
+      whammy: normalizeBend(graceBeat.whammyBarPoints),
       notes: graceBeat.notes.map(note => normalizeNote(note, staff, []))
     });
   }

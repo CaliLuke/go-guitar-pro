@@ -264,15 +264,16 @@ func TestSemanticMatrixM16NoteheadOptions(t *testing.T) {
 
 func runSemanticMatrixM16NoteheadOptions(run *semanticMatrixRun) {
 	for _, test := range []struct {
-		name string
-		kind GP8PercussionNotehead
-		want string
+		name   string
+		member string
+		kind   GP8PercussionNotehead
+		want   string
 	}{
-		{name: "native", kind: GP8PercussionNoteheadDefault, want: "noteheadCircleX noteheadCircleX noteheadCircleX"},
-		{name: "filled", kind: GP8PercussionNoteheadFilled, want: "noteheadBlack noteheadHalf noteheadWhole"},
-		{name: "x", kind: GP8PercussionNoteheadX, want: "noteheadXBlack noteheadXBlack noteheadXBlack"},
-		{name: "circle x", kind: GP8PercussionNoteheadCircleX, want: "noteheadCircleX noteheadCircleX noteheadCircleX"},
-		{name: "heavy x", kind: GP8PercussionNoteheadHeavyX, want: "noteheadHeavyX noteheadHeavyX noteheadHeavyX"},
+		{name: "native", member: "GP8PercussionNoteheadDefault", kind: GP8PercussionNoteheadDefault, want: "noteheadCircleX noteheadCircleX noteheadCircleX"},
+		{name: "filled", member: "GP8PercussionNoteheadFilled", kind: GP8PercussionNoteheadFilled, want: "noteheadBlack noteheadHalf noteheadWhole"},
+		{name: "x", member: "GP8PercussionNoteheadX", kind: GP8PercussionNoteheadX, want: "noteheadXBlack noteheadXBlack noteheadXBlack"},
+		{name: "circle x", member: "GP8PercussionNoteheadCircleX", kind: GP8PercussionNoteheadCircleX, want: "noteheadCircleX noteheadCircleX noteheadCircleX"},
+		{name: "heavy x", member: "GP8PercussionNoteheadHeavyX", kind: GP8PercussionNoteheadHeavyX, want: "noteheadHeavyX noteheadHeavyX noteheadHeavyX"},
 	} {
 		run.t.Run(test.name, func(t *testing.T) {
 			song := m16BuiltinPercussionSong(t, 46)
@@ -287,6 +288,7 @@ func runSemanticMatrixM16NoteheadOptions(run *semanticMatrixRun) {
 				t.Fatalf("articulations = %#v, want one", flat)
 			}
 			run.Wire("gpifArticulation.Noteheads", flat[0].Noteheads, test.want)
+			run.Enum("GP8PercussionNotehead."+test.member, flat[0].Noteheads, test.want)
 		})
 	}
 
