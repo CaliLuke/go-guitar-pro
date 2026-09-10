@@ -78,12 +78,12 @@ func runConformanceBeatEffects(run *conformanceRun) {
 			run.Enum([]string{"BeatStrokeDirection.BeatStrokeDirectionNone", "BeatStrokeDirection.BeatStrokeDirectionUp", "BeatStrokeDirection.BeatStrokeDirectionDown"}[strokeIndex], parsedStroke.Effect.Stroke.Direction, stroke)
 			beat := defaultBeat()
 			beat.Effect.Hairpin = hairpin
-			beat.Effect.Stroke = BeatStroke{Direction: stroke, Value: uint16(DurationEighth)}
-			run.Preserved("Beat.Effect", beat.Effect, BeatEffects{Hairpin: hairpin, Stroke: BeatStroke{Direction: stroke, Value: uint16(DurationEighth)}})
+			beat.Effect.Stroke = BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)}
+			run.Preserved("Beat.Effect", beat.Effect, BeatEffects{Hairpin: hairpin, Stroke: BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)}})
 			run.Preserved("BeatEffects.Hairpin", beat.Effect.Hairpin, hairpin)
-			run.Normalized("BeatEffects.Stroke", beat.Effect.Stroke, BeatStroke{Direction: stroke, Value: uint16(DurationEighth)})
+			run.Normalized("BeatEffects.Stroke", beat.Effect.Stroke, BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)})
 			run.Preserved("BeatStroke.Direction", beat.Effect.Stroke.Direction, stroke)
-			run.Preserved("BeatStroke.Value", beat.Effect.Stroke.Value, uint16(DurationEighth))
+			run.Preserved("BeatStroke.Duration", beat.Effect.Stroke.Duration, NoteValue(DurationEighth))
 		}
 	}
 	for index, value := range []SlapEffect{SlapEffectNone, SlapEffectTapping, SlapEffectSlapping, SlapEffectPopping} {
@@ -172,7 +172,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	beat.Effect.PickStroke = BeatStrokeDirectionUp
 	beat.Effect.SlapEffect = SlapEffectPopping
 	beat.Effect.Vibrato = true
-	beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionDown, Value: uint16(DurationSixteenth)}
+	beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionDown, Duration: NoteValue(DurationSixteenth)}
 	run.Preserved("BeatEffects.FadeIn", beat.Effect.FadeIn, true)
 	run.Omitted("BeatEffects.HasRasgueado", beat.Effect.HasRasgueado, true)
 	run.Field("BeatEffects.PickStroke", beat.Effect.PickStroke, BeatStrokeDirectionUp)
@@ -195,7 +195,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Effect
 	run.Field("BeatEffects.FadeIn", got.FadeIn, true)
 	run.Field("BeatEffects.Hairpin", got.Hairpin, HairpinCrescendo)
-	run.Field("BeatEffects.Stroke", got.Stroke, BeatStroke{Direction: BeatStrokeDirectionDown, Value: uint16(DurationEighth)})
+	run.Field("BeatEffects.Stroke", got.Stroke, BeatStroke{Direction: BeatStrokeDirectionDown, Duration: NoteValue(DurationEighth)})
 
 	var lossErr *ExportLossError
 	strict, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})

@@ -73,7 +73,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Track.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Track.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
-| `GPIF.Track.CapoFret.StaffConflict` | `staff-ownership` | `lossy-projection` | Track.Offset cannot preserve different capo values for individual staves. |
+| `GPIF.Track.CapoFret.StaffConflict` | `staff-ownership` | `lossy-projection` | Track.CapoFret cannot preserve different capo values for individual staves. |
 | `GPIF.Track.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
 | `GPIF.Track.Property.Unknown` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.ScoreCore` | `score-core` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
@@ -199,7 +199,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `VolumeAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The volume point is authored playback data. |
 | `TempoAutomation` | `tempo-automations` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The tempo point is authored timing data. |
 | `Lyrics` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The score lyrics are authored text data. |
-| `LyricLine` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The lyric line is authored text data. |
+| `LyricLine` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The lyric line is authored text data. |
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
 | `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
 | `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
@@ -222,7 +222,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Beat` | `note-and-beat-semantics` | 8 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
-| `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and duration. |
+| `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and note-value duration. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
@@ -247,7 +247,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 190 |
+| `preserved` | 189 |
 | `normalized` | 34 |
 | `omitted` | 118 |
 | `rejected` | 0 |
@@ -304,7 +304,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `isPercussionTrack:t.InstrumentSet.Type` | `percussion-articulations` | 3 | `percussion-identity` | `delegated-to-audit` | Known instrument-set spellings map to one percussion-track value. |
 | `gpifNormalizePercussionArticulation:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | Percussion elements use their authored articulation identity. |
 | `gpifRhythmToDuration:r.NoteValue` | `rhythm` | 8 | `timing-finalization` | `unsupported-feature` | The importer maps each supported GPIF note value to one public duration. |
-| `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `capo-precedence` | `delegated-to-audit` | The importer maps the classified capo property to Track.Offset. |
+| `gpifReadCapo:property.Name` | `staff-ownership` | 1 | `capo-precedence` | `delegated-to-audit` | The importer maps the classified capo property to Track.CapoFret. |
 | `gpifXMLAuditStart:element.Name.Local` | `score-core` | 5 | `unclassified-gpif-wire-field` | `delegated-to-audit` | The XML audit records graph object identifiers for diagnostic locations. |
 | `gpifApplyBeatEffects:p.Direction` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps both supported brush directions. |
 | `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 6 | `timing-finalization` | `delegated-to-audit` | The importer maps every supported master-bar triplet-feel value. |

@@ -12,14 +12,17 @@ const maxVoices = 2
 // Measure represents a measure within a track.
 type Measure struct {
 	Voices []Voice
+	// Number is the one-based ordinal of the measure in its staff.
 	Number int
 	// Start matches the owning MeasureHeader display-time start in ticks.
 	Start int64
 	// ExactStart preserves fractional score ticks before Start is quantized.
 	ExactStart ScoreTime
+	// TrackIndex is the zero-based index of the owning track.
 	TrackIndex int
 	// StaffIndex is the zero-based staff index within the owning track.
-	StaffIndex    int
+	StaffIndex int
+	// HeaderIndex is the zero-based index of the owning measure header.
 	HeaderIndex   int
 	TimeSignature TimeSignature
 	KeySignature  KeySignature
@@ -43,6 +46,7 @@ func (s *Song) readMeasures(c *cursor) error {
 		for t := 0; t < len(s.Tracks); t++ {
 			s.currentTrack = &t
 			m := defaultMeasure()
+			m.Number = h + 1
 			m.TrackIndex = t
 			m.HeaderIndex = h
 			m.Start = start

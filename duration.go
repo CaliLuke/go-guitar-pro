@@ -15,9 +15,14 @@ const (
 
 // Duration represents a beat duration.
 type Duration struct {
-	Value        uint16
+	// Value is the note-value denominator: 4 is a quarter note, 8 is an eighth.
+	Value uint16
+	// Dotted and DoubleDotted are legacy compatibility flags. If both are set,
+	// DoubleDotted takes precedence.
 	Dotted       bool
 	DoubleDotted bool
+	// TupletEnters notes occupy the time normally taken by TupletTimes notes.
+	// The pair 0:0 is the legacy spelling of 1:1.
 	TupletEnters uint8
 	TupletTimes  uint8
 }
@@ -63,7 +68,9 @@ func (d Duration) ExactScoreTime() (ScoreTime, error) {
 
 // TimeSignature represents a time signature.
 type TimeSignature struct {
-	Numerator   int8
+	Numerator int8
+	// Denominator uses Duration.Value as the note-value denominator; dot and
+	// tuplet fields must remain at their default values.
 	Denominator Duration
 	Beams       [4]uint8
 }

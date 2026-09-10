@@ -147,8 +147,8 @@ func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(result.Diagnostics) != 0 || result.Song.Tracks[0].Offset != 4 {
-			t.Fatalf("matching staff overrides = offset %d, diagnostics %#v", result.Song.Tracks[0].Offset, result.Diagnostics)
+		if len(result.Diagnostics) != 0 || result.Song.Tracks[0].CapoFret != 4 {
+			t.Fatalf("matching staff overrides = capo fret %d, diagnostics %#v", result.Song.Tracks[0].CapoFret, result.Diagnostics)
 		}
 	})
 
@@ -160,8 +160,8 @@ func TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if song.Tracks[0].Offset != 2 {
-			t.Fatalf("staff capo = %d, want 2", song.Tracks[0].Offset)
+		if song.Tracks[0].CapoFret != 2 {
+			t.Fatalf("staff capo = %d, want 2", song.Tracks[0].CapoFret)
 		}
 	})
 

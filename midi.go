@@ -7,17 +7,22 @@ const DefaultPercussionChannel uint8 = 9
 
 // MidiChannel describes MIDI playback data for a track.
 type MidiChannel struct {
-	Channel       uint8
+	// Channel is the zero-based MIDI channel number.
+	Channel uint8
+	// EffectChannel is the zero-based MIDI channel used for effects.
 	EffectChannel uint8
-	Instrument    int32
-	// Volume and Balance use the normalized MIDI controller range 0 through 127.
+	// Instrument is the zero-based General MIDI program number, from 0 through 127.
+	Instrument int32
+	// Volume, Balance, Chorus, Reverb, Phaser, and Tremolo use the normalized
+	// MIDI controller range 0 through 127.
 	Volume  int8
 	Balance int8
 	Chorus  int8
 	Reverb  int8
 	Phaser  int8
 	Tremolo int8
-	Bank    uint8
+	// Bank is a MIDI bank-select value from 0 through 127.
+	Bank uint8
 }
 
 func defaultMidiChannel() MidiChannel {

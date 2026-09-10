@@ -47,20 +47,23 @@ func pitchClassFrom(just int8, accidental *int8, sharp *bool) PitchClass {
 
 // Chord represents a chord annotation for beats.
 type Chord struct {
-	FirstFret  *uint8
-	Ninth      *ChordAlteration
-	Root       *PitchClass
-	Fifth      *ChordAlteration
-	Extension  *ChordExtension
-	Bass       *PitchClass
-	Tonality   *ChordAlteration
-	Add        *bool
-	Sharp      *bool
-	NewFormat  *bool
-	Kind       *ChordType
-	Eleventh   *ChordAlteration
-	Show       *bool
-	Name       string
+	// FirstFret is the one-based display fret for the diagram. Nil means absent.
+	FirstFret *uint8
+	Ninth     *ChordAlteration
+	Root      *PitchClass
+	Fifth     *ChordAlteration
+	Extension *ChordExtension
+	Bass      *PitchClass
+	Tonality  *ChordAlteration
+	Add       *bool
+	Sharp     *bool
+	NewFormat *bool
+	Kind      *ChordType
+	Eleventh  *ChordAlteration
+	Show      *bool
+	Name      string
+	// Strings contains one fret state per string: -1 is muted, 0 is open, and a
+	// positive value is a fretted position.
 	Strings    []int8
 	Barres     []Barre
 	Omissions  []bool

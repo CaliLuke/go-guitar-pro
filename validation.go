@@ -105,8 +105,8 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if _, err := header.TimeSignature.Denominator.MusicalDuration(); err != nil {
 			add("score.measure.time-signature", ScoreDiagnosticValue, location, "time-signature denominator: %v", err)
 		}
-		if header.RepeatClose < -1 {
-			add("score.measure.repeat-close", ScoreDiagnosticValue, location, "repeat-close value %d is outside -1..127", header.RepeatClose)
+		if header.RepeatCount > maxRepeatCount {
+			add("score.measure.repeat-count", ScoreDiagnosticValue, location, "repeat count %d is outside 0..%d", header.RepeatCount, maxRepeatCount)
 		}
 		if header.Direction != nil && (*header.Direction < DirectionSignCoda || *header.Direction > DirectionSignDaDoubleCoda) {
 			add("score.measure.direction", ScoreDiagnosticValue, location, "direction %d is not defined", *header.Direction)
@@ -115,10 +115,18 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)
 		}
 	}
+	if len(song.Lyrics.Lines) != 0 && (song.Lyrics.TrackIndex < -1 || song.Lyrics.TrackIndex >= len(song.Tracks)) {
+		add("score.lyrics.track-reference", ScoreDiagnosticStructural, ScoreLocation{Track: song.Lyrics.TrackIndex}, "lyrics track index %d is outside -1..%d", song.Lyrics.TrackIndex, len(song.Tracks)-1)
+	}
+	for lineIndex, line := range song.Lyrics.Lines {
+		if line.Text != "" && (line.StartMeasureIndex < -1 || line.StartMeasureIndex >= len(song.MeasureHeaders)) {
+			add("score.lyrics.measure-reference", ScoreDiagnosticStructural, ScoreLocation{Measure: line.StartMeasureIndex}, "lyric line %d start measure index %d is outside -1..%d", lineIndex, line.StartMeasureIndex, len(song.MeasureHeaders)-1)
+		}
+	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
-		if track.Offset < 0 {
-			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.Offset)
+		if track.CapoFret < 0 {
+			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.CapoFret)
 		}
 		if track.ChannelIndex < -1 || track.ChannelIndex >= len(song.Channels) {
 			add("score.track.channel-reference", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "channel index %d is outside -1..%d", track.ChannelIndex, len(song.Channels)-1)

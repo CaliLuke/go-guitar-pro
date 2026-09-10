@@ -18,7 +18,7 @@ func conformanceExportSong() *Song {
 	song := syntheticGP8Song()
 	track := &song.Tracks[0]
 	track.Name = "Guitar"
-	track.Offset = 2
+	track.CapoFret = 2
 	track.PercussionTrack = false
 	track.Strings = []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}, {Number: 3, Value: 55}, {Number: 4, Value: 50}, {Number: 5, Value: 45}, {Number: 6, Value: 40}}
 	song.Channels[0].Channel = 0

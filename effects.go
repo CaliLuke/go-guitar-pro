@@ -18,20 +18,25 @@ const (
 
 // BendPoint is a single point within a BendEffect.
 type BendPoint struct {
+	// Position is the normalized curve position from 0 through 12.
 	Position uint8
-	Value    int8
-	Vibrato  bool
+	// Value is the signed pitch offset in semitones.
+	Value   int8
+	Vibrato bool
 }
 
 // BendEffect describes string bends and tremolo bars.
 type BendEffect struct {
 	Points []BendPoint
-	Value  int16
-	Kind   BendType
+	// Value preserves the legacy Guitar Pro summary in units of 1/25 semitone.
+	// Use Points for the semantic curve.
+	Value int16
+	Kind  BendType
 }
 
 // GraceEffect represents a grace note effect.
 type GraceEffect struct {
+	// Duration is a note-value denominator such as 16 or 32.
 	Duration uint8
 	Fret     int8
 	// ExactFret preserves a non-negative GPIF fret that does not fit Fret.
@@ -45,9 +50,10 @@ type GraceEffect struct {
 	HasPercussionArticulation bool
 	IsDead                    bool
 	IsOnBeat                  bool
-	Sequence                  uint8
-	Transition                GraceEffectTransition
-	Velocity                  int16
+	// Sequence is the zero-based order of this grace note in its attached group.
+	Sequence   uint8
+	Transition GraceEffectTransition
+	Velocity   int16
 }
 
 // HarmonicEffect represents a harmonic note effect.

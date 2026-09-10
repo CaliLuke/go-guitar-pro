@@ -17,8 +17,8 @@ func normalizeGoScore(song *Song) any {
 			"index":            index,
 			"start":            header.Start - DurationQuarterTime,
 			"timeSignature":    []any{header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value},
-			"repeatStart":      header.RepeatOpen,
-			"repeatCount":      normalizeGoRepeatCount(header.RepeatClose),
+			"repeatStart":      header.RepeatStart,
+			"repeatCount":      header.RepeatCount,
 			"alternateEndings": header.RepeatAlternative,
 			"tripletFeel":      goTripletFeel(header.TripletFeel),
 			"pickup":           index == 0 && song.Anacrusis,
@@ -121,7 +121,7 @@ func normalizeGoStaves(song *Song, trackIndex int) []any {
 		}
 		result = append(result, map[string]any{
 			"index":                     staffIndex,
-			"capo":                      track.Offset,
+			"capo":                      track.CapoFret,
 			"percussion":                staff.PercussionTrack,
 			"standardNotationLineCount": staff.StandardNotationLineCount,
 			"tuning":                    tuning,
@@ -317,7 +317,7 @@ func normalizeGoNoteWithLinks(track *Track, staff *Staff, note *Note, links goNo
 	} else if note.String == 0 {
 		fret = nil
 	} else if note.String > 0 && int(note.String) <= len(staff.Strings) {
-		midi += int(staff.Strings[note.String-1].Value) + int(track.Offset)
+		midi += int(staff.Strings[note.String-1].Value) + int(track.CapoFret)
 	}
 	graces := make([]any, 0, len(note.Effect.Graces))
 	for _, grace := range note.Effect.Graces {
@@ -630,11 +630,4 @@ func goSlide(slide SlideType) string {
 	default:
 		return fmt.Sprintf("unknown:%d", slide)
 	}
-}
-
-func normalizeGoRepeatCount(repeatClose int8) int {
-	if repeatClose < 0 {
-		return 0
-	}
-	return int(repeatClose) + 1
 }

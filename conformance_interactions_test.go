@@ -19,7 +19,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 	song.MeasureHeaders = slices.Clone(song.MeasureHeaders[:1])
 	primary := &song.Tracks[0]
 	primary.Name = "Grand staff"
-	primary.Offset = 3
+	primary.CapoFret = 3
 	primary.Settings.Notation = true
 	primary.Measures = slices.Clone(primary.Measures[:1])
 	primary.Measures[0].Clef = MeasureClefTreble
@@ -51,7 +51,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 	}
 	run.Field("Song.Tracks", len(song.Tracks), 2)
 	run.Field("Track.Staves", []int{len(song.Tracks[0].Staves), len(song.Tracks[1].Staves)}, []int{2, 1})
-	run.Field("Track.Offset", []int32{song.Tracks[0].Offset, song.Tracks[1].Offset}, []int32{3, 0})
+	run.Field("Track.CapoFret", []int32{song.Tracks[0].CapoFret, song.Tracks[1].CapoFret}, []int32{3, 0})
 	run.Field("Staff.Strings", [][]GuitarString{song.Tracks[0].Staves[0].Strings, song.Tracks[0].Staves[1].Strings, song.Tracks[1].Staves[0].Strings}, [][]GuitarString{primary.Strings, lower.Strings, followingStrings})
 	run.Field("Measure.Clef", []MeasureClef{song.Tracks[0].Staves[0].Measures[0].Clef, song.Tracks[0].Staves[1].Measures[0].Clef, song.Tracks[1].Staves[0].Measures[0].Clef}, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto})
 
@@ -74,7 +74,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 	run.Wire("gpifMasterTrack.Tracks", []string{roundTrip.Tracks[0].Name, roundTrip.Tracks[1].Name}, []string{"Grand staff", "Following"})
 	run.Wire("gpifTrack.Staves", []int{len(roundTrip.Tracks[0].Staves), len(roundTrip.Tracks[1].Staves)}, []int{2, 1})
 	run.Wire("gpifStaffProperty.Pitches", gotTunings, wantTunings)
-	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].Offset, int32(3))
+	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].CapoFret, int32(3))
 }
 
 func TestConformancePickupTupletTempo(t *testing.T) {

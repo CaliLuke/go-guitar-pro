@@ -22,15 +22,15 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 	if header.Marker != nil {
 		result.Section = &gpifSection{Text: header.Marker.Title}
 	}
-	if header.RepeatOpen || header.RepeatClose >= 0 {
+	if header.RepeatStart || header.RepeatCount > 0 {
 		result.Repeat = &gpifRepeat{}
 	}
-	if header.RepeatOpen {
+	if header.RepeatStart {
 		result.Repeat.Start = "true"
 	}
-	if header.RepeatClose >= 0 {
+	if header.RepeatCount > 0 {
 		result.Repeat.End = "true"
-		result.Repeat.Count = int(header.RepeatClose) + 1
+		result.Repeat.Count = int(header.RepeatCount)
 	}
 	if header.RepeatAlternative != 0 {
 		endings := make([]string, 0, 8)

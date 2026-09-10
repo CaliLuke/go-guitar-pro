@@ -81,7 +81,7 @@ func runConformanceOwnershipImport(run *conformanceRun) {
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
 		run.Preserved("Track.Name", track.Name, wantNames[trackIndex])
-		run.Preserved("Track.Number", track.Number, int32(trackIndex))
+		run.Preserved("Track.Number", track.Number, int32(trackIndex+1))
 		run.Preserved("Track.Staves", len(track.Staves), wantStaffCounts[trackIndex])
 		run.Normalized("Track.Measures", len(track.Measures), 1)
 		run.Normalized("Track.Strings", track.Strings, track.Staves[0].Strings)

@@ -59,19 +59,19 @@ func runConformanceInstrumentContext(run *conformanceRun) {
 		if err != nil || got.value != test.value || got.common != test.common {
 			t.Errorf("capo resolution = %#v, %v, want %d common %t", got, err, test.value, test.common)
 		}
-		run.Preserved("Track.Offset", got.value, test.value)
+		run.Preserved("Track.CapoFret", got.value, test.value)
 	}
 	capoStrings := []GuitarString{{Number: 1, Value: 64}}
-	capoTrack := Track{Offset: 4, Strings: capoStrings}
+	capoTrack := Track{CapoFret: 4, Strings: capoStrings}
 	capoNote := Note{String: 1}
-	run.Field("Track.Offset", capoTrack.Offset, int32(4))
-	if sounding := gp8NoteMIDI(&capoTrack, capoStrings, &capoNote) + int(capoTrack.Offset); sounding != 68 {
+	run.Field("Track.CapoFret", capoTrack.CapoFret, int32(4))
+	if sounding := gp8NoteMIDI(&capoTrack, capoStrings, &capoNote) + int(capoTrack.CapoFret); sounding != 68 {
 		t.Errorf("capo sounding MIDI = %d, want 68", sounding)
 	}
 
 	song := semanticValidPitchedGP8Song(t)
 	track := &song.Tracks[0]
-	track.Offset = 4
+	track.CapoFret = 4
 	track.FretCount = 31
 	track.Port = 3
 	track.TwelveStringedGuitarTrack = true
@@ -114,12 +114,12 @@ func runConformanceInstrumentContext(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Field("Track.Offset", roundTrip.Tracks[0].Offset, int32(4))
+	run.Field("Track.CapoFret", roundTrip.Tracks[0].CapoFret, int32(4))
 	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
 	run.Wire("gpifStaffProperty.Name", strings.Contains(string(readZipMember(t, archive, "Content/score.gpif")), `name="CapoFret"`), true)
-	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].Offset, int32(4))
+	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].CapoFret, int32(4))
 	run.Wire("gpifStaffProperty.Pitches", roundTrip.Tracks[0].Strings, track.Strings)
 }

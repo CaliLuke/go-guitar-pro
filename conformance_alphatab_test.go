@@ -154,7 +154,7 @@ func TestAlphaTabExportConformance(t *testing.T) {
 func TestAlphaTabPreservesInspectedCapo(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := semanticExportProbeSong(t)
-	source.Tracks[0].Offset = 2
+	source.Tracks[0].CapoFret = 2
 	data, err := Export(source, ExportFormatGP8)
 	if err != nil {
 		t.Fatal(err)
@@ -196,8 +196,8 @@ func TestAlphaTabGPIFCapoPrecedence(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if result.Song.Tracks[0].Offset != 4 {
-		t.Fatalf("Go effective capo = %d, want 4", result.Song.Tracks[0].Offset)
+	if result.Song.Tracks[0].CapoFret != 4 {
+		t.Fatalf("Go effective capo = %d, want 4", result.Song.Tracks[0].CapoFret)
 	}
 	score, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
 	if !ok {

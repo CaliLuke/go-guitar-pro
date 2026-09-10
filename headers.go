@@ -4,6 +4,8 @@ package goguitarpro
 
 import "fmt"
 
+const maxRepeatCount uint8 = 128
+
 // Version holds file version information.
 type Version struct {
 	Data      string
@@ -30,14 +32,21 @@ type MeasureHeader struct {
 	// one-quarter-note origin, so the first measure starts at 960.
 	Start int64
 	// ExactStart preserves fractional score ticks before Start is quantized.
-	ExactStart        ScoreTime
-	Tempo             int32
-	TimeSignature     TimeSignature
-	Number            uint16
-	KeySignature      KeySignature
-	RepeatOpen        bool
+	ExactStart    ScoreTime
+	Tempo         int32
+	TimeSignature TimeSignature
+	// Number is the one-based ordinal of this measure header in the score.
+	Number       uint16
+	KeySignature KeySignature
+	// RepeatStart reports whether a repeat section starts at this measure.
+	RepeatStart bool
+	// RepeatCount is the total number of passes shown at this repeat end.
+	// Zero means that this measure is not a repeat end. Supported positive
+	// counts are 1 through 128.
+	RepeatCount uint8
+	// RepeatAlternative is a bit set of the first through eighth alternate
+	// endings, with the first ending stored in the least-significant bit.
 	RepeatAlternative uint8
-	RepeatClose       int8
 	TripletFeel       TripletFeel
 	DoubleBar         bool
 }
@@ -46,7 +55,6 @@ func defaultMeasureHeader() MeasureHeader {
 	return MeasureHeader{
 		Number:        1,
 		Start:         DurationQuarterTime,
-		RepeatClose:   -1,
 		TimeSignature: defaultTimeSignature(),
 	}
 }
@@ -200,13 +208,20 @@ func (s *Song) readMeasureHeaderBody(c *cursor, flag byte, number int, previous 
 		mh.TimeSignature.Denominator = previous.TimeSignature.Denominator
 	}
 
-	mh.RepeatOpen = (flag & 0x04) == 0x04
+	mh.RepeatStart = (flag & 0x04) == 0x04
 	if (flag & 0x08) == 0x08 {
-		rc, err := c.readSignedByte()
+		wireCount, err := c.readByte()
 		if err != nil {
 			return mh, err
 		}
-		mh.RepeatClose = rc
+		repeatCount := int(wireCount)
+		if s.Version.Number[0] < 5 {
+			repeatCount++
+		}
+		if repeatCount > int(maxRepeatCount) {
+			return mh, fmt.Errorf("measure %d repeat count %d exceeds supported maximum %d", number, repeatCount, maxRepeatCount)
+		}
+		mh.RepeatCount = uint8(repeatCount)
 	}
 	if (flag&0x10) == 0x10 && s.Version.Number[0] < 5 {
 		ra, err := s.readRepeatAlternative(c)
@@ -249,9 +264,6 @@ func (s *Song) readMeasureHeaderV5(c *cursor, number int, previous *MeasureHeade
 	mh, flags, err := s.readMeasureHeaderWithFlags(c, number, previous)
 	if err != nil {
 		return mh, err
-	}
-	if mh.RepeatClose > -1 {
-		mh.RepeatClose--
 	}
 	if (flags & 0x03) != 0 {
 		for i := 0; i < 4; i++ {
@@ -297,10 +309,10 @@ func (s *Song) readRepeatAlternative(c *cursor) (uint8, error) {
 	var existingAlternative uint16
 	previousIndex := len(s.MeasureHeaders) - 1
 	for i := previousIndex; i >= 0; i-- {
-		if i != previousIndex && s.MeasureHeaders[i].RepeatClose >= 0 {
+		if i != previousIndex && s.MeasureHeaders[i].RepeatCount > 0 {
 			break
 		}
-		if s.MeasureHeaders[i].RepeatOpen {
+		if s.MeasureHeaders[i].RepeatStart {
 			break
 		}
 		existingAlternative |= uint16(s.MeasureHeaders[i].RepeatAlternative)

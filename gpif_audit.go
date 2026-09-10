@@ -477,7 +477,7 @@ func gpifAuditStaffCapoConflict(track gpifTrack, context *parseContext, path str
 	}
 	context.add(diagnosticSource("GPIF.Track.CapoFret.StaffConflict", "staff-ownership", ParseDiagnosticLossyProjection), ParseDiagnostic{
 		SourcePath: path + "/Staves", ObjectID: track.ID, Location: ParseLocation{TrackID: track.ID},
-		Reason: "staff capo values differ and Track.Offset stores one value",
+		Reason: "staff capo values differ and Track.CapoFret stores one value",
 	})
 }
 

@@ -44,6 +44,11 @@ the authority for staff 0. This rule applies to finalization, validation, and
 GP8 export. Clear the matching compatibility slice before you replace staff 0
 directly. Later staves are always authoritative and remain independent.
 
+`Track.Number`, `MeasureHeader.Number`, and `Measure.Number` are one-based
+ordinals. Fields whose names end in `Index` are zero-based references.
+`Track.CapoFret` is the non-negative fret where the capo is placed. Tuning
+values are absolute MIDI note numbers for open strings.
+
 GPIF master-bar references list bars by track, then by staff. An interior `-1`
 voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole
 track. The parser reports a short, long, or misplaced bar list as invalid data.
@@ -128,6 +133,13 @@ directions, header-local tempo, or authored meter beam groups. Export reports
 each of these omissions. Import and export reject an invalid meter or repeat
 count before a value can wrap to a smaller integer type.
 
+`MeasureHeader.RepeatStart` marks the start of a repeat section.
+`MeasureHeader.RepeatCount` is the total number of passes displayed at the
+repeat end, so a repeat displayed as `6x` has a count of 6. Zero means that the
+measure is not a repeat end. Positive counts from 1 through 128 are supported.
+GP3 and GP4 count offsets are decoded at the binary reader boundary; the public
+model, GP5, GPIF, GP8 export, and AlphaTab comparisons all use total passes.
+
 Duration arithmetic uses exact rational score ticks until it updates a legacy
 integer field. The score starts at tick 960. Each voice starts at its measure
 origin. A grace beat does not advance the regular beat timeline. A pickup uses
@@ -156,10 +168,11 @@ one quantized dynamic for the complete beat, so export reports note velocities
 that differ from the selected target dynamic. Text remains valid on rests.
 GP8 changes an explicit empty beat to a rest and reports that normalization.
 
-GP8 preserves fade-in, hairpin, octave, and stroke direction. The target uses
-an eighth-note stroke duration. Export reports a different source duration. It
-also reports rasgueado, pick stroke, slap effects, and beat vibrato because the
-writer does not emit them.
+GP8 preserves fade-in, hairpin, octave, and stroke direction.
+`BeatStroke.Duration` is a note-value denominator, not a tick count. The target
+uses an eighth-note stroke duration. Export reports a different source duration.
+It also reports rasgueado, pick stroke, slap effects, and beat vibrato because
+the writer does not emit them.
 
 GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
 boolean vibrato, hammer origin, slide flags, harmonic kind, and trill fret.
@@ -228,11 +241,14 @@ sound references, unknown automation types, and unsupported channel-strip
 types. They also report linear tempo or sound interpolation because the public
 records do not contain an interpolation field.
 
-Score lyrics and track lyrics have separate scopes. GP8 preserves ordered track
-lyrics and their offsets, but it does not emit binary score lyrics. Export
-reports the score-level omission. Beat text remains separate and is preserved
-on rests. An undispatched GPIF lyric source produces a loss diagnostic because
-the public model does not retain that source state.
+Score lyrics and track lyrics have separate scopes. Binary score lyrics expose
+`Lyrics.TrackIndex` and `LyricLine.StartMeasureIndex` as zero-based references;
+`-1` means that the source stored its unassigned zero value. Line order is the
+slice order and is not duplicated in a second public number field. GP8
+preserves ordered track lyrics and their offsets, but it does not emit binary
+score lyrics. Export reports the score-level omission. Beat text remains
+separate and is preserved on rests. An undispatched GPIF lyric source produces
+a loss diagnostic because the public model does not retain that source state.
 
 An enabled local backing track must refer to an archive entry with audio data.
 Its frame padding must fit in a signed 64-bit frame count. Sync points preserve

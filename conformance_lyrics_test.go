@@ -22,11 +22,11 @@ func runConformanceLyricScopes(run *conformanceRun) {
 	t := run.t
 	song := semanticValidPitchedGP8Song(t)
 	song.Lyrics = Lyrics{
-		TrackChoice: 1,
+		TrackIndex: 0,
 		Lines: []LyricLine{
-			{Number: 0, StartingMeasure: 0, Text: "score-only one"},
-			{Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"},
-			{Number: 2, StartingMeasure: 4, Text: "score 日本語"},
+			{StartMeasureIndex: 0, Text: "score-only one"},
+			{StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"},
+			{StartMeasureIndex: 0, Text: "score 日本語"},
 		},
 	}
 	song.Tracks[0].Lyrics = []TrackLyricLine{
@@ -40,12 +40,11 @@ func runConformanceLyricScopes(run *conformanceRun) {
 	rest.Text = "rest-only text"
 	song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
 
-	run.Omitted("Song.Lyrics", song.Lyrics, Lyrics{TrackChoice: 1, Lines: []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}}})
-	run.Preserved("Lyrics.TrackChoice", song.Lyrics.TrackChoice, uint8(1))
-	run.Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{Number: 0, StartingMeasure: 0, Text: "score-only one"}, {Number: 1, StartingMeasure: 2, Text: "score punctuation: [a], don't!"}, {Number: 2, StartingMeasure: 4, Text: "score 日本語"}})
+	run.Omitted("Song.Lyrics", song.Lyrics, Lyrics{TrackIndex: 0, Lines: []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}}})
+	run.Preserved("Lyrics.TrackIndex", song.Lyrics.TrackIndex, 0)
+	run.Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}})
 	for index, line := range song.Lyrics.Lines {
-		run.Preserved("LyricLine.Number", line.Number, uint8(index))
-		run.Preserved("LyricLine.StartingMeasure", line.StartingMeasure, []uint16{0, 2, 4}[index])
+		run.Preserved("LyricLine.StartMeasureIndex", line.StartMeasureIndex, 0)
 		run.Preserved("LyricLine.Text", line.Text, []string{"score-only one", "score punctuation: [a], don't!", "score 日本語"}[index])
 	}
 	run.Preserved("Track.Lyrics", song.Tracks[0].Lyrics, []TrackLyricLine{{Text: "track first", Offset: 0}, {Text: "", Offset: 2}, {Text: "track punctuation + 日本語", Offset: 4}})
@@ -108,7 +107,7 @@ func runConformanceLyricScopes(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	run.Field("Track.Lyrics", roundTrip.Tracks[0].Lyrics, song.Tracks[0].Lyrics)
-	if len(roundTrip.Lyrics.Lines) != 0 || roundTrip.Lyrics.TrackChoice != 0 {
+	if len(roundTrip.Lyrics.Lines) != 0 {
 		t.Fatalf("round-trip score lyrics = %#v, want reported omission", roundTrip.Lyrics)
 	}
 	gotRest := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0]
@@ -122,11 +121,12 @@ func TestConformanceBinaryScoreLyrics(t *testing.T) {
 func runConformanceBinaryScoreLyrics(run *conformanceRun) {
 	t := run.t
 	texts := []string{"first", "", "punctuation: [a], don't!", "fourth", "fifth"}
-	starts := []int32{0, 2, 4, 6, 8}
+	wireStarts := []int32{1, 3, 5, 7, 9}
+	wantStarts := []int{0, 2, 4, 6, 8}
 	var data bytes.Buffer
 	writeLyricInt32(t, &data, 2)
 	for index, text := range texts {
-		writeLyricInt32(t, &data, starts[index])
+		writeLyricInt32(t, &data, wireStarts[index])
 		writeLyricInt32(t, &data, int32(len(text)))
 		if _, err := data.WriteString(text); err != nil {
 			t.Fatal(err)
@@ -136,12 +136,47 @@ func runConformanceBinaryScoreLyrics(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Field("Lyrics.TrackChoice", lyrics.TrackChoice, uint8(2))
+	run.Field("Lyrics.TrackIndex", lyrics.TrackIndex, 1)
 	run.Field("Lyrics.Lines", len(lyrics.Lines), 5)
 	for index, line := range lyrics.Lines {
-		run.Field("LyricLine.Number", line.Number, uint8(index))
-		run.Field("LyricLine.StartingMeasure", line.StartingMeasure, uint16(starts[index]))
+		run.Field("LyricLine.StartMeasureIndex", line.StartMeasureIndex, wantStarts[index])
 		run.Field("LyricLine.Text", line.Text, texts[index])
+	}
+}
+
+func TestBinaryScoreLyricsPreserveUnassignedSentinels(t *testing.T) {
+	var data bytes.Buffer
+	writeLyricInt32(t, &data, 0)
+	for range 5 {
+		writeLyricInt32(t, &data, 0)
+		writeLyricInt32(t, &data, 0)
+	}
+	lyrics, err := (&Song{}).readLyrics(newCursor(data.Bytes()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if lyrics.TrackIndex != -1 {
+		t.Fatalf("track index = %d, want -1", lyrics.TrackIndex)
+	}
+	for index, line := range lyrics.Lines {
+		if line.StartMeasureIndex != -1 {
+			t.Errorf("line %d start measure index = %d, want -1", index, line.StartMeasureIndex)
+		}
+	}
+}
+
+func TestBinaryScoreLyricsRejectNegativeWireIndexes(t *testing.T) {
+	var negativeTrack bytes.Buffer
+	writeLyricInt32(t, &negativeTrack, -1)
+	if _, err := (&Song{}).readLyrics(newCursor(negativeTrack.Bytes())); err == nil || !strings.Contains(err.Error(), "track choice -1") {
+		t.Fatalf("negative track error = %v", err)
+	}
+
+	var negativeMeasure bytes.Buffer
+	writeLyricInt32(t, &negativeMeasure, 1)
+	writeLyricInt32(t, &negativeMeasure, -1)
+	if _, err := (&Song{}).readLyrics(newCursor(negativeMeasure.Bytes())); err == nil || !strings.Contains(err.Error(), "starting measure -1") {
+		t.Fatalf("negative measure error = %v", err)
 	}
 }
 

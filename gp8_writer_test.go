@@ -330,11 +330,11 @@ func TestExportGP8RoundTrip(t *testing.T) {
 	}
 
 	firstHeader := roundTrip.MeasureHeaders[0]
-	if firstHeader.Marker == nil || firstHeader.Marker.Title != "Pickup" || !firstHeader.RepeatOpen {
+	if firstHeader.Marker == nil || firstHeader.Marker.Title != "Pickup" || !firstHeader.RepeatStart {
 		t.Errorf("first header = %#v", firstHeader)
 	}
 	secondHeader := roundTrip.MeasureHeaders[1]
-	if secondHeader.TimeSignature.Numerator != 3 || secondHeader.TimeSignature.Denominator.Value != 4 || secondHeader.RepeatClose != 1 || secondHeader.RepeatAlternative != 0b11 {
+	if secondHeader.TimeSignature.Numerator != 3 || secondHeader.TimeSignature.Denominator.Value != 4 || secondHeader.RepeatCount != 2 || secondHeader.RepeatAlternative != 0b11 {
 		t.Errorf("second header = %#v", secondHeader)
 	}
 	if secondHeader.Marker == nil || secondHeader.Marker.Title != "" {
@@ -1149,10 +1149,10 @@ func syntheticGP8Song() *Song {
 		headers[index].Number = uint16(index + 1)
 	}
 	headers[0].Marker = &Marker{Title: "Pickup"}
-	headers[0].RepeatOpen = true
+	headers[0].RepeatStart = true
 	headers[1].TimeSignature.Numerator = 3
 	headers[1].Marker = &Marker{}
-	headers[1].RepeatClose = 1
+	headers[1].RepeatCount = 2
 	headers[1].RepeatAlternative = 0b11
 	headers[2].DoubleBar = true
 

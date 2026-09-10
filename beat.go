@@ -18,12 +18,14 @@ type BeatDisplay struct {
 // BeatStroke represents a stroke effect for beats.
 type BeatStroke struct {
 	Direction BeatStrokeDirection
-	Value     uint16
+	// Duration is the note-value denominator used to spread the stroke.
+	Duration NoteValue
 }
 
 // Voice contains multiple beats.
 type Voice struct {
-	Beats        []Beat
+	Beats []Beat
+	// MeasureIndex is the zero-based index of the owning measure in its staff.
 	MeasureIndex int16
 	Direction    VoiceDirection
 }
@@ -333,11 +335,11 @@ func (s *Song) readBeatStroke(c *cursor) (BeatStroke, error) {
 	}
 	if up > 0 {
 		bs.Direction = BeatStrokeDirectionUp
-		bs.Value = uint16(strokeValue(up))
+		bs.Duration = NoteValue(strokeValue(up))
 	}
 	if down > 0 {
 		bs.Direction = BeatStrokeDirectionDown
-		bs.Value = uint16(strokeValue(down))
+		bs.Duration = NoteValue(strokeValue(down))
 	}
 	if versionGTE(s.Version.Number, [3]byte{5, 0, 0}) {
 		// Swap direction

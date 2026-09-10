@@ -106,8 +106,8 @@ func TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries(t *testing.T) {
 		{name: "maximum repeat count", mutate: func(gpif string) string {
 			return strings.Replace(gpif, "<Bars>0 1</Bars>", `<Repeat end="true" count="128"/><Bars>0 1</Bars>`, 1)
 		}, assert: func(t *testing.T, song *Song) {
-			if song.MeasureHeaders[0].RepeatClose != 127 {
-				t.Fatalf("repeat close = %d, want 127", song.MeasureHeaders[0].RepeatClose)
+			if song.MeasureHeaders[0].RepeatCount != 128 {
+				t.Fatalf("repeat count = %d, want 128", song.MeasureHeaders[0].RepeatCount)
 			}
 		}},
 		{name: "repeat overflow", wantError: true, mutate: func(gpif string) string {

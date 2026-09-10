@@ -4,16 +4,17 @@ package goguitarpro
 
 // PageSetup describes how the document is rendered.
 type PageSetup struct {
-	Words               string
-	Music               string
-	PageNumber          string
-	Copyright           string
-	WordAndMusic        string
-	Artist              string
-	Album               string
-	Title               string
-	Subtitle            string
-	PageHeight          int32
+	Words        string
+	Music        string
+	PageNumber   string
+	Copyright    string
+	WordAndMusic string
+	Artist       string
+	Album        string
+	Title        string
+	Subtitle     string
+	PageHeight   int32
+	// ScoreSizeProportion is a normalized scale factor; 1 means 100 percent.
 	ScoreSizeProportion float32
 	PageWidth           int32
 	MarginBottom        int32

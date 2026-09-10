@@ -300,8 +300,8 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		PlaybackState:    "Default",
 		AudioEngineState: "MIDI",
 	}
-	if track.Offset != 0 {
-		capo := int(track.Offset)
+	if track.CapoFret != 0 {
+		capo := int(track.CapoFret)
 		result.Properties = append(result.Properties, gpifStaffProperty{Name: "CapoFret", Fret: &capo})
 	}
 	if len(track.Sounds) > 0 {
@@ -659,7 +659,7 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.Vibrato {
 		builder.addReport("gp8.omit.beat-vibrato", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-wide vibrato")
 	}
-	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Value != uint16(DurationEighth) {
+	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Duration != NoteValue(DurationEighth) {
 		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")
 	}
 	if whammy := beat.Effect.TremoloBar; whammy != nil {

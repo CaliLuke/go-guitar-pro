@@ -46,9 +46,12 @@ type Track struct {
 	Rse                     TrackRse
 	// ChannelIndex is the index of the track channel in Song.Channels.
 	// A value of -1 means that the file does not bind the track to a channel.
-	ChannelIndex              int
-	Offset                    int32
-	Number                    int32
+	ChannelIndex int
+	// CapoFret is the non-negative fret at which the track's capo is placed.
+	CapoFret int32
+	// Number is the one-based ordinal of the track in the score.
+	Number int32
+	// Color is the track color encoded as 0xRRGGBB.
 	Color                     int32
 	Settings                  TrackSettings
 	Mute                      bool
@@ -133,15 +136,20 @@ type TrackSound struct {
 
 // SoundAutomation selects a track sound at a score position.
 type SoundAutomation struct {
-	Bar      int
+	// Bar is a zero-based measure-header index.
+	Bar int
+	// Position is a ratio from 0 at the bar start through 1 at the bar end.
 	Position float64
-	Sound    int
+	// Sound is a zero-based index in Track.Sounds.
+	Sound int
 }
 
 // GuitarString represents a guitar string with tuning.
 type GuitarString struct {
+	// Number is the one-based string number in tuning order, highest to lowest.
 	Number int8
-	Value  int8
+	// Value is the absolute MIDI note number of the open string, from 0 through 127.
+	Value int8
 }
 
 func defaultTrack() Track {
@@ -175,7 +183,7 @@ func (s *Song) readTracks(c *cursor, trackCount int) error {
 
 func (s *Song) readTrack(c *cursor, number int) error {
 	track := defaultTrack()
-	track.Number = int32(number)
+	track.Number = int32(number + 1)
 
 	flags1, err := c.readByte()
 	if err != nil {
@@ -226,7 +234,7 @@ func (s *Song) readTrack(c *cursor, number int) error {
 	if err != nil {
 		return err
 	}
-	track.Offset = offset
+	track.CapoFret = offset
 
 	color, err := c.readColor()
 	if err != nil {
@@ -254,7 +262,7 @@ func (s *Song) readTracksV5(c *cursor, trackCount int) error {
 
 func (s *Song) readTrackV5(c *cursor, number int) error {
 	track := defaultTrack()
-	track.Number = int32(number)
+	track.Number = int32(number + 1)
 
 	if number == 0 || s.Version.Number == [3]byte{5, 0, 0} {
 		if err := c.skip(1); err != nil {
@@ -314,7 +322,7 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 	if err != nil {
 		return err
 	}
-	track.Offset = offset
+	track.CapoFret = offset
 
 	color, err := c.readColor()
 	if err != nil {

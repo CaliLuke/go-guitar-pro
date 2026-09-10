@@ -39,8 +39,8 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Omitted("TimeSignature.Beams", []([4]uint8){headers[0].TimeSignature.Beams, headers[2].TimeSignature.Beams}, []([4]uint8){{1, 0, 0, 0}, {3, 2, 2, 0}})
 	run.Field("MeasureHeader.Marker", []string{headers[0].Marker.Title, headers[2].Marker.Title}, []string{"A <&>", "Coda Ω"})
 	run.Field("Marker.Title", headers[2].Marker.Title, "Coda Ω")
-	run.Preserved("MeasureHeader.RepeatOpen", headers[0].RepeatOpen, true)
-	run.Preserved("MeasureHeader.RepeatClose", []int8{headers[1].RepeatClose, headers[2].RepeatClose, headers[3].RepeatClose}, []int8{0, 5, 127})
+	run.Preserved("MeasureHeader.RepeatStart", headers[0].RepeatStart, true)
+	run.Preserved("MeasureHeader.RepeatCount", []uint8{headers[1].RepeatCount, headers[2].RepeatCount, headers[3].RepeatCount}, []uint8{1, 6, 128})
 	run.Preserved("MeasureHeader.RepeatAlternative", []uint8{headers[0].RepeatAlternative, headers[2].RepeatAlternative}, []uint8{1, 0b10000001})
 	run.Preserved("MeasureHeader.TripletFeel", []TripletFeel{headers[0].TripletFeel, headers[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
 	run.Preserved("MeasureHeader.DoubleBar", headers[2].DoubleBar, true)
@@ -243,13 +243,13 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 		wantError       string
 		wantNumerator   int8
 		wantDenominator uint16
-		wantRepeat      int8
+		wantRepeat      uint8
 		wantEnding      uint8
 	}{
-		{name: "one", time: "1/1", repeat: "1", ending: "1", wantNumerator: 1, wantDenominator: 1, wantRepeat: 0, wantEnding: 1},
-		{name: "four", time: "4/4", repeat: "2", ending: "1 8", wantNumerator: 4, wantDenominator: 4, wantRepeat: 1, wantEnding: 0b10000001},
-		{name: "seven", time: "7/8", repeat: "6", wantNumerator: 7, wantDenominator: 8, wantRepeat: 5},
-		{name: "maximum", time: "127/128", repeat: "128", wantNumerator: 127, wantDenominator: 128, wantRepeat: 127},
+		{name: "one", time: "1/1", repeat: "1", ending: "1", wantNumerator: 1, wantDenominator: 1, wantRepeat: 1, wantEnding: 1},
+		{name: "four", time: "4/4", repeat: "2", ending: "1 8", wantNumerator: 4, wantDenominator: 4, wantRepeat: 2, wantEnding: 0b10000001},
+		{name: "seven", time: "7/8", repeat: "6", wantNumerator: 7, wantDenominator: 8, wantRepeat: 6},
+		{name: "maximum", time: "127/128", repeat: "128", wantNumerator: 127, wantDenominator: 128, wantRepeat: 128},
 		{name: "zero numerator", time: "0/4", repeat: "2", wantError: "outside 1..127"},
 		{name: "negative numerator", time: "-1/4", repeat: "2", wantError: "outside 1..127"},
 		{name: "numerator overflow", time: "128/4", repeat: "2", wantError: "outside 1..127"},
@@ -278,7 +278,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 			header := result.Song.MeasureHeaders[0]
 			run.Field("TimeSignature.Numerator", header.TimeSignature.Numerator, test.wantNumerator)
 			run.Field("TimeSignature.Denominator", header.TimeSignature.Denominator.Value, test.wantDenominator)
-			run.Field("MeasureHeader.RepeatClose", header.RepeatClose, test.wantRepeat)
+			run.Field("MeasureHeader.RepeatCount", header.RepeatCount, test.wantRepeat)
 			run.Field("MeasureHeader.RepeatAlternative", header.RepeatAlternative, test.wantEnding)
 		})
 	}
@@ -288,7 +288,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 		mutate func(*Song)
 		want   string
 	}{
-		{name: "negative repeat", mutate: func(song *Song) { song.MeasureHeaders[0].RepeatClose = -2 }, want: "repeat-close"},
+		{name: "repeat count", mutate: func(song *Song) { song.MeasureHeaders[0].RepeatCount = 129 }, want: "repeat count 129"},
 		{name: "denominator three", mutate: func(song *Song) { song.MeasureHeaders[0].TimeSignature.Denominator.Value = 3 }, want: "unsupported note value 3"},
 		{name: "zero numerator", mutate: func(song *Song) { song.MeasureHeaders[0].TimeSignature.Numerator = 0 }, want: "numerator 0 must be positive"},
 		{name: "undefined direction", mutate: func(song *Song) { value := DirectionSign(99); song.MeasureHeaders[0].Direction = &value }, want: "direction 99 is not defined"},
@@ -337,18 +337,18 @@ func conformanceMeasureSong(t *testing.T) *Song {
 		time        TimeSignature
 		key         KeySignature
 		marker      string
-		repeatOpen  bool
-		repeatClose int8
+		repeatStart bool
+		repeatCount uint8
 		ending      uint8
 		triplet     TripletFeel
 		doubleBar   bool
 		tempo       int32
 		clef        MeasureClef
 	}{
-		{TimeSignature{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}}, KeySignature{Key: -7}, "A <&>", true, -1, 1, TripletFeelEighth, false, 90, MeasureClefTreble},
-		{defaultTimeSignature(), KeySignature{}, "", false, 0, 0, TripletFeelNone, false, 0, MeasureClefBass},
-		{TimeSignature{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}}, KeySignature{Key: 7, IsMinor: true}, "Coda Ω", false, 5, 0b10000001, TripletFeelSixteenth, true, 120, MeasureClefAlto},
-		{TimeSignature{Numerator: 127, Denominator: Duration{Value: 128, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{2, 2, 2, 2}}, KeySignature{Key: -1, IsMinor: true}, "", false, 127, 0, TripletFeelNone, false, 0, MeasureClefTenor},
+		{TimeSignature{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}}, KeySignature{Key: -7}, "A <&>", true, 0, 1, TripletFeelEighth, false, 90, MeasureClefTreble},
+		{defaultTimeSignature(), KeySignature{}, "", false, 1, 0, TripletFeelNone, false, 0, MeasureClefBass},
+		{TimeSignature{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}}, KeySignature{Key: 7, IsMinor: true}, "Coda Ω", false, 6, 0b10000001, TripletFeelSixteenth, true, 120, MeasureClefAlto},
+		{TimeSignature{Numerator: 127, Denominator: Duration{Value: 128, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{2, 2, 2, 2}}, KeySignature{Key: -1, IsMinor: true}, "", false, 128, 0, TripletFeelNone, false, 0, MeasureClefTenor},
 	}
 	for index, value := range values {
 		header := &song.MeasureHeaders[index]
@@ -360,8 +360,8 @@ func conformanceMeasureSong(t *testing.T) *Song {
 			header.Marker = nil
 		}
 		header.Direction = &directions[index]
-		header.RepeatOpen = value.repeatOpen
-		header.RepeatClose = value.repeatClose
+		header.RepeatStart = value.repeatStart
+		header.RepeatCount = value.repeatCount
 		header.RepeatAlternative = value.ending
 		header.TripletFeel = value.triplet
 		header.DoubleBar = value.doubleBar

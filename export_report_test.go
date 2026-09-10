@@ -144,7 +144,7 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 			beat.Effect.Vibrato = true
 		}},
 		{name: "stroke duration", code: "gp8.normalize.stroke-duration", set: func(beat *Beat, _ *Note) {
-			beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionUp, Value: uint16(DurationSixteenth)}
+			beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionUp, Duration: NoteValue(DurationSixteenth)}
 		}},
 		{name: "tremolo picking", code: "gp8.omit.tremolo-picking", set: func(_ *Beat, note *Note) {
 			note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: defaultDuration()}
@@ -214,8 +214,14 @@ func TestGP8ExportRejectsSharedAuthoredInvariants(t *testing.T) {
 		{name: "channel reference", code: "gp8.reject.score.track.channel-reference", set: func(song *Song) {
 			song.Tracks[0].ChannelIndex = len(song.Channels)
 		}},
+		{name: "lyrics track reference", code: "gp8.reject.score.lyrics.track-reference", set: func(song *Song) {
+			song.Lyrics = Lyrics{TrackIndex: len(song.Tracks), Lines: []LyricLine{{Text: "words", StartMeasureIndex: 0}}}
+		}},
+		{name: "lyrics measure reference", code: "gp8.reject.score.lyrics.measure-reference", set: func(song *Song) {
+			song.Lyrics = Lyrics{TrackIndex: 0, Lines: []LyricLine{{Text: "words", StartMeasureIndex: len(song.MeasureHeaders)}}}
+		}},
 		{name: "negative capo", code: "gp8.reject.score.track.capo", set: func(song *Song) {
-			song.Tracks[0].Offset = -1
+			song.Tracks[0].CapoFret = -1
 		}},
 		{name: "sound reference", code: "gp8.reject.score.sound-automation.reference", set: func(song *Song) {
 			song.Tracks[0].SoundAutomations = []SoundAutomation{{Bar: 0, Sound: 4}}
@@ -322,7 +328,7 @@ func TestGP8ExportReconcilesSemanticAndLegacyTempo(t *testing.T) {
 
 func TestGP8StrictExportReportsScoreLyricsOmission(t *testing.T) {
 	song := syntheticGP8Song()
-	song.Lyrics = Lyrics{TrackChoice: 1, Lines: []LyricLine{{Text: "authored words"}}}
+	song.Lyrics = Lyrics{TrackIndex: 0, Lines: []LyricLine{{Text: "authored words"}}}
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
 		LossPolicy: ExportLossPolicy{RequirePreservation: true},
 	})
@@ -335,7 +341,7 @@ func TestGP8StrictExportReportsScoreLyricsOmission(t *testing.T) {
 func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 	t.Run("track capo", func(t *testing.T) {
 		song := semanticExportProbeSong(t)
-		song.Tracks[0].Offset = 2
+		song.Tracks[0].CapoFret = 2
 		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
 			LossPolicy: ExportLossPolicy{RequirePreservation: true},
 		})
@@ -346,8 +352,8 @@ func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if roundTrip.Tracks[0].Offset != 2 {
-			t.Fatalf("round-trip capo = %d, want 2", roundTrip.Tracks[0].Offset)
+		if roundTrip.Tracks[0].CapoFret != 2 {
+			t.Fatalf("round-trip capo = %d, want 2", roundTrip.Tracks[0].CapoFret)
 		}
 	})
 

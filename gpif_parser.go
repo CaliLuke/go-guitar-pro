@@ -110,7 +110,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	trackChordMaps := make([]gpifChordScope, 0, len(trackIDs))
 	for _, trackID := range trackIDs {
 		track := defaultTrack()
-		track.Number = int32(len(song.Tracks))
+		track.Number = int32(len(song.Tracks) + 1)
 		chordMap := gpifChordScope{}
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
@@ -120,7 +120,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if capoErr != nil {
 					return nil, fmt.Errorf("track %s capo: %w", trackID, capoErr)
 				}
-				track.Offset = capo.value
+				track.CapoFret = capo.value
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
 					track.PercussionArticulations = gpifReadPercussionArticulations(t.InstrumentSet, t.NotationPatch)
@@ -270,12 +270,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		mh.KeySignature.IsMinor = mb.Key.Mode == "Minor"
 
 		if mb.Repeat != nil {
-			mh.RepeatOpen = mb.Repeat.Start == "true"
+			mh.RepeatStart = mb.Repeat.Start == "true"
 			if mb.Repeat.End == "true" && mb.Repeat.Count > 0 {
-				if mb.Repeat.Count > math.MaxInt8+1 {
-					return nil, fmt.Errorf("master bar %d repeat count %d is outside 1..%d", mbIdx, mb.Repeat.Count, math.MaxInt8+1)
+				if mb.Repeat.Count > int(maxRepeatCount) {
+					return nil, fmt.Errorf("master bar %d repeat count %d is outside 1..%d", mbIdx, mb.Repeat.Count, maxRepeatCount)
 				}
-				mh.RepeatClose = int8(mb.Repeat.Count - 1)
+				mh.RepeatCount = uint8(mb.Repeat.Count)
 			}
 		}
 		for _, ending := range splitIDs(mb.AlternateEndings) {

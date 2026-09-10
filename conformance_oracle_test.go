@@ -122,13 +122,6 @@ func testOracleGoAdapterContracts(t *testing.T) {
 		t.Fatalf("percussion input presence = missing %#v, explicit zero %#v", missing, zero)
 	}
 
-	if got := normalizeGoRepeatCount(-1); got != 0 {
-		t.Fatalf("no repeat count = %d, want 0", got)
-	}
-	if got := normalizeGoRepeatCount(5); got != 6 {
-		t.Fatalf("legacy repeat close 5 = %d, want source count 6", got)
-	}
-
 	for index, want := range []string{"ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"} {
 		velocity := MinVelocity + int16(index)*VelocityIncrement
 		if got := goDynamic(velocity); got != want {
@@ -138,7 +131,7 @@ func testOracleGoAdapterContracts(t *testing.T) {
 	if got := goDynamic(1); got != "1" {
 		t.Fatalf("unknown dynamic = %q, want visible source value", got)
 	}
-	track := Track{Offset: 2}
+	track := Track{CapoFret: 2}
 	staff := Staff{Strings: []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 59}}}
 	if got := normalizeGoTuning(staff.Strings); !reflect.DeepEqual(got, []any{int8(64), int8(59)}) {
 		t.Fatalf("Go tuning orientation = %#v", got)
@@ -171,7 +164,7 @@ func testOracleGoAdapterContracts(t *testing.T) {
 	quarter := DurationQuarterTime
 	score := normalizeGoScore(&Song{
 		TempoAutomations: []TempoAutomation{{Bar: 0, Position: 0.25, Tempo: 132.5}},
-		MeasureHeaders:   []MeasureHeader{{Start: quarter, RepeatClose: -1}},
+		MeasureHeaders:   []MeasureHeader{{Start: quarter}},
 	}).(map[string]any)
 	masterBar := score["masterBars"].([]any)[0].(map[string]any)
 	if masterBar["index"] != 0 || masterBar["start"] != int64(0) {

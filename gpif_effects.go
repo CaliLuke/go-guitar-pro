@@ -44,10 +44,10 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 	switch b.Arpeggio {
 	case "Up":
 		beat.Effect.Stroke.Direction = BeatStrokeDirectionUp
-		beat.Effect.Stroke.Value = uint16(DurationEighth)
+		beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 	case "Down":
 		beat.Effect.Stroke.Direction = BeatStrokeDirectionDown
-		beat.Effect.Stroke.Value = uint16(DurationEighth)
+		beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 	}
 
 	// Ottavia
@@ -75,10 +75,10 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 				switch *p.Direction {
 				case "Up":
 					beat.Effect.Stroke.Direction = BeatStrokeDirectionUp
-					beat.Effect.Stroke.Value = uint16(DurationEighth)
+					beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 				case "Down":
 					beat.Effect.Stroke.Direction = BeatStrokeDirectionDown
-					beat.Effect.Stroke.Value = uint16(DurationEighth)
+					beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 				}
 			}
 		case "PickStroke":
