@@ -640,6 +640,33 @@ export function loadLegatoFacts(fixture) {
   return facts;
 }
 
+export function loadMidiBankFacts(fixture) {
+  const score = loadScore(fixture);
+  return score.tracks.map(track => {
+    const automations = [];
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            for (const automation of beat.automations) {
+              if (automation.type === alphaTab.model.AutomationType.Bank ||
+                  automation.type === alphaTab.model.AutomationType.Instrument) {
+                automations.push(normalizeAutomation(automation, bar.index));
+              }
+            }
+          }
+        }
+      }
+    }
+    return {
+      track: track.index,
+      bank: finite(track.playbackInfo.bank),
+      program: finite(track.playbackInfo.program),
+      automations
+    };
+  });
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -672,6 +699,10 @@ function main() {
   }
   if (args[0] === '--legato' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadLegatoFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--midi-bank' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadMidiBankFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

@@ -21,8 +21,8 @@ type MidiChannel struct {
 	Reverb  int8
 	Phaser  int8
 	Tremolo int8
-	// Bank is a MIDI bank-select value from 0 through 127.
-	Bank uint8
+	// Bank is the combined MIDI bank-select value from 0 through 16383.
+	Bank int32
 }
 
 func defaultMidiChannel() MidiChannel {

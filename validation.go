@@ -87,8 +87,8 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if channel.Instrument < 0 || channel.Instrument > 127 {
 			add("score.channel.instrument", ScoreDiagnosticValue, ScoreLocation{}, "channel %d instrument %d is outside 0..127", channelIndex, channel.Instrument)
 		}
-		if channel.Bank > 127 {
-			add("score.channel.bank", ScoreDiagnosticValue, ScoreLocation{}, "channel %d bank %d is outside 0..127", channelIndex, channel.Bank)
+		if channel.Bank < 0 || channel.Bank > 16383 {
+			add("score.channel.bank", ScoreDiagnosticValue, ScoreLocation{}, "channel %d bank %d is outside 0..16383", channelIndex, channel.Bank)
 		}
 		for name, value := range map[string]int8{"volume": channel.Volume, "balance": channel.Balance, "chorus": channel.Chorus, "reverb": channel.Reverb, "phaser": channel.Phaser, "tremolo": channel.Tremolo} {
 			if value < 0 {
@@ -222,6 +222,11 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			}
 			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 {
 				add("score.sound-automation.location", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound automation %d has bar %d position %v", automationIndex, automation.Bar, automation.Position)
+			}
+		}
+		for soundIndex, sound := range track.Sounds {
+			if sound.Bank < 0 || sound.Bank > 16383 {
+				add("score.track-sound.bank", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound %d bank %d is outside 0..16383", soundIndex, sound.Bank)
 			}
 		}
 	}

@@ -129,7 +129,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				for _, sound := range t.Sounds.Sounds {
 					track.Sounds = append(track.Sounds, TrackSound{
 						Name: sound.Name, Label: sound.Label, Path: sound.Path,
-						Role: sound.Role, Program: int32(sound.Program),
+						Role: sound.Role, Program: int32(sound.Program), Bank: gpifSoundBank(sound),
 					})
 				}
 				for _, automation := range t.Automations.Automations {
@@ -201,13 +201,14 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				ch := defaultMidiChannel()
 				if len(t.Sounds.Sounds) > 0 {
 					ch.Instrument = int32(t.Sounds.Sounds[0].Program)
+					ch.Bank = gpifSoundBank(t.Sounds.Sounds[0])
 				}
 				ch.Channel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.PrimaryChannel)
 				ch.EffectChannel = gpifMIDIChannel(t.MidiConnection.Port, t.MidiConnection.SecondaryChannel)
 				if t.GeneralMidi != nil {
 					ch.Channel = gpifMIDIChannel(t.GeneralMidi.Port, t.GeneralMidi.PrimaryChannel)
 					ch.EffectChannel = gpifMIDIChannel(t.GeneralMidi.Port, t.GeneralMidi.SecondaryChannel)
-					if t.GeneralMidi.Program != nil {
+					if len(t.Sounds.Sounds) == 0 && t.GeneralMidi.Program != nil {
 						ch.Instrument = int32(*t.GeneralMidi.Program)
 					}
 				}
@@ -495,6 +496,13 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+func gpifSoundBank(sound gpifSound) int32 {
+	if sound.MSB < 0 || sound.MSB > 127 || sound.LSB < 0 || sound.LSB > 127 {
+		return 0
+	}
+	return int32(sound.MSB*128 + sound.LSB)
 }
 
 func gpifParseFermata(raw gpifFermata) (Fermata, bool) {

@@ -3,9 +3,6 @@
 package goguitarpro
 
 import (
-	"archive/zip"
-	"bytes"
-	"encoding/xml"
 	"slices"
 	"testing"
 )
@@ -32,7 +29,7 @@ func runConformanceStaffCapo(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("two-staff capo export = %v, %#v", err, report.Entries)
 	}
-	wireTrack := conformanceCapoWireTrack(t, data)
+	wireTrack := conformanceSingleWireTrack(t, data)
 	if _, found, readErr := gpifReadCapo(wireTrack.Properties); readErr != nil || found {
 		t.Fatalf("track-level capo = found %t, error %v; want omitted", found, readErr)
 	}
@@ -176,22 +173,6 @@ func staffCapoPitches(track *Track) []int {
 		pitches[staffIndex] = gp8NoteMIDI(track, staff.Strings, note) + int(staff.CapoFret)
 	}
 	return pitches
-}
-
-func conformanceCapoWireTrack(t *testing.T, data []byte) gpifTrack {
-	t.Helper()
-	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
-	if err != nil {
-		t.Fatal(err)
-	}
-	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
-	}
-	if len(document.Tracks.Tracks) != 1 {
-		t.Fatalf("wire tracks = %d, want 1", len(document.Tracks.Tracks))
-	}
-	return document.Tracks.Tracks[0]
 }
 
 func conformanceParseCapoExport(t *testing.T, data []byte) *Song {

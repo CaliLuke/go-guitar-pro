@@ -13,6 +13,8 @@ import (
 
 var gpifBackingTrackAssetReferenceSource = diagnosticSource("GPIF.BackingTrack.AssetId.Reference", "score-core", ParseDiagnosticInvalidData)
 
+var gpifSoundBankInvalidSource = diagnosticSource("GPIF.Track.Sound.MIDI.Bank.Invalid", "midi-bank", ParseDiagnosticInvalidData)
+
 var (
 	gpifTrackPropertyConflictSource = diagnosticSource("GPIF.Track.Property.ConflictingDuplicate", "staff-ownership", ParseDiagnosticInvalidData)
 	gpifStaffPropertyConflictSource = diagnosticSource("GPIF.Staff.Property.ConflictingDuplicate", "staff-ownership", ParseDiagnosticInvalidData)
@@ -370,6 +372,8 @@ type gpifSound struct {
 	Label   string `xml:"Label,omitempty"`
 	Path    string `xml:"Path,omitempty"`
 	Role    string `xml:"Role,omitempty"`
+	LSB     int    `xml:"MIDI>LSB"`
+	MSB     int    `xml:"MIDI>MSB"`
 	Program int    `xml:"MIDI>Program"`
 	Channel *int   `xml:"MIDI>PrimaryChannel"`
 }

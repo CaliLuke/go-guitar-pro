@@ -67,9 +67,17 @@ staff line counts remain supported.
 
 GP8 export preserves the selected MIDI program, primary and effect channels,
 volume, balance, mute state, solo state, sound definitions, and sound changes.
-It reports bank and effect controllers as one scoped MIDI omission. It also
-reports each legacy master or track RSE record as one scoped omission. The RSE
-tests assert every descendant covered by those parent reports.
+`MidiChannel.Bank` and `TrackSound.Bank` use the combined MIDI bank range 0
+through 16383. GPIF sound `MSB` and `LSB` values must each fit 0 through 127.
+The first explicit `TrackSound` owns the initial program and bank; import mirrors
+those values into the channel. When a track has no explicit sound table, the
+channel supplies the GP8 sound fallback. Export reports a normalization if an
+explicit first sound conflicts with its channel mirror. Sound automations keep
+their authored order, including multiple bank-and-program changes at one score
+position. GP8 reports the remaining legacy effect controllers as one scoped
+MIDI omission. It also reports each legacy master or track RSE record as one
+scoped omission. The RSE tests assert every descendant covered by those parent
+reports.
 
 GPIF `AudioEngineState` maps `RSE` to `Track.UseRse` and `MIDI` to false. An
 unknown engine state produces an unknown-syntax diagnostic.

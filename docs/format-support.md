@@ -7,6 +7,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | Feature | Formats | Status | Issues | Reason |
 | --- | --- | --- | --- | --- |
 | `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix accounts for the public score model, fixtures, validation, and explicit GP8 conversion limits; audited upstream-only model surface is recorded by issue 34. |
+| `midi-bank` | gp5, gp6, gp7, gp8 | supported | none | Legacy track banks and GPIF sound-bank definitions survive import, public editing, GP8 export, and pinned AlphaTab consumption with exact event order. |
 | `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public duration, exact timing, meter, tuplets, rests, and binary discriminants; audited upstream-only model surface is recorded by issue 34. |
 | `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
@@ -193,6 +194,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.AudioEngineState.InvalidValue` | `score-core` | `unknown-syntax` | The source audio-engine state must be MIDI or RSE. |
 | `GPIF.Track.Property.ConflictingDuplicate` | `staff-ownership` | `invalid-data` | Repeated track properties must not provide conflicting authored values. |
 | `GPIF.Track.Sound.Channel` | `score-core` | `unsupported-feature` | The public sound model has no destination for a per-sound MIDI channel. |
+| `GPIF.Track.Sound.MIDI.Bank.Invalid` | `midi-bank` | `invalid-data` | Each GPIF bank-select component must fit the seven-bit MIDI MSB or LSB range. |
 
 ## Public model inventory
 
@@ -220,7 +222,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Staff` | `staff-ownership` | 4 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, measures, and tuning. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
-| `TrackSound` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition is authored playback data. |
+| `TrackSound` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition owns its authored program and combined MIDI bank. The first sound is authoritative; MidiChannel mirrors it on import and supplies the fallback only when no explicit sounds exist. |
 | `SoundAutomation` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound automation preserves authored playback, interpolation, annotation, and visibility data. |
 | `TrackLyricLine` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track lyric line is authored text data. |
 | `TrackRse` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track RSE record is authored playback data. |
@@ -258,9 +260,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 208 |
+| `preserved` | 210 |
 | `normalized` | 34 |
-| `omitted` | 117 |
+| `omitted` | 116 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -269,7 +271,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 79 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 80 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -277,7 +279,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 241 |
+| `schema` | 243 |
 
 ## Source dispatch inventory
 
@@ -336,6 +338,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | --- | --- | --- | --- | --- | --- |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `key-mode-preservation` | `score-core` | `TestConformanceKeyModes` | `TestAlphaTabPreservesKeyModes` | no | Exact supported major and minor spellings retain independent nonzero accidental counts across adjacent master bars and canonical GP8 export; unknown spellings remain explicit. |
+| `midi-bank-preservation` | `midi-bank` | `TestConformanceMIDIBank` | `TestAlphaTabPreservesMIDIBanks` | no | Full-range bank definitions, initial channel mirrors, and duplicate-position sound changes survive checked GP5/GPIF import and GP8 export in source order. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
 | `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | Every supported fermata symbol, exact master-bar offset, and finite length survives as an independent authored value while beat association remains consumer-derived. |
 | `free-time-preservation` | `free-time` | `TestConformanceFreeTime` | `TestAlphaTabPreservesFreeTime` | no | Every authored free-time marker survives on its exact master bar without changing numeric meter timing. |

@@ -285,6 +285,10 @@ func validateGP8Song(song *Song) error {
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
 		if track.ChannelIndex >= 0 && track.ChannelIndex < len(song.Channels) {
+			bank := song.Channels[track.ChannelIndex].Bank
+			if bank < 0 || bank > 16383 {
+				return fmt.Errorf("track %d has MIDI bank %d outside 0..16383", trackIndex, bank)
+			}
 			program := song.Channels[track.ChannelIndex].Instrument
 			if program < 0 || program > 127 {
 				return fmt.Errorf("track %d has MIDI program %d outside 0..127", trackIndex, program)
@@ -297,6 +301,9 @@ func validateGP8Song(song *Song) error {
 			}
 		}
 		for soundIndex, sound := range track.Sounds {
+			if sound.Bank < 0 || sound.Bank > 16383 {
+				return fmt.Errorf("track %d sound %d has MIDI bank %d outside 0..16383", trackIndex, soundIndex, sound.Bank)
+			}
 			if sound.Program < 0 || sound.Program > 127 {
 				return fmt.Errorf("track %d sound %d has MIDI program %d outside 0..127", trackIndex, soundIndex, sound.Program)
 			}

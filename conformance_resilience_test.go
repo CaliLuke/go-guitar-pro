@@ -154,7 +154,7 @@ func conformanceResilienceAssertScoreDiagnosticEnums(run *conformanceRun) {
 		},
 		{
 			member: "ScoreDiagnosticValue", kind: ScoreDiagnosticValue, code: "score.channel.bank",
-			mutate: func(song *Song) { song.Channels[0].Bank = 200 },
+			mutate: func(song *Song) { song.Channels[0].Bank = 16384 },
 		},
 	}
 	for _, test := range tests {

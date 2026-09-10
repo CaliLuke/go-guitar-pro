@@ -25,7 +25,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve free-time bars without inventing a meter](work-items/free-time.json) | implementation | 1 | in_progress | — | [#48](https://github.com/CaliLuke/go-guitar-pro/issues/48) |
 | [Preserve lowercase GPIF minor key modes](work-items/key.json) | implementation | 1 | in_progress | — | [#49](https://github.com/CaliLuke/go-guitar-pro/issues/49) |
 | [Preserve authored legato and slur endpoints](work-items/legato-slurs.json) | implementation | 1 | in_progress | — | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) |
-| [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json) | implementation | 1 | todo | — | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51) |
+| [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json) | implementation | 1 | in_progress | — | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51) |
 | [Require executable evidence for supported capability claims](work-items/oracle-breadth.json) | implementation | 1 | todo | — | [#67](https://github.com/CaliLuke/go-guitar-pro/issues/67) |
 | [Emit GP8 archives readable by the pinned AlphaTab inflater](work-items/oracle-inflater.json) | implementation | 1 | todo | — | [#68](https://github.com/CaliLuke/go-guitar-pro/issues/68) |
 | [Preserve pan automation independently from static balance](work-items/pan-automation.json) | implementation | 1 | blocked | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52) |

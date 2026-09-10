@@ -162,6 +162,8 @@ type TrackSound struct {
 	Path    string
 	Role    string
 	Program int32
+	// Bank is the combined MIDI bank-select value from 0 through 16383.
+	Bank int32
 }
 
 // SoundAutomation selects a track sound at a score position.
@@ -394,7 +396,7 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 		return err
 	}
 	if track.ChannelIndex >= 0 && track.ChannelIndex < len(s.Channels) {
-		s.Channels[track.ChannelIndex].Bank = bankByte
+		s.Channels[track.ChannelIndex].Bank = int32(bankByte)
 	}
 
 	if err := s.readTrackRse(c, &track); err != nil {

@@ -29,8 +29,8 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 		Volume: 101, Balance: 33, Chorus: 12, Reverb: 23, Phaser: 34, Tremolo: 45,
 	}
 	wantSounds := []TrackSound{
-		{Name: "Clean", Label: "A", Path: "factory/clean", Role: "main", Program: 42},
-		{Name: "Lead", Label: "B", Path: "factory/lead", Role: "solo", Program: 81},
+		{Name: "Clean", Label: "A", Path: "factory/clean", Role: "main", Program: 42, Bank: 2},
+		{Name: "Lead", Label: "B", Path: "factory/lead", Role: "solo", Program: 81, Bank: 256},
 	}
 	track.Sounds = slices.Clone(wantSounds)
 	wantSoundAutomations := []SoundAutomation{{Bar: 0, Position: 0.5, Sound: 1}}
@@ -50,7 +50,7 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 	run.Preserved("MidiChannel.Channel", channel.Channel, uint8(18))
 	run.Normalized("MidiChannel.EffectChannel", channel.EffectChannel, uint8(19))
 	run.Preserved("MidiChannel.Instrument", channel.Instrument, int32(42))
-	run.Omitted("MidiChannel.Bank", channel.Bank, uint8(2))
+	run.Preserved("MidiChannel.Bank", channel.Bank, int32(2))
 	run.Preserved("MidiChannel.Volume", channel.Volume, int8(101))
 	run.Preserved("MidiChannel.Balance", channel.Balance, int8(33))
 	run.Omitted("MidiChannel.Chorus", channel.Chorus, int8(12))
@@ -80,7 +80,6 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 		name string
 		set  func(*MidiChannel)
 	}{
-		{"bank", func(channel *MidiChannel) { channel.Bank = 2 }},
 		{"chorus", func(channel *MidiChannel) { channel.Chorus = 12 }},
 		{"reverb", func(channel *MidiChannel) { channel.Reverb = 23 }},
 		{"phaser", func(channel *MidiChannel) { channel.Phaser = 34 }},
@@ -125,6 +124,7 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 		"MidiChannel.Channel":       {gotChannel.Channel, uint8(18)},
 		"MidiChannel.EffectChannel": {gotChannel.EffectChannel, uint8(19)},
 		"MidiChannel.Instrument":    {gotChannel.Instrument, int32(42)},
+		"MidiChannel.Bank":          {gotChannel.Bank, int32(2)},
 		"MidiChannel.Volume":        {gotChannel.Volume, int8(101)},
 		"MidiChannel.Balance":       {gotChannel.Balance, int8(33)},
 		"Track.Mute":                {gotTrack.Mute, true},
@@ -168,7 +168,7 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 	generalTrack := generalMIDIResult.Song.Tracks[0]
 	generalChannel := generalMIDIResult.Song.Channels[generalTrack.ChannelIndex]
 	generalValues := extractGPIFLeafText(t, generalMIDIData)
-	run.Wire("gpifGeneralMidi.Program", generalChannel.Instrument, int32(81))
+	run.Wire("gpifGeneralMidi.Program", generalChannel.Instrument, int32(42))
 	run.Wire("gpifGeneralMidi.Port", generalValues["GPIF/Tracks/Track/GeneralMidi/Port"], "2")
 	run.Wire("gpifGeneralMidi.PrimaryChannel", generalChannel.Channel, uint8(36))
 	run.Wire("gpifGeneralMidi.SecondaryChannel", generalChannel.EffectChannel, uint8(37))

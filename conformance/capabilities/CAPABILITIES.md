@@ -13,15 +13,15 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 56 | 23 | 20 | 2 |
-| model | 56 | 23 | 21 | 1 |
-| export | 37 | 23 | 39 | 2 |
+| import | 57 | 22 | 20 | 2 |
+| model | 57 | 22 | 21 | 1 |
+| export | 38 | 23 | 38 | 2 |
 
-All three stages have a supported rating in 35 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 36 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `true`.
+The receipt contains 364 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support.
 
 | Capability | Files with non-default source values | Files with differences | Blocked comparisons |
@@ -50,7 +50,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Multiple-bar rest preferences | 4 | 4 | 26 |
 | Volume automation events | 8 | 4 | 26 |
 | Chord name, diagram and fingering visibility | 3 | 3 | 26 |
-| MIDI bank selection and bank changes | 8 | 3 | 26 |
 | Numbered staff notation | 3 | 3 | 26 |
 | Authored timer marks | 2 | 2 | 26 |
 | Beat barre fret and shape | 2 | 2 | 26 |
@@ -71,6 +70,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Free-time bars | 1 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
 | Legato and authored slurs | 2 | 0 | 26 |
+| MIDI bank selection and bank changes | 8 | 0 | 26 |
 | Navigation targets and jumps | 8 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
 | Octave shifts attached to clefs | 2 | 0 | 26 |
@@ -869,11 +869,11 @@ Bounded work: [Export embedded audio backing-track assets](https://github.com/Ca
 
 Playback data. Priority 1. Formats: gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Sound MSB/LSB do not exist in gpifSound. Legacy bank/controller data has an omission report. AlphaTab GP8 bank fixtures exercise this gap.
+GP5 track banks and GPIF sound MSB/LSB definitions map to a checked 14-bit public value. GP8 export preserves initial selection and ordered bank/program changes.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Banks 0, 77, 256, and 16383, exact MSB/LSB wire values, duplicate-position change order, authority, fallback, and invalid ranges are covered by public, wire, reimport, and pinned AlphaTab evidence.
 
 Bounded work: [Preserve MIDI bank selection and bank changes](https://github.com/CaliLuke/go-guitar-pro/issues/51).
 

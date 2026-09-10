@@ -5,8 +5,8 @@
   "title": "Preserve MIDI bank selection and bank changes",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp5",
     "gp6",
@@ -60,13 +60,23 @@
       "kind": "probe",
       "reference": "upstream/guitarpro8/bank-change.gp:midi-bank",
       "detail": "An authored bank 256 automation disappears in GP8 export."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMIDIBank",
+      "detail": "Covers public import, authority, fallback, validation, exact GPIF wire values, and Go reimport."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabPreservesMIDIBanks",
+      "detail": "Uses pinned upstream fixtures and verifies ordered bank/program changes in Go-exported GP8."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "MidiChannel.Bank and TrackSound.Bank now retain the checked 14-bit MIDI bank range. GP5 track bytes and GPIF sound MSB/LSB components import without narrowing; the first explicit TrackSound is authoritative and mirrors into the channel, while MidiChannel supplies the GP8 fallback only when no explicit sound table exists. GP8 emits exact LSB/MSB components and retains SoundAutomation order, including distinct changes at the same position, so pinned AlphaTab observes each bank immediately before its program event. Invalid public and wire values are rejected with scoped diagnostics. General automation refactoring and pan, sustain, and volume changes remain outside this ticket.",
   "verification": [],
   "issue": {
     "number": 51,

@@ -297,6 +297,7 @@ func runConformanceLyricsPlaybackAutomation(run *conformanceRun) {
 	song := semanticValidPitchedGP8Song(t)
 	track := &song.Tracks[0]
 	track.Settings.Notation = true
+	song.Channels[0].Instrument = 27
 	track.Lyrics = []TrackLyricLine{{Offset: 2, Text: "M22 lyric"}}
 	track.Sounds = []TrackSound{{Name: "Clean", Label: "C", Path: "factory/clean", Role: "main", Program: 27}, {Name: "Lead", Label: "L", Path: "factory/lead", Role: "solo", Program: 81}}
 	track.SoundAutomations = []SoundAutomation{{Bar: 1, Position: 0.5, Sound: 1}}

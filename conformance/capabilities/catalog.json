@@ -1624,12 +1624,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Sound MSB/LSB do not exist in gpifSound. Legacy bank/controller data has an omission report. AlphaTab GP8 bank fixtures exercise this gap.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GP5 track banks and GPIF sound MSB/LSB definitions map to a checked 14-bit public value. GP8 export preserves initial selection and ordered bank/program changes.",
+      "acceptance": "Banks 0, 77, 256, and 16383, exact MSB/LSB wire values, duplicate-position change order, authority, fallback, and invalid ranges are covered by public, wire, reimport, and pinned AlphaTab evidence.",
       "upstream": [],
       "evidence": [
         {
@@ -1646,6 +1646,16 @@
           "kind": "probe",
           "reference": "upstream/guitarpro8/bank-change.gp:midi-bank",
           "detail": "An authored bank 256 automation disappears in GP8 export."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMIDIBank",
+          "detail": "Public import, editing, validation, exact wire, reimport, authority, and fallback evidence."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesMIDIBanks",
+          "detail": "Pinned AlphaTab fixture and Go-output evidence for initial banks and ordered bank/program changes."
         }
       ]
     },

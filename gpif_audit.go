@@ -244,6 +244,13 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 			})
 		}
 		for soundIndex, sound := range track.Sounds.Sounds {
+			if sound.MSB < 0 || sound.MSB > 127 || sound.LSB < 0 || sound.LSB > 127 {
+				context.add(gpifSoundBankInvalidSource, ParseDiagnostic{
+					SourcePath: fmt.Sprintf("%s/Sounds/Sound[%d]/MIDI", path, soundIndex),
+					ObjectID:   track.ID, Location: ParseLocation{TrackID: track.ID}, Feature: "midi-bank",
+					Reason: fmt.Sprintf("MIDI bank MSB %d and LSB %d must each be within 0..127", sound.MSB, sound.LSB),
+				})
+			}
 			if sound.Channel == nil || *sound.Channel == track.MidiConnection.PrimaryChannel {
 				continue
 			}

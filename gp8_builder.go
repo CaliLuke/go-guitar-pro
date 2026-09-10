@@ -292,14 +292,17 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		channel.Channel = DefaultPercussionChannel
 		channel.EffectChannel = DefaultPercussionChannel
 	}
-	if channel.Bank != 0 || channel.Chorus != 0 || channel.Reverb != 0 || channel.Phaser != 0 || channel.Tremolo != 0 {
-		builder.addReport("gp8.omit.midi-effects", "score-core", ExportDispositionOmitted, location, "GP8 writer emits channel, program, volume, and balance but not the legacy bank and effect controllers")
+	if channel.Chorus != 0 || channel.Reverb != 0 || channel.Phaser != 0 || channel.Tremolo != 0 {
+		builder.addReport("gp8.omit.midi-effects", "score-core", ExportDispositionOmitted, location, "GP8 writer emits channel, program, bank, volume, and balance but not the legacy effect controllers")
 	}
 	if track.ChannelIndex == -1 {
 		builder.addReport("gp8.normalize.channel-binding", "score-core", ExportDispositionNormalized, location, "GP8 output binds an unbound track to a default channel")
 	}
 	if channel.Channel/16 != channel.EffectChannel/16 {
 		builder.addReport("gp8.normalize.effect-channel-port", "score-core", ExportDispositionNormalized, location, "GP8 stores one port for both primary and effect channels")
+	}
+	if len(track.Sounds) > 0 && (track.Sounds[0].Program != channel.Instrument || track.Sounds[0].Bank != channel.Bank) {
+		builder.addReport("gp8.normalize.sound-authority", "midi-bank", ExportDispositionNormalized, location, "the first explicit track sound is authoritative over the channel program and bank mirror")
 	}
 
 	red := (uint32(track.Color) >> 16) & 0xff
@@ -313,6 +316,8 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		Sounds: gpifSounds{Sounds: []gpifSound{{
 			Name:    track.Name,
 			Program: int(channel.Instrument),
+			LSB:     int(channel.Bank & 0x7f),
+			MSB:     int(channel.Bank >> 7),
 			Channel: &primaryChannel,
 		}}},
 		RSE: &gpifTrackRSE{ChannelStrip: gpifChannelStrip{
@@ -331,7 +336,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		for _, sound := range track.Sounds {
 			result.Sounds.Sounds = append(result.Sounds.Sounds, gpifSound{
 				Name: sound.Name, Label: sound.Label, Path: sound.Path, Role: sound.Role,
-				Program: int(sound.Program), Channel: &primaryChannel,
+				Program: int(sound.Program), LSB: int(sound.Bank & 0x7f), MSB: int(sound.Bank >> 7), Channel: &primaryChannel,
 			})
 		}
 	}
