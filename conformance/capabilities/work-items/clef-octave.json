@@ -5,8 +5,8 @@
   "title": "Preserve bar-level clef octave shifts",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -74,7 +74,7 @@
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "Measure.ClefOctave now preserves GPIF Bar.Ottavia independently for every staff measure. Import audits and maps 8va, 8vb, 15ma, and 15mb; validation rejects undefined programmatic values at the exact location; GP8 export writes each authored bar value without changing Beat.Octave. Focused public, wire, reimport, post-parse edit, and pinned AlphaTab evidence covers the complete scoped behavior.",
   "verification": [],
   "issue": {
     "number": 44,

@@ -350,6 +350,16 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 
 				if bar, ok := barMap[barID]; ok {
 					m.Clef = gpifMeasureClef(bar.Clef)
+					switch bar.Ottavia {
+					case "8va":
+						m.ClefOctave = OctaveOttava
+					case "15ma":
+						m.ClefOctave = OctaveQuindicesima
+					case "8vb":
+						m.ClefOctave = OctaveOttavaBassa
+					case "15mb":
+						m.ClefOctave = OctaveQuindicesimaBassa
+					}
 					m.SimileMark = gpifSimileMark(bar.SimileMark)
 					voiceIDs := splitIDs(bar.Voices)
 					pendingVoicePlaceholders := 0

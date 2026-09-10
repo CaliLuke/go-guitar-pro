@@ -28,6 +28,9 @@ type Measure struct {
 	KeySignature  KeySignature
 	HasDoubleBar  bool
 	Clef          MeasureClef
+	// ClefOctave preserves the octave shift attached to this measure's clef.
+	// It is independent from octave shifts authored on individual beats.
+	ClefOctave Octave
 	// SimileMark preserves a one- or two-measure repeat symbol on this measure.
 	SimileMark SimileMark
 	LineBreak  LineBreak

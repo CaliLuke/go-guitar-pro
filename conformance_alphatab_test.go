@@ -224,6 +224,37 @@ func TestAlphaTabPreservesIndependentStaffCapos(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesClefOctaves(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformanceClefOctaveSong(t)
+	data, report, err := ExportWithReport(source, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("clef octave export = %v, %#v", err, report.Entries)
+	}
+	parsed, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	parsed.Tracks[0].Measures[1].ClefOctave = OctaveOttavaBassa
+	parsed.Tracks[0].Staves[1].Measures[0].ClefOctave = OctaveQuindicesima
+	edited, editedReport, err := ExportWithReport(parsed, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{
+			"gp8.normalize.source-version", "gp8.omit.track-display-settings",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("edited clef octave export = %v, %#v", err, editedReport.Entries)
+	}
+	if got := conformanceAlphaTabClefOctaves(t, edited); !slices.Equal(got, []string{"8va", "8vb", "none", "15ma", "15mb", "none"}) {
+		t.Fatalf("AlphaTab clef octaves = %v", got)
+	}
+	if got := conformanceBeatAlphaTabFirstOctave(t, edited); got != "15mb" {
+		t.Fatalf("AlphaTab beat octave = %q, want 15mb", got)
+	}
+}
+
 func TestAlphaTabPreservesSimileMarks(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceMeasureSong(t)

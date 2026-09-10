@@ -414,6 +414,21 @@ func gp8BarClef(song *Song, trackIndex int, measure *Measure) string {
 	return "G2"
 }
 
+func gp8Octave(value Octave) string {
+	switch value {
+	case OctaveOttava:
+		return "8va"
+	case OctaveQuindicesima:
+		return "15ma"
+	case OctaveOttavaBassa:
+		return "8vb"
+	case OctaveQuindicesimaBassa:
+		return "15mb"
+	default:
+		return ""
+	}
+}
+
 func gp8HarmonicType(kind HarmonicType) string {
 	switch kind {
 	case HarmonicTypeNatural:

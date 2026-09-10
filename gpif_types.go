@@ -413,6 +413,7 @@ type gpifBar struct {
 	ID         string `xml:"id,attr"`
 	Voices     string `xml:"Voices"`
 	Clef       string `xml:"Clef"`
+	Ottavia    string `xml:"Ottavia,omitempty"`
 	SimileMark string `xml:"SimileMark,omitempty"`
 }
 

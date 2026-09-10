@@ -139,9 +139,15 @@ Master bars own key, meter, and double-bar output. A non-default compatibility
 value on `Measure` produces a normalization report when it conflicts with its
 header.
 
+`Measure.ClefOctave` is the authored octave shift attached to that staff's clef.
+It is independent from `Beat.Octave`, which applies only to its beat. The normal
+first-staff `Track.Measures` compatibility rule applies to post-parse edits;
+later staff measures remain independently authoritative.
+
 GP8 export preserves master-bar key changes, meter values, section text,
 repeats, alternate endings, triplet feel, and double bars. It preserves treble,
-bass, alto, tenor, and percussion clefs. It does not write legacy navigation
+bass, alto, tenor, and percussion clefs, including 8va, 8vb, 15ma, and 15mb
+clef shifts. It does not write legacy navigation
 directions, header-local tempo, or authored meter beam groups. Export reports
 each of these omissions. Import and export reject an invalid meter or repeat
 count before a value can wrap to a smaller integer type.

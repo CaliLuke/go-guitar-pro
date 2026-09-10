@@ -419,6 +419,7 @@ function normalizeStaff(staff) {
     bars: staff.bars.map(bar => ({
       index: bar.index,
       clef: normalizeClef(bar.clef),
+	  clefOctave: normalizeOttavia(bar.clefOttava),
 	  simileMark: normalizeSimileMark(bar.simileMark),
       voices: bar.voices.filter(voice => !voice.isEmpty).map(voice => normalizeVoice(voice, staff))
     }))

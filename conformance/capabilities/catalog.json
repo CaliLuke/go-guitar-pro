@@ -1343,12 +1343,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Bar.Ottavia is not decoded. Beat.Ottavia is supported but cannot replace the clef-level value.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Measure.ClefOctave preserves every GPIF Bar.Ottavia value at its staff and measure location independently from Beat.Octave. GP8 export and post-parse edits retain the same values through pinned AlphaTab consumption.",
+      "acceptance": "Keep the four clef-octave values covered across import, public editing, GP8 export, exact wire locations, and pinned AlphaTab consumption.",
       "upstream": [
         "Bar.clefOttava"
       ],
@@ -1357,6 +1357,26 @@
           "kind": "source",
           "reference": "gpif_types.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Measure.ClefOctave",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "GP8 bars emit the authored clef octave independently from beat notation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceClefOctave",
+          "detail": "All four values, staff and measure ownership, post-parse edits, wire output, and beat independence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesClefOctaves",
+          "detail": "Pinned AlphaTab independently consumes bar and beat octave values."
         },
         {
           "kind": "probe",

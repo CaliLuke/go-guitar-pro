@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 50 | 25 | 24 | 2 |
-| model | 50 | 25 | 25 | 1 |
-| export | 33 | 22 | 44 | 2 |
+| import | 51 | 25 | 23 | 2 |
+| model | 51 | 25 | 24 | 1 |
+| export | 34 | 22 | 43 | 2 |
 
-All three stages have a supported rating in 30 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 31 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -60,7 +60,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Golpe thumb and finger marks | 2 | 2 | 26 |
 | Key signatures and key mode spelling | 44 | 2 | 26 |
 | Legato and authored slurs | 2 | 2 | 26 |
-| Octave shifts attached to clefs | 2 | 2 | 26 |
 | Explicit note string-number display | 1 | 1 | 26 |
 | Fade out and volume swell | 1 | 1 | 26 |
 | Free-time bars | 1 | 1 | 26 |
@@ -74,6 +73,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Fade in | 17 | 0 | 26 |
 | Left-hand tapping identity | 1 | 0 | 26 |
 | Note vibrato strength | 21 | 0 | 26 |
+| Octave shifts attached to clefs | 2 | 0 | 26 |
 | One-bar and two-bar simile marks | 4 | 0 | 26 |
 | Repeat starts and displayed pass counts | 28 | 0 | 26 |
 | String tuning and tuning labels | 360 | 0 | 26 |
@@ -419,11 +419,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Instrument. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF Bar.Ottavia is not decoded. Beat.Ottavia is supported but cannot replace the clef-level value.
+Measure.ClefOctave preserves every GPIF Bar.Ottavia value at its staff and measure location independently from Beat.Octave. GP8 export and post-parse edits retain the same values through pinned AlphaTab consumption.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep the four clef-octave values covered across import, public editing, GP8 export, exact wire locations, and pinned AlphaTab consumption.
 
 Bounded work: [Preserve bar-level clef octave shifts](https://github.com/CaliLuke/go-guitar-pro/issues/44).
 

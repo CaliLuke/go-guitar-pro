@@ -616,7 +616,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 					voiceIDs = append(voiceIDs, "-1")
 				}
 				builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{
-					ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure), SimileMark: gp8SimileMark(measure.SimileMark),
+					ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure), Ottavia: gp8Octave(measure.ClefOctave), SimileMark: gp8SimileMark(measure.SimileMark),
 				})
 			}
 		}

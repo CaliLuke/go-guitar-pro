@@ -6777,10 +6777,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 37,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ab79f6450f7e453d24868141d95cf6a0e69dc218dac2bca273c8c46b8758a8fb"
+          "locationsSha256": "3a2a62e859f089bc974d08df2252999208a3017d4135702bc95d15895de653f9"
         }
       ],
       "differences": null
@@ -12620,10 +12620,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 38,
+          "count": 34,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "5c3ee5484a1a544577d82b22b1ec5883f93716ffe15d00899d72a707496e7694"
+          "locationsSha256": "c05fc5c989ebda1990610bddef75456a56d88423a2b00098ec5728d97176eb21"
         }
       ],
       "differences": null

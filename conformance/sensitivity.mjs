@@ -382,7 +382,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: ',"gpifBeat.Ottavia":["M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]', after: ',"gpifBeat.Ottavia":["M20-SOURCE-AUDIT"]' },
+      { before: ',"gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]', after: ',"gpifBeat.Ottavia":["M20-SOURCE-AUDIT"]' },
       { before: '"gpifBars.Bars":"Collection wrapper;', after: '"gpifBeat.Ottavia":"Incorrect scalar structural classification.",\n      "gpifBars.Bars":"Collection wrapper;' }
     ],
     command: 'ledger-test',

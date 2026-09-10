@@ -10,6 +10,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public duration, exact timing, meter, tuplets, rests, and binary discriminants; audited upstream-only model surface is recorded by issue 34. |
 | `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
+| `clef-octave` | gp6, gp7, gp8 | supported | none | Every GPIF bar-level clef octave survives import, post-parse editing, GP8 export, and pinned AlphaTab consumption independently from Beat.Octave. |
 | `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix inventories and tests public note and beat fields, effects, strict export decisions, and independent consumption; audited upstream-only model surface is recorded by issue 34. |
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
@@ -123,6 +124,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.ChordDefinition.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.ChordDefinition.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Bar.SimileMark.InvalidValue` | `rhythm` | `unsupported-feature` | Unknown simile-mark text has no defined public enum value. |
+| `GPIF.Bar.Ottavia.InvalidValue` | `clef-octave` | `unsupported-feature` | Unknown clef-octave text has no defined public enum value. |
 | `GPIF.MasterBar.Bars.Cardinality` | `staff-ownership` | `invalid-data` | The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track. |
 | `GPIF.MasterBar.Bars.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.MasterBar.TripletFeel.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -215,7 +217,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
 | `RseInstrument` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The RSE instrument contains authored playback values. |
 | `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
-| `Measure` | `timing` | 9 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
+| `Measure` | `timing` | 10 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
 | `Beat` | `note-and-beat-semantics` | 8 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
@@ -245,7 +247,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 197 |
+| `preserved` | 198 |
 | `normalized` | 34 |
 | `omitted` | 118 |
 | `rejected` | 0 |
@@ -256,7 +258,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 73 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 74 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 143 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -264,7 +266,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 228 |
+| `schema` | 229 |
 
 ## Source dispatch inventory
 
@@ -306,6 +308,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifXMLAuditStart:element.Name.Local` | `score-core` | 5 | `unclassified-gpif-wire-field` | `delegated-to-audit` | The XML audit records graph object identifiers for diagnostic locations. |
 | `gpifApplyBeatEffects:p.Direction` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps both supported brush directions. |
 | `parseGPIFWithContext:mb.TripletFeel` | `rhythm` | 6 | `timing-finalization` | `delegated-to-audit` | The importer maps every supported master-bar triplet-feel value. |
+| `parseGPIFWithContext:bar.Ottavia` | `clef-octave` | 4 | `clef-octave-preservation` | `delegated-to-audit` | The importer maps every supported bar-level clef octave independently from beat octave notation. |
 | `validateGP8Staff:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The exporter validates percussion articulation MIDI boundaries. |
 | `parseGPIFWithContext:b.GraceNotes` | `grace-relationships` | 2 | `grace-order-preservation` | `unsupported-feature` | The importer preserves supported before-beat and on-beat grace ordering. |
 | `gpifAuditDiagnostics:beat.Fadding` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `unsupported-feature` | The audit classifies each fading value before the importer maps it. |
@@ -320,6 +323,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
+| `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
 | `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
 | `unclassified-source-dispatch` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A new semantic dispatch case must receive a source disposition before the gate passes. |
 | `automation-dispatch-diagnostic` | `score-core` | `TestGPIFAutomationDispatchDiagnostics` | `TestAlphaTabInputConformance` | yes | Unknown, unsupported, and invalid automation records remain visible to strict policy. |

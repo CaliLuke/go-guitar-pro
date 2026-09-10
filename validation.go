@@ -183,6 +183,9 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 				if measure.SimileMark < SimileMarkNone || measure.SimileMark > SimileMarkSecondOfDouble {
 					add("score.measure.simile-mark", ScoreDiagnosticValue, location, "simile mark %d is not defined", measure.SimileMark)
 				}
+				if measure.ClefOctave < OctaveNone || measure.ClefOctave > OctaveQuindicesimaBassa {
+					add("score.measure.clef-octave", ScoreDiagnosticValue, location, "clef octave %d is not defined", measure.ClefOctave)
+				}
 				for voiceIndex := range measure.Voices {
 					if int(measure.Voices[voiceIndex].MeasureIndex) != measureIndex {
 						voiceLocation := location
