@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "documentation-contract-drift",
+  "capability": "upstream-discovery",
+  "title": "Correct stale semantic documentation and diagnostic labels",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Reconcile prose and source declarations with the already implemented vibrato strength, tenuto and tapping contracts.",
+  "acceptance": [
+    "Document NoteEffect.VibratoStrength, Accent, Tapped and LeftHandTapped authority and supported export behavior.",
+    "Remove or correct stale loss claims and inactive diagnostic-source dispositions without suppressing genuine beat-vibrato/hammer losses.",
+    "Existing public cases and source inventory gates still pass; no capability is promoted merely from revised prose."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "conformance/sync-upstream-inventory.mjs"
+    ],
+    "instructions": "Document NoteEffect.VibratoStrength, Accent, Tapped and LeftHandTapped authority and supported export behavior."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "conformance/sync-upstream-inventory.mjs",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "issue",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/34",
+      "detail": "CLOSED. Existing broad feature rows still cite this ticket; it is not an open owner for remaining gaps."
+    }
+  ],
+  "shared_files": [
+    "conformance/sync-upstream-inventory.mjs"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "export-curve-order",
+  "capability": "bends",
+  "title": "Investigate parsed bend point order rejected by export",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Trace the nonmonotonic point sequence from the canon audio-track fixtures through decoding and canonicalization.",
+  "acceptance": [
+    "Reproduce position 3 following position 6 in testdata/gp7/canon-audio-track.gp and its GP8 counterpart.",
+    "Compare original wire controls and AlphaTab authored/derived curves to locate the first disagreement.",
+    "Fix a proven decoding/order defect or retain a scoped malformed-source classification; do not sort authored points without proof."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_effects.go",
+      "gp8_effects.go"
+    ],
+    "instructions": "Reproduce position 3 following position 6 in testdata/gp7/canon-audio-track.gp and its GP8 counterpart."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L10",
+      "symbol": "BendPoint.MaxPosition"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L11",
+      "symbol": "BendPoint.MaxValue"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L16",
+      "symbol": "BendPoint.offset"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L21",
+      "symbol": "BendPoint.value"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "NoteEffect.Bend",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceCurvePreservation",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_effects.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

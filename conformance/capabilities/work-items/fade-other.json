@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "id": "fade-other",
+  "capability": "fade-other",
+  "title": "Preserve fade-out and volume-swell beat effects",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Represent all GPIF Fadding variants while keeping existing FadeIn compatibility explicit.",
+  "acceptance": [
+    "Retain None, FadeIn, FadeOut and VolumeSwell as distinct authored values.",
+    "A post-parse change from fade-out to swell exports as the exact target variant.",
+    "Unknown source and authored enum values are diagnosed; the existing fade-in case remains supported."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/fade.gp",
+    "capability": "fade-other",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].fade",
+        "source": 3,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[1].fade",
+        "source": 3,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[1].fade",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L383",
+      "symbol": "Beat.fade"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/FadeType.ts#L9",
+      "symbol": "FadeType.None"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/FadeType.ts#L13",
+      "symbol": "FadeType.FadeIn"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/FadeType.ts#L17",
+      "symbol": "FadeType.FadeOut"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/fade.gp:fade-other",
+      "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].fade. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_audit.go",
+    "gpif_parser.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "upstream-discovery",
+  "capability": "upstream-discovery",
+  "title": "Reconcile expanded source inventory with executable obligations",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Turn unclassified upstream constructs into explicit authored, derived, other-format or unsupported dispositions without treating associations as behavior evidence.",
+  "acceptance": [
+    "Review each remaining unlinked construct in bounded domain groups and record its source applicability.",
+    "Correct old helper-class misattribution for BeamingRules and SyncPointData in the original upstream inventory.",
+    "New authored constructs fail classification checks until they have a scope decision and a capability/work-item owner."
+  ],
+  "exclusions": [
+    "Do not mark all methods or enum aliases supported from a class-wide mapping."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "conformance/sync-upstream-inventory.mjs"
+    ],
+    "instructions": "Review each remaining unlinked construct in bounded domain groups and record its source applicability."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "conformance/sync-upstream-inventory.mjs",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "issue",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/34",
+      "detail": "CLOSED. Existing broad feature rows still cite this ticket; it is not an open owner for remaining gaps."
+    }
+  ],
+  "shared_files": [
+    "conformance/sync-upstream-inventory.mjs"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

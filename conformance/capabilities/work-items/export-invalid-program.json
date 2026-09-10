@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "export-invalid-program",
+  "capability": "midi-routing",
+  "title": "Classify parsed invalid MIDI programs that block export",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Resolve the parse/export contract for instrument -1 in fade-to-black.gp4 and upstream beat-harmonics.gp3.",
+  "acceptance": [
+    "Reproduce both program -1 failures through the public API and compare AlphaTab defaults.",
+    "Determine whether -1 means an authored invalid program, an unbound channel or a legitimate format sentinel.",
+    "Implement only a justified boundary normalization or retain precise parse/export diagnostics with regression tests."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "track.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Reproduce both program -1 failures through the public API and compare AlphaTab defaults."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/PlaybackInformation.ts#L12",
+      "symbol": "PlaybackInformation.volume"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/PlaybackInformation.ts#L17",
+      "symbol": "PlaybackInformation.balance"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/PlaybackInformation.ts#L22",
+      "symbol": "PlaybackInformation.port"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/PlaybackInformation.ts#L27",
+      "symbol": "PlaybackInformation.program"
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.Channels",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePlaybackRouting",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

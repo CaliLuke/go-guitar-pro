@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "trill",
+  "capability": "trill",
+  "title": "Determine supported GP8 trill-speed encoding",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Resolve the current forced sixteenth-note trill duration using actual target syntax and independent consumption.",
+  "acceptance": [
+    "Compare authored 16th, 32nd and 64th trill speeds at the same non-default fret.",
+    "Identify a supported GPIF speed payload, or show that the target consumer has a fixed value.",
+    "Preserve supported speeds or retain the exact normalization policy, with no false full-support rating."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_effects.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Compare authored 16th, 32nd and 64th trill speeds at the same non-default fret."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L544",
+      "symbol": "Note.trillValue"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L557",
+      "symbol": "Note.trillSpeed"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "NoteEffect.Trill",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTechniqueDispositions",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

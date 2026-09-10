@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "volume-automation",
+  "capability": "volume-automation",
+  "title": "Export authored channel-strip volume automation",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Emit the existing Song.VolumeAutomations records as supported GPIF channel-strip events.",
+  "acceptance": [
+    "Preserve two non-default values at different positions and their linear flags.",
+    "Assert track ownership, same-position event order and exact supported wire values.",
+    "Remove only the resolved omission report; pinned AlphaTab reads equivalent values and strict export accepts the supported slice."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp5/RSE.gp5",
+    "capability": "volume-automation",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].automations[0]",
+        "source": {
+          "ratioPosition": 0,
+          "text": "7",
+          "type": 1
+        },
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L13",
+      "symbol": "AutomationType.Volume"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.VolumeAutomations",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "source",
+      "reference": "export_report.go",
+      "detail": "Target omission reports."
+    }
+  ],
+  "shared_files": [
+    "export_report.go",
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

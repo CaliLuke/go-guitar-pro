@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "common-time",
+  "capability": "common-time",
+  "title": "Determine Guitar Pro support for common and cut time",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Establish whether common/cut-time display flags have an authored representation in supported Guitar Pro versions.",
+  "acceptance": [
+    "Find a valid source fixture and importer/exporter path, or document that the AlphaTab field is populated only by other formats.",
+    "Distinguish numeric 4/4 or 2/2 from an explicitly authored display symbol.",
+    "Record a scoped implementation follow-up only if a supported Guitar Pro source can express the distinction."
+  ],
+  "exclusions": [
+    "Do not infer a notation symbol from a numeric meter."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "headers.go"
+    ],
+    "instructions": "Find a valid source fixture and importer/exporter path, or document that the AlphaTab field is populated only by other formats."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L282",
+      "symbol": "MasterBar.timeSignatureCommon"
+    },
+    {
+      "kind": "source",
+      "reference": "headers.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "headers.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

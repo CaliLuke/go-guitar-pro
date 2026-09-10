@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "oracle-breadth",
+  "capability": "oracle-breadth",
+  "title": "Make broad capability comparisons reliable acceptance evidence",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Strengthen the audit probe so each comparison has explicit normalization, coverage and stage boundaries.",
+  "acceptance": [
+    "Keep default-only, non-default, blocked and source/target consumer failures separate in counts and stored evidence.",
+    "For the new implementation tickets, provide focused exact-path assertions and avoid accepting unrelated raw differences as blanket waivers.",
+    "Add sensitivity checks for representative missing-property faults and document the evidence needed before a probe result can close a ticket."
+  ],
+  "exclusions": [
+    "Do not require every existing raw layout/default difference to disappear before a scoped feature can land."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "conformance/oracle.mjs",
+      "conformance_go_adapter_test.go"
+    ],
+    "instructions": "Keep default-only, non-default, blocked and source/target consumer failures separate in counts and stored evidence."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_go_adapter_test.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_go_adapter_test.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

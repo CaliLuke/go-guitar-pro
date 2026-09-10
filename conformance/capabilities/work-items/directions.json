@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "directions",
+  "capability": "directions",
+  "title": "Preserve navigation targets and jumps on each measure",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain every navigation marker on a measure, including simultaneous target and jump markers from GP5 and GPIF.",
+  "acceptance": [
+    "Preserve Coda, Segno and Fine targets together with applicable Da Capo/Da Segno jumps on one measure.",
+    "Define one authority between the existing Direction pointer and the new semantic representation, including post-parse edits.",
+    "GP5 and GPIF fixtures retain the exact marker set in GP8 as read by pinned AlphaTab."
+  ],
+  "exclusions": [
+    "Do not implement a playback engine or repeat traversal."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/timer.gp",
+    "capability": "directions",
+    "differences": [
+      {
+        "path": "masterBars[3].directions",
+        "source": [
+          0
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "masterBars[7].directions",
+        "source": [
+          8
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L371",
+      "symbol": "MasterBar.directions"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Direction.ts#L6",
+      "symbol": "Direction.TargetFine"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Direction.ts#L7",
+      "symbol": "Direction.TargetSegno"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Direction.ts#L8",
+      "symbol": "Direction.TargetSegnoSegno"
+    },
+    {
+      "kind": "source",
+      "reference": "headers.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "MeasureHeader.Direction",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_types.go",
+    "headers.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

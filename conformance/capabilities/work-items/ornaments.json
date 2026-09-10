@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "ornaments",
+  "capability": "ornaments",
+  "title": "Preserve turns and mordents through GPIF and GP8",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain all four authored GPIF ornament variants on their notes.",
+  "acceptance": [
+    "Cover Turn, InvertedTurn, UpperMordent and LowerMordent separately in the existing ornament fixture.",
+    "A caller can edit one ornament without modifying an adjacent or reused note occurrence.",
+    "Pinned AlphaTab retains each exact variant after export; undefined values are diagnosed."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/ornaments.gp",
+    "capability": "ornaments",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].ornament",
+        "source": 3,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[10].voices[0].beats[0].notes[0].ornament",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[11].voices[0].beats[0].notes[0].ornament",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L623",
+      "symbol": "Note.ornament"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteOrnament.ts#L6",
+      "symbol": "NoteOrnament.None"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteOrnament.ts#L7",
+      "symbol": "NoteOrnament.InvertedTurn"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteOrnament.ts#L8",
+      "symbol": "NoteOrnament.Turn"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/ornaments.gp:ornaments",
+      "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].ornament. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

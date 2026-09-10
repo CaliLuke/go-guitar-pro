@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "mix-table",
+  "capability": "mix-table",
+  "title": "Project supported legacy mix-table events into GP8 automation",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Translate supported beat-local instrument, tempo, volume and balance changes into equivalent target events; classify other controllers individually.",
+  "acceptance": [
+    "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position.",
+    "Preserve timing and event order while avoiding duplicates with score/track automation collections.",
+    "For chorus, reverb, phaser, tremolo and transitions, implement a verified wire mapping or retain an exact per-controller omission."
+  ],
+  "exclusions": [
+    "Do not synthesize audio or implement proprietary RSE processing."
+  ],
+  "depends_on": [
+    "volume-automation",
+    "pan-automation",
+    "midi-bank",
+    "automation-detail"
+  ],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "mix_table.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "mix_table.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "BeatEffects.MixTableChange",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBinaryMixTable",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "mix_table.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

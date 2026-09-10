@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "bends",
+  "capability": "bends",
+  "title": "Define exact bend precision and style boundaries",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Resolve which bend curve and style distinctions require richer public values versus unavoidable target normalization.",
+  "acceptance": [
+    "Use a fractional bend amount, an authored hold and distinct styles with exact source values.",
+    "Trace each value through source decoding, public storage, finalization, validation and the interpreted target curve.",
+    "Produce bounded implementation follow-ups for preservable losses and scoped target-limit evidence for the remainder."
+  ],
+  "exclusions": [
+    "Do not relax existing strict curve tests or broadly normalize bend points."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_effects.go",
+      "gp8_effects.go"
+    ],
+    "instructions": "Use a fractional bend amount, an authored hold and distinct styles with exact source values."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L10",
+      "symbol": "BendPoint.MaxPosition"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L11",
+      "symbol": "BendPoint.MaxValue"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L16",
+      "symbol": "BendPoint.offset"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BendPoint.ts#L21",
+      "symbol": "BendPoint.value"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "NoteEffect.Bend",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceCurvePreservation",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_effects.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "dead-slap",
+  "capability": "dead-slap",
+  "title": "Preserve dead-slapped beats without reducing them to rests",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain the DeadSlapped annotation independently from empty/rest beat structure.",
+  "acceptance": [
+    "A note-free dead slap stays annotated after public import/export, with its source beat status explicitly defined.",
+    "Compare an ordinary rest, empty beat and dead slap without the existing broad dead-slap normalization hiding the mark.",
+    "The exact target annotation survives independently and no note is fabricated to simulate it."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/colors.gp",
+    "capability": "dead-slap",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[1].deadSlapped",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L425",
+      "symbol": "Beat.deadSlapped"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/colors.gp:dead-slap",
+      "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[1].deadSlapped. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "conformance/oracle.mjs",
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

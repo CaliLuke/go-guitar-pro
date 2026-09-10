@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "id": "legacy-instrument",
+  "capability": "legacy-instrument",
+  "title": "Resolve GP8 support for legacy instrument flags",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Determine target representations for fret count, twelve-string simulation and banjo fifth-string flags.",
+  "acceptance": [
+    "Show a non-default legacy fixture for each flag and its current export report.",
+    "Check whether the pinned GPIF consumer supports the equivalent instrument state.",
+    "Implement verified mappings or document narrow target limits; do not silently change tuning to simulate a missing flag."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "track.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Show a non-default legacy fixture for each flag and its current export report."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceInstrumentContext",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

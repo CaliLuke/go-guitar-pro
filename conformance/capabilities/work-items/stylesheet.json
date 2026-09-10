@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "stylesheet",
+  "capability": "stylesheet",
+  "title": "Split remaining authored stylesheet gaps into scoped contracts",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Audit brackets, track-name policies, hide-empty-staff rules, tuning/chord display and other remaining BinaryStylesheet fields.",
+  "acceptance": [
+    "For each remaining property, record a non-default pinned fixture, exact wire key, public destination gap and target-consumer behavior.",
+    "Separate already-owned part flags, multirests, beam overrides and page templates from this ticket.",
+    "Create bounded follow-ups for each independent verified property group and classify rendering-only settings explicitly."
+  ],
+  "exclusions": [
+    "Do not implement all stylesheet settings in one broad patch."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/brackets-braces-staves.gp",
+    "capability": "stylesheet",
+    "differences": [
+      {
+        "path": "stylesheet.hideDynamics",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L474",
+      "symbol": "Bar.style"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L757",
+      "symbol": "Beat.style"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/RenderStylesheet.ts#L105",
+      "symbol": "RenderStylesheet.hideDynamics"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/RenderStylesheet.ts#L110",
+      "symbol": "RenderStylesheet.bracketExtendMode"
+    },
+    {
+      "kind": "source",
+      "reference": "gp7_zip.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceDisplayExportPolicy",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp7_zip.go",
+    "gp8_builder.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

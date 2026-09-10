@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "partial-capo",
+  "capability": "partial-capo",
+  "title": "Decide the supported scope for partial capos",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Determine whether per-string capo data belongs in the Guitar Pro parity target given the documented AlphaTab limitation.",
+  "acceptance": [
+    "Inspect a valid partial-capo Guitar Pro file and record what the pinned importer retains or loses.",
+    "Identify whether independent consumer validation is available for any subset.",
+    "Record a justified scope decision; if supported scope expands, specify a concrete follow-up and oracle before implementation."
+  ],
+  "exclusions": [
+    "Do not count an AlphaTab-unsupported feature as an existing parity defect by default."
+  ],
+  "depends_on": [
+    "capo"
+  ],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "track.go"
+    ],
+    "instructions": "Inspect a valid partial-capo Guitar Pro file and record what the pinned importer retains or loses."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

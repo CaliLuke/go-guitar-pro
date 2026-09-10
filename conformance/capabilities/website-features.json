@@ -1,0 +1,3678 @@
+{
+  "fetched_at": "2026-09-10T18:23:45.273819+00:00",
+  "pages": [
+    {
+      "url": "https://alphatab.net/docs/formats/guitar-pro-3-5",
+      "format": "gp3-5",
+      "html_sha256": "1cd415852e44edaf902a89e3cb4523b95844c222f79ba22e0b1707609ae57380",
+      "rows": [
+        {
+          "domain": "Score Level",
+          "feature": "Score Information",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Lyrics (with special syntax)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Page Setup > Page Format",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Page Setup > Orientation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Page Setup > Score Size",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Page Setup > Margins",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Page Setup > Header & Footer",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Color",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "String Tuning",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Show/Hide Standard Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Show/Hide Tablature",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Frets",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Capo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Simulate 12 stringed Guitar",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Particular for Banjo 5th String",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Indicate Tuning on the Score",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Show Rhythm with Tab",
+          "model": "✅ Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Extend Rhythmic inside the Tab",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Force Horizontal Beams",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Diagrams List On Top of the Score",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Diagrams In the Score",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Style > Diagrams/Chords Below the Standard Notation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Channels > Force Channels 11 to 16",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Instrument, Volume, Pan/Balance, Mute/Solo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Midi Channels and Ports",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Chorus, Reverb, Phaser, Tremolo Change",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Time Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Key Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Triplet Feel",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Repeats",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Alternate Endings",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Directions (Jumps)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Markers/Sections",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Double Bar",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Line Breaks",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Multiple Voices",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Names",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Diagrams",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Whole to 64th)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Dots)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Grace Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Dynamics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Beaming Mode (Force, Break, Invert)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Text",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Mix Table > Instrument Change",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Mix Table > Volume Change",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Mix Table > Pan/Balance Change",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Mix Table > Chorus, Reverb, Phaser, Tremolo Change",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Mix Table > Tempo Change",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Whammy Bars",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Wide Vibrato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tap/Slap/Pop",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fade In",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Wah Wah",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Brush Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Rasgueado",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Beat Harmonics (GP3)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Ottavia",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Swap Accidentals",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accentuations (Normal/Heavy)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Bends",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tied Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Sound Duration",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Rests",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Right Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Dead Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ghost Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Let Ring",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Natural Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Artificial Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Hammer-On / Pull-Off",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Slides",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Vibrato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Trill",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Palm Mute",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Staccato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Percussion Tracks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        }
+      ]
+    },
+    {
+      "url": "https://alphatab.net/docs/formats/guitar-pro-6",
+      "format": "gp6",
+      "html_sha256": "edef7ddb0507cd7d72c902deb456a4f2c81dcfcab6ad866cb3bc4141d16383b5",
+      "rows": [
+        {
+          "domain": "Score Level",
+          "feature": "Score Information",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Lyrics (with special syntax)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Page",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Sizes & Spacings",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (Display)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (other settings)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > On Top of Score > Visible",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > In Score > Visible",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams (sizing)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Staves",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Brackets",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Track Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Header & Footer",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Texts & Styles",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Notation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Short Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Color",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "String Tuning",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Staves > Show/Hide Slash",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Staves > Show/Hide Standard",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Staves > Show/Hide Tablature",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Transposing instrument",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Capo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Instrument, Volume, Pan/Balance, Mute/Solo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Midi Channels and Ports",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > Play settings",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > EQ",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Playback Information > RSE",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Clefs",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Time Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Key Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Triplet Feel",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Free Time",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Anacrusis",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Repeats",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Alternate Endings",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Directions (Jumps)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Simile Marks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Markers/Sections",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Double Bar",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "System Layout",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Tempo Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Volume Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Pan Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Multiple Voices",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Names",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Diagrams",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Whole to 64th)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Dots)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets 2,3)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets n:m)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Grace Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Dynamics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Beaming Mode (Force, Break, Invert)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Text",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Whammy Bars",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tap/Slap/Pop",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fade In, Fade Out, Volume Swell",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Wah Wah",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Brush Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Rasgueado (with patterns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Ottavia",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fermata",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Crescendo / Decrescendo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Slashed",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Barre",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Timer",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Display String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Arpeggios",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Palm Mute (whole beat)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accidentals",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accentuations (Normal/Heavy)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Bends",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tied Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Rests",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Right Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Dead Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ghost Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Let Ring",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Natural Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Artificial Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Hammer-On / Pull-Off",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Slides",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Trill",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Palm Mute",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Staccato, Staccatissimo, Tenuto",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Legato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Tapping",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Show String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ornaments (mordents & turns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Non Stringed Instruments (e.g. piano)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Multiple Staves (e.g. Grand Staff)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Slash notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Percussion Tracks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        }
+      ]
+    },
+    {
+      "url": "https://alphatab.net/docs/formats/guitar-pro-7",
+      "format": "gp7",
+      "html_sha256": "932d27e7a28be0a959ae0ffbb6d0c42e15d0b05c73518703ca61f409f279388f",
+      "rows": [
+        {
+          "domain": "Score Level",
+          "feature": "Score Information",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Lyrics (with special syntax)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Page",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Sizes",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (Display)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (other settings)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > On Top of Score > Visible",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > In Score > Visible",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams (sizing)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Staves",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Brackets",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Track Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Header & Footer",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Texts & Styles",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Notation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Short Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Color",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Tablature Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Standard Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Slash Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Grand Staff",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning > Capo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning > Partial Capo",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Transposition tonality",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Sounds > RSE",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Sounds > Midi > Sound",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Interpretation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Midi Settings",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Clefs",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Time Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Key Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Triplet Feel",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Free Time",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Anacrusis",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Repeats",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Alternate Endings",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Directions (Jumps)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Simile Marks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Markers/Sections",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Double Bar",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "System Layout",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Tempo Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Volume Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Pan Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Sound Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Bar Width/Scale",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Multirest",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Multiple Voices",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Names",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Diagrams",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Whole to 64th)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Dots)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets 2,3)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets n:m)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Grace Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Dynamics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Beaming Mode (Force, Break, Invert)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Text",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Whammy Bars",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tap/Slap/Pop",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fade In, Fade Out, Volume Swell",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Wah Wah",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Brush Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Rasgueado (with patterns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Ottavia",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fermata",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Crescendo / Decrescendo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Slashed",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Barre",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Timer",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Display String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Arpeggios",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Palm Mute (whole beat)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Slide / Pick Scrape",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Golpe",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accidentals",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accentuations (Normal/Heavy)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Bends",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tied Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Rests",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Right Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Dead Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ghost Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Let Ring",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Natural Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Artificial Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Hammer-On / Pull-Off",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Slides",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Trill",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Palm Mute",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Staccato, Staccatissimo, Tenuto",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Legato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Tapping",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Show String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ornaments (mordents & turns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Non Stringed Instruments (e.g. piano)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Multiple Staves (e.g. Grand Staff)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Slash notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Percussion Tracks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        }
+      ]
+    },
+    {
+      "url": "https://alphatab.net/docs/formats/guitar-pro-8",
+      "format": "gp8",
+      "html_sha256": "193f76be6b873385a7f64d76cf67a5bf951301fbd8fb3b7e6aaa92a001e6cceb",
+      "rows": [
+        {
+          "domain": "Score Level",
+          "feature": "Score Information",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Lyrics (with special syntax)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Page",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Sizes",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (Display)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Tuning (other settings)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > On Top of Score > Visible",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams > In Score > Visible",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Page & Score format > Chord Diagrams (sizing)",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Staves",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Brackets",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Systems & Staves > Track Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Header & Footer",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Texts & Styles",
+          "model": "✅ Supported",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Stylesheet > Notation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Audio File",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Score Level",
+          "feature": "Password Locked Files",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Short Name",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Color",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Tablature Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Standard Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Slash Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Numbered Notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Notation > Grand Staff",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning > Capo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Tuning > Partial Capo",
+          "model": "❌ Not Supported",
+          "reading": "❌ Not Supported",
+          "rendering": "❌ Not Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Musical Notation > Transposition tonality",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Sounds > RSE",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Sounds > Midi > Sound",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Interpretation",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Track Level",
+          "feature": "Midi Settings",
+          "model": "✅ Ignored",
+          "reading": "✅ Ignored",
+          "rendering": "✅ Ignored",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Ignored"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Clefs",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Time Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Key Signatures",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Triplet Feel",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Free Time",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Anacrusis",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Repeats",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Alternate Endings",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Directions (Jumps)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Simile Marks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Markers/Sections",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Double Bar",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "System Layout",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Tempo Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Volume Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Pan Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Sound Automations",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Bar Width/Scale",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Bar Level",
+          "feature": "Multirest",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Multiple Voices",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Names",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Chord Diagrams",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Whole to 64th)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Dots)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets 2,3)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Durations (Tuplets n:m)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Grace Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Dynamics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Beaming Mode (Force, Break, Invert)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Text",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Whammy Bars",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tap/Slap/Pop",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fade In, Fade Out, Volume Swell",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Wah Wah",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Brush Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Stroke",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Rasgueado (with patterns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Ottavia",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Fermata",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Crescendo / Decrescendo",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Slashed",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Barre",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Timer",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Display String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Arpeggios",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Palm Mute (whole beat)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Pick Slide / Pick Scrape",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Golpe",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Sustain Pedal",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Beat Level",
+          "feature": "Dead Slapped",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "❌ Not Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accidentals",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Ignored",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Accentuations (Normal/Heavy)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Bends",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tied Notes",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Sound Duration",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Ignored",
+          "audio": "❌ Not Supported",
+          "alphaTex": "❌ Not Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Rests",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Right Hand Fingering",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Dead Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ghost Note",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Let Ring",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Natural Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Artificial Harmonics",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Hammer-On / Pull-Off",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Slides",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Vibratos",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Trill",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Tremolo Picking",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Palm Mute",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Staccato, Staccatissimo, Tenuto",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Legato",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Left Hand Tapping",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Show String Number",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Note Level",
+          "feature": "Ornaments (mordents & turns)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Non Stringed Instruments (e.g. piano)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Multiple Staves (e.g. Grand Staff)",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Slash notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Numbered notation",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        },
+        {
+          "domain": "Special Tracks",
+          "feature": "Percussion Tracks",
+          "model": "✅ Supported",
+          "reading": "✅ Supported",
+          "rendering": "✅ Supported",
+          "audio": "✅ Supported",
+          "alphaTex": "✅ Supported"
+        }
+      ]
+    }
+  ]
+}

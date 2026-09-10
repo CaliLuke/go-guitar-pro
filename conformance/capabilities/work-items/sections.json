@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "sections",
+  "capability": "sections",
+  "title": "Keep section letters separate from section text",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain both GPIF Section.Letter and Section.Text while preserving an explicit compatibility rule for Marker.Title.",
+  "acceptance": [
+    "Parse a section with Letter=A and Text=Verse without losing either value.",
+    "Keep empty letter, empty text and both-present cases distinct, including Unicode/XML-sensitive text.",
+    "Post-parse edits follow the documented authority rule and the independent GP8 consumer sees both fields."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/slash.gp",
+    "capability": "sections",
+    "differences": [
+      {
+        "path": "masterBars[1].section",
+        "source": {
+          "marker": "",
+          "text": "Intro"
+        },
+        "target": {
+          "marker": "",
+          "text": "\u0000Intro\u0000"
+        },
+        "source_present": true,
+        "target_present": true
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L309",
+      "symbol": "MasterBar.section"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Section.ts#L12",
+      "symbol": "Section.marker"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Section.ts#L17",
+      "symbol": "Section.text"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Marker.Title",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMasterBars",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_notation.go",
+    "gpif_parser.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

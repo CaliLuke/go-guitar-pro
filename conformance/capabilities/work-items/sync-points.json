@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "sync-points",
+  "capability": "sync-points",
+  "title": "Export authored backing-track synchronization points",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Emit the existing sync-point records alongside backing-track assets.",
+  "acceptance": [
+    "Preserve two points with distinct bar occurrences, positions, frame offsets, tempos and visibility.",
+    "Define field authority for compatibility projections and retain exact source frame values before target conversion.",
+    "The independent consumer retains authored occurrences and timing; invalid boundaries retain precise rejection."
+  ],
+  "exclusions": [],
+  "depends_on": [
+    "backing-track"
+  ],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go",
+      "export_report.go"
+    ],
+    "instructions": "Preserve two points with distinct bar occurrences, positions, frame offsets, tempos and visibility."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L74",
+      "symbol": "SyncPointData.millisecondOffset"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L103",
+      "symbol": "Automation.syncPointValue"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L333",
+      "symbol": "MasterBar.syncPoints"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.SyncPoints",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBackingAssetsAndSyncPoints",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "export_report.go",
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

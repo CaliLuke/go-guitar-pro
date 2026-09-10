@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "automation-detail",
+  "capability": "automation-detail",
+  "title": "Preserve authored tempo and sound automation details",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain interpolation, text and visibility on authored tempo/sound events while separating sync-point occurrence fields.",
+  "acceptance": [
+    "Test linear and step events with the same non-default value and distinct text/visibility at one position.",
+    "Keep event order and public edit authority explicit; validate positions and finite values.",
+    "GP8/AlphaTab retains each representable detail; source-only details have precise diagnostics rather than broad normalization."
+  ],
+  "exclusions": [
+    "SyncPointData.barOccurence is a sync-point field, not a generic Automation field.",
+    "Bank events are handled by midi-bank."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_audit.go",
+      "gpif_automations.go"
+    ],
+    "instructions": "Test linear and step events with the same non-default value and distinct text/visibility at one position."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L69",
+      "symbol": "SyncPointData.barOccurence"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L88",
+      "symbol": "Automation.isLinear"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L93",
+      "symbol": "Automation.type"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L108",
+      "symbol": "Automation.ratioPosition"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "gpif_audit.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

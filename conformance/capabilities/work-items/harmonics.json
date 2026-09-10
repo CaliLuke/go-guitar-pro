@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "harmonics",
+  "capability": "harmonics",
+  "title": "Resolve harmonic spelling and octave target limits",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Determine whether authored harmonic spelling/octave survives any supported GP8 representation beyond kind and fractional fret.",
+  "acceptance": [
+    "Use natural and artificial harmonics with explicit non-default spelling, octave and fractional fret.",
+    "Separate contradictory compatibility fret fields from genuinely independent authored information.",
+    "Implement only proven target destinations or record narrow target limits with strict assertions; retain all currently supported harmonic kinds."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_effects.go",
+      "gp8_notation.go"
+    ],
+    "instructions": "Use natural and artificial harmonics with explicit non-default spelling, octave and fractional fret."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L426",
+      "symbol": "Note.harmonicType"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L431",
+      "symbol": "Note.harmonicValue"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/HarmonicType.ts#L9",
+      "symbol": "HarmonicType.None"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/HarmonicType.ts#L13",
+      "symbol": "HarmonicType.Natural"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "NoteEffect.Harmonic",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceHarmonicVariants",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_notation.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

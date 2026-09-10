@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "fermata",
+  "capability": "fermata",
+  "title": "Preserve fermata position, type and length",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Add authored fermata records to the measure/beat model and retain them in GPIF import and GP8 export.",
+  "acceptance": [
+    "Preserve Short, Medium and Long holds with distinct non-default lengths and offsets.",
+    "Assert two fermatas at different offsets and avoid sharing mutable data across reused definitions.",
+    "Check finite lengths, valid offsets and malformed payloads before conversion; compare exact consumer locations."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/slash.gp",
+    "capability": "fermata",
+    "differences": [
+      {
+        "path": "masterBars[1].fermata",
+        "source": [
+          [
+            2880,
+            {
+              "length": 0.5,
+              "type": 1
+            }
+          ]
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L287",
+      "symbol": "Beat.fermata"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Fermata.ts#L30",
+      "symbol": "Fermata.type"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Fermata.ts#L35",
+      "symbol": "Fermata.length"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L345",
+      "symbol": "MasterBar.fermata"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/slash.gp:fermata",
+      "detail": "Reproduced at masterBars[1].fermata. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

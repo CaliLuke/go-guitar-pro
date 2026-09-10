@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "free-time",
+  "capability": "free-time",
+  "title": "Preserve free-time bars without inventing a meter",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain the authored FreeTime flag independently from numeric meter and define its effect on finalized score timing.",
+  "acceptance": [
+    "Public results preserve the exact free-time bars in testdata/gp7/free-time.gp.",
+    "Document and test timing for free-time bars with different voice lengths; use pinned AlphaTab authored semantics as the reference.",
+    "A caller can toggle the flag and GP8/AlphaTab preserves it without changing adjacent fixed-meter bars."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/free-time.gp",
+    "capability": "free-time",
+    "differences": [
+      {
+        "path": "masterBars[1].isFreeTime",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "masterBars[2].isFreeTime",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "masterBars[6].isFreeTime",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L299",
+      "symbol": "MasterBar.isFreeTime"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/free-time.gp:free-time",
+      "detail": "Reproduced at masterBars[1].isFreeTime. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

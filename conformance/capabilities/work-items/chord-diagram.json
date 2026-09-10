@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "chord-diagram",
+  "capability": "chord-diagram",
+  "title": "Preserve representable chord diagram barres and fingerings",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Extend chord import/export for authored diagram barres, fingerings and their display-independent identities.",
+  "acceptance": [
+    "Use a chord with two barre ranges, explicit thumb/open fingering and muted/open/fretted strings.",
+    "Preserve first fret, string orientation and track/staff definition scope in the independent consumer.",
+    "Classify any legacy spelling/omission fields lacking a GPIF destination separately; strict export no longer reports resolved diagram losses."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp5/Unknown Chord Extension.gp5",
+    "capability": "chord-diagram",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].chord.barreFrets",
+        "source": [
+          3
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L18",
+      "symbol": "Chord.firstFret"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L25",
+      "symbol": "Chord.strings"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L30",
+      "symbol": "Chord.barreFrets"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_model.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceChordDefinitions",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_model.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

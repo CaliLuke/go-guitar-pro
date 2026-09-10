@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "backing-track",
+  "capability": "backing-track",
+  "title": "Export embedded audio backing-track assets",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Write existing authored backing-track metadata and audio bytes into a valid GP8 archive.",
+  "acceptance": [
+    "Use the existing enabled local audio fixture and preserve asset ID, embedded path, padding and bytes exactly.",
+    "The archive references an existing nonempty asset and the independent consumer retains enabled backing-track state.",
+    "Strict export accepts the implemented slice; missing assets, empty data and invalid frame boundaries fail without a partial file."
+  ],
+  "exclusions": [
+    "Audio synthesis and playback are outside this library."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go",
+      "export_report.go"
+    ],
+    "instructions": "Use the existing enabled local audio fixture and preserve asset ID, embedded path, padding and bytes exactly."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/BackingTrack.ts#L13",
+      "symbol": "BackingTrack.rawAudioFile"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L340",
+      "symbol": "Score.backingTrack"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.BackingTrack",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBackingAssetsAndSyncPoints",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "export_report.go",
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

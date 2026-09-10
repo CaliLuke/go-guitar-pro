@@ -31,6 +31,8 @@ fi
 
 node "$CONFORMANCE/verify.mjs"
 node "$CONFORMANCE/sync-upstream-inventory.mjs" --check
+python3 -B "$CONFORMANCE/capabilities/manage.py" check
+python3 -B -m unittest discover -s "$CONFORMANCE/capabilities" -p 'test_*.py'
 go test -count=1 -run '^TestSemanticContractInventory$' "$ROOT"
 node "$CONFORMANCE/sensitivity.mjs"
 ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestAlphaTab|TestGP8Percussion|TestGP8|TestConformanceWholeCorpusAccounting$)' "$ROOT"

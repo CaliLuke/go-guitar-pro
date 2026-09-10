@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "percussion",
+  "capability": "percussion",
+  "title": "Export valid percussion notes currently rejected by GP8",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Close missing native articulation mappings for valid percussion values found by the broad audit.",
+  "acceptance": [
+    "Reproduce the rejected values in canon.gp5, full-song.gp5, nightwish.gp5 and upstream percussion-all.gp5.",
+    "Compare the source articulation, intended output MIDI and supported GP8 definition before adding a mapping.",
+    "Valid mappings preserve identity, notation and playback across all relevant staves/graces; unsupported values retain a precise rejection."
+  ],
+  "exclusions": [
+    "Do not blanket-map arbitrary MIDI values to a convenient drum.",
+    "Conflicting staff line-count limits need separate representability evidence."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_types.go",
+      "gp8_percussion.go"
+    ],
+    "instructions": "Reproduce the rejected values in canon.gp5, full-song.gp5, nightwish.gp5 and upstream percussion-all.gp5."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/InstrumentArticulation.ts#L39",
+      "symbol": "InstrumentArticulation.id"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/InstrumentArticulation.ts#L51",
+      "symbol": "InstrumentArticulation.elementType"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/InstrumentArticulation.ts#L61",
+      "symbol": "InstrumentArticulation.staffLine"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/InstrumentArticulation.ts#L65",
+      "symbol": "InstrumentArticulation.noteHeadDefault"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_percussion.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Track.PercussionArticulations",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePercussionIdentity",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_percussion.go",
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -6,6 +6,11 @@ pinned AlphaTab package, and separately compares source semantics with a Go GP8
 export imported by AlphaTab. No Node dependency is linked into the production Go
 package.
 
+The [capability database](capabilities/README.md) tracks broader AlphaTab gaps.
+It includes the public format tables, an expanded source inventory, and runtime
+audit receipts. A complete semantic matrix covers the declared library contract.
+It does not establish full AlphaTab parity.
+
 The oracle is pinned in `oracle.json` and `package-lock.json`. Upgrading it is a
 reviewed change: update both pins, regenerate the upstream inventory, inspect all
 semantic differences, and then refresh snapshots explicitly. Default importer

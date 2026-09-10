@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "show-string",
+  "capability": "show-string",
+  "title": "Preserve explicit string-number display requests",
+  "kind": "implementation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain the authored ShowStringNumber property independently from string identity.",
+  "acceptance": [
+    "Test true, false/absent and a non-default note string without changing pitch or tuning.",
+    "Keep the display request on the exact note across reused definitions.",
+    "Independent GP8 consumption retains the authored flag and strict parsing no longer reports this supported property as lost."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/string-numbers.gp",
+    "capability": "show-string",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].showStringNumber",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].notes[1].showStringNumber",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[1].notes[0].showStringNumber",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L226",
+      "symbol": "Note.showStringNumber"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/string-numbers.gp:show-string",
+      "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].showStringNumber. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_audit.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

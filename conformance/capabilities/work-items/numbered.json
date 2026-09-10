@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "id": "numbered",
+  "capability": "numbered",
+  "title": "Preserve numbered notation per staff",
+  "kind": "implementation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain the authored numbered-notation preference independently from standard, tab and slash notation.",
+  "acceptance": [
+    "Use two staves with different numbered-notation flags and preserve their ownership.",
+    "Read and write the appropriate GP8 part settings without changing tuning or note values.",
+    "Pinned AlphaTab sees the edited numbered-notation state and the existing display flags remain independent."
+  ],
+  "exclusions": [],
+  "depends_on": [
+    "notation-visibility"
+  ],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/colors.gp",
+    "capability": "numbered",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].showNumbered",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Staff.ts#L91",
+      "symbol": "Staff.showNumbered"
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

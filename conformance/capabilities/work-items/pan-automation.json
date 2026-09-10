@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "id": "pan-automation",
+  "capability": "pan-automation",
+  "title": "Preserve pan automation independently from static balance",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Add a general authored pan/balance event representation and retain supported GPIF/legacy values through GP8.",
+  "acceptance": [
+    "Retain two pan changes on one track without changing its initial balance.",
+    "Document exact public units and conversion from GPIF channel-strip and legacy mix-table values.",
+    "Validate endpoints, ordering and track ownership; independently assert exported events."
+  ],
+  "exclusions": [
+    "Other legacy mix-table controllers remain in mix-table."
+  ],
+  "depends_on": [
+    "automation-detail"
+  ],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp5/motherload-percussion-grace.gp5",
+    "capability": "pan-automation",
+    "differences": [
+      {
+        "path": "tracks[2].staves[0].bars[143].voices[0].beats[0].automations[1]",
+        "source": {
+          "ratioPosition": 0,
+          "text": "0",
+          "type": 3
+        },
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[3].staves[0].bars[143].voices[0].beats[0].automations[0]",
+        "source": {
+          "ratioPosition": 0,
+          "text": "16",
+          "type": 3
+        },
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L21",
+      "symbol": "AutomationType.Balance"
+    },
+    {
+      "kind": "source",
+      "reference": "mix_table.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBinaryMixTable",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_automations.go",
+    "mix_table.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

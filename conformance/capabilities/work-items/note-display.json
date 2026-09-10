@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "note-display",
+  "capability": "note-display",
+  "title": "Determine GP source support for note visibility and noteheads",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Map pitched-note visibility and custom notehead/style fields to supported Guitar Pro source/target syntax.",
+  "acceptance": [
+    "Find a non-default GP fixture for each proposed note display field, separate from percussion articulation noteheads.",
+    "Distinguish authored source controls from rendering-only or other-format fields.",
+    "Create bounded preservation follow-ups for verified GP fields and explicit scope dispositions for the remainder."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "note.go"
+    ],
+    "instructions": "Find a non-default GP fixture for each proposed note display field, separate from percussion articulation noteheads."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L119",
+      "symbol": "NoteStyle.noteHead"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L124",
+      "symbol": "NoteStyle.noteHeadCenterOnStem"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L366",
+      "symbol": "Note.isVisible"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L629",
+      "symbol": "Note.style"
+    },
+    {
+      "kind": "source",
+      "reference": "note.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "note.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

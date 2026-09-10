@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "metadata",
+  "capability": "metadata",
+  "title": "Classify GP8 limits for binary-only score metadata",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Resolve export gaps for Writer, Comments, Date, notice boundaries and clipboard provenance without confusing authorship fields.",
+  "acceptance": [
+    "For each field, show a valid non-default public value and its current omission/normalization report.",
+    "Check GPIF and archive formats for a supported destination; keep Author and Writer independent.",
+    "Implement only verified destinations and classify the remainder as explicit target limits with strict export assertions."
+  ],
+  "exclusions": [
+    "Do not hide values in undocumented XML fields or repurpose unrelated credits."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "song.go",
+      "gpif_parser.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "For each field, show a valid non-default public value and its current omission/normalization report."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L243",
+      "symbol": "Score.album"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L248",
+      "symbol": "Score.artist"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L253",
+      "symbol": "Score.copyright"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L258",
+      "symbol": "Score.instructions"
+    },
+    {
+      "kind": "source",
+      "reference": "song.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.Author",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_parser.go",
+    "song.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "multi-rest",
+  "capability": "multi-rest",
+  "title": "Preserve score and track multirest preferences",
+  "kind": "implementation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain BinaryStylesheet multiple-bar-rest settings with independent global and per-track scope.",
+  "acceptance": [
+    "Use a global preference and two conflicting track overrides without changing the actual measure sequence.",
+    "Cover explicit false, true and absence and document precedence.",
+    "Pinned AlphaTab retains the same preferences after GP8 export."
+  ],
+  "exclusions": [
+    "Collapsing measures visually is the renderer responsibility."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/grand-staff.gp",
+    "capability": "multi-rest",
+    "differences": [
+      {
+        "path": "stylesheet.perTrackMultiBarRest",
+        "source": [
+          0
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/RenderStylesheet.ts#L175",
+      "symbol": "RenderStylesheet.multiTrackMultiBarRest"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/RenderStylesheet.ts#L180",
+      "symbol": "RenderStylesheet.perTrackMultiBarRest"
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/grand-staff.gp:multi-rest",
+      "detail": "Reproduced at stylesheet.perTrackMultiBarRest. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

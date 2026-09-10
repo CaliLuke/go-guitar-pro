@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "double-bar",
+  "capability": "double-bar",
+  "title": "Resolve final-bar double-line consumer differences",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Classify the final-bar double-line difference between legacy import and the pinned GPIF consumer before changing serialization.",
+  "acceptance": [
+    "Reproduce the last-bar difference in testdata/gp4/Slides.gp4 and inspect emitted DoubleBar XML.",
+    "Show whether a supported GP8 wire representation can retain the final visual bar line despite AlphaTab clearing the flag.",
+    "Implement and test a supported representation, or record a narrow target limit and precise preflight behavior without weakening ordinary double-bar assertions."
+  ],
+  "exclusions": [
+    "Do not remove all final-bar comparisons or normalize every bar line."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp4/Slides.gp4",
+    "capability": "double-bar",
+    "differences": [
+      {
+        "path": "masterBars[1].isDoubleBar",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L247",
+      "symbol": "MasterBar.isDoubleBar"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "MeasureHeader.DoubleBar",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMasterBars",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_notation.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

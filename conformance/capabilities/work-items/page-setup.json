@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "page-setup",
+  "capability": "page-setup",
+  "title": "Resolve page and header/footer preservation scope",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Determine supported GP8 representations for legacy page setup and authored header/footer templates.",
+  "acceptance": [
+    "Use non-default dimensions/margins and distinct title/copyright header/footer templates.",
+    "Separate AlphaTab rendering templates from settings actually read from Guitar Pro archives.",
+    "Provide bounded follow-ups for valid source/target mappings and explicit strict-policy limits for unsupported data."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "song.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Use non-default dimensions/margins and distinct title/copyright header/footer templates."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L89",
+      "symbol": "HeaderFooterStyle.template"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L94",
+      "symbol": "HeaderFooterStyle.isVisible"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L99",
+      "symbol": "HeaderFooterStyle.textAlign"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Score.ts#L192",
+      "symbol": "ScoreStyle.headerAndFooter"
+    },
+    {
+      "kind": "source",
+      "reference": "song.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.PageSetup",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePageSetupImport",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "song.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

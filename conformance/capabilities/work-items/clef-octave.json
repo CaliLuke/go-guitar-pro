@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "clef-octave",
+  "capability": "clef-octave",
+  "title": "Preserve bar-level clef octave shifts",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Model GPIF Bar.Ottavia independently from beat-level octave notation.",
+  "acceptance": [
+    "Retain 8va, 8vb, 15ma and 15mb at their bar/staff locations.",
+    "Use a bar clef shift and a different beat octave shift together and preserve both.",
+    "Post-parse edits and GP8 export retain exact independent AlphaTab clefOttava values."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/colors.gp",
+    "capability": "clef-octave",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[3].clefOttava",
+        "source": 0,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[4].clefOttava",
+        "source": 0,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[5].clefOttava",
+        "source": 0,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L273",
+      "symbol": "Bar.clefOttava"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/colors.gp:clef-octave",
+      "detail": "Reproduced at tracks[0].staves[0].bars[3].clefOttava. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

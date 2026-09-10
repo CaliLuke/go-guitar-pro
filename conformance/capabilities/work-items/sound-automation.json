@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "sound-automation",
+  "capability": "sound-automation",
+  "title": "Verify sound-definition selection and ordered event fidelity",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "After bank and event-detail work, isolate any remaining sound-definition or selection gaps rather than duplicating those fixes.",
+  "acceptance": [
+    "Compare at least two named definitions sharing a program but differing in role/path and selected event order.",
+    "Assert duplicate-position events, broken references and an authored public selection change.",
+    "Close only residual scoped differences; otherwise document that current support satisfies this row and retain separate limits for proprietary RSE data."
+  ],
+  "exclusions": [],
+  "depends_on": [
+    "midi-bank",
+    "automation-detail"
+  ],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Compare at least two named definitions sharing a program but differing in role/path and selected event order."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L17",
+      "symbol": "AutomationType.Instrument"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceAutomationSemantics",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

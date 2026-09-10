@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "slash",
+  "capability": "slash",
+  "title": "Preserve slashed beats and slash staff notation separately",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain both beat Slashed flags and per-staff slash notation preferences.",
+  "acceptance": [
+    "A staff can request slash notation while a distinct beat has an authored slashed flag; neither replaces the other.",
+    "Test mixed notation preferences on two staves using PartConfiguration and GPIF where applicable.",
+    "Public edits and GP8 output preserve exact consumer flags without creating or deleting notes."
+  ],
+  "exclusions": [],
+  "depends_on": [
+    "notation-visibility"
+  ],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/slash.gp",
+    "capability": "slash",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].showSlash",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L420",
+      "symbol": "Beat.slashed"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Staff.ts#L86",
+      "symbol": "Staff.showSlash"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/slash.gp:slash",
+      "detail": "Reproduced at tracks[0].staves[0].showSlash. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go",
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

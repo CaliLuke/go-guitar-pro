@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "fingering",
+  "capability": "fingering",
+  "title": "Export existing left and right hand fingerings",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Emit supported public fingering values including explicit zero-valued thumb/open markers.",
+  "acceptance": [
+    "Use different left/right fingerings and distinguish authored Thumb, Open and absence.",
+    "Preserve every supported named finger through GP8 and pinned AlphaTab.",
+    "Strict export accepts supported values and the writer removes only the resolved fingering omissions."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/effects.gp",
+    "capability": "fingering",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[23].voices[0].beats[0].notes[0].leftHandFinger",
+        "source": 0,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[23].voices[0].beats[1].notes[0].leftHandFinger",
+        "source": 1,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[23].voices[0].beats[2].notes[0].leftHandFinger",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L527",
+      "symbol": "Note.leftHandFinger"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L532",
+      "symbol": "Note.rightHandFinger"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Fingers.ts#L9",
+      "symbol": "Fingers.Unknown"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Fingers.ts#L13",
+      "symbol": "Fingers.NoOrDead"
+    },
+    {
+      "kind": "source",
+      "reference": "note.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTechniqueDispositions",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/effects.gp:fingering",
+      "detail": "Reproduced at tracks[0].staves[0].bars[23].voices[0].beats[0].notes[0].leftHandFinger. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "note.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

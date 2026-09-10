@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "tap-slap-pop",
+  "capability": "tap-slap-pop",
+  "title": "Preserve independent tap, slap and pop beat techniques",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Avoid the single SlapEffect projection for source combinations that can coexist, and emit supported beat techniques.",
+  "acceptance": [
+    "Use distinct slap, pop and tap examples plus a supported combination from an independently read source.",
+    "Keep the already supported Tapped and LeftHandTapped note flags independent from beat technique state.",
+    "Define legacy enum edit authority and independently assert exported technique locations."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp3/other-effects.gp3",
+    "capability": "tap-slap-pop",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[2].tap",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[3].slap",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].pop",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L400",
+      "symbol": "Beat.pop"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L405",
+      "symbol": "Beat.slap"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L410",
+      "symbol": "Beat.tap"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceSourceDistinctions",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_audit.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

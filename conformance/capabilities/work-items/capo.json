@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "capo",
+  "capability": "capo",
+  "title": "Preserve independent capo values on multiple staves",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Support non-default capo values per staff and define compatibility with Track.CapoFret.",
+  "acceptance": [
+    "A two-staff fixture with capos 2 and 5 retains both values and resulting pitches.",
+    "Document precedence for legacy track edits versus direct staff edits, with one source of authority.",
+    "Validate boundaries and preserve both capos through GP8 and AlphaTab without silently selecting one."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "track.go",
+      "gpif_parser.go"
+    ],
+    "instructions": "A two-staff fixture with capos 2 and 5 retains both values and resulting pitches."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Staff.ts#L44",
+      "symbol": "Staff.capo"
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Track.CapoFret",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceInstrumentContext",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gpif_parser.go",
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

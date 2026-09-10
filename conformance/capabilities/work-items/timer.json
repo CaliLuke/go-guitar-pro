@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "timer",
+  "capability": "timer",
+  "title": "Preserve authored timer marks and visibility",
+  "kind": "implementation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain GPIF Timer visibility and any explicit authored value without confusing it with a derived playback timer.",
+  "acceptance": [
+    "Distinguish no timer, a requested derived timer and an explicitly authored timer value.",
+    "Preserve nonzero and zero authored values at the exact beat.",
+    "Public edits and independent GP8 consumption retain the supported distinction; invalid values have a defined diagnostic."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/timer.gp",
+    "capability": "timer",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].showTimer",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].timer",
+        "source": 0,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].showTimer",
+        "source": true,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L746",
+      "symbol": "Beat.showTimer"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L751",
+      "symbol": "Beat.timer"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/timer.gp:timer",
+      "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].showTimer. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

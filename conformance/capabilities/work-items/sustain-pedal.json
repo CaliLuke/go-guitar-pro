@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "sustain-pedal",
+  "capability": "sustain-pedal",
+  "title": "Preserve sustain pedal down, hold and release markers",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain GPIF SustainPedal automations as authored bar/staff markers and emit them in GP8.",
+  "acceptance": [
+    "The exact marker sequence and positions in testdata/gp7/sustain.gp survive import and export.",
+    "Test down, hold and release, including a marker at a bar boundary and different tracks.",
+    "Public edits have deterministic order and validated positions; no playback engine is required."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/sustain.gp",
+    "capability": "sustain-pedal",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].sustainPedals",
+        "source": [
+          {
+            "pedalType": 0,
+            "ratioPosition": 0
+          },
+          {
+            "pedalType": 2,
+            "ratioPosition": 0.25
+          },
+          {
+            "pedalType": 0,
+            "ratioPosition": 0.5
+          },
+          {
+            "pedalType": 2,
+            "ratioPosition": 0.625
+          },
+          {
+            "pedalType": 0,
+            "ratioPosition": 0.875
+          }
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[1].sustainPedals",
+        "source": [
+          {
+            "pedalType": 2,
+            "ratioPosition": 0
+          }
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[2].sustainPedals",
+        "source": [
+          {
+            "pedalType": 0,
+            "ratioPosition": 0
+          }
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L43",
+      "symbol": "SustainPedalMarker.ratioPosition"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L47",
+      "symbol": "SustainPedalMarker.pedalType"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L53",
+      "symbol": "SustainPedalMarker.bar"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L60",
+      "symbol": "SustainPedalMarker.nextPedalMarker"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/sustain.gp:sustain-pedal",
+      "detail": "Reproduced at tracks[0].staves[0].bars[0].sustainPedals. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

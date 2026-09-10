@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "beat-vibrato",
+  "capability": "beat-vibrato",
+  "title": "Preserve and export beat vibrato strength",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Replace presence-only whammy vibrato projection with an explicit strength contract and retain compatibility with the boolean.",
+  "acceptance": [
+    "Slight and Wide beat vibrato remain distinct from note vibrato.",
+    "Define authority when the boolean and explicit strength disagree, including edits after parsing.",
+    "GP8/AlphaTab retains both strengths and strict policy no longer reports the resolved beat-vibrato omission."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/faulty.gp",
+    "capability": "beat-vibrato",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[29].voices[0].beats[8].vibrato",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[39].voices[0].beats[2].vibrato",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[57].voices[0].beats[16].vibrato",
+        "source": 2,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L498",
+      "symbol": "Beat.vibrato"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "BeatEffects.Vibrato",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBeatEffects",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

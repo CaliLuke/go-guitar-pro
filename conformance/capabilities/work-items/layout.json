@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "layout",
+  "capability": "layout",
+  "title": "Bound system layout, scale and line-break preservation",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Separate authored system-layout arrays, bar scales and legacy line-break preferences into supported target slices.",
+  "acceptance": [
+    "Use non-default score/track system layouts, a forced break and a bar scale from pinned fixtures.",
+    "Identify exact scope and source precedence for each value, including track-versus-score layout.",
+    "Produce bounded follow-ups for preservable slices and strict-policy evidence for target-only limits."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp6/accentuations.gpx",
+    "capability": "layout",
+    "differences": [
+      {
+        "path": "tracks[0].systemsLayout",
+        "source": [
+          1
+        ],
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L315",
+      "symbol": "Bar.displayScale"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L320",
+      "symbol": "Bar.displayWidth"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L360",
+      "symbol": "MasterBar.displayScale"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L365",
+      "symbol": "MasterBar.displayWidth"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

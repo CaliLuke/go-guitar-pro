@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "midi-bank",
+  "capability": "midi-bank",
+  "title": "Preserve MIDI bank selection and bank changes",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain GP5 bank values and GPIF MSB/LSB sound definitions and ordered bank-change events.",
+  "acceptance": [
+    "Preserve banks 0, 77 and 256 from upstream GP5/GP8 bank fixtures.",
+    "In bank-change.gp, retain the bank 256 event at its exact bar/position together with its program event.",
+    "Check bank ranges before conversion and keep duplicate-position event order through public editing and independent export."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "upstream/guitarpro8/bank-change.gp",
+    "capability": "midi-bank",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].automations[0]",
+        "source": {
+          "ratioPosition": 0,
+          "text": "256",
+          "type": 4
+        },
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "upstream/guitarpro8/bank-change.gp:midi-bank",
+      "detail": "An authored bank 256 automation disappears in GP8 export."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

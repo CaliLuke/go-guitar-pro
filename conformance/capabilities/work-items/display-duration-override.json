@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "display-duration-override",
+  "capability": "display-duration-override",
+  "title": "Determine whether GP input authors independent display duration",
+  "kind": "investigation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Investigate Beat.overrideDisplayDuration applicability before adding a public field.",
+  "acceptance": [
+    "Find a pinned Guitar Pro importer assignment and valid source fixture, or establish that the field belongs to other formats.",
+    "Distinguish displayed duration from authored rhythmic duration and derived playback duration.",
+    "Record a scope disposition or a concrete implementation follow-up with an independent fixture."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "beat.go"
+    ],
+    "instructions": "Find a pinned Guitar Pro importer assignment and valid source fixture, or establish that the field belongs to other formats."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L640",
+      "symbol": "Beat.overrideDisplayDuration"
+    },
+    {
+      "kind": "source",
+      "reference": "beat.go",
+      "detail": "Public Beat has one duration plus exact timing."
+    }
+  ],
+  "shared_files": [
+    "beat.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "oracle-inflater",
+  "capability": "oracle-breadth",
+  "title": "Isolate pinned AlphaTab inflater failures in transposition fixtures",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Make the fifteen source-side Invalid huffman failures reproducible without treating them as Go parser defects.",
+  "acceptance": [
+    "List each pinned input hash and show that Go and an independent ZIP reader can extract score.gpif.",
+    "Determine whether the failure is in the pinned AlphaTab inflater, source archive or runtime environment.",
+    "Document a narrow oracle workaround or upstream defect with unchanged semantic input evidence; retain original archives and visible blocked status until resolved."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "conformance/oracle.mjs",
+      "conformance_go_adapter_test.go"
+    ],
+    "instructions": "List each pinned input hash and show that Go and an independent ZIP reader can extract score.gpif."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_go_adapter_test.go",
+      "detail": "Reviewed implementation or documented contract."
+    }
+  ],
+  "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_go_adapter_test.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

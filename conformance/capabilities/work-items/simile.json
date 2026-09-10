@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "simile",
+  "capability": "simile",
+  "title": "Preserve single and double simile marks",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Represent and retain GPIF bar simile marks through parsing, public editing, finalization, validation, and GP8 export.",
+  "acceptance": [
+    "Distinguish None, Simple, FirstOfDouble and SecondOfDouble on the exact owning staff/bar.",
+    "Assert all three non-default variants through the public API and pinned AlphaTab consumer.",
+    "Reject undefined authored values and diagnose malformed source values without changing ordinary repeat counts."
+  ],
+  "exclusions": [
+    "Expanded playback traversal is outside this ticket."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/slash.gp",
+    "capability": "simile",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[2].simileMark",
+        "source": 1,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[1].staves[0].bars[2].simileMark",
+        "source": 1,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L290",
+      "symbol": "Bar.simileMark"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/SimileMark.ts#L9",
+      "symbol": "SimileMark.None"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/SimileMark.ts#L13",
+      "symbol": "SimileMark.Simple"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/SimileMark.ts#L18",
+      "symbol": "SimileMark.FirstOfDouble"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/slash.gp:simile",
+      "detail": "Reproduced at tracks[0].staves[0].bars[2].simileMark. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

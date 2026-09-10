@@ -1,0 +1,5396 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-10",
+  "reviewed_commit": "0c3890b62a0671fd162a3e3f0c5a1c8a97970325",
+  "capabilities": [
+    {
+      "id": "repeat-count",
+      "domain": "Structure",
+      "title": "Repeat starts and displayed pass counts",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Current API uses total passes: no end=0, ordinary repeat=2, displayed 6x=6. Supported maximum is 128. Issue 38 describes the old API.",
+      "acceptance": "Keep direct public values for 0, 1, 2, 6, and 128 across applicable codecs and the independent consumer.",
+      "upstream": [
+        "MasterBar.isRepeatStart",
+        "MasterBar.repeatCount"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.RepeatStart",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.RepeatCount",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestRepeatAPIUsesDisplayedPassCounts",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "issue",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/38",
+          "detail": "Open ticket describes previous offset API; current checkout already contains the semantic fields."
+        }
+      ]
+    },
+    {
+      "id": "alternate-endings",
+      "domain": "Structure",
+      "title": "Alternate endings",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Eight ending bits survive import and export. This represents notation, not an expanded playback sequence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.alternateEndings",
+        "MasterBar.MaxAlternateEndings"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.RepeatAlternative",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "simile",
+      "domain": "Structure",
+      "title": "One-bar and two-bar simile marks",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Bar.SimileMark has no wire or public destination. The previous-bar repeat symbol is distinct from a repeat section.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Bar.simileMark",
+        "SimileMark.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/slash.gp:simile",
+          "detail": "Reproduced at tracks[0].staves[0].bars[2].simileMark. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "directions",
+      "domain": "Structure",
+      "title": "Navigation targets and jumps",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "GP5 exposes only one Direction pointer per header. GPIF Directions is absent and GP8 omits it. Multiple targets/jumps cannot share a header.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.directions",
+        "Direction.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.Direction",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/timer.gp:directions",
+          "detail": "Reproduced at masterBars[3].directions. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "repeat-traversal",
+      "domain": "Playback engine",
+      "title": "Expanded repeat and jump traversal",
+      "scope": "excluded",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "The library stores authored order. AlphaTab repeat groups and MIDI traversal are derived playback services outside the documented package scope.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "RepeatGroup.*",
+        "MasterBar.repeatGroup"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "docs/semantic-model.md",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "fermata",
+      "domain": "Structure",
+      "title": "Fermata placement, kind and length",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Fermatas and the public fermata model are absent. Holds disappear from the semantic score and export.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.fermata",
+        "Beat.fermata",
+        "Fermata.*",
+        "FermataType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/slash.gp:fermata",
+          "detail": "Reproduced at masterBars[1].fermata. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "free-time",
+      "domain": "Structure",
+      "title": "Free-time bars",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF FreeTime has no model destination. Fixed meter timing cannot express the authored free-time flag.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.isFreeTime"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/free-time.gp:free-time",
+          "detail": "Reproduced at masterBars[1].isFreeTime. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "meter",
+      "domain": "Structure",
+      "title": "Meter numerator and denominator",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Meter values survive within the checked public bounds. Numerator is limited to 127.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.timeSignatureNumerator",
+        "MasterBar.timeSignatureDenominator"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.TimeSignature",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "common-time",
+      "domain": "Structure",
+      "title": "Common-time and cut-time notation",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "Public TimeSignature contains numeric meter and beam groups, but no common-time display flag. Pinned GPIF import does not expose a dedicated common-time case.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.timeSignatureCommon"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "key",
+      "domain": "Structure",
+      "title": "Key signatures and key mode spelling",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "supported"
+      },
+      "finding": "Standard Major/Minor values work. A generated valid lowercase minor fixture imports as major because Go compares Mode == Minor. AlphaTab preserves minor. Transposition also changes effective keys.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.keySignature",
+        "MasterBar.keySignatureType",
+        "Bar.keySignature",
+        "Bar.keySignatureType"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "KeySignature.Key",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "KeySignature.IsMinor",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "synthetic/key-mode-lowercase.gp:key",
+          "detail": "MasterBar keySignatureType changes from minor (1) to major (0) through Go import/export."
+        }
+      ]
+    },
+    {
+      "id": "sections",
+      "domain": "Structure",
+      "title": "Separate section marker and text",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "GPIF Letter and Text collapse into Marker.Title. A section containing both loses its separate letter. Export writes text.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.section",
+        "Section.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Marker.Title",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/slash.gp:sections",
+          "detail": "Reproduced at masterBars[1].section. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "double-bar",
+      "domain": "Structure",
+      "title": "Double bar lines",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Ordinary double bars are emitted. AlphaTab GPIF import clears the final bar DoubleBar flag, producing 12 binary-to-GP8 consumer differences. The wire field alone does not prove final-bar parity.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.isDoubleBar"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.DoubleBar",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "barlines",
+      "domain": "Structure",
+      "title": "Extended barline and bar-number controls",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "Only double bars have a dedicated public contract. Dashed/heavy/tick/custom bar lines and per-bar number display are absent. Some upstream values originate in other formats.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Bar.barLineLeft",
+        "Bar.barLineRight",
+        "Bar.barNumberDisplay"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "headers.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "pickup",
+      "domain": "Timing",
+      "title": "Pickup bars and exact authored timing",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Exact rational timing and anacrusis are modeled and tested. This does not implement AlphaTab performance timing.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.isAnacrusis",
+        "Beat.displayStart",
+        "MasterBar.start"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "musical_values.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "validation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Anacrusis",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.ExactStart",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceExactTiming",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "triplet-feel",
+      "domain": "Timing",
+      "title": "Triplet, dotted and Scottish feel",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "All seven public triplet-feel variants have import and export evidence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.tripletFeel",
+        "TripletFeel.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "MeasureHeader.TripletFeel",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "duration",
+      "domain": "Timing",
+      "title": "Note values and dots",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Public duration values, single/double dots and checked export limits have focused cases. Conflicting dot flags produce normalization.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.duration",
+        "Beat.dots",
+        "Duration.*",
+        "Beat.displayDuration"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "duration.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "musical_values.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Duration",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDurations",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "tuplets",
+      "domain": "Timing",
+      "title": "Exact tuplet ratios",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Authored n:m ratios are exact within the public legacy bounds. Zero:zero is a reported canonicalization on export.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.tupletNumerator",
+        "Beat.tupletDenominator",
+        "TupletGroup.*",
+        "Beat.tupletGroup"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "duration.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "musical_values.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Duration.TupletEnters",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Duration.TupletTimes",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDurations",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "rests",
+      "domain": "Timing",
+      "title": "Rests and explicit empty beats",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Rests survive. An explicit empty beat becomes a rest on GP8 export with a normalization report.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.isEmpty",
+        "Beat.isRest",
+        "Beat.isFullBarRest"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Status",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatSemantics",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "metadata",
+      "domain": "Metadata",
+      "title": "Score identity and credits",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Most score metadata survives. Binary Writer, Comments, Date and clipboard provenance lack equivalent GP8 output. Author and Writer remain distinct.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Score.title",
+        "Score.subTitle",
+        "Score.artist",
+        "Score.album",
+        "Score.music",
+        "Score.words",
+        "Score.notices",
+        "Score.tab",
+        "Score.copyright",
+        "Score.instructions"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "song.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Author",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Writer",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Name",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMetadataImport",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMetadataExportPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "track-identity",
+      "domain": "Metadata",
+      "title": "Track name and color",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Track name, color and identity have public import and export tests. Short name is a separate gap.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Track.name",
+        "Track.color"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Name",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Color",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMetadataCorpus",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "short-name",
+      "domain": "Metadata",
+      "title": "Track short names",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF ShortName is absent from the decoded track and public Track.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Track.shortName"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/dead.gp:short-name",
+          "detail": "Reproduced at tracks[0].shortName. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "ownership",
+      "domain": "Structure",
+      "title": "Multiple tracks, staves and voices",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Independent occurrences, staff order, voice holes and staff-0 compatibility authority have focused tests.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Score.tracks",
+        "Track.staves",
+        "Staff.bars",
+        "Bar.voices",
+        "Voice.beats",
+        "Beat.notes",
+        "Score.masterBars"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "score.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Staves",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Measures",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceOwnershipImport",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceCompatibilityAuthority",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "tuning",
+      "domain": "Instrument",
+      "title": "String tuning and tuning labels",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "supported"
+      },
+      "finding": "MIDI tuning values survive. AlphaTab stringTuning also stores authored labels that the public string slice cannot retain.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Staff.stringTuning",
+        "Tuning.*",
+        "TuningParseResult.*",
+        "TuningParseResultTone.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Strings",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceInstrumentContext",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "capo",
+      "domain": "Instrument",
+      "title": "Common and per-staff capo",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "A common track capo survives. Public Staff has no independent capo value. Differing staff capos need explicit evidence and a reconciliation contract.",
+      "acceptance": "Use two staves with distinct nonzero capos. Assert sounding pitches and per-staff values before and after export.",
+      "upstream": [
+        "Staff.capo"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.CapoFret",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceInstrumentContext",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "partial-capo",
+      "domain": "Instrument",
+      "title": "Partial capo across selected strings",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "No per-string capo model. Website lists this as unsupported in AlphaTab too; keep it separate from parity blockers.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "transposition",
+      "domain": "Instrument",
+      "title": "Concert and display transposition",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Transpose produces an unsupported-feature diagnostic. PartSounding and independent display/sounding pitch offsets have no public staff destination.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Staff.transpositionPitch",
+        "Staff.displayTranspositionPitch"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/tap.gp:transposition",
+          "detail": "Reproduced at tracks[0].staves[0].displayTranspositionPitch. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "clef",
+      "domain": "Instrument",
+      "title": "Treble, bass, alto, tenor and percussion clefs",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Five supported clefs survive independent export checks. Clef octave shifts are a separate field.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Bar.clef",
+        "Clef.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Measure.Clef",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMasterBars",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "clef-octave",
+      "domain": "Instrument",
+      "title": "Octave shifts attached to clefs",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Bar.Ottavia is not decoded. Beat.Ottavia is supported but cannot replace the clef-level value.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Bar.clefOttava"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/colors.gp:clef-octave",
+          "detail": "Reproduced at tracks[0].staves[0].bars[3].clefOttava. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "absolute-pitch",
+      "domain": "Instrument",
+      "title": "Non-stringed MIDI pitch",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "String 0 represents an absolute MIDI note, with range and independent export checks.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.octave",
+        "Note.tone",
+        "Note.fret",
+        "Note.string"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.String",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.Value",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteRepresentation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "legacy-instrument",
+      "domain": "Instrument",
+      "title": "Fret count, twelve strings and banjo",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Legacy instrument flags parse. GP8 reports fret count, twelve-string and banjo flags as omissions.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceInstrumentContext",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "percussion",
+      "domain": "Instrument",
+      "title": "Percussion identities and notation",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Separate articulation identities and MIDI output survive. Some notation resources and conflicting staff line counts have explicit target limits. Four existing corpus files fail GP8 export on percussion values without native articulation mappings.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Track.percussionArticulations",
+        "InstrumentArticulation.*",
+        "Note.percussionArticulation",
+        "PercussionMapper.*",
+        "Staff.DefaultStandardNotationLineCount",
+        "Staff.isPercussion",
+        "Staff.standardNotationLineCount"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_percussion.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.PercussionArticulations",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePercussionIdentity",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteheadOptions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "midi-routing",
+      "domain": "Playback data",
+      "title": "MIDI program, channels and mixer",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Selected program, channels, volume, balance and mute/solo are retained. Conflicting ports and mute+solo require target normalization.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Track.playbackInfo",
+        "PlaybackInformation.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Channels",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePlaybackRouting",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "midi-bank",
+      "domain": "Playback data",
+      "title": "MIDI bank selection and bank changes",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Sound MSB/LSB do not exist in gpifSound. Legacy bank/controller data has an omission report. AlphaTab GP8 bank fixtures exercise this gap.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "upstream/guitarpro8/bank-change.gp:midi-bank",
+          "detail": "An authored bank 256 automation disappears in GP8 export."
+        }
+      ]
+    },
+    {
+      "id": "tempo",
+      "domain": "Playback data",
+      "title": "Tempo values, event order and names",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Fractional opening tempo and ordered tempo events survive. HideTempo cannot be emitted. Interpolation and event annotations are tracked separately.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.tempoAutomations",
+        "Automation.value"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.InitialTempo",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.TempoAutomations",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTempoAuthority",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "automation-detail",
+      "domain": "Playback data",
+      "title": "Automation interpolation and annotations",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Tempo/sound event records lack full linear, text, visibility and occurrence state. Some source distinctions produce diagnostics.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Automation.isLinear",
+        "Automation.text",
+        "Automation.isVisible",
+        "SyncPointData.barOccurence",
+        "Automation.ratioPosition",
+        "Automation.type",
+        "Beat.automations"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "sound-automation",
+      "domain": "Playback data",
+      "title": "Sound definitions and program changes",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Ordered sound definitions and references are modeled. GPIF bank selections and legacy beat-local mix changes are not lossless.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "AutomationType.Instrument"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceAutomationSemantics",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "volume-automation",
+      "domain": "Playback data",
+      "title": "Volume automation events",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Song.VolumeAutomations preserves channel-strip volume events and linear flags. GP8 writer reports them as omitted.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "AutomationType.Volume"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.VolumeAutomations",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "source",
+          "reference": "export_report.go",
+          "detail": "Target omission reports."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp5/RSE.gp5:volume-automation",
+          "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[0].automations[0]. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "pan-automation",
+      "domain": "Playback data",
+      "title": "Pan and balance automation events",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy mix-table balance changes parse. There is no general pan automation collection corresponding to volume events. GP8 omits beat-local changes.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "AutomationType.Balance"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "mix_table.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBinaryMixTable",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp5/motherload-percussion-grace.gp5:pan-automation",
+          "detail": "Reproduced at tracks[2].staves[0].bars[143].voices[0].beats[0].automations[1]. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "mix-table",
+      "domain": "Playback data",
+      "title": "Legacy mix-table changes and effects",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Legacy instrument, tempo and controller changes are modeled. Beat-local mix tables are omitted by GP8 export.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "mix_table.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.MixTableChange",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBinaryMixTable",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "rse",
+      "domain": "Playback data",
+      "title": "RSE settings and proprietary effects",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy RSE records and some GPIF engine/sound state parse. GP8 omits legacy RSE master/track records. Proprietary synthesis is not implemented.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "rse.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePlaybackRouting",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "backing-track",
+      "domain": "Playback data",
+      "title": "Embedded audio backing tracks",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Embedded asset data and enabled backing-track references parse. GP8 does not emit audio assets. Website status conflicts with pinned source/tests.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Score.backingTrack",
+        "BackingTrack.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.BackingTrack",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBackingAssetsAndSyncPoints",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "source",
+          "reference": "export_report.go",
+          "detail": "Target omission reports."
+        }
+      ]
+    },
+    {
+      "id": "sync-points",
+      "domain": "Playback data",
+      "title": "Audio synchronization points",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Authored bar occurrence, frame offsets, tempo and visibility are modeled. GP8 omits sync points.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.syncPoints",
+        "Automation.syncPointValue",
+        "SyncPointData.millisecondOffset"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.SyncPoints",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBackingAssetsAndSyncPoints",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "source",
+          "reference": "export_report.go",
+          "detail": "Target omission reports."
+        }
+      ]
+    },
+    {
+      "id": "sustain-pedal",
+      "domain": "Playback data",
+      "title": "Sustain pedal markers",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "AlphaTab parses SustainPedal automation into bar markers. The Go model and writer have no pedal collection.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Bar.sustainPedals",
+        "SustainPedalMarker.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_automations.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/sustain.gp:sustain-pedal",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].sustainPedals. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "lyrics",
+      "domain": "Text",
+      "title": "Score and track lyrics",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Ordered score/track lyric text and offsets parse. GP8 preserves track lyrics but omits binary score lyrics. Syllable dispatch is not a rendering service here.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.lyrics",
+        "Lyrics.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.Lyrics",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Track.Lyrics",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceLyricScopes",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "beat-lyrics",
+      "domain": "Text",
+      "title": "Lyrics authored directly on a beat",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Beat.Lyrics has no dedicated public destination. FreeText and track lyrics cannot preserve this source scope.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "GpifParser._parseBeat:Lyrics"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/faulty.gp:beat-lyrics",
+          "detail": "Reproduced at tracks[0].staves[0].bars[9].voices[0].beats[0].lyrics. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "domain": "Text",
+      "title": "Beat text including rests",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Free text survives on both note beats and rests.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.text"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Text",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatSemantics",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "chord-name",
+      "domain": "Chords",
+      "title": "Chord names and scoped definitions",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Track/staff chord definitions retain separate ownership and names.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Chord.name",
+        "Staff.chords",
+        "Beat.chordId"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_model.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Chord.Name",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceChordScopeAndIsolation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "chord-diagram",
+      "domain": "Chords",
+      "title": "Chord diagrams, barres and fingering",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Name, string pattern and representable first fret survive. GP8 omits barres, fingerings, omissions and legacy descriptions.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Chord.firstFret",
+        "Chord.strings",
+        "Chord.barreFrets"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_model.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceChordDefinitions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "chord-display",
+      "domain": "Chords",
+      "title": "Chord name, diagram and fingering visibility",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF diagram display properties are audited but not retained as independent public flags.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Chord.showName",
+        "Chord.showDiagram",
+        "Chord.showFingering"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/notation-legend.gp:chord-display",
+          "detail": "Reproduced at tracks[0].staves[0].bars[87].voices[0].beats[0].chord.showFingering. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "dynamics",
+      "domain": "Expression",
+      "title": "Beat dynamics and note velocities",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Eight GPIF dynamics and binary velocities are modeled. GP8 quantizes the beat and cannot preserve distinct note velocities inside one chord.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.dynamics",
+        "Note.dynamics",
+        "DynamicValue.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Dynamics",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.Velocity",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDynamicQuantization",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "hairpins",
+      "domain": "Expression",
+      "title": "Crescendo and decrescendo",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Public hairpins have dedicated input and independent GP8 export evidence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.crescendo",
+        "CrescendoType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.Hairpin",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "fade-in",
+      "domain": "Expression",
+      "title": "Fade in",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Fade-in is preserved. Fade-out and volume swell require a richer public model.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.fadeIn"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.FadeIn",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "fade-other",
+      "domain": "Expression",
+      "title": "Fade out and volume swell",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "Only a FadeIn boolean is exposed. Other GPIF Fadding variants produce lossy-projection diagnostics and disappear.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.fade",
+        "FadeType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/fade.gp:fade-other",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].fade. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "note-vibrato",
+      "domain": "Expression",
+      "title": "Note vibrato strength",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Slight and Wide now have an explicit VibratoStrength field and distinct GPIF output. The semantic-model prose still describes the former boolean collapse.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.vibrato",
+        "VibratoType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Vibrato",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSourceDistinctions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.VibratoStrength",
+          "detail": "Current semantic API, unlike stale prose."
+        }
+      ]
+    },
+    {
+      "id": "beat-vibrato",
+      "domain": "Expression",
+      "title": "Whammy-bar vibrato strength",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "GPIF strength collapses into BeatEffects.Vibrato. GP8 omits beat vibrato.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.vibrato"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.Vibrato",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/faulty.gp:beat-vibrato",
+          "detail": "Reproduced at tracks[0].staves[0].bars[29].voices[0].beats[8].vibrato. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "wah",
+      "domain": "Expression",
+      "title": "Wah pedal state",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy mix-table Wah data exists. GPIF Beat.Wah is explicitly unsupported and there is no direct beat pedal enum.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.wahPedal",
+        "WahPedal.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "mix_table.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp5/Wah.gp5:wah",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].wahPedal. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "brush",
+      "domain": "Expression",
+      "title": "Brush and arpeggio timing",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Direction survives. GPIF brush duration XProperty is not retained. The GP8 writer uses a fixed eighth-note stroke duration.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.brushType",
+        "Beat.brushDuration",
+        "BrushType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.Stroke",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "pick-stroke",
+      "domain": "Expression",
+      "title": "Pick stroke direction",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Pick stroke parses into the public model, but GP8 export reports it as omitted.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.pickStroke",
+        "PickStroke.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.PickStroke",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/effects.gp:pick-stroke",
+          "detail": "Reproduced at tracks[0].staves[0].bars[24].voices[0].beats[2].pickStroke. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "rasgueado",
+      "domain": "Expression",
+      "title": "Rasgueado patterns",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy boolean data exists. GPIF named finger patterns do not have a public representation. GP8 omits rasgueado.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.rasgueado",
+        "Rasgueado.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "beat.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.HasRasgueado",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/rasgueado.gp:rasgueado",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].rasgueado. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "tap-slap-pop",
+      "domain": "Expression",
+      "title": "Tap, slap and pop distinctions",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Slap and pop share one SlapEffect value and cannot coexist. Separate note Tapped flags survive. GP8 omits the beat SlapEffect.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.tap",
+        "Beat.slap",
+        "Beat.pop"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSourceDistinctions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "beat-octave",
+      "domain": "Expression",
+      "title": "Beat octave shifts",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "All supported 8va/8vb/15ma/15mb beat shifts survive. These do not cover bar clef shifts.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.ottava",
+        "Ottavia.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Octave",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatEffects",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "tremolo",
+      "domain": "Expression",
+      "title": "Tremolo picking and stroke styles",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy durations parse. GPIF durations project into legacy note effects. GP8 omits tremolo picking. Extended marks/styles require new model evidence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.tremoloPicking",
+        "TremoloPickingEffect.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/colors.gp:tremolo",
+          "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[0].tremoloPicking. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "bends",
+      "domain": "Expression",
+      "title": "Bend curves and styles",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Common gestures and curves work. Narrow point units, target hold interpretation and missing BendStyle distinctions prevent full parity.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.bendPoints",
+        "Note.bendType",
+        "Note.bendStyle",
+        "BendType.*",
+        "BendStyle.*",
+        "BendPoint.*",
+        "Note.bendOrigin",
+        "Note.isContinuedBend",
+        "Note.maxBendPoint"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Bend",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceCurvePreservation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceCurveLossPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "whammy",
+      "domain": "Expression",
+      "title": "Whammy curves and styles",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Curve normalization and strict loss reports are tested. Target gesture interpretation can remove authored holds and rates.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.whammyBarPoints",
+        "Beat.whammyBarType",
+        "Beat.whammyStyle",
+        "WhammyType.*",
+        "Beat.isContinuedWhammy",
+        "Beat.maxWhammyPoint",
+        "Beat.minWhammyPoint"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.TremoloBar",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceCurvePreservation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "grace",
+      "domain": "Expression",
+      "title": "Ordered grace notes and transitions",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Ordered note-level graces preserve several fields. Full beat-level grace chords, timing/style distinctions and target duration/transition restrictions need further evidence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.graceType",
+        "GraceType.*",
+        "GraceGroup.*",
+        "Beat.graceGroup",
+        "Beat.graceIndex"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_model.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Graces",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceOrderedGraceExport",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceGraceAuthorityAndLoss",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "accent",
+      "domain": "Notes",
+      "title": "Normal and heavy accents",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Normal/heavy accents retain distinct flags. Tenuto is a separate loss.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.accentuated"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.AccentuatedNote",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.HeavyAccentuatedNote",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "tenuto",
+      "domain": "Notes",
+      "title": "Tenuto accent",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "The current NoteAccent enum preserves Tenuto and exports its flag. Older semantic-model prose is stale. AlphaTab has no separate staccatissimo note field.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "AccentuationType.Tenuto"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSourceDistinctions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Accent",
+          "detail": "Current semantic API, unlike stale prose."
+        }
+      ]
+    },
+    {
+      "id": "staccato",
+      "domain": "Notes",
+      "title": "Staccato",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Boolean staccato survives independent technique checks.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isStaccato"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Staccato",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "dead-ghost",
+      "domain": "Notes",
+      "title": "Dead notes and ghost notes",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Dead and ghost states have separate public fields and target cases.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isDead",
+        "Note.isGhost"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.Kind",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.GhostNote",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "palm-let-ring",
+      "domain": "Notes",
+      "title": "Palm mute and let ring",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Note-level palm mute and let-ring flags survive. Derived duration links are outside the authored model.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isPalmMute",
+        "Note.isLetRing",
+        "Beat.isLetRing",
+        "Beat.isPalmMute",
+        "Note.letRingDestination",
+        "Note.palmMuteDestination"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.PalmMute",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.LetRing",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "ties",
+      "domain": "Notes",
+      "title": "Tie markers and origin validation",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Origin/destination markers and pitch identity have tests. A destination without an earlier origin is diagnosed, while excerpts can still export.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isTieDestination",
+        "Note.tieOrigin",
+        "Note.tieDestination"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "validation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.Kind",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteRepresentation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteValidation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "hammer",
+      "domain": "Notes",
+      "title": "Hammer-on and pull-off endpoints",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "Hammer origin is modeled, but explicit destination distinction and full connection identity are projected.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isHammerPullOrigin",
+        "Note.hammerPullOrigin",
+        "Note.hammerPullDestination"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSourceDistinctions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "legato-slurs",
+      "domain": "Notes",
+      "title": "Legato and authored slurs",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "Beat.Legato and independent slur endpoints lack public destinations. Hammer or slide flags do not replace authored slurs.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.isLegatoOrigin",
+        "Note.isSlurDestination",
+        "Note.slurOrigin",
+        "Note.slurDestination",
+        "Slur.*",
+        "Beat.effectSlurDestination",
+        "Beat.effectSlurOrigin",
+        "Beat.isEffectSlurOrigin",
+        "Note.effectSlur",
+        "Note.effectSlurDestination",
+        "Note.effectSlurOrigin",
+        "Note.hasEffectSlur",
+        "Note.isEffectSlurOrigin"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/numbered.gp:legato-slurs",
+          "detail": "Reproduced at tracks[0].staves[0].bars[39].voices[0].beats[0].isLegatoOrigin. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "slides",
+      "domain": "Notes",
+      "title": "Slides including pick scrapes",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Named slide flags, including pick up/down, have public enum and independent export evidence.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.slideInType",
+        "Note.slideOutType",
+        "SlideInType.*",
+        "SlideOutType.*",
+        "Note.slideOrigin",
+        "Note.slideTarget"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Slides",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "harmonics",
+      "domain": "Notes",
+      "title": "Natural, artificial and feedback harmonics",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Harmonic kinds and fractional fret survive. GP8 reports spelling/octave and conflicting compatibility fret fields.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.harmonicType",
+        "Note.harmonicValue",
+        "HarmonicType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Harmonic",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceHarmonicVariants",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "trill",
+      "domain": "Notes",
+      "title": "Trill fret and speed",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
+      },
+      "finding": "Fret and duration parse. GP8 preserves fret but reports non-target trill durations.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.trillValue",
+        "Note.trillSpeed"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Trill",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "fingering",
+      "domain": "Notes",
+      "title": "Left and right hand fingering",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Presence markers distinguish authored thumb/open from absence. GP8 omits both fingerings.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.leftHandFinger",
+        "Note.rightHandFinger",
+        "Fingers.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTechniqueDispositions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/effects.gp:fingering",
+          "detail": "Reproduced at tracks[0].staves[0].bars[23].voices[0].beats[0].notes[0].leftHandFinger. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "tapping",
+      "domain": "Notes",
+      "title": "Left-hand tapping identity",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Tapped and LeftHandTapped now have separate public booleans and GPIF output. Earlier documentation still describes their collapse.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isLeftHandTapped"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSourceDistinctions",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.LeftHandTapped",
+          "detail": "Current semantic API, unlike stale prose."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.Tapped",
+          "detail": "Independent tapping marker."
+        }
+      ]
+    },
+    {
+      "id": "accidentals",
+      "domain": "Notes",
+      "title": "Authored pitch spelling and accidentals",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Pitch is projected to MIDI/fret. Concert/transposed spelling and explicit accidental modes are not lossless. SwapAccidentals is omitted on export.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.accidentalMode",
+        "NoteAccidentalMode.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_effects.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.SwapAccidentals",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        }
+      ]
+    },
+    {
+      "id": "sound-duration",
+      "domain": "Notes",
+      "title": "Authored note duration percentage",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "missing"
+      },
+      "finding": "Legacy DurationPercent parses and validates, but GP8 emits no independent duration percentage.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.durationPercent"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.DurationPercent",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteValidation",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "ornaments",
+      "domain": "Notes",
+      "title": "Turns and mordents",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Note.Ornament is absent. All four upstream turn/mordent variants lack a public representation.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.ornament",
+        "NoteOrnament.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/ornaments.gp:ornaments",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].ornament. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "show-string",
+      "domain": "Notation",
+      "title": "Explicit note string-number display",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "ShowStringNumber is recognized by the audit but omitted from the public note.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.showStringNumber"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/string-numbers.gp:show-string",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].showStringNumber. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "note-display",
+      "domain": "Notation",
+      "title": "Note visibility and notehead overrides",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "Pitched-note visibility, custom noteheads and note style are absent. Percussion notehead support is tracked separately.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Note.isVisible",
+        "Note.style",
+        "NoteStyle.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "note.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "slash",
+      "domain": "Notation",
+      "title": "Slashed beats and slash staff notation",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Slashed and per-staff slash notation lack lossless public destinations.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.slashed",
+        "Staff.showSlash"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/slash.gp:slash",
+          "detail": "Reproduced at tracks[0].staves[0].showSlash. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "numbered",
+      "domain": "Notation",
+      "title": "Numbered staff notation",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "The public staff settings do not represent AlphaTab numbered notation.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Staff.showNumbered"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "golpe",
+      "domain": "Expression",
+      "title": "Golpe thumb and finger marks",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Golpe is absent from wire and public beat types.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.golpe",
+        "GolpeType.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/golpe.gp:golpe",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].golpe. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "dead-slap",
+      "domain": "Expression",
+      "title": "Dead-slapped beats",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF DeadSlapped is absent. Existing oracle normalization treats an empty dead slap as a rest, which does not preserve the mark.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.deadSlapped"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/oracle.mjs",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/colors.gp:dead-slap",
+          "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[1].deadSlapped. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "barre",
+      "domain": "Expression",
+      "title": "Beat barre fret and shape",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "BarreFret and BarreString properties are audited as omissions. Chord diagram barres are a separate concept.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.barreFret",
+        "Beat.barreShape",
+        "BarreShape.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_audit.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/barre.gp:barre",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].barreFret. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "timer",
+      "domain": "Notation",
+      "title": "Authored timer marks",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "GPIF Timer and explicit/derived timer visibility have no public destination.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.timer",
+        "Beat.showTimer"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/timer.gp:timer",
+          "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].showTimer. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "beaming",
+      "domain": "Notation",
+      "title": "Beam grouping, direction and stem overrides",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Binary display flags exist. GPIF XProperties and stem-direction elements are absent. GP8 omits authored beam groups and beat display overrides.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MasterBar.beamingRules",
+        "BeamingRules.*",
+        "Beat.beamingMode",
+        "Beat.preferredBeamDirection",
+        "Beat.invertBeamDirection",
+        "MasterBar.actualBeamingRules"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "beat.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDisplayExportPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/tap.gp:beaming",
+          "detail": "Reproduced at masterBars[0].beamingRules. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "notation-visibility",
+      "domain": "Notation",
+      "title": "Track visibility and standard/tab flags",
+      "scope": "guitar-pro",
+      "priority": 2,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "supported"
+      },
+      "finding": "ZIP import reads LayoutConfiguration visibility but does not read PartConfiguration staff view flags. GP8 writes notation/tab flags from track settings.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Track.isVisibleOnMultiTrack",
+        "Staff.showTablature",
+        "Staff.showStandardNotation"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp7_zip.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDisplayExportPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "domain": "Notation",
+      "title": "System layout and forced line breaks",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy line breaks parse. GPIF system layouts and bar/master-bar scale lack public equivalents. Export omits line-break preferences.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Score.defaultSystemsLayout",
+        "Score.systemsLayout",
+        "Track.systemsLayout",
+        "Track.lineBreaks",
+        "MasterBar.displayScale",
+        "MasterBar.displayWidth",
+        "Bar.displayScale",
+        "Bar.displayWidth",
+        "Track.defaultSystemsLayout"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gpif_types.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "multi-rest",
+      "domain": "Notation",
+      "title": "Multiple-bar rest preferences",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "No public score/track multirest display preferences corresponding to the AlphaTab stylesheet.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "RenderStylesheet.multiTrackMultiBarRest",
+        "RenderStylesheet.perTrackMultiBarRest"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "track.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/grand-staff.gp:multi-rest",
+          "detail": "Reproduced at stylesheet.perTrackMultiBarRest. Source and target values are stored in probe_comparison."
+        }
+      ]
+    },
+    {
+      "id": "stylesheet",
+      "domain": "Notation",
+      "title": "Stylesheet, brackets and track-name policies",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy page and track settings partially parse. BinaryStylesheet authored policies, hide-empty staves, brackets and track-name modes lack full round-trip support.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "RenderStylesheet.*",
+        "Score.stylesheet",
+        "Bar.style",
+        "Beat.style",
+        "Track.style",
+        "Voice.style"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gp7_zip.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceDisplayExportPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "page-setup",
+      "domain": "Notation",
+      "title": "Page setup, headers and footer templates",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "missing"
+      },
+      "finding": "Legacy PageSetup is modeled and omitted on GP8 export. Pinned AlphaTab also exposes structured score header/footer templates not mapped here.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "ScoreStyle.*",
+        "HeaderFooterStyle.*",
+        "Score.style"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "song.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_builder.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "Song.PageSetup",
+          "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePageSetupImport",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "container",
+      "domain": "Formats",
+      "title": "GP3-GP8 containers and file APIs",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Compatibility suite covers all inventoried files. Parser diagnostics and file exports are available. Corpus success does not prove semantic fidelity.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "file_api.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp7_zip.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestParseScoreUsesOneSemanticModel",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "password",
+      "domain": "Formats",
+      "title": "Password-locked Guitar Pro files",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp8"
+      ],
+      "stages": {
+        "import": "missing",
+        "model": "missing",
+        "export": "missing"
+      },
+      "finding": "No decryption support. The format website also lists this as unsupported by AlphaTab.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "gp7_zip.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "strict-policy",
+      "domain": "Reliability",
+      "title": "Parse diagnostics and strict export policy",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Unknown/lossy source diagnostics and read-only preflight expose many losses. Silent distinctions still need specific probes.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "parser.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "export_report.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceValidationAndExportPolicy",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "bounds",
+      "domain": "Reliability",
+      "title": "Checked boundaries and malformed input",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
+      },
+      "finding": "Numeric bounds, mutation cases and fuzz checks cover the public graph. This is evidence of tested classes, not a total correctness claim.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "validation.go",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/sensitivity.mjs",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceAuthorityAndBoundaries",
+          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        }
+      ]
+    },
+    {
+      "id": "upstream-discovery",
+      "domain": "Audit",
+      "title": "Complete upstream capability discovery",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "unverified",
+        "model": "unverified",
+        "export": "unverified"
+      },
+      "finding": "Old inventory spans nine primary model files, omits related classes/enums and misattributes BeamingRules fields to MasterBar. Expanded lexical inventory leaves unmapped constructs unverified.",
+      "acceptance": "Review every unlinked upstream construct and new documentation row. Preserve explicit scope and independent stage evidence.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "conformance/sync-upstream-inventory.mjs",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "issue",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/34",
+          "detail": "CLOSED. Existing broad feature rows still cite this ticket; it is not an open owner for remaining gaps."
+        }
+      ]
+    },
+    {
+      "id": "oracle-breadth",
+      "domain": "Audit",
+      "title": "Independent oracle breadth and blind spots",
+      "scope": "guitar-pro",
+      "priority": 1,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
+      },
+      "finding": "The corpus oracle omits many authored fields. Zero current differences only describes its selected projection. Broad probes record additional raw consumer differences.",
+      "acceptance": "Extend independent comparisons for each new public capability with valid non-default fixtures and narrow normalization rules.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "conformance/oracle.mjs",
+          "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance_go_adapter_test.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "other-imports",
+      "domain": "Other AlphaTab services",
+      "title": "MusicXML, Capella and AlphaTex import",
+      "scope": "excluded",
+      "priority": 3,
+      "formats": [
+        "musicxml",
+        "capella",
+        "alphatex"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "These are AlphaTab importers outside this Guitar Pro library scope. Keep them visible without counting them as Guitar Pro gaps.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "docs/semantic-model.md",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "other-exports",
+      "domain": "Other AlphaTab services",
+      "title": "AlphaTex and other export formats",
+      "scope": "excluded",
+      "priority": 3,
+      "formats": [
+        "alphatex"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "The module exports GP8. AlphaTex and non-GP8 output are separate product scope.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "gp8_export.go",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "rendering",
+      "domain": "Other AlphaTab services",
+      "title": "Engraving, layout engine and font rendering",
+      "scope": "excluded",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "Rendering engines and style computation are not library goals. Authored Guitar Pro display data remains separately inventoried.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "MusicFontSymbol.*",
+        "Font.*",
+        "Color.*",
+        "ElementStyle.*",
+        "FontParser.*",
+        "FontParserToken.*"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "docs/semantic-model.md",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "domain": "Other AlphaTab services",
+      "title": "Synthesizer, MIDI generation and audio player",
+      "scope": "excluded",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "SoundFont synthesis, real-time player controls and MIDI generation are outside the documented authored-score scope.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "Beat.playbackDuration",
+        "Beat.playbackStart"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "docs/semantic-model.md",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "serialization",
+      "domain": "Other AlphaTab services",
+      "title": "AlphaTab JSON model and object graph utilities",
+      "scope": "excluded",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "out-of-scope",
+        "model": "out-of-scope",
+        "export": "out-of-scope"
+      },
+      "finding": "AlphaTab-specific IDs, object backreferences, lookup caches, JSON conversion and derived chain links are outside the public compatibility API. Authored ties and slurs have separate rows.",
+      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "upstream": [
+        "JsonConverter.*",
+        "ModelUtils.*",
+        "Bar.id",
+        "Bar.index",
+        "Bar.nextBar",
+        "Bar.previousBar",
+        "Bar.shortestDuration",
+        "Bar.staff",
+        "Beat.id",
+        "Beat.index",
+        "Beat.maxNote",
+        "Beat.maxStringNote",
+        "Beat.minNote",
+        "Beat.minStringNote",
+        "Beat.nextBeat",
+        "Beat.noteStringLookup",
+        "Beat.noteValueLookup",
+        "Beat.previousBeat",
+        "Beat.voice",
+        "Chord.staff",
+        "MasterBar.index",
+        "MasterBar.nextMasterBar",
+        "MasterBar.previousMasterBar",
+        "MasterBar.score",
+        "Note.beat",
+        "Note.globalNoteId",
+        "Note.id",
+        "Note.index",
+        "NoteIdBag.*",
+        "Staff.index",
+        "Staff.track",
+        "Track.index",
+        "Track.score",
+        "Voice.bar",
+        "Voice.id",
+        "Voice.index",
+        "Voice.shortestDuration"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "docs/semantic-model.md",
+          "detail": "Reviewed implementation or documented contract."
+        }
+      ]
+    },
+    {
+      "id": "display-duration-override",
+      "domain": "Notation",
+      "title": "Independent display-duration override",
+      "scope": "guitar-pro",
+      "priority": 3,
+      "formats": [
+        "gp3",
+        "gp4",
+        "gp5",
+        "gp6",
+        "gp7",
+        "gp8"
+      ],
+      "stages": {
+        "import": "unverified",
+        "model": "missing",
+        "export": "unverified"
+      },
+      "finding": "AlphaTab Beat.overrideDisplayDuration has no equivalent public field. Its applicability to Guitar Pro input needs a fixture; other AlphaTab importers can author it.",
+      "acceptance": "Find a valid Guitar Pro source for an independent display duration or document that this is exclusive to other formats.",
+      "upstream": [
+        "Beat.overrideDisplayDuration"
+      ],
+      "evidence": [
+        {
+          "kind": "source",
+          "reference": "beat.go",
+          "detail": "Public Beat has one duration plus exact timing."
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "number": 34,
+      "state": "CLOSED",
+      "title": "Bind semantic coverage to stages and value variants; remove blanket M20 completion credit",
+      "url": "https://github.com/CaliLuke/go-guitar-pro/issues/34",
+      "checked_at": "2026-09-10"
+    },
+    {
+      "number": 38,
+      "state": "OPEN",
+      "title": "Replace count-minus-one repeat fields with a semantic repeat API",
+      "url": "https://github.com/CaliLuke/go-guitar-pro/issues/38",
+      "checked_at": "2026-09-10"
+    }
+  ],
+  "website_mapping": {
+    "Score Information": [
+      "metadata"
+    ],
+    "Lyrics (with special syntax)": [
+      "lyrics",
+      "beat-lyrics"
+    ],
+    "Name": [
+      "track-identity"
+    ],
+    "Color": [
+      "track-identity"
+    ],
+    "Short Name": [
+      "short-name"
+    ],
+    "Musical Notation > Notation > Tablature Notation": [
+      "notation-visibility"
+    ],
+    "Musical Notation > Notation > Standard Notation": [
+      "notation-visibility"
+    ],
+    "Show/Hide Standard Notation": [
+      "notation-visibility"
+    ],
+    "Show/Hide Tablature": [
+      "notation-visibility"
+    ],
+    "Staves > Show/Hide Standard": [
+      "notation-visibility"
+    ],
+    "Staves > Show/Hide Tablature": [
+      "notation-visibility"
+    ],
+    "Musical Notation > Notation > Slash Notation": [
+      "slash"
+    ],
+    "Slash notation": [
+      "slash"
+    ],
+    "Slashed": [
+      "slash"
+    ],
+    "Staves > Show/Hide Slash": [
+      "slash"
+    ],
+    "Musical Notation > Notation > Numbered Notation": [
+      "numbered"
+    ],
+    "Numbered notation": [
+      "numbered"
+    ],
+    "Musical Notation > Notation > Grand Staff": [
+      "ownership"
+    ],
+    "Multiple Staves (e.g. Grand Staff)": [
+      "ownership"
+    ],
+    "Multiple Voices": [
+      "ownership"
+    ],
+    "Tuning": [
+      "tuning"
+    ],
+    "String Tuning": [
+      "tuning"
+    ],
+    "Tuning > Capo": [
+      "capo"
+    ],
+    "Capo": [
+      "capo"
+    ],
+    "Tuning > Partial Capo": [
+      "partial-capo"
+    ],
+    "Musical Notation > Transposition tonality": [
+      "transposition"
+    ],
+    "Transposing instrument": [
+      "transposition"
+    ],
+    "Frets": [
+      "legacy-instrument"
+    ],
+    "Particular for Banjo 5th String": [
+      "legacy-instrument"
+    ],
+    "Simulate 12 stringed Guitar": [
+      "legacy-instrument"
+    ],
+    "Sounds > RSE": [
+      "rse"
+    ],
+    "Playback Information > RSE": [
+      "rse"
+    ],
+    "Playback Information > EQ": [
+      "rse"
+    ],
+    "Sounds > Midi > Sound": [
+      "midi-routing"
+    ],
+    "Midi Settings": [
+      "midi-routing"
+    ],
+    "Playback Information > Midi Channels and Ports": [
+      "midi-routing"
+    ],
+    "Playback Information > Instrument, Volume, Pan/Balance, Mute/Solo": [
+      "midi-routing"
+    ],
+    "Channels > Force Channels 11 to 16": [
+      "midi-routing"
+    ],
+    "Interpretation": [
+      "rse"
+    ],
+    "Playback Information > Play settings": [
+      "rse"
+    ],
+    "Mix Table > Chorus, Reverb, Phaser, Tremolo Change": [
+      "mix-table"
+    ],
+    "Mix Table > Instrument Change": [
+      "mix-table"
+    ],
+    "Mix Table > Pan/Balance Change": [
+      "mix-table"
+    ],
+    "Mix Table > Tempo Change": [
+      "mix-table"
+    ],
+    "Mix Table > Volume Change": [
+      "mix-table"
+    ],
+    "Playback Information > Chorus, Reverb, Phaser, Tremolo Change": [
+      "mix-table"
+    ],
+    "Clefs": [
+      "clef",
+      "clef-octave"
+    ],
+    "Time Signatures": [
+      "meter",
+      "common-time"
+    ],
+    "Key Signatures": [
+      "key"
+    ],
+    "Triplet Feel": [
+      "triplet-feel"
+    ],
+    "Free Time": [
+      "free-time"
+    ],
+    "Anacrusis": [
+      "pickup"
+    ],
+    "Repeats": [
+      "repeat-count"
+    ],
+    "Alternate Endings": [
+      "alternate-endings"
+    ],
+    "Directions (Jumps)": [
+      "directions"
+    ],
+    "Simile Marks": [
+      "simile"
+    ],
+    "Markers/Sections": [
+      "sections"
+    ],
+    "Double Bar": [
+      "double-bar"
+    ],
+    "System Layout": [
+      "layout"
+    ],
+    "Bar Width/Scale": [
+      "layout"
+    ],
+    "Line Breaks": [
+      "layout"
+    ],
+    "Tempo Automations": [
+      "tempo",
+      "automation-detail"
+    ],
+    "Volume Automations": [
+      "volume-automation"
+    ],
+    "Pan Automations": [
+      "pan-automation"
+    ],
+    "Sound Automations": [
+      "sound-automation",
+      "midi-bank"
+    ],
+    "Multirest": [
+      "multi-rest"
+    ],
+    "Chord Names": [
+      "chord-name"
+    ],
+    "Chord Diagrams": [
+      "chord-diagram",
+      "chord-display"
+    ],
+    "Durations (Whole to 64th)": [
+      "duration"
+    ],
+    "Durations (Dots)": [
+      "duration"
+    ],
+    "Durations (Tuplets 2,3)": [
+      "tuplets"
+    ],
+    "Durations (Tuplets n:m)": [
+      "tuplets"
+    ],
+    "Durations (Tuplets)": [
+      "tuplets"
+    ],
+    "Grace Notes": [
+      "grace"
+    ],
+    "Dynamics": [
+      "dynamics"
+    ],
+    "Beaming Mode (Force, Break, Invert)": [
+      "beaming"
+    ],
+    "Style > Force Horizontal Beams": [
+      "beaming"
+    ],
+    "Text": [
+      "text"
+    ],
+    "Whammy Bars": [
+      "whammy"
+    ],
+    "Vibratos": [
+      "note-vibrato",
+      "beat-vibrato"
+    ],
+    "Vibrato": [
+      "note-vibrato",
+      "beat-vibrato"
+    ],
+    "Wide Vibrato": [
+      "note-vibrato",
+      "beat-vibrato"
+    ],
+    "Tap/Slap/Pop": [
+      "tap-slap-pop",
+      "tapping"
+    ],
+    "Fade In": [
+      "fade-in"
+    ],
+    "Fade In, Fade Out, Volume Swell": [
+      "fade-in",
+      "fade-other"
+    ],
+    "Wah Wah": [
+      "wah"
+    ],
+    "Brush Stroke": [
+      "brush"
+    ],
+    "Arpeggios": [
+      "brush"
+    ],
+    "Pick Stroke": [
+      "pick-stroke"
+    ],
+    "Rasgueado": [
+      "rasgueado"
+    ],
+    "Rasgueado (with patterns)": [
+      "rasgueado"
+    ],
+    "Ottavia": [
+      "beat-octave"
+    ],
+    "Tremolo Picking": [
+      "tremolo"
+    ],
+    "Fermata": [
+      "fermata"
+    ],
+    "Crescendo / Decrescendo": [
+      "hairpins"
+    ],
+    "Barre": [
+      "barre"
+    ],
+    "Timer": [
+      "timer"
+    ],
+    "Display String Number": [
+      "show-string"
+    ],
+    "Show String Number": [
+      "show-string"
+    ],
+    "Palm Mute": [
+      "palm-let-ring"
+    ],
+    "Palm Mute (whole beat)": [
+      "palm-let-ring"
+    ],
+    "Let Ring": [
+      "palm-let-ring"
+    ],
+    "Pick Slide / Pick Scrape": [
+      "slides"
+    ],
+    "Slides": [
+      "slides"
+    ],
+    "Golpe": [
+      "golpe"
+    ],
+    "Sustain Pedal": [
+      "sustain-pedal"
+    ],
+    "Dead Slapped": [
+      "dead-slap"
+    ],
+    "Accidentals": [
+      "accidentals"
+    ],
+    "Swap Accidentals": [
+      "accidentals"
+    ],
+    "Accentuations (Normal/Heavy)": [
+      "accent"
+    ],
+    "Bends": [
+      "bends"
+    ],
+    "Tied Notes": [
+      "ties"
+    ],
+    "Sound Duration": [
+      "sound-duration"
+    ],
+    "Rests": [
+      "rests"
+    ],
+    "Left Hand Fingering": [
+      "fingering"
+    ],
+    "Right Hand Fingering": [
+      "fingering"
+    ],
+    "Dead Note": [
+      "dead-ghost"
+    ],
+    "Ghost Note": [
+      "dead-ghost"
+    ],
+    "Natural Harmonics": [
+      "harmonics"
+    ],
+    "Artificial Harmonics": [
+      "harmonics"
+    ],
+    "Beat Harmonics (GP3)": [
+      "harmonics"
+    ],
+    "Hammer-On / Pull-Off": [
+      "hammer"
+    ],
+    "Trill": [
+      "trill"
+    ],
+    "Staccato, Staccatissimo, Tenuto": [
+      "staccato",
+      "tenuto"
+    ],
+    "Staccato": [
+      "staccato"
+    ],
+    "Legato": [
+      "legato-slurs"
+    ],
+    "Left Hand Tapping": [
+      "tapping"
+    ],
+    "Ornaments (mordents & turns)": [
+      "ornaments"
+    ],
+    "Non Stringed Instruments (e.g. piano)": [
+      "absolute-pitch"
+    ],
+    "Percussion Tracks": [
+      "percussion"
+    ],
+    "Audio File": [
+      "backing-track"
+    ],
+    "Password Locked Files": [
+      "password"
+    ],
+    "Page Setup > Header & Footer": [
+      "page-setup"
+    ],
+    "Page Setup > Margins": [
+      "page-setup"
+    ],
+    "Page Setup > Orientation": [
+      "page-setup"
+    ],
+    "Page Setup > Page Format": [
+      "page-setup"
+    ],
+    "Page Setup > Score Size": [
+      "page-setup"
+    ],
+    "Style > Diagrams In the Score": [
+      "stylesheet"
+    ],
+    "Style > Diagrams List On Top of the Score": [
+      "stylesheet"
+    ],
+    "Style > Diagrams/Chords Below the Standard Notation": [
+      "stylesheet"
+    ],
+    "Style > Extend Rhythmic inside the Tab": [
+      "stylesheet"
+    ],
+    "Style > Indicate Tuning on the Score": [
+      "stylesheet"
+    ],
+    "Style > Show Rhythm with Tab": [
+      "stylesheet"
+    ],
+    "Stylesheet > Header & Footer": [
+      "page-setup"
+    ],
+    "Stylesheet > Notation": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Chord Diagrams (sizing)": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Chord Diagrams > In Score > Visible": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Chord Diagrams > On Top of Score > Visible": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Page": [
+      "page-setup"
+    ],
+    "Stylesheet > Page & Score format > Sizes": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Sizes & Spacings": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Tuning (Display)": [
+      "stylesheet"
+    ],
+    "Stylesheet > Page & Score format > Tuning (other settings)": [
+      "stylesheet"
+    ],
+    "Stylesheet > Systems & Staves > Brackets": [
+      "stylesheet"
+    ],
+    "Stylesheet > Systems & Staves > Staves": [
+      "stylesheet"
+    ],
+    "Stylesheet > Systems & Staves > Track Name": [
+      "stylesheet"
+    ],
+    "Stylesheet > Texts & Styles": [
+      "stylesheet"
+    ]
+  }
+}

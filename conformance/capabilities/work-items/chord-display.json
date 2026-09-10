@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "chord-display",
+  "capability": "chord-display",
+  "title": "Preserve independent chord display flags",
+  "kind": "implementation",
+  "priority": 3,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain ShowName, ShowDiagram and ShowFingering on scoped chord definitions.",
+  "acceptance": [
+    "Test all three flags independently, including false values rather than only absent defaults.",
+    "Two otherwise identical scoped definitions with different visibility remain distinct.",
+    "Public changes and GP8 export produce matching independent consumer flags."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/notation-legend.gp",
+    "capability": "chord-display",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[87].voices[0].beats[0].chord.showFingering",
+        "source": false,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[87].voices[0].beats[1].chord.showFingering",
+        "source": false,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      },
+      {
+        "path": "tracks[0].staves[0].bars[87].voices[0].beats[3].chord.showFingering",
+        "source": false,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L41",
+      "symbol": "Chord.showName"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L46",
+      "symbol": "Chord.showDiagram"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Chord.ts#L51",
+      "symbol": "Chord.showFingering"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/notation-legend.gp:chord-display",
+      "detail": "Reproduced at tracks[0].staves[0].bars[87].voices[0].beats[0].chord.showFingering. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_audit.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

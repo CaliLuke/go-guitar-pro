@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "tremolo",
+  "capability": "tremolo",
+  "title": "Export tremolo picking and preserve supported stroke variants",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain authored tremolo subdivision/marks through parsing, public edits and GP8 output.",
+  "acceptance": [
+    "Reproduce the missing tremolo in testdata/gp4/Effects.gp4 and cover supported 8th/16th/32nd subdivisions.",
+    "Inventory extended marks/styles in the pinned model and prove GP source/target support before promising each variant.",
+    "Strict export accepts supported variants and reports unsupported styles individually rather than dropping all tremolo picking."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/colors.gp",
+    "capability": "tremolo",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].tremoloPicking",
+        "source": {
+          "marks": 1,
+          "style": 0
+        },
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L549",
+      "symbol": "Beat.tremoloPicking"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/TremoloPickingEffect.ts#L30",
+      "symbol": "TremoloPickingEffect.minMarks"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/TremoloPickingEffect.ts#L35",
+      "symbol": "TremoloPickingEffect.maxMarks"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/TremoloPickingEffect.ts#L41",
+      "symbol": "TremoloPickingEffect.marks"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTechniqueDispositions",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/colors.gp:tremolo",
+      "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[0].tremoloPicking. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_parser.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

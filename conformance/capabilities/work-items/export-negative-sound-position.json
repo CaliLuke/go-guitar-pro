@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "export-negative-sound-position",
+  "capability": "sound-automation",
+  "title": "Resolve negative sound automation positions in grace fixtures",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Determine the correct contract for sound events at position -0.125 in a parsed GPIF grace fixture.",
+  "acceptance": [
+    "Reproduce the export failure in testdata/gp7/grace.gp.",
+    "Establish whether the event is valid preroll, a malformed source or an importer projection error.",
+    "Preserve a valid event or diagnose it at the correct boundary with public and independent evidence; do not clamp it silently."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Reproduce the export failure in testdata/gp7/grace.gp."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L17",
+      "symbol": "AutomationType.Instrument"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceAutomationSemantics",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

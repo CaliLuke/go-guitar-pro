@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "rse",
+  "capability": "rse",
+  "title": "Bound RSE data preservation against real GP8 consumers",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Separate serializable RSE configuration from proprietary synthesis and unsupported legacy records.",
+  "acceptance": [
+    "Inventory non-default master and track RSE descendants currently covered by parent omission reports.",
+    "Find supported GPIF destinations and consumer evidence for each proposed preserved slice.",
+    "Produce bounded follow-ups for supported data; retain explicit target limitations for the remainder without claiming audio synthesis parity."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "rse.go",
+      "gpif_types.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Inventory non-default master and track RSE descendants currently covered by parent omission reports."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "rse.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePlaybackRouting",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_types.go",
+    "rse.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

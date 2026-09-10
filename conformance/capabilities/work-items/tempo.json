@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "tempo",
+  "capability": "tempo",
+  "title": "Preserve authored tempo visibility where GP8 supports it",
+  "kind": "investigation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Resolve the legacy HideTempo export gap independently from tempo interpolation and event annotations.",
+  "acceptance": [
+    "Demonstrate visible and hidden opening tempo marks with the same fractional BPM.",
+    "Determine whether GPIF Visible and the pinned consumer can represent HideTempo without suppressing tempo playback.",
+    "Implement verified preservation or retain a scoped target limit, with independent and strict-policy evidence."
+  ],
+  "exclusions": [
+    "Automation interpolation and occurrence semantics belong to automation-detail."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Demonstrate visible and hidden opening tempo marks with the same fractional BPM."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Automation.ts#L98",
+      "symbol": "Automation.value"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L326",
+      "symbol": "MasterBar.tempoAutomations"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_automations.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.InitialTempo",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.TempoAutomations",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_automations.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

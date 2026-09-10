@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "accidentals",
+  "capability": "accidentals",
+  "title": "Preserve authored pitch spelling and accidental choices",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain source spelling independently from numeric sounding pitch and define concert/transposed authority.",
+  "acceptance": [
+    "Two enharmonic notes with the same MIDI pitch retain distinct authored spellings.",
+    "Cover explicit natural, sharp, flat and double accidentals plus the existing SwapAccidentals compatibility field.",
+    "Validate spelling/pitch contradictions and independently assert supported GP8 output without changing sounding pitch."
+  ],
+  "exclusions": [],
+  "depends_on": [
+    "transposition"
+  ],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp5/No Wah.gp5",
+    "capability": "accidentals",
+    "differences": [
+      {
+        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].accidentalMode",
+        "source": null,
+        "target": 2,
+        "source_present": false,
+        "target_present": true
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L567",
+      "symbol": "Note.accidentalMode"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteAccidentalMode.ts#L9",
+      "symbol": "NoteAccidentalMode.Default"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteAccidentalMode.ts#L13",
+      "symbol": "NoteAccidentalMode.ForceNone"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/NoteAccidentalMode.ts#L17",
+      "symbol": "NoteAccidentalMode.ForceNatural"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_audit.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Note.SwapAccidentals",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_audit.go",
+    "gpif_effects.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

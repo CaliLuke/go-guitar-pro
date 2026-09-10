@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "short-name",
+  "capability": "short-name",
+  "title": "Preserve authored track short names",
+  "kind": "implementation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model",
+    "export"
+  ],
+  "scope": "Retain GPIF ShortName independently from the full track name through parsing and GP8 export.",
+  "acceptance": [
+    "Use different full and short names on two tracks and verify exact identities through the public API.",
+    "Cover empty, Unicode and XML-sensitive short names without automatic truncation.",
+    "The pinned consumer sees the exact short name after a public edit and export."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "testdata/gp7/dead.gp",
+    "capability": "short-name",
+    "differences": [
+      {
+        "path": "tracks[0].shortName",
+        "source": "S-Gt",
+        "target": "Track 1",
+        "source_present": true,
+        "target_present": true
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Track.ts#L99",
+      "symbol": "Track.shortName"
+    },
+    {
+      "kind": "source",
+      "reference": "track.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_types.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/dead.gp:short-name",
+      "detail": "Reproduced at tracks[0].shortName. Source and target values are stored in probe_comparison."
+    }
+  ],
+  "shared_files": [
+    "gpif_types.go",
+    "track.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

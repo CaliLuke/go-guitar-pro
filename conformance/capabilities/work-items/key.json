@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "key",
+  "capability": "key",
+  "title": "Preserve lowercase GPIF minor key modes",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "import",
+    "model"
+  ],
+  "scope": "Correct case handling for GPIF key modes without changing transposition behavior or broadening accepted unknown modes.",
+  "acceptance": [
+    "A valid Mode value of minor parses as IsMinor=true and exports to an AlphaTab minor key.",
+    "Test Major, major, Minor and minor with nonzero accidental counts and adjacent key changes.",
+    "Unknown mode handling remains explicit; add the failing case to the public API suite and independent oracle."
+  ],
+  "exclusions": [
+    "Transposition-derived key changes belong to the transposition ticket."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "runtime-candidate",
+    "fixture": "synthetic/key-mode-lowercase.gp",
+    "capability": "key",
+    "differences": [
+      {
+        "path": "masterBars[0].keySignatureType",
+        "source": 1,
+        "target": null,
+        "source_present": true,
+        "target_present": false
+      }
+    ],
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L394",
+      "symbol": "Bar.keySignature"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L399",
+      "symbol": "Bar.keySignatureType"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L215",
+      "symbol": "MasterBar.keySignature"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/MasterBar.ts#L223",
+      "symbol": "MasterBar.keySignature"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "KeySignature.Key",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "field",
+      "reference": "KeySignature.IsMinor",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_notation.go",
+    "gpif_parser.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

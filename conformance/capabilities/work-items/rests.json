@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "rests",
+  "capability": "rests",
+  "title": "Establish whether GP8 can preserve explicit empty beats",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Determine whether an authored empty beat can remain distinct from a rest in GP8 and in the pinned consumer.",
+  "acceptance": [
+    "Compare an empty voice slot, an explicit empty beat and a note-free rest using independent wire inspection.",
+    "Identify any supported target encoding that preserves the public BeatStatus distinction.",
+    "Preserve the distinction if possible; otherwise retain its narrow normalization and strict-policy evidence as an accepted target limit."
+  ],
+  "exclusions": [],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gp8_builder.go"
+    ],
+    "instructions": "Compare an empty voice slot, an explicit empty beat and a note-free rest using independent wire inspection."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L270",
+      "symbol": "Beat.isEmpty"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L331",
+      "symbol": "Beat.isRest"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L338",
+      "symbol": "Beat.isFullBarRest"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Beat.Status",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBeatSemantics",
+      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}

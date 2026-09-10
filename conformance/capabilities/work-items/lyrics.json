@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "lyrics",
+  "capability": "lyrics",
+  "title": "Resolve GP8 export of legacy score-level lyrics",
+  "kind": "investigation",
+  "priority": 2,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Map binary score lyrics to a valid target track/offset representation where possible, without merging independent lyric scopes.",
+  "acceptance": [
+    "Use an assigned score lyric track, multiple ordered lines and a nonzero starting measure.",
+    "Compare source text, target track and offsets with the pinned consumer; keep beat text separate.",
+    "For unassigned or unrepresentable scope, retain a specific omission and strict-policy assertion rather than silently assigning track zero."
+  ],
+  "exclusions": [
+    "Do not implement a lyrics renderer or collapse beat-authored lyrics into track lyrics."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_parser.go",
+      "gp8_builder.go"
+    ],
+    "instructions": "Use an assigned score lyric track, multiple ordered lines and a nonzero starting measure."
+  },
+  "evidence": [
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L388",
+      "symbol": "Beat.lyrics"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Lyrics.ts#L28",
+      "symbol": "Lyrics.startBar"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Lyrics.ts#L34",
+      "symbol": "Lyrics.text"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Lyrics.ts#L39",
+      "symbol": "Lyrics.chunks"
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_parser.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go",
+      "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "field",
+      "reference": "Song.Lyrics",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "field",
+      "reference": "Track.Lyrics",
+      "detail": "Public contract; linked matrix cases are in obligation."
+    }
+  ],
+  "shared_files": [
+    "gp8_builder.go",
+    "gpif_parser.go"
+  ],
+  "resolution": null,
+  "verification": [],
+  "issue": null
+}
