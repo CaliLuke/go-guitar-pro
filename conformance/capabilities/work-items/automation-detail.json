@@ -5,8 +5,8 @@
   "title": "Preserve authored tempo and sound automation details",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -75,12 +75,12 @@
     "gpif_audit.go",
     "gpif_automations.go"
   ],
-  "resolution": null,
+  "resolution": "Added public tempo and sound automation interpolation, text, and inverse visibility fields with ordered GPIF import/export. Sound references now use the CDATA encoding required by the pinned consumer. Tempo details and sound interpolation/text are preserved; hidden sound visibility has one precise GP8 consumer-omission report. Legacy Song.HideTempo and sync-point occurrence remain in their separately scoped tickets.",
   "verification": [],
   "issue": {
     "number": 41,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/41",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.727877+00:00"
+    "checked_at": "2026-09-10T19:28:34.915048+00:00"
   }
 }

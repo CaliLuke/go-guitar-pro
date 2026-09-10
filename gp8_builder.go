@@ -133,19 +133,21 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 	}
 
 	automations := gpifAutomations{Automations: make([]gpifAutomation, 0, len(tempos))}
-	for index, tempo := range tempos {
+	openingTextUsed := false
+	for _, tempo := range tempos {
 		if tempo.Tempo <= 0 {
 			continue
 		}
-		text := ""
-		if index == 0 {
+		text := tempo.Text
+		if !openingTextUsed && tempo.Bar == 0 && tempo.Position == 0 && song.TempoName != "" {
 			text = song.TempoName
+			openingTextUsed = true
 		}
 		automations.Automations = append(automations.Automations, gpifAutomation{
 			Type:     "Tempo",
-			Linear:   false,
+			Linear:   tempo.Linear,
 			Value:    gpifAutomationValue{Text: strconv.FormatFloat(tempo.Tempo, 'f', -1, 64) + " 2"},
-			Visible:  "true",
+			Visible:  strconv.FormatBool(!tempo.Hidden),
 			Text:     text,
 			Bar:      tempo.Bar,
 			Position: tempo.Position,
@@ -316,8 +318,9 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	for _, automation := range track.SoundAutomations {
 		sound := track.Sounds[automation.Sound]
 		result.Automations.Automations = append(result.Automations.Automations, gpifAutomation{
-			Type: "Sound", Value: gpifAutomationValue{Text: sound.Path + ";" + sound.Name + ";" + sound.Role},
-			Visible: "true", Bar: automation.Bar, Position: automation.Position,
+			Type: "Sound", Value: gpifAutomationValue{Text: sound.Path + ";" + sound.Name + ";" + sound.Role, cdata: true},
+			Linear: automation.Linear, Text: automation.Text, Visible: strconv.FormatBool(!automation.Hidden),
+			Bar: automation.Bar, Position: automation.Position,
 		})
 	}
 	if len(track.Lyrics) > 0 {

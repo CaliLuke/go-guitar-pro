@@ -142,6 +142,13 @@ type SoundAutomation struct {
 	Position float64
 	// Sound is a zero-based index in Track.Sounds.
 	Sound int
+	// Linear means the sound change is applied linearly.
+	Linear bool
+	// Text is the authored annotation for this event.
+	Text string
+	// Hidden reports whether the authored event is suppressed.
+	// The zero value keeps the historically visible programmatic default.
+	Hidden bool
 }
 
 // GuitarString represents a guitar string with tuning.

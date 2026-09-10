@@ -15,7 +15,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
 | `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | GPIF and binary harmonic kinds and fret values are compared on import and GP8 export, including feedback harmonics; audited upstream-only model surface is recorded by issue 34. |
 | `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
-| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public tempo authority, values, order, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
+| `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The public automation record and GP8 writer preserve ordered tempo values, interpolation, text, and per-event visibility; the remaining partial occurrence contract is tracked separately. |
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 
 ## Parse diagnostics
@@ -43,9 +43,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.MasterTrack.Automation.Tempo.Invalid` | `tempo-automations` | `invalid-data` | The opening tempo must be finite and positive. |
 | `GPIF.MasterTrack.Automation.Tempo.LegacyOverflow` | `tempo-automations` | `lossy-projection` | The exact opening BPM is preserved but cannot be projected into the legacy int16 field. |
 | `GPIF.MasterTrack.Automation.Tempo.Reference.Invalid` | `tempo-automations` | `invalid-data` | Applying the authored tempo reference unit must produce a finite positive BPM. |
-| `GPIF.MasterTrack.Automation.Tempo.Linear` | `tempo-automations` | `lossy-projection` | TempoAutomation has no interpolation field. |
 | `GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid` | `score-core` | `invalid-data` | A sync point must contain a valid non-negative frame offset and score location. |
-| `GPIF.Track.Automation.Sound.Linear` | `score-core` | `lossy-projection` | SoundAutomation has no interpolation field. |
 | `GPIF.Note.Property.Muted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The muted property must contain its Enable payload. |
 | `GPIF.Note.Property.PalmMuted.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The palm-muted property must contain its Enable payload. |
 | `GPIF.Note.Property.Tapped.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The tapped property must contain its Enable payload. |
@@ -198,7 +196,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BackingTrack` | `score-core` | 9 authored, 0 compatibility, 0 derived, 0 out-of-scope | The backing-track record and embedded asset are authored source data. |
 | `SyncPoint` | `timing` | 6 authored, 2 compatibility, 3 derived, 0 out-of-scope | The sync point preserves source values and checked timing views. |
 | `VolumeAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The volume point is authored playback data. |
-| `TempoAutomation` | `tempo-automations` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The tempo point is authored timing data. |
+| `TempoAutomation` | `tempo-automations` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The tempo point preserves authored timing, interpolation, annotation, and visibility data. |
 | `Lyrics` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The score lyrics are authored text data. |
 | `LyricLine` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The lyric line is authored text data. |
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
@@ -212,7 +210,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
 | `TrackSound` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition is authored playback data. |
-| `SoundAutomation` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound automation is authored playback data. |
+| `SoundAutomation` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound automation preserves authored playback, interpolation, annotation, and visibility data. |
 | `TrackLyricLine` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track lyric line is authored text data. |
 | `TrackRse` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track RSE record is authored playback data. |
 | `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
@@ -248,9 +246,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 190 |
+| `preserved` | 195 |
 | `normalized` | 34 |
-| `omitted` | 118 |
+| `omitted` | 119 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |

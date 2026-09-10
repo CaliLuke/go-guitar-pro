@@ -35,7 +35,7 @@ const mutations = [
     file: 'conformance/feature-ledger.json',
     replacements: [
       { before: '"preserved":["Song.Album"', after: '"preserved":["Song.HideTempo"' },
-      { before: '"TimeSignature.Beams","Song.HideTempo","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","MidiChannel.Tremolo"' }
+      { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',

@@ -110,6 +110,15 @@ type TempoAutomation struct {
 	Position float64
 	// Tempo is the number of beats per minute after the change.
 	Tempo float64
+	// Linear means the tempo changes linearly from the preceding point.
+	Linear bool
+	// Text is the authored label for this event. Song.TempoName remains the
+	// compatibility authority for the opening event; clear it to edit that
+	// event through Text.
+	Text string
+	// Hidden reports whether the authored tempo mark is suppressed in the score.
+	// The zero value keeps the historically visible programmatic default.
+	Hidden bool
 }
 
 func (s *Song) readBinary(c *cursor) error {

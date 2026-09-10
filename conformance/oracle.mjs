@@ -466,11 +466,47 @@ export function normalizeScore(score) {
   };
 }
 
-export function loadNormalizedScore(fixture) {
+function loadScore(fixture) {
   const settings = new alphaTab.Settings();
   Object.assign(settings.importer, oracle.importerSettings);
   const bytes = new Uint8Array(fs.readFileSync(path.resolve(fixture)));
-  return normalizeScore(alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings));
+  return alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings);
+}
+
+export function loadNormalizedScore(fixture) {
+  return normalizeScore(loadScore(fixture));
+}
+
+export function loadAutomationFacts(fixture) {
+  const score = loadScore(fixture);
+  const detail = (automation, bar) => ({
+    ...normalizeAutomation(automation, bar),
+    text: automation.text ?? '',
+    visible: Boolean(automation.isVisible)
+  });
+  const tempo = [];
+  for (const masterBar of score.masterBars) {
+    for (const automation of masterBar.tempoAutomations) {
+      tempo.push(detail(automation, masterBar.index));
+    }
+  }
+  const sound = [];
+  for (const track of score.tracks) {
+    const staff = track.staves[0];
+    if (!staff) continue;
+    for (const bar of staff.bars) {
+      for (const voice of bar.voices) {
+        for (const beat of voice.beats) {
+          for (const automation of beat.automations) {
+            if (automation.type === alphaTab.model.AutomationType.Instrument) {
+              sound.push({ track: track.index, ...detail(automation, bar.index) });
+            }
+          }
+        }
+      }
+    }
+  }
+  return { tempo, sound };
 }
 
 function main() {
@@ -485,6 +521,10 @@ function main() {
       fixture,
       score: loadNormalizedScore(fixture)
     })))}\n`);
+    return;
+  }
+  if (args[0] === '--automations' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadAutomationFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

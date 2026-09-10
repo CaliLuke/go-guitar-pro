@@ -32,7 +32,7 @@ func normalizeGoScore(song *Song) any {
 	} else {
 		for _, automation := range song.TempoAutomations {
 			tempoAutomations = append(tempoAutomations, map[string]any{
-				"bar": automation.Bar, "position": automation.Position, "type": "tempo", "value": automation.Tempo, "linear": false,
+				"bar": automation.Bar, "position": automation.Position, "type": "tempo", "value": automation.Tempo, "linear": automation.Linear,
 			})
 		}
 	}

@@ -6,8 +6,11 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"encoding/xml"
 	"math"
+	"os"
+	"os/exec"
 	"slices"
 	"strings"
 	"testing"
@@ -24,9 +27,9 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	song.Tempo = 111
 	song.InitialTempo = KnownSourceValue(BPM(111))
 	song.TempoAutomations = []TempoAutomation{
-		{Bar: 0, Position: 0, Tempo: 111},
-		{Bar: 1, Position: 0.75, Tempo: 145.5},
-		{Bar: 1, Position: 0.25, Tempo: 91.25},
+		{Bar: 0, Position: 0, Tempo: 111, Text: "Bright"},
+		{Bar: 0, Position: 0.5, Tempo: 145.5, Text: "step tempo"},
+		{Bar: 0, Position: 0.5, Tempo: 145.5, Linear: true, Text: "linear tempo", Hidden: true},
 	}
 	track := &song.Tracks[0]
 	track.Sounds = []TrackSound{
@@ -35,8 +38,8 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	}
 	track.SoundAutomations = []SoundAutomation{
 		{Bar: 0, Position: 0, Sound: 0},
-		{Bar: 1, Position: 0.75, Sound: 1},
-		{Bar: 1, Position: 0.25, Sound: 0},
+		{Bar: 0, Position: 0.5, Sound: 1, Text: "step sound"},
+		{Bar: 0, Position: 0.5, Sound: 1, Linear: true, Text: "linear sound", Hidden: true},
 	}
 	song.VolumeAutomations = []VolumeAutomation{
 		{Track: 0, Bar: 0, Position: 0, Value: 0.25, Linear: false},
@@ -62,18 +65,20 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	track.Measures[0].Voices[0].Beats[0].Effect.MixTableChange = change
 	track.Staves[0].Measures = track.Measures
 
-	run.Field("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 0, Position: 0, Tempo: 111}, {Bar: 1, Position: 0.75, Tempo: 145.5}, {Bar: 1, Position: 0.25, Tempo: 91.25}})
+	run.Field("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 0, Position: 0, Tempo: 111, Text: "Bright"}, {Bar: 0, Position: 0.5, Tempo: 145.5, Text: "step tempo"}, {Bar: 0, Position: 0.5, Tempo: 145.5, Linear: true, Text: "linear tempo", Hidden: true}})
 	for index, automation := range song.TempoAutomations {
-		run.Field("TempoAutomation.Bar", automation.Bar, []int{0, 1, 1}[index])
-		run.Field("TempoAutomation.Position", automation.Position, []float64{0, 0.75, 0.25}[index])
-		run.Field("TempoAutomation.Tempo", automation.Tempo, []float64{111, 145.5, 91.25}[index])
+		run.Field("TempoAutomation.Bar", automation.Bar, 0)
+		run.Field("TempoAutomation.Position", automation.Position, []float64{0, 0.5, 0.5}[index])
+		run.Field("TempoAutomation.Tempo", automation.Tempo, []float64{111, 145.5, 145.5}[index])
+		assertAutomationDetailFields(run, "TempoAutomation", automation.Linear, automation.Text, automation.Hidden, index, []string{"Bright", "step tempo", "linear tempo"})
 	}
 	run.Field("Track.Sounds", track.Sounds, []TrackSound{{Name: "Lead", Label: "Lead A", Path: "factory/a", Role: "main", Program: 27}, {Name: "Lead", Label: "Lead B", Path: "factory/b", Role: "solo", Program: 81}})
-	run.Field("Track.SoundAutomations", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 1, Position: 0.75, Sound: 1}, {Bar: 1, Position: 0.25, Sound: 0}})
+	run.Field("Track.SoundAutomations", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 0.5, Sound: 1, Text: "step sound"}, {Bar: 0, Position: 0.5, Sound: 1, Linear: true, Text: "linear sound", Hidden: true}})
 	for index, automation := range track.SoundAutomations {
-		run.Field("SoundAutomation.Bar", automation.Bar, []int{0, 1, 1}[index])
-		run.Field("SoundAutomation.Position", automation.Position, []float64{0, 0.75, 0.25}[index])
-		run.Field("SoundAutomation.Sound", automation.Sound, []int{0, 1, 0}[index])
+		run.Field("SoundAutomation.Bar", automation.Bar, 0)
+		run.Field("SoundAutomation.Position", automation.Position, []float64{0, 0.5, 0.5}[index])
+		run.Field("SoundAutomation.Sound", automation.Sound, []int{0, 1, 1}[index])
+		assertAutomationDetailFields(run, "SoundAutomation", automation.Linear, automation.Text, automation.Hidden, index, []string{"", "step sound", "linear sound"})
 	}
 	run.Omitted("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
 	for index, automation := range song.VolumeAutomations {
@@ -86,7 +91,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	assertAutomationMixTableFields(run, track.Measures[0].Voices[0].Beats[0].Effect.MixTableChange, change)
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.volume-automations", "gp8.omit.beat-mix-table-change"} {
+	for _, code := range []string{"gp8.omit.volume-automations", "gp8.omit.beat-mix-table-change", "gp8.omit.sound-automation-visibility"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
@@ -98,11 +103,12 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	wire := extractAutomationWireDocument(t, data)
 	run.Wire("gpifAutomations.Automations", len(wire.masterAutomations), 3)
 	run.Wire("gpifAutomation.Type", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Type }), []string{"Tempo", "Tempo", "Tempo"})
-	run.Wire("gpifAutomation.Bar", conformanceAutomationInts(wire.masterAutomations, func(item conformanceAutomationWireAutomation) int { return item.Bar }), []int{0, 1, 1})
-	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.masterAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.75, 0.25})
-	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"111 2", "145.5 2", "91.25 2"})
-	run.Wire("gpifAutomation.Linear", conformanceAutomationBools(wire.masterAutomations, func(item conformanceAutomationWireAutomation) bool { return item.Linear }), []bool{false, false, false})
-	run.Wire("gpifAutomation.Visible", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Visible }), []string{"true", "true", "true"})
+	run.Wire("gpifAutomation.Bar", conformanceAutomationInts(wire.masterAutomations, func(item conformanceAutomationWireAutomation) int { return item.Bar }), []int{0, 0, 0})
+	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.masterAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.5, 0.5})
+	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"111 2", "145.5 2", "145.5 2"})
+	run.Wire("gpifAutomation.Linear", conformanceAutomationBools(wire.masterAutomations, func(item conformanceAutomationWireAutomation) bool { return item.Linear }), []bool{false, false, true})
+	run.Wire("gpifAutomation.Visible", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Visible }), []string{"true", "true", "false"})
+	run.Wire("gpifAutomation.Text", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Text }), []string{"Bright", "step tempo", "linear tempo"})
 	run.Wire("gpifSounds.Sounds", len(wire.sounds), 2)
 	run.Wire("gpifSound.Name", []string{wire.sounds[0].Name, wire.sounds[1].Name}, []string{"Lead", "Lead"})
 	run.Wire("gpifSound.Label", []string{wire.sounds[0].Label, wire.sounds[1].Label}, []string{"Lead A", "Lead B"})
@@ -111,10 +117,11 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	run.Wire("gpifSound.Program", []int{wire.sounds[0].Program, wire.sounds[1].Program}, []int{27, 81})
 	run.Wire("gpifTrack.Automations", len(wire.trackAutomations), 3)
 	run.Wire("gpifTrack.Sounds", len(wire.sounds), 2)
-	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"factory/a;Lead;main", "factory/b;Lead;solo", "factory/a;Lead;main"})
-	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.trackAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.75, 0.25})
-	run.Wire("gpifAutomation.Linear", conformanceAutomationBools(wire.trackAutomations, func(item conformanceAutomationWireAutomation) bool { return item.Linear }), []bool{false, false, false})
-	run.Wire("gpifAutomation.Visible", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Visible }), []string{"true", "true", "true"})
+	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"factory/a;Lead;main", "factory/b;Lead;solo", "factory/b;Lead;solo"})
+	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.trackAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.5, 0.5})
+	run.Wire("gpifAutomation.Linear", conformanceAutomationBools(wire.trackAutomations, func(item conformanceAutomationWireAutomation) bool { return item.Linear }), []bool{false, false, true})
+	run.Wire("gpifAutomation.Visible", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Visible }), []string{"true", "true", "false"})
+	run.Wire("gpifAutomation.Text", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Text }), []string{"", "step sound", "linear sound"})
 
 	roundTrip, err := Parse(data)
 	if err != nil {
@@ -123,14 +130,33 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	run.Field("Song.TempoAutomations", roundTrip.TempoAutomations, song.TempoAutomations)
 	run.Field("Track.SoundAutomations", roundTrip.Tracks[0].SoundAutomations, track.SoundAutomations)
 	run.Field("Track.Sounds", roundTrip.Tracks[0].Sounds, track.Sounds)
+	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+		got := readAlphaTabAutomationFacts(t, writeConformanceFixture(t, data))
+		want := map[string]any{
+			"tempo": []any{
+				map[string]any{"bar": float64(0), "position": float64(0), "type": "tempo", "value": float64(111), "linear": false, "text": "Bright", "visible": true},
+				map[string]any{"bar": float64(0), "position": 0.5, "type": "tempo", "value": 145.5, "linear": false, "text": "step tempo", "visible": true},
+				map[string]any{"bar": float64(0), "position": 0.5, "type": "tempo", "value": 145.5, "linear": true, "text": "linear tempo", "visible": false},
+			},
+			"sound": []any{
+				map[string]any{"track": float64(0), "bar": float64(0), "position": float64(0), "type": "instrument", "value": float64(27), "linear": false, "text": "", "visible": true},
+				map[string]any{"track": float64(0), "bar": float64(0), "position": 0.5, "type": "instrument", "value": float64(81), "linear": false, "text": "step sound", "visible": true},
+				// AlphaTab does not copy hidden visibility from the Sound record to its instrument automation.
+				map[string]any{"track": float64(0), "bar": float64(0), "position": 0.5, "type": "instrument", "value": float64(81), "linear": true, "text": "linear sound", "visible": true},
+			},
+		}
+		if differences := semanticDifferences(got, want); len(differences) != 0 {
+			t.Fatalf("AlphaTab automation facts differ: %#v", differences)
+		}
+	}
 
 	reordered := semanticValidPitchedGP8Song(t)
 	reordered.Tracks[0].Settings.Notation = true
 	reordered.Tracks[0].Sounds = []TrackSound{track.Sounds[1], track.Sounds[0]}
 	reordered.Tracks[0].SoundAutomations = []SoundAutomation{
 		{Bar: 0, Position: 0, Sound: 1},
-		{Bar: 1, Position: 0.75, Sound: 0},
-		{Bar: 1, Position: 0.25, Sound: 1},
+		{Bar: 0, Position: 0.5, Sound: 0, Text: "step sound"},
+		{Bar: 0, Position: 0.5, Sound: 0, Linear: true, Text: "linear sound", Hidden: true},
 	}
 	reorderedData, err := Export(reordered, ExportFormatGP8)
 	if err != nil {
@@ -139,6 +165,37 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	reorderedWire := extractAutomationWireDocument(t, reorderedData)
 	if got, want := conformanceAutomationStrings(reorderedWire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }); !slices.Equal(got, want) {
 		t.Errorf("sound references after definition reorder = %#v, want %#v", got, want)
+	}
+
+	authority := semanticValidPitchedGP8Song(t)
+	authority.TempoName = "edited opening"
+	authority.TempoAutomations = []TempoAutomation{
+		{Bar: 1, Position: 0.25, Tempo: 99, Text: "later"},
+		{Bar: 0, Position: 0, Tempo: 120, Text: "source opening"},
+	}
+	authorityData, err := Export(authority, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	authorityWire := extractAutomationWireDocument(t, authorityData)
+	run.Wire("gpifAutomation.Text", conformanceAutomationStrings(authorityWire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Text }), []string{"later", "edited opening"})
+	authority.TempoName = ""
+	authorityData, err = Export(authority, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	authorityWire = extractAutomationWireDocument(t, authorityData)
+	run.Field("TempoAutomation.Text", authority.TempoAutomations[1].Text, "source opening")
+	run.Wire("gpifAutomation.Text", conformanceAutomationStrings(authorityWire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Text }), []string{"later", "source opening"})
+}
+
+func assertAutomationDetailFields(run *conformanceRun, prefix string, linear bool, text string, hidden bool, index int, texts []string) {
+	run.Preserved(prefix+".Linear", linear, index == 2)
+	run.Preserved(prefix+".Text", text, texts[index])
+	if prefix == "SoundAutomation" {
+		run.Omitted(prefix+".Hidden", hidden, index == 2)
+	} else {
+		run.Preserved(prefix+".Hidden", hidden, index == 2)
 	}
 }
 
@@ -186,11 +243,9 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	}
 	for _, code := range []string{
 		"GPIF.MasterTrack.Automation.Tempo.Invalid",
-		"GPIF.MasterTrack.Automation.Tempo.Linear",
 		"GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid",
 		"GPIF.MasterTrack.Automation.Type.Unknown",
 		"GPIF.Track.Automation.Sound.Reference",
-		"GPIF.Track.Automation.Sound.Linear",
 		"GPIF.Track.Automation.SustainPedal",
 		"GPIF.Track.Automation.Type.Unknown",
 		"GPIF.ChannelStrip.Automation.Volume.Value.Invalid",
@@ -216,8 +271,8 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 			t.Errorf("%s diagnostic count = %d, want %d", code, got, want)
 		}
 	}
-	if got := result.Song.TempoAutomations; len(got) != 1 || got[0].Tempo != 120 {
-		t.Fatalf("tempo automations after invalid records = %#v, want one valid value", got)
+	if got, want := result.Song.TempoAutomations, []TempoAutomation{{Bar: 0, Position: 0, Tempo: 120, Linear: true, Text: "source tempo", Hidden: true}}; !slices.Equal(got, want) {
+		t.Fatalf("tempo automations after invalid records = %#v, want %#v", got, want)
 	}
 	if len(result.Song.SyncPoints) != 0 {
 		t.Fatalf("sync points after invalid records = %#v, want none", result.Song.SyncPoints)
@@ -226,7 +281,7 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	if len(track.SoundAutomations) != 2 {
 		t.Fatalf("sound automations = %#v, want two resolved records", track.SoundAutomations)
 	}
-	run.Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 1, Sound: 1}})
+	run.Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 1, Sound: 1, Linear: true, Text: "source sound", Hidden: true}})
 	if len(result.Song.VolumeAutomations) != 1 {
 		t.Fatalf("volume automations = %#v, want one valid record", result.Song.VolumeAutomations)
 	}
@@ -238,6 +293,14 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	tempoSong := &Song{}
 	gpifReadTempoAutomations([]gpifAutomation{{Type: "Tempo", Bar: 1, Position: 0.5, Value: gpifAutomationValue{Text: "81.5 3"}}}, tempoSong, nil)
 	run.Dispatch("gpifReadTempoAutomations:auto.Type", tempoSong.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.5, Tempo: 122.25}})
+	labelSong := &Song{TempoName: "stale"}
+	gpifReadTempoAutomations([]gpifAutomation{
+		{Type: "Tempo", Bar: 1, Value: gpifAutomationValue{Text: "90 2"}, Text: "later"},
+		{Type: "Tempo", Bar: 0, Value: gpifAutomationValue{Text: "120 2"}},
+	}, labelSong, nil)
+	if labelSong.TempoName != "" {
+		t.Fatalf("out-of-order empty opening label left stale name %q", labelSong.TempoName)
+	}
 	syncSong := &Song{}
 	gpifReadSyncPoints([]gpifAutomation{{Type: "SyncPoint", Bar: 1, Position: 1, Linear: true, Visible: "false", Value: gpifAutomationValue{FrameOffset: "44100", BarOccurrence: "2"}}}, syncSong)
 	run.Dispatch("gpifReadSyncPoints:automation.Type", len(syncSong.SyncPoints), 1)
@@ -338,7 +401,7 @@ func runConformanceBinaryMixTable(run *conformanceRun) {
 
 func conformanceAutomationGPIFSource() string {
 	master := `<MasterTrack><Tracks>0</Tracks><Automations>
-    <Automation><Type>Tempo</Type><Linear>true</Linear><Bar>0</Bar><Position>0</Position><Value>120 2</Value></Automation>
+    <Automation><Type>Tempo</Type><Linear>true</Linear><Bar>0</Bar><Position>0</Position><Visible>false</Visible><Value>120 2</Value><Text>source tempo</Text></Automation>
     <Automation><Type>Tempo</Type><Bar>0</Bar><Position>0</Position></Automation>
     <Automation><Type>Tempo</Type><Bar>0</Bar><Position>0.5</Position><Value>invalid</Value></Automation>
     <Automation><Type>SyncPoint</Type><Bar>0</Bar><Position>0</Position><Value/></Automation>
@@ -351,7 +414,7 @@ func conformanceAutomationGPIFSource() string {
     <Sound><Name>Lead</Name><Label>Lead B</Label><Path>factory/b</Path><Role>solo</Role><MIDI><Program>81</Program><PrimaryChannel>0</PrimaryChannel></MIDI></Sound>
   </Sounds><Automations>
     <Automation><Type>Sound</Type><Bar>0</Bar><Position>0</Position><Value>factory/a;Lead;main</Value></Automation>
-    <Automation><Type>Sound</Type><Linear>true</Linear><Bar>0</Bar><Position>1</Position><Value>factory/b;Lead;solo</Value></Automation>
+    <Automation><Type>Sound</Type><Linear>true</Linear><Bar>0</Bar><Position>1</Position><Visible>false</Visible><Value>factory/b;Lead;solo</Value><Text>source sound</Text></Automation>
     <Automation><Type>Sound</Type><Bar>0</Bar><Position>0.5</Position><Value>factory/a;Lead;solo</Value></Automation>
     <Automation><Type>Sound</Type><Bar>0</Bar><Position>0.5</Position></Automation>
     <Automation><Type>SustainPedal</Type><Bar>0</Bar><Position>0.25</Position><Value>0 1</Value></Automation>
@@ -370,11 +433,26 @@ func conformanceAutomationGPIFSource() string {
 	return strings.Replace(result, `<Staves>`, trackData+`<Staves>`, 1)
 }
 
+func readAlphaTabAutomationFacts(t *testing.T, fixture string) any {
+	t.Helper()
+	command := exec.Command("node", alphaTabOracleScript(), "--automations", fixture)
+	output, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatalf("AlphaTab automation oracle: %v\n%s", err, output)
+	}
+	var facts any
+	if err := json.Unmarshal(output, &facts); err != nil {
+		t.Fatalf("decoding AlphaTab automation facts: %v\n%s", err, output)
+	}
+	return facts
+}
+
 type conformanceAutomationWireAutomation struct {
 	Type     string  `xml:"Type"`
 	Linear   bool    `xml:"Linear"`
 	Value    string  `xml:"Value"`
 	Visible  string  `xml:"Visible"`
+	Text     string  `xml:"Text"`
 	Bar      int     `xml:"Bar"`
 	Position float64 `xml:"Position"`
 }

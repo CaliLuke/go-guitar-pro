@@ -3369,13 +3369,6 @@
           "locationsSha256": "fd631855b2fdfbadb79125bd09e9f815c2f15a3d1ae5c54bf8cff2abf14db7b1"
         },
         {
-          "code": "GPIF.MasterTrack.Automation.Tempo.Linear",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/MasterTrack/Automations/Automation[1]/Linear",
-          "locationsSha256": "37cee82c7d89b7b9cd4029a6611fbc63e1b265bb878f32f2c6cfed9dcdc787a4"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 12,
@@ -14542,13 +14535,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
           "objectId": "0",
           "locationsSha256": "fd631855b2fdfbadb79125bd09e9f815c2f15a3d1ae5c54bf8cff2abf14db7b1"
-        },
-        {
-          "code": "GPIF.MasterTrack.Automation.Tempo.Linear",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/MasterTrack/Automations/Automation[1]/Linear",
-          "locationsSha256": "37cee82c7d89b7b9cd4029a6611fbc63e1b265bb878f32f2c6cfed9dcdc787a4"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",

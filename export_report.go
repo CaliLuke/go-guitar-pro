@@ -123,6 +123,13 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 	for _, automation := range song.VolumeAutomations {
 		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "GP8 writer does not emit this track volume automation")
 	}
+	for trackIndex := range song.Tracks {
+		for _, automation := range song.Tracks[trackIndex].SoundAutomations {
+			if automation.Hidden {
+				add("gp8.omit.sound-automation-visibility", "automation-detail", ExportDispositionOmitted, ScoreLocation{Track: trackIndex, Measure: automation.Bar}, "the pinned GP8 consumer does not retain hidden visibility on an instrument-change automation")
+			}
+		}
+	}
 	document, err := buildGP8DocumentWithReport(song, options.GP8, &report)
 	if err != nil {
 		add("gp8.reject.conversion", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())

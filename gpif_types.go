@@ -89,6 +89,17 @@ type gpifAutomationValue struct {
 	ModifiedTempo string `xml:"ModifiedTempo,omitempty"`
 	OriginalTempo string `xml:"OriginalTempo,omitempty"`
 	FrameOffset   string `xml:"FrameOffset,omitempty"`
+	cdata         bool
+}
+
+func (value gpifAutomationValue) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
+	if value.cdata {
+		return encoder.EncodeElement(struct {
+			Text string `xml:",cdata"`
+		}{Text: value.Text}, start)
+	}
+	type wireValue gpifAutomationValue
+	return encoder.EncodeElement(wireValue(value), start)
 }
 
 type gpifBackingTrack struct {

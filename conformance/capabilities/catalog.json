@@ -1667,12 +1667,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
+        "import": "supported",
+        "model": "supported",
         "export": "partial"
       },
-      "finding": "Tempo/sound event records lack full linear, text, visibility and occurrence state. Some source distinctions produce diagnostics.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Tempo and sound records preserve order, interpolation, text and visibility in the public model and GPIF wire. The pinned consumer retains tempo detail and sound interpolation/text, but drops hidden visibility from the instrument automation derived from a Sound record; GP8 preflight reports that exact omission. Sync-point occurrence remains separately modeled on SyncPoint.",
+      "acceptance": "Supported import/model scope has non-default public assertions. GP8 export is partial only for the pinned consumer's sound-visibility loss, with exact preflight and independent-consumer evidence.",
       "upstream": [
         "Automation.isLinear",
         "Automation.text",
@@ -1692,6 +1692,11 @@
           "kind": "source",
           "reference": "gpif_automations.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceAutomationSemantics",
+          "detail": "Linear and step tempo/sound events preserve order, text and visibility through the public model and GP8 wire; pinned AlphaTab verifies target behavior."
         }
       ]
     },

@@ -69,9 +69,15 @@ unknown engine state produces an unknown-syntax diagnostic.
 
 `InitialTempo` is the fractional authored value. `Tempo` is its legacy integer
 projection. When an opening automation identifies the stale value, an edit to
-either representation wins and produces a normalization report. GP8 preserves
-the tempo name and ordered automation values. It cannot preserve `HideTempo`,
-so it reports that omission.
+either representation wins and produces a normalization report. GPIF tempo and
+sound automations preserve authored order, interpolation, text, and per-event
+visibility. `Hidden` uses an inverse flag so the zero value keeps the historical
+visible default for programmatic callers. `Song.TempoName` remains the
+compatibility authority for the opening tempo label; clear it to edit that label
+through `TempoAutomation.Text`. GP8 preserves the automation wire values. The
+pinned consumer does not retain hidden visibility on the instrument automation
+it derives from a sound record, so export reports that specific omission. The
+separate legacy `Song.HideTempo` contract remains a target limitation.
 
 A score must have a valid opening tempo from `Tempo`, `InitialTempo`, or an
 automation at bar zero and position zero. A later automation does not supply

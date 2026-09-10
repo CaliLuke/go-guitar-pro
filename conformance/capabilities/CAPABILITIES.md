@@ -13,8 +13,8 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 48 | 27 | 24 | 2 |
-| model | 48 | 27 | 25 | 1 |
+| import | 49 | 26 | 24 | 2 |
+| model | 49 | 26 | 25 | 1 |
 | export | 32 | 22 | 45 | 2 |
 
 All three stages have a supported rating in 29 rows. This is a checklist count, not a percentage of all musical behavior.
@@ -46,13 +46,13 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Wah pedal state | 11 | 11 | 26 |
 | Navigation targets and jumps | 8 | 8 | 26 |
 | Slashed beats and slash staff notation | 8 | 8 | 26 |
-| MIDI bank selection and bank changes | 8 | 6 | 26 |
 | Lyrics authored directly on a beat | 5 | 5 | 26 |
 | Authored note duration percentage | 6 | 4 | 26 |
 | Fermata placement, kind and length | 4 | 4 | 26 |
 | Multiple-bar rest preferences | 4 | 4 | 26 |
 | Volume automation events | 8 | 4 | 26 |
 | Chord name, diagram and fingering visibility | 3 | 3 | 26 |
+| MIDI bank selection and bank changes | 8 | 3 | 26 |
 | Numbered staff notation | 3 | 3 | 26 |
 | Authored timer marks | 2 | 2 | 26 |
 | Beat barre fret and shape | 2 | 2 | 26 |
@@ -845,11 +845,11 @@ Bounded work: [Determine supported GP8 trill-speed encoding](https://github.com/
 
 Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Tempo/sound event records lack full linear, text, visibility and occurrence state. Some source distinctions produce diagnostics.
+Tempo and sound records preserve order, interpolation, text and visibility in the public model and GPIF wire. The pinned consumer retains tempo detail and sound interpolation/text, but drops hidden visibility from the instrument automation derived from a Sound record; GP8 preflight reports that exact omission. Sync-point occurrence remains separately modeled on SyncPoint.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Supported import/model scope has non-default public assertions. GP8 export is partial only for the pinned consumer's sound-visibility loss, with exact preflight and independent-consumer evidence.
 
 Bounded work: [Preserve authored tempo and sound automation details](https://github.com/CaliLuke/go-guitar-pro/issues/41).
 

@@ -13,13 +13,6 @@ func gpifAuditMasterAutomations(automations []gpifAutomation, context *parseCont
 	for index, automation := range automations {
 		switch automation.Type {
 		case "Tempo":
-			if automation.Linear {
-				context.add(diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Linear", "tempo-automations", ParseDiagnosticLossyProjection), ParseDiagnostic{
-					SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Linear", index),
-					Feature:    "tempo",
-					Reason:     "linear tempo interpolation has no TempoAutomation destination",
-				})
-			}
 			if strings.TrimSpace(automation.Value.Text) == "" {
 				context.add(gpifTempoAutomationInvalidSource, ParseDiagnostic{
 					SourcePath: fmt.Sprintf("/GPIF/MasterTrack/Automations/Automation[%d]/Value", index),
@@ -101,12 +94,6 @@ func gpifAuditTrackAutomations(track gpifTrack, context *parseContext) {
 		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/Automations/Automation[%d]", track.ID, index)
 		switch automation.Type {
 		case "Sound":
-			if automation.Linear {
-				context.add(diagnosticSource("GPIF.Track.Automation.Sound.Linear", "score-core", ParseDiagnosticLossyProjection), ParseDiagnostic{
-					SourcePath: path + "/Linear", ObjectID: track.ID,
-					Reason: "linear sound interpolation has no SoundAutomation destination",
-				})
-			}
 			resolved := false
 			for _, sound := range track.Sounds.Sounds {
 				if automation.Value.Text == sound.Path+";"+sound.Name+";"+sound.Role {
@@ -321,7 +308,10 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song, context 
 			})
 			continue
 		}
-		change := TempoAutomation{Bar: auto.Bar, Position: auto.Position, Tempo: tempo}
+		change := TempoAutomation{
+			Bar: auto.Bar, Position: auto.Position, Tempo: tempo,
+			Linear: auto.Linear, Text: auto.Text, Hidden: !gpifAutomationVisible(auto.Visible),
+		}
 		song.TempoAutomations = append(song.TempoAutomations, change)
 		if earliest < 0 || gpifAutomationIsBefore(change, song.TempoAutomations[earliest]) {
 			earliest = len(song.TempoAutomations) - 1
@@ -336,11 +326,13 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song, context 
 			} else {
 				song.Tempo = legacyTempo
 			}
-			if auto.Text != "" {
-				song.TempoName = auto.Text
-			}
+			song.TempoName = auto.Text
 		}
 	}
+}
+
+func gpifAutomationVisible(value string) bool {
+	return value == "" || strings.EqualFold(value, "true")
 }
 
 func gpifTempoReferenceFactor(parts []string) float64 {

@@ -144,6 +144,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 						if automation.Value.Text == sound.Path+";"+sound.Name+";"+sound.Role {
 							track.SoundAutomations = append(track.SoundAutomations, SoundAutomation{
 								Bar: automation.Bar, Position: automation.Position, Sound: soundIndex,
+								Linear: automation.Linear, Text: automation.Text, Hidden: !gpifAutomationVisible(automation.Visible),
 							})
 							break
 						}

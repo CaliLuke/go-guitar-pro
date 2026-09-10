@@ -88,7 +88,7 @@ func runConformancePickupTupletTempo(run *conformanceRun) {
 	song.Tracks[0].Settings.Notation = true
 	song.InitialTempo = KnownSourceValue(BPM(120))
 	song.Tempo = 120
-	song.TempoAutomations = []TempoAutomation{{Bar: 0, Position: 0, Tempo: 120}, {Bar: 1, Position: 0.25, Tempo: 132.5}}
+	song.TempoAutomations = []TempoAutomation{{Bar: 0, Position: 0, Tempo: 120, Text: "Bright"}, {Bar: 1, Position: 0.25, Tempo: 132.5}}
 	dottedTuplet := Duration{Value: uint16(DurationSixteenth), Dotted: true, TupletEnters: 7, TupletTimes: 4}
 	beats := make([]Beat, 7)
 	for index := range beats {
@@ -113,7 +113,7 @@ func runConformancePickupTupletTempo(run *conformanceRun) {
 	run.Field("Measure.Voices", len(song.Tracks[0].Measures[0].Voices), 2)
 	run.Field("Beat.ExactStart", [2]int64{song.Tracks[0].Measures[0].Voices[0].Beats[1].ExactStart.Numerator(), song.Tracks[0].Measures[0].Voices[0].Beats[1].ExactStart.Denominator()}, [2]int64{8160, 7})
 	run.Field("MeasureHeader.ExactStart", song.MeasureHeaders[1].ExactStart.FloorTicks(), int64(2400))
-	run.Field("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 0, Position: 0, Tempo: 120}, {Bar: 1, Position: 0.25, Tempo: 132.5}})
+	run.Field("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 0, Position: 0, Tempo: 120, Text: "Bright"}, {Bar: 1, Position: 0.25, Tempo: 132.5}})
 
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	if err != nil || len(report.Entries) != 0 {
