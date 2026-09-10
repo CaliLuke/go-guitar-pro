@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "export-invalid-program",
   "capability": "midi-routing",
-  "title": "Classify parsed invalid MIDI programs that block export",
-  "kind": "investigation",
+  "title": "Exclude unused legacy MIDI program slots from export rejection",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,24 @@
   "stages": [
     "export"
   ],
-  "scope": "Resolve the parse/export contract for instrument -1 in fade-to-black.gp4 and upstream beat-harmonics.gp3.",
+  "scope": "Do not block GP8 export because an unreferenced legacy channel-table slot contains program -1; continue rejecting invalid programs selected by a track.",
   "acceptance": [
-    "Reproduce both program -1 failures through the public API and compare AlphaTab defaults.",
-    "Determine whether -1 means an authored invalid program, an unbound channel or a legitimate format sentinel.",
-    "Implement only a justified boundary normalization or retain precise parse/export diagnostics with regression tests."
+    "Reproduce fade-to-black.gp4 and pinned guitarpro3/beat-harmonics.gp3. The negative-program slots are unreferenced by tracks; prove reference selection explicitly in the regression.",
+    "Export must not reject either fixture solely for an unused program -1. Any other export failure must remain separately identified rather than masked or waived.",
+    "Selecting one of those invalid slots from a track must still produce a precise rejection. Cover an authored invalid value other than -1 and an out-of-range channel reference.",
+    "Do not mutate the source channel table, silently coerce negative programs to zero, or relax format-independent validation indiscriminately. Test preflight/export agreement and selected program retention through the independent consumer."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No referenced-unbound default-instrument normalization is authorized by this slice. A referenced sentinel needs a separately justified contract."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "track.go",
-      "gp8_builder.go"
+      "validation.go",
+      "gp8_export.go"
     ],
-    "instructions": "Reproduce both program -1 failures through the public API and compare AlphaTab defaults."
+    "instructions": "Reproduce fade-to-black.gp4 and pinned guitarpro3/beat-harmonics.gp3. The negative-program slots are unreferenced by tracks; prove reference selection explicitly in the regression. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -74,11 +77,21 @@
       "kind": "test",
       "reference": "TestConformancePlaybackRouting",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/63#issuecomment-5624490039",
+      "detail": "implementation-ready: Public-API inspection confirmed every -1 slot in both fixtures is unused, including channels 25/41/57 and 9/25/41/57. ValidateSong currently checks the entire table before target export.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
     "gp8_builder.go",
-    "track.go"
+    "gp8_export.go",
+    "track.go",
+    "validation.go"
   ],
   "resolution": null,
   "verification": [],
@@ -86,6 +99,6 @@
     "number": 63,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/63",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.738343+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

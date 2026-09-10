@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "page-setup",
   "capability": "page-setup",
-  "title": "Resolve page and header/footer preservation scope",
-  "kind": "investigation",
+  "title": "Preserve supported header and footer templates and visibility",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
@@ -20,21 +20,28 @@
     "model",
     "export"
   ],
-  "scope": "Determine supported GP8 representations for legacy page setup and authored header/footer templates.",
+  "scope": "Map legacy page header/footer templates and visibility to the supported GP8 BinaryStylesheet fields; retain physical geometry as a separate limit.",
   "acceptance": [
-    "Use non-default dimensions/margins and distinct title/copyright header/footer templates.",
-    "Separate AlphaTab rendering templates from settings actually read from Guitar Pro archives.",
-    "Provide bounded follow-ups for valid source/target mappings and explicit strict-policy limits for unsupported data."
+    "Preserve the supported Title, Subtitle, Artist, Album, Words, Music, WordsAndMusic, Tabber and both Copyright template/visibility fields where present, using exact Header/* and Footer/* keys.",
+    "Use pinned GP5 and GP8 header-footer fixtures with distinct non-default templates and visible/hidden fields. Verify public import/edit/export, exact stylesheet records and pinned consumer values.",
+    "Define authority between the existing PageSetup templates/bitmask and any richer score-style representation. Split the legacy copyright lines deterministically and report ambiguous or lossy projection instead of discarding text.",
+    "Retain explicit template absence/defaults; do not accidentally erase other supported stylesheet values. New alignment APIs are excluded; preserve the documented default alignment for projected legacy fields."
   ],
-  "exclusions": [],
-  "depends_on": [],
+  "exclusions": [
+    "Physical dimensions, margins, score-size and page-number templates lack the required retaining GP8 oracle and remain separately reported.",
+    "Alignment preservation is not silently promised by template support; existing non-default alignment must have an explicit disposition."
+  ],
+  "depends_on": [
+    "barlines"
+  ],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "song.go",
+      "gp7_zip.go",
+      "gp8_export.go",
       "gp8_builder.go"
     ],
-    "instructions": "Use non-default dimensions/margins and distinct title/copyright header/footer templates."
+    "instructions": "Preserve the supported Title, Subtitle, Artist, Album, Words, Music, WordsAndMusic, Tabber and both Copyright template/visibility fields where present, using exact Header/* and Footer/* keys. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -76,10 +83,20 @@
       "kind": "test",
       "reference": "TestConformancePageSetupImport",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/114#issuecomment-5624507179",
+      "detail": "implementation-ready: Pinned BinaryStylesheet applies and writes header/footer templates and visibility, unlike physical geometry. The shared stylesheet infrastructure is owned by #109.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "gp7_zip.go",
     "gp8_builder.go",
+    "gp8_export.go",
     "song.go"
   ],
   "resolution": null,
@@ -88,6 +105,6 @@
     "number": 114,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/114",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.749367+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

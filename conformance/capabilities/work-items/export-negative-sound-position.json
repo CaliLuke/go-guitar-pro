@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "export-negative-sound-position",
   "capability": "sound-automation",
-  "title": "Resolve negative sound automation positions in grace fixtures",
-  "kind": "investigation",
+  "title": "Preserve authored opening sound-event preroll",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,27 @@
   "stages": [
     "export"
   ],
-  "scope": "Determine the correct contract for sound events at position -0.125 in a parsed GPIF grace fixture.",
+  "scope": "Preserve the valid opening Sound automation at position -0.125 in the GPIF grace fixture without clamping its position.",
   "acceptance": [
-    "Reproduce the export failure in testdata/gp7/grace.gp.",
-    "Establish whether the event is valid preroll, a malformed source or an importer projection error.",
-    "Preserve a valid event or diagnose it at the correct boundary with public and independent evidence; do not clamp it silently."
+    "testdata/gp7/grace.gp must pass the sound-position export boundary and retain bar 0, position -0.125, and the exact referenced sound through Go and pinned AlphaTab.",
+    "Retain event order relative to a position-zero event and other equal-position events. No event may be silently moved to zero.",
+    "For this evidenced slice, support finite opening-bar positions in [-0.125, 0), while regular positions remain in [0, 1]. Explicitly reject earlier preroll and negative positions on later bars; test -0.125, zero and values just outside the supported bounds. Document this as a bounded support contract, not a universal GPIF limit.",
+    "Continue rejecting non-finite positions, invalid bar/sound references and unsupported positions with precise diagnostics. Align preflight, validation and serialization without changing positive-position semantics."
   ],
-  "exclusions": [],
-  "depends_on": [],
+  "exclusions": [
+    "Do not infer a universal negative-position range from a permissive AlphaTab parser or add a playback engine."
+  ],
+  "depends_on": [
+    "automation-detail"
+  ],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
+      "gp8_export.go",
       "gpif_automations.go",
-      "gp8_builder.go"
+      "conformance_automations_test.go"
     ],
-    "instructions": "Reproduce the export failure in testdata/gp7/grace.gp."
+    "instructions": "testdata/gp7/grace.gp must pass the sound-position export boundary and retain bar 0, position -0.125, and the exact referenced sound through Go and pinned AlphaTab. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -54,10 +60,20 @@
       "kind": "test",
       "reference": "TestConformanceAutomationSemantics",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/64#issuecomment-5624490617",
+      "detail": "implementation-ready: The source contains bar 0 Position=-0.125; both parsers accept it and the current GP8 range check rejects it. The implementation must state a bounded preroll contract.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_automations_test.go",
     "gp8_builder.go",
+    "gp8_export.go",
     "gpif_automations.go"
   ],
   "resolution": null,
@@ -66,6 +82,6 @@
     "number": 64,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/64",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.738831+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

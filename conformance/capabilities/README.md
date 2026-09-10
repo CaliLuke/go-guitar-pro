@@ -236,3 +236,9 @@ Publish all items, regenerate the database, then commit the links and reports to
 | `work_conflicts` | Advisory overlap between source starting points |
 | `unticketed_work`, `uncovered_gaps` | Missing tickets or incomplete backlog coverage |
 | `backlog_state_drift` | Mismatch between reviewed work status and saved GitHub state |
+
+## Enriched investigation review
+
+The [investigation review](INVESTIGATION-REVIEW.md) records 15 implementation conversions and the reasons 16 tickets remain investigations.
+Review decisions and links to the original enrichment comments are stored in each work item and in SQLite `evidence_json`.
+They do not change capability support ratings or close tickets automatically.

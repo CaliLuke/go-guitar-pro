@@ -112,7 +112,7 @@ The remaining inputs had explicit blockers:
 
 - One upstream file failed Go parsing because it contains a fractional negative string index, `-2.5`.
 - Ten parsed files failed Go export. Causes include invalid MIDI programs, unsupported percussion mappings, curve ordering, and a negative sound-event position.
-- Fifteen upstream source files failed the pinned AlphaTab inflater with `Invalid huffman`. Go parsed them successfully.
+- Fifteen Go-exported target archives failed the pinned AlphaTab inflater with `Invalid huffman`. The original upstream files loaded successfully. Repackaging unchanged member bytes using ZIP Store made all fifteen targets load. See issue #68 and the investigation review.
 
 All local corpus files parsed successfully. Eight of them failed GP8 export.
 The database preserves every failure and does not score a blocked comparison as equal.
@@ -165,7 +165,7 @@ The database makes the remaining scope visible and keeps the evidence connected.
 ## Agent readiness
 
 The follow-up review defines 77 bounded work items for the 72 incomplete capability rows.
-There are 46 implementation tasks and 31 investigations.
+The initial backlog had 46 implementation tasks and 31 investigations. The [enriched investigation review](INVESTIGATION-REVIEW.md) converts 15 of those investigations into bounded implementation work.
 Five additional tasks separate export validation failures, an oracle inflater failure, and stale documentation from broader capability work.
 Each task has acceptance criteria, source evidence, a reproduction path, and explicit dependencies.
 The database exposes ready work, blocked work, issue-state drift, and potential shared-file conflicts.

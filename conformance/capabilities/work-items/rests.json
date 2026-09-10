@@ -63,6 +63,19 @@
       "kind": "test",
       "reference": "TestConformanceBeatSemantics",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/100#issuecomment-5624500148",
+      "detail": "target-limit: The target cannot distinguish an authored empty timed beat from a rest inside a populated voice. Whole-empty-voice encoding is a different scope.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/100#issuecomment-5625490534",
+      "detail": "Compare an absent whole voice, an explicit empty timed beat inside a populated voice, and an ordinary rest. Assert exact voice references and beat wire forms rather than relying only on finalized consumer objects. Verify the explicit-empty-to-rest normalization and strict rejection without losing timing or annotations. Do not use a fake note or remove a timed beat. Resolve the mixed-voice distinction as a target limit once tested. Encoding an entirely empty voice as -1 is separate scope and must not be reported as solving an empty beat inside a populated voice."
     }
   ],
   "shared_files": [
@@ -74,6 +87,6 @@
     "number": 100,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/100",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.752165+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

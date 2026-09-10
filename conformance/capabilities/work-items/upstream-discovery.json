@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "upstream-discovery",
   "capability": "upstream-discovery",
-  "title": "Reconcile expanded source inventory with executable obligations",
-  "kind": "investigation",
+  "title": "Classify authored GP constructs with importer-backed ownership",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,22 +20,27 @@
     "model",
     "export"
   ],
-  "scope": "Turn unclassified upstream constructs into explicit authored, derived, other-format or unsupported dispositions without treating associations as behavior evidence.",
+  "scope": "Make the expanded source audit distinguish authored Guitar Pro obligations from derived and other-product constructs, with an explicit owner for newly discovered in-scope syntax.",
   "acceptance": [
-    "Review each remaining unlinked construct in bounded domain groups and record its source applicability.",
-    "Correct old helper-class misattribution for BeamingRules and SyncPointData in the original upstream inventory.",
-    "New authored constructs fail classification checks until they have a scope decision and a capability/work-item owner."
+    "Identify declaring class and source applicability for GP3-GP8 importer-dispatched syntax and public model fields/enums those importers populate; keep explicit reasons for exclusions.",
+    "Retain the already-correct helper-class ownership in capabilities/manage.py. Correct stale helper attribution in the older canonical scanner/inventory rather than reintroducing filename-based ownership.",
+    "Show a stable migration diff with counts and reviewed dispositions; no unexplained construct may disappear. Do not treat every method/getter, renderer helper or derived cache as authored data.",
+    "Add sensitivity cases for a new in-scope importer assignment/dispatch, an unowned authored field/enum, and helper-class attribution. Missing scope/owner/disposition must fail; unrelated other-format additions remain visible without false GP obligations."
   ],
   "exclusions": [
-    "Do not mark all methods or enum aliases supported from a class-wide mapping."
+    "The enrichment incorrectly attributes the old scanner bug to the already class-aware expanded scanner. Preserve existing correct discovery behavior.",
+    "Do not replace review with lexical guesses or classify fields solely from the containing filename."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "conformance/sync-upstream-inventory.mjs"
+      "conformance/capabilities/manage.py",
+      "conformance/sync-upstream-inventory.mjs",
+      "conformance/upstream-inventory.json",
+      "conformance/sensitivity.mjs"
     ],
-    "instructions": "Review each remaining unlinked construct in bounded domain groups and record its source applicability."
+    "instructions": "Identify declaring class and source applicability for GP3-GP8 importer-dispatched syntax and public model fields/enums those importers populate; keep explicit reasons for exclusions. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -47,10 +52,21 @@
       "kind": "issue",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/34",
       "detail": "CLOSED. Existing broad feature rows still cite this ticket; it is not an open owner for remaining gaps."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/71#issuecomment-5624495302",
+      "detail": "implementation-ready: Expanded discover() already records actual declaring classes, with regression tests for BeamingRules and SyncPointData. Importer-backed applicability and complete owner/disposition enforcement remain missing.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
-    "conformance/sync-upstream-inventory.mjs"
+    "conformance/capabilities/manage.py",
+    "conformance/sensitivity.mjs",
+    "conformance/sync-upstream-inventory.mjs",
+    "conformance/upstream-inventory.json"
   ],
   "resolution": null,
   "verification": [],
@@ -58,6 +74,6 @@
     "number": 71,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/71",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.761760+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

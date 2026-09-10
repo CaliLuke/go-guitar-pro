@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "sound-automation",
   "capability": "sound-automation",
-  "title": "Verify sound-definition selection and ordered event fidelity",
-  "kind": "investigation",
+  "title": "Prove sound identity independently of MIDI program",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,13 +18,16 @@
   "stages": [
     "export"
   ],
-  "scope": "After bank and event-detail work, isolate any remaining sound-definition or selection gaps rather than duplicating those fixes.",
+  "scope": "Complete sound-selection evidence for different definitions sharing one MIDI program, including opening-event authority and ordered references.",
   "acceptance": [
-    "Compare at least two named definitions sharing a program but differing in role/path and selected event order.",
-    "Assert duplicate-position events, broken references and an authored public selection change.",
-    "Close only residual scoped differences; otherwise document that current support satisfies this row and retain separate limits for proprietary RSE data."
+    "Create two named sound definitions with the same program but distinct path/name/role; ordered and duplicate-position events must retain the selected identities through public edits and GP8 wire references.",
+    "Reorder definitions without changing event meaning and reject broken references. Use independent consumer assertions for the distinctions that consumer actually retains.",
+    "Document and test authority among the initial sound definition, explicit opening event and channel program, including conflicts; do not deduplicate definitions by program alone.",
+    "Keep Sound-event Hidden as an explicit pinned-consumer limit even though exact wire and Go reparse retain it. Reuse existing automation-detail coverage and update only residual missing evidence."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "MIDI bank work remains #51. Do not repeat #41 or broaden into proprietary RSE preservation."
+  ],
   "depends_on": [
     "midi-bank",
     "automation-detail"
@@ -32,10 +35,12 @@
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
+      "conformance_automations_test.go",
+      "gp8_builder.go",
       "gpif_automations.go",
-      "gp8_builder.go"
+      "docs/semantic-model.md"
     ],
-    "instructions": "Compare at least two named definitions sharing a program but differing in role/path and selected event order."
+    "instructions": "Create two named sound definitions with the same program but distinct path/name/role; ordered and duplicate-position events must retain the selected identities through public edits and GP8 wire references. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -57,9 +62,19 @@
       "kind": "test",
       "reference": "TestConformanceAutomationSemantics",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/69#issuecomment-5624493761",
+      "detail": "implementation-ready: Current automation tests already cover ordered definitions/events and detail fields. The same-program identity case and opening selection authority are the remaining bounded work.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_automations_test.go",
+    "docs/semantic-model.md",
     "gp8_builder.go",
     "gpif_automations.go"
   ],
@@ -69,6 +84,6 @@
     "number": 69,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/69",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.755243+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

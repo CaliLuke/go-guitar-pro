@@ -60,6 +60,19 @@
       "kind": "source",
       "reference": "note.go",
       "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/113#issuecomment-5624506502",
+      "detail": "out-of-scope: Pitched visibility/custom noteheads belong to other-format or rendering paths; percussion noteheads are separately modeled.",
+      "decision": "out-of-scope",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/113#issuecomment-5625493608",
+      "detail": "Record the actual assignments for pitched Note.isVisible and custom pitched NoteStyle fields, separating MusicXML/AlphaTex/rendering from Guitar Pro import paths. Give pitched visibility/noteheads an explicit scope disposition while retaining the separate percussion articulation notehead contract and tests. Resolve after the assignment evidence and database scope are reviewed. Reopen only with a non-default GP fixture and retaining consumer; do not reuse percussion IDs to simulate pitched styles."
     }
   ],
   "shared_files": [
@@ -71,6 +84,6 @@
     "number": 113,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/113",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.747192+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

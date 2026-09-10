@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "layout",
   "capability": "layout",
-  "title": "Bound system layout, scale and line-break preservation",
-  "kind": "investigation",
+  "title": "Preserve authored system layouts and bar display scales",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
@@ -20,30 +20,27 @@
     "model",
     "export"
   ],
-  "scope": "Separate authored system-layout arrays, bar scales and legacy line-break preferences into supported target slices.",
+  "scope": "Preserve the two evidenced GPIF layout slices: score/track system arrays and master/bar scale XProperties.",
   "acceptance": [
-    "Use non-default score/track system layouts, a forced break and a bar scale from pinned fixtures.",
-    "Identify exact scope and source precedence for each value, including track-versus-score layout.",
-    "Produce bounded follow-ups for preservable slices and strict-policy evidence for target-only limits."
+    "Retain score ScoreSystemsDefaultLayout/ScoreSystemsLayout and track SystemsDefautLayout/SystemsLayout, including the source spelling, differing explicit arrays and default values.",
+    "Keep score and track settings independently editable; explicit track layouts take precedence for that track, otherwise use score layout. Do not flatten or overwrite the retained authored arrays.",
+    "Preserve master scale XProperty 1124073984 and bar scale 1124139520, including the resized.gp values 0.5, 2 and 0.5 and a caller edit.",
+    "Use systems-layout/multi-track-different.gp and resized.gp for exact wire, public import/reparse and Go-export-to-AlphaTab assertions. Validate counts, finite positive scales and malformed arrays without narrowing silently."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Legacy LineBreakBreak/Protect projection and displayWidth are excluded; their existing reports remain.",
+    "Pinned AlphaTab re-export omits scales, so its re-export is not the preservation oracle for this slice."
+  ],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp6/accentuations.gpx",
-    "capability": "layout",
-    "differences": [
-      {
-        "path": "tracks[0].systemsLayout",
-        "source": [
-          1
-        ],
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_types.go",
+      "gpif_parser.go",
+      "gp8_builder.go",
+      "measure.go"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Retain score ScoreSystemsDefaultLayout/ScoreSystemsLayout and track SystemsDefautLayout/SystemsLayout, including the source spelling, differing explicit arrays and default values. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -75,11 +72,21 @@
       "kind": "source",
       "reference": "gp8_builder.go",
       "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/112#issuecomment-5624505264",
+      "detail": "implementation-ready: Both system arrays and scale XProperties have explicit pinned GPIF parser assignments and non-default fixtures. Two closely related layout slices can share one bounded public contract.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
     "gp8_builder.go",
-    "gpif_types.go"
+    "gpif_parser.go",
+    "gpif_types.go",
+    "measure.go"
   ],
   "resolution": null,
   "verification": [],
@@ -87,6 +94,6 @@
     "number": 112,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/112",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.743118+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

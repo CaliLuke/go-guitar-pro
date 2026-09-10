@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "bends",
   "capability": "bends",
-  "title": "Define exact bend precision and style boundaries",
-  "kind": "investigation",
+  "title": "Preserve exact authored bend offsets",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,23 +20,27 @@
     "model",
     "export"
   ],
-  "scope": "Resolve which bend curve and style distinctions require richer public values versus unavoidable target normalization.",
+  "scope": "Preserve GPIF bend offsets that the current integer 0..12 public scale rounds away, while keeping an explicit edit contract for existing callers.",
   "acceptance": [
-    "Use a fractional bend amount, an authored hold and distinct styles with exact source values.",
-    "Trace each value through source decoding, public storage, finalization, validation and the interpreted target curve.",
-    "Produce bounded implementation follow-ups for preservable losses and scoped target-limit evidence for the remainder."
+    "A valid 35% GPIF offset remains 35% after public import, edit and GP8 export; include a fractional percentage such as 35.5 because pinned AlphaTab also retains fractional offsets on its 0..60 scale.",
+    "Preserve endpoints and two distinct middle offsets in source control-role order, with representable quarter-tone values; compare exact wire values and independent consumer offsets.",
+    "Define one authority between any exact offset representation and the existing Position field. Existing binary positions and post-parse caller edits must have documented, tested conversions without silent rounding.",
+    "Reject non-finite and out-of-range authored offsets before narrowing; retain precise reports for genuinely unsupported shapes and metadata. Update field, enum, wire and source-dispatch obligations for the changed contract."
   ],
   "exclusions": [
-    "Do not relax existing strict curve tests or broadly normalize bend points."
+    "No invented BendStyle or per-point vibrato wire fields. More than four controls, incompatible middle values, and non-quarter-tone heights remain separate target/oracle limits.",
+    "Do not claim an integer 0..60 scale is exact for every GPIF float. Whammy integration is #72; nonmonotonic control-role validation is #62."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
+      "effects.go",
       "gpif_effects.go",
-      "gp8_effects.go"
+      "gp8_effects.go",
+      "conformance_curves_test.go"
     ],
-    "instructions": "Use a fractional bend amount, an authored hold and distinct styles with exact source values."
+    "instructions": "A valid 35% GPIF offset remains 35% after public import, edit and GP8 export; include a fractional percentage such as 35.5 because pinned AlphaTab also retains fractional offsets on its 0..60 scale. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -78,9 +82,19 @@
       "kind": "test",
       "reference": "TestConformanceCurvePreservation",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/60#issuecomment-5624488116",
+      "detail": "implementation-ready: Confirmed 0..12 rounding in gpifBendPosition and binary conversion. Pinned _toBendOffset multiplies by 0.6 without integer truncation, so fractional offsets also matter.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_curves_test.go",
+    "effects.go",
     "gp8_effects.go",
     "gpif_effects.go"
   ],
@@ -90,6 +104,6 @@
     "number": 60,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/60",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.731503+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

@@ -74,6 +74,19 @@
       "kind": "test",
       "reference": "TestConformancePlaybackRouting",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/66#issuecomment-5624491841",
+      "detail": "target-limit: GPIF has one port and one exclusive Default/Mute/Solo token; conflicting public values have no additional target field.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/66#issuecomment-5625488053",
+      "detail": "Verify differing primary/effect ports and simultaneous mute+solo with valid public scores. Assert the emitted single Port and exclusive PlaybackState, the documented precedence and independent consumer values. Assert gp8.normalize.effect-channel-port and gp8.normalize.playback-state and strict rejection when their losses are not allowed. Cite current tests for already-covered cases. Resolve as two explicit target limits after the checklist passes. A new preservation implementation requires a distinct authored GP wire record; changing precedence alone does not add fidelity."
     }
   ],
   "shared_files": [
@@ -86,6 +99,6 @@
     "number": 66,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/66",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.745573+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

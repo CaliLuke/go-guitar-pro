@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "tempo",
   "capability": "tempo",
-  "title": "Preserve authored tempo visibility where GP8 supports it",
-  "kind": "investigation",
+  "title": "Apply authored HideTempo to the opening GP8 tempo event",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,23 +18,27 @@
   "stages": [
     "export"
   ],
-  "scope": "Resolve the legacy HideTempo export gap independently from tempo interpolation and event annotations.",
+  "scope": "Preserve legacy opening-tempo visibility through the existing GPIF Visible field with explicit authority for an authored opening event.",
   "acceptance": [
-    "Demonstrate visible and hidden opening tempo marks with the same fractional BPM.",
-    "Determine whether GPIF Visible and the pinned consumer can represent HideTempo without suppressing tempo playback.",
-    "Implement verified preservation or retain a scoped target limit, with independent and strict-policy evidence."
+    "When no explicit bar-0/position-0 tempo event exists, synthesize one whose Hidden state reflects Song.HideTempo. Cover both true and false with a non-default fractional BPM where applicable.",
+    "An explicit opening event is authoritative for visibility. Report a disagreement with Song.HideTempo as a precise compatibility conflict; strict policy must reject an unallowed loss.",
+    "Preserve tempo value, text/linearity and stable event order according to existing authority rules. Avoid duplicate opening events and do not change playback tempo to hide its mark.",
+    "Use a legacy GP5 hidden-tempo source plus exact Visible=false wire, Go reparse and pinned AlphaTab evidence. Remove only the resolved blanket tempo-visibility omission."
   ],
   "exclusions": [
-    "Automation interpolation and occurrence semantics belong to automation-detail."
+    "No general tempo-authority redesign. Preserve the current text/BPM compatibility contract."
   ],
-  "depends_on": [],
+  "depends_on": [
+    "automation-detail"
+  ],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gpif_automations.go",
-      "gp8_builder.go"
+      "gp8_builder.go",
+      "conformance_automations_test.go",
+      "docs/semantic-model.md"
     ],
-    "instructions": "Demonstrate visible and hidden opening tempo marks with the same fractional BPM."
+    "instructions": "When no explicit bar-0/position-0 tempo event exists, synthesize one whose Hidden state reflects Song.HideTempo. Cover both true and false with a non-default fractional BPM where applicable. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -66,9 +70,19 @@
       "kind": "field",
       "reference": "Song.TempoAutomations",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/70#issuecomment-5624494583",
+      "detail": "implementation-ready: Current synthesized TempoAutomation lacks Hidden even when Song.HideTempo is true. Explicit TempoAutomation.Hidden already maps to GPIF Visible after #41.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_automations_test.go",
+    "docs/semantic-model.md",
     "gp8_builder.go",
     "gpif_automations.go"
   ],
@@ -78,6 +92,6 @@
     "number": 70,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/70",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.758584+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

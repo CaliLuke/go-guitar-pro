@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lyrics",
   "capability": "lyrics",
-  "title": "Resolve GP8 export of legacy score-level lyrics",
-  "kind": "investigation",
+  "title": "Export assigned legacy score lyrics as GPIF track lyrics",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,23 +18,26 @@
   "stages": [
     "export"
   ],
-  "scope": "Map binary score lyrics to a valid target track/offset representation where possible, without merging independent lyric scopes.",
+  "scope": "Project ordered Song.Lyrics lines onto their selected GPIF track without merging unrelated lyric scopes or mutating the input song.",
   "acceptance": [
-    "Use an assigned score lyric track, multiple ordered lines and a nonzero starting measure.",
-    "Compare source text, target track and offsets with the pinned consumer; keep beat text separate.",
-    "For unassigned or unrepresentable scope, retain a specific omission and strict-policy assertion rather than silently assigning track zero."
+    "For a valid TrackIndex and a track without lyrics, export the exact ordered legacy lines and starting-measure offsets; verify the index-base conversion with a real legacy fixture.",
+    "If existing Track.Lyrics are equivalent, emit one copy. If they conflict, keep explicit track lyrics authoritative and report the omitted conflicting score lyrics; strict policy must reject an unallowed conflict.",
+    "Retain empty/Unicode text and nonzero offsets with exact wire and Go reparse evidence; use pinned AlphaTab for supported lyric text/dispatch behavior.",
+    "Unassigned legacy lyrics remain an explicit loss and invalid track references remain diagnosed. Keep beat lyrics and Beat.Text independent; remove only the resolved blanket score-lyrics omission."
   ],
   "exclusions": [
-    "Do not implement a lyrics renderer or collapse beat-authored lyrics into track lyrics."
+    "Do not concatenate conflicting representations or silently assign unassigned lyrics to track zero."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gpif_parser.go",
-      "gp8_builder.go"
+      "gp8_builder.go",
+      "conformance_lyrics_test.go",
+      "gpif_types.go",
+      "docs/semantic-model.md"
     ],
-    "instructions": "Use an assigned score lyric track, multiple ordered lines and a nonzero starting measure."
+    "instructions": "For a valid TrackIndex and a track without lyrics, export the exact ordered legacy lines and starting-measure offsets; verify the index-base conversion with a real legacy fixture. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -76,11 +79,22 @@
       "kind": "field",
       "reference": "Track.Lyrics",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/98#issuecomment-5624498716",
+      "detail": "implementation-ready: The legacy selected-track lines have a GPIF Track.Lyrics destination already supported by both parsers; export currently omits Song.Lyrics unconditionally.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_lyrics_test.go",
+    "docs/semantic-model.md",
     "gp8_builder.go",
-    "gpif_parser.go"
+    "gpif_parser.go",
+    "gpif_types.go"
   ],
   "resolution": null,
   "verification": [],
@@ -88,6 +102,6 @@
     "number": 98,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/98",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.744461+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

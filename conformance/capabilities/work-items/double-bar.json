@@ -63,6 +63,19 @@
       "kind": "test",
       "reference": "TestConformanceMasterBars",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5624496589",
+      "detail": "target-limit: Go emits and reparses DoubleBar; the final-bar difference is pinned-consumer finalization. No writer change is justified.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5625488545",
+      "detail": "Reproduce both final and non-final double bars. Assert exact DoubleBar XML and Go reparse before comparing pinned AlphaTab finalization. Show that only the final projected flag is cleared and ordinary non-final double-bar evidence remains exact. Keep the wire flag; never delete authored data just to match a derived consumer projection. Record the consumer-only normalization and the verified tests/commit, then resolve this investigation when its checklist passes. If visual terminal-bar fidelity remains required, name a visual/retaining oracle as separate scope. This does not block #109 global stylesheet keys."
     }
   ],
   "shared_files": [
@@ -74,6 +87,6 @@
     "number": 95,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/95",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.736683+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

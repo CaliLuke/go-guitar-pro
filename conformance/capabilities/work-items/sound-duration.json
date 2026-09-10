@@ -73,6 +73,19 @@
       "kind": "test",
       "reference": "TestConformanceNoteValidation",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/102#issuecomment-5624501579",
+      "detail": "target-limit: No GPIF note-duration-percentage property is retained by the pinned parser/writer; preserve explicit export loss.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/102#issuecomment-5625491591",
+      "detail": "Verify 0.5 and 0.75 legacy DurationPercent values survive public import and are explicitly reported by gp8.omit.note-duration-percent during export. Check strict rejection and preserve rhythmic duration, ties and let-ring behavior unchanged. Cite existing tests or add the missing exact assertions. Resolve as a target limit when the acceptance checklist passes. Reopen implementation only for a dedicated authored GP7/GP8 record retained by a second consumer, not a timing approximation."
     }
   ],
   "shared_files": [
@@ -85,6 +98,6 @@
     "number": 102,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/102",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.755708+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

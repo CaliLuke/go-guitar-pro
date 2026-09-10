@@ -45,6 +45,19 @@
       "kind": "source",
       "reference": "beat.go",
       "detail": "Public Beat has one duration plus exact timing."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/111#issuecomment-5624504425",
+      "detail": "out-of-scope: overrideDisplayDuration is populated by MusicXML rather than GP3-GP8; no independent GP record is evidenced.",
+      "decision": "out-of-scope",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/111#issuecomment-5625493105",
+      "detail": "Record the pinned MusicXML assignments to overrideDisplayDuration and the absence of GP3-GP8 importer/writer mappings. Update the capability scope and documentation association so this other-format field is not counted as a missing Guitar Pro authored feature; keep rhythm/dots/tuplets and exact timing coverage intact. Resolve after the evidence and scope disposition are checked. A future implementation requires an independently authored GP display-duration record, not a derived timing placeholder."
     }
   ],
   "shared_files": [
@@ -56,6 +69,6 @@
     "number": 111,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/111",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.735810+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

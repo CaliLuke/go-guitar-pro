@@ -74,6 +74,19 @@
       "kind": "field",
       "reference": "Note.Velocity",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/61#issuecomment-5624488753",
+      "detail": "target-limit: One GPIF beat Dynamic token cannot represent arbitrary per-note velocities; retain normalization and strict rejection.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/61#issuecomment-5625487101",
+      "detail": "Verify the existing policy with a chord whose note velocities are 47 and 95 plus a rest carrying an explicit beat dynamic. Assert the chosen GPIF Dynamic token, the retained consumer beat value, and both beat-dynamic/note-velocity loss reports where applicable. Exercise strict export with and without the exact allowed loss codes. If the current tests already prove every case, cite those tests and the verified commit; add only missing assertions. Resolve as a documented target limit once the acceptance checklist passes. Keep the export assessment partial for arbitrary velocities; do not create per-note GPIF fields or repurpose rhythm to encode velocity."
     }
   ],
   "shared_files": [
@@ -86,6 +99,6 @@
     "number": 61,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/61",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.737234+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

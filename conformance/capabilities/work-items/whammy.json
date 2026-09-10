@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "whammy",
   "capability": "whammy",
-  "title": "Classify remaining whammy curve and style losses",
-  "kind": "investigation",
+  "title": "Apply exact authored offset preservation to whammy curves",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,25 +20,29 @@
     "model",
     "export"
   ],
-  "scope": "Separate source precision/style gaps from pinned consumer gesture interpretation.",
+  "scope": "Use the exact curve-position contract from #60 for GPIF and binary whammy points without losing authored control-role order.",
   "acceptance": [
-    "Reproduce an interior hold and unequal-rate curve already covered by existing whammy tests.",
-    "Determine whether an alternative supported wire representation preserves each exact curve and style.",
-    "Retain narrow strict reports for proven target limits and create bounded follow-ups for preservable source losses."
+    "Preserve a non-grid offset such as 35% and a fractional percentage such as 35.5 through public import/edit/export and retaining pinned-consumer assertions.",
+    "Exercise origin, two middle offsets sharing one value, and destination; preserve control order and the exact-offset/legacy Position authority established by #60.",
+    "Keep interior-hold and unequal-rate tests, with narrow loss reports for consumer gesture interpretation or unrepresentable shapes. Passing a rounded self-round-trip is insufficient.",
+    "Cover valid nonmonotonic standard tuples under #62 where applicable, and retain explicit reports for style/summary metadata, per-point vibrato, excess controls and incompatible middle heights."
   ],
   "exclusions": [
-    "Do not remove the interpreted-target-curve assertions."
+    "No new style-token mapping or broad normalization waiver. Extend the common precision contract rather than inventing a competing whammy scale."
   ],
   "depends_on": [
-    "bends"
+    "bends",
+    "export-curve-order"
   ],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
+      "effects.go",
       "gpif_effects.go",
-      "gp8_effects.go"
+      "gp8_effects.go",
+      "conformance_curves_test.go"
     ],
-    "instructions": "Reproduce an interior hold and unequal-rate curve already covered by existing whammy tests."
+    "instructions": "Preserve a non-grid offset such as 35% and a fractional percentage such as 35.5 through public import/edit/export and retaining pinned-consumer assertions. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -80,9 +84,19 @@
       "kind": "test",
       "reference": "TestConformanceCurvePreservation",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/72#issuecomment-5624495922",
+      "detail": "implementation-ready: Whammy uses the same 0..12 rounding and writer scale as bends; its precision work is concrete after the shared representation and role-aware validation changes.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_curves_test.go",
+    "effects.go",
     "gp8_effects.go",
     "gpif_effects.go"
   ],
@@ -92,6 +106,6 @@
     "number": 72,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/72",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.763078+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

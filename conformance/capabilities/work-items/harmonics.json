@@ -74,6 +74,19 @@
       "kind": "test",
       "reference": "TestConformanceHarmonicVariants",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/96#issuecomment-5624497293",
+      "detail": "target-limit: Harmonic kind/fret are supported; legacy harmonic-specific pitch/octave spelling has no retaining target destination.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/96#issuecomment-5625489007",
+      "detail": "Verify all supported harmonic kinds and fractional frets with exact wire and independent consumer assertions. Separately exercise non-default legacy Pitch/Octave values and their precise loss report. Check strict rejection for the unsupported spelling pair without weakening the supported kind/fret cases. Reuse existing conformance assertions where complete. Resolve as a scoped target limit when the checklist passes. Do not map harmonic spelling to generic note pitch/octave; reopen implementation only for a distinct harmonic-specific record retained by another consumer."
     }
   ],
   "shared_files": [
@@ -86,6 +99,6 @@
     "number": 96,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/96",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.742300+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

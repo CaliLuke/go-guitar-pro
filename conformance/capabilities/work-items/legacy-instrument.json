@@ -49,6 +49,19 @@
       "kind": "test",
       "reference": "TestConformanceInstrumentContext",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5624498011",
+      "detail": "needs-evidence: FretCount has a plausible raw field but no retaining pinned consumer/non-default corpus case; twelve-string and independent banjo flags remain limits.",
+      "decision": "needs-evidence",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5625489523",
+      "detail": "FretCount needs a non-default Guitar Pro fixture and an independent consumer that actually retains the value; a writer hardcoding 24 and an ignored parser property do not provide that oracle. Once that evidence exists, define staff versus track edit authority and isolate FretCount as its own implementation slice. Investigate twelve-string and standalone banjo flags independently instead of bundling them into that fix. Until then record explicit limits and verify the existing omission/strict-policy tests. Do not modify tuning or program to simulate preservation of a legacy boolean."
     }
   ],
   "shared_files": [
@@ -61,6 +74,6 @@
     "number": 97,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/97",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.743559+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

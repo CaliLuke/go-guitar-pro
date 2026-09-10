@@ -2,39 +2,37 @@
   "schema_version": 1,
   "id": "oracle-inflater",
   "capability": "oracle-breadth",
-  "title": "Isolate pinned AlphaTab inflater failures in transposition fixtures",
-  "kind": "investigation",
+  "title": "Emit GP8 archives readable by the pinned AlphaTab inflater",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
   "formats": [
-    "gp3",
-    "gp4",
-    "gp5",
-    "gp6",
-    "gp7",
     "gp8"
   ],
   "stages": [
-    "import",
-    "model",
     "export"
   ],
-  "scope": "Make the fifteen source-side Invalid huffman failures reproducible without treating them as Go parser defects.",
+  "scope": "Fix target archive interoperability for the fifteen transposition-tonality fixtures while preserving all uncompressed member bytes and musical data.",
   "acceptance": [
-    "List each pinned input hash and show that Go and an independent ZIP reader can extract score.gpif.",
-    "Determine whether the failure is in the pinned AlphaTab inflater, source archive or runtime environment.",
-    "Document a narrow oracle workaround or upstream defect with unchanged semantic input evidence; retain original archives and visible blocked status until resolved."
+    "For all fifteen pinned guitarpro8/transposition-tonality-*.gp inputs, source loading succeeds and the current Go-exported target reproduces Invalid huffman. Keep those stages distinct in the regression.",
+    "The exported targets must pass ordinary ZIP integrity checks, Go reparse and pinned AlphaTab loading. Compare source and output semantics with the existing scoped policies; unrelated transposition losses remain visible.",
+    "Preserve member names, bytes, CRCs, archive metadata requirements and backing-track assets. The fix may change compression strategy but must not alter score.gpif semantics to avoid the inflater failure.",
+    "Add a regression sensitive to target-side decompression failures and rerun the broad probe. Its fifteen target inflater blockers must disappear without source fixture changes or an AlphaTab dependency upgrade."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Store or another compatible ZIP profile is an implementation option; changing CreateRaw to CreateHeader alone is not evidence of a fix.",
+    "This is an interoperability failure, not proof the current archive violates ZIP. No transposition mapping changes in this ticket."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "conformance/oracle.mjs",
-      "conformance_go_adapter_test.go"
+      "gp8_export.go",
+      "conformance/capabilities/probe.mjs",
+      "conformance/capabilities/probe-results.json"
     ],
-    "instructions": "List each pinned input hash and show that Go and an independent ZIP reader can extract score.gpif."
+    "instructions": "For all fifteen pinned guitarpro8/transposition-tonality-*.gp inputs, source loading succeeds and the current Go-exported target reproduces Invalid huffman. Keep those stages distinct in the regression. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -46,11 +44,22 @@
       "kind": "source",
       "reference": "conformance_go_adapter_test.go",
       "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/68#issuecomment-5624493029",
+      "detail": "implementation-ready: Reproduced on current code: pinned AlphaTab loads all 15 sources, rejects all 15 Go targets, and loads all 15 targets repackaged as Store with identical member bytes. The old source-side diagnosis was incorrect.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance/capabilities/probe-results.json",
+    "conformance/capabilities/probe.mjs",
     "conformance/oracle.mjs",
-    "conformance_go_adapter_test.go"
+    "conformance_go_adapter_test.go",
+    "gp8_export.go"
   ],
   "resolution": null,
   "verification": [],
@@ -58,6 +67,6 @@
     "number": 68,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/68",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.748446+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "export-curve-order",
   "capability": "bends",
-  "title": "Investigate parsed bend point order rejected by export",
-  "kind": "investigation",
+  "title": "Preserve GPIF bend control roles with nonmonotonic offsets",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,21 +20,27 @@
     "model",
     "export"
   ],
-  "scope": "Trace the nonmonotonic point sequence from the canon audio-track fixtures through decoding and canonicalization.",
+  "scope": "Allow valid standard GPIF origin/middle/destination control tuples to survive export even when destination offset precedes a middle offset.",
   "acceptance": [
-    "Reproduce position 3 following position 6 in testdata/gp7/canon-audio-track.gp and its GP8 counterpart.",
-    "Compare original wire controls and AlphaTab authored/derived curves to locate the first disagreement.",
-    "Fix a proven decoding/order defect or retain a scoped malformed-source classification; do not sort authored points without proof."
+    "Reproduce the current export rejection for canon-audio-track.gp in GP7 and GP8: note 177 authors offsets 0, 50, 50, 35 in control-role order.",
+    "Preserve those roles and exact offsets in exported GPIF and Go reparse; pinned AlphaTab must consume the result with the same retained controls.",
+    "Do not sort controls or silently replace their positions. Keep malformed role counts, invalid numeric values and genuinely unrepresentable shapes diagnosable at their applicable boundary.",
+    "Add focused public-API validation/export tests, including a normal monotonic curve and a nonmonotonic but valid standard tuple, without weakening unrelated score invariants."
   ],
-  "exclusions": [],
-  "depends_on": [],
+  "exclusions": [
+    "This is not permission to accept every unordered arbitrary curve. The exact-offset representation is owned by #60."
+  ],
+  "depends_on": [
+    "bends"
+  ],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
       "gpif_effects.go",
-      "gp8_effects.go"
+      "gp8_effects.go",
+      "conformance_curves_test.go"
     ],
-    "instructions": "Reproduce position 3 following position 6 in testdata/gp7/canon-audio-track.gp and its GP8 counterpart."
+    "instructions": "Reproduce the current export rejection for canon-audio-track.gp in GP7 and GP8: note 177 authors offsets 0, 50, 50, 35 in control-role order. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -76,9 +82,18 @@
       "kind": "test",
       "reference": "TestConformanceCurvePreservation",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/62#issuecomment-5624489411",
+      "detail": "implementation-ready: The fixture authors destination 35 after middle offsets 50. Generic monotonic validation rejects a standard GPIF role tuple; the precision prerequisite avoids preserving only rounded coordinates.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance_curves_test.go",
     "gp8_effects.go",
     "gpif_effects.go"
   ],
@@ -88,6 +103,6 @@
     "number": 62,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/62",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.737759+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

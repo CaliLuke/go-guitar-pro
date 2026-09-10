@@ -64,6 +64,19 @@
       "kind": "test",
       "reference": "TestConformanceTechniqueDispositions",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/103#issuecomment-5624502327",
+      "detail": "target-limit: GPIF carries target fret but pinned parsing fixes duration to sixteenth. Do not repurpose rhythm or tremolo as speed.",
+      "decision": "target-limit",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/103#issuecomment-5625492081",
+      "detail": "Use the same non-default target fret with authored 16th, 32nd and 64th speeds. Assert exact Trill wire value, the pinned consumer sixteenth result and the precise normalization report. Verify that sixteenth input incurs no speed loss while non-sixteenth input is rejected under strict preservation unless the exact loss is allowed. Resolve as the documented speed limit after verification. Do not encode speed using rhythm, tremolo or ornament properties; those change other authored semantics."
     }
   ],
   "shared_files": [
@@ -76,6 +89,6 @@
     "number": 103,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/103",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.760698+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

@@ -57,6 +57,19 @@
       "kind": "test",
       "reference": "TestConformancePlaybackRouting",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5624500874",
+      "detail": "needs-evidence: Detailed proprietary RSE semantics have no independent retaining target oracle. Opaque archive preservation would be a different contract.",
+      "decision": "needs-evidence",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "review-next-steps",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5625491158",
+      "detail": "Enumerate the non-default legacy master/track RSE values covered by the existing parent omission reports and verify the exact strict-policy behavior for those descendants. Identify a retaining independent GP8 oracle before proposing semantic effect/synthesizer preservation. Ordinary MIDI/channel-strip and TrackSound fields are separately owned and do not prove RSE equivalence. Record the current oracle boundary if none exists. If opaque archive-member retention is desired, define a separate byte-preservation contract; it must not be presented as public RSE semantic support."
     }
   ],
   "shared_files": [
@@ -70,6 +83,6 @@
     "number": 101,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/101",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.752585+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

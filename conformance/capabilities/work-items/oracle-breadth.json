@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "oracle-breadth",
   "capability": "oracle-breadth",
-  "title": "Make broad capability comparisons reliable acceptance evidence",
-  "kind": "investigation",
+  "title": "Require executable evidence for supported capability claims",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,23 +20,26 @@
     "model",
     "export"
   ],
-  "scope": "Strengthen the audit probe so each comparison has explicit normalization, coverage and stage boundaries.",
+  "scope": "Connect each supported capability slice to non-default, stage-specific executable evidence so broad probe equality cannot certify support.",
   "acceptance": [
-    "Keep default-only, non-default, blocked and source/target consumer failures separate in counts and stored evidence.",
-    "For the new implementation tickets, provide focused exact-path assertions and avoid accepting unrelated raw differences as blanket waivers.",
-    "Add sensitivity checks for representative missing-property faults and document the evidence needed before a probe result can close a ticket."
+    "For each supported stage, record and validate the source or synthetic non-default case, asserted stage, exact field/wire/dispatch obligation, expected loss-report behavior, and retaining independent consumer or explicit justified limit.",
+    "Reuse or extend the semantic ledger and its executable assertion records. Mere strings naming a test, aggregate probe equality, default-only cases or a capability association must not satisfy the requirement.",
+    "Sensitivity checks must reject a supported claim whose non-default case, stage assertion, serialization assertion, required report assertion or independent evidence is removed or mismatched.",
+    "Keep unsupported, unverified, default-only and blocked comparisons visible and distinguish source-side from target-side consumer failures. Update the closure workflow and migrate existing claims without falsely promoting them."
   ],
   "exclusions": [
-    "Do not require every existing raw layout/default difference to disappear before a scoped feature can land."
+    "A new standalone manifest is an implementation option, not a required architecture. No blanket waiver for existing raw differences."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "conformance/oracle.mjs",
-      "conformance_go_adapter_test.go"
+      "conformance/capabilities/manage.py",
+      "conformance/capabilities/schema.sql",
+      "conformance/feature-ledger.json",
+      "conformance/sensitivity.mjs"
     ],
-    "instructions": "Keep default-only, non-default, blocked and source/target consumer failures separate in counts and stored evidence."
+    "instructions": "For each supported stage, record and validate the source or synthetic non-default case, asserted stage, exact field/wire/dispatch obligation, expected loss-report behavior, and retaining independent consumer or explicit justified limit. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -48,10 +51,22 @@
       "kind": "source",
       "reference": "conformance_go_adapter_test.go",
       "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/67#issuecomment-5624492426",
+      "detail": "implementation-ready: Current capabilities link source/tests but do not enforce all five closure evidence roles; existing ledger and sensitivity machinery can supply the enforceable contract.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
+    "conformance/capabilities/manage.py",
+    "conformance/capabilities/schema.sql",
+    "conformance/feature-ledger.json",
     "conformance/oracle.mjs",
+    "conformance/sensitivity.mjs",
     "conformance_go_adapter_test.go"
   ],
   "resolution": null,
@@ -60,6 +75,6 @@
     "number": 67,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/67",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.748024+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }

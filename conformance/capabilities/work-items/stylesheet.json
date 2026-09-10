@@ -2,15 +2,12 @@
   "schema_version": 1,
   "id": "stylesheet",
   "capability": "stylesheet",
-  "title": "Split remaining authored stylesheet gaps into scoped contracts",
-  "kind": "investigation",
+  "title": "Preserve supported score bracket, track-name and display policies",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
   "formats": [
-    "gp3",
-    "gp4",
-    "gp5",
     "gp6",
     "gp7",
     "gp8"
@@ -20,30 +17,28 @@
     "model",
     "export"
   ],
-  "scope": "Audit brackets, track-name policies, hide-empty-staff rules, tuning/chord display and other remaining BinaryStylesheet fields.",
+  "scope": "Preserve the three evidenced BinaryStylesheet policy groups: brackets/system separators, track names, and global dynamics/tuning/chord display.",
   "acceptance": [
-    "For each remaining property, record a non-default pinned fixture, exact wire key, public destination gap and target-consumer behavior.",
-    "Separate already-owned part flags, multirests, beam overrides and page templates from this ticket.",
-    "Create bounded follow-ups for each independent verified property group and classify rendering-only settings explicitly."
+    "Cover System/bracketExtendMode enum variants and Global/useSystemSignSeparator independently with pinned brackets-braces and system-divider fixtures.",
+    "Cover single/multi track-name visibility policy, first/other-system full/short names, and horizontal/vertical names. Preserve source key precedence and independently assert the resulting consumer policies.",
+    "Cover StandardNotation/hideDynamics, Global/DisplayTuning, Global/DrawChords and System/drawChordInScore with true, false and absence cases and the pinned hide/show fixtures.",
+    "For all supported keys, retain exact types and values, validate authored enum boundaries and malformed input, support public edits, and preserve other supported stylesheet settings through the shared codec."
   ],
   "exclusions": [
-    "Do not implement all stylesheet settings in one broad patch."
+    "hideEmptyStaves, hideEmptyStavesInFirstSystem and showSingleStaffBrackets lack pinned GP mappings and are excluded.",
+    "Header/footer templates are #114; barlines/numbering are #109. Part flags, multirests and beam overrides keep their existing owners."
   ],
-  "depends_on": [],
+  "depends_on": [
+    "barlines"
+  ],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp7/brackets-braces-staves.gp",
-    "capability": "stylesheet",
-    "differences": [
-      {
-        "path": "stylesheet.hideDynamics",
-        "source": true,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "gp7_zip.go",
+      "gp8_export.go",
+      "gp8_builder.go"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Cover System/bracketExtendMode enum variants and Global/useSystemSignSeparator independently with pinned brackets-braces and system-divider fixtures. See the linked investigation decision and review receipt for the confirmed baseline."
   },
   "evidence": [
     {
@@ -80,11 +75,20 @@
       "kind": "test",
       "reference": "TestConformanceDisplayExportPolicy",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "investigation-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/117#issuecomment-5624509196",
+      "detail": "implementation-ready: Each listed group has explicit pinned BinaryStylesheet mappings and non-default GP8 fixtures. Scope is limited to those groups, with shared codec work supplied by #109.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
+      "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
     }
   ],
   "shared_files": [
     "gp7_zip.go",
-    "gp8_builder.go"
+    "gp8_builder.go",
+    "gp8_export.go"
   ],
   "resolution": null,
   "verification": [],
@@ -92,6 +96,6 @@
     "number": 117,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/117",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.756333+00:00"
+    "checked_at": "2026-09-10T21:05:35.814214+00:00"
   }
 }
