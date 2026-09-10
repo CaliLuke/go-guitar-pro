@@ -69,6 +69,18 @@
       "kind": "source",
       "reference": "gpif_automations.go",
       "detail": "Reviewed implementation or documented contract."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
+      "decision": "no-blocker-found",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/41#issuecomment-5626717036",
+      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
+      "detail": "Same-position linear/step tempo and sound events retain order, text, and supported visibility. Checked the opening-text edit contract, numeric validation, and the explicit sound-visibility consumer-loss report. Bank and preroll scope stays in #51/#64.",
+      "commands": [
+        "prek run --all-files: PASS on clean audited commit",
+        "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
+      ]
     }
   ],
   "shared_files": [

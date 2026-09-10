@@ -94,6 +94,18 @@
       "kind": "field",
       "reference": "MeasureHeader.Direction",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
+      "decision": "no-blocker-found",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/45#issuecomment-5626717598",
+      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
+      "detail": "Checked all five targets and fourteen jumps, GP5 and GPIF import, simultaneous markers, deterministic deduplication, legacy-pointer versus collection edit/clear authority, and pinned-consumer output. Navigation traversal remains excluded.",
+      "commands": [
+        "prek run --all-files: PASS on clean audited commit",
+        "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
+      ]
     }
   ],
   "shared_files": [

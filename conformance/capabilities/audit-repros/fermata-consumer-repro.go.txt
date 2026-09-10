@@ -1,0 +1,46 @@
+package goguitarpro
+
+import (
+	"testing"
+)
+
+func TestAuditFractionalFermataConsumer(t *testing.T) {
+	song := semanticValidPitchedGP8Song(t)
+	song.Tracks[0].Settings.Notation = true
+	song.MeasureHeaders[0].Fermatas = []Fermata{
+		{Offset: mustScoreTime(t, 1, 2), Type: FermataTypeShort, Length: 0.25},
+		{Offset: mustScoreTime(t, 3, 4), Type: FermataTypeLong, Length: 1.5},
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("Strict export: %d bytes, diagnostics=%#v", len(data), report.Entries)
+	var facts []conformanceAlphaTabFermataBar
+	readAlphaTabOracleFacts(t, "--fermatas", writeConformanceFixture(t, data), &facts)
+	t.Logf("Authored fermatas: %#v", facts[0].Authored)
+	if len(facts[0].Authored) != 2 {
+		t.Errorf("lost a fermata: got %d, want 2", len(facts[0].Authored))
+	}
+}
+
+func TestAuditIntegerFermataConsumer(t *testing.T) {
+	song := semanticValidPitchedGP8Song(t)
+	song.Tracks[0].Settings.Notation = true
+	song.MeasureHeaders[0].Fermatas = []Fermata{
+		{Offset: mustScoreTime(t, 122, 1), Type: FermataTypeShort, Length: 0.25},
+		{Offset: mustScoreTime(t, 123, 1), Type: FermataTypeLong, Length: 1.5},
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("Strict export: %d bytes, diagnostics=%#v", len(data), report.Entries)
+	t.Logf("Wire fermatas: %#v", conformanceFermataWire(t, data)[0])
+	var facts []conformanceAlphaTabFermataBar
+	readAlphaTabOracleFacts(t, "--fermatas", writeConformanceFixture(t, data), &facts)
+	t.Logf("Authored fermatas: %#v", facts[0].Authored)
+	if len(facts[0].Authored) != 2 {
+		t.Errorf("lost a fermata: got %d, want 2", len(facts[0].Authored))
+	}
+}

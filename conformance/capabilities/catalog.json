@@ -307,10 +307,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "supported"
+        "export": "partial"
       },
-      "finding": "MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 export retains the authored master-bar records; beat association is consumer-derived.",
-      "acceptance": "Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport, malformed-value diagnostics and pinned AlphaTab consumer locations covered.",
+      "finding": "MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 retains the authored rational XML, but pinned AlphaTab can move offsets and collapse two distinct holds into one. Strict export currently reports no loss for these cases; #47 remains open for a precise consumer-limit policy.",
+      "acceptance": "Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport and malformed-value diagnostics covered. Add pinned-consumer movement/collision evidence and precise strict-export reporting for affected offsets before claiming full export support.",
       "upstream": [
         "MasterBar.fermata",
         "Beat.fermata",
@@ -327,6 +327,11 @@
           "kind": "probe",
           "reference": "testdata/gp7/slash.gp:fermata",
           "detail": "Reproduced at masterBars[1].fermata. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "implementation-audit",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5626717898",
+          "detail": "At 8835659, score-tick offsets 1/2 and 3/4 collapse to one hold at 0; offsets 122 and 123 collapse to one hold at 122. Both strict exports return no diagnostics. See IMPLEMENTATION-AUDIT.md and audit-repros/fermata-consumer-repro.go.txt."
         }
       ]
     },

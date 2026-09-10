@@ -69,6 +69,18 @@
       "kind": "probe",
       "reference": "testdata/gp7/colors.gp:clef-octave",
       "detail": "Reproduced at tracks[0].staves[0].bars[3].clefOttava. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
+      "decision": "no-blocker-found",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/44#issuecomment-5626717468",
+      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
+      "detail": "Checked all four clef octave shifts across staves, coexistence with a different beat octave, post-parse edits through the pinned consumer, and invalid source/public enum rejection.",
+      "commands": [
+        "prek run --all-files: PASS on clean audited commit",
+        "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
+      ]
     }
   ],
   "shared_files": [

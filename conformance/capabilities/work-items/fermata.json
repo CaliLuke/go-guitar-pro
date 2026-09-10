@@ -21,7 +21,10 @@
   "acceptance": [
     "Preserve Short, Medium and Long holds with distinct non-default lengths and offsets.",
     "Assert two fermatas at different offsets and avoid sharing mutable data across reused definitions.",
-    "Check finite lengths, valid offsets and malformed payloads before conversion; compare exact consumer locations."
+    "Check finite lengths, valid offsets and malformed payloads before conversion; compare exact consumer locations.",
+    "Preserve exact authored offsets while reporting pinned-consumer offset movement and collisions precisely; strict preservation must refuse unallowed loss with no output bytes.",
+    "Add pinned-consumer evidence for single-offset movement, fractional collisions at ticks 1/2 and 3/4, and whole-tick collisions at 122 and 123, plus retained ordinary offsets.",
+    "Document the fermata consumer limit and update the scoped capability assessment and verification receipt before closure."
   ],
   "exclusions": [],
   "depends_on": [],
@@ -78,12 +81,26 @@
       "kind": "probe",
       "reference": "testdata/gp7/slash.gp:fermata",
       "detail": "Reproduced at masterBars[1].fermata. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
+      "decision": "follow-up-required",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5626717898",
+      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
+      "detail": "Strict export returns no diagnostics for fractional and whole-tick offset pairs that pinned AlphaTab collapses into one fermata. Exact GPIF/model offsets survive; the unreported consumer limit remains unresolved.",
+      "commands": [
+        "prek run --all-files: PASS on clean audited commit",
+        "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^TestAudit(Fractional|Integer)FermataConsumer$' .: FAIL as expected, both pairs collapse from two holds to one"
+      ],
+      "reproduction": "conformance/capabilities/audit-repros/fermata-consumer-repro.go.txt"
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "MeasureHeader.Fermatas now preserves authoritative GPIF master-bar holds as independent values with exact ScoreTime offsets, Short, Medium, and Long types, and finite non-negative lengths. Import audits malformed types, lengths, rational offsets, overflow, and duplicates before conversion; validation rejects undefined types, invalid lengths, duplicate offsets, and offsets outside the exact measure. GP8 emits reduced rational offsets, exact lengths, and types without adding a mutable Beat copy. Focused public, wire, reimport, post-parse edit, fixture, and pinned AlphaTab evidence covers authored master-bar locations and derived consumer beat association. Playback stretching and GP3 through GP5 remain out of scope.",
+  "resolution": "MeasureHeader.Fermatas now preserves authoritative GPIF master-bar holds as independent values with exact ScoreTime offsets, Short, Medium, and Long types, and finite non-negative lengths. Import audits malformed types, lengths, rational offsets, overflow, and duplicates before conversion; validation rejects undefined types, invalid lengths, duplicate offsets, and offsets outside the exact measure. GP8 emits reduced rational offsets, exact lengths, and types without adding a mutable Beat copy. Focused public, wire, reimport, post-parse edit, fixture, and pinned AlphaTab evidence covers authored master-bar locations and derived consumer beat association. Playback stretching and GP3 through GP5 remain out of scope. Independent audit at 88356593a4ebb9b2f9859200a713838780d566b3 found an unresolved consumer limit: strict export accepts distinct fractional or whole-tick offsets with no loss report, but AlphaTab truncates them to the same map key and drops a hold. See the audit reproduction and updated acceptance checklist; this implementation is not yet accepted.",
   "verification": [],
   "issue": {
     "number": 47,

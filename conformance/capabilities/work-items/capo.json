@@ -66,6 +66,18 @@
       "kind": "test",
       "reference": "TestConformanceStaffCapo",
       "detail": "Exact model, reconciliation, boundary, GP8 wire, round-trip, sounding-pitch, and pinned AlphaTab evidence."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
+      "decision": "no-blocker-found",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/43#issuecomment-5626717324",
+      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
+      "detail": "Checked independent staff capos 2/5 and consumer pitches 69/57, legacy-track versus staff edit authority, first-staff compatibility, and numeric boundary rejection.",
+      "commands": [
+        "prek run --all-files: PASS on clean audited commit",
+        "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
+      ]
     }
   ],
   "shared_files": [

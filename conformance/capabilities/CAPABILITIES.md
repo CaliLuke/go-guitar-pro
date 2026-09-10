@@ -15,9 +15,9 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 55 | 23 | 21 | 2 |
 | model | 55 | 23 | 22 | 1 |
-| export | 37 | 22 | 40 | 2 |
+| export | 36 | 23 | 40 | 2 |
 
-All three stages have a supported rating in 35 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 34 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -1031,11 +1031,11 @@ Bounded work: [Preserve navigation targets and jumps on each measure](https://gi
 
 Structure. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **supported**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 export retains the authored master-bar records; beat association is consumer-derived.
+MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 retains the authored rational XML, but pinned AlphaTab can move offsets and collapse two distinct holds into one. Strict export currently reports no loss for these cases; #47 remains open for a precise consumer-limit policy.
 
-Completion criterion: Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport, malformed-value diagnostics and pinned AlphaTab consumer locations covered.
+Completion criterion: Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport and malformed-value diagnostics covered. Add pinned-consumer movement/collision evidence and precise strict-export reporting for affected offsets before claiming full export support.
 
 Bounded work: [Preserve fermata position, type and length](https://github.com/CaliLuke/go-guitar-pro/issues/47).
 
