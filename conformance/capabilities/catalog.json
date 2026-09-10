@@ -464,12 +464,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
+        "import": "supported",
+        "model": "supported",
         "export": "supported"
       },
-      "finding": "Standard Major/Minor values work. A generated valid lowercase minor fixture imports as major because Go compares Mode == Minor. AlphaTab preserves minor. Transposition also changes effective keys.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GPIF accepts the exact Major, major, Minor, and minor spellings plus the empty major default. Nonzero accidental counts and adjacent changes survive the public model and canonical GP8 Major/Minor export. Unknown modes remain permissive-major with an explicit unsupported-feature diagnostic and strict rejection.",
+      "acceptance": "Covered by focused public API, exact wire, reimport, diagnostic-policy, and pinned AlphaTab key-mode evidence.",
       "upstream": [
         "MasterBar.keySignature",
         "MasterBar.keySignatureType",
@@ -499,13 +499,23 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceMasterBars",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceKeyModes",
+          "detail": "Exercises exact supported spellings, empty and unknown modes, adjacent nonzero key changes, canonical GP8 wire values, and Go reimport."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesKeyModes",
+          "detail": "Uses the isolated pinned AlphaTab key oracle for the four supported spellings and unknown-mode default."
+        },
+        {
+          "kind": "diagnostic",
+          "reference": "GPIF.MasterBar.Key.Mode.InvalidValue",
+          "detail": "Unknown key modes retain permissive major projection while selected strict unsupported-feature policy rejects them."
         },
         {
           "kind": "probe",
           "reference": "synthetic/key-mode-lowercase.gp:key",
-          "detail": "MasterBar keySignatureType changes from minor (1) to major (0) through Go import/export."
+          "detail": "The capability probe exercises lowercase minor through Go import and GP8 export."
         }
       ]
     },

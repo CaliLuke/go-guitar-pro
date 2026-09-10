@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 54 | 24 | 21 | 2 |
-| model | 54 | 24 | 22 | 1 |
+| import | 55 | 23 | 21 | 2 |
+| model | 55 | 23 | 22 | 1 |
 | export | 37 | 22 | 40 | 2 |
 
-All three stages have a supported rating in 34 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 35 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -56,10 +56,10 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Beat barre fret and shape | 2 | 2 | 26 |
 | Dead-slapped beats | 2 | 2 | 26 |
 | Golpe thumb and finger marks | 2 | 2 | 26 |
-| Key signatures and key mode spelling | 44 | 2 | 26 |
 | Legato and authored slurs | 2 | 2 | 26 |
 | Explicit note string-number display | 1 | 1 | 26 |
 | Fade out and volume swell | 1 | 1 | 26 |
+| Key signatures and key mode spelling | 44 | 1 | 26 |
 | Pan and balance automation events | 1 | 1 | 26 |
 | Rasgueado patterns | 1 | 1 | 26 |
 | Sustain pedal markers | 1 | 1 | 26 |
@@ -1055,11 +1055,11 @@ Bounded work: [Preserve free-time bars without inventing a meter](https://github
 
 Structure. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **supported**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Standard Major/Minor values work. A generated valid lowercase minor fixture imports as major because Go compares Mode == Minor. AlphaTab preserves minor. Transposition also changes effective keys.
+GPIF accepts the exact Major, major, Minor, and minor spellings plus the empty major default. Nonzero accidental counts and adjacent changes survive the public model and canonical GP8 Major/Minor export. Unknown modes remain permissive-major with an explicit unsupported-feature diagnostic and strict rejection.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Covered by focused public API, exact wire, reimport, diagnostic-policy, and pinned AlphaTab key-mode evidence.
 
 Bounded work: [Preserve lowercase GPIF minor key modes](https://github.com/CaliLuke/go-guitar-pro/issues/49).
 

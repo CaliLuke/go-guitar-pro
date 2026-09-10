@@ -271,7 +271,16 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			return nil, fmt.Errorf("master bar %d key accidental count %d is outside %d..%d", mbIdx, mb.Key.AccidentalCount, math.MinInt8, math.MaxInt8)
 		}
 		mh.KeySignature.Key = int8(mb.Key.AccidentalCount)
-		mh.KeySignature.IsMinor = mb.Key.Mode == "Minor"
+		switch mb.Key.Mode {
+		case "Minor", "minor":
+			mh.KeySignature.IsMinor = true
+		case "", "Major", "major":
+			mh.KeySignature.IsMinor = false
+		default:
+			// The source audit reports unsupported spellings. Keep permissive
+			// parsing compatible by projecting an unknown mode to major.
+			mh.KeySignature.IsMinor = false
+		}
 
 		if mb.Repeat != nil {
 			mh.RepeatStart = mb.Repeat.Start == "true"

@@ -5,8 +5,8 @@
   "title": "Preserve lowercase GPIF minor key modes",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -90,7 +90,7 @@
     "gp8_notation.go",
     "gpif_parser.go"
   ],
-  "resolution": null,
+  "resolution": "GPIF key import now accepts the exact Major, major, Minor, and minor spellings plus an empty major default. Each adjacent measure header retains its independent nonzero accidental count and minor flag, while GP8 emits canonical Major or Minor tokens and Go reimport preserves the values. Unknown mode text keeps permissive parsing compatible by projecting to major, but now produces GPIF.MasterBar.Key.Mode.InvalidValue as an unsupported-feature diagnostic for selected strict rejection. Focused public API, exact wire, reimport, and isolated pinned AlphaTab evidence covers the supported spellings and unknown behavior. Transposition-derived key behavior remains outside this ticket.",
   "verification": [],
   "issue": {
     "number": 49,

@@ -601,6 +601,15 @@ export function loadFermataFacts(fixture) {
   });
 }
 
+export function loadKeyFacts(fixture) {
+  const score = loadScore(fixture);
+  const bars = score.tracks[0]?.staves[0]?.bars ?? [];
+  return bars.map(bar => ({
+    accidentalCount: finite(bar.keySignature),
+    mode: enumName(alphaTab.model.KeySignatureType, bar.keySignatureType)
+  }));
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -625,6 +634,10 @@ function main() {
   }
   if (args[0] === '--fermatas' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadFermataFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--keys' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadKeyFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

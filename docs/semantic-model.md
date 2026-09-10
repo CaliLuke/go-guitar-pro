@@ -130,6 +130,13 @@ legacy values on `Song` produce normalization reports. Embedded newlines in one
 notice item also produce a report because GPIF stores one newline-separated
 text value.
 
+GPIF key modes accept the exact `Major`, `major`, `Minor`, and `minor`
+spellings; an absent or empty mode defaults to major. An unknown spelling keeps
+permissive parsing compatible by projecting to major and produces an explicit
+unsupported-feature diagnostic, so strict parsing can reject it. The accidental
+count and mode remain independent on every adjacent measure header. GP8 writes
+the canonical `Major` or `Minor` spelling.
+
 `MeasureHeader.FreeTime` preserves the GPIF marker on its exact master bar.
 The marker is present or absent independently on every bar; it does not inherit
 and it does not replace the numeric `TimeSignature`. Finalization therefore uses
