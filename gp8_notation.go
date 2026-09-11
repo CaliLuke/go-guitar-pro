@@ -408,7 +408,7 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		properties = append([]gpifProperty{{Name: "ConcertPitch", Pitch: &pitch}, {Name: "TransposedPitch", Pitch: &pitch}}, properties...)
 	}
 	articulation := 0
-	result := gpifNote{ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
+	result := gpifNote{Ornament: gp8NoteOrnament(note.Ornament), ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
 	result.Properties.Properties = append(result.Properties.Properties, gp8ConvertBend(note.Effect.Bend).properties...)
 	if note.Effect.Harmonic != nil {
 		harmonicType := gp8HarmonicType(note.Effect.Harmonic.Kind)

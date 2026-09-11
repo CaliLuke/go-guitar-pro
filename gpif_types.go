@@ -548,6 +548,7 @@ type gpifNotes struct {
 }
 
 type gpifNote struct {
+	Ornament               string         `xml:"Ornament,omitempty"`
 	LetRing                *string        `xml:"LetRing,omitempty"`
 	Trill                  *gpifTrill     `xml:"Trill,omitempty"`
 	Tie                    *gpifTie       `xml:"Tie,omitempty"`

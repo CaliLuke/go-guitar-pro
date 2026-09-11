@@ -4676,11 +4676,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Note.Ornament is absent. All four upstream turn/mordent variants lack a public representation.",
+      "finding": "All four GPIF note ornaments and absence survive per-occurrence public edits, GP8 serialization and pinned AlphaTab consumption. Undefined source strings and public enum values are diagnosed.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Note.ornament",
@@ -4696,6 +4696,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/ornaments.gp:ornaments",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].ornament. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "source",
+          "reference": "ornament.go",
+          "detail": "Direct per-note ornament authority with checked GPIF spelling."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteOrnaments",
+          "detail": "Five exact runtime variants, raw original fixture and final consumer checks."
         }
       ]
     },

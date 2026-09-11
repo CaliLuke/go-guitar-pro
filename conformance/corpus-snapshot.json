@@ -10629,10 +10629,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 15,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "0849e795c0c47c396778a5e21cbb2067049c84dd8c6ee588f7f89740057113ab"
+          "locationsSha256": "322ea3ef3f53bc1dc3bed68a1e275802d3f6ba8563d8f432c36d3835492f8000"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

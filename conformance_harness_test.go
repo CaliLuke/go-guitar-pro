@@ -229,6 +229,7 @@ func (run *conformanceRun) constructs() []string {
 var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceLegacyInstrumentBounds":             runConformanceLegacyInstrumentBounds,
 	"TestConformanceRSEBounds":                          runConformanceRSEBounds,
+	"TestConformanceNoteOrnaments":                      runConformanceNoteOrnaments,
 	"TestConformanceStringNumberDisplay":                runConformanceStringNumberDisplay,
 	"TestConformanceMetadataText":                       runConformanceMetadataText,
 	"TestConformanceAssignedLyrics":                     runConformanceAssignedLyrics,

@@ -1285,8 +1285,15 @@ export function loadHarmonicFacts(fixture) {
   return loadScore(fixture).tracks.flatMap(track => track.staves.flatMap(staff => staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.notes.filter(note => note.harmonicType !== alphaTab.model.HarmonicType.None).map(note => ({kind: alphaTab.model.HarmonicType[note.harmonicType], fret: note.harmonicValue})))))));
 }
 
+export function loadNoteOrnamentFacts(fixture) {
+ const facts=[];
+ for(const track of loadScore(fixture).tracks)for(const staff of track.staves)for(const bar of staff.bars)for(const voice of bar.voices)for(const beat of voice.beats)for(const note of beat.notes)facts.push({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,note:note.index,ornament:alphaTab.model.NoteOrnament[note.ornament],string:note.string,fret:note.fret});
+ return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
+  if(args[0] === "--note-ornaments" && args.length===2){process.stdout.write(JSON.stringify(loadNoteOrnamentFacts(args[1])));return;}
   if (args[0] === "--harmonics" && args.length === 2) { process.stdout.write(JSON.stringify(loadHarmonicFacts(args[1]))); return; }
   if (args.length === 0) {
     console.error('usage: node oracle.mjs FIXTURE | --batch FIXTURE...');

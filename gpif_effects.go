@@ -369,6 +369,7 @@ func gpifSamePercussionArticulation(a, b PercussionArticulation) bool {
 func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error) {
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
+	note.Ornament = gpifNoteOrnament(*n)
 	if percussion && n.InstrumentArticulation != nil && *n.InstrumentArticulation >= 0 {
 		if _, err := NewPercussionArticulationID(int64(*n.InstrumentArticulation)); err != nil {
 			return Note{}, err

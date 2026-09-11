@@ -6,6 +6,8 @@ import "fmt"
 
 // Note represents a note.
 type Note struct {
+	// Ornament is the authored note ornament. Direct edits control GP8 output.
+	Ornament        NoteOrnament
 	Effect          NoteEffect
 	DurationPercent float32
 	// Value retains the source fret or MIDI value. For GPIF percussion,

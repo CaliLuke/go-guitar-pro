@@ -865,3 +865,9 @@ All six kinds retain fret `2.4` in GPIF, Go, and the pinned consumer.
 Authored harmonic pitch or octave produces one `gp8.omit.harmonic-pitch` report.
 A conflicting legacy fret produces a separate authority report. Strict export
 requires each applicable code; allowing spelling loss does not allow fret conflict.
+
+`Note.Ornament` is the authority for each note’s turn or mordent.
+GPIF stores Turn, InvertedTurn, UpperMordent, or LowerMordent; an absent element means None.
+Each parsed occurrence owns its value, including occurrences that share a source definition.
+Direct edits preserve string, fret, and adjacent notes. Unknown source strings produce an unsupported-feature diagnostic.
+Export rejects undefined enum values before writing the score.

@@ -5,8 +5,8 @@
   "title": "Preserve turns and mordents through GPIF and GP8",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "root",
   "formats": [
     "gp6",
     "gp7",
@@ -84,12 +84,17 @@
       "kind": "probe",
       "reference": "testdata/gp7/ornaments.gp:ornaments",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].ornament. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceNoteOrnaments",
+      "detail": "Five runtime enum cases and original GP7 reused-note regression."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "All four source variants and None now survive independent note occurrence edits, exact GPIF output, and the pinned consumer. Undefined source strings and enum values are diagnosed. Awaiting fresh agent review and integrated full gates.",
   "verification": [],
   "issue": {
     "number": 87,

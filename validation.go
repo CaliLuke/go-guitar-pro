@@ -437,6 +437,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.slide", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("slide %d is not defined", slide)})
 					}
 				}
+				if note.Ornament > NoteOrnamentLowerMordent {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.ornament", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("note ornament %d is not defined", note.Ornament)})
+				}
 				if note.Effect.VibratoStrength > NoteVibratoWide {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.vibrato", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("note vibrato %d is not defined", note.Effect.VibratoStrength)})
 				}

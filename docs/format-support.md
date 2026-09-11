@@ -230,6 +230,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Property.ConflictingDuplicate` | `staff-ownership` | `invalid-data` | Repeated track properties must not provide conflicting authored values. |
 | `GPIF.Track.Sound.Channel` | `score-core` | `unsupported-feature` | The public sound model has no destination for a per-sound MIDI channel. |
 | `GPIF.Track.Sound.MIDI.Bank.Invalid` | `midi-bank` | `invalid-data` | Each GPIF bank-select component must fit the seven-bit MIDI MSB or LSB range. |
+| `GPIF.Note.Ornament.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Only Turn, InvertedTurn, UpperMordent and LowerMordent are defined source ornament spellings. |
 
 ## Public model inventory
 
@@ -292,13 +293,13 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
-| `Note` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
+| `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 254 |
+| `preserved` | 255 |
 | `normalized` | 35 |
 | `omitted` | 105 |
 | `rejected` | 0 |
@@ -309,7 +310,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 124 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 125 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 177 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -317,7 +318,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 261 |
+| `schema` | 262 |
 
 ## Source dispatch inventory
 
@@ -375,6 +376,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | Volume and pan have authored destinations; other recognized channel-strip automation remains omitted. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 20 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
+| `gpifNoteOrnament:n.Ornament` | `note-and-beat-semantics` | 4 | `note-ornaments` | `unsupported-feature` | The four GPIF spellings retain exact variants. Absence maps to None; the source audit reports unknown strings before conversion. |
 
 ## Behavioral contracts
 
@@ -461,3 +463,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `metadata-text` | `score-core` | `TestConformanceMetadataText` | `TestAlphaTabMetadataText` | no | Exact raw consumer text including notices and tabber; precise boundary and legacy omissions. |
 | `assigned-lyrics` | `score-core` | `TestConformanceAssignedLyrics` | `TestAlphaTabAssignedLyrics` | no | Ordered source index conversion, explicit track authority, exact wire and final consumer dispatch with separate beat ownership. |
 | `exact-whammy-offsets` | `note-and-beat-semantics` | `TestConformanceExactWhammyOffsets` | `TestAlphaTabExactWhammyOffsets` | no | Shared ExactOffset authority preserves fractional and bounded nonmonotonic whammy roles; raw pinned consumer controls retain distinct35 and35.5 percent middle offsets. |
+| `note-ornaments` | `note-and-beat-semantics` | `TestConformanceNoteOrnaments` | `TestAlphaTabNoteOrnaments` | no | Four authored variants and None remain independent per occurrence; unknown source strings and public enum values are diagnosed without changing string or fret. |
