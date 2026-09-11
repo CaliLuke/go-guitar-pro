@@ -18,6 +18,9 @@ import (
 
 func TestConformanceAutomationSemantics(t *testing.T) {
 	runConformanceAutomationSemantics(newConformanceRun(t))
+	conformanceIndependentClaim(t, "field:TempoAutomation.Linear", claimSite("automation-detail", "model", "M17-AUTOMATION-SEMANTICS", "linear and step changes with the same value and position"))
+	conformanceIndependentClaim(t, "field:Track.SoundAutomations", claimSite("sound-automation", "model", "M17-AUTOMATION-SEMANTICS", "similar sound names with distinct paths and roles"))
+	conformanceIndependentClaim(t, "field:Song.VolumeAutomations", claimSite("volume-automation", "model", "M17-AUTOMATION-SEMANTICS", "ordered tempo, sound, and volume changes"))
 }
 
 func runConformanceAutomationSemantics(run *conformanceRun) {
@@ -72,6 +75,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 		run.Field("TempoAutomation.Tempo", automation.Tempo, []float64{111, 145.5, 145.5}[index])
 		assertAutomationDetailFields(run, "TempoAutomation", automation.Linear, automation.Text, automation.Hidden, index, []string{"Bright", "step tempo", "linear tempo"})
 	}
+	run.ClaimPrimary(claimSite("automation-detail", "model", "M17-AUTOMATION-SEMANTICS", "linear and step changes with the same value and position")).Preserved("TempoAutomation.Linear", []bool{song.TempoAutomations[0].Linear, song.TempoAutomations[1].Linear, song.TempoAutomations[2].Linear}, []bool{false, false, true})
 	run.Field("Track.Sounds", track.Sounds, []TrackSound{{Name: "Lead", Label: "Lead A", Path: "factory/a", Role: "main", Program: 27}, {Name: "Lead", Label: "Lead B", Path: "factory/b", Role: "solo", Program: 81}})
 	run.Field("Track.SoundAutomations", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 0.5, Sound: 1, Text: "step sound"}, {Bar: 0, Position: 0.5, Sound: 1, Linear: true, Text: "linear sound", Hidden: true}})
 	for index, automation := range track.SoundAutomations {
@@ -80,7 +84,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 		run.Field("SoundAutomation.Sound", automation.Sound, []int{0, 1, 1}[index])
 		assertAutomationDetailFields(run, "SoundAutomation", automation.Linear, automation.Text, automation.Hidden, index, []string{"", "step sound", "linear sound"})
 	}
-	run.Omitted("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
+	run.ClaimPrimary(claimSite("volume-automation", "model", "M17-AUTOMATION-SEMANTICS", "ordered tempo, sound, and volume changes")).Omitted("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
 	for index, automation := range song.VolumeAutomations {
 		run.Preserved("VolumeAutomation.Track", automation.Track, 0)
 		run.Preserved("VolumeAutomation.Bar", automation.Bar, index)
@@ -128,7 +132,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	run.Field("Song.TempoAutomations", roundTrip.TempoAutomations, song.TempoAutomations)
-	run.Field("Track.SoundAutomations", roundTrip.Tracks[0].SoundAutomations, track.SoundAutomations)
+	run.ClaimPrimary(claimSite("sound-automation", "model", "M17-AUTOMATION-SEMANTICS", "similar sound names with distinct paths and roles")).Field("Track.SoundAutomations", roundTrip.Tracks[0].SoundAutomations, track.SoundAutomations)
 	run.Field("Track.Sounds", roundTrip.Tracks[0].Sounds, track.Sounds)
 	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
 		got := readAlphaTabAutomationFacts(t, writeConformanceFixture(t, data))
@@ -232,6 +236,9 @@ func assertAutomationMixTableFields(run *conformanceRun, got, want *MixTableChan
 
 func TestConformanceSourceDispatchAndDiagnostics(t *testing.T) {
 	runConformanceSourceDispatchAndDiagnostics(newConformanceRun(t))
+	conformanceIndependentClaim(t, "dispatch:parseGPIFWithContext:automation.Type", claimSite("automation-detail", "import", "M17-SOURCE-DISPATCH", "linear and step changes with the same value and position"))
+	conformanceIndependentClaim(t, "dispatch:gpifAuditTrackAutomations:automation.Type", claimSite("sound-automation", "import", "M17-SOURCE-DISPATCH", "similar sound names with distinct paths and roles"))
+	conformanceIndependentClaim(t, "dispatch:gpifReadVolumeAutomations:automation.Type", claimSite("volume-automation", "import", "M17-SOURCE-DISPATCH", "ordered tempo, sound, and volume changes"))
 }
 
 func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
@@ -280,11 +287,11 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	if len(track.SoundAutomations) != 2 {
 		t.Fatalf("sound automations = %#v, want two resolved records", track.SoundAutomations)
 	}
-	run.Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 1, Sound: 1, Linear: true, Text: "source sound", Hidden: true}})
+	run.ClaimPrimary(claimSite("automation-detail", "import", "M17-SOURCE-DISPATCH", "linear and step changes with the same value and position")).Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 1, Sound: 1, Linear: true, Text: "source sound", Hidden: true}})
 	if len(result.Song.VolumeAutomations) != 1 {
 		t.Fatalf("volume automations = %#v, want one valid record", result.Song.VolumeAutomations)
 	}
-	run.Dispatch("gpifReadVolumeAutomations:automation.Type", result.Song.VolumeAutomations[0], VolumeAutomation{Track: 0, Bar: 0, Position: 1, Value: 0.875, Linear: true})
+	run.ClaimPrimary(claimSite("volume-automation", "import", "M17-SOURCE-DISPATCH", "ordered tempo, sound, and volume changes")).Dispatch("gpifReadVolumeAutomations:automation.Type", result.Song.VolumeAutomations[0], VolumeAutomation{Track: 0, Bar: 0, Position: 1, Value: 0.875, Linear: true})
 
 	masterContext := &parseContext{format: "GP8"}
 	gpifAuditMasterAutomations([]gpifAutomation{{Type: "Tempo", Value: gpifAutomationValue{Text: "120 2"}}, {Type: "SyncPoint", Value: gpifAutomationValue{FrameOffset: "0"}}}, masterContext)
@@ -306,7 +313,7 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 
 	trackContext := &parseContext{format: "GP8"}
 	gpifAuditTrackAutomations(gpifTrack{ID: "t", Sounds: gpifSounds{Sounds: []gpifSound{{Name: "Lead", Path: "a", Role: "main"}}}, Automations: gpifAutomations{Automations: []gpifAutomation{{Type: "Sound", Value: gpifAutomationValue{Text: "a;Lead;main"}}, {Type: "SustainPedal", Value: gpifAutomationValue{Text: "0 1"}}}}}, 1, trackContext)
-	run.Dispatch("gpifAuditTrackAutomations:automation.Type", len(trackContext.diagnostics), 0)
+	run.ClaimPrimary(claimSite("sound-automation", "import", "M17-SOURCE-DISPATCH", "similar sound names with distinct paths and roles")).Dispatch("gpifAuditTrackAutomations:automation.Type", len(trackContext.diagnostics), 0)
 	channelContext := &parseContext{format: "GP8"}
 	gpifAuditChannelStripAutomations([]gpifAutomation{{Type: "DSPParam_12", Value: gpifAutomationValue{Text: "0.5"}}, {Type: "DSPParam_00"}, {Type: "DSPParam_01"}, {Type: "DSPParam_11"}}, "t", channelContext)
 	run.Dispatch("gpifAuditChannelStripAutomations:automation.Type", len(channelContext.diagnostics), 3)
@@ -396,6 +403,10 @@ func runConformanceBinaryMixTable(run *conformanceRun) {
 		Tempo:      &MixTableItem{Value: 303, Duration: 7},
 	}
 	assertAutomationMixTableFields(run, &change, want)
+	run.ClaimPrimary(
+		claimSite("mix-table", "import", "M17-BINARY-MIX-TABLE", "every mix-table field"),
+		claimSiteAtStage("mix-table", "model", "M17-BINARY-MIX-TABLE", "every mix-table field", "import"),
+	).Omitted("BeatEffects.MixTableChange", &change, want)
 }
 
 func conformanceAutomationGPIFSource() string {

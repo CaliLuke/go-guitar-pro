@@ -3,8 +3,6 @@
 package goguitarpro
 
 import (
-	"archive/zip"
-	"bytes"
 	"encoding/xml"
 	"errors"
 	"math"
@@ -46,7 +44,7 @@ func runConformanceTransposition(run *conformanceRun) {
 		track := &result.Song.Tracks[trackIndex]
 		for staffIndex := range track.Staves {
 			staff := &track.Staves[staffIndex]
-			run.Preserved("Staff.DisplayTranspositionPitch", staff.DisplayTranspositionPitch, wantDisplay[trackIndex][staffIndex])
+			run.ClaimPrimary(claimSite("transposition", "import", "M04-TRANSPOSITION", "distinct sounding and display offsets")).Preserved("Staff.DisplayTranspositionPitch", staff.DisplayTranspositionPitch, wantDisplay[trackIndex][staffIndex])
 			run.Omitted("Staff.TranspositionPitch", staff.TranspositionPitch, int32(0))
 			run.Normalized("Measure.KeySignature", staff.Measures[0].KeySignature.Key, wantKeys[trackIndex][staffIndex])
 		}
@@ -102,7 +100,7 @@ func runConformanceTransposition(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("Staff.DisplayTranspositionPitch", roundTrip.Tracks[0].Staves[0].DisplayTranspositionPitch, int32(-13))
+	run.ClaimPrimary(claimSite("transposition", "model", "M04-TRANSPOSITION", "distinct sounding and display offsets")).Preserved("Staff.DisplayTranspositionPitch", roundTrip.Tracks[0].Staves[0].DisplayTranspositionPitch, int32(-13))
 	run.Omitted("Staff.TranspositionPitch", roundTrip.Tracks[0].Staves[0].TranspositionPitch, int32(0))
 	if got := roundTrip.Tracks[0].Staves[0].Measures[0].KeySignature.Key; got != 6 {
 		t.Fatalf("edited effective key = %d, want 6", got)
@@ -239,6 +237,7 @@ func TestAlphaTabPreservesTransposition(t *testing.T) {
 			}
 		})
 	}
+	conformanceIndependentClaim(t, "field:Staff.DisplayTranspositionPitch", claimSite("transposition", "import", "M04-TRANSPOSITION", "distinct sounding and display offsets"), claimSite("transposition", "model", "M04-TRANSPOSITION", "distinct sounding and display offsets"))
 }
 
 func conformancePartSoundingGPIF(nominalKey string) string {
@@ -257,13 +256,5 @@ func conformanceTranspositionGPIF() string {
 
 func conformanceTranspositionWire(t *testing.T, data []byte) gpifDocument {
 	t.Helper()
-	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
-	if err != nil {
-		t.Fatal(err)
-	}
-	var document gpifDocument
-	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
-		t.Fatal(err)
-	}
-	return document
+	return conformanceWireDocument(t, data)
 }

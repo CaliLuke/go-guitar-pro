@@ -50,7 +50,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 		t.Fatalf("combined multi-staff score diagnostics = %#v", diagnostics)
 	}
 	run.Field("Song.Tracks", len(song.Tracks), 2)
-	run.Field("Track.Staves", []int{len(song.Tracks[0].Staves), len(song.Tracks[1].Staves)}, []int{2, 1})
+	run.ClaimPrimary(claimSite("ownership", "model", "M22-MULTI-STAFF-CONTEXT", "two-staff track followed by one-staff track"), claimSite("ownership", "export", "M22-MULTI-STAFF-CONTEXT", "two-staff track followed by one-staff track")).Field("Track.Staves", []int{len(song.Tracks[0].Staves), len(song.Tracks[1].Staves)}, []int{2, 1})
 	run.Field("Track.CapoFret", []int32{song.Tracks[0].CapoFret, song.Tracks[1].CapoFret}, []int32{3, 0})
 	run.Field("Staff.Strings", [][]GuitarString{song.Tracks[0].Staves[0].Strings, song.Tracks[0].Staves[1].Strings, song.Tracks[1].Staves[0].Strings}, [][]GuitarString{primary.Strings, lower.Strings, followingStrings})
 	run.Field("Measure.Clef", []MeasureClef{song.Tracks[0].Staves[0].Measures[0].Clef, song.Tracks[0].Staves[1].Measures[0].Clef, song.Tracks[1].Staves[0].Measures[0].Clef}, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto})
@@ -59,6 +59,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("combined multi-staff export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("ownership", "export", "M22-MULTI-STAFF-CONTEXT", "two-staff track followed by one-staff track")).Report("M22-MULTI-STAFF-CONTEXT", reportCodes(report), []string{})
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
@@ -72,7 +73,7 @@ func runConformanceMultiStaffContext(run *conformanceRun) {
 		t.Fatalf("round-trip tunings = %#v, want %#v", gotTunings, wantTunings)
 	}
 	run.Wire("gpifMasterTrack.Tracks", []string{roundTrip.Tracks[0].Name, roundTrip.Tracks[1].Name}, []string{"Grand staff", "Following"})
-	run.Wire("gpifTrack.Staves", []int{len(roundTrip.Tracks[0].Staves), len(roundTrip.Tracks[1].Staves)}, []int{2, 1})
+	run.ClaimSerialization(claimSite("ownership", "export", "M22-MULTI-STAFF-CONTEXT", "two-staff track followed by one-staff track")).Wire("gpifTrack.Staves", []int{len(roundTrip.Tracks[0].Staves), len(roundTrip.Tracks[1].Staves)}, []int{2, 1})
 	run.Wire("gpifStaffProperty.Pitches", gotTunings, wantTunings)
 	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].CapoFret, int32(3))
 }
@@ -106,7 +107,7 @@ func runConformancePickupTupletTempo(run *conformanceRun) {
 	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
 		t.Fatalf("pickup combination diagnostics = %#v", diagnostics)
 	}
-	run.Field("Song.Anacrusis", song.Anacrusis, true)
+	run.ClaimPrimary(claimSite("pickup", "import", "M22-PICKUP-TUPLET-TEMPO", "pickup"), claimSite("pickup", "model", "M22-PICKUP-TUPLET-TEMPO", "pickup"), claimSite("pickup", "export", "M22-PICKUP-TUPLET-TEMPO", "pickup")).Field("Song.Anacrusis", song.Anacrusis, true)
 	run.Field("Duration.Dotted", beats[0].Duration.Dotted, true)
 	run.Field("Duration.TupletEnters", beats[0].Duration.TupletEnters, uint8(7))
 	run.Field("Duration.TupletTimes", beats[0].Duration.TupletTimes, uint8(4))
@@ -119,7 +120,10 @@ func runConformancePickupTupletTempo(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("pickup combination export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("pickup", "export", "M22-PICKUP-TUPLET-TEMPO", "pickup")).Report("M22-PICKUP-TUPLET-TEMPO", reportCodes(report), []string{})
 	wire := extractAutomationWireDocument(t, data)
+	document := conformanceWireDocument(t, data)
+	run.ClaimSerialization(claimSite("pickup", "export", "M22-PICKUP-TUPLET-TEMPO", "pickup")).Wire("gpifMasterTrack.Anacrusis", document.MasterTrack.Anacrusis != nil, true)
 	run.Wire("gpifAutomation.Bar", conformanceAutomationInts(wire.masterAutomations, func(item conformanceAutomationWireAutomation) int { return item.Bar }), []int{0, 1})
 	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.masterAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.25})
 	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"120 2", "132.5 2"})
@@ -394,7 +398,7 @@ func runConformanceSelectiveAllowlist(run *conformanceRun) {
 	song.Writer = "omitted writer"
 	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
 	note.DurationPercent = 0.5
-	run.Field("Song.Writer", song.Writer, "omitted writer")
+	run.ClaimPrimary(claimSite("strict-policy", "model", "M22-SELECTIVE-ALLOWLIST", "omitted writer")).Field("Song.Writer", song.Writer, "omitted writer")
 	run.Field("Note.DurationPercent", note.DurationPercent, float32(0.5))
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.omit.writer", "gp8.omit.note-duration-percent"} {
@@ -402,6 +406,7 @@ func runConformanceSelectiveAllowlist(run *conformanceRun) {
 			t.Fatalf("selective report = %#v, want %s", report.Entries, code)
 		}
 	}
+	run.ClaimReport(claimSite("strict-policy", "export", "M22-SELECTIVE-ALLOWLIST", "preserved title")).Report("M22-SELECTIVE-ALLOWLIST", reportCodes(report), []string{"gp8.omit.writer", "gp8.omit.note-duration-percent"})
 	for _, allowed := range []string{"gp8.omit.writer", "gp8.omit.note-duration-percent"} {
 		data, strictReport, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{allowed}}})
 		var lossErr *ExportLossError
@@ -417,8 +422,8 @@ func runConformanceSelectiveAllowlist(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Field("Song.Name", song.Name, "M22 preserved")
-	run.Wire("gpifScore.Title", got.Name, "M22 preserved")
+	run.ClaimPrimary(claimSite("strict-policy", "export", "M22-SELECTIVE-ALLOWLIST", "preserved title")).Field("Song.Name", song.Name, "M22 preserved")
+	run.ClaimSerialization(claimSite("strict-policy", "export", "M22-SELECTIVE-ALLOWLIST", "preserved title")).Wire("gpifScore.Title", got.Name, "M22 preserved")
 	if got.Writer != "" || got.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent != 1 {
 		t.Fatalf("selective omissions round trip = %#v", got)
 	}

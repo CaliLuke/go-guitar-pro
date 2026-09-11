@@ -51,7 +51,7 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 	run.Normalized("Song.Tempo", song.Tempo, int16(0))
 	run.Preserved("Song.TempoName", song.TempoName, "Fractional")
 	run.Omitted("Song.HideTempo", song.HideTempo, true)
-	run.Preserved("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}})
+	run.ClaimPrimary(claimSite("tempo", "import", "M06-TEMPO-AUTHORITY", "fractional opening tempo")).Preserved("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}})
 	run.Preserved("TempoAutomation.Bar", song.TempoAutomations[0].Bar, 1)
 	run.Preserved("TempoAutomation.Position", song.TempoAutomations[0].Position, 0.75)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
@@ -78,7 +78,7 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 	if len(roundTrip.TempoAutomations) != 2 || roundTrip.TempoAutomations[1] != (TempoAutomation{Bar: 1, Position: 0.75, Tempo: 90}) {
 		t.Fatalf("round-trip automations = %#v", roundTrip.TempoAutomations)
 	}
-	run.Field("Song.TempoAutomations", roundTrip.TempoAutomations[1:], song.TempoAutomations)
+	run.ClaimPrimary(claimSite("tempo", "model", "M06-TEMPO-AUTHORITY", "fractional opening tempo")).Field("Song.TempoAutomations", roundTrip.TempoAutomations[1:], song.TempoAutomations)
 	values := extractGPIFLeafText(t, data)
 	run.Wire("gpifAutomation.Type", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Type"], "Tempo"), 2)
 	run.Wire("gpifAutomation.Value", strings.Contains(values["GPIF/MasterTrack/Automations/Automation/Value"], "90 2"), true)

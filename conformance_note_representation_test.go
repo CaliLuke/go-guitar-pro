@@ -45,17 +45,18 @@ func runConformanceNoteRepresentation(run *conformanceRun) {
 	run.Preserved("Beat.Notes", len(song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes), 1)
 	for index := range notes {
 		note := song.Tracks[0].Measures[0].Voices[0].Beats[index].Notes[0]
-		run.Preserved("Note.Value", note.Value, notes[index].Value)
+		run.ClaimPrimary(claimSite("absolute-pitch", "import", "M09-NOTE-REPRESENTATION", "open and fretted end strings"), claimSite("absolute-pitch", "model", "M09-NOTE-REPRESENTATION", "open and fretted end strings")).Preserved("Note.Value", note.Value, notes[index].Value)
 		run.Preserved("Note.String", note.String, notes[index].String)
 		run.Preserved("Note.Kind", note.Kind, notes[index].Kind)
-		run.Preserved("Note.TieOrigin", note.TieOrigin, notes[index].TieOrigin)
+		run.ClaimPrimary(claimSite("ties", "import", "M09-NOTE-REPRESENTATION", "tie origin and destination"), claimSite("ties", "model", "M09-NOTE-REPRESENTATION", "tie origin and destination")).Preserved("Note.TieOrigin", note.TieOrigin, notes[index].TieOrigin)
 		run.Omitted("Note.SwapAccidentals", note.SwapAccidentals, notes[index].SwapAccidentals)
-		run.Omitted("Note.DurationPercent", note.DurationPercent, notes[index].DurationPercent)
+		run.ClaimPrimary(claimSite("sound-duration", "import", "M09-NOTE-REPRESENTATION", "half duration percentage")).Omitted("Note.DurationPercent", note.DurationPercent, notes[index].DurationPercent)
 		run.Preserved("Note.HasPercussionArticulation", note.HasPercussionArticulation, false)
 		run.Preserved("Note.PercussionArticulation", note.PercussionArticulation, 0)
 		run.Preserved("Note.Velocity", note.Velocity, Forte)
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	run.ClaimReport(claimSite("absolute-pitch", "export", "M09-NOTE-REPRESENTATION", "open and fretted end strings"), claimSite("ties", "export", "M09-NOTE-REPRESENTATION", "tie origin and destination")).Report("M09-NOTE-REPRESENTATION", reportCodes(report), []string{"gp8.omit.swap-accidentals", "gp8.omit.note-duration-percent"})
 	for _, code := range []string{"gp8.omit.swap-accidentals", "gp8.omit.note-duration-percent"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
@@ -77,10 +78,10 @@ func runConformanceNoteRepresentation(run *conformanceRun) {
 	gotBeats := roundTrip.Tracks[0].Measures[0].Voices[0].Beats
 	for index := range notes {
 		got := gotBeats[index].Notes[0]
-		run.Field("Note.Value", got.Value, notes[index].Value)
+		run.ClaimPrimary(claimSite("absolute-pitch", "export", "M09-NOTE-REPRESENTATION", "open and fretted end strings")).Field("Note.Value", got.Value, notes[index].Value)
 		run.Field("Note.String", got.String, notes[index].String)
 		run.Field("Note.Kind", got.Kind, notes[index].Kind)
-		run.Field("Note.TieOrigin", got.TieOrigin, notes[index].TieOrigin)
+		run.ClaimPrimary(claimSite("ties", "export", "M09-NOTE-REPRESENTATION", "tie origin and destination")).Field("Note.TieOrigin", got.TieOrigin, notes[index].TieOrigin)
 		switch notes[index].Kind {
 		case NoteTypeNormal:
 			run.Enum("NoteType.NoteTypeNormal", got.Kind, NoteTypeNormal)
@@ -91,7 +92,7 @@ func runConformanceNoteRepresentation(run *conformanceRun) {
 		}
 	}
 	run.Field("Note.SwapAccidentals", gotBeats[4].Notes[0].SwapAccidentals, false)
-	run.Field("Note.DurationPercent", gotBeats[5].Notes[0].DurationPercent, float32(1))
+	run.ClaimPrimary(claimSite("sound-duration", "model", "M09-NOTE-REPRESENTATION", "half duration percentage")).Field("Note.DurationPercent", gotBeats[5].Notes[0].DurationPercent, float32(1))
 
 	values := extractGPIFLeafText(t, data)
 	wireNotes := extractNotes(t, data)
@@ -103,12 +104,12 @@ func runConformanceNoteRepresentation(run *conformanceRun) {
 	run.Wire("gpifProperty.Fret", values["GPIF/Notes/Note/Properties/Property/Fret"], "00001275")
 	run.Wire("gpifProperty.Number", values["GPIF/Notes/Note/Properties/Property/Number"], "646464012745")
 	run.Wire("gpifProperty.String", values["GPIF/Notes/Note/Properties/Property/String"], "5550")
-	run.Wire("gpifProperty.Pitch", values["GPIF/Notes/Note/Properties/Property/Pitch/Step"], "EEEEEECCGGAA")
+	run.ClaimSerialization(claimSite("absolute-pitch", "export", "M09-NOTE-REPRESENTATION", "open and fretted end strings")).Wire("gpifProperty.Pitch", values["GPIF/Notes/Note/Properties/Property/Pitch/Step"], "EEEEEECCGGAA")
 	run.Wire("gpifPitch.Step", values["GPIF/Notes/Note/Properties/Property/Pitch/Step"], "EEEEEECCGGAA")
 	run.Wire("gpifPitch.Accidental", values["GPIF/Notes/Note/Properties/Property/Pitch/Accidental"], "")
 	run.Wire("gpifPitch.Octave", values["GPIF/Notes/Note/Properties/Property/Pitch/Octave"], "444444-1-19922")
 	run.Wire("gpifBeat.Notes", values["GPIF/Beats/Beat/Notes"], "012345")
-	run.Wire("gpifNote.Tie", len(wireNotes.ties), 3)
+	run.ClaimSerialization(claimSite("ties", "export", "M09-NOTE-REPRESENTATION", "tie origin and destination")).Wire("gpifNote.Tie", len(wireNotes.ties), 3)
 	run.Wire("gpifTie.Origin", []bool{wireNotes.ties[0][0], wireNotes.ties[1][0], wireNotes.ties[2][0]}, []bool{true, true, false})
 	run.Wire("gpifTie.Destination", []bool{wireNotes.ties[0][1], wireNotes.ties[1][1], wireNotes.ties[2][1]}, []bool{false, true, true})
 }

@@ -164,10 +164,28 @@ def validate_catalog(catalog, constructs):
                 raise ValueError(f"Missing public field: {item}")
 
 
+def validate_support_claims(catalog, ledger):
+    supported = {(cap["id"], stage) for cap in catalog["capabilities"]
+                 for stage, status in cap["stages"].items() if status == "supported"}
+    claims = [(claim["capability"], claim["stage"])
+              for claim in ledger["semanticMatrix"].get("capabilityClaims", [])]
+    duplicates = [key for key, count in collections.Counter(claims).items() if count != 1]
+    if duplicates:
+        raise ValueError(f"Duplicate support claims: {duplicates}")
+    extra = sorted(set(claims) - supported)
+    if extra:
+        raise ValueError(f"Support claim for non-supported stage: {extra}")
+    missing = sorted(supported - set(claims))
+    if missing:
+        raise ValueError(f"Supported stage without executable claim: {missing}")
+
+
 def build(path):
     catalog = read_json(HERE / "catalog.json")
     sources, constructs = discover()
     validate_catalog(catalog, constructs)
+    ledger = read_json(ROOT / "conformance/feature-ledger.json")
+    validate_support_claims(catalog, ledger)
     con = sqlite3.connect(path)
     con.executescript((HERE / "schema.sql").read_text())
     oracle = read_json(ROOT / "conformance/oracle.json")
@@ -192,7 +210,6 @@ def build(path):
                 con.execute("INSERT INTO construct_capability VALUES (?,?)", (c["id"], cap["id"]))
                 # Association gives a route to the review; it is not individual behavior evidence.
                 con.execute("UPDATE upstream_construct SET review_status='linked' WHERE id=?", (c["id"],))
-    ledger = read_json(ROOT / "conformance/feature-ledger.json")
     for kind, dispositions, cases in (
         ("public-field", "fieldDispositions", "fieldCases"),
         ("wire-field", "wireFieldDispositions", "wireFieldCases")):
@@ -204,6 +221,13 @@ def build(path):
             con.execute("INSERT INTO obligation VALUES (?,?,?,?)", ("go-dispatch", f"{dispatch['function']}:{dispatch['selector']}:{name}", disposition, packed(dispatch)))
     for case in ledger["semanticMatrix"]["cases"]:
         con.execute("INSERT INTO matrix_case VALUES (?,?)", (case["id"], packed(case)))
+    for claim in ledger["semanticMatrix"]["capabilityClaims"]:
+        con.execute("INSERT INTO support_claim VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (
+            claim["capability"], claim["stage"], claim["case"], packed(claim["source"]), claim["value"],
+            claim["assertionStage"], claim["obligation"], claim.get("serialization"),
+            claim.get("reportAssertion"), claim.get("reportNotApplicable"),
+            packed(claim["independentEvidence"]) if claim.get("independentEvidence") else None,
+            packed(claim["independentLimit"]) if claim.get("independentLimit") else None))
     for name, cases in ledger["semanticMatrix"]["enumCases"].items():
         con.execute("INSERT INTO obligation VALUES (?,?,?,?)", ("public-enum", name, "behavior-linked", packed(cases)))
     for f in read_json(ROOT / "conformance/fixture-inventory.json")["fixtures"]:
@@ -235,9 +259,9 @@ def build(path):
                  and probe.get("bridge_sha256") == sha(HERE / "probe.go"))
         con.execute("INSERT INTO metadata VALUES ('probe_fresh',?)", (str(fresh).lower(),))
         for f in probe["fixtures"]:
-            con.execute("INSERT INTO probe_result VALUES (?,?,?,?,?,?)", (f["path"], f.get("parseError"), f.get("exportError"), f.get("alphaError"), packed(f["diagnostics"]), packed(f["report"])))
+            con.execute("INSERT INTO probe_result VALUES (?,?,?,?,?,?,?)", (f["path"], f.get("parseError"), f.get("exportError"), f.get("sourceConsumerError"), f.get("targetConsumerError"), packed(f["diagnostics"]), packed(f["report"])))
             for c in f["comparisons"]:
-                con.execute("INSERT INTO probe_comparison VALUES (?,?,?,?,?,?,?)", (f["path"], c["capability"], len(c["source"]), None if c["target"] is None else len(c["target"]), c["equal"], packed(c["source"]), None if c["target"] is None else packed(c["target"])))
+                con.execute("INSERT INTO probe_comparison VALUES (?,?,?,?,?,?,?,?)", (f["path"], c["capability"], None if c["source"] is None else len(c["source"]), None if c["target"] is None else len(c["target"]), c["equal"], c["comparisonStatus"], packed(c["source"]), None if c["target"] is None else packed(c["target"])))
     backlog.populate(con, catalog)
     con.commit()
     if con.execute("PRAGMA integrity_check").fetchone()[0] != "ok" or con.execute("PRAGMA foreign_key_check").fetchall():
@@ -301,11 +325,11 @@ def report(path):
         complete = con.execute("SELECT COUNT(*) FROM capability_status WHERE scope='guitar-pro' AND import_status='supported' AND model_status='supported' AND export_status='supported'").fetchone()[0]
         lines += ["", f"All three stages have a supported rating in {complete} rows. This is a checklist count, not a percentage of all musical behavior.", "",
                   "## Runtime probe", "", f"The receipt contains {count('probe_result')} input files. Probe freshness against the current source: `{meta.get('probe_fresh', 'unavailable')}`.",
-                  "Raw consumer differences require review. Default-only cases do not prove feature support.", "",
-                  "| Capability | Files with non-default source values | Files with differences | Blocked comparisons |",
-                  "| --- | ---: | ---: | ---: |"]
-        for row in con.execute("SELECT * FROM probe_coverage WHERE nondefault_fixtures>0 OR differing_fixtures>0 ORDER BY differing_fixtures DESC,title"):
-            lines.append(f"| {row['title']} | {row['nondefault_fixtures']} | {row['differing_fixtures']} | {row['blocked_fixtures']} |")
+                  "Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.", "",
+                  "| Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |",
+                  "| --- | ---: | ---: | ---: | ---: | ---: |"]
+        for row in con.execute("SELECT * FROM probe_coverage WHERE fixtures>0 ORDER BY differing_fixtures DESC,title"):
+            lines.append(f"| {row['title']} | {row['nondefault_fixtures']} | {row['default_only_fixtures']} | {row['differing_fixtures']} | {row['source_blocked_fixtures']} | {row['target_blocked_fixtures']} |")
         lines += ["", "## Reviewed capabilities", "", "Priority 1 affects core semantics or audit confidence. Priority 2 covers techniques and expressions. Priority 3 covers display details or scope extensions.", ""]
         for row in con.execute("SELECT * FROM capability_status ORDER BY scope DESC,domain,priority,id"):
             lines += [f"### {row['id']}: {row['title']}", "",

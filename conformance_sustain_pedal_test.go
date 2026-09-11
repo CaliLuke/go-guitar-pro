@@ -35,7 +35,7 @@ func runConformanceSustainPedals(run *conformanceRun) {
 	song := parseTestFixture(t, "testdata/gp7/sustain.gp")
 	want := conformanceSustainFixtureMarkers()
 	got := conformanceSustainMeasureMarkers(song.Tracks[0].Measures)
-	run.Preserved("Measure.SustainPedals", got, want)
+	run.ClaimPrimary(claimSite("sustain-pedal", "import", "M17-SUSTAIN-PEDALS", "down, hold, and release"), claimSite("sustain-pedal", "model", "M17-SUSTAIN-PEDALS", "down, hold, and release"), claimSite("sustain-pedal", "export", "M17-SUSTAIN-PEDALS", "down, hold, and release")).Preserved("Measure.SustainPedals", got, want)
 	run.Preserved("SustainPedalMarker.Type", conformanceSustainTypes(got), conformanceSustainTypes(want))
 	run.Preserved("SustainPedalMarker.Position", conformanceSustainPositions(got), conformanceSustainPositions(want))
 	run.Enum("SustainPedalType.SustainPedalTypeDown", got[0][0].Type, SustainPedalTypeDown)
@@ -52,7 +52,7 @@ func runConformanceSustainPedals(run *conformanceRun) {
 	wire := conformanceSustainWire(t, data)
 	wantWire := conformanceSustainFixtureWire()
 	run.Wire("gpifTrack.Automations", len(wire[0]), len(wantWire))
-	run.Wire("gpifAutomation.Type", conformanceSustainWireStrings(wire[0], func(value gpifAutomation) string { return value.Type }), conformanceSustainWireStrings(wantWire, func(value gpifAutomation) string { return value.Type }))
+	run.ClaimSerialization(claimSite("sustain-pedal", "export", "M17-SUSTAIN-PEDALS", "down, hold, and release")).Wire("gpifAutomation.Type", conformanceSustainWireStrings(wire[0], func(value gpifAutomation) string { return value.Type }), conformanceSustainWireStrings(wantWire, func(value gpifAutomation) string { return value.Type }))
 	run.Wire("gpifAutomation.Value", conformanceSustainWireStrings(wire[0], func(value gpifAutomation) string { return value.Value.Text }), conformanceSustainWireStrings(wantWire, func(value gpifAutomation) string { return value.Value.Text }))
 	run.Wire("gpifAutomation.Bar", conformanceSustainWireInts(wire[0], func(value gpifAutomation) int { return value.Bar }), conformanceSustainWireInts(wantWire, func(value gpifAutomation) int { return value.Bar }))
 	run.Wire("gpifAutomation.Position", conformanceSustainWireFloats(wire[0]), conformanceSustainWireFloats(wantWire))
@@ -97,6 +97,7 @@ func runConformanceSustainPedals(run *conformanceRun) {
 	if err != nil {
 		t.Fatalf("programmatic sustain export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("sustain-pedal", "export", "M17-SUSTAIN-PEDALS", "down, hold, and release")).Report("M17-SUSTAIN-PEDALS", reportCodes(report), []string{})
 	programmaticWire := conformanceSustainWire(t, programmaticData)
 	if got, want := conformanceSustainWirePositionsByTrack(programmaticWire), [][]float64{{0, 1}, {0.25, 0.75}}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("track sustain positions = %#v, want %#v", got, want)
@@ -256,6 +257,7 @@ func TestAlphaTabPreservesSustainPedals(t *testing.T) {
 	if got, want := outputFacts[1].Markers, []conformanceSustainPedalMarkerFact{{Position: 0.25, Type: "release"}, {Position: 0.5, Type: "hold"}}; !slices.Equal(got, want) {
 		t.Fatalf("AlphaTab entered-down bar marker types = %#v, want %#v", got, want)
 	}
+	conformanceIndependentClaim(t, "field:Measure.SustainPedals", claimSite("sustain-pedal", "import", "M17-SUSTAIN-PEDALS", "down, hold, and release"), claimSite("sustain-pedal", "model", "M17-SUSTAIN-PEDALS", "down, hold, and release"), claimSite("sustain-pedal", "export", "M17-SUSTAIN-PEDALS", "down, hold, and release"))
 }
 
 func conformanceSustainFixtureMarkers() [][]SustainPedalMarker {

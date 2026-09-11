@@ -71,7 +71,7 @@ func runConformanceBackingAssetsAndSyncPoints(run *conformanceRun) {
 		t.Fatal("parsed backing track is nil")
 	}
 	backing := result.Song.BackingTrack
-	run.Preserved("Song.BackingTrack", backing != nil, true)
+	run.ClaimPrimary(claimSite("backing-track", "import", "M19-BACKING-ASSETS-SYNC", "enabled local asset")).Preserved("Song.BackingTrack", backing != nil, true)
 	run.Preserved("BackingTrack.Name", backing.Name, "Selected audio")
 	run.Preserved("BackingTrack.Source", backing.Source, "Local")
 	run.Preserved("BackingTrack.AssetID", backing.AssetID, "asset-b")
@@ -84,7 +84,7 @@ func runConformanceBackingAssetsAndSyncPoints(run *conformanceRun) {
 	if len(result.Song.SyncPoints) != 2 {
 		t.Fatalf("sync points = %#v, want two", result.Song.SyncPoints)
 	}
-	run.Omitted("Song.SyncPoints", len(result.Song.SyncPoints), 2)
+	run.ClaimPrimary(claimSite("sync-points", "import", "M19-BACKING-ASSETS-SYNC", "two sync points")).Omitted("Song.SyncPoints", len(result.Song.SyncPoints), 2)
 	zero, err := NewBarPosition(0, 1)
 	if err != nil {
 		t.Fatal(err)
@@ -255,6 +255,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	t := run.t
 	valid := conformanceBackingProgrammaticSong(t)
 	report := PreflightExport(valid, ExportFormatGP8, ExportOptions{})
+	run.Report("M19-VALIDATION-EXPORT-POLICY", reportCodes(report), []string{"gp8.omit.sync-points", "gp8.omit.sync-points"})
 	if hasExportCode(report, "gp8.normalize.sync-point-frame-authority") || hasExportCode(report, "gp8.normalize.sync-point-position-authority") {
 		t.Fatalf("agreeing sync points report = %#v", report.Entries)
 	}
@@ -323,7 +324,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	conflict.SyncPoints[1].FrameOffset = 22050
 	conflict.SyncPoints[1].Position = 0.25
 	run.Field("SyncPoint.FrameOffset", conflict.SyncPoints[1].FrameOffset, int64(22050))
-	run.Field("SyncPoint.AudioFrame", conflict.SyncPoints[1].AudioFrame, AudioFrame(44100))
+	run.ClaimPrimary(claimSite("sync-points", "model", "M19-VALIDATION-EXPORT-POLICY", "two sync points")).Field("SyncPoint.AudioFrame", conflict.SyncPoints[1].AudioFrame, AudioFrame(44100))
 	run.Field("SyncPoint.Position", conflict.SyncPoints[1].Position, 0.25)
 	run.Field("SyncPoint.BarPosition", conflict.SyncPoints[1].BarPosition, valid.SyncPoints[1].BarPosition)
 	conflictReport := PreflightExport(conflict, ExportFormatGP8, ExportOptions{})
@@ -380,6 +381,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 
 func TestConformanceBackingTrackExport(t *testing.T) {
 	runConformanceBackingTrackExport(newConformanceRun(t))
+	conformanceIndependentClaim(t, "field:Song.BackingTrack", claimSite("backing-track", "import", "M19-BACKING-ASSETS-SYNC", "enabled local asset"), claimSite("backing-track", "model", "M19-BACKING-EXPORT", "enabled local asset"))
 }
 
 func runConformanceBackingTrackExport(run *conformanceRun) {
@@ -397,7 +399,7 @@ func runConformanceBackingTrackExport(run *conformanceRun) {
 	if result.Song.BackingTrack == nil || !reflect.DeepEqual(*result.Song.BackingTrack, *song.BackingTrack) {
 		t.Fatalf("round-trip backing track = %#v, want %#v", result.Song.BackingTrack, song.BackingTrack)
 	}
-	run.Preserved("Song.BackingTrack", *result.Song.BackingTrack, *song.BackingTrack)
+	run.ClaimPrimary(claimSite("backing-track", "model", "M19-BACKING-EXPORT", "enabled local asset")).Preserved("Song.BackingTrack", *result.Song.BackingTrack, *song.BackingTrack)
 	run.Preserved("BackingTrack.AssetID", result.Song.BackingTrack.AssetID, song.BackingTrack.AssetID)
 	run.Preserved("BackingTrack.AudioData", result.Song.BackingTrack.AudioData, song.BackingTrack.AudioData)
 	run.Preserved("BackingTrack.EmbeddedFilePath", result.Song.BackingTrack.EmbeddedFilePath, song.BackingTrack.EmbeddedFilePath)

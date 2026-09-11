@@ -45,7 +45,7 @@ func runConformancePercussionIdentity(run *conformanceRun) {
 	}
 	mainNotes := track.Measures[0].Voices[0].Beats[0].Notes
 	run.Field("Note.HasPercussionArticulation", []bool{mainNotes[0].HasPercussionArticulation, mainNotes[1].HasPercussionArticulation, mainNotes[2].HasPercussionArticulation}, []bool{true, true, false})
-	run.Field("Note.PercussionArticulation", []int{mainNotes[0].PercussionArticulation, mainNotes[1].PercussionArticulation}, []int{0, 2})
+	run.ClaimPrimary(claimSite("percussion", "model", "M16-PERCUSSION-IDENTITY", "every articulation field")).Field("Note.PercussionArticulation", []int{mainNotes[0].PercussionArticulation, mainNotes[1].PercussionArticulation}, []int{0, 2})
 	run.Field("Note.Value", []int16{mainNotes[0].Value, mainNotes[1].Value, mainNotes[2].Value}, []int16{91, 46, 40})
 	run.Field("GraceEffect.HasPercussionArticulation", []bool{mainNotes[0].Effect.Graces[0].HasPercussionArticulation, mainNotes[1].Effect.Graces[0].HasPercussionArticulation}, []bool{true, false})
 	run.Field("GraceEffect.PercussionArticulation", mainNotes[0].Effect.Graces[0].PercussionArticulation, 0)
@@ -139,7 +139,7 @@ func runConformanceSourceAndValidation(run *conformanceRun) {
 				t.Errorf("isPercussionTrack() = %t, want %t", got, test.want)
 			}
 			if test.track.InstrumentSet != nil {
-				run.Dispatch("isPercussionTrack:t.InstrumentSet.Type", got, true)
+				run.ClaimPrimary(claimSite("percussion", "import", "M16-SOURCE-VALIDATION", "every articulation field")).Dispatch("isPercussionTrack:t.InstrumentSet.Type", got, true)
 			}
 		})
 	}

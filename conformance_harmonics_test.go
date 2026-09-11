@@ -73,7 +73,7 @@ func runConformanceHarmonicVariants(run *conformanceRun) {
 			song := conformanceHarmonicSong(t)
 			harmonic := &HarmonicEffect{Kind: test.kind, Fret: &legacyFret, FretFloat: &exactFret}
 			conformanceHarmonicFirstNote(song).Effect.Harmonic = harmonic
-			run.Preserved("HarmonicEffect.Kind", harmonic.Kind, test.kind)
+			run.ClaimPrimary(claimSite("harmonics", "import", "M13-HARMONIC-VARIANTS", "all harmonic kinds")).Preserved("HarmonicEffect.Kind", harmonic.Kind, test.kind)
 			run.Normalized("HarmonicEffect.Fret", *harmonic.Fret, legacyFret)
 			run.Preserved("HarmonicEffect.FretFloat", *harmonic.FretFloat, exactFret)
 			if got := gp8HarmonicType(test.kind); got != test.wire {
@@ -178,7 +178,7 @@ func runConformanceHarmonicVariants(run *conformanceRun) {
 		if legacy.Pitch == nil || legacy.Octave == nil {
 			t.Fatalf("legacy harmonic = %#v, want pitch and octave", legacy)
 		}
-		run.Field("HarmonicEffect.Kind", legacy.Kind, HarmonicTypeArtificial)
+		run.ClaimPrimary(claimSite("harmonics", "model", "M13-HARMONIC-VARIANTS", "all harmonic kinds")).Field("HarmonicEffect.Kind", legacy.Kind, HarmonicTypeArtificial)
 		run.Field("HarmonicEffect.Pitch", *legacy.Pitch, PitchClass{Note: "C#", Just: 0, Accidental: 1, Value: 1, Sharp: true})
 		run.Field("HarmonicEffect.Octave", *legacy.Octave, OctaveOttava)
 		run.Field("PitchClass.Note", legacy.Pitch.Note, "C#")

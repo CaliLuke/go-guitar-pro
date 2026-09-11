@@ -18,7 +18,7 @@ func runConformanceStaffCapo(run *conformanceRun) {
 	wantCapos := []int32{2, 5}
 	wantPitches := []int{69, 57}
 	run.Preserved("Track.CapoFret", track.CapoFret, int32(2))
-	run.Preserved("Staff.CapoFret", staffCapos(track), wantCapos)
+	run.ClaimPrimary(claimSite("capo", "import", "M04-STAFF-CAPO", "two staff capos 2 and 5"), claimSite("capo", "model", "M04-STAFF-CAPO", "two staff capos 2 and 5")).Preserved("Staff.CapoFret", staffCapos(track), wantCapos)
 	if got := staffCapoPitches(track); !slices.Equal(got, wantPitches) {
 		t.Errorf("sounding pitches = %v, want %v", got, wantPitches)
 	}
@@ -29,6 +29,7 @@ func runConformanceStaffCapo(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("two-staff capo export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("capo", "export", "M04-STAFF-CAPO", "two staff capos 2 and 5")).Report("M04-STAFF-CAPO", reportCodes(report), []string{})
 	wireTrack := conformanceSingleWireTrack(t, data)
 	if _, found, readErr := gpifReadCapo(wireTrack.Properties); readErr != nil || found {
 		t.Fatalf("track-level capo = found %t, error %v; want omitted", found, readErr)
@@ -41,10 +42,10 @@ func runConformanceStaffCapo(run *conformanceRun) {
 		}
 		wireCapos[staffIndex] = value
 	}
-	run.Wire("gpifStaffProperty.Fret", wireCapos, wantCapos)
+	run.ClaimSerialization(claimSite("capo", "export", "M04-STAFF-CAPO", "two staff capos 2 and 5")).Wire("gpifStaffProperty.Fret", wireCapos, wantCapos)
 
 	roundTrip := conformanceParseCapoExport(t, data)
-	run.Preserved("Staff.CapoFret", staffCapos(&roundTrip.Tracks[0]), wantCapos)
+	run.ClaimPrimary(claimSite("capo", "export", "M04-STAFF-CAPO", "two staff capos 2 and 5")).Preserved("Staff.CapoFret", staffCapos(&roundTrip.Tracks[0]), wantCapos)
 	if got := staffCapoPitches(&roundTrip.Tracks[0]); !slices.Equal(got, wantPitches) {
 		t.Errorf("round-trip sounding pitches = %v, want %v", got, wantPitches)
 	}

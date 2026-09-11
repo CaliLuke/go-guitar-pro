@@ -47,7 +47,7 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 
 	channel := song.Channels[0]
 	run.Preserved("Song.Channels", song.Channels, []MidiChannel{channel})
-	run.Preserved("MidiChannel.Channel", channel.Channel, uint8(18))
+	run.ClaimPrimary(claimSite("midi-routing", "import", "M05-PLAYBACK-ROUTING", "distinct primary and effect channels"), claimSite("midi-routing", "model", "M05-PLAYBACK-ROUTING", "distinct primary and effect channels")).Preserved("MidiChannel.Channel", channel.Channel, uint8(18))
 	run.Normalized("MidiChannel.EffectChannel", channel.EffectChannel, uint8(19))
 	run.Preserved("MidiChannel.Instrument", channel.Instrument, int32(42))
 	run.Preserved("MidiChannel.Bank", channel.Bank, int32(2))

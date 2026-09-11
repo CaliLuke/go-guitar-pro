@@ -67,19 +67,36 @@ CREATE TABLE probe_result (
   fixture_path TEXT PRIMARY KEY,
   parse_error TEXT,
   export_error TEXT,
-  alpha_error TEXT,
+  source_consumer_error TEXT,
+  target_consumer_error TEXT,
   diagnostics_json TEXT NOT NULL,
   export_report_json TEXT NOT NULL
 );
 CREATE TABLE probe_comparison (
   fixture_path TEXT NOT NULL REFERENCES probe_result(fixture_path),
   capability_id TEXT NOT NULL REFERENCES capability(id),
-  source_count INTEGER NOT NULL,
+  source_count INTEGER,
   target_count INTEGER,
   equal_value INTEGER,
+  comparison_status TEXT NOT NULL CHECK (comparison_status IN ('default-only','equal-nondefault','different','source-blocked','target-blocked')),
   source_json TEXT NOT NULL,
   target_json TEXT,
   PRIMARY KEY (fixture_path, capability_id)
+);
+CREATE TABLE support_claim (
+  capability_id TEXT NOT NULL REFERENCES capability(id),
+  stage TEXT NOT NULL CHECK (stage IN ('import','model','export')),
+  case_id TEXT NOT NULL REFERENCES matrix_case(id),
+  source TEXT NOT NULL,
+  value TEXT NOT NULL,
+  assertion_stage TEXT NOT NULL,
+  obligation TEXT NOT NULL,
+  serialization TEXT,
+  report_assertion TEXT,
+  report_not_applicable TEXT,
+  independent_evidence TEXT,
+  independent_limit TEXT,
+  PRIMARY KEY (capability_id,stage)
 );
 CREATE TABLE issue (number INTEGER PRIMARY KEY, state TEXT NOT NULL, url TEXT NOT NULL, title TEXT NOT NULL, checked_at TEXT NOT NULL);
 CREATE TABLE website_feature (
@@ -122,14 +139,24 @@ CREATE VIEW unreviewed_constructs AS
 SELECT u.* FROM upstream_construct u WHERE NOT EXISTS
   (SELECT 1 FROM construct_capability m WHERE m.construct_id=u.id);
 CREATE VIEW observed_differences AS
-SELECT p.fixture_path,c.title,p.source_count,p.target_count,p.source_json,p.target_json
-FROM probe_comparison p JOIN capability c ON c.id=p.capability_id WHERE equal_value=0;
+SELECT p.fixture_path,c.title,p.comparison_status,p.source_count,p.target_count,p.source_json,p.target_json
+FROM probe_comparison p JOIN capability c ON c.id=p.capability_id WHERE comparison_status='different';
 CREATE VIEW probe_coverage AS
 SELECT c.id,c.title,COUNT(p.fixture_path) AS fixtures,
   SUM(CASE WHEN p.source_count>0 THEN 1 ELSE 0 END) AS nondefault_fixtures,
-  SUM(CASE WHEN p.equal_value=0 THEN 1 ELSE 0 END) AS differing_fixtures,
-  SUM(CASE WHEN p.fixture_path IS NOT NULL AND p.equal_value IS NULL THEN 1 ELSE 0 END) AS blocked_fixtures
-FROM capability c LEFT JOIN probe_comparison p ON c.id=p.capability_id GROUP BY c.id;
+  SUM(CASE WHEN p.comparison_status='default-only' THEN 1 ELSE 0 END) AS default_only_fixtures,
+  SUM(CASE WHEN p.comparison_status='different' THEN 1 ELSE 0 END) AS differing_fixtures,
+  SUM(CASE WHEN p.comparison_status='source-blocked' OR r.source_consumer_error IS NOT NULL THEN 1 ELSE 0 END) AS source_blocked_fixtures,
+  SUM(CASE WHEN p.comparison_status='target-blocked' OR r.target_consumer_error IS NOT NULL THEN 1 ELSE 0 END) AS target_blocked_fixtures,
+  SUM(CASE WHEN p.comparison_status IN ('source-blocked','target-blocked') OR r.source_consumer_error IS NOT NULL OR r.target_consumer_error IS NOT NULL THEN 1 ELSE 0 END) AS blocked_fixtures
+FROM capability c
+LEFT JOIN probe_comparison p ON c.id=p.capability_id
+LEFT JOIN probe_result r ON r.fixture_path=p.fixture_path
+GROUP BY c.id;
+CREATE VIEW supported_without_claims AS
+SELECT a.capability_id,a.stage FROM assessment a
+LEFT JOIN support_claim s ON s.capability_id=a.capability_id AND s.stage=a.stage
+WHERE a.status='supported' AND s.capability_id IS NULL;
 CREATE TABLE work_item (
   id TEXT PRIMARY KEY,
   capability_id TEXT NOT NULL REFERENCES capability(id),

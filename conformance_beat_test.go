@@ -32,9 +32,9 @@ func runConformanceBeatSemantics(run *conformanceRun) {
 	}
 	for index := range beats {
 		got := song.Tracks[0].Measures[0].Voices[0].Beats[index]
-		run.Normalized("Beat.Status", got.Status, beats[index].Status)
+		run.ClaimPrimary(claimSite("rests", "import", "M10-BEAT-SEMANTICS", "rest status")).Normalized("Beat.Status", got.Status, beats[index].Status)
 		run.Normalized("Beat.Dynamics", got.Dynamics, beats[index].Dynamics)
-		run.Preserved("Beat.Text", got.Text, beats[index].Text)
+		run.ClaimPrimary(claimSite("text", "import", "M10-BEAT-SEMANTICS", "text on notes and rests"), claimSite("text", "model", "M10-BEAT-SEMANTICS", "text on notes and rests")).Preserved("Beat.Text", got.Text, beats[index].Text)
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range []string{"gp8.normalize.note-velocity", "gp8.normalize.empty-beat"} {
@@ -42,6 +42,7 @@ func runConformanceBeatSemantics(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
+	run.ClaimReport(claimSite("text", "export", "M10-BEAT-SEMANTICS", "text on notes and rests")).Report("M10-BEAT-SEMANTICS", reportCodes(report), []string{"gp8.normalize.note-velocity", "gp8.normalize.empty-beat"})
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.note-velocity", "gp8.normalize.empty-beat"}}})
 	if err != nil {
 		t.Fatal(err)
@@ -51,19 +52,20 @@ func runConformanceBeatSemantics(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats
-	run.Field("Beat.Status", []BeatStatus{got[0].Status, got[1].Status, got[2].Status}, []BeatStatus{BeatStatusNormal, BeatStatusRest, BeatStatusRest})
+	run.ClaimPrimary(claimSite("rests", "model", "M10-BEAT-SEMANTICS", "rest status")).Field("Beat.Status", []BeatStatus{got[0].Status, got[1].Status, got[2].Status}, []BeatStatus{BeatStatusNormal, BeatStatusRest, BeatStatusRest})
 	run.Enum("BeatStatus.BeatStatusNormal", got[0].Status, BeatStatusNormal)
 	run.Enum("BeatStatus.BeatStatusRest", got[1].Status, BeatStatusRest)
 	run.Enum("BeatStatus.BeatStatusEmpty", got[2].Status, BeatStatusRest)
 	run.Field("Beat.Dynamics", []int16{got[0].Dynamics, got[1].Dynamics, got[2].Dynamics}, []int16{MinVelocity + VelocityIncrement*7, MinVelocity, DefaultVelocity})
-	run.Field("Beat.Text", []string{got[0].Text, got[1].Text, got[2].Text}, []string{"normal <&>", "rest text", "empty metadata"})
+	run.ClaimPrimary(claimSite("text", "export", "M10-BEAT-SEMANTICS", "text on notes and rests")).Field("Beat.Text", []string{got[0].Text, got[1].Text, got[2].Text}, []string{"normal <&>", "rest text", "empty metadata"})
 	values := extractGPIFLeafText(t, data)
 	run.Wire("gpifBeat.Dynamic", values["GPIF/Beats/Beat/Dynamic"], "FFFPPPF")
-	run.Wire("gpifBeat.FreeText", values["GPIF/Beats/Beat/FreeText"], "normal <&>rest textempty metadata")
+	run.ClaimSerialization(claimSite("text", "export", "M10-BEAT-SEMANTICS", "text on notes and rests")).Wire("gpifBeat.FreeText", values["GPIF/Beats/Beat/FreeText"], "normal <&>rest textempty metadata")
 }
 
 func TestConformanceBeatEffects(t *testing.T) {
 	runConformanceBeatEffects(newConformanceRun(t))
+	conformanceIndependentClaim(t, "field:Beat.Octave", claimSite("beat-octave", "import", "M10-BEAT-EFFECTS", "all octave shifts"), claimSite("beat-octave", "model", "M10-BEAT-EFFECTS", "all octave shifts"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts"))
 }
 
 func runConformanceBeatEffects(run *conformanceRun) {
@@ -80,7 +82,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 			beat.Effect.Hairpin = hairpin
 			beat.Effect.Stroke = BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)}
 			run.Preserved("Beat.Effect", beat.Effect, BeatEffects{Hairpin: hairpin, Stroke: BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)}})
-			run.Preserved("BeatEffects.Hairpin", beat.Effect.Hairpin, hairpin)
+			run.ClaimPrimary(claimSite("hairpins", "import", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("hairpins", "model", "M10-BEAT-EFFECTS", "all hairpins")).Preserved("BeatEffects.Hairpin", beat.Effect.Hairpin, hairpin)
 			run.Normalized("BeatEffects.Stroke", beat.Effect.Stroke, BeatStroke{Direction: stroke, Duration: NoteValue(DurationEighth)})
 			run.Preserved("BeatStroke.Direction", beat.Effect.Stroke.Direction, stroke)
 			run.Preserved("BeatStroke.Duration", beat.Effect.Stroke.Duration, NoteValue(DurationEighth))
@@ -94,7 +96,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 		run.Omitted("BeatEffects.SlapEffect", BeatEffects{SlapEffect: value}.SlapEffect, value)
 	}
 	for _, value := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
-		run.Omitted("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
+		run.ClaimPrimary(claimSite("pick-stroke", "import", "M10-BEAT-EFFECTS", "up and down pick strokes")).Omitted("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
 	}
 	for _, source := range []struct {
 		name  string
@@ -109,7 +111,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	} {
 		beat := Beat{}
 		gpifApplyBeatEffects(&gpifBeat{Ottavia: source.value}, &beat)
-		run.Preserved("Beat.Octave", beat.Octave, source.want)
+		run.ClaimPrimary(claimSite("beat-octave", "import", "M10-BEAT-EFFECTS", "all octave shifts"), claimSite("beat-octave", "model", "M10-BEAT-EFFECTS", "all octave shifts"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Preserved("Beat.Octave", beat.Octave, source.want)
 		run.Dispatch("gpifApplyBeatEffects:b.Ottavia", beat.Octave, source.want)
 
 		song := semanticExportProbeSong(t)
@@ -119,7 +121,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 			t.Fatal(err)
 		}
 		wire := extractGPIFLeafText(t, data)["GPIF/Beats/Beat/Ottavia"]
-		run.Wire("gpifBeat.Ottavia", wire, source.value)
+		run.ClaimSerialization(claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Wire("gpifBeat.Ottavia", wire, source.value)
 		roundTrip, err := Parse(data)
 		if err != nil {
 			t.Fatal(err)
@@ -173,9 +175,9 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	beat.Effect.SlapEffect = SlapEffectPopping
 	beat.Effect.Vibrato = true
 	beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionDown, Duration: NoteValue(DurationSixteenth)}
-	run.Preserved("BeatEffects.FadeIn", beat.Effect.FadeIn, true)
+	run.ClaimPrimary(claimSite("fade-in", "import", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("fade-in", "model", "M10-BEAT-EFFECTS", "authored fade-in")).Preserved("BeatEffects.FadeIn", beat.Effect.FadeIn, true)
 	run.Omitted("BeatEffects.HasRasgueado", beat.Effect.HasRasgueado, true)
-	run.Field("BeatEffects.PickStroke", beat.Effect.PickStroke, BeatStrokeDirectionUp)
+	run.ClaimPrimary(claimSite("pick-stroke", "model", "M10-BEAT-EFFECTS", "up and down pick strokes")).Field("BeatEffects.PickStroke", beat.Effect.PickStroke, BeatStrokeDirectionUp)
 	run.Field("BeatEffects.SlapEffect", beat.Effect.SlapEffect, SlapEffectPopping)
 	run.Omitted("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
@@ -184,6 +186,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
+	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.omit.beat-vibrato", "gp8.normalize.stroke-duration"})
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)
@@ -193,8 +196,8 @@ func runConformanceBeatEffects(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Effect
-	run.Field("BeatEffects.FadeIn", got.FadeIn, true)
-	run.Field("BeatEffects.Hairpin", got.Hairpin, HairpinCrescendo)
+	run.ClaimPrimary(claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in")).Field("BeatEffects.FadeIn", got.FadeIn, true)
+	run.ClaimPrimary(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins")).Field("BeatEffects.Hairpin", got.Hairpin, HairpinCrescendo)
 	run.Field("BeatEffects.Stroke", got.Stroke, BeatStroke{Direction: BeatStrokeDirectionDown, Duration: NoteValue(DurationEighth)})
 
 	var lossErr *ExportLossError
@@ -203,8 +206,8 @@ func runConformanceBeatEffects(run *conformanceRun) {
 		t.Fatalf("strict effect export = %d bytes, %v", len(strict), strictErr)
 	}
 	values := extractGPIFLeafText(t, data)
-	run.Wire("gpifBeat.Fadding", values["GPIF/Beats/Beat/Fadding"], "FadeIn")
-	run.Wire("gpifBeat.Hairpin", values["GPIF/Beats/Beat/Hairpin"], "Crescendo")
+	run.ClaimSerialization(claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in")).Wire("gpifBeat.Fadding", values["GPIF/Beats/Beat/Fadding"], "FadeIn")
+	run.ClaimSerialization(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins")).Wire("gpifBeat.Hairpin", values["GPIF/Beats/Beat/Hairpin"], "Crescendo")
 	run.Wire("gpifBeat.Arpeggio", values["GPIF/Beats/Beat/Arpeggio"], "Down")
 }
 

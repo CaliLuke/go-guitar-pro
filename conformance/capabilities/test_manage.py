@@ -46,13 +46,56 @@ class CapabilityDatabaseTests(unittest.TestCase):
         con.execute("INSERT INTO upstream_construct(id,path,line,kind,name,declaration) VALUES ('new','Note.ts',1,'field','Note.newEffect','public newEffect = true;')")
         self.assertEqual(con.execute("SELECT name,review_status FROM unreviewed_constructs").fetchall(), [("Note.newEffect", "unverified")])
 
-    def test_failed_export_is_unknown_instead_of_equal(self):
+    def test_failed_target_consumer_is_distinct_from_a_difference(self):
         con = self.database()
         self.capability(con, "fermata")
-        con.execute("INSERT INTO probe_result VALUES ('bad.gp',NULL,'rejected',NULL,'[]','[]')")
-        con.execute("INSERT INTO probe_comparison VALUES ('bad.gp','fermata',1,NULL,NULL,'[1]',NULL)")
-        self.assertEqual(con.execute("SELECT nondefault_fixtures,differing_fixtures,blocked_fixtures FROM probe_coverage").fetchone(), (1, 0, 1))
+        con.execute("INSERT INTO probe_result VALUES ('bad.gp',NULL,'rejected',NULL,'consumer rejected','[]','[]')")
+        con.execute("INSERT INTO probe_comparison VALUES ('bad.gp','fermata',1,NULL,NULL,'target-blocked','[1]',NULL)")
+        self.assertEqual(con.execute("SELECT nondefault_fixtures,differing_fixtures,source_blocked_fixtures,target_blocked_fixtures,blocked_fixtures FROM probe_coverage").fetchone(), (1, 0, 0, 1, 1))
         self.assertEqual(con.execute("SELECT COUNT(*) FROM observed_differences").fetchone()[0], 0)
+
+    def test_source_and_target_consumer_blockers_are_independent(self):
+        con = self.database()
+        self.capability(con, "fermata")
+        con.executemany("INSERT INTO probe_result VALUES (?,?,?,?,?,?,?)", [
+            ("source.gp", None, None, "source failed", None, "[]", "[]"),
+            ("target.gp", None, None, None, "target failed", "[]", "[]")])
+        con.executemany("INSERT INTO probe_comparison VALUES (?,?,?,?,?,?,?,?)", [
+            ("source.gp", "fermata", None, 1, None, "source-blocked", "null", "[1]"),
+            ("target.gp", "fermata", 1, None, None, "target-blocked", "[1]", None)])
+        self.assertEqual(con.execute("SELECT source_blocked_fixtures,target_blocked_fixtures,blocked_fixtures FROM probe_coverage").fetchone(), (1, 1, 2))
+
+    def test_aggregate_blocker_count_does_not_double_count_both_sides(self):
+        con = self.database()
+        self.capability(con, "fermata")
+        con.execute("INSERT INTO probe_result VALUES ('both.gp',NULL,NULL,'source failed','target failed','[]','[]')")
+        con.execute("INSERT INTO probe_comparison VALUES ('both.gp','fermata',NULL,NULL,NULL,'source-blocked','null',NULL)")
+        self.assertEqual(con.execute("SELECT source_blocked_fixtures,target_blocked_fixtures,blocked_fixtures FROM probe_coverage").fetchone(), (1, 1, 1))
+
+    def test_default_only_probe_rows_remain_visible(self):
+        con = self.database()
+        self.capability(con, "fermata")
+        con.execute("INSERT INTO probe_result VALUES ('default.gp',NULL,NULL,NULL,NULL,'[]','[]')")
+        con.execute("INSERT INTO probe_comparison VALUES ('default.gp','fermata',0,0,1,'default-only','[]','[]')")
+        self.assertEqual(con.execute("SELECT fixtures,default_only_fixtures,nondefault_fixtures FROM probe_coverage").fetchone(), (1, 1, 0))
+
+    def test_supported_stage_without_claim_stays_visible(self):
+        con = self.database()
+        self.capability(con, "fermata")
+        con.execute("INSERT INTO assessment VALUES ('fermata','import','supported')")
+        self.assertEqual(con.execute("SELECT capability_id,stage FROM supported_without_claims").fetchall(), [("fermata", "import")])
+
+    def test_supported_stage_without_claim_is_rejected(self):
+        catalog = {"capabilities": [{"id": "fermata", "stages": {"import": "supported", "model": "partial", "export": "partial"}}]}
+        ledger = {"semanticMatrix": {"capabilityClaims": []}}
+        with self.assertRaisesRegex(ValueError, "without executable claim"):
+            manage.validate_support_claims(catalog, ledger)
+
+    def test_claim_for_non_supported_stage_is_rejected(self):
+        catalog = {"capabilities": [{"id": "fermata", "stages": {"import": "partial", "model": "partial", "export": "partial"}}]}
+        ledger = {"semanticMatrix": {"capabilityClaims": [{"capability": "fermata", "stage": "import"}]}}
+        with self.assertRaisesRegex(ValueError, "non-supported stage"):
+            manage.validate_support_claims(catalog, ledger)
 
     def test_check_rejects_stale_database_without_replacing_it(self):
         with tempfile.TemporaryDirectory() as directory:

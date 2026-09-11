@@ -48,14 +48,14 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 	}
 	for index, accent := range []NoteAccent{NoteAccentNone, NoteAccentNormal, NoteAccentHeavy, NoteAccentTenuto} {
 		run.Enum([]string{"NoteAccent.NoteAccentNone", "NoteAccent.NoteAccentNormal", "NoteAccent.NoteAccentHeavy", "NoteAccent.NoteAccentTenuto"}[index], accent, NoteAccent(index))
-		run.Preserved("NoteEffect.Accent", NoteEffect{Accent: accent}.Accent, accent)
+		run.ClaimPrimary(claimSite("tenuto", "import", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent"), claimSite("tenuto", "model", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent"), claimSite("tenuto", "export", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent")).Preserved("NoteEffect.Accent", NoteEffect{Accent: accent}.Accent, accent)
 	}
 	for index, vibrato := range []NoteVibrato{NoteVibratoNone, NoteVibratoSlight, NoteVibratoWide} {
 		run.Enum([]string{"NoteVibrato.NoteVibratoNone", "NoteVibrato.NoteVibratoSlight", "NoteVibrato.NoteVibratoWide"}[index], vibrato, NoteVibrato(index))
 		run.Preserved("NoteEffect.VibratoStrength", NoteEffect{VibratoStrength: vibrato}.VibratoStrength, vibrato)
 	}
 	run.Preserved("NoteEffect.Tapped", NoteEffect{Tapped: true}.Tapped, true)
-	run.Preserved("NoteEffect.LeftHandTapped", NoteEffect{LeftHandTapped: true}.LeftHandTapped, true)
+	run.ClaimPrimary(claimSite("tapping", "model", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins"), claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Preserved("NoteEffect.LeftHandTapped", NoteEffect{LeftHandTapped: true}.LeftHandTapped, true)
 	fingerings := []Fingering{FingeringOpen, FingeringThumb, FingeringIndex, FingeringMiddle, FingeringAnnular, FingeringLittle}
 	for index, fingering := range fingerings {
 		effect := defaultNoteEffect()
@@ -63,7 +63,7 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 		effect.RightHandFinger = fingering
 		effect.HasLeftHandFinger = true
 		effect.HasRightHandFinger = true
-		run.Omitted("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
+		run.ClaimPrimary(claimSite("fingering", "import", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open"), claimSite("fingering", "model", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open")).Omitted("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
 		run.Omitted("NoteEffect.RightHandFinger", effect.RightHandFinger, fingering)
 		run.Omitted("NoteEffect.HasLeftHandFinger", effect.HasLeftHandFinger, true)
 		run.Omitted("NoteEffect.HasRightHandFinger", effect.HasRightHandFinger, true)
@@ -94,36 +94,37 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 		LeftHandFinger: FingeringOpen, RightHandFinger: FingeringOpen,
 	}
 	note.Effect = wantEffect
-	data, err := Export(song, ExportFormatGP8)
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
+	run.ClaimReport(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("accent", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("tenuto", "export", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent"), claimSite("staccato", "export", "M11-TECHNIQUE-DISPOSITIONS", "staccato"), claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes"), claimSite("palm-let-ring", "export", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring"), claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags"), claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Report("M11-TECHNIQUE-DISPOSITIONS", reportCodes(report), []string{"gp8.normalize.track-view"})
 	values := extractGPIFLeafText(t, data)
 	wire := extractTechniqueWireNote(t, data)
 	run.Preserved("Note.Effect", note.Effect, wantEffect)
-	run.Preserved("NoteEffect.AccentuatedNote", note.Effect.AccentuatedNote, true)
+	run.ClaimPrimary(claimSite("accent", "import", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("accent", "model", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Preserved("NoteEffect.AccentuatedNote", note.Effect.AccentuatedNote, true)
 	run.Preserved("NoteEffect.HeavyAccentuatedNote", note.Effect.HeavyAccentuatedNote, true)
-	run.Preserved("NoteEffect.GhostNote", note.Effect.GhostNote, true)
-	run.Preserved("NoteEffect.Staccato", note.Effect.Staccato, true)
-	run.Preserved("NoteEffect.PalmMute", note.Effect.PalmMute, true)
+	run.ClaimPrimary(claimSite("dead-ghost", "import", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes"), claimSite("dead-ghost", "model", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Preserved("NoteEffect.GhostNote", note.Effect.GhostNote, true)
+	run.ClaimPrimary(claimSite("staccato", "import", "M11-TECHNIQUE-DISPOSITIONS", "staccato"), claimSite("staccato", "model", "M11-TECHNIQUE-DISPOSITIONS", "staccato")).Preserved("NoteEffect.Staccato", note.Effect.Staccato, true)
+	run.ClaimPrimary(claimSite("palm-let-ring", "import", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring"), claimSite("palm-let-ring", "model", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring")).Preserved("NoteEffect.PalmMute", note.Effect.PalmMute, true)
 	run.Preserved("NoteEffect.DeadNote", note.Effect.DeadNote, true)
 	run.Preserved("NoteEffect.LetRing", note.Effect.LetRing, true)
-	run.Preserved("NoteEffect.Vibrato", note.Effect.Vibrato, true)
+	run.ClaimPrimary(claimSite("note-vibrato", "model", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Preserved("NoteEffect.Vibrato", note.Effect.Vibrato, true)
 	run.Preserved("NoteEffect.Hammer", note.Effect.Hammer, true)
-	run.Preserved("NoteEffect.Slides", note.Effect.Slides, []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove})
-	run.Preserved("NoteEffect.Trill", note.Effect.Trill.Fret, int8(7))
+	run.ClaimPrimary(claimSite("slides", "import", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags"), claimSite("slides", "model", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags")).Preserved("NoteEffect.Slides", note.Effect.Slides, []SlideType{SlideShiftSlideTo, SlideLegatoSlideTo, SlideOutDownwards, SlideOutUpwards, SlideIntoFromBelow, SlideIntoFromAbove})
+	run.ClaimPrimary(claimSite("trill", "import", "M11-TECHNIQUE-DISPOSITIONS", "trill fret and duration"), claimSite("trill", "model", "M11-TECHNIQUE-DISPOSITIONS", "trill fret and duration")).Preserved("NoteEffect.Trill", note.Effect.Trill.Fret, int8(7))
 	run.Preserved("TrillEffect.Fret", note.Effect.Trill.Fret, int8(7))
 	run.Normalized("TrillEffect.Duration", note.Effect.Trill.Duration.Value, uint16(DurationSixteenth))
 	run.Preserved("NoteEffect.Harmonic", note.Effect.Harmonic.Kind, HarmonicTypeNatural)
-	run.Wire("gpifNote.Accent", values["GPIF/Notes/Note/Accent"], "13")
-	run.Wire("gpifNote.AntiAccent", values["GPIF/Notes/Note/AntiAccent"], "Normal")
-	run.Wire("gpifNote.LetRing", wire.LetRing != nil, true)
-	run.Wire("gpifNote.Vibrato", values["GPIF/Notes/Note/Vibrato"], "Slight")
+	run.ClaimSerialization(claimSite("accent", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("tenuto", "export", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent")).Wire("gpifNote.Accent", values["GPIF/Notes/Note/Accent"], "13")
+	run.ClaimSerialization(claimSite("staccato", "export", "M11-TECHNIQUE-DISPOSITIONS", "staccato")).Wire("gpifNote.AntiAccent", values["GPIF/Notes/Note/AntiAccent"], "Normal")
+	run.ClaimSerialization(claimSite("palm-let-ring", "export", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring")).Wire("gpifNote.LetRing", wire.LetRing != nil, true)
+	run.ClaimSerialization(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Wire("gpifNote.Vibrato", values["GPIF/Notes/Note/Vibrato"], "Slight")
 	run.Wire("gpifNote.Trill", values["GPIF/Notes/Note/Trill"], "7")
 	run.Wire("gpifTrill.Fret", values["GPIF/Notes/Note/Trill"], "7")
-	run.Wire("gpifProperty.Name", wire.propertyNames(), []string{"ConcertPitch", "TransposedPitch", "Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
-	run.Wire("gpifProperty.Enable", wire.allEnabled("Muted", "PalmMuted", "HopoOrigin"), true)
-	run.Wire("gpifProperty.Flags", wire.propertyText("Slide", "flags"), "63")
+	run.ClaimSerialization(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Wire("gpifProperty.Name", wire.propertyNames(), []string{"ConcertPitch", "TransposedPitch", "Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
+	run.ClaimSerialization(claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Wire("gpifProperty.Enable", wire.allEnabled("Muted", "PalmMuted", "HopoOrigin"), true)
+	run.ClaimSerialization(claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags")).Wire("gpifProperty.Flags", wire.propertyText("Slide", "flags"), "63")
 	run.Wire("gpifProperty.HType", wire.propertyText("HarmonicType", "type"), "Natural")
 
 	roundTrip, err := Parse(data)
@@ -131,16 +132,16 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect
-	run.Field("NoteEffect.AccentuatedNote", got.AccentuatedNote, true)
+	run.ClaimPrimary(claimSite("accent", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Field("NoteEffect.AccentuatedNote", got.AccentuatedNote, true)
 	run.Field("NoteEffect.HeavyAccentuatedNote", got.HeavyAccentuatedNote, true)
-	run.Field("NoteEffect.GhostNote", got.GhostNote, true)
-	run.Field("NoteEffect.Staccato", got.Staccato, true)
-	run.Field("NoteEffect.PalmMute", got.PalmMute, true)
+	run.ClaimPrimary(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Field("NoteEffect.GhostNote", got.GhostNote, true)
+	run.ClaimPrimary(claimSite("staccato", "export", "M11-TECHNIQUE-DISPOSITIONS", "staccato")).Field("NoteEffect.Staccato", got.Staccato, true)
+	run.ClaimPrimary(claimSite("palm-let-ring", "export", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring")).Field("NoteEffect.PalmMute", got.PalmMute, true)
 	run.Field("NoteEffect.DeadNote", got.DeadNote, true)
 	run.Field("NoteEffect.LetRing", got.LetRing, true)
-	run.Field("NoteEffect.Vibrato", got.Vibrato, true)
+	run.ClaimPrimary(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Field("NoteEffect.Vibrato", got.Vibrato, true)
 	run.Field("NoteEffect.Hammer", got.Hammer, true)
-	run.Field("NoteEffect.Slides", got.Slides, note.Effect.Slides)
+	run.ClaimPrimary(claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags")).Field("NoteEffect.Slides", got.Slides, note.Effect.Slides)
 
 	for _, test := range []struct {
 		name  string
@@ -205,7 +206,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 			t.Fatal(err)
 		}
 		got := note.Effect.DeadNote || note.Effect.PalmMute || note.Effect.Hammer
-		run.Dispatch("gpifNoteToNote:p.Name", got, true)
+		run.ClaimPrimary(claimSite("tapping", "import", "M11-SOURCE-DISTINCTIONS", "hammer, tap, and left-hand-tap origins")).Dispatch("gpifNoteToNote:p.Name", got, true)
 	}
 	enabled := "Enabled"
 	for _, property := range []gpifProperty{{Name: "Muted", Enable: &enabled}, {Name: "PalmMuted", Enable: &enabled}, {Name: "HopoOrigin", Enable: &enabled}} {
@@ -228,7 +229,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 		if vibratoErr != nil {
 			t.Fatal(vibratoErr)
 		}
-		run.Dispatch("gpifNoteToNote:n.Vibrato", vibratoNote.Effect.VibratoStrength, test.want)
+		run.ClaimPrimary(claimSite("note-vibrato", "import", "M11-SOURCE-DISTINCTIONS", "all note-accent and vibrato-strength variants")).Dispatch("gpifNoteToNote:n.Vibrato", vibratoNote.Effect.VibratoStrength, test.want)
 	}
 
 	for _, test := range []struct {

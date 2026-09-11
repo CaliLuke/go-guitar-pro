@@ -222,6 +222,7 @@ func TestAlphaTabPreservesIndependentStaffCapos(t *testing.T) {
 			t.Fatalf("AlphaTab staff %d sounding MIDI = %#v, want %v", staffIndex, midi, want.midi)
 		}
 	}
+	conformanceIndependentClaim(t, "field:Staff.CapoFret", claimSite("capo", "import", "M04-STAFF-CAPO", "two staff capos 2 and 5"), claimSite("capo", "model", "M04-STAFF-CAPO", "two staff capos 2 and 5"), claimSite("capo", "export", "M04-STAFF-CAPO", "two staff capos 2 and 5"))
 }
 
 func TestAlphaTabPreservesTuningLabels(t *testing.T) {
@@ -261,6 +262,7 @@ func TestAlphaTabPreservesTuningLabels(t *testing.T) {
 			t.Fatalf("AlphaTab staff %d capo = %#v, want 0", staffIndex, staff.Capo)
 		}
 	}
+	conformanceIndependentClaim(t, "field:Staff.TuningName", claimSite("tuning", "import", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels"), claimSite("tuning", "model", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels"), claimSite("tuning", "export", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels"))
 }
 
 func TestAlphaTabPreservesClefOctaves(t *testing.T) {
@@ -292,6 +294,7 @@ func TestAlphaTabPreservesClefOctaves(t *testing.T) {
 	if got := conformanceBeatAlphaTabFirstOctave(t, edited); got != "15mb" {
 		t.Fatalf("AlphaTab beat octave = %q, want 15mb", got)
 	}
+	conformanceIndependentClaim(t, "field:Measure.ClefOctave", claimSite("clef-octave", "import", "M07-CLEF-OCTAVE", "8va"), claimSite("clef-octave", "model", "M07-CLEF-OCTAVE", "8va"), claimSite("clef-octave", "export", "M07-CLEF-OCTAVE", "8va"))
 }
 
 func TestAlphaTabPreservesDirections(t *testing.T) {
@@ -341,6 +344,7 @@ func TestAlphaTabPreservesDirections(t *testing.T) {
 	if got := conformanceAlphaTabDirections(t, data)[0]; !slices.Equal(got, conformanceDirectionNames(all)) {
 		t.Fatalf("AlphaTab simultaneous directions = %v", got)
 	}
+	conformanceIndependentClaim(t, "field:MeasureHeader.Directions", claimSite("directions", "import", "M07-DIRECTIONS", "simultaneous target and jump markers"), claimSite("directions", "model", "M07-DIRECTIONS", "simultaneous target and jump markers"), claimSite("directions", "export", "M07-DIRECTIONS", "simultaneous target and jump markers"))
 }
 
 func TestAlphaTabPreservesSimileMarks(t *testing.T) {
@@ -369,6 +373,7 @@ func TestAlphaTabPreservesSimileMarks(t *testing.T) {
 	if !slices.Equal(got, want) {
 		t.Fatalf("AlphaTab simile marks = %v, want %v", got, want)
 	}
+	conformanceIndependentClaim(t, "field:Measure.SimileMark", claimSite("simile", "import", "M07-MASTER-BARS", "all simile marks"), claimSite("simile", "model", "M07-MASTER-BARS", "all simile marks"), claimSite("simile", "export", "M07-MASTER-BARS", "all simile marks"))
 }
 
 func TestAlphaTabPreservesNativePercussionFallbacks(t *testing.T) {
@@ -572,6 +577,7 @@ func TestAlphaTabMultiStaffTrackOrdering(t *testing.T) {
 			}
 		})
 	}
+	conformanceIndependentClaim(t, "field:Track.Staves", claimSite("ownership", "import", "M03-OWNERSHIP-IMPORT", "two-staff track followed by one-staff track"), claimSite("ownership", "model", "M22-MULTI-STAFF-CONTEXT", "two-staff track followed by one-staff track"))
 }
 
 func TestAlphaTabTempoReferences(t *testing.T) {
@@ -622,6 +628,7 @@ func TestAlphaTabTempoReferences(t *testing.T) {
 			}
 		})
 	}
+	conformanceIndependentClaim(t, "field:Song.TempoAutomations", claimSite("tempo", "import", "M06-TEMPO-AUTHORITY", "fractional opening tempo"), claimSite("tempo", "model", "M06-TEMPO-AUTHORITY", "fractional opening tempo"))
 }
 
 func TestAlphaTabGPIFTiming(t *testing.T) {
@@ -670,6 +677,9 @@ func TestAlphaTabGPIFTiming(t *testing.T) {
 			}
 		})
 	}
+	conformanceIndependentClaim(t, "field:Song.Anacrusis", claimSite("pickup", "import", "M22-PICKUP-TUPLET-TEMPO", "pickup"), claimSite("pickup", "model", "M22-PICKUP-TUPLET-TEMPO", "pickup"))
+	conformanceIndependentClaim(t, "field:Beat.Duration", claimSite("duration", "import", "M08-DURATIONS", "all note values"), claimSite("duration", "model", "M08-DURATIONS", "all note values"))
+	conformanceIndependentClaim(t, "field:Duration.TupletEnters", claimSite("tuplets", "import", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets"), claimSite("tuplets", "model", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets"))
 }
 
 func TestAlphaTabGP5DurationPercentWireValues(t *testing.T) {

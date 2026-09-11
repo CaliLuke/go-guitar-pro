@@ -98,7 +98,7 @@ func runConformanceTremoloPicking(run *conformanceRun) {
 		if gotBeat.Notes[0].Effect.TremoloPicking == nil || gotBeat.Notes[0].Effect.TremoloPicking.Duration.Value != value {
 			t.Fatalf("legacy note tremolo duration %d round trip = %#v", value, gotBeat.Notes[0].Effect.TremoloPicking)
 		}
-		run.Preserved("BeatEffects.TremoloPicking", gotBeat.Effect.TremoloPicking.Duration.Value, value)
+		run.ClaimPrimary(claimSite("tremolo", "import", "M11-TREMOLO-PICKING", "binary marks 1, 2, and 3")).Preserved("BeatEffects.TremoloPicking", gotBeat.Effect.TremoloPicking.Duration.Value, value)
 		run.Preserved("TremoloPickingEffect.Duration", gotBeat.Effect.TremoloPicking.Duration, duration)
 		run.Omitted("TremoloPickingEffect.Style", beat.Effect.TremoloPicking.Style, TremoloPickingStyleDefault)
 	}
@@ -295,4 +295,5 @@ func TestAlphaTabPreservesTremoloPicking(t *testing.T) {
 	if model.MinMarks != 0 || model.MaxMarks != 5 || model.DefaultMarks != 0 || model.DefaultStyle != "default" || model.BuzzRoll != "buzzroll" {
 		t.Fatalf("AlphaTab tremolo model facts = %#v", model)
 	}
+	conformanceIndependentClaim(t, "field:BeatEffects.TremoloPicking", claimSite("tremolo", "import", "M11-TREMOLO-PICKING", "binary marks 1, 2, and 3"))
 }

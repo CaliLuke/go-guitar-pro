@@ -23,7 +23,7 @@ func runConformanceClefOctave(run *conformanceRun) {
 	for measureIndex := 3; measureIndex <= 8; measureIndex++ {
 		fixtureValues = append(fixtureValues, fixture.Tracks[0].Staves[0].Measures[measureIndex].ClefOctave)
 	}
-	run.Preserved("Measure.ClefOctave", fixtureValues, []Octave{
+	run.ClaimPrimary(claimSite("clef-octave", "import", "M07-CLEF-OCTAVE", "8va")).Preserved("Measure.ClefOctave", fixtureValues, []Octave{
 		OctaveQuindicesima, OctaveQuindicesima, OctaveQuindicesima,
 		OctaveQuindicesima, OctaveQuindicesima, OctaveQuindicesima,
 	})
@@ -33,7 +33,7 @@ func runConformanceClefOctave(run *conformanceRun) {
 		OctaveOttava, OctaveQuindicesima, OctaveNone,
 		OctaveOttavaBassa, OctaveQuindicesimaBassa, OctaveNone,
 	}
-	run.Preserved("Measure.ClefOctave", conformanceClefOctaves(&song.Tracks[0]), wantLocations)
+	run.ClaimPrimary(claimSite("clef-octave", "model", "M07-CLEF-OCTAVE", "8va")).Preserved("Measure.ClefOctave", conformanceClefOctaves(&song.Tracks[0]), wantLocations)
 	run.Preserved("Beat.Octave", song.Tracks[0].Measures[0].Voices[0].Beats[0].Octave, OctaveQuindicesimaBassa)
 
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
@@ -42,8 +42,9 @@ func runConformanceClefOctave(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("clef octave export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("clef-octave", "export", "M07-CLEF-OCTAVE", "8va")).Report("M07-CLEF-OCTAVE", reportCodes(report), []string{})
 	wantWire := []string{"8va", "8vb", "15ma", "15mb", "", ""}
-	run.Wire("gpifBar.Ottavia", conformanceClefOctaveWire(t, data), wantWire)
+	run.ClaimSerialization(claimSite("clef-octave", "export", "M07-CLEF-OCTAVE", "8va")).Wire("gpifBar.Ottavia", conformanceClefOctaveWire(t, data), wantWire)
 	run.Wire("gpifBeat.Ottavia", extractGPIFLeafText(t, data)["GPIF/Beats/Beat/Ottavia"], "15mb15mb")
 
 	roundTrip, err := Parse(data)
@@ -76,7 +77,7 @@ func runConformanceClefOctave(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("Measure.ClefOctave", conformanceClefOctaves(&editedRoundTrip.Tracks[0]), wantEditedLocations)
+	run.ClaimPrimary(claimSite("clef-octave", "export", "M07-CLEF-OCTAVE", "8va")).Preserved("Measure.ClefOctave", conformanceClefOctaves(&editedRoundTrip.Tracks[0]), wantEditedLocations)
 	if got := editedRoundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Octave; got != OctaveQuindicesimaBassa {
 		t.Fatalf("edited round-trip beat octave = %d, want %d", got, OctaveQuindicesimaBassa)
 	}

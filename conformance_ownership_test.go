@@ -80,9 +80,9 @@ func runConformanceOwnershipImport(run *conformanceRun) {
 	wantStaffCounts := []int{2, 1, 2}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
-		run.Preserved("Track.Name", track.Name, wantNames[trackIndex])
+		run.ClaimPrimary(claimSite("track-identity", "import", "M03-OWNERSHIP-IMPORT", "non-default track color")).Preserved("Track.Name", track.Name, wantNames[trackIndex])
 		run.Preserved("Track.Number", track.Number, int32(trackIndex+1))
-		run.Preserved("Track.Staves", len(track.Staves), wantStaffCounts[trackIndex])
+		run.ClaimPrimary(claimSite("ownership", "import", "M03-OWNERSHIP-IMPORT", "two-staff track followed by one-staff track")).Preserved("Track.Staves", len(track.Staves), wantStaffCounts[trackIndex])
 		run.Normalized("Track.Measures", len(track.Measures), 1)
 		run.Normalized("Track.Strings", track.Strings, track.Staves[0].Strings)
 		if &track.Measures[0] != &track.Staves[0].Measures[0] {

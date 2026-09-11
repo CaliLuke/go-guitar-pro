@@ -42,7 +42,7 @@ func runConformanceLyricScopes(run *conformanceRun) {
 
 	run.Omitted("Song.Lyrics", song.Lyrics, Lyrics{TrackIndex: 0, Lines: []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}}})
 	run.Preserved("Lyrics.TrackIndex", song.Lyrics.TrackIndex, 0)
-	run.Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}})
+	run.ClaimPrimary(claimSite("lyrics", "model", "M18-LYRIC-SCOPES", "distinct score, track, and rest text")).Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}})
 	for index, line := range song.Lyrics.Lines {
 		run.Preserved("LyricLine.StartMeasureIndex", line.StartMeasureIndex, 0)
 		run.Preserved("LyricLine.Text", line.Text, []string{"score-only one", "score punctuation: [a], don't!", "score 日本語"}[index])
@@ -137,7 +137,7 @@ func runConformanceBinaryScoreLyrics(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	run.Field("Lyrics.TrackIndex", lyrics.TrackIndex, 1)
-	run.Field("Lyrics.Lines", len(lyrics.Lines), 5)
+	run.ClaimPrimary(claimSite("lyrics", "import", "M18-BINARY-SCORE-LYRICS", "distinct score, track, and rest text")).Field("Lyrics.Lines", len(lyrics.Lines), 5)
 	for index, line := range lyrics.Lines {
 		run.Field("LyricLine.StartMeasureIndex", line.StartMeasureIndex, wantStarts[index])
 		run.Field("LyricLine.Text", line.Text, texts[index])

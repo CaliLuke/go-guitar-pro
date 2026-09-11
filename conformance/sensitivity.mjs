@@ -9,6 +9,93 @@ const declared = new Set(ledger.semanticContracts.behaviorContracts.map(contract
 
 const mutations = [
   {
+    id: 'supported-capability-claim-removed',
+    contract: 'semantic-obligation-shape',
+    category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '{"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/repeat-count/repeat-counts-1-6-and-128"},"value":"repeat counts 1, 6, and 128","assertionStage":"import","obligation":"field:MeasureHeader.RepeatCount","reportNotApplicable":"not-applicable-non-export-stage","independentLimit":{"id":"limit-repeat-count-import","kind":"no-claim-specific-consumer","oracle":"@coderline/alphatab@1.8.4","source":"TestConformanceMasterBars","obligation":"field:MeasureHeader.RepeatCount","reason":"The pinned consumer registry has no claim-specific import callback for repeat-count; TestConformanceMasterBars supplies the exact field:MeasureHeader.RepeatCount matrix assertion."}},',
+    after: '',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$',
+    want: 'supported capability stage repeat-count:import has 0 executable closure claims'
+  },
+  {
+    id: 'supported-capability-source-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/repeat-count/repeat-counts-1-6-and-128"},',
+    after: '"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"fabricated"},',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-value-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"value":"repeat counts 1, 6, and 128","assertionStage":"import",',
+    after: '"value":"fabricated","assertionStage":"import",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-stage-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS",',
+    after: '"capability":"repeat-count","stage":"fabricated","case":"M07-MASTER-BARS",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'has no assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-assertion-stage-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"value":"repeat counts 1, 6, and 128","assertionStage":"import",',
+    after: '"value":"repeat counts 1, 6, and 128","assertionStage":"programmatic",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-primary-obligation-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"assertionStage":"import","obligation":"field:MeasureHeader.RepeatCount",',
+    after: '"assertionStage":"import","obligation":"field:MeasureHeader.TimeSignature",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-synchronized-scenario-redirect', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '{"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/repeat-count/repeat-counts-1-6-and-128"},"value":"repeat counts 1, 6, and 128","assertionStage":"import","obligation":"field:MeasureHeader.RepeatCount","reportNotApplicable":"not-applicable-non-export-stage","independentLimit":{"id":"limit-repeat-count-import","kind":"no-claim-specific-consumer","oracle":"@coderline/alphatab@1.8.4","source":"TestConformanceMasterBars","obligation":"field:MeasureHeader.RepeatCount","reason":"The pinned consumer registry has no claim-specific import callback for repeat-count; TestConformanceMasterBars supplies the exact field:MeasureHeader.RepeatCount matrix assertion."}}',
+    after: '{"capability":"repeat-count","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/repeat-count/meter-endpoints"},"value":"meter endpoints","assertionStage":"import","obligation":"field:MeasureHeader.TimeSignature","reportNotApplicable":"not-applicable-non-export-stage","independentLimit":{"id":"limit-repeat-count-import","kind":"no-claim-specific-consumer","oracle":"@coderline/alphatab@1.8.4","source":"TestConformanceMasterBars","obligation":"field:MeasureHeader.TimeSignature","reason":"The pinned consumer registry has no claim-specific import callback for repeat-count; TestConformanceMasterBars supplies the exact field:MeasureHeader.TimeSignature matrix assertion."}}',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-unrelated-serialization', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"serialization":"wire:gpifRepeat.Count","reportAssertion":"report:M07-MASTER-BARS",',
+    after: '"serialization":"wire:gpifMasterBar.Time","reportAssertion":"report:M07-MASTER-BARS",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-report-mismatch', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"serialization":"wire:gpifRepeat.Count","reportAssertion":"report:M07-MASTER-BARS",',
+    after: '"serialization":"wire:gpifRepeat.Count","reportAssertion":"report:fabricated",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'does not match assertion-site receipt'
+  },
+  {
+    id: 'supported-capability-independent-evidence-fabricated', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"capability":"simile","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/simile/all-simile-marks"},"value":"all simile marks","assertionStage":"import","obligation":"field:Measure.SimileMark","reportNotApplicable":"not-applicable-non-export-stage","independentEvidence":{"id":"alphatab-simile"}',
+    after: '"capability":"simile","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/simile/all-simile-marks"},"value":"all simile marks","assertionStage":"import","obligation":"field:Measure.SimileMark","reportNotApplicable":"not-applicable-non-export-stage","independentEvidence":{"id":"fabricated"}',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'cites unknown independent evidence'
+  },
+  {
+    id: 'supported-capability-independent-evidence-redirect', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"capability":"simile","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/simile/all-simile-marks"},"value":"all simile marks","assertionStage":"import","obligation":"field:Measure.SimileMark","reportNotApplicable":"not-applicable-non-export-stage","independentEvidence":{"id":"alphatab-simile"}',
+    after: '"capability":"simile","stage":"import","case":"M07-MASTER-BARS","source":{"kind":"matrix-scenario","id":"M07-MASTER-BARS/simile/all-simile-marks"},"value":"all simile marks","assertionStage":"import","obligation":"field:Measure.SimileMark","reportNotApplicable":"not-applicable-non-export-stage","independentEvidence":{"id":"alphatab-free-time"}',
+    command: 'alphatab-ledger-test', test: '^TestConformanceCapabilityIndependentEvidence$', want: 'independent evidence alphatab-free-time receipts'
+  },
+  {
+    id: 'supported-capability-independent-limit-invalid', contract: 'semantic-obligation-shape', category: 'capability-closure',
+    file: 'conformance/feature-ledger.json',
+    before: '"independentLimit":{"id":"limit-repeat-count-import",',
+    after: '"independentLimit":{"id":".",',
+    command: 'ledger-test', test: '^TestSemanticMatrixInventory$', want: 'has invalid independent limit'
+  },
+  {
     id: 'disabled-semantic-assertion',
     contract: 'field-disposition-evidence',
     category: 'executable-evidence',
@@ -382,7 +469,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: ',"gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]', after: ',"gpifBeat.Ottavia":["M20-SOURCE-AUDIT"]' },
+      { before: '"gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"]', after: '"gpifBeat.Ottavia":["M20-SOURCE-AUDIT"]' },
       { before: '"gpifBars.Bars":"Collection wrapper;', after: '"gpifBeat.Ottavia":"Incorrect scalar structural classification.",\n      "gpifBars.Bars":"Collection wrapper;' }
     ],
     command: 'ledger-test',
@@ -393,7 +480,7 @@ const mutations = [
     id: 'semantic-wire-executable-assertion',
     category: 'executable-evidence',
     file: 'conformance_beat_test.go',
-    before: '\t\trun.Wire("gpifBeat.Ottavia", wire, source.value)\n',
+    before: '\t\trun.ClaimSerialization(claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Wire("gpifBeat.Ottavia", wire, source.value)\n',
     after: '\t\t_ = wire\n',
     test: '^TestSemanticMatrixInventory$',
     want: 'semantic assertions for M10-BEAT-EFFECTS mismatch'
@@ -436,7 +523,7 @@ const mutations = [
     contract: 'semantic-obligation-shape',
     category: 'classification',
     file: 'conformance/feature-ledger.json',
-    before: '"id":"M10-BEAT-SEMANTICS","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceBeatSemantics","formats":["GP8","programmatic"],"stages":["programmatic","finalization","preflight","export","policy"]',
+    before: '"id":"M10-BEAT-SEMANTICS","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceBeatSemantics","formats":["GP8","programmatic"],"stages":["import","programmatic","finalization","preflight","export","policy"]',
     after: '"id":"M10-BEAT-SEMANTICS","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceBeatSemantics","formats":["GP8","programmatic"],"stages":[]',
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',
@@ -447,7 +534,7 @@ const mutations = [
     contract: 'semantic-obligation-shape',
     category: 'classification',
     file: 'conformance/feature-ledger.json',
-    before: '"values":["normal, rest, and empty status","text on notes and rests","rest dynamics","beat dynamic distinct from note velocity"]',
+    before: '"values":["normal, rest, and empty status","text on notes and rests","rest dynamics","beat dynamic distinct from note velocity","rest status"]',
     after: '"values":[]',
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',
@@ -458,7 +545,7 @@ const mutations = [
     contract: 'semantic-obligation-shape',
     category: 'classification',
     file: 'conformance/feature-ledger.json',
-    before: '{"id":"M10-DYNAMIC-QUANTIZATION","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api","independent-consumer","independent-wire","diagnostic-policy"],"test":"TestConformanceDynamicQuantization","formats":["GP8","programmatic"],"stages":["programmatic","validation","preflight","export","policy","oracle"],"values":["all PPP through FFF canonical normal and rest values","every midpoint and adjacent value","endpoint clamping","authored and note combinations","rest, empty, absent, and chord beats","invalid -1 and 128"],"oracle":"Hand-authored target markings, GPIF leaf extraction, Go reimport, and pinned AlphaTab normal and rest output.","limitations":["GPIF stores one quantized dynamic for the complete beat."]}',
+    before: '{"id":"M10-DYNAMIC-QUANTIZATION","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api","independent-consumer","independent-wire","diagnostic-policy"],"test":"TestConformanceDynamicQuantization","formats":["GP8","programmatic"],"stages":["import","programmatic","validation","preflight","export","policy","oracle"],"values":["all PPP through FFF canonical normal and rest values","every midpoint and adjacent value","endpoint clamping","authored and note combinations","rest, empty, absent, and chord beats","invalid -1 and 128"],"oracle":"Hand-authored target markings, GPIF leaf extraction, Go reimport, and pinned AlphaTab normal and rest output.","limitations":["GPIF stores one quantized dynamic for the complete beat."]}',
     after: '{"id":"M10-DYNAMIC-QUANTIZATION","family":"M10","evidenceRole":"behavior","evidenceSources":["public-api"],"test":"TestConformanceDynamicQuantization","formats":["programmatic"],"stages":["programmatic"],"values":["canonical"],"oracle":"Self-assigned public value","limitations":[]}',
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',
@@ -545,9 +632,15 @@ try {
         encoding: 'utf8',
         env: { ...process.env, ALPHATAB_CONFORMANCE: '1', ALPHATAB_ORACLE_OVERLAY: mutated }
       });
-    } else if (mutation.command === 'ledger-test') {
+    } else if (mutation.command === 'ledger-test' || mutation.command === 'alphatab-ledger-test') {
       result = spawnSync('go', ['test', '-count=1', '-run', mutation.test, '.'], {
-        cwd: root, encoding: 'utf8', env: { ...process.env, SEMANTIC_LEDGER_OVERLAY: mutated }
+        cwd: root,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          SEMANTIC_LEDGER_OVERLAY: mutated,
+          ...(mutation.command === 'alphatab-ledger-test' ? { ALPHATAB_CONFORMANCE: '1' } : {})
+        }
       });
     } else {
       const overlay = path.join(temporary, `${mutation.id}-overlay.json`);

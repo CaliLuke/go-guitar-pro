@@ -99,7 +99,7 @@ func runConformanceMetadataImport(run *conformanceRun) {
 			run.t.Fatalf("strict metadata parse changed the score: %#v", strictResult.Song)
 		}
 	}
-	run.Field("Song.Name", song.Name, "Title & 名")
+	run.ClaimPrimary(claimSite("metadata", "import", "M01-GPIF-METADATA-IMPORT", "Unicode")).Field("Song.Name", song.Name, "Title & 名")
 	run.Field("Song.Subtitle", song.Subtitle, "Subtitle")
 	run.Field("Song.Artist", song.Artist, "Artist")
 	run.Field("Song.Album", song.Album, "Album")
@@ -206,7 +206,7 @@ func runConformanceMetadataExportPolicy(run *conformanceRun) {
 	if diagnostics := ValidateSong(song); len(diagnostics) != 0 {
 		t.Fatalf("M01 baseline is invalid: %#v", diagnostics)
 	}
-	run.Field("Song.Name", song.Name, "Title & 名")
+	run.ClaimPrimary(claimSite("metadata", "model", "M01-GP8-METADATA-EXPORT", "Unicode")).Field("Song.Name", song.Name, "Title & 名")
 	run.Field("Song.Subtitle", song.Subtitle, "Subtitle <one>")
 	run.Field("Song.Artist", song.Artist, "Artist")
 	run.Field("Song.Album", song.Album, "Album")

@@ -99,7 +99,7 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 	run.Preserved("Marker.Title", marker.Title, "Section & 名")
 	run.Omitted("Marker.Color", marker.Color, int32(0x123456))
 	run.Preserved("Track.Visible", track.Visible, false)
-	run.Preserved("Track.Color", track.Color, int32(0x336699))
+	run.ClaimPrimary(claimSite("track-identity", "model", "M02-DISPLAY-EXPORT", "non-default track color"), claimSite("track-identity", "export", "M02-DISPLAY-EXPORT", "non-default track color")).Preserved("Track.Color", track.Color, int32(0x336699))
 	run.Omitted("Track.IndicateTuning", track.IndicateTuning, true)
 	run.Normalized("Track.Settings", track.Settings, wantSettings)
 	run.Normalized("TrackSettings.Tablature", track.Settings.Tablature, true)
@@ -179,6 +179,10 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 	if len(report.Entries) != len(want)+len(wantDoubleBarLocations) {
 		t.Errorf("report has %d entries, want %d: %#v", len(report.Entries), len(want)+len(wantDoubleBarLocations), report.Entries)
 	}
+	run.ClaimReport(claimSite("track-identity", "export", "M02-DISPLAY-EXPORT", "non-default track color")).Report("M02-DISPLAY-EXPORT", sortedSemanticValues(reportCodes(report)), []string{
+		"gp8.normalize.measure-double-bar-authority", "gp8.omit.beat-display", "gp8.omit.marker-color", "gp8.omit.measure-line-break",
+		"gp8.omit.page-setup", "gp8.omit.track-display-settings", "gp8.omit.track-indicate-tuning", "gp8.omit.voice-direction",
+	})
 
 	data, exported, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
 	if err != nil || !reflect.DeepEqual(exported, report) {
@@ -191,7 +195,7 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 	}
 	run.Field("Track.Visible", roundTrip.Tracks[0].Visible, false)
 	run.Wire("gpifSection.Text", values["GPIF/MasterBars/MasterBar/Section/Text"], marker.Title)
-	run.Wire("gpifTrack.Color", values["GPIF/Tracks/Track/Color"], "51 102 153")
+	run.ClaimSerialization(claimSite("track-identity", "export", "M02-DISPLAY-EXPORT", "non-default track color")).Wire("gpifTrack.Color", values["GPIF/Tracks/Track/Color"], "51 102 153")
 
 	layout := buildGP8LayoutConfiguration(song)
 	if got := binary.BigEndian.Uint32(layout[:4]); got != 4 {

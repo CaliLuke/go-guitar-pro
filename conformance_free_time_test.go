@@ -20,7 +20,7 @@ func runConformanceFreeTime(run *conformanceRun) {
 	t := run.t
 	fixture := parseTestFixture(t, "testdata/gp7/free-time.gp")
 	wantFixture := []bool{false, true, true, false, false, false, true}
-	run.Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(fixture), wantFixture)
+	run.ClaimPrimary(claimSite("free-time", "import", "M07-FREE-TIME", "present")).Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(fixture), wantFixture)
 
 	// Free time is authored notation, not a request to derive measure length
 	// from voice contents. A non-pickup measure advances by its numeric meter
@@ -43,14 +43,15 @@ func runConformanceFreeTime(run *conformanceRun) {
 
 	song := conformanceFreeTimeSong(t)
 	want := []bool{true, false, true}
-	run.Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(song), want)
+	run.ClaimPrimary(claimSite("free-time", "model", "M07-FREE-TIME", "present")).Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(song), want)
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
 		LossPolicy: ExportLossPolicy{RequirePreservation: true},
 	})
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("free-time strict export = %v, %#v", err, report.Entries)
 	}
-	run.Wire("gpifMasterBar.FreeTime", conformanceFreeTimeWire(t, data), want)
+	run.ClaimReport(claimSite("free-time", "export", "M07-FREE-TIME", "present")).Report("M07-FREE-TIME", reportCodes(report), []string{})
+	run.ClaimSerialization(claimSite("free-time", "export", "M07-FREE-TIME", "present")).Wire("gpifMasterBar.FreeTime", conformanceFreeTimeWire(t, data), want)
 	if raw := conformanceGPIFText(t, data); strings.Count(raw, "<FreeTime></FreeTime>") != 2 {
 		t.Fatalf("GPIF FreeTime elements = %q, want two empty presence markers", raw)
 	}
@@ -91,7 +92,7 @@ func runConformanceFreeTime(run *conformanceRun) {
 	if strictErr != nil || result == nil {
 		t.Fatalf("FreeTime payload parse = %#v, %v", result, strictErr)
 	}
-	run.Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(result.Song), wantEdited)
+	run.ClaimPrimary(claimSite("free-time", "export", "M07-FREE-TIME", "present")).Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(result.Song), wantEdited)
 }
 
 func conformanceFreeTimeSong(t *testing.T) *Song {
@@ -204,6 +205,7 @@ func TestAlphaTabPreservesFreeTime(t *testing.T) {
 	if got := conformanceAlphaTabFreeTime(t, edited); !slices.Equal(got, []bool{false, true, true}) {
 		t.Fatalf("AlphaTab edited free-time flags = %v", got)
 	}
+	conformanceIndependentClaim(t, "field:MeasureHeader.FreeTime", claimSite("free-time", "import", "M07-FREE-TIME", "present"), claimSite("free-time", "model", "M07-FREE-TIME", "present"), claimSite("free-time", "export", "M07-FREE-TIME", "present"))
 }
 
 func conformanceAlphaTabFreeTime(t *testing.T, data []byte) []bool {

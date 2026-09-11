@@ -90,6 +90,15 @@ func conformanceGPIFArchive(t *testing.T, gpif string) []byte {
 
 func conformanceSingleWireTrack(t *testing.T, data []byte) gpifTrack {
 	t.Helper()
+	document := conformanceWireDocument(t, data)
+	if len(document.Tracks.Tracks) != 1 {
+		t.Fatalf("wire tracks = %d, want 1", len(document.Tracks.Tracks))
+	}
+	return document.Tracks.Tracks[0]
+}
+
+func conformanceWireDocument(t *testing.T, data []byte) gpifDocument {
+	t.Helper()
 	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
 		t.Fatal(err)
@@ -98,10 +107,7 @@ func conformanceSingleWireTrack(t *testing.T, data []byte) gpifTrack {
 	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &document); err != nil {
 		t.Fatal(err)
 	}
-	if len(document.Tracks.Tracks) != 1 {
-		t.Fatalf("wire tracks = %d, want 1", len(document.Tracks.Tracks))
-	}
-	return document.Tracks.Tracks[0]
+	return document
 }
 
 func rewriteConformanceGPIF(t interface {

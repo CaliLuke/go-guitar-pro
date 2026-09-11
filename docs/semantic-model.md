@@ -15,6 +15,14 @@ Enum discovery uses Go type information across the package, so inferred
 constants and aliases cannot bypass the matrix. Every exported member name has
 its own executable obligation, even when two members have the same value.
 
+A `supported` capability stage has one closure claim in the semantic matrix.
+The claim selects one typed source, one non-default value, one stage, and one executed obligation.
+The case emits the claim identity at the exact assertion site.
+An export receipt binds its primary, wire, and report assertions in one claim context.
+Independent evidence IDs run AlphaTab-gated callbacks that emit matching claim identities.
+A structured limit names the pinned oracle, exact obligation, and source test.
+The inventory rejects missing claims, duplicate claims, and claims for stages that are not supported.
+
 ## Processing stages
 
 The parser uses these stages:

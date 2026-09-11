@@ -52,7 +52,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 		NewFormat:  &newFormat,
 		Show:       &show,
 	}
-	run.Preserved("Chord.Name", chord.Name, "C#13/Eb")
+	run.ClaimPrimary(claimSite("chord-name", "model", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Preserved("Chord.Name", chord.Name, "C#13/Eb")
 	run.Preserved("Chord.Length", chord.Length, uint8(6))
 	run.Preserved("Chord.Strings", chord.Strings, []int8{3, -1, 0, 5, 4, 3})
 	run.Preserved("Chord.FirstFret", *chord.FirstFret, uint8(3))
@@ -147,6 +147,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
+	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-barres", "gp8.omit.chord-fingerings", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
 	strictData, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError
 	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
@@ -161,7 +162,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	}
 	wire := extractChordWire(t, data)
 	run.Wire("gpifItem.ID", wire.id, "0")
-	run.Wire("gpifItem.Name", wire.name, "C#13/Eb")
+	run.ClaimSerialization(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Wire("gpifItem.Name", wire.name, "C#13/Eb")
 	run.Wire("gpifItem.Diagram", wire.hasDiagram, true)
 	run.Wire("gpifItem.Chord", wire.hasChord, true)
 	run.Wire("gpifDiagram.StringCount", wire.stringCount, 6)
@@ -195,7 +196,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	if got == nil {
 		t.Fatal("round-trip chord is nil")
 	}
-	run.Field("Chord.Name", got.Name, chord.Name)
+	run.ClaimPrimary(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Field("Chord.Name", got.Name, chord.Name)
 	run.Field("Chord.Length", got.Length, chord.Length)
 	run.Field("Chord.Strings", got.Strings, chord.Strings)
 	run.Field("Chord.FirstFret", *got.FirstFret, *chord.FirstFret)
@@ -290,7 +291,7 @@ func runConformanceChordScopeAndIsolation(run *conformanceRun) {
 	if len(upper) != 5 || len(lower) != 2 {
 		t.Fatalf("scoped beats = %d, %d; want 5, 2", len(upper), len(lower))
 	}
-	run.Preserved("BeatEffects.Chord", []string{upper[0].Effect.Chord.Name, upper[1].Effect.Chord.Name, lower[0].Effect.Chord.Name, lower[1].Effect.Chord.Name}, []string{"Upper", "Track", "Lower", "Track"})
+	run.ClaimPrimary(claimSite("chord-name", "import", "M14-CHORD-SCOPE-ISOLATION", "C#13/Eb name")).Preserved("BeatEffects.Chord", []string{upper[0].Effect.Chord.Name, upper[1].Effect.Chord.Name, lower[0].Effect.Chord.Name, lower[1].Effect.Chord.Name}, []string{"Upper", "Track", "Lower", "Track"})
 	run.Field("Chord.Strings", []int8{upper[0].Effect.Chord.Strings[0], lower[0].Effect.Chord.Strings[0]}, []int8{1, 2})
 	if upper[3].Effect.Chord == upper[4].Effect.Chord || !reflect.DeepEqual(*upper[3].Effect.Chord, *upper[4].Effect.Chord) {
 		t.Fatalf("equal definitions = %#v, %#v; want equal content and independent occurrences", upper[3].Effect.Chord, upper[4].Effect.Chord)

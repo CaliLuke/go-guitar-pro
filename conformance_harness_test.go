@@ -6,13 +6,34 @@ import (
 	"fmt"
 	"reflect"
 	"sort"
+	"strings"
 	"testing"
+	"unicode"
 )
 
 type conformanceRun struct {
 	t                 *testing.T
 	assertions        map[string]int
 	fieldDispositions map[string]string
+	claimReceipts     map[string]*conformanceClaimReceipt
+	pendingClaims     []conformanceClaimSite
+	pendingComponent  string
+}
+
+type conformanceClaimSite struct {
+	Capability     string
+	Stage          string
+	Case           string
+	Source         semanticClaimSource
+	Value          string
+	AssertionStage string
+}
+
+type conformanceClaimReceipt struct {
+	Site            conformanceClaimSite
+	Obligation      string
+	Serialization   string
+	ReportAssertion string
 }
 
 func newConformanceRun(t *testing.T) *conformanceRun {
@@ -21,7 +42,80 @@ func newConformanceRun(t *testing.T) *conformanceRun {
 		t:                 t,
 		assertions:        make(map[string]int),
 		fieldDispositions: make(map[string]string),
+		claimReceipts:     make(map[string]*conformanceClaimReceipt),
 	}
+}
+
+func claimSite(capability, stage, caseID, value string) conformanceClaimSite {
+	assertionStage := stage
+	if stage == "model" {
+		assertionStage = "programmatic"
+	}
+	return claimSiteAtStage(capability, stage, caseID, value, assertionStage)
+}
+
+func claimSiteAtStage(capability, stage, caseID, value, assertionStage string) conformanceClaimSite {
+	return conformanceClaimSite{
+		Capability: capability,
+		Stage:      stage,
+		Case:       caseID,
+		Source: semanticClaimSource{
+			Kind: "matrix-scenario",
+			ID:   caseID + "/" + capability + "/" + conformanceClaimSlug(value),
+		},
+		Value:          value,
+		AssertionStage: assertionStage,
+	}
+}
+
+func claimImportModel(capability, caseID, value string) []conformanceClaimSite {
+	return []conformanceClaimSite{
+		claimSite(capability, "import", caseID, value),
+		claimSite(capability, "model", caseID, value),
+	}
+}
+
+func claimAllStages(capability, caseID, value string) []conformanceClaimSite {
+	return append(claimImportModel(capability, caseID, value), claimSite(capability, "export", caseID, value))
+}
+
+func conformanceClaimSlug(value string) string {
+	var result strings.Builder
+	separator := false
+	for _, r := range strings.ToLower(value) {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			if separator && result.Len() != 0 {
+				result.WriteByte('-')
+			}
+			result.WriteRune(r)
+			separator = false
+		} else {
+			separator = true
+		}
+	}
+	return result.String()
+}
+
+func (run *conformanceRun) ClaimPrimary(sites ...conformanceClaimSite) *conformanceRun {
+	return run.claimComponent("primary", sites)
+}
+
+func (run *conformanceRun) ClaimSerialization(sites ...conformanceClaimSite) *conformanceRun {
+	return run.claimComponent("serialization", sites)
+}
+
+func (run *conformanceRun) ClaimReport(sites ...conformanceClaimSite) *conformanceRun {
+	return run.claimComponent("report", sites)
+}
+
+func (run *conformanceRun) claimComponent(component string, sites []conformanceClaimSite) *conformanceRun {
+	run.t.Helper()
+	if run.pendingComponent != "" {
+		run.t.Fatalf("claim component %s was not consumed before %s", run.pendingComponent, component)
+	}
+	run.pendingComponent = component
+	run.pendingClaims = sites
+	return run
 }
 
 func (run *conformanceRun) Field(path string, got, want any) {
@@ -65,6 +159,10 @@ func (run *conformanceRun) Wire(path string, got, want any) {
 	run.equal("wire", path, got, want)
 }
 
+func (run *conformanceRun) Report(path string, got, want any) {
+	run.equal("report", path, got, want)
+}
+
 func (run *conformanceRun) Dispatch(path string, got, want any) {
 	run.equal("dispatch", path, got, want)
 }
@@ -77,8 +175,38 @@ func (run *conformanceRun) equal(kind, path string, got, want any) {
 	run.t.Helper()
 	key := kind + ":" + path
 	run.assertions[key]++
+	component, sites := run.pendingComponent, run.pendingClaims
+	run.pendingComponent = ""
+	run.pendingClaims = nil
 	if !reflect.DeepEqual(got, want) {
 		run.t.Errorf("%s = %#v, want %#v", key, got, want)
+		return
+	}
+	for _, site := range sites {
+		run.recordClaimComponent(site, component, key)
+	}
+}
+
+func (run *conformanceRun) recordClaimComponent(site conformanceClaimSite, component, assertion string) {
+	run.t.Helper()
+	key := site.Capability + ":" + site.Stage
+	receipt := run.claimReceipts[key]
+	if receipt == nil {
+		receipt = &conformanceClaimReceipt{Site: site}
+		run.claimReceipts[key] = receipt
+	} else if receipt.Site != site {
+		run.t.Errorf("claim site %s emitted conflicting identities %#v and %#v", key, receipt.Site, site)
+		return
+	}
+	switch component {
+	case "primary":
+		receipt.Obligation = assertion
+	case "serialization":
+		receipt.Serialization = assertion
+	case "report":
+		receipt.ReportAssertion = assertion
+	default:
+		run.t.Fatalf("unknown claim component %q", component)
 	}
 }
 

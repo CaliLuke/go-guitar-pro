@@ -245,6 +245,7 @@ func TestAlphaTabGP8ReadsNormalAndRestDynamic(t *testing.T) {
 	if !slices.Equal(values, []string{"mf", "mf"}) {
 		t.Fatalf("AlphaTab dynamics = %v", values)
 	}
+	conformanceIndependentClaim(t, "field:Beat.Dynamics", claimSite("dynamics", "import", "M10-DYNAMIC-QUANTIZATION", "all PPP through FFF canonical normal and rest values"), claimSite("dynamics", "model", "M10-DYNAMIC-QUANTIZATION", "all PPP through FFF canonical normal and rest values"))
 }
 
 func dynamicExportAssertDynamicConversion(run *conformanceRun, status BeatStatus, source, target int16, marking string) {
@@ -274,7 +275,7 @@ func dynamicExportAssertDynamicConversion(run *conformanceRun, status BeatStatus
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Normalized("Beat.Dynamics", roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Dynamics, target)
+	run.ClaimPrimary(claimImportModel("dynamics", "M10-DYNAMIC-QUANTIZATION", "all PPP through FFF canonical normal and rest values")...).Normalized("Beat.Dynamics", roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Dynamics, target)
 	if source != target {
 		strict, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 		var lossErr *ExportLossError

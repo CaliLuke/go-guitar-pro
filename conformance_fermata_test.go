@@ -23,7 +23,7 @@ func runConformanceFermatas(run *conformanceRun) {
 	if len(fixture.MeasureHeaders) < 4 {
 		t.Fatalf("fermata fixture headers = %d", len(fixture.MeasureHeaders))
 	}
-	run.Preserved("MeasureHeader.Fermatas", conformanceFermataValues(fixture.MeasureHeaders[0].Fermatas), []any{
+	run.ClaimPrimary(claimSite("fermata", "import", "M07-FERMATAS", "exact sub-tick offset")).Preserved("MeasureHeader.Fermatas", conformanceFermataValues(fixture.MeasureHeaders[0].Fermatas), []any{
 		[]any{int64(0), int64(1), FermataTypeShort, float64(0)},
 		[]any{int64(480), int64(1), FermataTypeShort, float64(0)},
 		[]any{int64(960), int64(1), FermataTypeShort, 0.26},
@@ -102,7 +102,7 @@ func runConformanceFermatas(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("MeasureHeader.Fermatas", conformanceFermataValues(roundTrip.MeasureHeaders[0].Fermatas), conformanceFermataValues(song.MeasureHeaders[0].Fermatas))
+	run.ClaimPrimary(claimSite("fermata", "model", "M07-FERMATAS", "exact sub-tick offset")).Preserved("MeasureHeader.Fermatas", conformanceFermataValues(roundTrip.MeasureHeaders[0].Fermatas), conformanceFermataValues(song.MeasureHeaders[0].Fermatas))
 	if got := roundTrip.MeasureHeaders[1].Fermatas[0].Offset; got.Compare(mustScoreTime(t, 1, 2)) != 0 {
 		t.Fatalf("sub-tick round-trip offset = %d/%d", got.Numerator(), got.Denominator())
 	}
@@ -237,6 +237,7 @@ func TestAlphaTabPreservesFermatas(t *testing.T) {
 	if !slices.Contains(facts[0].DerivedBeats, wantEditedDerived) {
 		t.Fatalf("AlphaTab edited derived fermatas = %#v, want exact %#v", facts[0].DerivedBeats, wantEditedDerived)
 	}
+	conformanceIndependentClaim(t, "field:MeasureHeader.Fermatas", claimSite("fermata", "import", "M07-FERMATAS", "exact sub-tick offset"), claimSite("fermata", "model", "M07-FERMATAS", "exact sub-tick offset"))
 }
 
 func conformanceFermataValues(values []Fermata) []any {

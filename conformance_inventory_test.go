@@ -24,6 +24,7 @@ import (
 )
 
 type semanticContractLedger struct {
+	Oracle   string `json:"oracle"`
 	Features []struct {
 		ID string `json:"id"`
 	} `json:"features"`
@@ -38,12 +39,54 @@ type semanticContractLedger struct {
 		ObligationDigest     string                       `json:"obligationDigest"`
 		Families             []semanticMatrixFamily       `json:"families"`
 		Cases                []semanticMatrixCaseContract `json:"cases"`
+		CapabilityClaims     []semanticCapabilityClaim    `json:"capabilityClaims"`
 		FieldCases           map[string][]string          `json:"fieldCases"`
 		WireFieldCases       map[string][]string          `json:"wireFieldCases"`
 		DispatchCases        map[string][]string          `json:"dispatchCases"`
 		EnumCases            map[string][]string          `json:"enumCases"`
+		ReportCases          map[string][]string          `json:"reportCases"`
 		StructuralWireFields map[string]string            `json:"structuralWireFields"`
 	} `json:"semanticMatrix"`
+}
+
+type semanticCapabilityClaim struct {
+	Capability          string                       `json:"capability"`
+	Stage               string                       `json:"stage"`
+	Case                string                       `json:"case"`
+	Source              semanticClaimSource          `json:"source"`
+	Value               string                       `json:"value"`
+	AssertionStage      string                       `json:"assertionStage"`
+	Obligation          string                       `json:"obligation"`
+	Serialization       string                       `json:"serialization,omitempty"`
+	ReportAssertion     string                       `json:"reportAssertion,omitempty"`
+	ReportNotApplicable string                       `json:"reportNotApplicable,omitempty"`
+	IndependentEvidence *semanticIndependentEvidence `json:"independentEvidence,omitempty"`
+	IndependentLimit    *semanticIndependentLimit    `json:"independentLimit,omitempty"`
+}
+
+type semanticClaimSource struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
+}
+
+type semanticIndependentEvidence struct {
+	ID string `json:"id"`
+}
+
+type semanticIndependentLimit struct {
+	ID         string `json:"id"`
+	Kind       string `json:"kind"`
+	Oracle     string `json:"oracle"`
+	Source     string `json:"source"`
+	Obligation string `json:"obligation"`
+	Reason     string `json:"reason"`
+}
+
+type semanticCapabilityCatalog struct {
+	Capabilities []struct {
+		ID     string            `json:"id"`
+		Stages map[string]string `json:"stages"`
+	} `json:"capabilities"`
 }
 
 type semanticMatrixFamily struct {
@@ -300,6 +343,7 @@ func TestSemanticMatrixInventory(t *testing.T) {
 		}
 	}
 	assertSemanticMatrixEvidence(t, ledger, cases)
+	assertSupportedCapabilityClaims(t, ledger, cases)
 	if ledger.SemanticMatrix.Complete && (len(missingFields) != 0 || len(missingWireFields) != 0 || len(missingDispatches) != 0 || len(missingEnumMembers) != 0 || len(missingFieldBehavior) != 0 || len(missingWireBehavior) != 0 || len(missingDispatchBehavior) != 0 || len(missingEnumBehavior) != 0) {
 		t.Errorf("complete semantic matrix has %d public fields, %d GPIF wire fields, %d source dispatches, and %d enum members without cases", len(missingFields), len(missingWireFields), len(missingDispatches), len(missingEnumMembers))
 		t.Logf("missing behavioral obligations: %d public fields, %d GPIF wire fields, %d source dispatches, %d enum members", len(missingFieldBehavior), len(missingWireBehavior), len(missingDispatchBehavior), len(missingEnumBehavior))
@@ -317,6 +361,106 @@ func TestSemanticMatrixInventory(t *testing.T) {
 		}
 	}
 	t.Logf("semantic matrix coverage: %d/%d public fields, %d/%d GPIF wire fields, %d/%d source dispatches, and %d/%d enum members assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches), len(inventory.enumMembers)-len(missingEnumMembers), len(inventory.enumMembers))
+}
+
+func assertSupportedCapabilityClaims(t *testing.T, ledger semanticContractLedger, cases map[string]semanticMatrixCaseContract) {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join("conformance", "capabilities", "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var catalog semanticCapabilityCatalog
+	if err := json.Unmarshal(data, &catalog); err != nil {
+		t.Fatal(err)
+	}
+	supported := make(map[string]struct{})
+	for _, capability := range catalog.Capabilities {
+		for stage, status := range capability.Stages {
+			if status == "supported" {
+				supported[capability.ID+":"+stage] = struct{}{}
+			}
+		}
+	}
+	receipts := make(map[string]conformanceClaimReceipt)
+	for caseID, contract := range cases {
+		executor := conformanceExecutors[contract.Test]
+		if executor == nil {
+			continue
+		}
+		t.Run("claim-receipts/"+caseID, func(t *testing.T) {
+			run := newConformanceRun(t)
+			executor(run)
+			if run.pendingComponent != "" {
+				t.Errorf("case %s left claim component %s without an assertion", caseID, run.pendingComponent)
+			}
+			for key, receipt := range run.claimReceipts {
+				if receipt.Site.Case != caseID {
+					t.Errorf("case %s emitted claim %s for case %s", caseID, key, receipt.Site.Case)
+				}
+				if _, duplicate := receipts[key]; duplicate {
+					t.Errorf("duplicate assertion-site claim receipt %s", key)
+				}
+				receipts[key] = *receipt
+			}
+		})
+	}
+	actual := make(map[string]int, len(ledger.SemanticMatrix.CapabilityClaims))
+	for _, claim := range ledger.SemanticMatrix.CapabilityClaims {
+		key := claim.Capability + ":" + claim.Stage
+		actual[key]++
+		contract, caseExists := cases[claim.Case]
+		if !caseExists {
+			t.Errorf("capability closure claim %s names unknown case %s", key, claim.Case)
+			continue
+		}
+		receipt, ok := receipts[key]
+		if !ok {
+			t.Errorf("capability closure claim %s has no assertion-site receipt", key)
+			continue
+		}
+		wantSite := conformanceClaimSite{Capability: claim.Capability, Stage: claim.Stage, Case: claim.Case, Source: claim.Source, Value: claim.Value, AssertionStage: claim.AssertionStage}
+		if receipt.Site != wantSite || receipt.Obligation != claim.Obligation || receipt.Serialization != claim.Serialization || receipt.ReportAssertion != claim.ReportAssertion {
+			t.Errorf("capability closure claim %s does not match assertion-site receipt %#v", key, receipt)
+		}
+		if claim.Source.Kind != "matrix-scenario" || !strings.HasPrefix(claim.Source.ID, claim.Case+"/"+claim.Capability+"/") || !slices.Contains(contract.Values, claim.Value) || !slices.Contains(contract.Stages, claim.AssertionStage) {
+			t.Errorf("capability closure claim %s has an invalid source, value, or assertion stage", key)
+		}
+		validObligation := strings.HasPrefix(claim.Obligation, "field:") || strings.HasPrefix(claim.Obligation, "wire:") || strings.HasPrefix(claim.Obligation, "dispatch:")
+		if !validObligation {
+			t.Errorf("capability closure claim %s has invalid primary obligation %q", key, claim.Obligation)
+		}
+		if claim.Stage == "export" {
+			if !strings.HasPrefix(claim.Serialization, "wire:") || !strings.HasPrefix(claim.ReportAssertion, "report:") || claim.ReportNotApplicable != "" {
+				t.Errorf("export capability closure claim %s lacks serialization or report evidence", key)
+			}
+		} else if claim.Serialization != "" || claim.ReportAssertion != "" || claim.ReportNotApplicable != "not-applicable-non-export-stage" {
+			t.Errorf("non-export capability closure claim %s has invalid report disposition", key)
+		}
+		hasIndependent := claim.IndependentEvidence != nil
+		hasLimit := claim.IndependentLimit != nil
+		if hasIndependent == hasLimit {
+			t.Errorf("capability closure claim %s must record independent evidence or exactly one justified limit", key)
+		} else if hasIndependent {
+			if _, exists := conformanceIndependentEvidenceExecutors[claim.IndependentEvidence.ID]; !exists {
+				t.Errorf("capability closure claim %s cites unknown independent evidence %q", key, claim.IndependentEvidence.ID)
+			}
+		} else {
+			limit := claim.IndependentLimit
+			if limit.ID != "limit-"+claim.Capability+"-"+claim.Stage || limit.Kind != "no-claim-specific-consumer" || limit.Oracle != ledger.Oracle || limit.Source != contract.Test || limit.Obligation != claim.Obligation || len(limit.Reason) < 80 || !strings.Contains(limit.Reason, claim.Capability) || !strings.Contains(limit.Reason, claim.Obligation) {
+				t.Errorf("capability closure claim %s has invalid independent limit %#v", key, limit)
+			}
+		}
+	}
+	for key := range supported {
+		if actual[key] != 1 {
+			t.Errorf("supported capability stage %s has %d executable closure claims, want 1", key, actual[key])
+		}
+	}
+	for key := range receipts {
+		if _, ok := supported[key]; !ok {
+			t.Errorf("assertion-site receipt %s does not name a supported catalog stage", key)
+		}
+	}
 }
 
 func missingSemanticBehaviorAssignments(discovered []string, assignments map[string][]string, cases map[string]semanticMatrixCaseContract, structural map[string]string) []string {
@@ -354,7 +498,7 @@ func assertSemanticMatrixAssertionsIndependent(t *testing.T) {
 				return true
 			}
 			selector, ok := call.Fun.(*ast.SelectorExpr)
-			if !ok || !slices.Contains([]string{"Field", "Preserved", "Normalized", "Omitted", "Rejected", "Derived", "OutOfScope", "Wire", "Dispatch", "Enum"}, selector.Sel.Name) {
+			if !ok || !slices.Contains([]string{"Field", "Preserved", "Normalized", "Omitted", "Rejected", "Derived", "OutOfScope", "Wire", "Report", "Dispatch", "Enum"}, selector.Sel.Name) {
 				return true
 			}
 			var gotSource, wantSource bytes.Buffer
@@ -431,6 +575,11 @@ func assertSemanticMatrixEvidence(t *testing.T, ledger semanticContractLedger, c
 	for construct, caseIDs := range ledger.SemanticMatrix.EnumCases {
 		for _, caseID := range caseIDs {
 			want[caseID] = append(want[caseID], "enum:"+construct)
+		}
+	}
+	for construct, caseIDs := range ledger.SemanticMatrix.ReportCases {
+		for _, caseID := range caseIDs {
+			want[caseID] = append(want[caseID], "report:"+construct)
 		}
 	}
 	provedFieldDispositions := make(map[string]string)

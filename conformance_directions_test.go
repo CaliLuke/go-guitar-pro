@@ -35,10 +35,10 @@ func runConformanceDirections(run *conformanceRun) {
 		}
 		gotGP5[index] = gp5.MeasureHeaders[index].Directions[0]
 	}
-	run.Preserved("MeasureHeader.Directions", gotGP5, gp5Want)
+	run.ClaimPrimary(claimSite("directions", "import", "M07-DIRECTIONS", "simultaneous target and jump markers")).Preserved("MeasureHeader.Directions", gotGP5, gp5Want)
 
 	gpif := parseTestFixture(t, "testdata/gp7/timer.gp")
-	run.Preserved("MeasureHeader.Directions", gpif.MeasureHeaders[3].Directions, []DirectionSign{DirectionSignFine})
+	run.ClaimPrimary(claimSite("directions", "model", "M07-DIRECTIONS", "simultaneous target and jump markers")).Preserved("MeasureHeader.Directions", gpif.MeasureHeaders[3].Directions, []DirectionSign{DirectionSignFine})
 	run.Preserved("MeasureHeader.Directions", gpif.MeasureHeaders[7].Directions, []DirectionSign{DirectionSignDaCapoAlFine})
 
 	song := semanticValidPitchedGP8Song(t)
@@ -52,13 +52,14 @@ func runConformanceDirections(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("directions export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("directions", "export", "M07-DIRECTIONS", "simultaneous target and jump markers")).Report("M07-DIRECTIONS", reportCodes(report), []string{})
 	if got := conformanceContractSnapshot(song, false); got != before {
 		t.Fatal("directions export mutated the authored score")
 	}
 	targets, jumps, hasDirections := conformanceDirectionWire(t, data)
 	wantTargets := []string{"Coda", "DoubleCoda", "Segno", "SegnoSegno", "Fine"}
 	wantJumps := []string{"DaCapo", "DaCapoAlCoda", "DaCapoAlDoubleCoda", "DaCapoAlFine", "DaSegno", "DaSegnoAlCoda", "DaSegnoAlDoubleCoda", "DaSegnoAlFine", "DaSegnoSegno", "DaSegnoSegnoAlCoda", "DaSegnoSegnoAlDoubleCoda", "DaSegnoSegnoAlFine", "DaCoda", "DaDoubleCoda"}
-	run.Wire("gpifMasterBar.Directions", hasDirections, true)
+	run.ClaimSerialization(claimSite("directions", "export", "M07-DIRECTIONS", "simultaneous target and jump markers")).Wire("gpifMasterBar.Directions", hasDirections, true)
 	run.Wire("gpifDirections.Targets", targets, wantTargets)
 	run.Wire("gpifDirections.Jumps", jumps, wantJumps)
 	run.Preserved("MeasureHeader.Directions", header.resolvedDirections(), all)
@@ -67,7 +68,7 @@ func runConformanceDirections(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("MeasureHeader.Directions", roundTrip.MeasureHeaders[0].Directions, all)
+	run.ClaimPrimary(claimSite("directions", "export", "M07-DIRECTIONS", "simultaneous target and jump markers")).Preserved("MeasureHeader.Directions", roundTrip.MeasureHeaders[0].Directions, all)
 	run.Preserved("MeasureHeader.Direction", *roundTrip.MeasureHeaders[0].Direction, DirectionSignDaDoubleCoda)
 
 	// An unchanged parsed compatibility pointer leaves the complete slice in

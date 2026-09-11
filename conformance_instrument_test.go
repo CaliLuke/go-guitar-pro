@@ -80,7 +80,7 @@ func runConformanceInstrumentContext(run *conformanceRun) {
 	track.Staves[0].StandardNotationLineCount = 7
 	run.Omitted("Track.FretCount", track.FretCount, uint8(31))
 	run.Omitted("Track.Port", track.Port, uint8(3))
-	run.Omitted("Track.TwelveStringedGuitarTrack", track.TwelveStringedGuitarTrack, true)
+	run.ClaimPrimary(claimSite("legacy-instrument", "import", "M04-INSTRUMENT-CONTEXT", "non-default legacy instrument flags"), claimSite("legacy-instrument", "model", "M04-INSTRUMENT-CONTEXT", "non-default legacy instrument flags")).Omitted("Track.TwelveStringedGuitarTrack", track.TwelveStringedGuitarTrack, true)
 	run.Omitted("Track.BanjoTrack", track.BanjoTrack, true)
 	run.Normalized("Staff.StandardNotationLineCount", track.Staves[0].StandardNotationLineCount, 7)
 	run.Preserved("Track.PercussionTrack", track.PercussionTrack, false)

@@ -47,7 +47,7 @@ func runConformanceKeyModes(run *conformanceRun) {
 	for index := range result.Song.Tracks[0].Measures {
 		gotMeasures[index] = result.Song.Tracks[0].Measures[index].KeySignature
 	}
-	run.Preserved("MeasureHeader.KeySignature", gotHeaders, want)
+	run.ClaimPrimary(claimSite("key", "import", "M07-KEY-MODES", "nonzero flat and sharp counts")).Preserved("MeasureHeader.KeySignature", gotHeaders, want)
 	run.Preserved("KeySignature.Key", conformanceKeyCounts(gotHeaders), conformanceKeyCounts(want))
 	run.Preserved("KeySignature.IsMinor", conformanceKeyMinorModes(gotHeaders), conformanceKeyMinorModes(want))
 	run.Normalized("Measure.KeySignature", gotMeasures, want)
@@ -68,7 +68,7 @@ func runConformanceKeyModes(run *conformanceRun) {
 	}
 	run.Wire("gpifKey.Mode", gotModes, wantModes)
 	run.Wire("gpifKey.AccidentalCount", gotCounts, wantCounts)
-	run.Wire("gpifMasterBar.Key", len(wires.masterBars), len(known))
+	run.ClaimSerialization(claimSite("key", "export", "M07-KEY-MODES", "nonzero flat and sharp counts")).Wire("gpifMasterBar.Key", len(wires.masterBars), len(known))
 
 	roundTrip, err := Parse(data)
 	if err != nil {
@@ -90,13 +90,14 @@ func runConformanceKeyModes(run *conformanceRun) {
 	if err != nil || !hasExportCode(editedReport, "gp8.normalize.measure-key-authority") {
 		t.Fatalf("edited key export = %v, %#v", err, editedReport.Entries)
 	}
+	run.ClaimReport(claimSite("key", "export", "M07-KEY-MODES", "nonzero flat and sharp counts")).Report("M07-KEY-MODES", reportCodes(editedReport), []string{"gp8.normalize.source-version", "gp8.omit.track-display-settings", "gp8.normalize.measure-key-authority"})
 	editedWire := extractMeasureWire(t, edited)
 	run.Wire("gpifMasterBar.Key", editedWire.masterBars[1].key, conformanceMeasureWireKey{mode: "Minor", count: 7})
 	editedRoundTrip, err := Parse(edited)
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("MeasureHeader.KeySignature", editedRoundTrip.MeasureHeaders[1].KeySignature, KeySignature{Key: 7, IsMinor: true})
+	run.ClaimPrimary(claimSite("key", "export", "M07-KEY-MODES", "nonzero flat and sharp counts")).Preserved("MeasureHeader.KeySignature", editedRoundTrip.MeasureHeaders[1].KeySignature, KeySignature{Key: 7, IsMinor: true})
 
 	unknown := []conformanceKeyModeCase{{mode: "Dorian", count: -2}}
 	permissive, err := ParseWithOptions(conformanceGPIFArchive(t, conformanceKeyModeGPIF(unknown)), ParseOptions{})
@@ -154,6 +155,7 @@ func TestAlphaTabPreservesKeyModes(t *testing.T) {
 	if !slices.Equal(unknownFacts, wantUnknown) {
 		t.Fatalf("AlphaTab unknown-source key facts = %#v, want %#v", unknownFacts, wantUnknown)
 	}
+	conformanceIndependentClaim(t, "field:MeasureHeader.KeySignature", claimSite("key", "import", "M07-KEY-MODES", "nonzero flat and sharp counts"), claimSite("key", "model", "M07-MASTER-BARS", "nonzero flat and sharp counts"), claimSite("key", "export", "M07-KEY-MODES", "nonzero flat and sharp counts"))
 }
 
 func conformanceKeySignatures(cases []conformanceKeyModeCase) []KeySignature {

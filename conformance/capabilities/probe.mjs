@@ -164,23 +164,32 @@ try {
   const fixtures = [];
   const catalogIDs = new Set(catalog.capabilities.map(c => c.id));
   for (const [index, result] of output.trim().split('\n').map(line => JSON.parse(line)).entries()) {
-    let source = {}, target = null, alphaError = null, alphaStage = 'source';
+    let source = null, target = null, sourceConsumerError = null, targetConsumerError = null;
     try {
       source = project(load(path.resolve(root, result.Path)));
-      alphaStage = 'target';
-      if (result.Output) target = project(load(result.Output));
     } catch (error) {
-      alphaError = `${alphaStage}: ${error}`;
+      sourceConsumerError = String(error);
+    }
+    if (result.Output) {
+      try {
+        target = project(load(result.Output));
+      } catch (error) {
+        targetConsumerError = String(error);
+      }
     }
     const comparisons = [];
     const tested = Object.values(definitions).flatMap(group => Object.keys(group));
     tested.push('midi-bank', 'tuning', 'chord-display', 'chord-diagram', 'volume-automation', 'pan-automation', 'multi-rest', 'stylesheet');
-    for (const id of [...new Set([...tested, ...Object.keys(source), ...Object.keys(target ?? {})])].sort()) {
+    for (const id of [...new Set([...tested, ...Object.keys(source ?? {}), ...Object.keys(target ?? {})])].sort()) {
       if (!catalogIDs.has(id)) throw new Error(`Unknown probe capability ${id}`);
-      const from = source[id] ?? [];
+      const from = source === null ? null : source[id] ?? [];
       const to = target === null ? null : target[id] ?? [];
-      comparisons.push({ capability: id, source: from, target: to,
-        equal: to === null ? null : JSON.stringify(from) === JSON.stringify(to) });
+      const equal = from === null || to === null ? null : JSON.stringify(from) === JSON.stringify(to);
+      const comparisonStatus = from === null ? 'source-blocked'
+        : to === null ? 'target-blocked'
+          : from.length === 0 && to.length === 0 ? 'default-only'
+            : equal ? 'equal-nondefault' : 'different';
+      comparisons.push({ capability: id, source: from, target: to, equal, comparisonStatus });
     }
     // Aggregate repetitive reports, but preserve exact source/output values and paths.
     const summarize = (items, key) => {
@@ -194,13 +203,14 @@ try {
       return [...groups.values()];
     };
     fixtures.push({ path: logicalPaths.get(result.Path), sha256: crypto.createHash('sha256').update(fs.readFileSync(path.resolve(root, result.Path))).digest('hex'),
-      parseError: result.ParseError || null, exportError: result.ExportError || null, alphaError,
+      parseError: result.ParseError || null, exportError: result.ExportError || null,
+      sourceConsumerError, targetConsumerError,
       diagnostics: summarize(result.Diagnostics, 'Kind'), report: summarize(result.Report.Entries, 'Disposition'), comparisons });
     if ((index + 1) % 50 === 0) process.stderr.write(`Audited ${index + 1}/${paths.length} fixtures\n`);
   }
   const hashes = JSON.parse(execFileSync('python3', ['-c',
     'import sys,json;sys.path.insert(0,sys.argv[1]);import manage;print(json.dumps(manage.input_hashes()))', here], { encoding: 'utf8' }));
-  const result = { schema_version: 1, run_at: new Date().toISOString(), oracle,
+  const result = { schema_version: 2, run_at: new Date().toISOString(), oracle,
     source_commit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     input_hashes: hashes, probe_sha256: crypto.createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
     bridge_sha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(here, 'probe.go'))).digest('hex'),
@@ -208,7 +218,7 @@ try {
     limitations: ['Differences require review: export limitations, importer differences and AlphaTab derivation can all contribute.',
       'Default values are omitted; absence of a row is not coverage. No difference is not a full-support certificate.',
       'Grace addresses use regular-beat ordinal plus grace ordinal; changed grace grouping can produce alignment differences.',
-      'Original-vs-export comparisons do not by themselves isolate the import stage from the export stage.'], fixtures };
+      'Source and target consumer failures are loaded independently and remain visible as separate comparison statuses.'], fixtures };
   fs.writeFileSync(path.join(here, 'probe-results.json'), `${JSON.stringify(result, null, 2)}\n`);
   process.stdout.write(`Saved ${fixtures.length} fixture receipts\n`);
 } finally {

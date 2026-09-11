@@ -74,16 +74,17 @@ func runConformanceDurations(run *conformanceRun) {
 			run.Preserved("Duration.Value", duration.Value, noteValue.value)
 			run.Normalized("Duration.Dotted", duration.Dotted, dots == 1)
 			run.Normalized("Duration.DoubleDotted", duration.DoubleDotted, dots == 2)
-			run.Normalized("Duration.TupletEnters", duration.TupletEnters, uint8(1))
+			run.ClaimPrimary(claimSite("tuplets", "import", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets"), claimSite("tuplets", "model", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets"), claimSite("tuplets", "export", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets")).Normalized("Duration.TupletEnters", duration.TupletEnters, uint8(1))
 			run.Normalized("Duration.TupletTimes", duration.TupletTimes, uint8(1))
 
 			song := conformanceTimingSingleBeatSong(t, duration)
-			data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+			data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
 			if err != nil {
 				t.Fatal(err)
 			}
+			run.ClaimReport(claimSite("duration", "export", "M08-DURATIONS", "all note values"), claimSite("tuplets", "export", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets")).Report("M08-DURATIONS", reportCodes(report), []string{})
 			wire := extractTimingRhythm(t, data)
-			run.Wire("gpifRhythm.NoteValue", wire.noteValue, noteValue.wire)
+			run.ClaimSerialization(claimSite("duration", "export", "M08-DURATIONS", "all note values")).Wire("gpifRhythm.NoteValue", wire.noteValue, noteValue.wire)
 			wantDots := 0
 			if dots != 0 {
 				wantDots = int(dots)
@@ -95,7 +96,7 @@ func runConformanceDurations(run *conformanceRun) {
 				t.Fatal(err)
 			}
 			got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Duration
-			run.Preserved("Beat.Duration", got, duration)
+			run.ClaimPrimary(claimSite("duration", "import", "M08-DURATIONS", "all note values"), claimSite("duration", "model", "M08-DURATIONS", "all note values"), claimSite("duration", "export", "M08-DURATIONS", "all note values")).Preserved("Beat.Duration", got, duration)
 		}
 	}
 
@@ -119,7 +120,7 @@ func runConformanceDurations(run *conformanceRun) {
 			wantNum = int(ratio.Enters)
 			wantDen = int(ratio.Times)
 		}
-		run.Wire("gpifRhythm.PrimaryTuplet", [2]int{wire.tupletNum, wire.tupletDen}, [2]int{wantNum, wantDen})
+		run.ClaimSerialization(claimSite("tuplets", "export", "M08-DURATIONS", "1:1, 3:2, 5:4, 7:4, and 255:254 tuplets")).Wire("gpifRhythm.PrimaryTuplet", [2]int{wire.tupletNum, wire.tupletDen}, [2]int{wantNum, wantDen})
 		run.Wire("gpifTuplet.Num", wire.tupletNum, wantNum)
 		run.Wire("gpifTuplet.Den", wire.tupletDen, wantDen)
 	}

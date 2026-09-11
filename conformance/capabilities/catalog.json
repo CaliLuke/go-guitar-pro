@@ -4470,9 +4470,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "supported"
+        "export": "unverified"
       },
-      "finding": "ZIP import reads LayoutConfiguration visibility but does not read PartConfiguration staff view flags. GP8 writes notation/tab flags from track settings.",
+      "finding": "ZIP import reads LayoutConfiguration visibility but does not read PartConfiguration staff view flags. GP8 writes notation and tablature flags, but the capability ledger does not yet bind that binary artifact to a claim-scoped export receipt.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Track.isVisibleOnMultiTrack",
@@ -4500,7 +4500,8 @@
           "reference": "TestConformanceDisplayExportPolicy",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
         }
-      ]
+      ],
+      "completion": "Add a claim-scoped PartConfiguration serialization assertion and pinned-consumer evidence or a validated consumer limit."
     },
     {
       "id": "layout",

@@ -22,8 +22,8 @@ func runConformanceTuningLabels(run *conformanceRun) {
 	second := &song.Tracks[0].Staves[1]
 	wantStrings := []GuitarString{{Number: 1, Value: 46}, {Number: 2, Value: 41}}
 
-	run.Preserved("Staff.TuningName", first.TuningName, "Author's tuning")
-	run.Preserved("Staff.TuningName", second.TuningName, "")
+	run.ClaimPrimary(claimSite("tuning", "import", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels"), claimSite("tuning", "model", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels")).Preserved("Staff.TuningName", first.TuningName, "Author's tuning")
+	run.ClaimPrimary(claimSite("tuning", "export", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels")).Preserved("Staff.TuningName", second.TuningName, "")
 	if !reflect.DeepEqual(first.Strings, wantStrings) || !reflect.DeepEqual(second.Strings, wantStrings) {
 		t.Fatalf("identical staff tunings = %#v / %#v, want %#v", first.Strings, second.Strings, wantStrings)
 	}
@@ -64,6 +64,7 @@ func runConformanceTuningLabels(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("tuning label export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("tuning", "export", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels")).Report("M04-TUNING-LABELS", reportCodes(report), []string{})
 	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
 		t.Fatal(err)
@@ -86,7 +87,7 @@ func runConformanceTuningLabels(run *conformanceRun) {
 			t.Fatalf("staff %d tuning label is absent", staffIndex)
 		}
 		run.Wire("gpifStaffProperty.Pitches", tuning.Pitches, "41 46 51 56 60 65")
-		run.Wire("gpifStaffProperty.Label", *tuning.Label, wantLabel)
+		run.ClaimSerialization(claimSite("tuning", "export", "M04-TUNING-LABELS", "two identical pitch arrays with distinct labels")).Wire("gpifStaffProperty.Label", *tuning.Label, wantLabel)
 	}
 
 	roundTrip, err := Parse(data)

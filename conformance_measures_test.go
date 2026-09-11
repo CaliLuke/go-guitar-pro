@@ -27,10 +27,10 @@ func runConformanceMasterBars(run *conformanceRun) {
 
 	run.Preserved("Song.MeasureHeaders", len(headers), 4)
 	run.Preserved("MeasureHeader.Number", []uint16{headers[0].Number, headers[1].Number, headers[2].Number, headers[3].Number}, []uint16{1, 2, 3, 4})
-	run.Preserved("MeasureHeader.KeySignature", []KeySignature{headers[0].KeySignature, headers[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
+	run.ClaimPrimary(claimSite("key", "model", "M07-MASTER-BARS", "nonzero flat and sharp counts")).Preserved("MeasureHeader.KeySignature", []KeySignature{headers[0].KeySignature, headers[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
 	run.Preserved("KeySignature.Key", []int8{headers[0].KeySignature.Key, headers[2].KeySignature.Key}, []int8{-7, 7})
 	run.Preserved("KeySignature.IsMinor", []bool{headers[0].KeySignature.IsMinor, headers[2].KeySignature.IsMinor}, []bool{false, true})
-	run.Preserved("MeasureHeader.TimeSignature", []TimeSignature{headers[0].TimeSignature, headers[2].TimeSignature}, []TimeSignature{
+	run.ClaimPrimary(claimSite("meter", "import", "M07-MASTER-BARS", "meter endpoints"), claimSite("meter", "model", "M07-MASTER-BARS", "meter endpoints"), claimSite("meter", "export", "M07-MASTER-BARS", "meter endpoints")).Preserved("MeasureHeader.TimeSignature", []TimeSignature{headers[0].TimeSignature, headers[2].TimeSignature}, []TimeSignature{
 		{Numerator: 1, Denominator: Duration{Value: 1, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{1}},
 		{Numerator: 7, Denominator: Duration{Value: 8, TupletEnters: 1, TupletTimes: 1}, Beams: [4]uint8{3, 2, 2}},
 	})
@@ -40,10 +40,10 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Field("MeasureHeader.Marker", []string{headers[0].Marker.Title, headers[2].Marker.Title}, []string{"A <&>", "Coda Ω"})
 	run.Field("Marker.Title", headers[2].Marker.Title, "Coda Ω")
 	run.Preserved("MeasureHeader.RepeatStart", headers[0].RepeatStart, true)
-	run.Preserved("MeasureHeader.RepeatCount", []uint8{headers[1].RepeatCount, headers[2].RepeatCount, headers[3].RepeatCount}, []uint8{1, 6, 128})
-	run.Preserved("MeasureHeader.RepeatAlternative", []uint8{headers[0].RepeatAlternative, headers[2].RepeatAlternative}, []uint8{1, 0b10000001})
-	run.Preserved("MeasureHeader.TripletFeel", []TripletFeel{headers[0].TripletFeel, headers[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
-	run.Preserved("MeasureHeader.DoubleBar", headers[2].DoubleBar, true)
+	run.ClaimPrimary(claimSite("repeat-count", "import", "M07-MASTER-BARS", "repeat counts 1, 6, and 128"), claimSite("repeat-count", "model", "M07-MASTER-BARS", "repeat counts 1, 6, and 128"), claimSite("repeat-count", "export", "M07-MASTER-BARS", "repeat counts 1, 6, and 128")).Preserved("MeasureHeader.RepeatCount", []uint8{headers[1].RepeatCount, headers[2].RepeatCount, headers[3].RepeatCount}, []uint8{1, 6, 128})
+	run.ClaimPrimary(claimSite("alternate-endings", "import", "M07-MASTER-BARS", "endings 1 and 8"), claimSite("alternate-endings", "model", "M07-MASTER-BARS", "endings 1 and 8"), claimSite("alternate-endings", "export", "M07-MASTER-BARS", "endings 1 and 8")).Preserved("MeasureHeader.RepeatAlternative", []uint8{headers[0].RepeatAlternative, headers[2].RepeatAlternative}, []uint8{1, 0b10000001})
+	run.ClaimPrimary(claimSite("triplet-feel", "import", "M07-MASTER-BARS", "all triplet-feel variants"), claimSite("triplet-feel", "model", "M07-MASTER-BARS", "all triplet-feel variants")).Preserved("MeasureHeader.TripletFeel", []TripletFeel{headers[0].TripletFeel, headers[2].TripletFeel}, []TripletFeel{TripletFeelEighth, TripletFeelSixteenth})
+	run.ClaimPrimary(claimSite("double-bar", "import", "M07-MASTER-BARS", "authored double bar"), claimSite("double-bar", "model", "M07-MASTER-BARS", "authored double bar")).Preserved("MeasureHeader.DoubleBar", headers[2].DoubleBar, true)
 	run.Omitted("MeasureHeader.Tempo", []int32{headers[0].Tempo, headers[2].Tempo}, []int32{90, 120})
 	run.Normalized("Measure.KeySignature", []KeySignature{song.Tracks[0].Measures[0].KeySignature, song.Tracks[0].Measures[2].KeySignature}, []KeySignature{{Key: -7}, {Key: 7, IsMinor: true}})
 	run.Normalized("Measure.TimeSignature", []int8{song.Tracks[0].Measures[0].TimeSignature.Numerator, song.Tracks[0].Measures[2].TimeSignature.Numerator}, []int8{1, 7})
@@ -97,6 +97,7 @@ func runConformanceMasterBars(run *conformanceRun) {
 		t.Fatalf("strict export = %d bytes, %v", len(strictData), strictErr)
 	}
 	allowed := []string{"gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"}
+	run.ClaimReport(claimSite("repeat-count", "export", "M07-MASTER-BARS", "repeat counts 1, 6, and 128"), claimSite("alternate-endings", "export", "M07-MASTER-BARS", "endings 1 and 8"), claimSite("simile", "export", "M07-MASTER-BARS", "all simile marks"), claimSite("meter", "export", "M07-MASTER-BARS", "meter endpoints"), claimSite("triplet-feel", "export", "M07-MASTER-BARS", "all triplet-feel variants"), claimSite("clef", "export", "M07-MASTER-BARS", "all clefs")).Report("M07-MASTER-BARS", reportCodes(report), []string{"gp8.omit.measure-tempo", "gp8.omit.time-signature-beams", "gp8.omit.measure-tempo", "gp8.omit.time-signature-beams"})
 	data, allowedReport, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
 	if err != nil {
 		t.Fatal(err)
@@ -111,7 +112,7 @@ func runConformanceMasterBars(run *conformanceRun) {
 	run.Wire("gpifMasterBar.Key", []conformanceMeasureWireKey{wires.masterBars[0].key, wires.masterBars[2].key}, []conformanceMeasureWireKey{{"Major", -7}, {"Minor", 7}})
 	run.Wire("gpifKey.Mode", []string{wires.masterBars[0].key.mode, wires.masterBars[2].key.mode}, []string{"Major", "Minor"})
 	run.Wire("gpifKey.AccidentalCount", []int{wires.masterBars[0].key.count, wires.masterBars[2].key.count}, []int{-7, 7})
-	run.Wire("gpifMasterBar.Time", []string{wires.masterBars[0].time, wires.masterBars[2].time, wires.masterBars[3].time}, []string{"1/1", "7/8", "127/128"})
+	run.ClaimSerialization(claimSite("meter", "export", "M07-MASTER-BARS", "meter endpoints")).Wire("gpifMasterBar.Time", []string{wires.masterBars[0].time, wires.masterBars[2].time, wires.masterBars[3].time}, []string{"1/1", "7/8", "127/128"})
 	run.Wire("gpifMasterBar.Section", []string{wires.masterBars[0].sectionText, wires.masterBars[2].sectionText}, []string{"A <&>", "Coda Ω"})
 	run.Wire("gpifSection.Text", wires.masterBars[2].sectionText, "Coda Ω")
 	run.Wire("gpifSection.Letter", wires.masterBars[2].sectionLetter, "")
@@ -120,12 +121,12 @@ func runConformanceMasterBars(run *conformanceRun) {
 	})
 	run.Wire("gpifRepeat.Start", wires.masterBars[0].repeat.start, "true")
 	run.Wire("gpifRepeat.End", wires.masterBars[2].repeat.end, "true")
-	run.Wire("gpifRepeat.Count", []int{wires.masterBars[1].repeat.count, wires.masterBars[2].repeat.count, wires.masterBars[3].repeat.count}, []int{1, 6, 128})
-	run.Wire("gpifMasterBar.AlternateEndings", []string{wires.masterBars[0].alternateEndings, wires.masterBars[2].alternateEndings}, []string{"1", "1 8"})
+	run.ClaimSerialization(claimSite("repeat-count", "export", "M07-MASTER-BARS", "repeat counts 1, 6, and 128")).Wire("gpifRepeat.Count", []int{wires.masterBars[1].repeat.count, wires.masterBars[2].repeat.count, wires.masterBars[3].repeat.count}, []int{1, 6, 128})
+	run.ClaimSerialization(claimSite("alternate-endings", "export", "M07-MASTER-BARS", "endings 1 and 8")).Wire("gpifMasterBar.AlternateEndings", []string{wires.masterBars[0].alternateEndings, wires.masterBars[2].alternateEndings}, []string{"1", "1 8"})
 	run.Wire("gpifMasterBar.DoubleBar", wires.masterBars[2].doubleBar, true)
-	run.Wire("gpifMasterBar.TripletFeel", []string{wires.masterBars[0].tripletFeel, wires.masterBars[2].tripletFeel}, []string{"Triplet8th", "Triplet16th"})
-	run.Wire("gpifBar.Clef", wires.clefs, []string{"G2", "F4", "C3", "C4"})
-	run.Wire("gpifBar.SimileMark", wires.simileMarks, []string{"", "Simple", "FirstOfDouble", "SecondOfDouble"})
+	run.ClaimSerialization(claimSite("triplet-feel", "export", "M07-MASTER-BARS", "all triplet-feel variants")).Wire("gpifMasterBar.TripletFeel", []string{wires.masterBars[0].tripletFeel, wires.masterBars[2].tripletFeel}, []string{"Triplet8th", "Triplet16th"})
+	run.ClaimSerialization(claimSite("clef", "export", "M07-MASTER-BARS", "all clefs")).Wire("gpifBar.Clef", wires.clefs, []string{"G2", "F4", "C3", "C4"})
+	run.ClaimSerialization(claimSite("simile", "export", "M07-MASTER-BARS", "all simile marks")).Wire("gpifBar.SimileMark", wires.simileMarks, []string{"", "Simple", "FirstOfDouble", "SecondOfDouble"})
 
 	roundTrip, err := Parse(data)
 	if err != nil {
@@ -160,12 +161,12 @@ func runConformanceMasterBars(run *conformanceRun) {
 	} {
 		run.Enum(member, tripletFeels[index], wantTripletFeels[index])
 	}
-	run.Preserved("MeasureHeader.TripletFeel", tripletFeels, wantTripletFeels)
+	run.ClaimPrimary(claimSite("triplet-feel", "export", "M07-MASTER-BARS", "all triplet-feel variants")).Preserved("MeasureHeader.TripletFeel", tripletFeels, wantTripletFeels)
 	clefs := []MeasureClef{roundTrip.Tracks[0].Measures[0].Clef, roundTrip.Tracks[0].Measures[1].Clef, roundTrip.Tracks[0].Measures[2].Clef, roundTrip.Tracks[0].Measures[3].Clef}
-	run.Preserved("Measure.Clef", clefs, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto, MeasureClefTenor})
+	run.ClaimPrimary(claimSite("clef", "import", "M07-MASTER-BARS", "all clefs"), claimSite("clef", "model", "M07-MASTER-BARS", "all clefs"), claimSite("clef", "export", "M07-MASTER-BARS", "all clefs")).Preserved("Measure.Clef", clefs, []MeasureClef{MeasureClefTreble, MeasureClefBass, MeasureClefAlto, MeasureClefTenor})
 	simileMarks := []SimileMark{roundTrip.Tracks[0].Measures[0].SimileMark, roundTrip.Tracks[0].Measures[1].SimileMark, roundTrip.Tracks[0].Measures[2].SimileMark, roundTrip.Tracks[0].Measures[3].SimileMark}
 	wantSimileMarks := []SimileMark{SimileMarkNone, SimileMarkSimple, SimileMarkFirstOfDouble, SimileMarkSecondOfDouble}
-	run.Preserved("Measure.SimileMark", simileMarks, wantSimileMarks)
+	run.ClaimPrimary(claimSite("simile", "import", "M07-MASTER-BARS", "all simile marks"), claimSite("simile", "model", "M07-MASTER-BARS", "all simile marks"), claimSite("simile", "export", "M07-MASTER-BARS", "all simile marks")).Preserved("Measure.SimileMark", simileMarks, wantSimileMarks)
 	for index, member := range []string{
 		"SimileMark.SimileMarkNone",
 		"SimileMark.SimileMarkSimple",
@@ -232,6 +233,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 	run.Field("Measure.KeySignature", conflict.Tracks[0].Measures[0].KeySignature, KeySignature{Key: 4})
 	run.Field("Measure.TimeSignature", []uint16{uint16(conflict.Tracks[0].Measures[0].TimeSignature.Numerator), conflict.Tracks[0].Measures[0].TimeSignature.Denominator.Value}, []uint16{3, 4})
 	report := PreflightExport(conflict, ExportFormatGP8, ExportOptions{})
+	run.ClaimReport(claimSite("bounds", "export", "M07-AUTHORITY-BOUNDARIES", "checked numeric boundaries")).Report("M07-AUTHORITY-BOUNDARIES", reportCodes(report), []string{"gp8.normalize.measure-key-authority", "gp8.normalize.measure-time-authority"})
 	for _, code := range []string{"gp8.normalize.measure-key-authority", "gp8.normalize.measure-time-authority"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("conflict report = %#v, want %s", report.Entries, code)
@@ -248,7 +250,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 	}
 	conflictWire := extractMeasureWire(t, data)
 	run.Wire("gpifMasterBar.Key", conflictWire.masterBars[0].key, conformanceMeasureWireKey{mode: "Minor", count: -3})
-	run.Wire("gpifMasterBar.Time", conflictWire.masterBars[0].time, "7/8")
+	run.ClaimSerialization(claimSite("bounds", "export", "M07-AUTHORITY-BOUNDARIES", "checked numeric boundaries")).Wire("gpifMasterBar.Time", conflictWire.masterBars[0].time, "7/8")
 
 	for _, test := range []struct {
 		name            string
@@ -291,7 +293,7 @@ func runConformanceAuthorityAndBoundaries(run *conformanceRun) {
 				t.Fatal(err)
 			}
 			header := result.Song.MeasureHeaders[0]
-			run.Field("TimeSignature.Numerator", header.TimeSignature.Numerator, test.wantNumerator)
+			run.ClaimPrimary(claimSite("bounds", "import", "M07-AUTHORITY-BOUNDARIES", "checked numeric boundaries"), claimSite("bounds", "model", "M07-AUTHORITY-BOUNDARIES", "checked numeric boundaries"), claimSite("bounds", "export", "M07-AUTHORITY-BOUNDARIES", "checked numeric boundaries")).Field("TimeSignature.Numerator", header.TimeSignature.Numerator, test.wantNumerator)
 			run.Field("TimeSignature.Denominator", header.TimeSignature.Denominator.Value, test.wantDenominator)
 			run.Field("MeasureHeader.RepeatCount", header.RepeatCount, test.wantRepeat)
 			run.Field("MeasureHeader.RepeatAlternative", header.RepeatAlternative, test.wantEnding)

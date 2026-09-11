@@ -5,8 +5,8 @@
   "title": "Require executable evidence for supported capability claims",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -69,7 +69,7 @@
     "conformance/sensitivity.mjs",
     "conformance_go_adapter_test.go"
   ],
-  "resolution": null,
+  "resolution": "The semantic ledger now requires one assertion-site receipt for each supported catalog stage. Each receipt emits its exact source, value, stage, and primary obligation from the assertion. Export receipts also emit exact serialization and report assertions from the same claim context. AlphaTab callbacks emit the matching independent claim identity. The database stores all 159 supported-stage claims. One prior supported rating was downgraded because its evidence used an unrelated obligation. The runtime probe keeps default-only rows and source or target consumer blockers visible.",
   "verification": [],
   "issue": {
     "number": 67,

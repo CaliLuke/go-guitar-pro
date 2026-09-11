@@ -10,8 +10,13 @@ The database separates three stages: import, public model, and GP8 export.
 Each capability includes its scope, formats, priority, finding, evidence, and completion criterion.
 Format lists identify relevant formats. Ratings describe the combined scope, with narrower format differences explained in the finding.
 
-`supported` means the stated slice has implementation and scoped evidence.
-It does not certify every format variant or interaction.
+`supported` means that the stated slice has implementation and one executable closure claim.
+The claim identifies a typed source, a non-default value, a stage, and an exact runtime obligation.
+The case emits that identity at the exact assertion site. A broad case cannot substitute another assertion.
+An export receipt binds primary, serialization, and report assertions emitted by the same claim context.
+Independent evidence uses an AlphaTab-gated callback that emits the same claim identity after its consumer assertion.
+A structured limit records the pinned oracle, source test, and exact obligation.
+This status does not certify every format variant or interaction.
 `partial` identifies incomplete preservation. `missing` identifies an absent capability.
 `unverified` identifies an unresolved assessment.
 `out-of-scope` identifies other AlphaTab services, such as its audio player.
@@ -60,6 +65,9 @@ SELECT * FROM obligation WHERE name='MeasureHeader.RepeatCount';
 
 -- Check whether the saved runtime evidence matches the current source.
 SELECT * FROM metadata WHERE key IN ('probe_fresh','probe_metadata');
+
+-- Find a supported stage that has no executable closure claim.
+SELECT * FROM supported_without_claims;
 ```
 
 ## Update a capability
@@ -112,8 +120,9 @@ It records input hashes, tool hashes, the source commit, the oracle pin, diagnos
 The lowercase-key-mode case changes only key-mode text in the existing notes fixture.
 
 The runtime receipt is [probe-results.json](probe-results.json).
-It records failed comparisons as blocked, never as equal.
-Non-default source counts distinguish exercised values from default-only cases.
+It records source and target consumer failures separately.
+Each comparison has an explicit status, including `default-only` and both blocked states.
+Non-default source counts identify exercised values.
 An import-plus-export difference does not identify the failing stage by itself.
 The source review supplies that distinction for confirmed gaps.
 
@@ -144,10 +153,10 @@ The original URL, retrieval time, and page hash remain available for review.
 | `upstream_construct`, `construct_capability`, `unreviewed_constructs` | Expanded source inventory and unresolved associations |
 | `source_file`, `metadata` | Revision, hashes, scope, and receipt freshness |
 | `website_feature`, `website_capability`, `website_comparison` | Every captured format-documentation row |
-| `obligation`, `matrix_case` | Existing public fields, enums, wire fields, dispatches, and test cases |
+| `obligation`, `matrix_case`, `support_claim` | Executed obligations, matrix cases, and supported-stage closure claims |
 | `fixture`, `corpus_diagnostic` | Local fixture inventory and existing diagnostic receipt |
 | `upstream_test`, `upstream_fixture`, `missing_upstream_fixtures` | Upstream tests and fixture coverage by content |
-| `probe_result`, `probe_comparison`, `probe_coverage`, `observed_differences` | Runtime results, failures, and exact differences |
+| `probe_result`, `probe_comparison`, `probe_coverage`, `observed_differences` | Runtime results, separate consumer failures, default-only rows, and exact differences |
 | `issue` | Explicit issue state at the review date |
 
 ## Work through the backlog

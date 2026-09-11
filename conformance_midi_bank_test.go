@@ -34,7 +34,7 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	run.Preserved("Track.Sounds", track.Sounds, wantSounds)
 	run.Preserved("TrackSound.Bank", []int32{track.Sounds[0].Bank, track.Sounds[1].Bank, track.Sounds[2].Bank}, []int32{0, 77, 256})
 	run.Preserved("Track.SoundAutomations", track.SoundAutomations, wantAutomations)
-	run.Preserved("MidiChannel.Bank", result.Song.Channels[track.ChannelIndex].Bank, int32(0))
+	run.ClaimPrimary(claimSite("midi-bank", "import", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Preserved("MidiChannel.Bank", result.Song.Channels[track.ChannelIndex].Bank, int32(0))
 	if got := result.Song.Channels[track.ChannelIndex].Instrument; got != 25 {
 		t.Fatalf("explicit first sound program mirror = %d, want 25", got)
 	}
@@ -46,9 +46,10 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	if err != nil || !hasExportCode(report, "gp8.normalize.sound-authority") {
 		t.Fatalf("explicit sound authority export = %v, %#v", err, report.Entries)
 	}
+	run.ClaimReport(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Report("M05-MIDI-BANK", reportCodes(report), []string{"gp8.normalize.source-version", "gp8.omit.track-display-settings", "gp8.normalize.sound-authority"})
 	wire := conformanceSingleWireTrack(t, data)
 	run.Wire("gpifSound.LSB", conformanceMIDIBankLSBs(wire), []int{127, 77, 0})
-	run.Wire("gpifSound.MSB", conformanceMIDIBankMSBs(wire), []int{127, 0, 2})
+	run.ClaimSerialization(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Wire("gpifSound.MSB", conformanceMIDIBankMSBs(wire), []int{127, 0, 2})
 	run.Wire("gpifSound.Program", conformanceMIDIBankPrograms(wire), []int{25, 26, 27})
 	run.Wire("gpifTrack.Automations", len(wire.Automations.Automations), 3)
 	run.Wire("gpifAutomation.Position", []float64{wire.Automations.Automations[0].Position, wire.Automations.Automations[1].Position, wire.Automations.Automations[2].Position}, []float64{0, 0.5, 0.5})
@@ -59,7 +60,7 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	}
 	run.Preserved("TrackSound.Bank", []int32{roundTrip.Tracks[0].Sounds[0].Bank, roundTrip.Tracks[0].Sounds[1].Bank, roundTrip.Tracks[0].Sounds[2].Bank}, []int32{16383, 77, 256})
 	run.Preserved("Track.SoundAutomations", roundTrip.Tracks[0].SoundAutomations, wantAutomations)
-	run.Preserved("MidiChannel.Bank", roundTrip.Channels[roundTrip.Tracks[0].ChannelIndex].Bank, int32(16383))
+	run.ClaimPrimary(claimSite("midi-bank", "model", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Preserved("MidiChannel.Bank", roundTrip.Channels[roundTrip.Tracks[0].ChannelIndex].Bank, int32(16383))
 
 	fallback := semanticValidPitchedGP8Song(t)
 	fallback.Tracks[0].Settings.Notation = true
@@ -77,7 +78,7 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.Preserved("MidiChannel.Bank", fallbackRoundTrip.Channels[fallbackRoundTrip.Tracks[0].ChannelIndex].Bank, int32(77))
+	run.ClaimPrimary(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Preserved("MidiChannel.Bank", fallbackRoundTrip.Channels[fallbackRoundTrip.Tracks[0].ChannelIndex].Bank, int32(77))
 
 	for _, invalid := range []int32{-1, 16384} {
 		t.Run("invalid channel bank", func(t *testing.T) {
@@ -201,6 +202,7 @@ func TestAlphaTabPreservesMIDIBanks(t *testing.T) {
 	if len(facts) != 1 || !slices.Equal(facts[0].Automations, want) {
 		t.Fatalf("AlphaTab duplicate-position bank/program order = %#v, want %#v", facts, want)
 	}
+	conformanceIndependentClaim(t, "field:MidiChannel.Bank", claimSite("midi-bank", "import", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383"), claimSite("midi-bank", "model", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383"), claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383"))
 }
 
 type conformanceAlphaTabMIDIBankTrack struct {

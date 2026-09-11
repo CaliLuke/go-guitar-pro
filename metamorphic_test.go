@@ -95,6 +95,19 @@ func TestConformanceStructuralResilience(t *testing.T) {
 func runConformanceStructuralResilience(run *conformanceRun) {
 	t := run.t
 	t.Run("adapter sensitivity", testResilienceAdapterMutationSensitivity)
+	container := semanticValidPitchedGP8Song(t)
+	container.Tracks[0].Settings.Notation = true
+	containerData, containerReport, containerErr := ExportWithReport(container, ExportFormatGP8, ExportOptions{})
+	if containerErr != nil {
+		t.Fatal(containerErr)
+	}
+	run.ClaimReport(claimSite("container", "export", "M25-STRUCTURAL-RESILIENCE", "GP5 input and GP8 output containers")).Report("M25-STRUCTURAL-RESILIENCE", reportCodes(containerReport), []string{})
+	parsedContainer, parseErr := Parse(containerData)
+	if parseErr != nil {
+		t.Fatal(parseErr)
+	}
+	run.ClaimPrimary(claimSite("container", "import", "M25-STRUCTURAL-RESILIENCE", "GP5 input and GP8 output containers"), claimSite("container", "model", "M25-STRUCTURAL-RESILIENCE", "GP5 input and GP8 output containers"), claimSite("container", "export", "M25-STRUCTURAL-RESILIENCE", "GP5 input and GP8 output containers")).Normalized("Song.Version", parsedContainer.Version, Version{Data: gp8DocumentVersion, Number: [3]byte{8, 1, 3}})
+	run.ClaimSerialization(claimSite("container", "export", "M25-STRUCTURAL-RESILIENCE", "GP5 input and GP8 output containers")).Wire("gpifDocument.GPVersion", extractGPIFLeafText(t, containerData)["GPIF/GPVersion"], gp8DocumentVersion)
 	data, err := Export(conformanceExportSong(), ExportFormatGP8)
 	if err != nil {
 		t.Fatal(err)
