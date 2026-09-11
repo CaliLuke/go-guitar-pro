@@ -65,6 +65,26 @@ fret counts, connection ports, twelve-string flags, and banjo flags as
 omissions. It also reports a custom line count on a pitched staff. Percussion
 staff line counts remain supported.
 
+`Staff.DisplayTranspositionPitch` is the staff-authoritative notation offset in
+semitones. For legacy GPIF `PartSounding`, `TranspositionPitch` initializes the
+display offset while `NominalKey` independently derives each staff's effective
+key; `Neutral` means no key offset. GPIF `Transpose` takes precedence over both
+legacy values when present. Conflicting legacy values receive scoped lossy
+diagnostics. `MeasureHeader.KeySignature` remains the concert and wire
+authority, while each staff's `Measure.KeySignature` retains its effective
+displayed key. Editing a staff offset changes export without rewriting tuning,
+string, fret, or the concert key. GP8 stores one coupled display/key offset per
+track, so export reports an independent effective-key combination and a
+differing later-staff display value. The independent key uses the existing
+`gp8.normalize.measure-key-authority` report. Percussion consumers reset the
+display offset, which is also reported.
+
+`Staff.TranspositionPitch` is the independent sounding offset. Sounding MIDI is
+the open-string, capo, and fret pitch minus this value. The field never rewrites
+those authored values. GP8 GPIF has no sounding-offset destination, so every
+nonzero value is reported as omitted. Source octave and chromatic components are
+combined with checked signed 32-bit arithmetic before they enter the model.
+
 GP8 export preserves the selected MIDI program, primary and effect channels,
 volume, balance, mute state, solo state, sound definitions, and sound changes.
 `MidiChannel.Bank` and `TrackSound.Bank` use the combined MIDI bank range 0

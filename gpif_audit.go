@@ -236,13 +236,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 				Reason: "the public lyric model does not retain the source dispatch state",
 			})
 		}
-		if track.Transpose != nil {
-			context.add(diagnosticSource("GPIF.Track.Transpose", "staff-ownership", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
-				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path + "/Transpose",
-				ObjectID: track.ID, Location: ParseLocation{TrackID: track.ID}, Feature: "staff-ownership",
-				Reason: "track transposition has no destination in Song",
-			})
-		}
+		gpifAuditTrackTransposition(context, track, path)
 		for soundIndex, sound := range track.Sounds.Sounds {
 			if sound.MSB < 0 || sound.MSB > 127 || sound.LSB < 0 || sound.LSB > 127 {
 				context.add(gpifSoundBankInvalidSource, ParseDiagnostic{

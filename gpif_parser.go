@@ -109,10 +109,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	// Parse tracks
 	trackIDs := splitIDs(doc.MasterTrack.Tracks)
 	trackChordMaps := make([]gpifChordScope, 0, len(trackIDs))
+	trackKeyTranspositions := make([]int32, 0, len(trackIDs))
 	for _, trackID := range trackIDs {
 		track := defaultTrack()
 		track.Number = int32(len(song.Tracks) + 1)
 		chordMap := gpifChordScope{}
+		keyTransposition := int32(0)
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
 				gpifAuditTrackAutomations(t, len(doc.MasterBars.MasterBars), context)
@@ -154,6 +156,11 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if capoErr != nil {
 					return nil, fmt.Errorf("track %s capo: %w", trackID, capoErr)
 				}
+				displayTransposition, effectiveKeyTransposition, transpositionErr := gpifTrackTranspositions(t)
+				if transpositionErr != nil {
+					return nil, fmt.Errorf("track %s transposition: %w", trackID, transpositionErr)
+				}
+				keyTransposition = effectiveKeyTransposition
 				track.CapoFret = capos[0]
 				track.markCapoFretCompatibility()
 				lineCount := 5
@@ -180,6 +187,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 						PercussionTrack:           track.PercussionTrack,
 						StandardNotationLineCount: lineCount,
 						CapoFret:                  capos[staffIndex],
+						DisplayTranspositionPitch: displayTransposition,
 					}
 				}
 				track.Strings = track.Staves[0].Strings
@@ -234,6 +242,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		}
 		song.Tracks = append(song.Tracks, track)
 		trackChordMaps = append(trackChordMaps, chordMap)
+		trackKeyTranspositions = append(trackKeyTranspositions, keyTransposition)
 	}
 	song.consolidateTrackChannels()
 
@@ -365,7 +374,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			measure.StaffIndex = staffIndex
 			measure.HeaderIndex = mbIdx
 			measure.TimeSignature = mh.TimeSignature
-			measure.KeySignature = mh.KeySignature
+			measure.KeySignature = transposeKeySignature(mh.KeySignature, trackKeyTranspositions[trackIndex])
 			measure.HasDoubleBar = mh.DoubleBar
 			return measure
 		}
@@ -497,6 +506,30 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 
 	return song, nil
+}
+
+func gpifTrackTranspositions(track gpifTrack) (display int32, effectiveKey int32, err error) {
+	if track.Transpose != nil {
+		pitch, transposeErr := checkedGPIFTransposition(track.Transpose.Chromatic, track.Transpose.Octave)
+		return pitch, pitch, transposeErr
+	}
+	if track.PartSounding == nil {
+		return 0, 0, nil
+	}
+	if track.PartSounding.TranspositionPitch < math.MinInt32 || track.PartSounding.TranspositionPitch > math.MaxInt32 {
+		return 0, 0, fmt.Errorf("PartSounding pitch %d is outside %d..%d", track.PartSounding.TranspositionPitch, math.MinInt32, math.MaxInt32)
+	}
+	keyPitch, _ := gpifNominalKeyPitch(track.PartSounding.NominalKey)
+	return int32(track.PartSounding.TranspositionPitch), keyPitch, nil
+}
+
+func checkedGPIFTransposition(chromatic, octave int64) (int32, error) {
+	pitch := new(big.Int).Mul(big.NewInt(octave), big.NewInt(12))
+	pitch.Add(pitch, big.NewInt(chromatic))
+	if !pitch.IsInt64() || pitch.Int64() < math.MinInt32 || pitch.Int64() > math.MaxInt32 {
+		return 0, fmt.Errorf("combined chromatic %d and octave %d offset is outside %d..%d", chromatic, octave, math.MinInt32, math.MaxInt32)
+	}
+	return int32(pitch.Int64()), nil
 }
 
 func gpifSoundBank(sound gpifSound) int32 {

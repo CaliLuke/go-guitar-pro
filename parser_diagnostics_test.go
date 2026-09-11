@@ -25,11 +25,11 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 			kind: ParseDiagnosticUnknownSyntax, feature: "note-and-beat-semantics", pathContains: "FutureTechnique",
 		},
 		{
-			name: "known unsupported transpose",
+			name: "invalid transposition nominal key",
 			mutate: func(gpif string) string {
-				return strings.Replace(gpif, "<Staves>", "<Transpose><Chromatic>2</Chromatic><Octave>1</Octave></Transpose><Staves>", 1)
+				return strings.Replace(gpif, "<Staves>", "<PartSounding><NominalKey>H</NominalKey><TranspositionPitch>0</TranspositionPitch></PartSounding><Staves>", 1)
 			},
-			kind: ParseDiagnosticUnsupportedFeature, feature: "staff-ownership", pathContains: "Transpose",
+			kind: ParseDiagnosticUnsupportedFeature, feature: "transposition", pathContains: "NominalKey",
 		},
 		{
 			name: "unsupported harmonic enum",

@@ -139,6 +139,7 @@ type gpifTrack struct {
 	Properties       []gpifStaffProperty `xml:"Properties>Property"`
 	Sounds           gpifSounds          `xml:"Sounds"`
 	Automations      gpifAutomations     `xml:"Automations"`
+	PartSounding     *gpifPartSounding   `xml:"PartSounding,omitempty"`
 	Transpose        *gpifTranspose      `xml:"Transpose,omitempty"`
 	RSE              *gpifTrackRSE       `xml:"RSE,omitempty"`
 	MidiConnection   gpifMidiConnection  `xml:"MidiConnection"`
@@ -359,8 +360,13 @@ func (t *gpifTrack) isPercussionTrack() bool {
 }
 
 type gpifTranspose struct {
-	Chromatic int `xml:"Chromatic"`
-	Octave    int `xml:"Octave"`
+	Chromatic int64 `xml:"Chromatic"`
+	Octave    int64 `xml:"Octave"`
+}
+
+type gpifPartSounding struct {
+	NominalKey         string `xml:"NominalKey"`
+	TranspositionPitch int64  `xml:"TranspositionPitch"`
 }
 
 type gpifSounds struct {

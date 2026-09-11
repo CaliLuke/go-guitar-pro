@@ -1280,15 +1280,28 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
       },
-      "finding": "GPIF Transpose produces an unsupported-feature diagnostic. PartSounding and independent display/sounding pitch offsets have no public staff destination.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GPIF Transpose populates each public staff's display offset and effective key. Legacy PartSounding keeps TranspositionPitch as display authority and NominalKey as independent effective-key authority, including Neutral as zero, without changing string/fret authority. GP8 reports independent effective-key loss with gp8.normalize.measure-key-authority; sounding offsets, differing later-staff display offsets, and percussion display offsets are explicit omissions.",
+      "acceptance": "Covered by TestConformanceTransposition and TestAlphaTabPreservesTransposition with exact int32 boundaries, exact GPIF leaves, GP8 reimport/reporting, and pinned AlphaTab staff/key/note facts for Transpose, PartSounding D, and Neutral.",
       "upstream": [
         "Staff.transpositionPitch",
         "Staff.displayTranspositionPitch"
+      ],
+      "goDestination": [
+        "Staff.TranspositionPitch",
+        "Staff.DisplayTranspositionPitch",
+        "Measure.KeySignature"
+      ],
+      "semanticAssertions": [
+        "sounding offset",
+        "display offset",
+        "effective staff key",
+        "string and fret authority",
+        "exact signed 32-bit source boundaries",
+        "target omission report"
       ],
       "evidence": [
         {
@@ -1300,6 +1313,16 @@
           "kind": "source",
           "reference": "gpif_types.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTransposition",
+          "detail": "Exercises positive and negative offsets, octave decomposition, multi-staff edits, independent PartSounding effective keys, Neutral, source conflicts, exact int32 boundaries, and target reporting."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesTransposition",
+          "detail": "Compares the guitarpro8/e.gp regression and synthetic PartSounding D and Neutral staff/key facts with pinned AlphaTab 1.8.4."
         },
         {
           "kind": "probe",

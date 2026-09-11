@@ -13,9 +13,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 58 | 22 | 19 | 2 |
-| model | 58 | 22 | 20 | 1 |
-| export | 39 | 23 | 37 | 2 |
+| import | 59 | 22 | 18 | 2 |
+| model | 59 | 22 | 19 | 1 |
+| export | 39 | 24 | 36 | 2 |
 
 All three stages have a supported rating in 37 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -27,11 +27,11 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Capability | Files with non-default source values | Files with differences | Blocked comparisons |
 | --- | ---: | ---: | ---: |
 | Stylesheet, brackets and track-name policies | 364 | 339 | 25 |
-| Concert and display transposition | 347 | 323 | 25 |
 | System layout and forced line breaks | 250 | 230 | 25 |
 | Track short names | 364 | 194 | 25 |
 | Beam grouping, direction and stem overrides | 200 | 180 | 25 |
 | Authored pitch spelling and accidentals | 157 | 138 | 25 |
+| Concert and display transposition | 347 | 108 | 25 |
 | Track visibility and standard/tab flags | 77 | 91 | 25 |
 | Brush and arpeggio timing | 21 | 17 | 25 |
 | Whammy-bar vibrato strength | 17 | 17 | 25 |
@@ -57,7 +57,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Golpe thumb and finger marks | 2 | 2 | 25 |
 | Explicit note string-number display | 1 | 1 | 25 |
 | Fade out and volume swell | 1 | 1 | 25 |
-| Key signatures and key mode spelling | 44 | 1 | 25 |
 | Pan and balance automation events | 1 | 1 | 25 |
 | Rasgueado patterns | 1 | 1 | 25 |
 | Turns and mordents | 1 | 1 | 25 |
@@ -67,6 +66,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Fade in | 17 | 0 | 25 |
 | Fermata placement, kind and length | 4 | 0 | 25 |
 | Free-time bars | 1 | 0 | 25 |
+| Key signatures and key mode spelling | 44 | 0 | 25 |
 | Left-hand tapping identity | 1 | 0 | 25 |
 | Legato and authored slurs | 2 | 0 | 25 |
 | MIDI bank selection and bank changes | 8 | 0 | 25 |
@@ -443,11 +443,11 @@ Bounded work: [Export valid percussion notes currently rejected by GP8](https://
 
 Instrument. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-GPIF Transpose produces an unsupported-feature diagnostic. PartSounding and independent display/sounding pitch offsets have no public staff destination.
+GPIF Transpose populates each public staff's display offset and effective key. Legacy PartSounding keeps TranspositionPitch as display authority and NominalKey as independent effective-key authority, including Neutral as zero, without changing string/fret authority. GP8 reports independent effective-key loss with gp8.normalize.measure-key-authority; sounding offsets, differing later-staff display offsets, and percussion display offsets are explicit omissions.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Covered by TestConformanceTransposition and TestAlphaTabPreservesTransposition with exact int32 boundaries, exact GPIF leaves, GP8 reimport/reporting, and pinned AlphaTab staff/key/note facts for Transpose, PartSounding D, and Neutral.
 
 Bounded work: [Preserve sounding and display transposition separately](https://github.com/CaliLuke/go-guitar-pro/issues/56).
 

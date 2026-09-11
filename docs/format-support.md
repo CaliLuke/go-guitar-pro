@@ -12,6 +12,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public duration, exact timing, meter, tuplets, rests, and binary discriminants; audited upstream-only model surface is recorded by issue 34. |
 | `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
+| `transposition` | gp6, gp7, gp8 | partial | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | Display transposition survives import and first-staff GP8 export. PartSounding nominal keys independently derive effective keys, including Neutral as zero. GP8 lacks independent effective keys, sounding transposition, and per-staff display offsets, and consumers reset percussion display offsets; each limit is reported. |
 | `clef-octave` | gp6, gp7, gp8 | supported | none | Every GPIF bar-level clef octave survives import, post-parse editing, GP8 export, and pinned AlphaTab consumption independently from Beat.Octave. |
 | `legato-slurs` | gp6, gp7, gp8 | supported | none | The matrix preserves the complete authored beat-level Legato element. Separate note-level slur symbols remain outside this contract because no distinct authored source evidence was found. |
 | `fermata` | gp6, gp7, gp8 | supported | none | GPIF fermata offsets, types, and lengths survive import, post-parse editing, GP8 export, and pinned AlphaTab consumption. Beat association remains derived from the authoritative master-bar records. |
@@ -182,7 +183,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Automation.SustainPedal.Value.Invalid` | `sustain-pedal` | `invalid-data` | A sustain-pedal value must use reference 1 for down or 3 for release. |
 | `GPIF.Track.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The track automation type is not recognized. |
 | `GPIF.Track.Lyrics.Undispatched` | `score-core` | `lossy-projection` | The public lyric model keeps the lines but not the source dispatch state. |
-| `GPIF.Track.Transpose` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Track.PartSounding.NominalKey.Conflict` | `transposition` | `lossy-projection` | The PartSounding nominal key conflicts with the authoritative Transpose key offset. |
+| `GPIF.Track.PartSounding.NominalKey.InvalidValue` | `transposition` | `unsupported-feature` | The PartSounding nominal key is neither Neutral nor one of the twelve recognized GPIF spellings. |
+| `GPIF.Track.Transposition.ConflictingValues` | `transposition` | `lossy-projection` | Transpose is authoritative when it conflicts with the legacy PartSounding pitch. |
 | `GPIF.UnknownAttribute.NoteAndBeat` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.Rhythm` | `rhythm` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.UnknownAttribute.StaffOwnership` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
@@ -223,7 +226,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
 | `Track` | `staff-ownership` | 21 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
-| `Staff` | `staff-ownership` | 4 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, measures, and tuning. PercussionTrack mirrors its track. |
+| `Staff` | `staff-ownership` | 6 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, and tuning. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
 | `TrackSound` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition owns its authored program and combined MIDI bank. The first sound is authoritative; MidiChannel mirrors it on import and supplies the fallback only when no explicit sounds exist. |
@@ -265,9 +268,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 213 |
+| `preserved` | 214 |
 | `normalized` | 34 |
-| `omitted` | 116 |
+| `omitted` | 117 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -276,7 +279,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 82 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 149 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 83 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 149 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -284,7 +287,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 243 |
+| `schema` | 246 |
 
 ## Source dispatch inventory
 
@@ -344,6 +347,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | --- | --- | --- | --- | --- | --- |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `key-mode-preservation` | `score-core` | `TestConformanceKeyModes` | `TestAlphaTabPreservesKeyModes` | no | Exact supported major and minor spellings retain independent nonzero accidental counts across adjacent master bars and canonical GP8 export; unknown spellings remain explicit. |
+| `transposition-preservation` | `transposition` | `TestConformanceTransposition` | `TestAlphaTabPreservesTransposition` | no | Display offsets and independently derived effective keys survive GPIF import and pinned AlphaTab consumption; GP8 target limits for independent keys, sounding offsets, and differing later-staff values receive scoped reports. |
 | `midi-bank-preservation` | `midi-bank` | `TestConformanceMIDIBank` | `TestAlphaTabPreservesMIDIBanks` | no | Full-range bank definitions, initial channel mirrors, and duplicate-position sound changes survive checked GP5/GPIF import and GP8 export in source order. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
 | `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | Every supported fermata symbol, exact master-bar offset, and finite length survives as an independent authored value while beat association remains consumer-derived. |

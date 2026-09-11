@@ -392,6 +392,12 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				if !percussion && (note.String < 0 || int(note.String) > len(staff.Strings)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.string", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("string %d is outside 0..%d", note.String, len(staff.Strings))})
 				}
+				if !percussion && staff.TranspositionPitch != 0 && note.String >= 0 && int(note.String) <= len(staff.Strings) {
+					midi := soundingNoteMIDI(staff, &note)
+					if midi < 0 || midi > 127 {
+						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.sounding-midi", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("sounding MIDI value %d after staff transposition %d is outside 0..127", midi, staff.TranspositionPitch)})
+					}
+				}
 				if !percussion && note.Kind == NoteTypeTie {
 					previous, ok := tiedNotes[voiceIndex][note.String]
 					if !ok || previous != note.Value {

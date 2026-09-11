@@ -5,8 +5,8 @@
   "title": "Preserve sounding and display transposition separately",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -21,7 +21,8 @@
   "acceptance": [
     "Reproduce upstream guitarpro8/e.gp: Chromatic=4 must not disappear or reset its effective key from four flats to zero.",
     "Test positive/negative chromatic offsets, octave shifts, transposing instruments and differing staff offsets.",
-    "Keep concert pitch, displayed pitch and string/fret authority explicit; validate checked boundaries and compare exact consumer values."
+    "Keep concert pitch, displayed pitch and string/fret authority explicit; validate checked boundaries and compare exact consumer values.",
+    "Preserve PartSounding NominalKey independently from TranspositionPitch, including Neutral as the percussion convention, and report GP8 target loss precisely."
   ],
   "exclusions": [
     "The separate lowercase key-mode bug is not part of this fix."
@@ -67,13 +68,23 @@
       "kind": "probe",
       "reference": "testdata/gp7/tap.gp:transposition",
       "detail": "Reproduced at tracks[0].staves[0].displayTranspositionPitch. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTransposition",
+      "detail": "Covers distinct staff sounding/display fields, independent PartSounding nominal keys, Neutral, exact wire values, edits, int32 boundaries, reconciliation diagnostics, and scoped target reports."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabPreservesTransposition",
+      "detail": "Uses pinned AlphaTab 1.8.4 to verify guitarpro8/e.gp plus independent PartSounding D and Neutral effective keys, display offsets, string, fret, and sounding MIDI values."
     }
   ],
   "shared_files": [
     "gpif_audit.go",
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "Added distinct per-staff sounding and display semitone offsets. GPIF Transpose imports with checked int32 conversion and remains authoritative when present. Legacy PartSounding imports TranspositionPitch as the display offset and NominalKey independently as the effective-key offset, with Neutral mapped to zero. GP8 preserves the first staff display offset and reports an independent effective key with gp8.normalize.measure-key-authority. Nonzero sounding offsets, differing later-staff display offsets, and percussion display offsets are also explicit target omissions.",
   "verification": [],
   "issue": {
     "number": 56,

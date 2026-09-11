@@ -1888,10 +1888,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -1944,10 +1944,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "daaf304173fc12154cbbfc4142ec32eee3d43ef69942bd7641c484d9887b3e25"
+          "locationsSha256": "f575d86e77d847811997d6d6e460b3f06445a259e3734f1eb6e5b9b157a5569f"
         }
       ],
       "differences": null
@@ -2000,10 +2000,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 12,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ee3b0dc8617b0276fb707efba853296c7ed9cc72311689dd83f3ba38350e3b66"
+          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
         }
       ],
       "differences": null
@@ -2080,10 +2080,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "daaf304173fc12154cbbfc4142ec32eee3d43ef69942bd7641c484d9887b3e25"
+          "locationsSha256": "f575d86e77d847811997d6d6e460b3f06445a259e3734f1eb6e5b9b157a5569f"
         }
       ],
       "differences": null
@@ -2136,10 +2136,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 41,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6b9bad7c03783d06c8ed189eae724c4958e0e99ad5c05d050ee4ba36f066b2d3"
+          "locationsSha256": "88393c86c0950b95e92c9c27bfa87b9bb139aca0707aa0af145888f9879e6457"
         }
       ],
       "differences": null
@@ -2192,10 +2192,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -2272,10 +2272,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 43,
+          "count": 42,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "71d7b701958389f29124d3c01fcb31f81380a1f30c0a8db08161a11aaf6f9bcb"
+          "locationsSha256": "27fa17be86602173fc53821708ad2831646d04a8d780f66ec022934b91da4ac6"
         }
       ],
       "differences": null
@@ -2320,10 +2320,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "daaf304173fc12154cbbfc4142ec32eee3d43ef69942bd7641c484d9887b3e25"
+          "locationsSha256": "f575d86e77d847811997d6d6e460b3f06445a259e3734f1eb6e5b9b157a5569f"
         }
       ],
       "differences": null
@@ -2376,10 +2376,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -2472,10 +2472,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 315,
+          "count": 304,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "5cf7a31df7ab34cda35c77f63b99166d849b2811b053d04ac3a3f97748185b72"
+          "locationsSha256": "3fbfc5e4c0d61be6ef3c09b0f5057f06fa4d0e9ec62b4a037525bbbf68ebaa3f"
         }
       ],
       "differences": null
@@ -2528,10 +2528,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -2592,10 +2592,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 12,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ee3b0dc8617b0276fb707efba853296c7ed9cc72311689dd83f3ba38350e3b66"
+          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
         }
       ],
       "differences": null
@@ -2648,10 +2648,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 12,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ee3b0dc8617b0276fb707efba853296c7ed9cc72311689dd83f3ba38350e3b66"
+          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
         }
       ],
       "differences": null
@@ -2696,10 +2696,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "daaf304173fc12154cbbfc4142ec32eee3d43ef69942bd7641c484d9887b3e25"
+          "locationsSha256": "f575d86e77d847811997d6d6e460b3f06445a259e3734f1eb6e5b9b157a5569f"
         }
       ],
       "differences": null
@@ -2744,10 +2744,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 34,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c3abadd3a729fe93a28748d58a1052603c4c74eddd7d448b0577b49b2257c35"
+          "locationsSha256": "98b80c2bed0b9b5be78fac259a3d01ee565c63e0e36241644583d5dc08b3e205"
         }
       ],
       "differences": null
@@ -2792,10 +2792,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 34,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c3abadd3a729fe93a28748d58a1052603c4c74eddd7d448b0577b49b2257c35"
+          "locationsSha256": "98b80c2bed0b9b5be78fac259a3d01ee565c63e0e36241644583d5dc08b3e205"
         }
       ],
       "differences": null
@@ -2840,10 +2840,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 34,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c3abadd3a729fe93a28748d58a1052603c4c74eddd7d448b0577b49b2257c35"
+          "locationsSha256": "98b80c2bed0b9b5be78fac259a3d01ee565c63e0e36241644583d5dc08b3e205"
         }
       ],
       "differences": null
@@ -2888,10 +2888,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 34,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c3abadd3a729fe93a28748d58a1052603c4c74eddd7d448b0577b49b2257c35"
+          "locationsSha256": "98b80c2bed0b9b5be78fac259a3d01ee565c63e0e36241644583d5dc08b3e205"
         }
       ],
       "differences": null
@@ -2944,10 +2944,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 26,
+          "count": 24,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6b621372696a5e3bd91da41676eeda922ac2d7a6c8b8e517ed96e807c7d4ef06"
+          "locationsSha256": "7adfc05d16bb2586a86dd56f0b9da231958c79fb4fa185e7a240b6fdbae2d748"
         }
       ],
       "differences": null
@@ -3002,10 +3002,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -3066,10 +3066,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9aa2e4f91446f40e4250ef608eb9fe2758f51598f6d88547ebac5f211b7b895c"
+          "locationsSha256": "d2b397b0fce8cca9b6b3e1c7fcd87f6d72f2070d1035e33ff8dace8d331f13bc"
         }
       ],
       "differences": null
@@ -3122,10 +3122,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 14,
+          "count": 13,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "c44d7451d9d8cc2bbe3d736072223ddbf2c847fcf05cf886b7785b6dedde007f"
+          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
         }
       ],
       "differences": null
@@ -3178,10 +3178,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d96ff5cfe139b6ff0486433539369828ce577d88dd10df5b3abf7a9320132987"
+          "locationsSha256": "67a3d1ec8acf3a65fa6747f61a6464cb4ad06828549d155456bfd21bee9c4ab5"
         }
       ],
       "differences": null
@@ -3234,10 +3234,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 14,
+          "count": 13,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "c44d7451d9d8cc2bbe3d736072223ddbf2c847fcf05cf886b7785b6dedde007f"
+          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
         }
       ],
       "differences": null
@@ -3290,10 +3290,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 14,
+          "count": 13,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "c44d7451d9d8cc2bbe3d736072223ddbf2c847fcf05cf886b7785b6dedde007f"
+          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
         }
       ],
       "differences": null
@@ -3346,10 +3346,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 25,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9eab10ee82fdd85eb29978e7bfe180fcd099ceaf44cb9a724bd76ec9d414dea7"
+          "locationsSha256": "35a4656b25ebd35b91ff729f04a0de5c8417f404a457ce8a56ee858a23e2bf6c"
         }
       ],
       "differences": null
@@ -3410,10 +3410,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 122,
+          "count": 118,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "1629afa1d56a3b5a2bb671ffbe31c415c3bb6bb49f4034896335fe96f4cee6ca"
+          "locationsSha256": "457f3fd8eaadd04e7903fad31d57d537d8fd60336743248ae806b70bede0ecfe"
         }
       ],
       "differences": null
@@ -3466,10 +3466,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "854ed24bdd8d4f8afcd73831477d8c36ccd3572442e4d36c39db91c3e92dabd4"
+          "locationsSha256": "d4000aae683ef851e27ac6227fc013806e09e683601e2ccf3d0b3b66aa8ed543"
         }
       ],
       "differences": null
@@ -3522,10 +3522,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 12,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ee3b0dc8617b0276fb707efba853296c7ed9cc72311689dd83f3ba38350e3b66"
+          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
         }
       ],
       "differences": null
@@ -3579,10 +3579,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -3635,10 +3635,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -3691,10 +3691,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 26,
+          "count": 24,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6b621372696a5e3bd91da41676eeda922ac2d7a6c8b8e517ed96e807c7d4ef06"
+          "locationsSha256": "7adfc05d16bb2586a86dd56f0b9da231958c79fb4fa185e7a240b6fdbae2d748"
         }
       ],
       "differences": null
@@ -3747,10 +3747,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9aa2e4f91446f40e4250ef608eb9fe2758f51598f6d88547ebac5f211b7b895c"
+          "locationsSha256": "d2b397b0fce8cca9b6b3e1c7fcd87f6d72f2070d1035e33ff8dace8d331f13bc"
         }
       ],
       "differences": null
@@ -3812,10 +3812,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d96ff5cfe139b6ff0486433539369828ce577d88dd10df5b3abf7a9320132987"
+          "locationsSha256": "67a3d1ec8acf3a65fa6747f61a6464cb4ad06828549d155456bfd21bee9c4ab5"
         }
       ],
       "differences": null
@@ -3868,10 +3868,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -3924,10 +3924,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 12,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ee3b0dc8617b0276fb707efba853296c7ed9cc72311689dd83f3ba38350e3b66"
+          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
         }
       ],
       "differences": null
@@ -3988,10 +3988,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2dd7fddc87a0f05c7046ae74a9865ecfe14942bcd2509841436b5d138c8faf60"
+          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
         }
       ],
       "differences": null
@@ -4049,14 +4049,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -4147,14 +4139,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -4243,14 +4227,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -4336,14 +4312,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -4434,14 +4402,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -4527,14 +4487,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -4640,14 +4592,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -4734,14 +4678,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -4831,14 +4767,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -4917,14 +4845,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -5030,14 +4950,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -5116,14 +5028,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -5213,14 +5117,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -5307,14 +5203,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -5413,14 +5301,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -5507,14 +5387,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -5610,14 +5482,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -5673,14 +5537,6 @@
           "locationsSha256": "f252d10b73fb776b55b2ed4cf1a3b3e5c75fd295f5d16ccc628c3d912924b73e"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "1ed649762b7abfba6e098101b7ae58b65e241cb9886f6810a2f222328d47f433"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 9,
@@ -5729,14 +5585,6 @@
           "locationsSha256": "f252d10b73fb776b55b2ed4cf1a3b3e5c75fd295f5d16ccc628c3d912924b73e"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "1ed649762b7abfba6e098101b7ae58b65e241cb9886f6810a2f222328d47f433"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 9,
@@ -5783,14 +5631,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f252d10b73fb776b55b2ed4cf1a3b3e5c75fd295f5d16ccc628c3d912924b73e"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "1ed649762b7abfba6e098101b7ae58b65e241cb9886f6810a2f222328d47f433"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -5873,14 +5713,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -5958,14 +5790,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6053,14 +5877,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6166,14 +5982,6 @@
           "locationsSha256": "6b629e09afba64b15480800de92419b838ae08bb59011ab2be684622a4ec29bd"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "1ed649762b7abfba6e098101b7ae58b65e241cb9886f6810a2f222328d47f433"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 9,
@@ -6256,14 +6064,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6383,14 +6183,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
@@ -6529,14 +6321,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 21,
@@ -6598,14 +6382,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6736,14 +6512,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 35,
@@ -6806,14 +6574,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6885,14 +6645,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6982,14 +6734,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -7075,14 +6819,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7173,14 +6909,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -7250,14 +6978,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7332,14 +7052,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -7394,14 +7106,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7474,14 +7178,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7569,14 +7265,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7690,14 +7378,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -7783,14 +7463,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7886,14 +7558,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -8008,14 +7672,6 @@
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 6,
@@ -8094,14 +7750,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
@@ -8197,14 +7845,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -8327,14 +7967,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 98,
@@ -8430,14 +8062,6 @@
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -8523,14 +8147,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -8621,14 +8237,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -8714,14 +8322,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -8812,14 +8412,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -8906,14 +8498,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9012,14 +8596,6 @@
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -9106,14 +8682,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9204,14 +8772,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -9298,14 +8858,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9399,14 +8951,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "0fd1b6164e7d986b2e907e048edd396a51a51e48e8963b35d2620e30591f3bf7"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9504,14 +9048,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -9599,14 +9135,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -9652,14 +9180,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9710,14 +9230,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -9764,14 +9276,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9852,14 +9356,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -9949,14 +9445,6 @@
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 6,
@@ -10042,14 +9530,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -10139,14 +9619,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -10232,14 +9704,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -10329,14 +9793,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -10390,14 +9846,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "0b98dc46fa13a87b3e6c4dd1ba3e06a6ec33406f44b16501e3abe435a1b01f5f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "16b3287838bea008e4de7220ed9d0558d4aba58a8b85d7785cd29be7b470500c"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -10487,14 +9935,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -10550,14 +9990,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -10604,14 +10036,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -10662,14 +10086,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -10716,14 +10132,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -10814,14 +10222,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -10907,14 +10307,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11004,14 +10396,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -11097,14 +10481,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11195,14 +10571,6 @@
           "locationsSha256": "4b4690dbd829e32ec39a59aa57b22ed51c1a2b81fdc1a964be7d81ef2244c549"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -11256,14 +10624,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11353,14 +10713,6 @@
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -11446,14 +10798,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11544,14 +10888,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -11639,14 +10975,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -11693,14 +11021,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "cc0dcfe98bfc30433ad011798e9239e1254511158b3abe7626be287f5359dcd6"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11780,14 +11100,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11950,14 +11262,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 105,
@@ -12092,14 +11396,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 21,
@@ -12198,14 +11494,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -12301,14 +11589,6 @@
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -12395,14 +11675,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -12501,14 +11773,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -12586,14 +11850,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -12683,14 +11939,6 @@
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 6,
@@ -12776,14 +12024,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -12873,14 +12113,6 @@
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 6,
@@ -12968,14 +12200,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -13055,14 +12279,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -13140,14 +12356,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13237,14 +12445,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -13332,14 +12532,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -13425,14 +12617,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13562,14 +12746,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 14,
@@ -13666,14 +12842,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -13759,14 +12927,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13856,14 +13016,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -13917,14 +13069,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -14014,14 +13158,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -14099,14 +13235,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -14234,14 +13362,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
@@ -14379,14 +13499,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 21,
@@ -14464,14 +13576,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "4b4690dbd829e32ec39a59aa57b22ed51c1a2b81fdc1a964be7d81ef2244c549"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -14569,14 +13673,6 @@
           "locationsSha256": "d272ffd52d6b4f28c7993be4d9f4201929bcefb021756a597766bdd4f5d8e9ee"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "16b3287838bea008e4de7220ed9d0558d4aba58a8b85d7785cd29be7b470500c"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 4,
@@ -14655,14 +13751,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -14784,14 +13872,6 @@
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
           "count": 28,
@@ -14888,14 +13968,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -14949,14 +14021,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15044,14 +14108,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15150,14 +14206,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -15244,14 +14292,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15341,14 +14381,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -15426,14 +14458,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15514,14 +14538,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15612,14 +14628,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -15673,14 +14681,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15768,14 +14768,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15881,14 +14873,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -15975,14 +14959,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16072,14 +15048,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -16134,14 +15102,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16229,14 +15189,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
@@ -16335,14 +15287,6 @@
           "locationsSha256": "08e61a6bdeff2c847926ed5dd52626899c9082262b2ef1636c1c7cbd04284b0a"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "27eb2d05f115f3eb9d694b4b0afa55e1dc6bb739a6e98245f5076a9245e0dfce"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 5,
@@ -16390,14 +15334,6 @@
           "locationsSha256": "940cdf4880290f7fb1efa6ef878832f8807a8dd9ecb741f1e728731d228d715a"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 2,
@@ -16436,14 +15372,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16486,14 +15414,6 @@
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -16534,14 +15454,6 @@
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -16580,14 +15492,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16638,14 +15542,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -16692,14 +15588,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16780,14 +15668,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "9d4badd0a8ccceaf253b6338a800ad52943e3668ce1f7010953a049611dfcc86"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "c62523127ae49dd3a53d678406f1d758df6f6cd390e96c8894a83f72caa4762c"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -16878,14 +15758,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -16971,14 +15843,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -17084,14 +15948,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -17188,14 +16044,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -17281,14 +16129,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -17378,14 +16218,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -17471,14 +16303,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -17568,14 +16392,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -17661,14 +16477,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -17757,14 +16565,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -17862,14 +16662,6 @@
           "locationsSha256": "bb215f51f6d7e66441ee308e9d2d53ead5008f28ac0af02b877f2a7c15782c7f"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -17956,14 +16748,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18055,14 +16839,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -18149,14 +16925,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18263,14 +17031,6 @@
           "locationsSha256": "6b629e09afba64b15480800de92419b838ae08bb59011ab2be684622a4ec29bd"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "1ed649762b7abfba6e098101b7ae58b65e241cb9886f6810a2f222328d47f433"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 9,
@@ -18337,14 +17097,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18451,14 +17203,6 @@
           "locationsSha256": "a9334add25c04d0effbb29199a0250493a344960f8b01e00bc709ac96cfdef73"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "3e5d9c643e13ed1ac97c59d07c0d776b33418012ca226eaea96457303e54a63a"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 6,
@@ -18505,14 +17249,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "67ec1db3c07030fd2f403dc59d9bbefe587ef50ab43e44e3d7aeeec0643a3ad7"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18563,14 +17299,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -18617,14 +17345,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18675,14 +17395,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -18729,14 +17441,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18787,14 +17491,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -18843,14 +17539,6 @@
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 3,
@@ -18897,14 +17585,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "f819ca90056ae3a112461a0cf92fbd0cd287763829b5871026781e10a360756d"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "344f5c909732ef404f8e255ff63e2a66ac86fcde59ede9177867589f44debcab"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -18985,14 +17665,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "016d999966efebb519c9a211feac7b2391fd26a1617b0fd3919f74969e8e2d21"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -19083,14 +17755,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -19147,14 +17811,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
-        },
-        {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
           "kind": "unknown-syntax",
           "count": 1,
@@ -19201,14 +17857,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
           "objectId": "0",
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
-        },
-        {
-          "code": "GPIF.Track.Transpose",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Transpose",
-          "objectId": "0",
-          "locationsSha256": "f9f776f11fd36443ad88bfc0a24556ab3b600ff2619180cf5d74abe3e7d25bf2"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",

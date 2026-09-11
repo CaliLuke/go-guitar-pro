@@ -691,6 +691,28 @@ export function loadSustainPedalFacts(fixture) {
   return facts;
 }
 
+export function loadTranspositionFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      const notes = staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.notes)));
+      const firstNote = notes[0] ?? null;
+      facts.push({
+        track: track.index,
+        staff: staff.index,
+        transpositionPitch: finite(staff.transpositionPitch),
+        displayTranspositionPitch: finite(staff.displayTranspositionPitch),
+        keys: staff.bars.map(bar => finite(bar.keySignature)),
+        firstNoteString: firstNote ? finite(firstNote.string) : 0,
+        firstNoteFret: firstNote ? finite(firstNote.fret) : 0,
+        firstNoteSoundingMidi: firstNote ? finite(firstNote.realValue) : 0
+      });
+    }
+  }
+  return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -731,6 +753,10 @@ function main() {
   }
   if (args[0] === '--sustain-pedals' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadSustainPedalFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--transposition' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadTranspositionFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

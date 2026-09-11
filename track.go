@@ -29,6 +29,14 @@ type Staff struct {
 	StandardNotationLineCount int
 	// CapoFret is the non-negative fret at which this staff's capo is placed.
 	CapoFret int32
+	// TranspositionPitch is the authored sounding offset in semitones.
+	// A sounded MIDI pitch is the string-and-fret pitch minus this value.
+	// Changing it does not rewrite the authored tuning, string, or fret.
+	TranspositionPitch int32
+	// DisplayTranspositionPitch is the authored notation offset in semitones.
+	// It changes the effective displayed key without changing sounding pitch,
+	// tuning, string, or fret.
+	DisplayTranspositionPitch int32
 }
 
 // Track represents a track.

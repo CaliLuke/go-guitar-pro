@@ -350,6 +350,22 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 	staves := gp8ExportStaves(track)
 	if len(staves) > 0 {
+		transpose := gp8Transpose(staves[0].DisplayTranspositionPitch)
+		result.Transpose = &transpose
+		for staffIndex := range staves {
+			staffLocation := ScoreLocation{Track: trackIndex, Staff: staffIndex}
+			if staves[staffIndex].TranspositionPitch != 0 {
+				builder.addReport("gp8.omit.staff-sounding-transposition", "transposition", ExportDispositionOmitted, staffLocation, "GP8 GPIF has no staff sounding-transposition destination")
+			}
+			if staffIndex > 0 && staves[staffIndex].DisplayTranspositionPitch != staves[0].DisplayTranspositionPitch {
+				builder.addReport("gp8.omit.staff-display-transposition", "transposition", ExportDispositionOmitted, staffLocation, "GP8 stores one display transposition for every staff in a track")
+			}
+			if track.PercussionTrack && staves[staffIndex].DisplayTranspositionPitch != 0 {
+				builder.addReport("gp8.omit.percussion-display-transposition", "transposition", ExportDispositionOmitted, staffLocation, "GP8 consumers reset display transposition on percussion staves")
+			}
+		}
+	}
+	if len(staves) > 0 {
 		for barIndex := range staves[0].Measures {
 			for _, marker := range staves[0].Measures[barIndex].SustainPedals {
 				if marker.Type == SustainPedalTypeHold {
@@ -595,7 +611,8 @@ func (builder *gp8Builder) buildScoreGraph() error {
 				if measure.HasDoubleBar != header.DoubleBar {
 					builder.addReport("gp8.normalize.measure-double-bar-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar double-bar value instead of the compatibility measure value")
 				}
-				if measure.KeySignature != (KeySignature{}) && measure.KeySignature != header.KeySignature {
+				effectiveKey := transposeKeySignature(header.KeySignature, staff.DisplayTranspositionPitch)
+				if measure.KeySignature != (KeySignature{}) && measure.KeySignature != effectiveKey {
 					builder.addReport("gp8.normalize.measure-key-authority", "score-core", ExportDispositionNormalized, location, "GP8 writer uses the master-bar key instead of the compatibility measure value")
 				}
 				if measure.TimeSignature != (TimeSignature{}) && measure.TimeSignature != header.TimeSignature {
