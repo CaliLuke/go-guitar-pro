@@ -5,8 +5,8 @@
   "title": "Exclude unused legacy MIDI program slots from export rejection",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -79,6 +79,31 @@
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
     },
     {
+      "kind": "source",
+      "reference": "validation.go",
+      "detail": "Validates instrument range only through valid track channel references while retaining table-wide bank and mixer checks."
+    },
+    {
+      "kind": "source",
+      "reference": "midi.go",
+      "detail": "Binary pitched-track channel selection retains the authored program; percussion selection keeps its established program-zero normalization."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMIDIProgramReferences",
+      "detail": "Covers both named fixtures, explicit unused-slot selection proof, selected -7 and 128 values, invalid references, strict preflight/export agreement, reimport, and nonmutation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestBinarySelectedMIDIProgramIsNotCoerced",
+      "detail": "Direct binary channel-reference bytes prove that a selected pitched channel retains authored program -7."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabPreservesSelectedMIDIProgram",
+      "detail": "Pinned AlphaTab verifies that selected non-default program 73 survives GP8 export."
+    },
+    {
       "kind": "investigation-review",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/63#issuecomment-5624490039",
       "detail": "implementation-ready: Public-API inspection confirmed every -1 slot in both fixtures is unused, including channels 25/41/57 and 9/25/41/57. ValidateSong currently checks the entire table before target export.",
@@ -90,10 +115,11 @@
   "shared_files": [
     "gp8_builder.go",
     "gp8_export.go",
+    "midi.go",
     "track.go",
     "validation.go"
   ],
-  "resolution": null,
+  "resolution": "Made MIDI program validation reference-aware without changing table-wide bank or mixer validation. Unused legacy channel-table sentinels remain authored values and no longer block GP8 export, while selected negative or overflowing programs remain track-located rejections. Binary pitched-track channel selection no longer coerces a selected negative program; percussion normalization is unchanged.",
   "verification": [],
   "issue": {
     "number": 63,

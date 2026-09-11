@@ -94,6 +94,12 @@ combined with checked signed 32-bit arithmetic before they enter the model.
 
 GP8 export preserves the selected MIDI program, primary and effect channels,
 volume, balance, mute state, solo state, sound definitions, and sound changes.
+`Song.Channels` retains all authored legacy channel-table slots, including
+invalid sentinel program values. Program validation is reference-aware: an
+unused slot does not invalidate the score or block export, while every track
+that selects a slot requires its program to be within 0 through 127. Export and
+validation do not rewrite either selected or unused program values. Percussion
+channel selection keeps its existing import normalization to program zero.
 `MidiChannel.Bank` and `TrackSound.Bank` use the combined MIDI bank range 0
 through 16383. GPIF sound `MSB` and `LSB` values must each fit 0 through 127.
 The first explicit `TrackSound` owns the initial program and bank; import mirrors

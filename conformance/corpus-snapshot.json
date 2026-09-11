@@ -283,12 +283,6 @@
           "locationsSha256": "4b89bb41ae93ebf935e7a3701f448cc4b954c1aea0fc28120da77e0440cfaa4a"
         },
         {
-          "code": "score.channel.instrument",
-          "kind": "invalid-data",
-          "count": 3,
-          "locationsSha256": "8d98b23cefda6ad8dd7f936b2c83d40db67a0d5cd050ec2f8d0e123457a6e644"
-        },
-        {
           "code": "score.note.kind",
           "kind": "invalid-data",
           "count": 1,

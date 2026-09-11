@@ -11,7 +11,9 @@ type MidiChannel struct {
 	Channel uint8
 	// EffectChannel is the zero-based MIDI channel used for effects.
 	EffectChannel uint8
-	// Instrument is the zero-based General MIDI program number, from 0 through 127.
+	// Instrument is the authored zero-based General MIDI program. A track that
+	// selects this channel requires a value from 0 through 127; unused legacy
+	// channel-table slots can retain an out-of-range sentinel.
 	Instrument int32
 	// Volume, Balance, Chorus, Reverb, Phaser, and Tremolo use the normalized
 	// MIDI controller range 0 through 127.
@@ -124,9 +126,6 @@ func (s *Song) readChannel(c *cursor, track *Track) error {
 			s.Channels[idx].EffectChannel = DefaultPercussionChannel
 			s.Channels[idx].Instrument = 0
 		} else {
-			if s.Channels[idx].Instrument < 0 {
-				s.Channels[idx].Instrument = 0
-			}
 			s.Channels[idx].EffectChannel = uint8(effectChannel)
 		}
 	}

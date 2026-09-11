@@ -277,7 +277,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 86 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 87 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -348,6 +348,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `key-mode-preservation` | `score-core` | `TestConformanceKeyModes` | `TestAlphaTabPreservesKeyModes` | no | Exact supported major and minor spellings retain independent nonzero accidental counts across adjacent master bars and canonical GP8 export; unknown spellings remain explicit. |
 | `transposition-preservation` | `transposition` | `TestConformanceTransposition` | `TestAlphaTabPreservesTransposition` | no | Display offsets and independently derived effective keys survive GPIF import and pinned AlphaTab consumption; GP8 target limits for independent keys, sounding offsets, and differing later-staff values receive scoped reports. |
 | `midi-bank-preservation` | `midi-bank` | `TestConformanceMIDIBank` | `TestAlphaTabPreservesMIDIBanks` | no | Full-range bank definitions, initial channel mirrors, and duplicate-position sound changes survive checked GP5/GPIF import and GP8 export in source order. |
+| `reference-aware-midi-program-validation` | `score-core` | `TestConformanceMIDIProgramReferences` | `TestAlphaTabPreservesSelectedMIDIProgram` | no | Actual GP3 and GP4 unused -1 slots no longer invalidate GP8 export, while selected invalid values remain exact track-located rejections and a valid non-default program survives the pinned consumer. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
 | `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | Every supported fermata symbol, exact master-bar offset, and finite length survives as an independent authored value while beat association remains consumer-derived. |
 | `free-time-preservation` | `free-time` | `TestConformanceFreeTime` | `TestAlphaTabPreservesFreeTime` | no | Every authored free-time marker survives on its exact master bar without changing numeric meter timing. |

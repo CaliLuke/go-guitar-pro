@@ -84,9 +84,6 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		add("score.tempo", ScoreDiagnosticValue, ScoreLocation{}, "song has no valid opening tempo")
 	}
 	for channelIndex, channel := range song.Channels {
-		if channel.Instrument < 0 || channel.Instrument > 127 {
-			add("score.channel.instrument", ScoreDiagnosticValue, ScoreLocation{}, "channel %d instrument %d is outside 0..127", channelIndex, channel.Instrument)
-		}
 		if channel.Bank < 0 || channel.Bank > 16383 {
 			add("score.channel.bank", ScoreDiagnosticValue, ScoreLocation{}, "channel %d bank %d is outside 0..16383", channelIndex, channel.Bank)
 		}
@@ -155,6 +152,11 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		}
 		if track.ChannelIndex < -1 || track.ChannelIndex >= len(song.Channels) {
 			add("score.track.channel-reference", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "channel index %d is outside -1..%d", track.ChannelIndex, len(song.Channels)-1)
+		} else if track.ChannelIndex >= 0 {
+			channel := song.Channels[track.ChannelIndex]
+			if channel.Instrument < 0 || channel.Instrument > 127 {
+				add("score.channel.instrument", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "selected channel %d instrument %d is outside 0..127", track.ChannelIndex, channel.Instrument)
+			}
 		}
 		if track.PercussionTrack {
 			for articulationIndex, articulation := range track.PercussionArticulations {

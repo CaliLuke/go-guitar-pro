@@ -1620,8 +1620,8 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Selected program, channels, volume, balance and mute/solo are retained. Conflicting ports and mute+solo require target normalization.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Selected program, channels, volume, balance and mute/solo are retained. Unreferenced legacy channel-table program sentinels remain authored data but do not invalidate export; a selected invalid program remains precisely rejected. Conflicting ports and mute+solo require target normalization.",
+      "acceptance": "Reference-aware program validation is covered with actual GP3 and GP4 sentinel fixtures, selected negative and overflowing values, an out-of-range channel reference, nonmutation, GP8 reimport, and pinned AlphaTab program 73 evidence. Remaining port and playback-state variants stay separately tracked.",
       "upstream": [
         "Track.playbackInfo",
         "PlaybackInformation.*"
@@ -1646,6 +1646,21 @@
           "kind": "test",
           "reference": "TestConformancePlaybackRouting",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMIDIProgramReferences",
+          "detail": "Covers unused -1 slots in actual GP3 and GP4 fixtures, selected invalid programs, invalid references, validation/preflight agreement, GP8 reimport, and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestBinarySelectedMIDIProgramIsNotCoerced",
+          "detail": "Direct binary channel-reference bytes prove that selecting a pitched channel retains its authored negative program."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesSelectedMIDIProgram",
+          "detail": "Pinned AlphaTab verifies that valid selected program 73 survives GP8 export."
         }
       ]
     },

@@ -19,7 +19,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve navigation targets and jumps on each measure](work-items/directions.json) | implementation | 1 | in_progress | — | [#45](https://github.com/CaliLuke/go-guitar-pro/issues/45) |
 | [Correct stale semantic documentation and diagnostic labels](work-items/documentation-contract-drift.json) | implementation | 1 | in_progress | — | [#46](https://github.com/CaliLuke/go-guitar-pro/issues/46) |
 | [Preserve GPIF bend control roles with nonmonotonic offsets](work-items/export-curve-order.json) | implementation | 1 | blocked | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) | [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) |
-| [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | todo | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |
+| [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | in_progress | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |
 | [Preserve authored opening sound-event preroll](work-items/export-negative-sound-position.json) | implementation | 1 | blocked | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#64](https://github.com/CaliLuke/go-guitar-pro/issues/64) |
 | [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | in_progress | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
 | [Preserve free-time bars without inventing a meter](work-items/free-time.json) | implementation | 1 | in_progress | — | [#48](https://github.com/CaliLuke/go-guitar-pro/issues/48) |
