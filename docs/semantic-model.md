@@ -630,6 +630,23 @@ authoritative when nonzero and preserves `Slight` and `Wide` exactly. A true
 legacy `Vibrato` value falls back to `Slight` when the typed strength is absent.
 Beat-level vibrato uses the separate `BeatEffects.VibratoStrength` contract.
 
+`BeatEffects.WahPedal` preserves a beat-local None, Open, or Closed event.
+None means no event; it does not reset an earlier pedal event. GPIF writes
+Open and Closed on the owning beat. GP5 maps legacy values 0..99 to Open and
+100..127 to Closed. Value -1 means no event. Values below -1 remain in
+`MixTableChange.Wah.Value` with `Binary.Beat.Wah.Unsupported`; GPIF export
+reports `gp8.omit.wah-legacy-state`. GP3 and GP4 have no wah event byte.
+
+Imported edits to either WahPedal or the legacy value control export.
+Clearing the legacy pointer removes the event. Incompatible edits to both
+favor WahPedal and report `gp8.normalize.wah-authority`. A nonzero programmatic
+state takes precedence; otherwise the legacy value supplies the event.
+GPIF import leaves the legacy mix-table pointer absent. Export never mutates
+these views. Intermediate legacy values preserve the consumer state but report
+`gp8.normalize.wah-legacy-value`. GPIF has no legacy wah display field:
+`gp8.omit.wah-display` reports the exact boolean for a present event, unsupported
+state, or nondefault flag. Static sound settings do not supply pedal events.
+
 `BeatEffects.Tap`, `Slap`, and `Pop` preserve independent beat techniques.
 GP3–5 imports map the legacy enum to one state. GPIF imports combine enabled
 Slapped/Popped properties and derive Tap from actual note Tapped properties.

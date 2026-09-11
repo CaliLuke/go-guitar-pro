@@ -319,11 +319,11 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		if beat.Legato != nil {
 			gpifAuditLegato(context, beat.ID, path+"/Legato", beat.Legato)
 		}
-		if beat.Wah != "" {
+		if beat.Wah != "" && beat.Wah != "Open" && beat.Wah != "Closed" {
 			context.add(diagnosticSource("GPIF.Beat.Wah", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				Kind: ParseDiagnosticUnsupportedFeature, SourcePath: path + "/Wah", ObjectID: beat.ID,
 				Location: ParseLocation{BeatID: beat.ID}, Feature: "note-and-beat-semantics",
-				Reason: "beat wah has no destination in Song",
+				Reason: fmt.Sprintf("unsupported GPIF wah state %q", beat.Wah),
 			})
 		}
 		switch beat.Fadding {

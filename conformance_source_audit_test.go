@@ -168,7 +168,7 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	doc := gpifDocument{
 		Tracks: gpifTracks{Tracks: []gpifTrack{track}},
 		Beats: gpifBeats{Beats: []gpifBeat{{
-			ID: "beat-id", Tremolo: "future-rate", Wah: "Open", Fadding: "FutureFade",
+			ID: "beat-id", Tremolo: "future-rate", Wah: "FutureWah", Fadding: "FutureFade",
 			Properties: gpifProperties{Properties: []gpifProperty{{Name: "FutureBeatProperty"}}},
 		}}},
 		Notes: gpifNotes{Notes: []gpifNote{{

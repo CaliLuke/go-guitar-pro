@@ -11,6 +11,8 @@ import (
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 	beat.DeadSlapped = b.DeadSlapped != nil
+	beat.Effect.WahPedal = gpifWah(b.Wah)
+	beat.Effect.rememberWah()
 	beat.Effect.Golpe = gpifGolpe(b.Golpe)
 	if b.Lyrics != nil {
 		beat.Lyrics = append([]string{}, b.Lyrics.Lines...)

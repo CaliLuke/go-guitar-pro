@@ -248,6 +248,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 		result.DeadSlapped = &struct{}{}
 	}
 	result.Golpe = gp8Golpe(beat.Effect.Golpe)
+	result.Wah = gp8Wah(beat.Effect.resolvedWah().state)
 	techniques, _ := beat.Effect.resolvedTechniques()
 	enableTechnique := ""
 	if techniques.slap {

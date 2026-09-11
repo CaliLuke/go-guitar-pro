@@ -3210,9 +3210,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy mix-table Wah data exists. GPIF Beat.Wah is explicitly unsupported and there is no direct beat pedal enum.",
+      "finding": "Beat-local None, Open and Closed events preserve source ownership and order. GP5 raw values remain available with documented edit authority. Pinned consumer states are retained; intermediate numeric detail, display flags and unsupported negative states have separate precise reports. None means absent, not a pedal reset.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.wahPedal",
@@ -3238,6 +3238,11 @@
           "kind": "probe",
           "reference": "testdata/gp5/Wah.gp5:wah",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].wahPedal. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabWah",
+          "detail": "Original GP5 events, complete binary signed boundaries at final wah byte, authored three-state locations, and exact exported raw consumer facts."
         }
       ]
     },

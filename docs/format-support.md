@@ -145,7 +145,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Property.WhammyBarExtend` | `note-and-beat-semantics` | `deliberate-ignore` | The GPIF extension marker has no documented playback or notation effect. |
 | `GPIF.Beat.Rhythm.Reference` | `rhythm` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.Tremolo.InvalidValue` | `tremolo-picking` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Wah` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.ChordDefinition.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.ChordDefinition.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Bar.SimileMark.InvalidValue` | `rhythm` | `unsupported-feature` | Unknown simile-mark text has no defined public enum value. |
@@ -232,6 +231,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Ornament.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Only Turn, InvertedTurn, UpperMordent and LowerMordent are defined source ornament spellings. |
 | `GPIF.Beat.Property.Rasgueado.MissingPattern` | `note-and-beat-semantics` | `invalid-data` | A named rasgueado property requires its pattern payload. |
 | `GPIF.Beat.Property.Rasgueado` | `note-and-beat-semantics` | `unsupported-feature` | An unknown source pattern has no named semantic destination; no default gesture is substituted. |
+| `Binary.Beat.Wah.Unsupported` | `note-and-beat-semantics` | `unsupported-feature` | Legacy wah values below -1 have no supported pedal event; the raw value remains in MixTableChange.Wah. |
+| `GPIF.Beat.Wah` | `note-and-beat-semantics` | `unsupported-feature` | Only Open and Closed are supported GPIF beat wah events; unknown values are diagnosed without substituting a state. |
 
 ## Public model inventory
 
@@ -294,13 +295,13 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
-| `BeatEffects` | `note-and-beat-semantics` | 16 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. |
+| `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 259 |
+| `preserved` | 260 |
 | `normalized` | 37 |
 | `omitted` | 103 |
 | `rejected` | 0 |
@@ -311,7 +312,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 127 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 196 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 128 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
 
 ## GPIF wire inventory
 

@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "fmt"
+
 // MixTableItem describes a mix parameter change.
 // Value uses int32 because Guitar Pro stores tempo values as int32.
 type MixTableItem struct {
@@ -243,6 +245,9 @@ func (s *Song) readWahEffect(c *cursor, flags int8) (WahEffect, error) {
 	val, err := c.readSignedByte()
 	if err != nil {
 		return WahEffect{}, err
+	}
+	if val < -1 {
+		c.report(diagnosticSource("Binary.Beat.Wah.Unsupported", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), fmt.Sprintf("legacy wah value %d has no supported pedal event", val))
 	}
 	return WahEffect{
 		Value:   val,

@@ -97,6 +97,11 @@
       "kind": "probe",
       "reference": "testdata/gp5/Wah.gp5:wah",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].wahPedal. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabWah",
+      "detail": "Exact source/output wah events at original beat locations and complete GP5 signed boundaries."
     }
   ],
   "shared_files": [
@@ -104,8 +109,11 @@
     "gpif_audit.go",
     "mix_table.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Typed beat-local wah state, legacy numeric authority, GPIF import/export and scoped unsupported legacy diagnostics are implemented. Original GP5 eight alternating events and final -2 are checked against the pinned consumer; complete binary -128,-2,-1,0,1,99,100,101,127 cases retain the exact supported state. Authored None/Open/Closed locations, edits, selective policy subsets and invalid values are covered. Exact-commit fresh review, combined gates and capability probe remain assigned to root; issue stays open.",
+  "verification": [
+    "Public GP5 export regression failed before implementation and passes afterward.",
+    "Focused public, independent pinned consumer, matrix inventory and lint checks; full gates and capability probe deferred to parent integration."
+  ],
   "issue": {
     "number": 94,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/94",

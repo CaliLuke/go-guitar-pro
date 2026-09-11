@@ -54,6 +54,12 @@ type Voice struct {
 
 // BeatEffects contains all beat effects.
 type BeatEffects struct {
+	// WahPedal is a beat-local event. GP5 imports derive it from MixTableChange.Wah:
+	// -1 means absent, 0..99 Open, and 100..127 Closed. Imported edits to either
+	// view control export; incompatible edits to both favor WahPedal. A nonzero
+	// programmatic state wins, otherwise the legacy value is the fallback.
+	// GPIF imports do not fabricate a legacy mix-table record.
+	WahPedal   WahPedal
 	Chord      *Chord
 	TremoloBar *BendEffect
 	// TremoloPicking is the beat-wide authored authority. The legacy
@@ -99,6 +105,10 @@ type BeatEffects struct {
 	VibratoStrength BeatVibrato
 	Vibrato         bool
 
+	importedWah             WahPedal
+	importedWahValue        int8
+	importedWahPresent      bool
+	hasImportedWah          bool
 	importedTechniques      beatTechniques
 	importedSlapEffect      SlapEffect
 	hasImportedTechniques   bool
@@ -270,6 +280,10 @@ func (s *Song) readBeat(c *cursor, voice *Voice, start int64, trackIndex int) (i
 	beat.promoteLegacyTremoloPicking()
 	beat.Effect.rememberRasgueado()
 	beat.importLegacyTechniques()
+	if value, present := beat.Effect.legacyWahValue(); present {
+		beat.Effect.WahPedal = legacyWah(value)
+	}
+	beat.Effect.rememberWah()
 	if dbg {
 		fmt.Printf("    after notes pos=%d noteCount=%d\n", c.pos, len(beat.Notes))
 	}

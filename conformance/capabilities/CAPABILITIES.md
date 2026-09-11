@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 74 | 15 | 8 | 1 |
 | model | 73 | 16 | 8 | 1 |
-| export | 52 | 29 | 15 | 2 |
+| export | 52 | 30 | 14 | 2 |
 
 All three stages have a supported rating in 52 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -357,9 +357,9 @@ Bounded work: [Preserve independent tap, slap and pop beat techniques](https://g
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Legacy mix-table Wah data exists. GPIF Beat.Wah is explicitly unsupported and there is no direct beat pedal enum.
+Beat-local None, Open and Closed events preserve source ownership and order. GP5 raw values remain available with documented edit authority. Pinned consumer states are retained; intermediate numeric detail, display flags and unsupported negative states have separate precise reports. None means absent, not a pedal reset.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
