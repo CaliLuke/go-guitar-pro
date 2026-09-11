@@ -2,7 +2,10 @@
 
 package goguitarpro
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 // Velocity and bend constants define the effect scales for Guitar Pro.
 const (
@@ -20,9 +23,19 @@ const (
 type BendPoint struct {
 	// Position is the normalized curve position from 0 through 12.
 	Position uint8
+	// ExactOffset preserves a note bend's authored GPIF percentage from 0
+	// through 100 when Position cannot represent it exactly. For a programmatic
+	// point, a non-nil ExactOffset is authoritative. For an imported point,
+	// ExactOffset remains authoritative while Position is unchanged; editing
+	// Position makes the legacy field authoritative, including when both fields
+	// are edited. Clearing ExactOffset always falls back to Position.
+	ExactOffset *float64
 	// Value is the signed pitch offset in semitones.
 	Value   int8
 	Vibrato bool
+
+	importedPosition       uint8
+	hasImportedExactOffset bool
 }
 
 // BendEffect describes string bends and tremolo bars.
@@ -134,6 +147,10 @@ func unpackVelocity(v int16) int16 {
 // readBendEffect reads the shared binary bend-point record without applying
 // note- or beat-specific gesture semantics.
 func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
+	return s.readBendEffectWithExactOffsets(c, false)
+}
+
+func (s *Song) readBendEffectWithExactOffsets(c *cursor, preserveExactOffsets bool) (*BendEffect, error) {
 	kindByte, err := c.readSignedByte()
 	if err != nil {
 		return nil, err
@@ -161,10 +178,13 @@ func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
 		if err != nil {
 			return nil, err
 		}
-		bp := BendPoint{
-			Position: uint8(math.Round(float64(int16(posRaw)) * float64(BendEffectMaxPosition) / float64(GPBendPosition))),
-			Value:    int8(math.Round(float64(int16(valRaw)) / float64(GPBendSemitone))),
-			Vibrato:  vibrato,
+		if posRaw < 0 || posRaw > int32(GPBendPosition) {
+			return nil, fmt.Errorf("bend point %d position %d is outside 0..%d", i, posRaw, int32(GPBendPosition))
+		}
+		position := uint8(math.Round(float64(posRaw) * float64(BendEffectMaxPosition) / float64(GPBendPosition)))
+		bp := BendPoint{Position: position, Value: int8(math.Round(float64(int16(valRaw)) / float64(GPBendSemitone))), Vibrato: vibrato}
+		if preserveExactOffsets {
+			bp = importedBendPoint(float64(posRaw)*100/float64(GPBendPosition), bp.Value, vibrato)
 		}
 		be.Points = append(be.Points, bp)
 	}
@@ -175,7 +195,7 @@ func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
 }
 
 func (s *Song) readNoteBendEffect(c *cursor) (*BendEffect, error) {
-	bend, err := s.readBendEffect(c)
+	bend, err := s.readBendEffectWithExactOffsets(c, true)
 	if err != nil || bend == nil {
 		return bend, err
 	}
@@ -204,7 +224,7 @@ func canonicalizeStandardBendPoints(points []BendPoint) []BendPoint {
 		}
 		if destination.Value > origin.Value && middle.Value > destination.Value ||
 			destination.Value == origin.Value && middle.Value > origin.Value {
-			return []BendPoint{origin, middle, middle, destination}
+			return []BendPoint{origin, cloneBendPoint(middle), cloneBendPoint(middle), destination}
 		}
 		return []BendPoint{origin, destination}
 	}

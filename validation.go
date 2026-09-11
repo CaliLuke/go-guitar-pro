@@ -443,13 +443,30 @@ func validateBendEffect(effect *BendEffect, codePrefix string, location ScoreLoc
 	if effect.Kind < BendTypeNone || effect.Kind > BendTypeReleaseDown {
 		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend kind %d is not defined", effect.Kind)})
 	}
+	previousOffset := float64(0)
+	previousOffsetValid := false
 	for index, point := range effect.Points {
+		currentOffsetValid := true
+		if codePrefix == "score.note.bend" && point.ExactOffset != nil {
+			offset := *point.ExactOffset
+			if math.IsNaN(offset) || math.IsInf(offset, 0) || offset < 0 || offset > 100 {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".exact-offset", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d exact offset %v must be finite and within 0..100", index, offset)})
+				currentOffsetValid = false
+			}
+		}
 		if point.Position > uint8(BendEffectMaxPosition) {
 			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".position", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d position %d is outside 0..%d", index, point.Position, uint8(BendEffectMaxPosition))})
+			currentOffsetValid = false
 		}
-		if index > 0 && point.Position < effect.Points[index-1].Position {
-			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".order", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d position %d precedes position %d", index, point.Position, effect.Points[index-1].Position)})
+		currentOffset := float64(point.Position)
+		if codePrefix == "score.note.bend" {
+			currentOffset = resolvedBendOffset(point)
 		}
+		if index > 0 && previousOffsetValid && currentOffsetValid && currentOffset < previousOffset {
+			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".order", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d offset %v precedes offset %v", index, currentOffset, previousOffset)})
+		}
+		previousOffset = currentOffset
+		previousOffsetValid = currentOffsetValid
 	}
 }
 

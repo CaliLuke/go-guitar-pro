@@ -4457,14 +4457,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"1\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "1",
-          "locationsSha256": "6d455a691b06fefc2efa5ea17c558edafbc1c6e7715552678275650aa8e99134"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 2,
@@ -5269,14 +5261,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "0",
-          "locationsSha256": "c9a5ce3c249ab67a067cd972aaaacefae684d3ceccf73bb005b967bc7781185a"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 6,
@@ -5359,10 +5343,10 @@
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
-          "count": 56,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "0",
-          "locationsSha256": "02cf88d858cc7a078286e2e0778ca6db4d98f8f73fb564fbdb3c88887022fe12"
+          "count": 1,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"32\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
+          "objectId": "32",
+          "locationsSha256": "034676d1c87b383f58a9f55c9de3f0e5d4627403d4bca089cfe76a2a61811169"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5452,10 +5436,10 @@
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
-          "count": 48,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendDestinationOffset\"]/Float",
+          "count": 1,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
           "objectId": "0",
-          "locationsSha256": "e00bcd25326830a1917105de27685de79947babd4acfe321d39b3fa5f75e2864"
+          "locationsSha256": "41af6a9b6878e6ad94e7c0a5846e73f0a64d2cd9dc410a6ea69641851a6e589d"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5944,10 +5928,10 @@
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
-          "count": 18,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"177\"]/Properties/Property[@name=\"BendDestinationOffset\"]/Float",
-          "objectId": "177",
-          "locationsSha256": "634bd2eaab93bb3d8e748841ab3755a8ce6a1edfea6ade02e52500801abcfb30"
+          "count": 2,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"379\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
+          "objectId": "379",
+          "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -7632,14 +7616,6 @@
           "locationsSha256": "98f81380cf03bba9d124fc56c521bf1fe0ecf6c3dcf173d269674ded89433d35"
         },
         {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"34\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "34",
-          "locationsSha256": "ea2c241649ff5f45fd38ea2567ded1b035085a777be541cde1b159922c9fd367"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 346,
@@ -8466,14 +8442,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "1e343c807cbd57af3116b2ca95a380d3b220ac2b8c4df18707edbb82ad74d437"
-        },
-        {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"6\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "6",
-          "locationsSha256": "750abfbbb314df8c7aea95a99e6edf3a14bd5327e3aff73a3b7ee49f019e8c82"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11224,10 +11192,10 @@
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
-          "count": 124,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendDestinationOffset\"]/Float",
+          "count": 2,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
           "objectId": "0",
-          "locationsSha256": "e5b83d5c89b4a9257ffa2de755e8996049cc44be886acf7c1d681cf237f0b180"
+          "locationsSha256": "8ed198e3a8d4717efa8fc8dac3625c3e0e36d7cc6e9f88310db4809350840e69"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -14833,14 +14801,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"1\"]/Properties/Property[@name=\"BendDestinationOffset\"]/Float",
-          "objectId": "1",
-          "locationsSha256": "da543f5b6bebec5ee66375ce8698d34122883b178e1659bf633460bb38864d56"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 3,
@@ -14927,14 +14887,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
-        },
-        {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"20\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "20",
-          "locationsSha256": "8dbbbe3bc106d9eb9bd2a6fcd54fa1f5afc2f19ae0792f47ef341a2858c9d9a2"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15914,14 +15866,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"6\"]/Whammy/@middleOffset1",
           "objectId": "6",
           "locationsSha256": "3a8648ffcf94314702d3eebcbdebea477560f8215fd74bae13ea5517ffd82f17"
-        },
-        {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"6\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "6",
-          "locationsSha256": "750abfbbb314df8c7aea95a99e6edf3a14bd5327e3aff73a3b7ee49f019e8c82"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -16993,10 +16937,10 @@
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
-          "count": 18,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"177\"]/Properties/Property[@name=\"BendDestinationOffset\"]/Float",
-          "objectId": "177",
-          "locationsSha256": "634bd2eaab93bb3d8e748841ab3755a8ce6a1edfea6ade02e52500801abcfb30"
+          "count": 2,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"379\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
+          "objectId": "379",
+          "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -17161,14 +17105,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"12\"]/Whammy/@middleOffset1",
           "objectId": "12",
           "locationsSha256": "98f81380cf03bba9d124fc56c521bf1fe0ecf6c3dcf173d269674ded89433d35"
-        },
-        {
-          "code": "GPIF.Note.Property.BendNumber.Quantized",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"34\"]/Properties/Property[@name=\"BendMiddleOffset1\"]/Float",
-          "objectId": "34",
-          "locationsSha256": "ea2c241649ff5f45fd38ea2567ded1b035085a777be541cde1b159922c9fd367"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",

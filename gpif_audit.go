@@ -662,7 +662,12 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 	case "BendOriginOffset", "BendOriginValue", "BendMiddleOffset1", "BendMiddleOffset2", "BendMiddleValue", "BendDestinationOffset", "BendDestinationValue":
 		gpifAuditPropertyPayload(context, gpifNotePropertySources[property.Name], property.Float != nil, propertyPath, noteID, "note-and-beat-semantics", "Float")
 		if property.Float != nil {
-			gpifAuditBendNumber(context, *property.Float, strings.Contains(property.Name, "Offset"), propertyPath+"/Float", ParseLocation{NoteID: noteID}, noteID, gpifNoteBendInvalidSource, gpifNoteBendQuantizedSource)
+			offset := strings.Contains(property.Name, "Offset")
+			quantizedSource := gpifNoteBendQuantizedSource
+			if offset {
+				quantizedSource = parseDiagnosticSource{}
+			}
+			gpifAuditBendNumber(context, *property.Float, offset, propertyPath+"/Float", ParseLocation{NoteID: noteID}, noteID, gpifNoteBendInvalidSource, quantizedSource)
 		}
 	case "Slide":
 		if property.Flags == nil {
@@ -819,7 +824,7 @@ func gpifAuditBendNumber(context *parseContext, raw string, offset bool, path st
 	if offset {
 		projected = parsed * float64(BendEffectMaxPosition) / 100
 	}
-	if math.Abs(projected-math.Round(projected)) > 0.000001 {
+	if quantizedSource.code != "" && math.Abs(projected-math.Round(projected)) > 0.000001 {
 		context.add(quantizedSource, ParseDiagnostic{
 			SourcePath: path, ObjectID: objectID, Location: location,
 			Reason: fmt.Sprintf("bend number %q requires quantization to the public curve scale", raw),

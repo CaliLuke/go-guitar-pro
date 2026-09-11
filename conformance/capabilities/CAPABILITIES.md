@@ -40,6 +40,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Double bar lines | 32 | 12 | 25 |
 | Extended barline and bar-number controls | 32 | 12 | 25 |
 | Tap, slap and pop distinctions | 13 | 12 | 25 |
+| Bend curves and styles | 27 | 11 | 25 |
 | Chord diagrams, barres and fingering | 11 | 11 | 25 |
 | Pick stroke direction | 11 | 11 | 25 |
 | Wah pedal state | 11 | 11 | 25 |
@@ -147,9 +148,9 @@ Expression. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Common gestures and curves work. Narrow point units, target hold interpretation and missing BendStyle distinctions prevent full parity.
+Note bend offsets preserve exact GPIF percentages, including fractional values, through the public model and GP8 export. The legacy 0..12 Position has a parsed-edit reconciliation rule, and binary note offsets retain their checked raw 0..60 position. Bend heights remain quantized; target hold interpretation, nonmonotonic controls, and model-only style distinctions remain separate limits.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Exact note offsets are complete for the supported GP3 through GP8 sources. Keep bend-height quantization, nonmonotonic control validation, hold interpretation, and style metadata explicitly bounded until their separate tickets or target evidence are complete.
 
 Bounded work: [Preserve exact authored bend offsets](https://github.com/CaliLuke/go-guitar-pro/issues/60); [Preserve GPIF bend control roles with nonmonotonic offsets](https://github.com/CaliLuke/go-guitar-pro/issues/62).
 

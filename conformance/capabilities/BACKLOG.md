@@ -13,7 +13,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | --- | --- | ---: | --- | --- | --- |
 | [Preserve authored tempo and sound automation details](work-items/automation-detail.json) | implementation | 1 | in_progress | — | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) |
 | [Export embedded audio backing-track assets](work-items/backing-track.json) | implementation | 1 | in_progress | — | [#42](https://github.com/CaliLuke/go-guitar-pro/issues/42) |
-| [Preserve exact authored bend offsets](work-items/bends.json) | implementation | 1 | todo | — | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) |
+| [Preserve exact authored bend offsets](work-items/bends.json) | implementation | 1 | in_progress | — | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) |
 | [Preserve independent capo values on multiple staves](work-items/capo.json) | implementation | 1 | in_progress | — | [#43](https://github.com/CaliLuke/go-guitar-pro/issues/43) |
 | [Preserve bar-level clef octave shifts](work-items/clef-octave.json) | implementation | 1 | in_progress | — | [#44](https://github.com/CaliLuke/go-guitar-pro/issues/44) |
 | [Preserve navigation targets and jumps on each measure](work-items/directions.json) | implementation | 1 | in_progress | — | [#45](https://github.com/CaliLuke/go-guitar-pro/issues/45) |

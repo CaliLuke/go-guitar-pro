@@ -5,8 +5,8 @@
   "title": "Preserve exact authored bend offsets",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -90,6 +90,21 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceExactBendOffsets",
+      "detail": "Decimal GPIF offsets, binary raw boundaries, public edit reconciliation, validation, and exact GP8 properties."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesExactBendOffsets",
+      "detail": "Pinned consumer retains 35 and 35.5 percent middle controls as distinct raw 0..60 offsets."
+    },
+    {
+      "kind": "probe",
+      "reference": "testdata/gp7/bends.gp:bends",
+      "detail": "All 22 authored bends compare equal after public Go import and GP8 export; residual shape limits remain separately visible."
     }
   ],
   "shared_files": [
@@ -98,7 +113,7 @@
     "gp8_effects.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "Added an exact GPIF percentage to note bend points with a documented legacy Position reconciliation rule, preserved checked binary 0..60 offsets, used resolved offsets for curve equality, collinearity, validation, and export, and retained scoped height and shape diagnostics.",
   "verification": [],
   "issue": {
     "number": 60,

@@ -389,18 +389,17 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 		case "Bended":
 			bend.enabled = true
 		case "BendOriginOffset":
-			bend.originPosition = gpifBendPosition(p.Float)
+			bend.originOffset, _ = gpifBendOffset(p.Float)
 		case "BendOriginValue":
 			bend.originValue = gpifBendValue(p.Float)
 		case "BendMiddleOffset1":
-			bend.middlePosition1 = gpifBendPosition(p.Float)
+			bend.middleOffset1, bend.hasMiddleOffset1 = gpifBendOffset(p.Float)
 		case "BendMiddleOffset2":
-			bend.middlePosition2 = gpifBendPosition(p.Float)
+			bend.middleOffset2, bend.hasMiddleOffset2 = gpifBendOffset(p.Float)
 		case "BendMiddleValue":
 			bend.middleValue = gpifBendValue(p.Float)
 		case "BendDestinationOffset":
-			bend.destinationPosition = gpifBendPosition(p.Float)
-			bend.hasDestinationPosition = true
+			bend.destinationOffset, bend.hasDestinationOffset = gpifBendOffset(p.Float)
 		case "BendDestinationValue":
 			bend.destinationValue = gpifBendValue(p.Float)
 		case "PalmMuted":
@@ -547,37 +546,39 @@ func gpifHarmonicFret(raw *string) (*float64, bool) {
 }
 
 type gpifBendProperties struct {
-	enabled                bool
-	originPosition         uint8
-	originValue            int8
-	middlePosition1        uint8
-	middlePosition2        uint8
-	middleValue            int8
-	destinationPosition    uint8
-	hasDestinationPosition bool
-	destinationValue       int8
+	enabled              bool
+	originOffset         float64
+	originValue          int8
+	middleOffset1        float64
+	hasMiddleOffset1     bool
+	middleOffset2        float64
+	hasMiddleOffset2     bool
+	middleValue          int8
+	destinationOffset    float64
+	hasDestinationOffset bool
+	destinationValue     int8
 }
 
 func (bend gpifBendProperties) effect() *BendEffect {
-	destinationPosition := bend.destinationPosition
-	if !bend.hasDestinationPosition {
-		destinationPosition = uint8(BendEffectMaxPosition)
+	destinationOffset := bend.destinationOffset
+	if !bend.hasDestinationOffset {
+		destinationOffset = 100
 	}
-	points := []BendPoint{{Position: bend.originPosition, Value: bend.originValue}}
+	points := []BendPoint{importedBendPoint(bend.originOffset, bend.originValue, false)}
 	if bend.middleValue != 0 {
 		switch {
-		case bend.middlePosition1 == 0 && bend.middlePosition2 == 0:
-			points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition) / 2, Value: bend.middleValue})
+		case !bend.hasMiddleOffset1 && !bend.hasMiddleOffset2:
+			points = append(points, importedBendPoint(50, bend.middleValue, false))
 		default:
-			if bend.middlePosition1 != 0 {
-				points = append(points, BendPoint{Position: bend.middlePosition1, Value: bend.middleValue})
+			if bend.hasMiddleOffset1 {
+				points = append(points, importedBendPoint(bend.middleOffset1, bend.middleValue, false))
 			}
-			if bend.middlePosition2 != 0 {
-				points = append(points, BendPoint{Position: bend.middlePosition2, Value: bend.middleValue})
+			if bend.hasMiddleOffset2 {
+				points = append(points, importedBendPoint(bend.middleOffset2, bend.middleValue, false))
 			}
 		}
 	}
-	points = append(points, BendPoint{Position: destinationPosition, Value: bend.destinationValue})
+	points = append(points, importedBendPoint(destinationOffset, bend.destinationValue, false))
 	points = canonicalizeStandardBendPoints(points)
 	maximum := int8(0)
 	for _, point := range points {
@@ -600,9 +601,17 @@ func (bend gpifBendProperties) effect() *BendEffect {
 }
 
 func simplifyBendPoints(points []BendPoint) []BendPoint {
+	return simplifyCurvePoints(points, false)
+}
+
+func simplifyNoteBendPoints(points []BendPoint) []BendPoint {
+	return simplifyCurvePoints(points, true)
+}
+
+func simplifyCurvePoints(points []BendPoint, exactOffsets bool) []BendPoint {
 	result := make([]BendPoint, 0, len(points))
 	for _, point := range points {
-		if len(result) > 0 && result[len(result)-1] == point {
+		if len(result) > 0 && ((exactOffsets && sameBendPoint(result[len(result)-1], point)) || (!exactOffsets && result[len(result)-1] == point)) {
 			continue
 		}
 		result = append(result, point)
@@ -611,8 +620,11 @@ func simplifyBendPoints(points []BendPoint) []BendPoint {
 		left := result[index-1]
 		middle := result[index]
 		right := result[index+1]
-		leftSpan := int(right.Position) - int(left.Position)
-		if leftSpan > 0 && (int(middle.Value)-int(left.Value))*leftSpan == (int(right.Value)-int(left.Value))*(int(middle.Position)-int(left.Position)) {
+		leftOffset := curvePointOffset(left, exactOffsets)
+		middleOffset := curvePointOffset(middle, exactOffsets)
+		rightOffset := curvePointOffset(right, exactOffsets)
+		leftSpan := rightOffset - leftOffset
+		if leftSpan > 0 && float64(int(middle.Value)-int(left.Value))*leftSpan == float64(int(right.Value)-int(left.Value))*(middleOffset-leftOffset) {
 			result = append(result[:index], result[index+1:]...)
 			continue
 		}
@@ -621,12 +633,23 @@ func simplifyBendPoints(points []BendPoint) []BendPoint {
 	return result
 }
 
+func curvePointOffset(point BendPoint, exact bool) float64 {
+	if exact {
+		return resolvedBendOffset(point)
+	}
+	return float64(point.Position)
+}
+
 func gpifBendPosition(value *string) uint8 {
 	parsed, valid := gpifParseBendNumberPointer(value, true)
 	if !valid {
 		return 0
 	}
 	return uint8(math.Round(parsed * float64(BendEffectMaxPosition) / 100))
+}
+
+func gpifBendOffset(value *string) (float64, bool) {
+	return gpifParseBendNumberPointer(value, true)
 }
 
 func gpifBendValue(value *string) int8 {

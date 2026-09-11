@@ -780,6 +780,12 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 			omittedCode: "gp8.omit.bend-curve", normalizedCode: "gp8.normalize.bend-curve",
 			summaryCode: "gp8.omit.bend-summary", vibratoCode: "gp8.omit.bend-point-vibrato", name: "bend",
 		})
+		for _, point := range bend.Points {
+			if bendPointOffsetAuthorityConflict(point) {
+				builder.addReport("gp8.normalize.bend-offset-authority", "note-and-beat-semantics", ExportDispositionNormalized, location, "an edited imported Position takes precedence over its conflicting ExactOffset")
+				break
+			}
+		}
 	}
 	if trill := note.Effect.Trill; trill != nil {
 		canonical := defaultDuration()

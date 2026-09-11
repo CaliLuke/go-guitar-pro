@@ -232,7 +232,7 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 		"octave":         goOctave(beat.Octave),
 		"hairpin":        goHairpin(beat.Effect.Hairpin),
 		"tremoloPicking": goTremoloPicking(beat),
-		"whammy":         normalizeGoBend(beat.Effect.TremoloBar),
+		"whammy":         normalizeGoWhammy(beat.Effect.TremoloBar),
 		"notes":          notes,
 	}
 }
@@ -401,6 +401,17 @@ func normalizeGoHarmonic(harmonic *HarmonicEffect) any {
 }
 
 func normalizeGoBend(bend *BendEffect) any {
+	if bend == nil || len(bend.Points) == 0 {
+		return nil
+	}
+	points := make([]any, 0, len(bend.Points))
+	for _, point := range bend.Points {
+		points = append(points, map[string]any{"position": resolvedBendRawOffset(point), "value": point.Value})
+	}
+	return points
+}
+
+func normalizeGoWhammy(bend *BendEffect) any {
 	if bend == nil || len(bend.Points) == 0 {
 		return nil
 	}

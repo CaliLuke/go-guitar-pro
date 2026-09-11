@@ -79,7 +79,7 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 	if bend == nil {
 		return gp8BendConversion{}
 	}
-	points := simplifyBendPoints(slices.Clone(bend.Points))
+	points := simplifyNoteBendPoints(slices.Clone(bend.Points))
 	if len(points) < 2 || len(points) > 4 {
 		return gp8BendConversion{omitted: len(points) != 0}
 	}
@@ -93,7 +93,7 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 			// an initial hold and release by ending the explicit curve where the
 			// final value is reached.
 			middle1 = points[1]
-			middle2 = points[1]
+			middle2 = cloneBendPoint(points[1])
 			destination = points[2]
 		} else {
 			middle1 = points[1]
@@ -103,49 +103,58 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 		middle1 = points[1]
 		if points[1].Value == points[2].Value {
 			// A destination before the end denotes a bend followed by a hold.
-			destination = points[1]
+			destination = cloneBendPoint(points[1])
 			middle2 = points[2]
 		} else {
-			middle2 = points[1]
+			middle2 = cloneBendPoint(points[1])
 		}
 	default:
-		middle1 = BendPoint{
-			Position: uint8((uint16(origin.Position) + uint16(destination.Position)) / 2),
-			Value:    int8((int16(origin.Value) + int16(destination.Value)) / 2),
-		}
-		middle2 = middle1
+		middle1 = bendPointWithOffset((resolvedBendOffset(origin)+resolvedBendOffset(destination))/2, int8((int16(origin.Value)+int16(destination.Value))/2))
+		middle2 = cloneBendPoint(middle1)
 	}
+	originOffset := gp8BendOffset(origin)
+	middleOffset1 := gp8BendOffset(middle1)
+	middleOffset2 := gp8BendOffset(middle2)
+	destinationOffset := gp8BendOffset(destination)
 	enable := ""
 	properties := []gpifProperty{
 		{Name: "Bended", Enable: &enable},
-		{Name: "BendDestinationOffset", Float: gp8BendOffset(destination.Position)},
+		{Name: "BendDestinationOffset", Float: destinationOffset.text},
 		{Name: "BendDestinationValue", Float: gp8BendValue(destination.Value)},
-		{Name: "BendMiddleOffset1", Float: gp8BendOffset(middle1.Position)},
-		{Name: "BendMiddleOffset2", Float: gp8BendOffset(middle2.Position)},
+		{Name: "BendMiddleOffset1", Float: middleOffset1.text},
+		{Name: "BendMiddleOffset2", Float: middleOffset2.text},
 		{Name: "BendMiddleValue", Float: gp8BendValue(middle1.Value)},
-		{Name: "BendOriginOffset", Float: gp8BendOffset(origin.Position)},
+		{Name: "BendOriginOffset", Float: originOffset.text},
 		{Name: "BendOriginValue", Float: gp8BendValue(origin.Value)},
 	}
 	encoded := gpifBendProperties{
-		enabled:                true,
-		originPosition:         origin.Position,
-		originValue:            origin.Value,
-		middlePosition1:        middle1.Position,
-		middlePosition2:        middle2.Position,
-		middleValue:            middle1.Value,
-		destinationPosition:    destination.Position,
-		hasDestinationPosition: true,
-		destinationValue:       destination.Value,
+		enabled:              true,
+		originOffset:         originOffset.value,
+		originValue:          origin.Value,
+		middleOffset1:        middleOffset1.value,
+		hasMiddleOffset1:     true,
+		middleOffset2:        middleOffset2.value,
+		hasMiddleOffset2:     true,
+		middleValue:          middle1.Value,
+		destinationOffset:    destinationOffset.value,
+		hasDestinationOffset: true,
+		destinationValue:     destination.Value,
 	}
 	return gp8BendConversion{
 		properties: properties,
-		normalized: !slices.Equal(simplifyBendPoints(encoded.effect().Points), simplifyBendPoints(points)),
+		normalized: !sameBendPoints(simplifyNoteBendPoints(encoded.effect().Points), simplifyNoteBendPoints(points)),
 	}
 }
 
-func gp8BendOffset(position uint8) *string {
-	value := strconv.FormatFloat(float64(position)*100/float64(BendEffectMaxPosition), 'f', 6, 64)
-	return &value
+type gp8BendOffsetEncoding struct {
+	text  *string
+	value float64
+}
+
+func gp8BendOffset(point BendPoint) gp8BendOffsetEncoding {
+	text := strconv.FormatFloat(resolvedBendOffset(point), 'f', -1, 64)
+	value, _ := strconv.ParseFloat(text, 64)
+	return gp8BendOffsetEncoding{text: &text, value: value}
 }
 
 func gp8BendValue(value int8) *string {

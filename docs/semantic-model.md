@@ -150,6 +150,16 @@ The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
 quantizes values only at a target boundary.
 
+`BendPoint.ExactOffset` preserves a note bend's authored GPIF position as a
+percentage from 0 through 100 when the legacy 0-through-12 `Position` cannot
+represent it. A programmatic non-nil exact offset is authoritative; nil falls
+back to `Position`. On an imported point, the exact offset remains authoritative
+while `Position` is unchanged. Editing `Position` makes the legacy view
+authoritative, including when both views changed, and export reports that
+conflict. Binary note-bend offsets are checked on their native 0-through-60
+scale before conversion. Bend heights retain their existing whole-semitone
+projection. This exact-offset contract does not apply to beat whammy curves.
+
 ## Authored values and loss
 
 The model preserves ordered grace effects, staff ownership, chord scope,

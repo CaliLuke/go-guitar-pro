@@ -3110,8 +3110,8 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Common gestures and curves work. Narrow point units, target hold interpretation and missing BendStyle distinctions prevent full parity.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Note bend offsets preserve exact GPIF percentages, including fractional values, through the public model and GP8 export. The legacy 0..12 Position has a parsed-edit reconciliation rule, and binary note offsets retain their checked raw 0..60 position. Bend heights remain quantized; target hold interpretation, nonmonotonic controls, and model-only style distinctions remain separate limits.",
+      "acceptance": "Exact note offsets are complete for the supported GP3 through GP8 sources. Keep bend-height quantization, nonmonotonic control validation, hold interpretation, and style metadata explicitly bounded until their separate tickets or target evidence are complete.",
       "upstream": [
         "Note.bendPoints",
         "Note.bendType",
@@ -3148,6 +3148,21 @@
           "kind": "test",
           "reference": "TestConformanceCurveLossPolicy",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceExactBendOffsets",
+          "detail": "Covers decimal GPIF import and exact wire output, binary 0..60 boundaries, compatibility reconciliation, validation, and scoped diagnostics."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesExactBendOffsets",
+          "detail": "Pinned AlphaTab retains distinct 35 and 35.5 percent controls on its raw 0..60 offset scale."
+        },
+        {
+          "kind": "probe",
+          "reference": "testdata/gp7/bends.gp:bends",
+          "detail": "All 22 authored bends compare equal after Go GP8 export; broader shape differences remain visible on their individual fixtures."
         }
       ]
     },

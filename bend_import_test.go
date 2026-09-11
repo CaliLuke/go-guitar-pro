@@ -3,6 +3,7 @@
 package goguitarpro
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 	"testing"
@@ -62,7 +63,11 @@ func TestParseCanonicalizesStandardBendCurves(t *testing.T) {
 			if bend == nil {
 				t.Fatal("bend is nil")
 			}
-			if !slices.Equal(bend.Points, test.want) {
+			legacyPoints := make([]BendPoint, len(bend.Points))
+			for index, point := range bend.Points {
+				legacyPoints[index] = BendPoint{Position: point.Position, Value: point.Value, Vibrato: point.Vibrato}
+			}
+			if !slices.Equal(legacyPoints, test.want) {
 				t.Fatalf("bend points = %#v, want %#v", bend.Points, test.want)
 			}
 		})
@@ -99,7 +104,7 @@ func TestAlphaTabBendCorpusConformance(t *testing.T) {
 		for _, difference := range semanticDifferences(goFeatures, alphaFeatures) {
 			semanticPath := conformanceCorpusSemanticPath(difference.Path, goFeatures, alphaFeatures)
 			if strings.Contains(semanticPath, "/effects/bend") {
-				bendDifferences = append(bendDifferences, fixture+":"+semanticPath)
+				bendDifferences = append(bendDifferences, fmt.Sprintf("%s:%s Go=%v AlphaTab=%v", fixture, semanticPath, difference.Go, difference.AlphaTab))
 			}
 		}
 	}

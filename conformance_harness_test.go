@@ -135,6 +135,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestGP8WhammyMiddleHoldReportsInterpretedLoss":     runConformanceWhammyTargetInterpretation,
 	"TestConformanceCurveLossPolicy":                    runConformanceCurveLossPolicy,
 	"TestConformanceCurveValidation":                    runConformanceCurveValidation,
+	"TestConformanceExactBendOffsets":                   runConformanceExactBendOffsets,
 	"TestConformanceHarmonicVariants":                   runConformanceHarmonicVariants,
 	"TestConformanceGPIFCompatibilityAndDiagnostics":    runConformanceGPIFCompatibilityAndDiagnostics,
 	"TestConformanceHarmonicAuthorityAndValidation":     runConformanceHarmonicAuthorityAndValidation,

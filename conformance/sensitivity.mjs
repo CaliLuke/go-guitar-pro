@@ -342,7 +342,7 @@ const mutations = [
     contract: 'whammy-corpus-projection',
     category: 'adapter',
     file: 'conformance_go_adapter_test.go',
-    before: '\t\t"whammy":         normalizeGoBend(beat.Effect.TremoloBar),\n',
+    before: '\t\t"whammy":         normalizeGoWhammy(beat.Effect.TremoloBar),\n',
     after: '\t\t"whammy":         nil,\n',
     test: '^TestWhammyProjectionAdaptersExposeBeatCurves$',
     want: 'Go corpus whammy projection'
@@ -352,7 +352,7 @@ const mutations = [
     contract: 'whammy-corpus-projection',
     category: 'adapter',
     file: 'conformance/oracle.mjs',
-    before: '      tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,\n      whammy: normalizeBend(beat.whammyBarPoints),\n      notes\n',
+    before: '      tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,\n      whammy: normalizeWhammy(beat.whammyBarPoints),\n      notes\n',
     after: '      tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,\n      whammy: null,\n      notes\n',
     command: 'oracle-test',
     test: '^TestAlphaTabBinaryWhammyProjection$',

@@ -218,7 +218,7 @@ assert.equal(normalizeGrace(
 
 assert.deepEqual(normalizeBend([{ offset: 0, value: 2 }, { offset: 60, value: 4 }]), [
   { position: 0, value: 2 },
-  { position: 12, value: 4 }
+  { position: 60, value: 4 }
 ]);
 assert.deepEqual(normalizeAutomation({ ratioPosition: 0.25, value: 120.5, isLinear: true, type: 0 }, 3), {
   bar: 3,

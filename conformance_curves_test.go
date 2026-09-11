@@ -83,7 +83,7 @@ func runConformanceCurvePreservation(run *conformanceRun) {
 	run.Wire("gpifProperty.Float", []string{
 		wire.bend["BendOriginOffset"], wire.bend["BendMiddleOffset1"], wire.bend["BendMiddleValue"],
 		wire.bend["BendDestinationOffset"], wire.bend["BendDestinationValue"],
-	}, []string{"0.000000", "50.000000", "50.000000", "100.000000", "100.000000"})
+	}, []string{"0", "50", "50.000000", "100", "100.000000"})
 	run.Wire("gpifBeat.Whammy", len(wire.whammy) != 0, true)
 	run.Wire("gpifWhammy.OriginValue", wire.whammy["originValue"], "0.000000")
 	run.Wire("gpifWhammy.MiddleValue", wire.whammy["middleValue"], "50.000000")
@@ -93,10 +93,10 @@ func runConformanceCurvePreservation(run *conformanceRun) {
 	run.Wire("gpifWhammy.MiddleOffset2", wire.whammy["middleOffset2"], "50.000000")
 	run.Wire("gpifWhammy.DestinationOffset", wire.whammy["destinationOffset"], "100.000000")
 	for name, want := range map[string]string{
-		"BendOriginOffset":      "0.000000",
-		"BendMiddleOffset1":     "50.000000",
+		"BendOriginOffset":      "0",
+		"BendMiddleOffset1":     "50",
 		"BendMiddleValue":       "50.000000",
-		"BendDestinationOffset": "100.000000",
+		"BendDestinationOffset": "100",
 		"BendDestinationValue":  "100.000000",
 	} {
 		if got := wire.bend[name]; got != want {
@@ -112,8 +112,8 @@ func runConformanceCurvePreservation(run *conformanceRun) {
 		}
 	}
 	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
-		got := conformanceCurveAlphaTabFirstBend(t, data)
-		want := []BendPoint{{Position: 0, Value: 0}, {Position: 12, Value: 4}}
+		got := conformanceCurveAlphaTabFirstBendOffsets(t, data)
+		want := []float64{0, 60}
 		if !slices.Equal(got, want) {
 			t.Fatalf("AlphaTab bend controls = %#v, want %#v", got, want)
 		}
@@ -376,18 +376,10 @@ func runConformanceCurveValidation(run *conformanceRun) {
 		name  string
 		value string
 	}{
-		{name: "offset", value: "12.5"},
-		{name: "endpoint offset", value: "95.833333"},
 		{name: "value", value: "37.5"},
 	} {
 		t.Run("GPIF quantized "+test.name, func(t *testing.T) {
-			property := "BendMiddleOffset1"
-			if test.name == "endpoint offset" {
-				property = "BendDestinationOffset"
-			}
-			if test.name == "value" {
-				property = "BendOriginValue"
-			}
+			property := "BendOriginValue"
 			data := diagnosticGP8Fixture(t, func(gpif string) string {
 				return insertFirstNoteProperty(t, gpif, `<Property name="Bended"><Enable/></Property><Property name="`+property+`"><Float>`+test.value+`</Float></Property>`)
 			})
@@ -524,26 +516,4 @@ func conformanceCurveWhammyXML(attribute, value string) string {
 		`" destinationValue="` + values["destinationValue"] + `" originOffset="` + values["originOffset"] +
 		`" middleOffset1="` + values["middleOffset1"] + `" middleOffset2="` + values["middleOffset2"] +
 		`" destinationOffset="` + values["destinationOffset"] + `"/>`
-}
-
-func conformanceCurveAlphaTabFirstBend(t *testing.T, data []byte) []BendPoint {
-	t.Helper()
-	root, ok := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
-	if !ok {
-		t.Fatalf("AlphaTab root = %T", root)
-	}
-	tracks := root["tracks"].([]any)
-	staves := tracks[0].(map[string]any)["staves"].([]any)
-	bars := staves[0].(map[string]any)["bars"].([]any)
-	voices := bars[0].(map[string]any)["voices"].([]any)
-	beats := voices[0].(map[string]any)["beats"].([]any)
-	notes := beats[0].(map[string]any)["notes"].([]any)
-	effects := notes[0].(map[string]any)["effects"].(map[string]any)
-	points := effects["bend"].([]any)
-	result := make([]BendPoint, 0, len(points))
-	for _, raw := range points {
-		point := raw.(map[string]any)
-		result = append(result, BendPoint{Position: uint8(point["position"].(float64)), Value: int8(point["value"].(float64))})
-	}
-	return result
 }

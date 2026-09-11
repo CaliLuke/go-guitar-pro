@@ -60,7 +60,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.Slide.InvalidFlags` | `note-and-beat-semantics` | `invalid-data` | Slide flags must be a non-negative integer. |
 | `GPIF.Note.Property.Slide.UnknownFlags` | `note-and-beat-semantics` | `unsupported-feature` | The slide flag contains a bit that the public enum does not define. |
 | `GPIF.Note.Property.BendNumber.Invalid` | `note-and-beat-semantics` | `invalid-data` | A bend number must be finite and inside the public curve range. |
-| `GPIF.Note.Property.BendNumber.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public bend curve uses a narrower integer scale. |
+| `GPIF.Note.Property.BendNumber.Quantized` | `note-and-beat-semantics` | `lossy-projection` | Note bend heights still use a narrower integer semitone scale; exact note offsets are preserved separately. |
 | `GPIF.Beat.Whammy.Invalid` | `note-and-beat-semantics` | `invalid-data` | A whammy number must be finite and inside the public curve range. |
 | `GPIF.Beat.Whammy.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public whammy curve uses a narrower integer scale. |
 | `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
@@ -245,7 +245,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
-| `BendPoint` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend point contains authored curve data. |
+| `BendPoint` | `note-and-beat-semantics` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The bend point preserves authored curve data. Position is the legacy note-offset view when ExactOffset is present. |
 | `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
 | `HarmonicEffect` | `harmonics` | 4 authored, 1 compatibility, 0 derived, 0 out-of-scope | The harmonic effect preserves authored kind and pitch data. Fret is a legacy view. |
 | `TremoloPickingEffect` | `tremolo-picking` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The effect preserves the authored tremolo subdivision and independently classifies its notation style. |
@@ -266,7 +266,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 216 |
+| `preserved` | 217 |
 | `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -277,7 +277,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 85 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 86 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
 
 ## GPIF wire inventory
 

@@ -272,6 +272,16 @@ export function normalizeBend(points) {
     return null;
   }
   return points.map(point => ({
+    position: Math.round(finite(point.offset) * 1e9) / 1e9,
+    value: point.value
+  }));
+}
+
+export function normalizeWhammy(points) {
+  if (!points || points.length === 0) {
+    return null;
+  }
+  return points.map(point => ({
     position: Math.round(point.offset * 12 / 60),
     value: point.value
   }));
@@ -428,7 +438,7 @@ function normalizeVoice(voice, staff) {
       octave: normalizeOttavia(beat.ottava),
       hairpin: normalizeHairpin(beat.crescendo),
       tremoloPicking: beat.tremoloPicking ? 1 << (beat.tremoloPicking.marks + 2) : null,
-      whammy: normalizeBend(beat.whammyBarPoints),
+      whammy: normalizeWhammy(beat.whammyBarPoints),
       notes
     });
   }
@@ -447,7 +457,7 @@ function normalizeVoice(voice, staff) {
       octave: normalizeOttavia(graceBeat.ottava),
       hairpin: 'none',
       tremoloPicking: null,
-      whammy: normalizeBend(graceBeat.whammyBarPoints),
+      whammy: normalizeWhammy(graceBeat.whammyBarPoints),
       notes: graceBeat.notes.map(note => normalizeNote(note, staff, []))
     });
   }

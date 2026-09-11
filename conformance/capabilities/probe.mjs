@@ -38,7 +38,7 @@ const definitions = {
     'tap-slap-pop': ['tap', 'slap', 'pop'], 'tremolo': ['tremoloPicking'],
     'beaming': ['beamingMode', 'invertBeamDirection', 'preferredBeamDirection'],
     'timer': ['showTimer', 'timer'], 'beat-octave': ['ottava'] },
-  Note: { 'note-vibrato': ['vibrato'], 'tenuto': ['accentuated'],
+  Note: { 'note-vibrato': ['vibrato'], 'tenuto': ['accentuated'], 'bends': ['bendPoints'],
     'tapping': ['isLeftHandTapped'], 'ornaments': ['ornament'],
     'fingering': ['leftHandFinger', 'rightHandFinger'],
     'show-string': ['showStringNumber'], 'note-display': ['isVisible'],
@@ -54,7 +54,7 @@ function plain(value) {
   if (value instanceof Set) return [...value].sort();
   if (Array.isArray(value)) return value.map(plain);
   // Only explicitly selected authored sub-records. Never serialize graph pointers.
-  const keys = ['type', 'length', 'marker', 'text', 'marks', 'style', 'groups', 'ratioPosition', 'pedalType'];
+  const keys = ['type', 'length', 'marker', 'text', 'marks', 'style', 'groups', 'ratioPosition', 'pedalType', 'offset', 'value'];
   return Object.fromEntries(keys.filter(k => Object.hasOwn(value, k)).map(k => [k, plain(value[k])]));
 }
 
