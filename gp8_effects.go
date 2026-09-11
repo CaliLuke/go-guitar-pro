@@ -88,7 +88,7 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 	var middle1, middle2 BendPoint
 	switch len(points) {
 	case 4:
-		if points[0].Value == points[1].Value && points[2].Value == points[3].Value {
+		if !nonmonotonicBendControlRoles(points) && points[0].Value == points[1].Value && points[2].Value == points[3].Value {
 			// GPIF keeps the destination value through the end of the note. Encode
 			// an initial hold and release by ending the explicit curve where the
 			// final value is reached.

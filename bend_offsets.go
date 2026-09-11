@@ -71,3 +71,14 @@ func sameBendPoints(left, right []BendPoint) bool {
 	}
 	return true
 }
+
+// nonmonotonicBendControlRoles recognizes the bounded GPIF role tuple whose
+// destination precedes a middle control. The two middle roles share one value.
+func nonmonotonicBendControlRoles(points []BendPoint) bool {
+	if len(points) != 4 || points[1].Value != points[2].Value {
+		return false
+	}
+	origin, middle1 := resolvedBendOffset(points[0]), resolvedBendOffset(points[1])
+	middle2, destination := resolvedBendOffset(points[2]), resolvedBendOffset(points[3])
+	return origin <= middle1 && middle1 <= middle2 && origin <= destination && destination < middle2
+}

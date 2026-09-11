@@ -526,6 +526,31 @@ function loadScore(fixture) {
   return alphaTab.importer.ScoreLoader.loadScoreFromBytes(bytes, settings);
 }
 
+// Retained consumer controls, before the normalized comparison projection.
+export function loadCurveGraceFacts(fixture) {
+  const facts = [];
+  for (const track of loadScore(fixture).tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            for (const note of beat.notes) {
+              if (!note.bendPoints && beat.graceType === 0 && (!beat.previousBeat || beat.previousBeat.graceType === 0)) continue;
+              facts.push({track: track.index, staff: staff.index, bar: bar.index,
+                voice: voice.index, beat: beat.index, note: note.index,
+                graceType: beat.graceType, string: note.string, fret: note.fret,
+                duration: beat.duration, dynamic: note.dynamics,
+                bend: (note.bendPoints ?? []).map(p => ({offset: p.offset, value: p.value})),
+                slide: note.slideOutType, hammer: note.isHammerPullOrigin});
+            }
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadNormalizedScore(fixture) {
   return normalizeScore(loadScore(fixture));
 }
@@ -1193,6 +1218,10 @@ function main() {
   }
   if (args[0] === '--section-track-names' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadSectionTrackNameFacts(args[1]))}\n`);
+    return;
+  }
+  if (args[0] === '--curve-grace' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadCurveGraceFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--batch') {

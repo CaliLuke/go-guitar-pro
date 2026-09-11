@@ -5,8 +5,8 @@
   "title": "Preserve GPIF bend control roles with nonmonotonic offsets",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:bend-grace",
   "formats": [
     "gp3",
     "gp4",
@@ -90,6 +90,26 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBendControlRoles",
+      "detail": "Named four-role offsets survive without sorting. Canon GP7/GP8 note177 retains 0,50,50,35. Whole original export remains rejected for track2 sound event1 (bar179, position2, sound1); isolated export removes only that asserted event. Pinned AlphaTab keeps matching hold endpoints0,21/value4. Implementation awaits fresh acceptance review and centralized full gates."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabBendControlRoles",
+      "detail": "Independent retained consumer facts use AlphaTab1.8.4 at source revision022a45c8e42370f9e12e68949d11eada370da83d."
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L975",
+      "symbol": "Note.finish"
+    },
+    {
+      "kind": "regression",
+      "reference": "TestGP8BendControlRoles",
+      "detail": "Before the fix on basecf139522378e4fed5ea487383e2bb5e13d29a45e, the valid four-role programmatic tuple failed score.note.bend.order. Original canon exports failed bend point3 offset25 precedes50. Focused public regression now validates monotonic and bounded nonmonotonic tuples; invalid shapes and numeric bounds still reject."
     }
   ],
   "shared_files": [

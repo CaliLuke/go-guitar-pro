@@ -151,9 +151,9 @@ Expression. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Note bend offsets preserve exact GPIF percentages, including fractional values, through the public model and GP8 export. The legacy 0..12 Position has a parsed-edit reconciliation rule, and binary note offsets retain their checked raw 0..60 position. Bend heights remain quantized; target hold interpretation, nonmonotonic controls, and model-only style distinctions remain separate limits.
+Exact note-bend offsets and bounded nonmonotonic GPIF role tuples survive the public model and GP8 wire output without sorting. Pinned AlphaTab retains the same standard-gesture controls from source and export. Bend heights, arbitrary unordered shapes, target hold interpretation and style distinctions remain explicit limits.
 
-Completion criterion: Exact note offsets are complete for the supported GP3 through GP8 sources. Keep bend-height quantization, nonmonotonic control validation, hold interpretation, and style metadata explicitly bounded until their separate tickets or target evidence are complete.
+Completion criterion: Keep exact offsets and the four-role shared-middle-value tuple covered. Preserve numeric and arbitrary-curve validation. Track broader height, hold interpretation and style distinctions separately.
 
 Bounded work: [Preserve exact authored bend offsets](https://github.com/CaliLuke/go-guitar-pro/issues/60); [Preserve GPIF bend control roles with nonmonotonic offsets](https://github.com/CaliLuke/go-guitar-pro/issues/62).
 
@@ -175,9 +175,9 @@ Expression. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Ordered note-level graces preserve several fields. Full beat-level grace chords, timing/style distinctions and target duration/transition restrictions need further evidence.
+Ordered grace/chord structure and before/on-beat placement have focused coverage. The real GP4 transition2 record survives Parse. GP8 explicitly omits grace Bend at its owning note and requires exact loss allowance. Pinned AlphaTab ignores the original transition and finalizes grace timing; its absence is not evidence of preservation.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Retain ordered None/Slide/Hammer controls and the exact Bend omission policy. Future Bend preservation requires independently verified curve semantics; authored versus finalized grace timing and raw provenance remain separate.
 
 Bounded work: [Verify legacy grace-bend preservation and explicit export omission](https://github.com/CaliLuke/go-guitar-pro/issues/65).
 

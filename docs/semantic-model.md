@@ -597,6 +597,21 @@ destination offset means the end of the note. A middle value without middle
 offsets means the midpoint. GP8 export reports an authored initial or final
 hold when this standard gesture encoding cannot keep the hold boundary.
 
+Four-point note bends also represent named GPIF roles: origin, middle1,
+middle2, and destination. A bounded tuple can place the destination before
+middle2 when both middle values match, origin precedes both middles, and the
+destination does not precede origin. Import and export retain all four roles
+and exact offsets without sorting. Other unordered curves remain invalid.
+Finite offset bounds, point vibrato, and unsupported shapes retain their
+existing checks and loss reports. Beat whammy validation does not change.
+
+The GP7 and GP8 canon sources author note177 at offsets 0, 50, 50, 35.
+Go preserves those controls. Pinned AlphaTab keeps only the hold endpoints
+at offsets 0 and 21 on its 0-through-60 scale, for both source and output.
+The complete source still fails export because track2 sound event1 has
+bar179 and position2. The isolated bend regression removes only that event;
+it does not expand the sound-event domain.
+
 GP8 percussion resources cover every resolved staff, including articulations
 used only by grace notes. The writer emits staff definitions before the shared
 instrument set because the pinned consumer applies that set only to staves that
@@ -639,6 +654,20 @@ placement, transition, and supported duration. GP8 reports a raw source fret,
 an unsupported duration, a conflicting legacy fret, a noncanonical velocity,
 or a bend transition. Reused grace definitions produce independent occurrence
 data.
+
+The GP4 fade-to-black grace record at byte70913 is `16 06 02 02`.
+Public Parse retains transition Bend at track6/measure201/voice0/beat4/note0/grace0,
+with fret22, raw fret22, duration32, velocity95, and before-beat placement.
+Pinned AlphaTab ignores this transition byte. Its raw grace beat4 precedes
+owner beat5 on string6 and has no bend, slide, or hammer effect.
+Its finalized grace duration8 does not replace the authored duration32.
+
+GP8 reports `gp8.omit.grace-bend-transition` at the owning note. Strict export
+refuses output unless that exact omission is allowed. Allowed output keeps
+the grace placement and owning string; it does not fabricate a bend curve.
+Matching absence in the pinned consumer proves this omission policy only.
+Future preservation requires independently verified curve semantics, not a
+curve inferred from adjacent frets.
 
 Percussion articulations retain separate notation and playback identities even
 when two definitions use the same output MIDI value. GP8 also creates builtin

@@ -5,8 +5,8 @@
   "title": "Verify legacy grace-bend preservation and explicit export omission",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:bend-grace",
   "formats": [
     "gp3",
     "gp4",
@@ -164,6 +164,21 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceGraceBendPolicy",
+      "detail": "GP4 source hash and record16060202 at70913 retain Transition=Bend at6/201/0/4/0/grace0, fret22/raw22/duration32/velocity95/beforebeat. Isolated before/onbeat Bend requires exactly gp8.omit.grace-bend-transition. Pinned source and output consumer omit the transition and finalize grace duration32 to8; this is an explicit importer/target limit, not proof of preservation. Implementation awaits fresh acceptance review and centralized full gates."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabGraceBendPolicy",
+      "detail": "Independent retained consumer facts use AlphaTab1.8.4 at source revision022a45c8e42370f9e12e68949d11eada370da83d."
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1510",
+      "symbol": "Gp3To5Importer.readGrace"
     }
   ],
   "shared_files": [

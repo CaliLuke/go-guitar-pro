@@ -601,6 +601,7 @@ func validateBendEffect(effect *BendEffect, codePrefix string, location ScoreLoc
 	}
 	previousOffset := float64(0)
 	previousOffsetValid := false
+	roleTuple := codePrefix == "score.note.bend" && nonmonotonicBendControlRoles(effect.Points)
 	for index, point := range effect.Points {
 		currentOffsetValid := true
 		if codePrefix == "score.note.bend" && point.ExactOffset != nil {
@@ -618,7 +619,7 @@ func validateBendEffect(effect *BendEffect, codePrefix string, location ScoreLoc
 		if codePrefix == "score.note.bend" {
 			currentOffset = resolvedBendOffset(point)
 		}
-		if index > 0 && previousOffsetValid && currentOffsetValid && currentOffset < previousOffset {
+		if index > 0 && previousOffsetValid && currentOffsetValid && currentOffset < previousOffset && !roleTuple {
 			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: codePrefix + ".order", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("bend point %d offset %v precedes offset %v", index, currentOffset, previousOffset)})
 		}
 		previousOffset = currentOffset

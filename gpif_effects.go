@@ -652,6 +652,12 @@ func (bend gpifBendProperties) effect() *BendEffect {
 		}
 	}
 	points = append(points, importedBendPoint(destinationOffset, bend.destinationValue, false))
+	if bend.middleValue == 0 && bend.hasMiddleOffset1 && bend.hasMiddleOffset2 {
+		roles := []BendPoint{points[0], importedBendPoint(bend.middleOffset1, 0, false), importedBendPoint(bend.middleOffset2, 0, false), points[len(points)-1]}
+		if nonmonotonicBendControlRoles(roles) {
+			points = roles
+		}
+	}
 	points = canonicalizeStandardBendPoints(points)
 	maximum := int8(0)
 	for _, point := range points {
@@ -678,6 +684,9 @@ func simplifyBendPoints(points []BendPoint) []BendPoint {
 }
 
 func simplifyNoteBendPoints(points []BendPoint) []BendPoint {
+	if nonmonotonicBendControlRoles(points) {
+		return points
+	}
 	return simplifyCurvePoints(points, true)
 }
 

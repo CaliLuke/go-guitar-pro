@@ -307,7 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 110 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 112 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -448,3 +448,5 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `isolated-harmonic-member-report` | `harmonics` | `TestConformanceHarmonicVariants` | none | yes | Pitch and octave each trigger the shared harmonic omission report in isolation. |
 | `isolated-chord-legacy-report` | `note-and-beat-semantics` | `TestConformanceChordDefinitions` | none | yes | Every legacy chord field triggers the shared omission report in isolation. |
 | `section-track-names` | `score-core` | `TestConformanceSectionTrackNames` | `TestAlphaTabSectionTrackNames` | yes | Distinct authored values, empty and absent records, post-parse authority, exact XML and final consumer results, with scoped empty-name and boundary-whitespace reports. |
+| `bend-control-roles` | `note-and-beat-semantics` | `TestConformanceBendControlRoles` | `TestAlphaTabBendControlRoles` | no | Named roles retain exact offsets; pinned consumer retains the same standard-gesture controls from source and output. |
+| `grace-bend-omission` | `note-and-beat-semantics` | `TestConformanceGraceBendPolicy` | `TestAlphaTabGraceBendPolicy` | no | Real binary transition2 survives Parse; strict export requires the exact reported omission and never invents a bend curve. The independent consumer limitation is explicit. |

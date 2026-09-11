@@ -206,6 +206,9 @@ func (s *Song) readNoteBendEffect(c *cursor) (*BendEffect, error) {
 // canonicalizeStandardBendPoints removes the control points that Guitar Pro
 // uses to identify a standard bend gesture. It keeps custom curves unchanged.
 func canonicalizeStandardBendPoints(points []BendPoint) []BendPoint {
+	if nonmonotonicBendControlRoles(points) {
+		return points
+	}
 	if len(points) == 4 {
 		origin, middle1, middle2, destination := points[0], points[1], points[2], points[3]
 		if middle1.Vibrato || middle2.Vibrato || middle1.Value != middle2.Value {

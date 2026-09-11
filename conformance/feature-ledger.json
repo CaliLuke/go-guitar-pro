@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "0cbae75ddd0df090ed081aca16df59c79151c2f7f76ca82b8bc502f183e2b093",
+    "obligationDigest": "56f904ab9f3d2dec9b2d1692ae00afc0ff6ab9ab35530f965ca634b7e987ce2d",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -251,6 +251,84 @@
         "oracle": "TestAlphaTabHarmonicConsumerPolicy asserts explicit raw consumer kind/fret for each kind and spelling combination. TestHarmonicSpellingSelectivePolicy verifies precise reports, all allowance subsets, owner identity and source nonmutation. Existing variants retain exact wire and parser boundary coverage.",
         "limitations": [
           "Legacy harmonic-specific pitch and octave have no retained GPIF destination. Export remains partial for spelling; harmonic kind and fractional fret remain supported."
+        ]
+      },
+      {
+        "id": "M12-BEND-CONTROL-ROLES",
+        "family": "M12",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceBendControlRoles",
+        "formats": [
+          "GP7",
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "import",
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "named origin/middle1/middle2/destination offsets 0,50,50,35",
+          "nonzero and zero equal-height hold controls and hump controls",
+          "exact original canon note177",
+          "bounded role tuple and arbitrary unordered rejection"
+        ],
+        "oracle": "Exact source GPIF, public validation and strict export, exact output GPIF and Go reparse, pinned AlphaTab retained controls.",
+        "limitations": [
+          "Only four role controls with equal middle values, ordered origin/middles, and destination within origin..middle2 qualify.",
+          "Pinned AlphaTab removes middle hold controls; source and export retain the same consumer endpoints.",
+          "Original canon export still rejects track2 sound event1 at bar179 position2; the isolated export removes only this exact independently invalid event."
+        ]
+      },
+      {
+        "id": "M15-GRACE-BEND-POLICY",
+        "family": "M15",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceGraceBendPolicy",
+        "formats": [
+          "GP4",
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "import",
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "GP4 fade-to-black source record16060202 at70913",
+          "transition Bend and fret22/raw22/duration32/velocity95 at6/201/0/4/0/0",
+          "before-beat and on-beat isolated exact fret2 duration32 Forte with no RawFret",
+          "selective omission allowance and exact owning string/chord identity"
+        ],
+        "oracle": "Exact binary record and source hash, public Parse, GPIF and Go output, raw pinned AlphaTab grace/owner facts.",
+        "limitations": [
+          "Pinned legacy importer ignores transition2; matching consumer absence does not prove preservation.",
+          "Pinned consumer finalizes authored duration32 to8 for these graces.",
+          "GP8 retains gp8.omit.grace-bend-transition; future preservation needs independently verified curve semantics."
         ]
       }
     ],
@@ -576,29 +654,29 @@
       "TrillEffect.Duration": ["M11-TECHNIQUE-DISPOSITIONS"],
       "BeatEffects.TremoloBar": ["M12-CURVE-PRESERVATION","M12-WHAMMY-TARGET-INTERPRETATION"],
       "NoteEffect.Bend": ["M12-CURVE-PRESERVATION","M22-GRACE-COMBINATIONS","M22-EFFECTS-DYNAMICS"],
-      "BendEffect.Points": ["M12-CURVE-PRESERVATION","M22-EFFECTS-DYNAMICS"],
+      "BendEffect.Points": ["M12-CURVE-PRESERVATION","M22-EFFECTS-DYNAMICS","M12-BEND-CONTROL-ROLES"],
       "BendEffect.Kind": ["M12-CURVE-LOSS-POLICY"],
       "BendEffect.Value": ["M12-CURVE-LOSS-POLICY"],
-      "BendPoint.Position": ["M12-CURVE-PRESERVATION","M12-EXACT-BEND-OFFSETS"],
-      "BendPoint.ExactOffset": ["M12-EXACT-BEND-OFFSETS"],
-      "BendPoint.Value": ["M12-CURVE-PRESERVATION"],
+      "BendPoint.Position": ["M12-CURVE-PRESERVATION","M12-EXACT-BEND-OFFSETS","M12-BEND-CONTROL-ROLES"],
+      "BendPoint.ExactOffset": ["M12-EXACT-BEND-OFFSETS","M12-BEND-CONTROL-ROLES"],
+      "BendPoint.Value": ["M12-CURVE-PRESERVATION","M12-BEND-CONTROL-ROLES"],
       "BendPoint.Vibrato": ["M12-CURVE-PRESERVATION","M12-CURVE-LOSS-POLICY"],
       "HarmonicEffect.Kind": ["M13-HARMONIC-VARIANTS","M22-EFFECTS-DYNAMICS","M13-HARMONIC-CONSUMER-POLICY"],
       "HarmonicEffect.Fret": ["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS"],
       "HarmonicEffect.FretFloat": ["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS","M13-HARMONIC-CONSUMER-POLICY"],
       "HarmonicEffect.Pitch": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-CONSUMER-POLICY"],
       "HarmonicEffect.Octave": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-CONSUMER-POLICY"],
-      "GraceEffect.Duration": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS"],
-      "GraceEffect.Fret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE"],
-      "GraceEffect.ExactFret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-COMBINED-GRACE-EFFECTS","M16-NATIVE-FALLBACKS"],
-      "GraceEffect.RawFret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE"],
+      "GraceEffect.Duration": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-GRACE-BEND-POLICY"],
+      "GraceEffect.Fret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-GRACE-BEND-POLICY"],
+      "GraceEffect.ExactFret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-COMBINED-GRACE-EFFECTS","M16-NATIVE-FALLBACKS","M15-GRACE-BEND-POLICY"],
+      "GraceEffect.RawFret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-GRACE-BEND-POLICY"],
       "GraceEffect.PercussionArticulation": ["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY","M22-GRACE-COMBINATIONS"],
       "GraceEffect.HasPercussionArticulation": ["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M16-PERCUSSION-IDENTITY","M22-GRACE-COMBINATIONS"],
       "GraceEffect.IsDead": ["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS"],
-      "GraceEffect.IsOnBeat": ["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS"],
+      "GraceEffect.IsOnBeat": ["M15-ORDERED-GRACE-EXPORT","M15-COMBINED-GRACE-EFFECTS","M15-GRACE-BEND-POLICY"],
       "GraceEffect.Sequence": ["M15-ORDERED-GRACE-EXPORT"],
-      "GraceEffect.Transition": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS"],
-      "GraceEffect.Velocity": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS"],
+      "GraceEffect.Transition": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-COMBINED-GRACE-EFFECTS","M22-GRACE-COMBINATIONS","M15-GRACE-BEND-POLICY"],
+      "GraceEffect.Velocity": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-GRACE-BEND-POLICY"],
       "PercussionArticulation.ElementName": ["M16-PERCUSSION-IDENTITY"],
       "PercussionArticulation.ElementType": ["M16-PERCUSSION-IDENTITY"],
       "PercussionArticulation.ElementSoundbankName": ["M16-PERCUSSION-IDENTITY"],
@@ -776,7 +854,7 @@
       "gpifBar.Clef": ["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
       "gpifBar.Ottavia": ["M07-CLEF-OCTAVE","M20-SOURCE-AUDIT"],
       "gpifBar.SimileMark": ["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
-      "gpifRhythm.NoteValue": ["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifRhythm.NoteValue": ["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M15-GRACE-BEND-POLICY"],
       "gpifRhythm.AugmentationDot": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
       "gpifAugDot.Count": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
       "gpifRhythm.PrimaryTuplet": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
@@ -793,7 +871,7 @@
       "gpifPitch.Step": ["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
       "gpifPitch.Accidental": ["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
       "gpifPitch.Octave": ["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
-      "gpifBeat.Notes": ["M09-NOTE-REPRESENTATION","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M10-TIMED-EMPTY-VOICE"],
+      "gpifBeat.Notes": ["M09-NOTE-REPRESENTATION","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M10-TIMED-EMPTY-VOICE","M15-GRACE-BEND-POLICY"],
       "gpifBeat.XProperties": ["M10-BEAMING","M10-BRUSH","M20-SOURCE-AUDIT"],
       "gpifBeat.TransposedPitchStemOrientation": ["M10-BEAMING","M20-SOURCE-AUDIT"],
       "gpifBeat.UserTransposedPitchStemOrientation": ["M10-BEAMING","M20-SOURCE-AUDIT"],
@@ -824,7 +902,7 @@
       "gpifProperty.Enable": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
       "gpifProperty.Flags": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
       "gpifProperty.HType": ["M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT","M13-HARMONIC-CONSUMER-POLICY"],
-      "gpifProperty.Float": ["M12-CURVE-PRESERVATION","M12-EXACT-BEND-OFFSETS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
+      "gpifProperty.Float": ["M12-CURVE-PRESERVATION","M12-EXACT-BEND-OFFSETS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT","M12-BEND-CONTROL-ROLES"],
       "gpifProperty.HFret": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-AUTHORITY","M20-SOURCE-AUDIT","M13-HARMONIC-CONSUMER-POLICY"],
       "gpifBeat.Whammy": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
       "gpifWhammy.OriginValue": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
@@ -834,7 +912,7 @@
       "gpifWhammy.MiddleOffset1": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
       "gpifWhammy.MiddleOffset2": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
       "gpifWhammy.DestinationOffset": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
-      "gpifBeat.GraceNotes": ["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
+      "gpifBeat.GraceNotes": ["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M15-GRACE-BEND-POLICY"],
       "gpifBeat.Rhythm": ["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
       "gpifRhythmRef.Ref": ["M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT"],
       "gpifTrack.InstrumentSet": ["M16-PERCUSSION-IDENTITY","M20-SOURCE-AUDIT"],
@@ -1070,6 +1148,12 @@
       ],
       "M13-HARMONIC-CONSUMER-POLICY": [
         "M13-HARMONIC-CONSUMER-POLICY"
+      ],
+      "M12-BEND-CONTROL-ROLES": [
+        "M12-BEND-CONTROL-ROLES"
+      ],
+      "M15-GRACE-BEND-POLICY": [
+        "M15-GRACE-BEND-POLICY"
       ]
     },
     "capabilityClaims": [
@@ -2882,6 +2966,22 @@
         "independentTest": "TestAlphaTabSectionTrackNames",
         "mutationSensitive": true,
         "reason": "Distinct authored values, empty and absent records, post-parse authority, exact XML and final consumer results, with scoped empty-name and boundary-whitespace reports."
+      },
+      {
+        "id": "bend-control-roles",
+        "feature": "note-and-beat-semantics",
+        "construct": "BendEffect.Points standard nonmonotonic GPIF roles",
+        "test": "TestConformanceBendControlRoles",
+        "independentTest": "TestAlphaTabBendControlRoles",
+        "reason": "Named roles retain exact offsets; pinned consumer retains the same standard-gesture controls from source and output."
+      },
+      {
+        "id": "grace-bend-omission",
+        "feature": "note-and-beat-semantics",
+        "construct": "GraceEffect.Transition legacy Bend and GP8 omission",
+        "test": "TestConformanceGraceBendPolicy",
+        "independentTest": "TestAlphaTabGraceBendPolicy",
+        "reason": "Real binary transition2 survives Parse; strict export requires the exact reported omission and never invents a bend curve. The independent consumer limitation is explicit."
       }
     ],
     "modelTypes": [

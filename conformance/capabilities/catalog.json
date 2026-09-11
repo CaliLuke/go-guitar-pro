@@ -3505,8 +3505,8 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Note bend offsets preserve exact GPIF percentages, including fractional values, through the public model and GP8 export. The legacy 0..12 Position has a parsed-edit reconciliation rule, and binary note offsets retain their checked raw 0..60 position. Bend heights remain quantized; target hold interpretation, nonmonotonic controls, and model-only style distinctions remain separate limits.",
-      "acceptance": "Exact note offsets are complete for the supported GP3 through GP8 sources. Keep bend-height quantization, nonmonotonic control validation, hold interpretation, and style metadata explicitly bounded until their separate tickets or target evidence are complete.",
+      "finding": "Exact note-bend offsets and bounded nonmonotonic GPIF role tuples survive the public model and GP8 wire output without sorting. Pinned AlphaTab retains the same standard-gesture controls from source and export. Bend heights, arbitrary unordered shapes, target hold interpretation and style distinctions remain explicit limits.",
+      "acceptance": "Keep exact offsets and the four-role shared-middle-value tuple covered. Preserve numeric and arbitrary-curve validation. Track broader height, hold interpretation and style distinctions separately.",
       "upstream": [
         "Note.bendPoints",
         "Note.bendType",
@@ -3558,6 +3558,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/bends.gp:bends",
           "detail": "All 22 authored bends compare equal after Go GP8 export; broader shape differences remain visible on their individual fixtures."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBendControlRoles",
+          "detail": "Pins canon note177 roles0,50,50,35 and isolated source export; original full export retains the exact sound-event-position rejection."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabBendControlRoles",
+          "detail": "Pinned raw consumer assertions compare source and output retained controls, including hold endpoint simplification."
         }
       ]
     },
@@ -3633,8 +3643,8 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Ordered note-level graces preserve several fields. Full beat-level grace chords, timing/style distinctions and target duration/transition restrictions need further evidence.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Ordered grace/chord structure and before/on-beat placement have focused coverage. The real GP4 transition2 record survives Parse. GP8 explicitly omits grace Bend at its owning note and requires exact loss allowance. Pinned AlphaTab ignores the original transition and finalizes grace timing; its absence is not evidence of preservation.",
+      "acceptance": "Retain ordered None/Slide/Hammer controls and the exact Bend omission policy. Future Bend preservation requires independently verified curve semantics; authored versus finalized grace timing and raw provenance remain separate.",
       "upstream": [
         "Beat.graceType",
         "GraceType.*",
@@ -3667,6 +3677,16 @@
           "kind": "test",
           "reference": "TestConformanceGraceAuthorityAndLoss",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceGraceBendPolicy",
+          "detail": "Exact GP4 source record/address/hash and isolated before/on-beat Bend loss policy with owning-note report and wire assertions."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabGraceBendPolicy",
+          "detail": "Raw pinned source importer limitation and allowed output placement/string/owner/no-curve assertions."
         }
       ]
     },
