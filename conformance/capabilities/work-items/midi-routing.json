@@ -189,7 +189,7 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "The existing primary-port authority and mute precedence are confirmed GP8 target limits. Separate and combined conflict scores now assert exact wire Port=0, PrimaryChannel=1, SecondaryChannel=2 and PlaybackState=Mute, raw pinned playbackInfo fields, one scoped normalization per conflict, every selective strict allowance, preservation controls, and nonmutation. No routing fields or precedence changes were added. Export remains partial. Fresh independent acceptance review and integrated full gates passed; the issue remains open with solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "resolution": "The existing primary-port authority and mute precedence are confirmed GP8 target limits. Separate and combined conflict scores now assert exact wire Port=0, PrimaryChannel=1, SecondaryChannel=2 and PlaybackState=Mute, raw pinned playbackInfo fields, one scoped normalization per conflict, every selective strict allowance, preservation controls, and nonmutation. No routing fields or precedence changes were added. Export remains partial. Fresh independent acceptance review and integrated full gates passed; Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
   "verification": [
     {
       "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
@@ -221,12 +221,25 @@
         "Retain same-port/different-channel and nonconflicting Default/Mute/Solo cases as passing preservation controls. Record the two explicit target limits in the work-item resolution without upgrading export to full support.: PASS",
         "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
       ]
+    },
+    {
+      "commit": "5d90e8a12786b2d28c28cf22a8d1583ac9b41339",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS, including race tests and the 80% coverage floor.",
+        "Fresh capability probe: PASS; all 377 fixture receipts exactly match the integrated review baseline."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/66#issuecomment-5641449268",
+        "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket closed as completed; capability ratings and target limits unchanged."
+      ]
     }
   ],
   "issue": {
     "number": 66,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/66",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T21:37:12.436185+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T22:41:42.790906+00:00"
   }
 }

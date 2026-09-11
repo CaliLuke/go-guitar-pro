@@ -188,7 +188,7 @@
     "gp8_effects.go",
     "gp8_notation.go"
   ],
-  "resolution": "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "resolution": "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit. Independently reviewed as solved. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
@@ -220,12 +220,25 @@
         "Register focused runtime assertions and the pinned-consumer evidence in the semantic ledger. Keep arbitrary per-note velocities rated partial and record the target limitation rather than inventing a per-note GPIF destination.: PASS",
         "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
       ]
+    },
+    {
+      "commit": "5d90e8a12786b2d28c28cf22a8d1583ac9b41339",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS, including race tests and the 80% coverage floor.",
+        "Fresh capability probe: PASS; all 377 fixture receipts exactly match the integrated review baseline."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/61#issuecomment-5641448685",
+        "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket closed as completed; capability ratings and target limits unchanged."
+      ]
     }
   ],
   "issue": {
     "number": 61,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/61",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T21:37:12.436185+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T22:41:42.780444+00:00"
   }
 }

@@ -93,12 +93,25 @@
         "For chorus, reverb, phaser, tremolo and transitions, implement a verified wire mapping or retain an exact per-controller omission.: PASS",
         "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
       ]
+    },
+    {
+      "commit": "5d90e8a12786b2d28c28cf22a8d1583ac9b41339",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS, including race tests and the 80% coverage floor.",
+        "Fresh capability probe: PASS; all 377 fixture receipts exactly match the integrated review baseline."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/85#issuecomment-5641450112",
+        "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket remains open because its documented acceptance failure or external evidence blocker remains unresolved."
+      ]
     }
   ],
   "issue": {
     "number": 85,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/85",
     "state": "OPEN",
-    "checked_at": "2026-09-11T21:37:12.436185+00:00"
+    "checked_at": "2026-09-11T22:41:42.791782+00:00"
   }
 }

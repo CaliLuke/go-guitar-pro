@@ -166,7 +166,7 @@
     "gp8_builder.go",
     "rse.go"
   ],
-  "resolution": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "resolution": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -199,12 +199,25 @@
         "Record targeted regressions and exact source/report evidence in the semantic ledger and work item. Run ./conformance/check.sh and prek run --all-files. Do not promote unsupported GP8 semantics from a checked-decoding or omission-policy fix.: PASS",
         "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
       ]
+    },
+    {
+      "commit": "5d90e8a12786b2d28c28cf22a8d1583ac9b41339",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS, including race tests and the 80% coverage floor.",
+        "Fresh capability probe: PASS; all 377 fixture receipts exactly match the integrated review baseline."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5641452426",
+        "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket closed as completed; capability ratings and target limits unchanged."
+      ]
     }
   ],
   "issue": {
     "number": 101,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/101",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T21:37:12.436185+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T22:41:42.801081+00:00"
   }
 }

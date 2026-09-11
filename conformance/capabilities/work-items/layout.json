@@ -98,7 +98,7 @@
     "gpif_types.go",
     "measure.go"
   ],
-  "resolution": "Preserved score and track system layouts and bar scales with explicit scope precedence, empty-array authority and checked bounds. Inheritance and empty-array normalization have exact strict policy evidence. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "resolution": "Preserved score and track system layouts and bar scales with explicit scope precedence, empty-array authority and checked bounds. Inheritance and empty-array normalization have exact strict policy evidence. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",
@@ -115,12 +115,25 @@
         "Use systems-layout/multi-track-different.gp and resized.gp for exact wire, public import/reparse and Go-export-to-AlphaTab assertions. Validate counts, finite positive scales and malformed arrays without narrowing silently.: PASS",
         "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
       ]
+    },
+    {
+      "commit": "5d90e8a12786b2d28c28cf22a8d1583ac9b41339",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS, including race tests and the 80% coverage floor.",
+        "Fresh capability probe: PASS; all 377 fixture receipts exactly match the integrated review baseline."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/112#issuecomment-5641453877",
+        "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket closed as completed; capability ratings and target limits unchanged."
+      ]
     }
   ],
   "issue": {
     "number": 112,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/112",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T21:37:12.436185+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T22:41:42.787762+00:00"
   }
 }
