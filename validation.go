@@ -363,6 +363,11 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.PreferredBeamDirection < VoiceDirectionNone || beat.PreferredBeamDirection > VoiceDirectionDown {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.beam-direction", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("preferred beam direction %d is not defined", beat.PreferredBeamDirection)})
 			}
+			if beat.Effect.Chord != nil {
+				if err := validateChordDiagramStructure(beat.Effect.Chord); err != nil {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.chord.diagram", Kind: ScoreDiagnosticValue, Location: location, Reason: err.Error()})
+				}
+			}
 			stroke := beat.Effect.Stroke
 			if stroke.Kind > BeatStrokeKindArpeggio {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("stroke kind %d is not defined", stroke.Kind)})
@@ -463,6 +468,101 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			}
 		}
 	}
+}
+
+func validateChordDiagramStructure(chord *Chord) error {
+	stringCount := len(chord.Strings)
+	if chord.Fingerings != nil && len(chord.Fingerings) != stringCount {
+		return fmt.Errorf("chord fingering count %d does not match string count %d", len(chord.Fingerings), stringCount)
+	}
+	for index, finger := range chord.Fingerings {
+		if finger < FingeringUnknown || finger > FingeringLittle {
+			return fmt.Errorf("chord fingering %d at string position %d is not defined", finger, index+1)
+		}
+	}
+	for index, barre := range chord.Barres {
+		if barre.Fret <= 0 {
+			return fmt.Errorf("chord barre %d fret %d must be positive", index, barre.Fret)
+		}
+		if barre.Start < 1 || int(barre.Start) > stringCount || barre.End < 1 || int(barre.End) > stringCount {
+			return fmt.Errorf("chord barre %d endpoints %d..%d are outside 1..%d", index, barre.Start, barre.End, stringCount)
+		}
+		if barre.Start >= barre.End {
+			return fmt.Errorf("chord barre %d endpoints %d..%d must identify two strings in highest-to-lowest order", index, barre.Start, barre.End)
+		}
+	}
+	return nil
+}
+
+func validateGP8ChordDiagram(chord *Chord) error {
+	if err := validateChordDiagramStructure(chord); err != nil {
+		return err
+	}
+	for index, finger := range chord.Fingerings {
+		if finger == FingeringUnknown {
+			continue
+		}
+		if finger == FingeringOpen && chord.Strings[index] > 0 {
+			return fmt.Errorf("none fingering at string position %d requires a muted or open string", index+1)
+		}
+		if finger != FingeringOpen && chord.Strings[index] <= 0 {
+			return fmt.Errorf("muted or open string position %d cannot use finger %d", index+1, finger)
+		}
+	}
+	if chord.Fingerings == nil && len(chord.Barres) > 5 {
+		return fmt.Errorf("%d chord barres need more than five distinct GPIF fingers", len(chord.Barres))
+	}
+	barresByKey := make(map[gpifChordBarreKey]Barre, len(chord.Barres))
+	usedSyntheticEndpoints := make(map[int]struct{}, len(chord.Barres)*2)
+	for index, barre := range chord.Barres {
+		startIndex, endIndex := int(barre.Start)-1, int(barre.End)-1
+		if chord.Strings[startIndex] != barre.Fret || chord.Strings[endIndex] != barre.Fret {
+			return fmt.Errorf("chord barre %d fret %d does not match endpoint frets %d and %d", index, barre.Fret, chord.Strings[startIndex], chord.Strings[endIndex])
+		}
+		if chord.Fingerings == nil {
+			for _, endpoint := range []int{startIndex, endIndex} {
+				if _, exists := usedSyntheticEndpoints[endpoint]; exists {
+					return fmt.Errorf("chord barre %d shares endpoint position %d with another barre", index, endpoint+1)
+				}
+				usedSyntheticEndpoints[endpoint] = struct{}{}
+			}
+			continue
+		}
+		finger := chord.Fingerings[startIndex]
+		if finger == FingeringUnknown || finger == FingeringOpen || chord.Fingerings[endIndex] != finger {
+			return fmt.Errorf("chord barre %d endpoints must share one known fretting finger", index)
+		}
+		key := gpifChordBarreKey{finger: finger, fret: barre.Fret}
+		if _, exists := barresByKey[key]; exists {
+			return fmt.Errorf("chord barre %d duplicates finger %d at fret %d", index, finger, barre.Fret)
+		}
+		barresByKey[key] = barre
+	}
+	if chord.Fingerings != nil {
+		groups := make(map[gpifChordBarreKey][]int)
+		for index, finger := range chord.Fingerings {
+			if finger == FingeringUnknown || finger == FingeringOpen {
+				continue
+			}
+			key := gpifChordBarreKey{finger: finger, fret: chord.Strings[index]}
+			groups[key] = append(groups[key], index+1)
+		}
+		for key, positions := range groups {
+			if len(positions) < 2 {
+				continue
+			}
+			start, end := positions[0], positions[0]
+			for _, position := range positions[1:] {
+				start = min(start, position)
+				end = max(end, position)
+			}
+			barre, exists := barresByKey[key]
+			if !exists || barre.Start != int8(start) || barre.End != int8(end) {
+				return fmt.Errorf("repeated finger %d at fret %d requires an exact matching barre range", key.finger, key.fret)
+			}
+		}
+	}
+	return nil
 }
 
 func validateHarmonicEffect(effect *HarmonicEffect, location ScoreLocation, diagnostics *[]ScoreDiagnostic) {

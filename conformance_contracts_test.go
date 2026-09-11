@@ -378,7 +378,7 @@ func conformanceContractReadOnlySong(t *testing.T) *Song {
 	beat = &song.Tracks[0].Measures[0].Voices[0].Beats[0]
 	firstFret := uint8(1)
 	root := PitchClass{Note: "C", Value: 0, Sharp: true}
-	beat.Effect.Chord = &Chord{Name: "C", Length: 6, FirstFret: &firstFret, Root: &root, Strings: []int8{0, 3, 2, 0, 1, 0}, Barres: []Barre{{Fret: 1, Start: 1, End: 2}}}
+	beat.Effect.Chord = &Chord{Name: "C", Length: 6, FirstFret: &firstFret, Root: &root, Strings: []int8{1, 1, 2, 0, 1, 0}, Barres: []Barre{{Fret: 1, Start: 1, End: 2}}}
 	beat.Notes[0].Effect.Bend = &BendEffect{Kind: BendTypeBend, Points: []BendPoint{{Position: 0}, {Position: 12, Value: 2}}}
 	exactFret := Fret(2)
 	rawFret := int8(2)

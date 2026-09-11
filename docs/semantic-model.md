@@ -465,10 +465,22 @@ also reports harmonic pitch spelling and octave because the target does not
 emit them. Import rejects malformed, non-finite, and out-of-range harmonic
 frets. A GPIF feedback harmonic remains distinct through import and GP8 export.
 
-GP8 preserves a chord name, string pattern, and representable first fret. It
-reports barres, fingerings, omissions, and legacy chord descriptions. Imported
-chord occurrences own separate mutable slices and pointers. Track and staff
-definition scopes remain separate when they use the same local identifier.
+GP8 preserves a chord name, string pattern, representable first fret, barre
+ranges, and finger assignments. `Chord.Strings` is the diagram width and order
+authority from highest string to lowest string. `Chord.Fingerings`, when
+non-nil, parallels that slice; `FingeringUnknown` means no authored assignment,
+while `FingeringOpen` preserves a GPIF `None` position whose string state
+distinguishes muted from open. `Barre.Start` and `Barre.End` are one-based
+positions in `Chord.Strings`. Direct public edits are authoritative and export
+does not modify them. When fingerings are absent, GP8 export assigns a distinct
+finger to each representable barre only for the target encoding. Conflicting
+range endpoints, repeated finger/fret groups, invalid indices, and unchecked
+numeric mappings are rejected. GPIF `Ring` and legacy `Rank` both import as
+`FingeringAnnular`; export emits `Ring`. GP4 and GP5 seven-slot storage is
+trimmed to the actual chord string count. Interval omissions and legacy chord
+descriptions remain separately reported losses. Imported chord occurrences own
+separate mutable slices and pointers. Staff-local definitions take precedence
+over track definitions with the same identifier.
 
 Grace notes keep their order, exact fret, articulation identity, dead state,
 placement, transition, and supported duration. GP8 reports a raw source fret,

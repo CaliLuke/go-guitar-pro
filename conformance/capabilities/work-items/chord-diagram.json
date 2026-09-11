@@ -5,8 +5,8 @@
   "title": "Preserve representable chord diagram barres and fingerings",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex-ticket-79",
   "formats": [
     "gp3",
     "gp4",
@@ -26,7 +26,11 @@
     "Preserve first fret, string orientation and track/staff definition scope in the independent consumer.",
     "Classify any legacy spelling/omission fields lacking a GPIF destination separately; strict export no longer reports resolved diagram losses."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Chord display flags are owned by issue 104.",
+    "Legacy chord spelling, quality, alterations, and interval omissions remain separate reported losses.",
+    "GP3 through GP5 export, rendering, note fingerings, and content deduplication are outside this ticket."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -81,7 +85,7 @@
     "gp8_builder.go",
     "gpif_model.go"
   ],
-  "resolution": null,
+  "resolution": "Added checked GPIF string-position and fret mappings for chord finger assignments, including canonical Ring plus legacy Rank input and the unsigned muted-string sentinel. Chord.Fingerings now distinguishes missing positions with FingeringUnknown while retaining explicit None positions for muted and open strings. Repeated known finger/fret groups derive ordered one-based Barre ranges. GP4 and GP5 finger arrays are trimmed from seven storage slots to the actual diagram width. GP8 emits exact position strings, relative frets, and canonical finger tokens; when Fingerings is nil it synthesizes distinct fingers only for representable barre endpoints. Shared validation rejects invalid counts, indices, fret mismatches, unintended repeated groups, overlapping synthetic endpoints, and checked arithmetic boundaries without mutating the song. Focused evidence covers the actual Unknown Chord Extension GP5 fixture, a seven-string diagram with two barres and thumb/open/muted/fretted positions, staff-local precedence, occurrence isolation, exact wire/reimport behavior, and pinned AlphaTab first-fret, string-order, and barre facts. The separate chord-omissions and chord-legacy-details reports remain intact; resolved barre and fingering losses no longer report.",
   "verification": [],
   "issue": {
     "number": 79,

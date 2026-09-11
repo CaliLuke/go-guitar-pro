@@ -26,6 +26,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `brush` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) | M10-BRUSH preserves binary and GPIF kind, direction, exact authored timing, source absence, compatibility edits, and supported GP8 wire values with scoped diagnostics for malformed or inexpressible values. |
 | `beat-lyrics` | gp6, gp7, gp8 | supported | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) | Beat.Lyrics preserves GPIF beat-scoped lines as independent ordered occurrence data through public edits and GP8 export, without merging them into beat text or score and track lyrics. |
+| `chord-diagram` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) | Representable chord diagram ranges and finger assignments survive binary or GPIF import, direct public edits, exact GP8 positions, Go reimport, and pinned AlphaTab consumption. Legacy chord description and interval-omission fields remain separate losses. |
 | `beat-vibrato` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) | Beat vibrato strength survives GP3-8 import, deterministic compatibility reconciliation, GP8 export, and pinned AlphaTab consumption without sharing authority with note vibrato. |
 | `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
 
@@ -69,7 +70,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Whammy.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public whammy curve uses a narrower integer scale. |
 | `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Note.Property.TransposedPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
-| `GPIF.Chord.Diagram.Fingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowDiagram` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -293,9 +293,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 231 |
+| `preserved` | 233 |
 | `normalized` | 34 |
-| `omitted` | 116 |
+| `omitted` | 114 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -304,7 +304,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 92 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 164 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 92 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 165 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -312,7 +312,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 255 |
+| `schema` | 256 |
 
 ## Source dispatch inventory
 
@@ -407,7 +407,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `unclassified-gpif-wire-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new decoded GPIF field must receive a source disposition. |
 | `inspected-track-capo` | `staff-ownership` | `TestGP8StrictExportCoversInspectedSemanticFields` | `TestAlphaTabPreservesInspectedCapo` | no | A nonzero capo survives GP8 conversion and independent consumption. |
 | `inspected-note-duration-percent` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | yes | Strict export reports a non-default duration percentage before it emits bytes. |
-| `inspected-chord-barres` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | Strict export reports explicit barre ranges before it emits bytes. |
+| `chord-diagram-preservation` | `chord-diagram` | `TestConformanceChordDefinitions` | `TestAlphaTabPreservesChordDiagrams` | yes | Representable ranges and explicit or synthesized finger positions preserve string orientation, first fret, scope, occurrence ownership, and checked target mappings. |
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |

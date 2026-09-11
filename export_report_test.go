@@ -390,13 +390,6 @@ func TestGP8StrictExportCoversInspectedSemanticFields(t *testing.T) {
 		{name: "zero note duration percent", code: "gp8.omit.note-duration-percent", set: func(song *Song) {
 			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent = 0
 		}},
-		{name: "chord barres", code: "gp8.omit.chord-barres", set: func(song *Song) {
-			firstFret := uint8(3)
-			song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = &Chord{
-				Name: "barre", FirstFret: &firstFret, Strings: []int8{3, 3, 4, 5, 5, 3},
-				Barres: []Barre{{Fret: 3, Start: 1, End: 6}},
-			}
-		}},
 		{name: "five point bend", code: "gp8.omit.bend-curve", set: func(song *Song) {
 			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Bend = &BendEffect{Points: []BendPoint{
 				{Position: 0, Value: 0}, {Position: 3, Value: 2}, {Position: 6, Value: 0},

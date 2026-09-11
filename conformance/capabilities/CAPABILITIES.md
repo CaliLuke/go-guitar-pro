@@ -14,15 +14,15 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 66 | 17 | 16 | 2 |
-| model | 65 | 18 | 17 | 1 |
-| export | 43 | 24 | 31 | 3 |
+| import | 67 | 16 | 16 | 2 |
+| model | 66 | 17 | 17 | 1 |
+| export | 44 | 23 | 31 | 3 |
 
-All three stages have a supported rating in 43 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 44 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `true`.
+The receipt contains 364 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -39,11 +39,11 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Extended barline and bar-number controls | 32 | 326 | 12 | 0 | 7 |
 | Tap, slap and pop distinctions | 13 | 344 | 12 | 0 | 7 |
 | Bend curves and styles | 27 | 333 | 11 | 0 | 7 |
-| Chord diagrams, barres and fingering | 11 | 346 | 11 | 0 | 7 |
 | Pick stroke direction | 11 | 346 | 11 | 0 | 7 |
 | Wah pedal state | 11 | 346 | 11 | 0 | 7 |
 | Beam grouping, direction and stem overrides | 200 | 162 | 8 | 0 | 7 |
 | Slashed beats and slash staff notation | 8 | 349 | 8 | 0 | 7 |
+| Chord diagrams, barres and fingering | 33 | 323 | 7 | 0 | 7 |
 | Volume automation events | 8 | 350 | 7 | 0 | 7 |
 | Authored note duration percentage | 6 | 351 | 6 | 0 | 7 |
 | Multiple-bar rest preferences | 4 | 353 | 4 | 0 | 7 |
@@ -115,11 +115,11 @@ Bounded work: [Correct stale semantic documentation and diagnostic labels](https
 
 Chords. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Name, string pattern and representable first fret survive. GP8 omits barres, fingerings, omissions and legacy descriptions.
+Representable first fret, string order, barre ranges and explicit or synthesized finger positions survive GP3-8 import and GP8 export. Interval omissions and legacy chord descriptions remain separate losses.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports.
 
 Bounded work: [Preserve representable chord diagram barres and fingerings](https://github.com/CaliLuke/go-guitar-pro/issues/79).
 

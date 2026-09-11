@@ -106,14 +106,14 @@ const mutations = [
     want: 'semantic assertions for M01-METADATA-CORPUS mismatch'
   },
   {
-    id: 'false-preservation-uninspected-field',
-    contract: 'field-disposition-evidence',
-    category: 'classification',
-    file: 'conformance_chords_test.go',
-    before: '\trun.Omitted("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle})\n',
-    after: '\trun.Preserved("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle})\n',
-    test: '^TestSemanticMatrixInventory$',
-    want: 'Chord.Fingerings executable evidence proves preserved, but the field partition claims omitted'
+    id: 'chord-fingering-string-orientation',
+    contract: 'chord-diagram-preservation',
+    category: 'ownership',
+    file: 'gpif_model.go',
+    before: '\t\tpublicIndex := diagram.StringCount - *position.String - 1\n',
+    after: '\t\tpublicIndex := *position.String\n',
+    test: '^TestConformanceChordDefinitions$',
+    want: 'fingering string 6 fret 3 does not match chord fret 7'
   },
   {
     id: 'swapped-uninspected-field-dispositions',
@@ -121,7 +121,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Song.HideTempo"' },
+      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.HideTempo"' },
       { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',

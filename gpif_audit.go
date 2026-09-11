@@ -1111,12 +1111,6 @@ func gpifAuditChordIDs(context *parseContext, chords map[string]struct{}, proper
 			if item.Diagram == nil {
 				continue
 			}
-			if item.Diagram.Fingering != nil {
-				context.add(diagnosticSource("GPIF.Chord.Diagram.Fingering", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
-					SourcePath: itemPath + "/Diagram/Fingering", ObjectID: item.ID,
-					Reason: "Chord does not preserve GPIF diagram finger positions",
-				})
-			}
 			for diagramPropertyIndex, diagramProperty := range item.Diagram.Properties {
 				propertyPath := fmt.Sprintf("%s/Diagram/Property[%d][@name=%q]", itemPath, diagramPropertyIndex, diagramProperty.Name)
 				source, known := gpifDiagramPropertySources[diagramProperty.Name]

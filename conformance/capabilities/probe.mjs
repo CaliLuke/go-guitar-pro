@@ -105,6 +105,8 @@ function project(score, options = {}) {
               for (const field of ['showName', 'showDiagram', 'showFingering']) {
                 add('chord-display', `${p}.chord.${field}`, beat.chord[field], new alphaTab.model.Chord()[field]);
               }
+              add('chord-diagram', `${p}.chord.firstFret`, beat.chord.firstFret, new alphaTab.model.Chord().firstFret);
+              add('chord-diagram', `${p}.chord.strings`, beat.chord.strings, []);
               add('chord-diagram', `${p}.chord.barreFrets`, beat.chord.barreFrets, []);
             }
             for (const note of beat.notes) collect('Note', note, `${p}.notes[${note.index}]`);

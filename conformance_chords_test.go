@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"reflect"
 	"slices"
 	"strings"
@@ -33,11 +34,11 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	add, sharp, newFormat, show := true, false, false, false
 	chord := &Chord{
 		Name:       "C#13/Eb",
-		Length:     6,
-		Strings:    []int8{3, -1, 0, 5, 4, 3},
+		Length:     7,
+		Strings:    []int8{3, 3, -1, 0, 5, 5, 7},
 		FirstFret:  &firstFret,
-		Barres:     []Barre{{Fret: 3, Start: 1, End: 3}, {Fret: 5, Start: 4, End: 6}},
-		Fingerings: []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle},
+		Barres:     []Barre{{Fret: 3, Start: 1, End: 2}, {Fret: 5, Start: 5, End: 6}},
+		Fingerings: []Fingering{FingeringIndex, FingeringIndex, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringAnnular, FingeringThumb},
 		Omissions:  []bool{true, false, true, false, false, true, false},
 		Root:       &root,
 		Bass:       &bass,
@@ -53,14 +54,15 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 		Show:       &show,
 	}
 	run.ClaimPrimary(claimSite("chord-name", "model", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Preserved("Chord.Name", chord.Name, "C#13/Eb")
-	run.Preserved("Chord.Length", chord.Length, uint8(6))
-	run.Preserved("Chord.Strings", chord.Strings, []int8{3, -1, 0, 5, 4, 3})
+	run.Preserved("Chord.Length", chord.Length, uint8(7))
+	run.Preserved("Chord.Strings", chord.Strings, []int8{3, 3, -1, 0, 5, 5, 7})
 	run.Preserved("Chord.FirstFret", *chord.FirstFret, uint8(3))
-	run.Omitted("Chord.Barres", chord.Barres, []Barre{{Fret: 3, Start: 1, End: 3}, {Fret: 5, Start: 4, End: 6}})
+	run.ClaimPrimary(claimSite("chord-diagram", "model", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Preserved("Chord.Barres", chord.Barres, []Barre{{Fret: 3, Start: 1, End: 2}, {Fret: 5, Start: 5, End: 6}})
 	run.Preserved("Barre.Fret", []int8{chord.Barres[0].Fret, chord.Barres[1].Fret}, []int8{3, 5})
-	run.Preserved("Barre.Start", []int8{chord.Barres[0].Start, chord.Barres[1].Start}, []int8{1, 4})
-	run.Preserved("Barre.End", []int8{chord.Barres[0].End, chord.Barres[1].End}, []int8{3, 6})
-	run.Omitted("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringIndex, FingeringMiddle})
+	run.Preserved("Barre.Start", []int8{chord.Barres[0].Start, chord.Barres[1].Start}, []int8{1, 5})
+	run.Preserved("Barre.End", []int8{chord.Barres[0].End, chord.Barres[1].End}, []int8{2, 6})
+	run.Preserved("Chord.Fingerings", chord.Fingerings, []Fingering{FingeringIndex, FingeringIndex, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringAnnular, FingeringThumb})
+	run.Enum("Fingering.FingeringUnknown", FingeringUnknown, Fingering(-2))
 	run.Omitted("Chord.Omissions", chord.Omissions, []bool{true, false, true, false, false, true, false})
 	run.Omitted("Chord.Root", *chord.Root, root)
 	run.Omitted("Chord.Bass", *chord.Bass, bass)
@@ -137,8 +139,6 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	beat.Effect.Chord = chord
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	wantCodes := []string{
-		"gp8.omit.chord-barres",
-		"gp8.omit.chord-fingerings",
 		"gp8.omit.chord-legacy-details",
 		"gp8.omit.chord-omissions",
 	}
@@ -147,7 +147,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-barres", "gp8.omit.chord-fingerings", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
+	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name"), claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
 	strictData, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError
 	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
@@ -165,29 +165,69 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	run.ClaimSerialization(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Wire("gpifItem.Name", wire.name, "C#13/Eb")
 	run.Wire("gpifItem.Diagram", wire.hasDiagram, true)
 	run.Wire("gpifItem.Chord", wire.hasChord, true)
-	run.Wire("gpifDiagram.StringCount", wire.stringCount, 6)
+	run.Wire("gpifDiagram.StringCount", wire.stringCount, 7)
 	run.Wire("gpifDiagram.FretCount", wire.fretCount, 5)
 	run.Wire("gpifDiagram.BaseFret", wire.baseFret, 2)
-	run.Wire("gpifDiagram.Frets", wire.frets, []conformanceChordWireFret{{String: 5, Fret: 1}, {String: 3, Fret: -2}, {String: 2, Fret: 3}, {String: 1, Fret: 2}, {String: 0, Fret: 1}})
-	run.Wire("gpifDiagramFret.String", conformanceChordWireFretStrings(wire.frets), []int{5, 3, 2, 1, 0})
-	run.Wire("gpifDiagramFret.Fret", conformanceChordWireFretValues(wire.frets), []int{1, -2, 3, 2, 1})
-	run.Wire("gpifDiagram.Fingering", wire.hasFingering, false)
+	run.Wire("gpifDiagram.Frets", wire.frets, []conformanceChordWireFret{{String: 6, Fret: 1}, {String: 5, Fret: 1}, {String: 3, Fret: -2}, {String: 2, Fret: 3}, {String: 1, Fret: 3}, {String: 0, Fret: 5}})
+	run.Wire("gpifDiagramFret.String", conformanceChordWireFretStrings(wire.frets), []int{6, 5, 3, 2, 1, 0})
+	run.Wire("gpifDiagramFret.Fret", conformanceChordWireFretValues(wire.frets), []int{1, 1, -2, 3, 3, 5})
+	run.Wire("gpifDiagram.Fingering", wire.hasFingering, true)
+	run.ClaimSerialization(claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Wire("gpifDiagramFingering.Positions", wire.positions, []conformanceChordWirePosition{{Fret: 1, Finger: "Index", String: 6}, {Fret: 1, Finger: "Index", String: 5}, {Fret: 4294967295, Finger: "None", String: 4}, {Fret: -2, Finger: "None", String: 3}, {Fret: 3, Finger: "Ring", String: 2}, {Fret: 3, Finger: "Ring", String: 1}, {Fret: 5, Finger: "Thumb", String: 0}})
+	run.Wire("gpifDiagramPosition.Fret", []int{wire.positions[0].Fret, wire.positions[2].Fret, wire.positions[3].Fret, wire.positions[6].Fret}, []int{1, 4294967295, -2, 5})
+	run.Wire("gpifDiagramPosition.Finger", []string{wire.positions[0].Finger, wire.positions[2].Finger, wire.positions[4].Finger, wire.positions[6].Finger}, []string{"Index", "None", "Ring", "Thumb"})
+	run.Wire("gpifDiagramPosition.String", []int{wire.positions[0].String, wire.positions[2].String, wire.positions[4].String, wire.positions[6].String}, []int{6, 4, 2, 0})
 	run.Wire("gpifDiagram.Properties", wire.propertyNames, []string(nil))
 	if wire.chordChildCount != 1 || wire.chordDetailCount != 0 {
 		t.Fatalf("wire chord children = %d details = %d, want marker only", wire.chordChildCount, wire.chordDetailCount)
 	}
 	run.Wire("gpifBeat.Chord", extractGPIFLeafText(t, data)["GPIF/Beats/Beat/Chord"], "01")
 
-	sourceGPIF := strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Fingering><Position fret="1" finger="Index"/><Position fret="2" finger="Thumb"/></Fingering><Property name="ShowName" type="bool" value="false"/></Diagram></Item>`, 1)
+	sourceGPIF := strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowName" type="bool" value="false"/></Diagram></Item>`, 1)
 	sourceWire := decodeChordWire(t, []byte(sourceGPIF))
-	run.Wire("gpifDiagram.Fingering", sourceWire.hasFingering, true)
-	run.Wire("gpifDiagramFingering.Positions", sourceWire.positions, []conformanceChordWirePosition{{Fret: 1, Finger: "Index"}, {Fret: 2, Finger: "Thumb"}})
-	run.Wire("gpifDiagramPosition.Fret", []int{sourceWire.positions[0].Fret, sourceWire.positions[1].Fret}, []int{1, 2})
-	run.Wire("gpifDiagramPosition.Finger", []string{sourceWire.positions[0].Finger, sourceWire.positions[1].Finger}, []string{"Index", "Thumb"})
 	run.Wire("gpifDiagram.Properties", sourceWire.properties, []conformanceChordWireProperty{{Name: "ShowName", Type: "bool", Value: "false"}})
 	run.Wire("gpifDiagramProperty.Name", sourceWire.properties[0].Name, "ShowName")
 	run.Wire("gpifDiagramProperty.Type", sourceWire.properties[0].Type, "bool")
 	run.Wire("gpifDiagramProperty.Value", sourceWire.properties[0].Value, "false")
+	detailedItem := `<Item id="track" name="Track"><Diagram stringCount="7" fretCount="5" baseFret="2"><Fret string="6" fret="1"/><Fret string="5" fret="1"/><Fret string="3" fret="-2"/><Fret string="2" fret="3"/><Fret string="1" fret="3"/><Fret string="0" fret="5"/><Fingering><Position finger="Index" fret="1" string="6"/><Position finger="Index" fret="1" string="5"/><Position finger="None" fret="4294967295" string="4"/><Position finger="None" fret="-2" string="3"/><Position finger="Ring" fret="3" string="2"/><Position finger="Ring" fret="3" string="1"/><Position finger="Thumb" fret="5" string="0"/></Fingering></Diagram></Item>`
+	for _, ringToken := range []string{"Ring", "Rank"} {
+		gpif := strings.Replace(conformanceChordScopedGPIF, `<Item id="track" name="Track"><Diagram stringCount="1" fretCount="4" baseFret="0"><Fret string="0" fret="3"/></Diagram></Item>`, strings.ReplaceAll(detailedItem, `finger="Ring"`, `finger="`+ringToken+`"`), 1)
+		parsed, parseErr := ParseWithOptions(conformanceGPIFArchive(t, gpif), ParseOptions{})
+		if parseErr != nil {
+			t.Fatalf("parse %s fingering: %v", ringToken, parseErr)
+		}
+		imported := parsed.Song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[1].Effect.Chord
+		run.Preserved("Chord.FirstFret", *imported.FirstFret, uint8(3))
+		run.Preserved("Chord.Length", imported.Length, uint8(7))
+		run.Preserved("Chord.Strings", imported.Strings, chord.Strings)
+		run.Preserved("Chord.Fingerings", imported.Fingerings, chord.Fingerings)
+		run.ClaimPrimary(claimSite("chord-diagram", "import", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Preserved("Chord.Barres", imported.Barres, chord.Barres)
+		if slices.ContainsFunc(parsed.Diagnostics, func(diagnostic ParseDiagnostic) bool { return diagnostic.Code == "GPIF.Chord.Diagram.Fingering" }) {
+			t.Fatalf("%s fingering remained diagnosed: %#v", ringToken, parsed.Diagnostics)
+		}
+	}
+	legacy := parseTestFixture(t, "testdata/gp5/Unknown Chord Extension.gp5")
+	legacyChord := legacy.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+	if legacyChord == nil {
+		t.Fatal("legacy chord is nil")
+	}
+	run.Preserved("Chord.Length", legacyChord.Length, uint8(6))
+	run.Preserved("Chord.Strings", legacyChord.Strings, []int8{-1, 3, 3, 1, 3, -1})
+	run.Preserved("Chord.Fingerings", legacyChord.Fingerings, []Fingering{FingeringOpen, FingeringAnnular, FingeringAnnular, FingeringIndex, FingeringMiddle, FingeringOpen})
+	run.Preserved("Chord.Barres", legacyChord.Barres, []Barre{{Fret: 3, Start: 2, End: 3}})
+	legacyData, legacyReport, legacyErr := ExportWithReport(legacy, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(PreflightExport(legacy, ExportFormatGP8, ExportOptions{}))}})
+	if legacyErr != nil {
+		t.Fatalf("legacy chord export: %v, %#v", legacyErr, legacyReport.Entries)
+	}
+	if hasExportCode(legacyReport, "gp8.omit.chord-barres") || hasExportCode(legacyReport, "gp8.omit.chord-fingerings") {
+		t.Fatalf("legacy representable chord report = %#v", legacyReport.Entries)
+	}
+	legacyRoundTrip, legacyErr := Parse(legacyData)
+	if legacyErr != nil {
+		t.Fatal(legacyErr)
+	}
+	legacyGot := legacyRoundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+	run.Field("Chord.Barres", legacyGot.Barres, legacyChord.Barres)
+	run.Field("Chord.Fingerings", legacyGot.Fingerings, legacyChord.Fingerings)
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
@@ -200,7 +240,9 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	run.Field("Chord.Length", got.Length, chord.Length)
 	run.Field("Chord.Strings", got.Strings, chord.Strings)
 	run.Field("Chord.FirstFret", *got.FirstFret, *chord.FirstFret)
-	if len(got.Barres) != 0 || len(got.Fingerings) != 0 || len(got.Omissions) != 0 || got.Root != nil || got.Bass != nil || got.Kind != nil || got.Show != nil {
+	run.ClaimPrimary(claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Field("Chord.Barres", got.Barres, chord.Barres)
+	run.Field("Chord.Fingerings", got.Fingerings, chord.Fingerings)
+	if len(got.Omissions) != 0 || got.Root != nil || got.Bass != nil || got.Kind != nil || got.Show != nil {
 		t.Fatalf("round-trip kept omitted chord details: %#v", got)
 	}
 }
@@ -221,8 +263,8 @@ func runConformanceChordDefaultsAndLength(run *conformanceRun) {
 	run.Field("Chord.Length", gChord.Length, uint8(6))
 	run.Field("Chord.Strings", gChord.Strings, []int8{3, 0, 0, 0, 2, 3})
 	run.Field("Chord.Fingerings", gChord.Fingerings, []Fingering{FingeringLittle, FingeringOpen, FingeringOpen, FingeringOpen, FingeringIndex, FingeringMiddle})
-	allFingerings := Chord{Fingerings: []Fingering{FingeringOpen, FingeringThumb, FingeringIndex, FingeringMiddle, FingeringAnnular, FingeringLittle}}
-	run.Field("Chord.Fingerings", allFingerings.Fingerings, []Fingering{-1, 0, 1, 2, 3, 4})
+	allFingerings := Chord{Fingerings: []Fingering{FingeringUnknown, FingeringOpen, FingeringThumb, FingeringIndex, FingeringMiddle, FingeringAnnular, FingeringLittle}}
+	run.Field("Chord.Fingerings", allFingerings.Fingerings, []Fingering{-2, -1, 0, 1, 2, 3, 4})
 	empty := Chord{}
 	run.Field("Chord.Add", empty.Add, (*bool)(nil))
 	run.Field("Chord.Bass", empty.Bass, (*PitchClass)(nil))
@@ -260,6 +302,94 @@ func runConformanceChordDefaultsAndLength(run *conformanceRun) {
 			}
 			run.Field("Chord.FirstFret", chord.FirstFret, test.firstFret)
 			run.Field("Chord.Length", chord.Length, uint8(7))
+		})
+	}
+}
+
+func TestChordDiagramRejectsMalformedMappings(t *testing.T) {
+	wireString := 0
+	tests := []struct {
+		name    string
+		diagram gpifDiagram
+	}{
+		{name: "negative base fret", diagram: gpifDiagram{StringCount: 1, BaseFret: -1}},
+		{name: "first fret overflow", diagram: gpifDiagram{StringCount: 1, BaseFret: math.MaxUint8}},
+		{name: "negative string count", diagram: gpifDiagram{StringCount: -1}},
+		{name: "string count overflow", diagram: gpifDiagram{StringCount: math.MaxUint8 + 1}},
+		{name: "fret string below range", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: -1}}}},
+		{name: "fret string above range", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: 1}}}},
+		{name: "duplicate fret string", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: 0}, {String: 0}}}},
+		{name: "fret addition overflow", diagram: gpifDiagram{StringCount: 1, BaseFret: 1, Frets: []gpifDiagramFret{{String: 0, Fret: math.MaxInt}}}},
+		{name: "absolute fret overflow", diagram: gpifDiagram{StringCount: 1, BaseFret: 127, Frets: []gpifDiagramFret{{String: 0, Fret: 1}}}},
+		{name: "missing fingering string", diagram: gpifDiagram{StringCount: 1, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "None"}}}}},
+		{name: "fingering string above range", diagram: gpifDiagram{StringCount: 1, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "None", String: ptrTo(1)}}}}},
+		{name: "duplicate fingering string", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: 0}}, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "None", String: &wireString}, {Finger: "None", String: &wireString}}}}},
+		{name: "unknown finger", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: 0}}, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "Unknown", String: &wireString}}}}},
+		{name: "fingering fret mismatch", diagram: gpifDiagram{StringCount: 1, Frets: []gpifDiagramFret{{String: 0, Fret: 1}}, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "Index", Fret: 2, String: &wireString}}}}},
+		{name: "fingering addition overflow", diagram: gpifDiagram{StringCount: 1, BaseFret: 1, Fingering: &gpifDiagramFingering{Positions: []gpifDiagramPosition{{Finger: "Index", Fret: math.MaxInt, String: &wireString}}}}},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			definitions := make(map[string]Chord)
+			err := gpifReadChordProperties([]gpifStaffProperty{{Name: "DiagramCollection", Items: &gpifItems{Items: []gpifItem{{ID: "bad", Diagram: &test.diagram}}}}}, definitions)
+			if err == nil {
+				t.Fatalf("malformed diagram unexpectedly parsed: %#v", definitions)
+			}
+		})
+	}
+}
+
+func TestChordDiagramValidationAndNonmutation(t *testing.T) {
+	tests := []struct {
+		name       string
+		chord      Chord
+		targetOnly bool
+	}{
+		{name: "fingering count", chord: Chord{Strings: []int8{1}, Fingerings: []Fingering{}}},
+		{name: "unknown fingering value", chord: Chord{Strings: []int8{1}, Fingerings: []Fingering{Fingering(5)}}},
+		{name: "None on fretted string", targetOnly: true, chord: Chord{Strings: []int8{1}, Fingerings: []Fingering{FingeringOpen}}},
+		{name: "finger on open string", targetOnly: true, chord: Chord{Strings: []int8{0}, Fingerings: []Fingering{FingeringIndex}}},
+		{name: "zero barre fret", chord: Chord{Strings: []int8{0, 0}, Barres: []Barre{{Start: 1, End: 2}}}},
+		{name: "barre endpoint below range", chord: Chord{Strings: []int8{1, 1}, Barres: []Barre{{Fret: 1, Start: 0, End: 2}}}},
+		{name: "barre endpoint above range", chord: Chord{Strings: []int8{1, 1}, Barres: []Barre{{Fret: 1, Start: 1, End: 3}}}},
+		{name: "barre endpoint order", chord: Chord{Strings: []int8{1, 1}, Barres: []Barre{{Fret: 1, Start: 2, End: 1}}}},
+		{name: "barre fret mismatch", targetOnly: true, chord: Chord{Strings: []int8{1, 2}, Barres: []Barre{{Fret: 1, Start: 1, End: 2}}}},
+		{name: "too many synthesized fingers", targetOnly: true, chord: Chord{Strings: []int8{1, 1}, Barres: []Barre{{1, 1, 2}, {1, 1, 2}, {1, 1, 2}, {1, 1, 2}, {1, 1, 2}, {1, 1, 2}}}},
+		{name: "shared synthesized endpoint", targetOnly: true, chord: Chord{Strings: []int8{1, 1, 2}, Barres: []Barre{{1, 1, 2}, {2, 2, 3}}}},
+		{name: "barre fingering conflict", targetOnly: true, chord: Chord{Strings: []int8{1, 1}, Fingerings: []Fingering{FingeringIndex, FingeringMiddle}, Barres: []Barre{{1, 1, 2}}}},
+		{name: "undeclared repeated finger", targetOnly: true, chord: Chord{Strings: []int8{1, 1}, Fingerings: []Fingering{FingeringIndex, FingeringIndex}}},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			song := semanticValidPitchedGP8Song(t)
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = &test.chord
+			before := fmt.Sprintf("%#v", song)
+			diagnostics := ValidateSong(song)
+			if test.targetOnly {
+				if slices.ContainsFunc(diagnostics, func(diagnostic ScoreDiagnostic) bool { return diagnostic.Code == "score.chord.diagram" }) {
+					t.Fatalf("target-only conflict entered score diagnostics: %#v", diagnostics)
+				}
+				data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+				if err != nil || len(data) == 0 || !hasExportCode(report, "gp8.omit.chord-diagram-conflict") {
+					t.Fatalf("target conflict export = %d bytes, %#v, %v", len(data), report.Entries, err)
+				}
+				strictData, strictReport, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+				var lossErr *ExportLossError
+				if len(strictData) != 0 || !errors.As(strictErr, &lossErr) || !hasExportCode(strictReport, "gp8.omit.chord-diagram-conflict") {
+					t.Fatalf("strict target conflict = %d bytes, %#v, %v", len(strictData), strictReport.Entries, strictErr)
+				}
+			} else {
+				if !slices.ContainsFunc(diagnostics, func(diagnostic ScoreDiagnostic) bool { return diagnostic.Code == "score.chord.diagram" }) {
+					t.Fatalf("diagnostics = %#v, want score.chord.diagram", diagnostics)
+				}
+				data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+				if len(data) != 0 || err == nil || !hasExportCode(report, "gp8.reject.score.chord.diagram") {
+					t.Fatalf("invalid chord export = %d bytes, %#v, %v", len(data), report.Entries, err)
+				}
+			}
+			if fmt.Sprintf("%#v", song) != before {
+				t.Fatal("chord validation or export mutated the song")
+			}
 		})
 	}
 }
@@ -336,7 +466,6 @@ func runConformanceChordScopeAndIsolation(run *conformanceRun) {
 		{name: "missing reference", data: strings.Replace(conformanceChordScopedGPIF, "<Chord>track</Chord>", "<Chord>missing</Chord>", 1), code: "GPIF.Beat.Chord.Reference"},
 		{name: "empty id", data: strings.Replace(conformanceChordScopedGPIF, `id="track" name="Track"`, `id="" name="Track"`, 1), code: "GPIF.ChordDefinition.EmptyID"},
 		{name: "duplicate id", data: strings.Replace(conformanceChordScopedGPIF, `id="equal-a"`, `id="track"`, 1), code: "GPIF.ChordDefinition.DuplicateID"},
-		{name: "fingering", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Fingering><Position fret="1" finger="Index"/></Fingering></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Fingering"},
 		{name: "show name", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowName" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowName"},
 		{name: "show diagram", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowDiagram" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowDiagram"},
 		{name: "show fingering", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowFingering" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowFingering"},
@@ -391,12 +520,53 @@ func conformanceChordWireFretValues(frets []conformanceChordWireFret) []int {
 type conformanceChordWirePosition struct {
 	Fret   int
 	Finger string
+	String int
 }
 
 type conformanceChordWireProperty struct {
 	Name  string
 	Type  string
 	Value string
+}
+
+type conformanceAlphaTabChordDiagramFact struct {
+	Track      int    `json:"track"`
+	Staff      int    `json:"staff"`
+	Bar        int    `json:"bar"`
+	Voice      int    `json:"voice"`
+	Beat       int    `json:"beat"`
+	Name       string `json:"name"`
+	FirstFret  int    `json:"firstFret"`
+	Strings    []int  `json:"strings"`
+	BarreFrets []int  `json:"barreFrets"`
+}
+
+func TestAlphaTabPreservesChordDiagrams(t *testing.T) {
+	requireAlphaTabConformance(t)
+	song := semanticValidPitchedGP8Song(t)
+	firstFret := uint8(3)
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = &Chord{
+		Name: "Two barres", FirstFret: &firstFret, Length: 7,
+		Strings: []int8{3, 3, -1, 0, 5, 5, 7},
+		Barres:  []Barre{{Fret: 3, Start: 1, End: 2}, {Fret: 5, Start: 5, End: 6}},
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.track-view"}}})
+	if err != nil || !reflect.DeepEqual(reportCodes(report), []string{"gp8.normalize.track-view"}) {
+		t.Fatalf("chord diagram export = %v, %#v", err, report.Entries)
+	}
+	var facts []conformanceAlphaTabChordDiagramFact
+	readAlphaTabOracleFacts(t, "--chord-diagrams", writeConformanceFixture(t, data), &facts)
+	facts = slices.DeleteFunc(facts, func(fact conformanceAlphaTabChordDiagramFact) bool { return fact.Name != "Two barres" })
+	want := []conformanceAlphaTabChordDiagramFact{{Track: 0, Staff: 0, Bar: 0, Voice: 0, Beat: 1, Name: "Two barres", FirstFret: 3, Strings: []int{3, 3, -1, 0, 5, 5, 7}, BarreFrets: []int{3, 5}}}
+	if !reflect.DeepEqual(facts, want) {
+		t.Fatalf("AlphaTab chord diagram facts = %#v, want %#v", facts, want)
+	}
+	sites := []conformanceClaimSite{
+		claimSite("chord-diagram", "import", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
+		claimSite("chord-diagram", "model", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
+		claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
+	}
+	conformanceIndependentClaim(t, "field:Chord.Barres", sites...)
 }
 
 type conformanceChordWire struct {
@@ -462,7 +632,7 @@ func decodeChordWire(t *testing.T, gpif []byte) conformanceChordWire {
 			case "Fingering":
 				result.hasFingering = true
 			case "Position":
-				result.positions = append(result.positions, conformanceChordWirePosition{Fret: conformanceChordXMLIntAttribute(t, value, "fret"), Finger: conformanceChordXMLAttribute(value, "finger")})
+				result.positions = append(result.positions, conformanceChordWirePosition{Fret: conformanceChordXMLIntAttribute(t, value, "fret"), Finger: conformanceChordXMLAttribute(value, "finger"), String: conformanceChordXMLIntAttribute(t, value, "string")})
 			case "Property":
 				property := conformanceChordWireProperty{Name: conformanceChordXMLAttribute(value, "name"), Type: conformanceChordXMLAttribute(value, "type"), Value: conformanceChordXMLAttribute(value, "value")}
 				result.propertyNames = append(result.propertyNames, property.Name)

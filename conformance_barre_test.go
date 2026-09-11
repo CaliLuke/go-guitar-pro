@@ -64,16 +64,14 @@ func runConformanceBarre(run *conformanceRun) {
 		t.Fatalf("editing one reused beat occurrence changed the other to %d", *reusedSecond.BarreFret)
 	}
 
-	// A beat-level barre and a chord diagram barre are independent authored
-	// values. The target preserves the beat mark even while it reports the
-	// separate chord range that #79 owns.
+	// Beat-level and chord-diagram barres are independent authored values.
 	song := semanticExportProbeSong(t)
 	track := &song.Tracks[0]
 	first := &track.Measures[0].Voices[0].Beats[0]
 	firstFret := Fret(3)
 	first.BarreFret = &firstFret
 	first.BarreShape = BarreShapeFull
-	first.Effect.Chord = &Chord{Name: "Independent chord", Strings: []int8{1, 1, 3, 3, 3, 1}, Barres: []Barre{{Fret: 9, Start: 2, End: 5}}}
+	first.Effect.Chord = &Chord{Name: "Independent chord", Strings: []int8{1, 1, 3, 3, 3, 1}, Barres: []Barre{{Fret: 3, Start: 3, End: 5}}}
 	second := *first
 	second.Notes = slices.Clone(first.Notes)
 	second.Effect.Chord = nil
@@ -85,13 +83,11 @@ func runConformanceBarre(run *conformanceRun) {
 		t.Fatal(err)
 	}
 
-	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
-		LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.chord-barres"}},
-	})
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	if err != nil {
 		t.Fatalf("barre export: %v, %#v", err, report.Entries)
 	}
-	run.ClaimReport(claimSite("barre", "export", "M10-BARRE", "distinct frets and full/half shapes")).Report("M10-BARRE", reportCodes(report), []string{"gp8.omit.chord-barres"})
+	run.ClaimReport(claimSite("barre", "export", "M10-BARRE", "distinct frets and full/half shapes")).Report("M10-BARRE", reportCodes(report), []string{})
 	wire := conformanceBarreWire(t, data)
 	wantWire := []conformanceBarreWireFact{{Fret: 3, String: 0}, {Fret: 7, String: 1}}
 	run.ClaimSerialization(claimSite("barre", "export", "M10-BARRE", "distinct frets and full/half shapes")).Wire("gpifProperty.Fret", wire, wantWire)
@@ -106,10 +102,10 @@ func runConformanceBarre(run *conformanceRun) {
 	if got := conformanceBarreShapes(roundTripBeats); !slices.Equal(got, []BarreShape{BarreShapeFull, BarreShapeHalf}) {
 		t.Fatalf("round-trip barre shapes = %v", got)
 	}
-	if roundTripBeats[0].Effect.Chord == nil || len(roundTripBeats[0].Effect.Chord.Barres) != 0 {
-		t.Fatalf("round-trip chord = %#v, want diagram independent from omitted chord ranges", roundTripBeats[0].Effect.Chord)
+	if roundTripBeats[0].Effect.Chord == nil || !reflect.DeepEqual(roundTripBeats[0].Effect.Chord.Barres, []Barre{{Fret: 3, Start: 3, End: 5}}) {
+		t.Fatalf("round-trip chord = %#v, want independent diagram range", roundTripBeats[0].Effect.Chord)
 	}
-	if first.Effect.Chord.Barres[0].Fret != 9 || *first.BarreFret != 3 {
+	if first.Effect.Chord.Barres[0].Fret != 3 || *first.BarreFret != 3 {
 		t.Fatal("export mutated independent beat or chord barre data")
 	}
 

@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"cmp"
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -579,7 +580,70 @@ func gp8ChordItem(id string, chord *Chord, fallbackStringCount int) gpifItem {
 			})
 		}
 	}
+	positions := gp8ChordPositions(chord, baseFret)
+	if len(positions) != 0 || chord.Fingerings != nil {
+		diagram.Fingering = &gpifDiagramFingering{Positions: positions}
+	}
 	return gpifItem{ID: id, Name: chord.Name, Diagram: diagram, Chord: &struct{}{}}
+}
+
+func gp8ChordPositions(chord *Chord, baseFret int) []gpifDiagramPosition {
+	if validateGP8ChordDiagram(chord) != nil {
+		return nil
+	}
+	if chord.Fingerings != nil {
+		positions := make([]gpifDiagramPosition, 0, len(chord.Fingerings))
+		for index, finger := range chord.Fingerings {
+			if finger == FingeringUnknown {
+				continue
+			}
+			wireString := len(chord.Strings) - index - 1
+			wireFret := int(chord.Strings[index]) - baseFret
+			if finger == FingeringOpen && chord.Strings[index] < 0 {
+				wireFret = math.MaxUint32
+			}
+			positions = append(positions, gpifDiagramPosition{
+				Fret:   wireFret,
+				Finger: gp8ChordFingerToken(finger),
+				String: &wireString,
+			})
+		}
+		return positions
+	}
+	fingers := [...]Fingering{FingeringIndex, FingeringMiddle, FingeringAnnular, FingeringLittle, FingeringThumb}
+	positions := make([]gpifDiagramPosition, 0, len(chord.Barres)*2)
+	for barreIndex, barre := range chord.Barres {
+		finger := fingers[barreIndex]
+		for _, publicPosition := range []int8{barre.Start, barre.End} {
+			index := int(publicPosition) - 1
+			wireString := len(chord.Strings) - index - 1
+			positions = append(positions, gpifDiagramPosition{
+				Fret:   int(barre.Fret) - baseFret,
+				Finger: gp8ChordFingerToken(finger),
+				String: &wireString,
+			})
+		}
+	}
+	return positions
+}
+
+func gp8ChordFingerToken(finger Fingering) string {
+	switch finger {
+	case FingeringOpen:
+		return "None"
+	case FingeringThumb:
+		return "Thumb"
+	case FingeringIndex:
+		return "Index"
+	case FingeringMiddle:
+		return "Middle"
+	case FingeringAnnular:
+		return "Ring"
+	case FingeringLittle:
+		return "Pinky"
+	default:
+		return ""
+	}
 }
 
 func (builder *gp8Builder) buildScoreGraph() error {
@@ -708,11 +772,8 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
 	}
 	if chord := beat.Effect.Chord; chord != nil {
-		if len(chord.Barres) != 0 {
-			builder.addReport("gp8.omit.chord-barres", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit explicit chord barre ranges")
-		}
-		if len(chord.Fingerings) != 0 {
-			builder.addReport("gp8.omit.chord-fingerings", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit authored chord finger assignments")
+		if err := validateGP8ChordDiagram(chord); err != nil {
+			builder.addReport("gp8.omit.chord-diagram-conflict", "note-and-beat-semantics", ExportDispositionOmitted, location, err.Error())
 		}
 		if len(chord.Omissions) != 0 {
 			builder.addReport("gp8.omit.chord-omissions", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit legacy chord interval-omission flags")

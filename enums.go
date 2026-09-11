@@ -315,6 +315,8 @@ type Fingering int8
 
 // Fingering values enumerate open strings and finger choices.
 const (
+	// FingeringUnknown indicates that no authored finger assignment is present.
+	FingeringUnknown Fingering = -2
 	// FingeringOpen indicates an open string.
 	FingeringOpen    Fingering = -1
 	FingeringThumb   Fingering = 0

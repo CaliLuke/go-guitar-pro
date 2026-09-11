@@ -153,23 +153,16 @@ func runConformanceChordOccurrence(run *conformanceRun) {
 		t.Fatal("shared source chord did not create independent equal occurrences")
 	}
 	first.Fingerings = []Fingering{FingeringIndex}
-	first.Barres = []Barre{{Fret: 5, Start: 1, End: 1}}
 	first.Strings[0] = 7
 	*first.FirstFret = 5
 	second.Fingerings = []Fingering{FingeringLittle}
-	second.Barres = []Barre{{Fret: 1, Start: 1, End: 1}}
 	run.Field("BeatEffects.Chord", []string{first.Name, second.Name}, []string{"Upper", "Upper"})
 	run.Field("Chord.Fingerings", [][]Fingering{first.Fingerings, second.Fingerings}, [][]Fingering{{FingeringIndex}, {FingeringLittle}})
-	run.Field("Chord.Barres", [][]Barre{first.Barres, second.Barres}, [][]Barre{{{Fret: 5, Start: 1, End: 1}}, {{Fret: 1, Start: 1, End: 1}}})
+	run.Field("Chord.Barres", [][]Barre{first.Barres, second.Barres}, [][]Barre{nil, nil})
 	run.Field("Chord.Strings", []int8{first.Strings[0], second.Strings[0]}, []int8{7, 1})
 	run.Field("Chord.FirstFret", []uint8{*first.FirstFret, *second.FirstFret}, []uint8{5, 1})
 
 	report := PreflightExport(parsed, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.chord-fingerings", "gp8.omit.chord-barres"} {
-		if !hasExportCode(report, code) {
-			t.Fatalf("chord combination report = %#v, want %s", report.Entries, code)
-		}
-	}
 	data, _, err := ExportWithReport(parsed, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)
@@ -181,9 +174,7 @@ func runConformanceChordOccurrence(run *conformanceRun) {
 	gotBeats := roundTrip.Tracks[0].Staves[0].Measures[0].Voices[0].Beats
 	run.Wire("gpifBeat.Chord", []string{gotBeats[0].Effect.Chord.Name, gotBeats[2].Effect.Chord.Name}, []string{"Upper", "Upper"})
 	run.Wire("gpifDiagram.Frets", []int8{gotBeats[0].Effect.Chord.Strings[0], gotBeats[2].Effect.Chord.Strings[0]}, []int8{7, 1})
-	if len(gotBeats[0].Effect.Chord.Fingerings) != 0 || len(gotBeats[0].Effect.Chord.Barres) != 0 {
-		t.Fatal("omitted chord details unexpectedly appeared in GP8 output")
-	}
+	run.Field("Chord.Fingerings", [][]Fingering{gotBeats[0].Effect.Chord.Fingerings, gotBeats[2].Effect.Chord.Fingerings}, [][]Fingering{{FingeringIndex}, {FingeringLittle}})
 }
 
 func TestConformanceGraceCombinations(t *testing.T) {

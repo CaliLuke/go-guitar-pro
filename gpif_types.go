@@ -232,6 +232,7 @@ type gpifDiagramFingering struct {
 type gpifDiagramPosition struct {
 	Fret   int    `xml:"fret,attr"`
 	Finger string `xml:"finger,attr"`
+	String *int   `xml:"string,attr"`
 }
 
 type gpifDiagramProperty struct {

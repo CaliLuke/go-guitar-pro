@@ -2424,12 +2424,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "partial"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Name, string pattern and representable first fret survive. GP8 omits barres, fingerings, omissions and legacy descriptions.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Representable first fret, string order, barre ranges and explicit or synthesized finger positions survive GP3-8 import and GP8 export. Interval omissions and legacy chord descriptions remain separate losses.",
+      "acceptance": "Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports.",
       "upstream": [
         "Chord.firstFret",
         "Chord.strings",
@@ -2449,7 +2449,22 @@
         {
           "kind": "test",
           "reference": "TestConformanceChordDefinitions",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "detail": "Covers actual GP5 import, seven-string and two-barre GPIF import, every finger token, exact wire output, reimport, validation boundaries, and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesChordDiagrams",
+          "detail": "Pinned AlphaTab retains seven-string orientation, first fret, and two distinct barre frets after Go GP8 export."
+        },
+        {
+          "kind": "field",
+          "reference": "Chord.Barres",
+          "detail": "One-based highest-to-lowest range endpoints remain occurrence-owned and authoritative for export."
+        },
+        {
+          "kind": "field",
+          "reference": "Chord.Fingerings",
+          "detail": "The optional slice parallels Chord.Strings and preserves explicit None, thumb, and named finger positions."
         }
       ]
     },

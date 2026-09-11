@@ -209,22 +209,131 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 				if item.Diagram.StringCount < 0 || item.Diagram.StringCount > math.MaxUint8 {
 					return fmt.Errorf("diagram %q string count %d is outside 0..255", item.ID, item.Diagram.StringCount)
 				}
-				firstFret := uint8(min(math.MaxUint8, max(0, item.Diagram.BaseFret+1)))
+				if item.Diagram.BaseFret < 0 || item.Diagram.BaseFret >= math.MaxUint8 {
+					return fmt.Errorf("diagram %q base fret %d cannot map to a one-based chord fret", item.ID, item.Diagram.BaseFret)
+				}
+				firstFret := uint8(item.Diagram.BaseFret + 1)
 				chord.FirstFret = &firstFret
 				chord.Length = uint8(item.Diagram.StringCount)
 				chord.Strings = make([]int8, item.Diagram.StringCount)
 				for index := range chord.Strings {
 					chord.Strings[index] = -1
 				}
+				seenStrings := make(map[int]struct{}, len(item.Diagram.Frets))
 				for _, fret := range item.Diagram.Frets {
-					index := item.Diagram.StringCount - fret.String - 1
-					if index >= 0 && index < len(chord.Strings) {
-						chord.Strings[index] = int8(min(math.MaxInt8, max(0, item.Diagram.BaseFret+fret.Fret)))
+					if fret.String < 0 || fret.String >= item.Diagram.StringCount {
+						return fmt.Errorf("diagram %q string %d is outside 0..%d", item.ID, fret.String, item.Diagram.StringCount-1)
 					}
+					if _, exists := seenStrings[fret.String]; exists {
+						return fmt.Errorf("diagram %q repeats string %d", item.ID, fret.String)
+					}
+					seenStrings[fret.String] = struct{}{}
+					if fret.Fret > math.MaxInt-item.Diagram.BaseFret {
+						return fmt.Errorf("diagram %q fret %d plus base fret %d overflows int", item.ID, fret.Fret, item.Diagram.BaseFret)
+					}
+					absoluteFret := item.Diagram.BaseFret + fret.Fret
+					if absoluteFret < 0 || absoluteFret > math.MaxInt8 {
+						return fmt.Errorf("diagram %q fret %d plus base fret %d is outside 0..%d", item.ID, fret.Fret, item.Diagram.BaseFret, math.MaxInt8)
+					}
+					index := item.Diagram.StringCount - fret.String - 1
+					chord.Strings[index] = int8(absoluteFret)
+				}
+				if item.Diagram.Fingering != nil {
+					fingerings, barres, err := gpifChordFingerings(item.ID, item.Diagram, chord.Strings)
+					if err != nil {
+						return err
+					}
+					chord.Fingerings = fingerings
+					chord.Barres = barres
 				}
 			}
 			chords[item.ID] = chord
 		}
 	}
 	return nil
+}
+
+type gpifChordBarreKey struct {
+	finger Fingering
+	fret   int8
+}
+
+func gpifChordFingerings(id string, diagram *gpifDiagram, strings []int8) ([]Fingering, []Barre, error) {
+	fingerings := make([]Fingering, len(strings))
+	for index := range fingerings {
+		fingerings[index] = FingeringUnknown
+	}
+	groups := make(map[gpifChordBarreKey][]int)
+	order := make([]gpifChordBarreKey, 0)
+	for positionIndex, position := range diagram.Fingering.Positions {
+		if position.String == nil {
+			return nil, nil, fmt.Errorf("diagram %q fingering position %d has no string", id, positionIndex)
+		}
+		if *position.String < 0 || *position.String >= diagram.StringCount {
+			return nil, nil, fmt.Errorf("diagram %q fingering string %d is outside 0..%d", id, *position.String, diagram.StringCount-1)
+		}
+		publicIndex := diagram.StringCount - *position.String - 1
+		if fingerings[publicIndex] != FingeringUnknown {
+			return nil, nil, fmt.Errorf("diagram %q repeats fingering for string %d", id, *position.String)
+		}
+		if position.Fret > math.MaxInt-diagram.BaseFret {
+			return nil, nil, fmt.Errorf("diagram %q fingering fret %d plus base fret %d overflows int", id, position.Fret, diagram.BaseFret)
+		}
+		absoluteFret := diagram.BaseFret + position.Fret
+		if position.Finger == "None" && position.Fret == math.MaxUint32 {
+			absoluteFret = -1
+		}
+		if absoluteFret < -1 || absoluteFret > math.MaxInt8 {
+			return nil, nil, fmt.Errorf("diagram %q fingering fret %d plus base fret %d is outside 0..%d", id, position.Fret, diagram.BaseFret, math.MaxInt8)
+		}
+		if strings[publicIndex] != int8(absoluteFret) {
+			return nil, nil, fmt.Errorf("diagram %q fingering string %d fret %d does not match chord fret %d", id, *position.String, absoluteFret, strings[publicIndex])
+		}
+		finger, err := gpifChordFinger(position.Finger)
+		if err != nil {
+			return nil, nil, fmt.Errorf("diagram %q fingering position %d: %w", id, positionIndex, err)
+		}
+		fingerings[publicIndex] = finger
+		if finger == FingeringOpen {
+			continue
+		}
+		key := gpifChordBarreKey{finger: finger, fret: int8(absoluteFret)}
+		if _, exists := groups[key]; !exists {
+			order = append(order, key)
+		}
+		groups[key] = append(groups[key], publicIndex+1)
+	}
+	barres := make([]Barre, 0)
+	for _, key := range order {
+		positions := groups[key]
+		if len(positions) < 2 {
+			continue
+		}
+		start, end := positions[0], positions[0]
+		for _, position := range positions[1:] {
+			start = min(start, position)
+			end = max(end, position)
+		}
+		barres = append(barres, Barre{Fret: key.fret, Start: int8(start), End: int8(end)})
+	}
+	return fingerings, barres, nil
+}
+
+func gpifChordFinger(token string) (Fingering, error) {
+	switch token {
+	case "None":
+		return FingeringOpen, nil
+	case "Thumb":
+		return FingeringThumb, nil
+	case "Index":
+		return FingeringIndex, nil
+	case "Middle":
+		return FingeringMiddle, nil
+	case "Ring", "Rank":
+		return FingeringAnnular, nil
+	case "Pinky":
+		return FingeringLittle, nil
+	default:
+		return FingeringUnknown, fmt.Errorf("finger %q is not defined", token)
+	}
 }

@@ -593,6 +593,34 @@ export function loadBarreFacts(fixture) {
   return facts;
 }
 
+export function loadChordDiagramFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (!beat.chord) continue;
+            facts.push({
+              track: track.index,
+              staff: staff.index,
+              bar: bar.index,
+              voice: voice.index,
+              beat: beat.index,
+              name: beat.chord.name ?? '',
+              firstFret: finite(beat.chord.firstFret),
+              strings: Array.from(beat.chord.strings),
+              barreFrets: Array.from(beat.chord.barreFrets)
+            });
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadBeatLyricFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -956,6 +984,10 @@ function main() {
   }
   if (args[0] === '--barre' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBarreFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--chord-diagrams' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadChordDiagramFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--beat-lyrics' && args.length === 2) {

@@ -2017,14 +2017,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Properties/Property[1]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "5",
-          "locationsSha256": "022e0360d014793841f75c77c43e6c31e636acd573285874e954198659b3feb6"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowFingering",
           "kind": "unsupported-feature",
           "count": 8,
@@ -2043,10 +2035,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 140,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"5\"]/Diagram/@barsStates",
           "objectId": "5",
-          "locationsSha256": "b8e3ed2841ca07d5f8decb287cfbb47243d1385a31abe50b0ff90e22113cab40"
+          "locationsSha256": "1efd4dd00faa6d63832bc7a86475792d11dd13fc4a159fac8ce90749083d38d1"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6075,14 +6067,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "390e3c49a1b473172da513327f23d96e932f16d9b8aab98c1946670e8b628184"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 2,
@@ -6133,10 +6117,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 28,
+          "count": 4,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "8ff280bda836f1b9fbe3ece1e4531c5c253793227cd8c811b4bae313daa9196b"
+          "locationsSha256": "be350eab3d0b74df464e1b46e487852fbcf5ceca289e41af4340645c7a595419"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6203,14 +6187,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "f62b21729679faccffa830686f9004729ed0e3eb2e0927572e6f737acabcc9d9"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 3,
@@ -6269,10 +6245,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 3,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "bd3415d81fb0cbb86055c33b186c278aaf743eff2bf082aa6b7ecccf87e62eaf"
+          "locationsSha256": "84ca20f907a720bacc61cd4f7cf3f773043aea7d9e77795879dce997f7ce4896"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -6410,14 +6386,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "2",
-          "locationsSha256": "ca13c8dff3f29c284d54b2c877cca9a3992e7e897fea89b26c69c6e3672a560c"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 2,
@@ -6468,10 +6436,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 35,
+          "count": 5,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"2\"]/Diagram/@barsStates",
           "objectId": "2",
-          "locationsSha256": "63f28f49fb2e33694366ea4f29857bb310aa62d75086875c6ad43cf440a838cf"
+          "locationsSha256": "7b62a2d2c8cdc4abab7d9f3516a5c8556a1c6706f5dc8b3744edac3318853317"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7676,10 +7644,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 1,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"1\"]/Staves/Staff/Properties/Property[@name=\"DiagramWorkingSet\"]/Items/Item/Diagram/@barsStates",
           "objectId": "1",
-          "locationsSha256": "b46076892fa0aeb731f025abf9a3afef4f0c2a5892497261cbd2c1aeb3b26c1c"
+          "locationsSha256": "ca4b19bce29c1bd5297e58a11de75ddc71b1f3ecee1306c7dbd89a0582f56202"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -7833,14 +7801,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "539f7040f526dfc7b37192ec745246f5e5cdd7cf413a52006bc7e4a7def1bb28"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 7,
@@ -7891,10 +7851,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 98,
+          "count": 14,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "74217f3efd86afa6e407ae493bd9e0859c00bc47023b17fee4070bc7bc6a2f12"
+          "locationsSha256": "3e6d0dcc63c44caa1e5c0c485fcc0e77339abeafbdff22e92932b6891be1d45d"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11127,14 +11087,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "539f7040f526dfc7b37192ec745246f5e5cdd7cf413a52006bc7e4a7def1bb28"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 7,
@@ -11201,10 +11153,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 105,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "9c31408b27947c3b58eb7890a8789c94a41dfb1c8ea2c75b7fb7c5f702cad054"
+          "locationsSha256": "b68b3eaf72e3183e4aa6b5dcf5876fba22bdf131a843c4b7222a47a40394116e"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -11277,14 +11229,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "1",
-          "locationsSha256": "f55ec90a58f7eb63d76ce76a46abd9ef562c8bcbc0edb49e3771e0473f0b3967"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 1,
@@ -11335,10 +11279,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 3,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"1\"]/Diagram/@barsStates",
           "objectId": "1",
-          "locationsSha256": "0a9f242aff1d3676b47c6387295ce4d55932571293a47cf076e47d100f1f8d7b"
+          "locationsSha256": "2c9376b1ff653726d1c56ce4c4b4003a5ed4e5ec9efa59d2cc3b91f49c8cb953"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -12627,14 +12571,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "5bd691c929bbd09771312ea73f7888ba12a20023e0a95f3549e64681ace81052"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 1,
@@ -12685,10 +12621,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 14,
+          "count": 2,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "7a6db281040ac4fb78b49ec231ce39df22314b467d3c7d7a25d8fd79d5285b08"
+          "locationsSha256": "1698d116ab5361b7924a0e27645659f5e2cf7e87b039451e07ed7c5dbf607575"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13237,14 +13173,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "f62b21729679faccffa830686f9004729ed0e3eb2e0927572e6f737acabcc9d9"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 3,
@@ -13303,10 +13231,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 3,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "bd3415d81fb0cbb86055c33b186c278aaf743eff2bf082aa6b7ecccf87e62eaf"
+          "locationsSha256": "84ca20f907a720bacc61cd4f7cf3f773043aea7d9e77795879dce997f7ce4896"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13372,14 +13300,6 @@
           "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "f62b21729679faccffa830686f9004729ed0e3eb2e0927572e6f737acabcc9d9"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 3,
@@ -13438,10 +13358,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 3,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "bd3415d81fb0cbb86055c33b186c278aaf743eff2bf082aa6b7ecccf87e62eaf"
+          "locationsSha256": "84ca20f907a720bacc61cd4f7cf3f773043aea7d9e77795879dce997f7ce4896"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -13753,14 +13673,6 @@
           "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
         },
         {
-          "code": "GPIF.Chord.Diagram.Fingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Fingering",
-          "objectId": "0",
-          "locationsSha256": "831a4561bab1142865c157399dbe9443e5084302409b729e2b64ed1ee1f7587f"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 2,
@@ -13811,10 +13723,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 28,
+          "count": 4,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "a5f0bcf8822710b086e4e9272bdd0fb1238c1c9b5f896b7561f478e851861912"
+          "locationsSha256": "05f2c620a78139f489b2e6622589740790480ea250fbd358c4bb21b2837484eb"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",
@@ -15114,10 +15026,10 @@
         {
           "code": "GPIF.UnknownAttribute.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 1,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramWorkingSet\"]/Items/Item/Diagram/@barsStates",
           "objectId": "0",
-          "locationsSha256": "12bb9511d8011fba2a0852164169e25f7caf74a5c3a806fbc07169347d9d5e7c"
+          "locationsSha256": "425dda48bf29312c491ee0d2a696ba2b0cc582910f1f4bc3bf13bb7680c25113"
         },
         {
           "code": "GPIF.UnknownAttribute.StaffOwnership",

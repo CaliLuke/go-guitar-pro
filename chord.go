@@ -63,10 +63,17 @@ type Chord struct {
 	Show      *bool
 	Name      string
 	// Strings contains one fret state per string: -1 is muted, 0 is open, and a
-	// positive value is a fretted position.
-	Strings    []int8
-	Barres     []Barre
-	Omissions  []bool
+	// positive value is a fretted position. The order is highest to lowest and
+	// is authoritative for the diagram width.
+	Strings []int8
+	// Barres contains authored fingering ranges. Start and End are one-based
+	// positions in Strings order. Direct edits are authoritative for export.
+	Barres    []Barre
+	Omissions []bool
+	// Fingerings parallels Strings. FingeringUnknown means no authored
+	// assignment. FingeringOpen preserves an authored GPIF None position; the
+	// matching string state distinguishes a muted string from an open one. Nil
+	// means that the source did not contain fingering positions.
 	Fingerings []Fingering
 	Length     uint8
 }
@@ -235,10 +242,12 @@ func (s *Song) readNewFormatChordV3(c *cursor, ch Chord) (Chord, error) {
 		}
 	}
 	for i := 0; i < int(barreCount) && i < 2; i++ {
+		start := min(barreStarts[i], barreEnds[i])
+		end := max(barreStarts[i], barreEnds[i])
 		ch.Barres = append(ch.Barres, Barre{
 			Fret:  int8(barreFrets[i]),
-			Start: int8(barreStarts[i]),
-			End:   int8(barreEnds[i]),
+			Start: int8(start),
+			End:   int8(end),
 		})
 	}
 	for i := 0; i < 7; i++ {
@@ -362,10 +371,12 @@ func (s *Song) readNewFormatChordV4(c *cursor, ch Chord) (Chord, error) {
 		}
 	}
 	for i := 0; i < int(barreCount) && i < 5; i++ {
+		start := min(barreStarts[i], barreEnds[i])
+		end := max(barreStarts[i], barreEnds[i])
 		ch.Barres = append(ch.Barres, Barre{
 			Fret:  int8(barreFrets[i]),
-			Start: int8(barreStarts[i]),
-			End:   int8(barreEnds[i]),
+			Start: int8(start),
+			End:   int8(end),
 		})
 	}
 	for i := 0; i < 7; i++ {
@@ -383,7 +394,9 @@ func (s *Song) readNewFormatChordV4(c *cursor, ch Chord) (Chord, error) {
 		if fingeringErr != nil {
 			return ch, fingeringErr
 		}
-		ch.Fingerings = append(ch.Fingerings, Fingering(f))
+		if i < len(ch.Strings) {
+			ch.Fingerings = append(ch.Fingerings, Fingering(f))
+		}
 	}
 	show, err := c.readBool()
 	if err != nil {
