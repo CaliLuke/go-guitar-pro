@@ -14,22 +14,21 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 62 | 20 | 17 | 2 |
-| model | 61 | 21 | 18 | 1 |
-| export | 39 | 25 | 34 | 3 |
+| import | 63 | 19 | 17 | 2 |
+| model | 62 | 20 | 18 | 1 |
+| export | 40 | 25 | 33 | 3 |
 
-All three stages have a supported rating in 39 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 40 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `false`.
+The receipt contains 364 input files. Probe freshness against the current source: `true`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Stylesheet, brackets and track-name policies | 364 | 0 | 357 | 0 | 7 |
 | System layout and forced line breaks | 250 | 112 | 245 | 0 | 7 |
-| Beam grouping, direction and stem overrides | 200 | 162 | 195 | 0 | 7 |
 | Track short names | 364 | 0 | 194 | 0 | 7 |
 | Authored pitch spelling and accidentals | 157 | 89 | 156 | 0 | 7 |
 | Concert and display transposition | 347 | 16 | 111 | 0 | 7 |
@@ -45,6 +44,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord diagrams, barres and fingering | 11 | 346 | 11 | 0 | 7 |
 | Pick stroke direction | 11 | 346 | 11 | 0 | 7 |
 | Wah pedal state | 11 | 346 | 11 | 0 | 7 |
+| Beam grouping, direction and stem overrides | 200 | 162 | 8 | 0 | 7 |
 | Slashed beats and slash staff notation | 8 | 349 | 8 | 0 | 7 |
 | Volume automation events | 8 | 350 | 7 | 0 | 7 |
 | Authored note duration percentage | 6 | 351 | 6 | 0 | 7 |
@@ -245,7 +245,7 @@ Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Direction survives. GPIF brush duration XProperty is not retained. The GP8 writer uses a fixed eighth-note stroke duration.
+Direction survives. GPIF brush duration XProperty is not retained and now has a stable brush-specific unknown-syntax diagnostic instead of becoming silently accepted by the generic XProperty schema. The GP8 writer uses a fixed eighth-note stroke duration.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -529,11 +529,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Notation. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Binary display flags exist. GPIF XProperties and stem-direction elements are absent. GP8 omits authored beam groups and beat display overrides.
+GP5 following-beat flags, known beaming GPIF XProperties, custom master-bar groups, and independent inverted or preferred stem directions on canonical Beat occurrences have public destinations and GP8 output. The generic XProperty containers remain audit-closed: unhandled beat and master-bar IDs receive stable unknown-syntax diagnostics. Legacy Beat.Display fields remain source-compatible raw data and receive individual omission reports. GPIF grace-beat stem direction is part of the separately scoped grace representation because the public model projects that occurrence to GraceEffect rather than Beat.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Preserve custom grouping ownership and every beam/stem override through public editing and pinned AlphaTab consumption while retaining exact dispositions for legacy-only display fields.
 
 Bounded work: [Preserve authored beam groups and stem overrides](https://github.com/CaliLuke/go-guitar-pro/issues/75).
 

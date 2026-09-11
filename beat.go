@@ -75,9 +75,19 @@ type Beat struct {
 	// BarreShape is the authored full- or half-barre shape. BarreShapeNone must
 	// be paired with a nil BarreFret.
 	BarreShape BarreShape
-	Text       string
-	Notes      []Note
-	Duration   Duration
+	// BeamingMode controls the beam connection from this beat to the next beat.
+	// It is the export authority. Binary GP5 flags are moved from the following
+	// beat's legacy Display fields into this field during import.
+	BeamingMode BeatBeamingMode
+	// InvertBeamDirection reverses the automatically selected stem direction. It
+	// is independent from an explicit PreferredBeamDirection.
+	InvertBeamDirection bool
+	// PreferredBeamDirection is the authored up/down stem override. None means
+	// no explicit direction and is independent from InvertBeamDirection.
+	PreferredBeamDirection VoiceDirection
+	Text                   string
+	Notes                  []Note
+	Duration               Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
 	// absent and lets export use the first note velocity. A nonzero value must be
 	// within 1..127. GP3-5 stores the value on notes, but the last explicit value
@@ -244,6 +254,7 @@ func (s *Song) readBeatV5(c *cursor, voice *Voice, start *int64, trackIndex int)
 	if (flags2 & 0x0008) == 0x0008 {
 		voice.Beats[b].Display.BeamDirection = VoiceDirectionUp
 	}
+	voice.Beats[b].PreferredBeamDirection = voice.Beats[b].Display.BeamDirection
 	if (flags2 & 0x0200) == 0x0200 {
 		voice.Beats[b].Display.TupletBracket = TupletBracketStart
 	}
@@ -256,6 +267,17 @@ func (s *Song) readBeatV5(c *cursor, voice *Voice, start *int64, trackIndex int)
 			return 0, err
 		}
 		voice.Beats[b].Display.BreakSecondary = bs
+	}
+	if b > 0 {
+		previous := &voice.Beats[b-1]
+		switch {
+		case voice.Beats[b].Display.BreakSecondary != 0:
+			previous.BeamingMode = BeatBeamingForceSplitSecondary
+		case voice.Beats[b].Display.ForceBeam:
+			previous.BeamingMode = BeatBeamingForceMerge
+		case voice.Beats[b].Display.BreakBeam:
+			previous.BeamingMode = BeatBeamingForceSplit
+		}
 	}
 
 	return dur, nil

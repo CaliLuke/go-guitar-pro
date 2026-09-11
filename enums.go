@@ -167,6 +167,21 @@ const (
 	VoiceDirectionDown VoiceDirection = 2
 )
 
+// BeatBeamingMode controls the beam connection from one beat to the next.
+type BeatBeamingMode int8
+
+// Beat beaming modes preserve explicit split and merge instructions.
+const (
+	// BeatBeamingAuto lets the master-bar grouping rules choose the connection.
+	BeatBeamingAuto BeatBeamingMode = iota
+	// BeatBeamingForceSplit forces the beam to end before the next beat.
+	BeatBeamingForceSplit
+	// BeatBeamingForceMerge forces the beam to continue to the next beat.
+	BeatBeamingForceMerge
+	// BeatBeamingForceSplitSecondary splits only the secondary beam before the next beat.
+	BeatBeamingForceSplitSecondary
+)
+
 // TupletBracket describes where a tuplet bracket begins or ends.
 type TupletBracket int8
 

@@ -1882,10 +1882,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -1923,10 +1923,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 10,
+          "count": 1,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "eca63048bbc0d411bf604a627c818ef83b8090021c9f5c71bcb278c9e1fda779"
+          "locationsSha256": "3c61b9154e467a699844d69d9d123fab2ceee3d104369b3c2db12311a0564b07"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -1994,10 +1994,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2130,10 +2130,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 41,
+          "count": 40,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "88393c86c0950b95e92c9c27bfa87b9bb139aca0707aa0af145888f9879e6457"
+          "locationsSha256": "b83bf024b91205607cfcc57a0e336c4930d008c3e89026b9ccbb1088dd8bbcfa"
         }
       ],
       "differences": null
@@ -2186,10 +2186,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2215,6 +2215,14 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"56\"]/Wah",
           "objectId": "56",
           "locationsSha256": "595dedcab246f6073a66111261d58182bca9f274dd03d42cb31dd11d3b0763f4"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"74\"]/XProperties/XProperty[0]/@id",
+          "objectId": "74",
+          "locationsSha256": "9e218c1193e2daf1077c4b7129126335be59f66d379127b9bdf55ea56d9f266c"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -2251,10 +2259,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 14,
+          "count": 12,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "d6d7c557266df6281c03efad2d5388c0d66d5c4f36a3a65743ef517b17033611"
+          "locationsSha256": "1bd7dce730b36f7ae0f90072722aea8ae4e6b5c983bd3c6181804a64f196d0df"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -2266,10 +2274,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 42,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "27fa17be86602173fc53821708ad2831646d04a8d780f66ec022934b91da4ac6"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2370,10 +2378,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2384,6 +2392,14 @@
         "score-core"
       ],
       "diagnostics": [
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 3,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"4\"]/XProperties/XProperty[0]/@id",
+          "objectId": "4",
+          "locationsSha256": "64486fb4949f0ea15adb048b9898846bad017d163a0da75020dde78072583c2e"
+        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -2451,10 +2467,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 1269,
+          "count": 1266,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "94946fab2ad50446c45f2e8856f19ac2cee435bc6db3a7f5853f9fa7e8c31088"
+          "locationsSha256": "15900c2e56c1fef0ecadaf9ba9ea0268ea6bf7745d86f556ac17db5bf2cb080d"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -2466,10 +2482,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 304,
+          "count": 208,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "3fbfc5e4c0d61be6ef3c09b0f5057f06fa4d0e9ec62b4a037525bbbf68ebaa3f"
+          "locationsSha256": "693c9eb9b41b4870a940c8c5a8acde74e26619cb80139b727598bd249800e683"
         }
       ],
       "differences": null
@@ -2522,10 +2538,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2586,10 +2602,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2642,10 +2658,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -2996,10 +3012,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3060,10 +3076,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d2b397b0fce8cca9b6b3e1c7fcd87f6d72f2070d1035e33ff8dace8d331f13bc"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3116,10 +3132,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3172,10 +3188,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 15,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "67a3d1ec8acf3a65fa6747f61a6464cb4ad06828549d155456bfd21bee9c4ab5"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3228,10 +3244,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3284,10 +3300,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "9c34bc74c9d0efb552307f4148c58001dd73048e99d1ae98e2c999bfe52b9cdd"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3340,10 +3356,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "35a4656b25ebd35b91ff729f04a0de5c8417f404a457ce8a56ee858a23e2bf6c"
+          "locationsSha256": "4fe5be15a5330a63429db8286eaa4e9d56f90b8493a5d42b5aaaf5f0cec18097"
         }
       ],
       "differences": null
@@ -3404,10 +3420,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 118,
+          "count": 40,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "457f3fd8eaadd04e7903fad31d57d537d8fd60336743248ae806b70bede0ecfe"
+          "locationsSha256": "b83bf024b91205607cfcc57a0e336c4930d008c3e89026b9ccbb1088dd8bbcfa"
         }
       ],
       "differences": null
@@ -3516,10 +3532,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3573,10 +3589,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3587,6 +3603,14 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "3597ce0bab5f6c605896456ae8f97e6a6ed4a25ddda452cefe748bde871a224f"
+        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -3614,10 +3638,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 3,
+          "count": 1,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "7285e1b0c6021690067972c4656e5a82d439f93cafc3a24c91fe02f1aec6a50d"
+          "locationsSha256": "3c61b9154e467a699844d69d9d123fab2ceee3d104369b3c2db12311a0564b07"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -3629,10 +3653,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3741,10 +3765,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d2b397b0fce8cca9b6b3e1c7fcd87f6d72f2070d1035e33ff8dace8d331f13bc"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3806,10 +3830,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 15,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "67a3d1ec8acf3a65fa6747f61a6464cb4ad06828549d155456bfd21bee9c4ab5"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3862,10 +3886,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3918,10 +3942,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "abc10e47b4b60e0e2fc41a0dc1bb08cf7270511deb950c0548da9eeef7a00c00"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -3982,10 +4006,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 10,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6dd753e643f25d1f69586b0201b5907bb50efa7c52ef16f8d777f47812442ece"
+          "locationsSha256": "a1a8a071d7454d9104564ea9f87d429759612731d685372bdea6cdae87c41d27"
         }
       ],
       "differences": null
@@ -4055,10 +4079,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 16,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 8,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "2ccd5d9c0d99a4c8e201946c0de4c3cf9555b8a2123dac4ea26a85265dbe96c2"
+          "locationsSha256": "2a25fd0edf3ffe9dbb44df3322de50fa68b63ef698ef813dc49564fddc7135e7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4143,10 +4167,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 127,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 61,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "126dede6cfb8bb26136921b656a87e55ab2b771e43ee31a17485d106e48a7405"
+          "locationsSha256": "f5f49f987b3e2edc53738cbb822a37aa2e2a02491918c818634b1edce0e7608f"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4158,10 +4182,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 1066,
+          "count": 541,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "daa61c5f6f8f39bb02dae13d2c97cee93251d256e7d09ddd381519a198e3bd6a"
+          "locationsSha256": "96fe02ce1aa71d3272e9525c358f579187cc341addc38d87a6fd7de140ff2319"
         }
       ],
       "differences": null
@@ -4231,9 +4255,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 7,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "521c3b91a49586ac487e26c689df25ce0c5b91c967763839f882e063270d5a20"
+          "locationsSha256": "c40f99151cd96c75234664f9476f11a5f45c5c46f7ad0a114f5f2a1385d25846"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4245,10 +4269,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "61ac607f2f7819aa2ed2d3ac4fc7703c0e244078687e5e770e4e04af0a948117"
+          "locationsSha256": "5736a4f088e762b4642d95366469aba6a377281fe076deba75e40e47653b1626"
         }
       ],
       "differences": null
@@ -4318,9 +4342,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 3,
+          "count": 2,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1386c89133f0dd1542d1560c74f6ce80018a7df025d9d1908986aac0252b51e0"
+          "locationsSha256": "9514b9e666caa01c29920f794e2dfade60a0b35cf32d3e9da77b5886e6c548cf"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4332,10 +4356,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bc3b1c1d732d7d27988746b6ffc8318cc25e491ffc187e98dc005e5cedecd65f"
+          "locationsSha256": "31485577784bca71d153c1a267ece9bad09ae66909a63c994315af2dcc6ef516"
         }
       ],
       "differences": null
@@ -4406,9 +4430,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 7,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "521c3b91a49586ac487e26c689df25ce0c5b91c967763839f882e063270d5a20"
+          "locationsSha256": "c40f99151cd96c75234664f9476f11a5f45c5c46f7ad0a114f5f2a1385d25846"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4485,9 +4509,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 5,
+          "count": 3,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "f3e2d82ded8e97233d243b4ce1232ffa76ecfb8cfb9652122bc5e51dd7edb748"
+          "locationsSha256": "8b610cb9541ef3c1985bf62d424dcd271a514fccd10b5971db1cd3af25616cb7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4499,10 +4523,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "e5e34f6e7058df4bcc5e00b52eb84825bf305910877f094d2933366c42e697d3"
+          "locationsSha256": "c35066dd88cdf07a9424ae25846a205102e289aca576760750d5c6e3042bc915"
         }
       ],
       "differences": null
@@ -4572,10 +4596,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 24,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 12,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "7cb359918eb73914c3326b76ee75633ddd664d8b8ef5a64909927dc52adb654b"
+          "locationsSha256": "bb3dc9f92b18e99e274dd272ce289b45141bf9104db37ca4ead2c3237dfb7cf7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4660,9 +4684,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 4,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "325efcc9a409ae9060787b2ffe3f4b68a35cc58c00f1f63710ec2039f2750328"
+          "locationsSha256": "6e5996f3ffe6b0cfc3f0dfd09996921ea0231b62beb61a90b109a590d9ccfee8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4747,10 +4771,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 34,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 12,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "fecf6e7a7e013ab3a01588357c2724c217c68780ca98cc6e5a7d5131c99a1166"
+          "locationsSha256": "bb3dc9f92b18e99e274dd272ce289b45141bf9104db37ca4ead2c3237dfb7cf7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4827,9 +4851,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 103,
+          "count": 52,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "33ddc825d38e55721ffce8c20d55f38f68668dd710bea8ffcca7ec592dc1dddc"
+          "locationsSha256": "f529386b8a161d3878ea12e3f612ad611ea944db2fee25a3c109e25d8e5f788e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4841,10 +4865,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 67,
+          "count": 44,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "5d81d65581c00f6805e469dfa0247000e573643f79d440a89041dc07a3e80949"
+          "locationsSha256": "df844a24538ffbc5cca037da72261db0f1b89b5f820f4e5cb1a6e7efc5692a77"
         }
       ],
       "differences": null
@@ -4914,10 +4938,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 6,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 3,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "36daac0fcd3d09004dbcca0225e6006c3233fd9b6d11a643fcfc0ff1a90e9e5b"
+          "locationsSha256": "be7acab3eb6a2b87704b0979f63ba15f6d8a2bcdc3614f1547f27fd66914a30e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -4994,9 +5018,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 15,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "087c6954732b3d16d6188743c006b70dca32f2bce93724b066fa568ac216637a"
+          "locationsSha256": "12ba7a834d97267a2953b642382558226637ca9c3da8a24ff45d258b4135ddee"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5081,10 +5105,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 36,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 21,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "5176e87a7298b00bac74b52c40ee3f50a40afbbdb63d5eff15bbd0ab2291425f"
+          "locationsSha256": "4f892a4990d09d1dd41d7c318a571c222c5767913b25ec25c40528fc47db0fb1"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5169,10 +5193,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 8,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 4,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1d283bf99f33bc64d12897dbd49a6a5a95a8d7adf7da4f8d331651049da424d2"
+          "locationsSha256": "7f8e3fa8376610256a4bf85cb38a73c0270b2d903e9047517f2ff43d33f7ce51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5257,10 +5281,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 16,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 8,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "2ccd5d9c0d99a4c8e201946c0de4c3cf9555b8a2123dac4ea26a85265dbe96c2"
+          "locationsSha256": "2a25fd0edf3ffe9dbb44df3322de50fa68b63ef698ef813dc49564fddc7135e7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5272,10 +5296,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 22,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "6772bebd461af17c3cfca67159dcc4420ddb16fcfcde4dd96a5b1a5a93db320c"
+          "locationsSha256": "a7ace9c3f2d9f770c6653c7f0f6a46bbe5b7a3c77555e2f4c0348eb1d4abf1e3"
         }
       ],
       "differences": null
@@ -5345,9 +5369,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 77,
+          "count": 39,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "0a720e3f6b814f4c2afe42be62fd08caca0c593665fd664ee60c9e6ff1ca2ae7"
+          "locationsSha256": "bdf3bc6e419cb294dc464dfc3dadcdd2344f8982c9b3ce3226bcdd88017bc6a0"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5438,9 +5462,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 51,
+          "count": 26,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1af5596a6d9ff9ce1ffd766dff465f5aa32338a353a311616709ad46a659e45c"
+          "locationsSha256": "403273c07f424b48f66eea27e626039ebd81087628d234225fcc48961271f777"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5627,6 +5651,14 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 4,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "be89b0f954aa06f055bbce84806f63525915e7b25f6274308be0003dcfa4556c"
+        },
+        {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
           "count": 1,
@@ -5669,9 +5701,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "f417df15d9424904ba30411c1e9730acb2da0321048b47aba513f95250218e3c"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5683,10 +5715,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -5712,6 +5744,22 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "a443c7c9ccb2ff76101d859686eeb33e2ef6be03397cc17d7e604d4e615f701a"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 16,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "2aac3ec468fff630841bd7147762d8facd209a83a44a7f56f6a4afb1a910e73d"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 48,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[1]/@id",
+          "objectId": "0",
+          "locationsSha256": "7d6784dc4741496e9ca7d21199201f27ae9bea4025f2fc918121b289a16311ff"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5748,9 +5796,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 97,
+          "count": 65,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "2c00a83d02fe357d7839ce62fe3cae3ed8a525e1691b1eba445ab76b0dd117ec"
+          "locationsSha256": "d25038802b667343718c36f7944c1d521507f5bfb0a4dc83d6ba43e1e256db6b"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5791,6 +5839,22 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 28,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "566beb0d926b8e456cee36878d54e7f10b7f4d36f2a1fd1f52eaf030cf9e27b7"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 60,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[1]/@id",
+          "objectId": "0",
+          "locationsSha256": "6cbdc981b45a72e96846c0ed3aa8049e2e61065a9bdd37f841cb1299733486cd"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -5835,9 +5899,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 73,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "fb0270473f1ef6298fc77a4bbe95876fd7046b57e1496b7964423f849fdc7366"
+          "locationsSha256": "1815d72a2e7db43f6cb5f345d332e2b8afa3374fb1097b2ea5007bd714feab81"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5938,10 +6002,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2451,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1376,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1e1115d2999d09f34f8fd398427a990dd0aaabc631bf947c3f4df97170697db5"
+          "locationsSha256": "72aabfcf5e04f2ac6268f8c049bb43991d5bced914cc5566c6acba4048c43892"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -5953,10 +6017,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 591,
+          "count": 367,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "342cc6b9d62177dfa349d890c1afe0abd3a36a6f96c01fab53bd8b9a42dc627a"
+          "locationsSha256": "62b60b29c1c11a18678098697b685d66101f57626c7ec5090bea05004bf0c2de"
         },
         {
           "code": "score.note.bend.order",
@@ -6022,9 +6086,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 10,
+          "count": 8,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "5c56a6a2e3c89b461906ec9f44560f8191159eaea14475b6fa252bbbe73ca782"
+          "locationsSha256": "c8769cc862ceb3e33ea8b25f323988725f27017ab57ffe4ffe3dec6898bc2c12"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6149,10 +6213,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 20,
+          "count": 18,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "81ca640d824f6455a2cd62a88df11c416ac21b8e21da4a45011b07b31c14b4a9"
+          "locationsSha256": "c27ebe15e8324d4c31a18fdbc36ba486160573073b22068ed1212e15af5ec8ff"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6285,9 +6349,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 63,
+          "count": 36,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "2999737094f719069caccc288e31b992430ed9a453a938fd4ab69862a04fccc6"
+          "locationsSha256": "6430ca2a20dea0ccbc8308f4aac90f34c6dac18f277b0edfd98b132406f9c3f3"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6299,10 +6363,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "1f8520721126c45352c8bd5ffce36ddd3e098520baff5362c5b63e93e2efa48e"
+          "locationsSha256": "f0e7d38e583269506dd4b930745a9e4e37e445f73cae586497ef0ead948fa495"
         }
       ],
       "differences": null
@@ -6394,6 +6458,22 @@
           "locationsSha256": "4bf9a9a701d942a2e46a7e4436be673d8b8b12a911aa9b4fcce2a01e21e5bbc4"
         },
         {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[2]/@id",
+          "objectId": "0",
+          "locationsSha256": "61ee72c01cb776cdcc3a23497f5166c261b10d342a750d73e59fe9be1fc86bd2"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 3,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "28e386e0d1bb9ee00c24c1795df3247d95f220bbc6b9897ad6a991cfbec16b9d"
+        },
+        {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
           "count": 1,
@@ -6476,10 +6556,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 54,
+          "count": 39,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"2\"]/Chord/KeyNote",
           "objectId": "2",
-          "locationsSha256": "0c7e1831beda565b269f2414180c78003b1f996281d42e1208b411724c608cda"
+          "locationsSha256": "50921f2e24212fe34799eab83d376662aac9d40bfa9df14238f1d2a9b0fc9a19"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6603,9 +6683,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 4,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "325efcc9a409ae9060787b2ffe3f4b68a35cc58c00f1f63710ec2039f2750328"
+          "locationsSha256": "6e5996f3ffe6b0cfc3f0dfd09996921ea0231b62beb61a90b109a590d9ccfee8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6617,10 +6697,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "61ac607f2f7819aa2ed2d3ac4fc7703c0e244078687e5e770e4e04af0a948117"
+          "locationsSha256": "5736a4f088e762b4642d95366469aba6a377281fe076deba75e40e47653b1626"
         }
       ],
       "differences": null
@@ -6690,9 +6770,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 4,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "325efcc9a409ae9060787b2ffe3f4b68a35cc58c00f1f63710ec2039f2750328"
+          "locationsSha256": "6e5996f3ffe6b0cfc3f0dfd09996921ea0231b62beb61a90b109a590d9ccfee8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6704,10 +6784,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "b71a8474ddc7259d5b08caaf5ee3686f144640738e830e5587b36f524c56016b"
+          "locationsSha256": "f913bf81d4dd5c043eb5ae99cdae996e22875e300d773eca16650db474e1aa8a"
         }
       ],
       "differences": null
@@ -6777,10 +6857,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 13,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "de74a7c1548276b5a0018abd7e09fd61b85b11e1ac73b08d2aba7d40ff908ce6"
+          "locationsSha256": "6fec12456c39cd93d75b55c515cc7c5921bc6806acaf6da5d09973a14fcc3c93"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6865,9 +6945,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b5f9125f892235c85ee3a2cc1a28b10c986f25fe72d45f40fdc96092098ed1f4"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6879,10 +6959,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         }
       ],
       "differences": null
@@ -6936,10 +7016,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "876b5d5f904ba1d08a3005899e6b256621c035dd0ede14bb194d8e5eea43b19f"
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7008,10 +7088,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "876b5d5f904ba1d08a3005899e6b256621c035dd0ede14bb194d8e5eea43b19f"
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7136,9 +7216,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 189,
+          "count": 95,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7168096b65edc77d2a8ed3867590972032b7d4d310485660a0fdc808fa3e6233"
+          "locationsSha256": "94f86c83b869bea74541df2f854f0f4994cc92551b925d2c20dd9d41d55366c3"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7223,9 +7303,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7f5b556504420828c3b9066c0838e7b50bdd5b28b4f0ff1fa7798932a8db763b"
+          "locationsSha256": "fb012d4e76a87ba1d965194934786a4902e968d50c453aae546c91ab836c711e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7237,10 +7317,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "b71a8474ddc7259d5b08caaf5ee3686f144640738e830e5587b36f524c56016b"
+          "locationsSha256": "f913bf81d4dd5c043eb5ae99cdae996e22875e300d773eca16650db474e1aa8a"
         }
       ],
       "differences": null
@@ -7282,6 +7362,14 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"60\"]/Wah",
           "objectId": "60",
           "locationsSha256": "4f1522c32fc6685c066b03025bf1ca7756c94f103e86f710a4aca529b0c226f7"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"81\"]/XProperties/XProperty[0]/@id",
+          "objectId": "81",
+          "locationsSha256": "814762042164894a0895a65de5d065720f2faa21335b6533ebe42f9f8a3e337e"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -7334,9 +7422,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 240,
+          "count": 126,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "badc762ece08fdafd3df2843c3493ad088105195b8a4a03420e4de1617272fbc"
+          "locationsSha256": "85817056cea81a23c0a22c7a5162e8fc9b691b9e32d26af81c656b58891578b2"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7348,10 +7436,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 78,
+          "count": 46,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "64b560db0200e8a02ca47d194181328846a39f7183ba811a7f5491b315c5ccc3"
+          "locationsSha256": "274650d7f2599284727b332a895077d4ece8cf77e6fdabdd1426becdeb851744"
         }
       ],
       "differences": null
@@ -7421,9 +7509,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b5f9125f892235c85ee3a2cc1a28b10c986f25fe72d45f40fdc96092098ed1f4"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7435,10 +7523,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "b71a8474ddc7259d5b08caaf5ee3686f144640738e830e5587b36f524c56016b"
+          "locationsSha256": "f913bf81d4dd5c043eb5ae99cdae996e22875e300d773eca16650db474e1aa8a"
         }
       ],
       "differences": null
@@ -7516,10 +7604,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 6,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 3,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "36daac0fcd3d09004dbcca0225e6006c3233fd9b6d11a643fcfc0ff1a90e9e5b"
+          "locationsSha256": "be7acab3eb6a2b87704b0979f63ba15f6d8a2bcdc3614f1547f27fd66914a30e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7635,10 +7723,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 283,
+          "count": 185,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "857b7cb7e0c983d18514688fcb5467a1e9ba02d22eafe9f6ced9f0d3206392d5"
+          "locationsSha256": "233bf09919c5d710a7cb617c5fbe31a5a6920623fb7bede0cfdef22f5b228a93"
         }
       ],
       "differences": null
@@ -7708,9 +7796,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 77,
+          "count": 40,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "4886632f61a64f99da463bf3a4f92876daf350e7ff340613cf4e903fe7a9a727"
+          "locationsSha256": "d755317f47633715b2e94877e5d2b3ec0325f74c6fd6bff212df15d0f01ec3df"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7795,10 +7883,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 16,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 12,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "fbeaf3139177d91763c6b594f361250af56667bd47ebe3263eff97cf88057411"
+          "locationsSha256": "bbbfe75f7732daaedf053d165447ece3d99405dac993292bcf940813389f811b"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7923,9 +8011,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 175,
+          "count": 147,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "312f8293d63f6f9e734f2abd897218084a45c9676fc853ce539cf002c000fb21"
+          "locationsSha256": "70ae8df15fef7121e04554b2cf4e59494d5675e56622ecc966f283c28d53cfaa"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8010,9 +8098,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 53,
+          "count": 27,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "031da170fadd6028ff34fbc32bc29ec20660d28a42ce209b6d0edb4d20c1f0d9"
+          "locationsSha256": "1d69fd12668f24ce363860135dc180351bfb2fdf5ead39eb050f466b28e140e8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8097,10 +8185,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "876b5d5f904ba1d08a3005899e6b256621c035dd0ede14bb194d8e5eea43b19f"
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8112,10 +8200,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 28,
+          "count": 26,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "536ecfccc69f27b11c32f465e952f1c8d882233021aef3eecd65b8a33630e14f"
+          "locationsSha256": "4bac873ba7bdc1e0a51ada1db6392b95bffd12dc6ced5bd2c095d4df733ad548"
         }
       ],
       "differences": null
@@ -8185,9 +8273,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 7,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "521c3b91a49586ac487e26c689df25ce0c5b91c967763839f882e063270d5a20"
+          "locationsSha256": "c40f99151cd96c75234664f9476f11a5f45c5c46f7ad0a114f5f2a1385d25846"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8199,10 +8287,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -8272,10 +8360,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 24,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 16,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "73aa1737a79850c8c79851282288f3ec550b1cc2db4c9d65df48914bbf8f11b7"
+          "locationsSha256": "373877f4826030f04bbc9ac0f6e3b96075377ba335e23f2927c949c19b8d15e2"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8360,10 +8448,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 27,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 18,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1da6a21c1ff200271983847f91b7ced794109033f860a00f245eca705bff7853"
+          "locationsSha256": "11b7f5c985b8661aeb85f7db704c5b5c4cfc7bf71d03037ba0acb5c33bb2a7fd"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8440,9 +8528,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 15,
+          "count": 8,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "816345a4f911a93f8b9e1e9c284d3bc3d8f39376fce5a5a759f07bfae27c1b94"
+          "locationsSha256": "c7612bc2620ee85d562fa72188ff668c75a85d551261c7775d96242d0f53e6f8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8536,9 +8624,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 29,
+          "count": 15,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "6c914ded0282a2cd002c4e31304878b1ce377ffaa7332d416361e5a733a081f7"
+          "locationsSha256": "2c8ae27e6b87f6cd6b215ecc28faec52e93bba05e92d4cd6f0395cc32eb51346"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8550,10 +8638,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 46,
+          "count": 42,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "017d266cb93124d64eaaf86d866ef599335336055e70c67cd64adc2e990ea857"
+          "locationsSha256": "931c1d78de73d1d48c13b73ce3959d5c13b365340d624b365a31ec0a67539a39"
         }
       ],
       "differences": null
@@ -8580,6 +8668,22 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "29c40cff6a8e72c2f579ec48c5bc44ee0ca899a8389e78303e0df0c5af712b84"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 16,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[2]/@id",
+          "objectId": "0",
+          "locationsSha256": "6bb77aed22d2751e16aae5b24f0466b5bcc907c52c162e653597798fadbeff7f"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 24,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "45145f80be069cd8d7d8e708dad736200c4d47dc182d83c5a1b41b2262520a77"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -8624,9 +8728,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 109,
+          "count": 67,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "3264816b85081477d0c2ccb97ee771ab9ff028d613073733af195ff149ded20a"
+          "locationsSha256": "8fc8d6b5582195452e234c7a907a669718b642cfb68301ce54f1e2a45c6609ac"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8712,9 +8816,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7f5b556504420828c3b9066c0838e7b50bdd5b28b4f0ff1fa7798932a8db763b"
+          "locationsSha256": "fb012d4e76a87ba1d965194934786a4902e968d50c453aae546c91ab836c711e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8726,10 +8830,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -8800,9 +8904,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 6,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "c78bb5fe67d83a7ede0c57bac8ee741b86bedddb9ea5798fbcae13d46d7ea417"
+          "locationsSha256": "6979f5cc051bca6dfb5b12ecde9e670e14ab4c21b1585d5deefec46ab376bd1e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8814,10 +8918,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         },
         {
           "code": "score.sound-automation.location",
@@ -8893,9 +8997,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 63,
+          "count": 32,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "832c161e80ebe4771d09966141384acc360784a1a5539e8d6063372232e0a5d7"
+          "locationsSha256": "7c7249c6032d14d852524ebc2bdae8c725770cd19877b3abb8a16f09112a1e69"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8988,9 +9092,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 10,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "6aa5d330aabc340f7ef62bdcfd724a64dde5a76e620eb69ec32b5fde8636e9f4"
+          "locationsSha256": "58711f6015c113794866bb742c1b8114ac3dc877aacd56025d195fc5493b5271"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9002,10 +9106,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 18,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "f0f4baccb7f43a9a9b0456d0f2b0e029099817bb410e346577c1e6d99dfd0e81"
+          "locationsSha256": "51e57006bd523b59d3cfceb9611b188e8676e0f405810d158d6f9f790066a481"
         }
       ],
       "differences": null
@@ -9075,9 +9179,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 15,
+          "count": 8,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "816345a4f911a93f8b9e1e9c284d3bc3d8f39376fce5a5a759f07bfae27c1b94"
+          "locationsSha256": "c7612bc2620ee85d562fa72188ff668c75a85d551261c7775d96242d0f53e6f8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9089,10 +9193,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 18,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "f0f4baccb7f43a9a9b0456d0f2b0e029099817bb410e346577c1e6d99dfd0e81"
+          "locationsSha256": "51e57006bd523b59d3cfceb9611b188e8676e0f405810d158d6f9f790066a481"
         }
       ],
       "differences": null
@@ -9298,9 +9402,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9312,10 +9416,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -9385,9 +9489,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9399,10 +9503,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -9472,9 +9576,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 43,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1a814eede305af757a317e7f192e00db1cdaf3a387a46b0b54ec00a2712f676b"
+          "locationsSha256": "64df325a20c0d144b5b350f107784456dd9c6c13466eb0efda8d373799a270ad"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9486,10 +9590,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "213d7b0bd079f4c3972203f6bbea72ae20a39a20d5ec73e5a0f982d06e8e2c7a"
+          "locationsSha256": "2bdd7f5485949e94d7b1301ed74e6b3a9ad181abf0ab8da2f6401eb02684b9fe"
         }
       ],
       "differences": null
@@ -9559,9 +9663,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 43,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1a814eede305af757a317e7f192e00db1cdaf3a387a46b0b54ec00a2712f676b"
+          "locationsSha256": "64df325a20c0d144b5b350f107784456dd9c6c13466eb0efda8d373799a270ad"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9573,10 +9677,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "213d7b0bd079f4c3972203f6bbea72ae20a39a20d5ec73e5a0f982d06e8e2c7a"
+          "locationsSha256": "2bdd7f5485949e94d7b1301ed74e6b3a9ad181abf0ab8da2f6401eb02684b9fe"
         }
       ],
       "differences": null
@@ -9646,9 +9750,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 43,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1a814eede305af757a317e7f192e00db1cdaf3a387a46b0b54ec00a2712f676b"
+          "locationsSha256": "64df325a20c0d144b5b350f107784456dd9c6c13466eb0efda8d373799a270ad"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9660,10 +9764,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "213d7b0bd079f4c3972203f6bbea72ae20a39a20d5ec73e5a0f982d06e8e2c7a"
+          "locationsSha256": "2bdd7f5485949e94d7b1301ed74e6b3a9ad181abf0ab8da2f6401eb02684b9fe"
         }
       ],
       "differences": null
@@ -9733,9 +9837,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 43,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1a814eede305af757a317e7f192e00db1cdaf3a387a46b0b54ec00a2712f676b"
+          "locationsSha256": "64df325a20c0d144b5b350f107784456dd9c6c13466eb0efda8d373799a270ad"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9747,10 +9851,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "213d7b0bd079f4c3972203f6bbea72ae20a39a20d5ec73e5a0f982d06e8e2c7a"
+          "locationsSha256": "2bdd7f5485949e94d7b1301ed74e6b3a9ad181abf0ab8da2f6401eb02684b9fe"
         }
       ],
       "differences": null
@@ -9875,9 +9979,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 85,
+          "count": 43,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1a814eede305af757a317e7f192e00db1cdaf3a387a46b0b54ec00a2712f676b"
+          "locationsSha256": "64df325a20c0d144b5b350f107784456dd9c6c13466eb0efda8d373799a270ad"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -9889,10 +9993,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 45,
+          "count": 30,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "213d7b0bd079f4c3972203f6bbea72ae20a39a20d5ec73e5a0f982d06e8e2c7a"
+          "locationsSha256": "2bdd7f5485949e94d7b1301ed74e6b3a9ad181abf0ab8da2f6401eb02684b9fe"
         }
       ],
       "differences": null
@@ -10162,9 +10266,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 59,
+          "count": 42,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "87a05eab7e06b15966998ca5ce2f13a2ec7851e19bb1bc9bbcd072d4c531247a"
+          "locationsSha256": "15dd76db9405446416a1baee910a13990ef7fa780d0939be7ec94e7e699ba4d2"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10176,10 +10280,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 22,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "1834524f9e23c411d1ffe615421d325b72b01991f8418863238f287a2adaf340"
+          "locationsSha256": "a7ace9c3f2d9f770c6653c7f0f6a46bbe5b7a3c77555e2f4c0348eb1d4abf1e3"
         }
       ],
       "differences": null
@@ -10249,9 +10353,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 4,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "325efcc9a409ae9060787b2ffe3f4b68a35cc58c00f1f63710ec2039f2750328"
+          "locationsSha256": "6e5996f3ffe6b0cfc3f0dfd09996921ea0231b62beb61a90b109a590d9ccfee8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10336,9 +10440,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 10,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "6aa5d330aabc340f7ef62bdcfd724a64dde5a76e620eb69ec32b5fde8636e9f4"
+          "locationsSha256": "58711f6015c113794866bb742c1b8114ac3dc877aacd56025d195fc5493b5271"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10350,10 +10454,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "61ac607f2f7819aa2ed2d3ac4fc7703c0e244078687e5e770e4e04af0a948117"
+          "locationsSha256": "5736a4f088e762b4642d95366469aba6a377281fe076deba75e40e47653b1626"
         }
       ],
       "differences": null
@@ -10423,10 +10527,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "876b5d5f904ba1d08a3005899e6b256621c035dd0ede14bb194d8e5eea43b19f"
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10511,9 +10615,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 81,
+          "count": 41,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "967a2563ffce3eb8f6cbab3697b16b3526b4d01887d29d73deacb9a1dad8c50a"
+          "locationsSha256": "c6f7fee64a173b947182c003b50a20b01c0ea5071591c7d90be88438a48f08cb"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10580,10 +10684,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 24,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "508df60bfdbe543dd42f7c3b70178923bd4d1bc7388ffadd9231f330d8f3f745"
+          "locationsSha256": "05dcbd7969aaaea2803109f82e829fda94372dab95809afb738e028aded69de7"
         }
       ],
       "differences": null
@@ -10617,6 +10721,13 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
           "objectId": "0",
           "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
+        },
+        {
+          "code": "GPIF.MasterBar.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 8,
+          "sourcePath": "/GPIF/MasterBars/MasterBar[0]/XProperties/XProperty[0]/@id",
+          "locationsSha256": "dee56d8ba0c5147be3cdddff36856cd0619a67b64d3b957dc05cc57a1aa7e4cb"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -10653,9 +10764,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 5,
+          "count": 3,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "f3e2d82ded8e97233d243b4ce1232ffa76ecfb8cfb9652122bc5e51dd7edb748"
+          "locationsSha256": "8b610cb9541ef3c1985bf62d424dcd271a514fccd10b5971db1cd3af25616cb7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10670,7 +10781,7 @@
           "count": 62,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "08a00b5c27e29feab20aa83f1ecacbbc5b70d57843b2cdba5ef8779f0658b1ff"
+          "locationsSha256": "9028fc338a37284bdbd7dd4039f934c722c71f1c7e224b3ec78b729cabf3d1d5"
         }
       ],
       "differences": null
@@ -10740,9 +10851,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10754,10 +10865,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -10828,9 +10939,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 17,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "e7b510cd25b8a5155ae0be15f32ac4b103600ba8f58ec89bb07c68bea054ce39"
+          "locationsSha256": "77605e316aebc6fa550ae03006f975c552f8ce61aea33d4477ae2bd91e23c6e9"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10842,10 +10953,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bc3b1c1d732d7d27988746b6ffc8318cc25e491ffc187e98dc005e5cedecd65f"
+          "locationsSha256": "31485577784bca71d153c1a267ece9bad09ae66909a63c994315af2dcc6ef516"
         }
       ],
       "differences": null
@@ -10915,10 +11026,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 8,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 4,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1d283bf99f33bc64d12897dbd49a6a5a95a8d7adf7da4f8d331651049da424d2"
+          "locationsSha256": "7f8e3fa8376610256a4bf85cb38a73c0270b2d903e9047517f2ff43d33f7ce51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11042,9 +11153,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 51,
+          "count": 26,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1af5596a6d9ff9ce1ffd766dff465f5aa32338a353a311616709ad46a659e45c"
+          "locationsSha256": "403273c07f424b48f66eea27e626039ebd81087628d234225fcc48961271f777"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11110,6 +11221,14 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"394\"]/Whammy/@middleOffset1",
           "objectId": "394",
           "locationsSha256": "a759f4ec33e85ec2ce643aeabcdb6a0077e42ed8fcc5da677448f82f60c54d5a"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.Unknown",
+          "kind": "unknown-syntax",
+          "count": 4,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"239\"]/XProperties/XProperty[0]/@id",
+          "objectId": "239",
+          "locationsSha256": "965bc20b00671c988dd9bc62f789471672808420887194700a2296689f004a2d"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -11210,9 +11329,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 1257,
+          "count": 699,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "d679d8bf8646fc8b5f29b591ead116552fb060bc8f95dcff0015ccf3c4b3b24b"
+          "locationsSha256": "52f09d8041075922542b97e8fa11b7cc232e0d7e845d85292dc80ab7f76d0d0f"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11224,10 +11343,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 237,
+          "count": 146,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "5837228dc8f0f36826722b585cdc5fded420fd61ae2d4383f9f19ea9121beafb"
+          "locationsSha256": "00d21ac0134c2e1c243f4c662ee056c7aa92ada0245910bc5811ec71c27c0bad"
         },
         {
           "code": "score.note.tie-destination",
@@ -11344,9 +11463,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 83,
+          "count": 48,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "a9276e04641888571d9ce787884eb348d211aa68b8906d5b83af059e4f905d6d"
+          "locationsSha256": "b719fdbda5fdfb9eebaecfa10f9f13b5269c37674c4469b9b8b7ac363614e013"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11358,10 +11477,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 23,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2f1e52d227b63ae5bb932dd24f1e50d996e21ef2c9f3e02658cff7d99f98b73f"
+          "locationsSha256": "233a2e4d41e9eb06f8017714d7d2bae0e401387651b6f83e28391192ea631f9b"
         }
       ],
       "differences": null
@@ -11434,9 +11553,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 71,
+          "count": 36,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b60bb5b373cc29c6ec2818d51bbcc56f5ea5d85a01b5de107bdd6157e3a2da73"
+          "locationsSha256": "e35495ab9ccd70d95f422d807c9dca9f93d0e55c7ac0ccfdb17c4fc694b0495b"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11448,10 +11567,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         }
       ],
       "differences": null
@@ -11529,10 +11648,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 480,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 240,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "8359a6b4635382f49c86365e5f7136716580b1514de4d61de46cb17c56d92c4b"
+          "locationsSha256": "79fa2bebd99c629d6269c9f5d537318644c1da5390811ba601296c9a110cad9c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11544,10 +11663,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 144,
+          "count": 91,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "ea8d03e947adeb4b78cfd136a2651ea1a319fe3e5d80c6150c1cbd2276cb5063"
+          "locationsSha256": "f3a1d8fa468fb1ab55bbaf6e9e47f0e71ac29e4e3825a7efd54e325d76826de3"
         }
       ],
       "differences": null
@@ -11617,10 +11736,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 34,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 19,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "d75e436383ddee69e72dbb187f6a19c4c9222639c61a831f0b6354db70f3bc9d"
+          "locationsSha256": "0849e795c0c47c396778a5e21cbb2067049c84dd8c6ee588f7f89740057113ab"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11632,10 +11751,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 43,
+          "count": 31,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "173ba9e171c9a2486d6636892fcb883936daa29c3ac694a33d294f3463029983"
+          "locationsSha256": "f3b36f93642925c1460fe66e3ea7a2069b067139ae7ab211d8f89e094ac8db39"
         }
       ],
       "differences": null
@@ -11713,9 +11832,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 37,
+          "count": 20,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "48558e51a8c4ca94fc091c06de8f0dffaeaf4dbce709f69b2403e1f5819197bd"
+          "locationsSha256": "ed3be6f73c73eddc3c1b1d78ae8d1623847f996f5c0ae8433210ba9be985cd8a"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11727,10 +11846,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 26,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "234f542cc8af6a3fb9bcb9a199e0e3f5fb98c2f3cbdfbd3a624e32edc4b31ecd"
+          "locationsSha256": "472ac9eda3811f4cd2e538415cd7fd072fef60096402b4b5cfaf937ce57ad8ff"
         }
       ],
       "differences": null
@@ -11792,9 +11911,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 105,
+          "count": 53,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "d3966bd0d718ffc3f5b8447bd96a130d7a58e57ccf74d2ad50349ffba6e9077a"
+          "locationsSha256": "cc93b0f3b811455cfa98a193fbfdfeaebede7bd4cb1848a166b95d033e2168fb"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11879,9 +11998,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11893,10 +12012,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -11966,9 +12085,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11980,10 +12099,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -12053,9 +12172,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 135,
+          "count": 68,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "27601f37633b0ee64d432019ef72e0e705e2c66a3ccd84f4f85bd63e9a1019d6"
+          "locationsSha256": "c9c351a60dca0af41dd8e0fcc18fbee431d936f935bfe550f6b155d4d02fd1a6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12067,10 +12186,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 110,
+          "count": 99,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7c12b61796c83f2edd3a768edb2ec01e2883ea5456e597f18d6c2164e7b93f89"
+          "locationsSha256": "4a24005b91a7fa9236ae07937a1a8b0018d37686e8747a216413c05b139d0f7f"
         }
       ],
       "differences": null
@@ -12140,9 +12259,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b5f9125f892235c85ee3a2cc1a28b10c986f25fe72d45f40fdc96092098ed1f4"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12154,10 +12273,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -12219,9 +12338,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 14,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "265f647156e68cd4b100846362e80844437400435099635454dccff69a6a6cbc"
+          "locationsSha256": "3324be729d380e7c8514e68a00258cfcdbf6517c09381a5dac01403a933e06b1"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12298,9 +12417,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 35,
+          "count": 18,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7e26ac82da56e8eb8dfa54a95d99c074cabda223d02a212b194e1d7d6b3cc02c"
+          "locationsSha256": "2ff0ee4bd6e2497dba11e5702614a863bf06ea9a56295577fcff0ab89ea77a59"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12385,9 +12504,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b5f9125f892235c85ee3a2cc1a28b10c986f25fe72d45f40fdc96092098ed1f4"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12399,10 +12518,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -12472,9 +12591,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 24,
+          "count": 15,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7b0aa20272d41851d906b7fdeabbf0b3ab14db9c5a5ca58534d424cbe19b9190"
+          "locationsSha256": "c46d84a112c64ccefa5e3ec1472511b354a28f3442293336f45ebcdb3cd3c7db"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12559,9 +12678,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 12,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "bbdf458bbf1a905efeb6523fa94207c7cb8b984b793f21ecde114d9492ccf5d4"
+          "locationsSha256": "3c6abb81c62ff9e0bad7220c29cc93b8953ed78889dea15455711f1b0bee9b53"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12573,10 +12692,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 20,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "4affa3de1c9ce8d3884f0c49e5608f89af8b59afcf0ffeab05e25339d8c2e7ae"
+          "locationsSha256": "8772b8bf4847b1d758b4637ceba27c3faa68f9555f7e4c2ce49d112362e7c50d"
         }
       ],
       "differences": null
@@ -12694,10 +12813,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 13,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "c7313dbf6d252ffd3d4b0be27909f09998495a0e760eda1b6e361ad497f2da97"
+          "locationsSha256": "c818fae75e262f9c63c77fdf995c9525747af79bb63432c835174ac603037a14"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12782,9 +12901,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 11,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "9fd885a29c207f8ac4524b080c2e1077f4e682989de547ea6e74e053473294f8"
+          "locationsSha256": "b026eb13088d58f10803eb9abbcc0f9e2a8a76d610b8da25eadf7f89b337eb62"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12796,10 +12915,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 24,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "dbfa10e3a72e582ca2f63a63c0902189d033a8003f696d776c78002b0611d263"
+          "locationsSha256": "3c807cefd38bf81f3d932fe977dbe03e6c2c229e924aff4149751e8aa049e454"
         }
       ],
       "differences": null
@@ -12869,9 +12988,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 13,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "373b8b0187ab201d0478225073dd6e929ea506123230c82ebce867fe819e5352"
+          "locationsSha256": "ebe822a5a4644597ff993ccdd6fc80d9556a2e39f6bcde4571a24b9c4637f8ae"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12883,10 +13002,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 20,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "4affa3de1c9ce8d3884f0c49e5608f89af8b59afcf0ffeab05e25339d8c2e7ae"
+          "locationsSha256": "8772b8bf4847b1d758b4637ceba27c3faa68f9555f7e4c2ce49d112362e7c50d"
         }
       ],
       "differences": null
@@ -12956,9 +13075,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 13,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "373b8b0187ab201d0478225073dd6e929ea506123230c82ebce867fe819e5352"
+          "locationsSha256": "ebe822a5a4644597ff993ccdd6fc80d9556a2e39f6bcde4571a24b9c4637f8ae"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -12970,10 +13089,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 20,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "4affa3de1c9ce8d3884f0c49e5608f89af8b59afcf0ffeab05e25339d8c2e7ae"
+          "locationsSha256": "8772b8bf4847b1d758b4637ceba27c3faa68f9555f7e4c2ce49d112362e7c50d"
         }
       ],
       "differences": null
@@ -13025,10 +13144,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 23,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2f1e52d227b63ae5bb932dd24f1e50d996e21ef2c9f3e02658cff7d99f98b73f"
+          "locationsSha256": "233a2e4d41e9eb06f8017714d7d2bae0e401387651b6f83e28391192ea631f9b"
         }
       ],
       "differences": null
@@ -13098,9 +13217,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 5,
+          "count": 3,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "f3e2d82ded8e97233d243b4ce1232ffa76ecfb8cfb9652122bc5e51dd7edb748"
+          "locationsSha256": "8b610cb9541ef3c1985bf62d424dcd271a514fccd10b5971db1cd3af25616cb7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13177,9 +13296,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 73,
+          "count": 37,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "00d3fc9e9619b2b73297f60ccbc7c39825e917d2ffd43f414e309c5724dafefa"
+          "locationsSha256": "e804aefb562f69576d9c8afdb5684e96bb3da76c497249a52454d062d11db751"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13191,10 +13310,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 25,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2713683576d3430bc7fa284a533289fe171817b5b1d2ffc23d888dc527c11900"
+          "locationsSha256": "82a8d274842cc11f153df6c80a51cd4c425d460860013c8f5d39eebc7fc8c626"
         }
       ],
       "differences": null
@@ -13312,9 +13431,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 65,
+          "count": 36,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b24e98ac9af5f0f48d1cd48483cafa994cf2ad06bb523aa5d432e51f89e1f7d0"
+          "locationsSha256": "075a9e18f8d3d5095f20084b5e2569f5b9413e7c64dbf554f5df473306c9e0c3"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13326,10 +13445,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 22,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bb79455afbab2a1e81c44f3eab5812a402eecd2215e4ed928bce8bc94b9792ef"
+          "locationsSha256": "03101228f772f826ba84c09063ef1a916efd336220f5e1da00b21e1007876272"
         }
       ],
       "differences": null
@@ -13447,9 +13566,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 63,
+          "count": 35,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "4d89fb3bd333bb3b7ae6227061ae04953dd92ad40441974a9312db3a049ec073"
+          "locationsSha256": "e65f80f720ef2af0bb112edd7ae7bc59c881e22c56213b7274b32ca96ac6a820"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13461,10 +13580,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 22,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bb79455afbab2a1e81c44f3eab5812a402eecd2215e4ed928bce8bc94b9792ef"
+          "locationsSha256": "03101228f772f826ba84c09063ef1a916efd336220f5e1da00b21e1007876272"
         }
       ],
       "differences": null
@@ -13518,9 +13637,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 41,
+          "count": 21,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "42b70cc9a000ed7da7406a2349257fb6df2ba8ba87363d33a30193a0b43dd040"
+          "locationsSha256": "108a52aea805cec56e667099ef18a07f94805f07053b6f043e16924844125e53"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13532,10 +13651,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 38,
+          "count": 33,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "3ea382d4b27fa991fbbac4ae7da707710b95549460a068b4ff7f5f3fae2204e1"
+          "locationsSha256": "8f898362a65672280ab63a537f4f832f5f72e23caf84816df592a7a26f5d2c4a"
         }
       ],
       "differences": null
@@ -13613,9 +13732,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2699,
+          "count": 1350,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "e3b3c1e3564c311cd8761fc30a4672700dbb60c6137c5956f778e2e549d2bbe7"
+          "locationsSha256": "fe9075bfc1cc0522139596a2986d2cbd943814022944879f863af49f11fe3c69"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13627,10 +13746,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 212,
+          "count": 134,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "8f3f6eb1a9e1502104405a7a2f91a478d59fd4665fc1500c78b6e37d70531f81"
+          "locationsSha256": "87e00160e8ef699f38159b1c58aea1a56e8657a34245e3d4934378c78bb33065"
         }
       ],
       "differences": null
@@ -13693,9 +13812,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 81,
+          "count": 41,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "967a2563ffce3eb8f6cbab3697b16b3526b4d01887d29d73deacb9a1dad8c50a"
+          "locationsSha256": "c6f7fee64a173b947182c003b50a20b01c0ea5071591c7d90be88438a48f08cb"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13820,10 +13939,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 74,
+          "count": 45,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "37de58e74f1ad5b0e810df7c23bbdff62de847cd3f75e1ea7f80cda29f5e8a87"
+          "locationsSha256": "a288c5469143854f8be05b3394d5544048aa3a57d4776becf9ef314466aed02d"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13835,10 +13954,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 55,
+          "count": 48,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0d6839257765b1614861deb7e771588cebfd1c17bbed2231bed8782bb73177ba"
+          "locationsSha256": "7882b9bfda8af88d8733adeeaeb18cb3f5f8aae0cc6efd244790d7ea06ebd443"
         }
       ],
       "differences": null
@@ -13908,9 +14027,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 11,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "9fd885a29c207f8ac4524b080c2e1077f4e682989de547ea6e74e053473294f8"
+          "locationsSha256": "b026eb13088d58f10803eb9abbcc0f9e2a8a76d610b8da25eadf7f89b337eb62"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13922,10 +14041,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bc3b1c1d732d7d27988746b6ffc8318cc25e491ffc187e98dc005e5cedecd65f"
+          "locationsSha256": "31485577784bca71d153c1a267ece9bad09ae66909a63c994315af2dcc6ef516"
         }
       ],
       "differences": null
@@ -13977,10 +14096,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -14050,10 +14169,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 5,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "746dcabb842ed9ddaf2bc766f9acde9d1ff280bd9504db426f7e763e8961ca7f"
+          "locationsSha256": "17a4ebddb913b827d8bb812c79ea45a54c1fd85df5505638aa2104d3b42a7c40"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14146,9 +14265,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 29,
+          "count": 15,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "6c914ded0282a2cd002c4e31304878b1ce377ffaa7332d416361e5a733a081f7"
+          "locationsSha256": "2c8ae27e6b87f6cd6b215ecc28faec52e93bba05e92d4cd6f0395cc32eb51346"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14160,10 +14279,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 23,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2f1e52d227b63ae5bb932dd24f1e50d996e21ef2c9f3e02658cff7d99f98b73f"
+          "locationsSha256": "233a2e4d41e9eb06f8017714d7d2bae0e401387651b6f83e28391192ea631f9b"
         }
       ],
       "differences": null
@@ -14234,9 +14353,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 5,
+          "count": 3,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "f3e2d82ded8e97233d243b4ce1232ffa76ecfb8cfb9652122bc5e51dd7edb748"
+          "locationsSha256": "8b610cb9541ef3c1985bf62d424dcd271a514fccd10b5971db1cd3af25616cb7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14248,10 +14367,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         }
       ],
       "differences": null
@@ -14277,6 +14396,14 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
+        },
+        {
+          "code": "GPIF.Beat.XProperty.BrushDuration",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
+          "objectId": "0",
+          "locationsSha256": "3597ce0bab5f6c605896456ae8f97e6a6ed4a25ddda452cefe748bde871a224f"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -14321,9 +14448,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "70c5b130eeb554c6cf6c037b9bcf5af55a5b6de577a2eca22c9404ea4a1d58fd"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14335,10 +14462,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         }
       ],
       "differences": null
@@ -14400,10 +14527,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 10,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 5,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "3cfdd4392e119e6bcd259560efbbbfeeaa8e7efa2a0c8f51e76ad7284c8aade4"
+          "locationsSha256": "0a09c39a5ce180586095b9d02751515c2c728cd06f1878eb047d03ff2c9fce7e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14480,10 +14607,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "876b5d5f904ba1d08a3005899e6b256621c035dd0ede14bb194d8e5eea43b19f"
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14568,9 +14695,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 7,
+          "count": 4,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "325efcc9a409ae9060787b2ffe3f4b68a35cc58c00f1f63710ec2039f2750328"
+          "locationsSha256": "6e5996f3ffe6b0cfc3f0dfd09996921ea0231b62beb61a90b109a590d9ccfee8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14582,10 +14709,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -14637,10 +14764,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 27,
+          "count": 21,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "bc3b1c1d732d7d27988746b6ffc8318cc25e491ffc187e98dc005e5cedecd65f"
+          "locationsSha256": "31485577784bca71d153c1a267ece9bad09ae66909a63c994315af2dcc6ef516"
         }
       ],
       "differences": null
@@ -14710,9 +14837,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 6,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "c78bb5fe67d83a7ede0c57bac8ee741b86bedddb9ea5798fbcae13d46d7ea417"
+          "locationsSha256": "6979f5cc051bca6dfb5b12ecde9e670e14ab4c21b1585d5deefec46ab376bd1e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14724,10 +14851,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "b71a8474ddc7259d5b08caaf5ee3686f144640738e830e5587b36f524c56016b"
+          "locationsSha256": "f913bf81d4dd5c043eb5ae99cdae996e22875e300d773eca16650db474e1aa8a"
         }
       ],
       "differences": null
@@ -14805,10 +14932,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 6,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 3,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "36daac0fcd3d09004dbcca0225e6006c3233fd9b6d11a643fcfc0ff1a90e9e5b"
+          "locationsSha256": "be7acab3eb6a2b87704b0979f63ba15f6d8a2bcdc3614f1547f27fd66914a30e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14820,10 +14947,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "e5e34f6e7058df4bcc5e00b52eb84825bf305910877f094d2933366c42e697d3"
+          "locationsSha256": "c35066dd88cdf07a9424ae25846a205102e289aca576760750d5c6e3042bc915"
         }
       ],
       "differences": null
@@ -14885,9 +15012,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 17,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "e7b510cd25b8a5155ae0be15f32ac4b103600ba8f58ec89bb07c68bea054ce39"
+          "locationsSha256": "77605e316aebc6fa550ae03006f975c552f8ce61aea33d4477ae2bd91e23c6e9"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14899,10 +15026,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 25,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2713683576d3430bc7fa284a533289fe171817b5b1d2ffc23d888dc527c11900"
+          "locationsSha256": "82a8d274842cc11f153df6c80a51cd4c425d460860013c8f5d39eebc7fc8c626"
         }
       ],
       "differences": null
@@ -14972,9 +15099,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7f5b556504420828c3b9066c0838e7b50bdd5b28b4f0ff1fa7798932a8db763b"
+          "locationsSha256": "fb012d4e76a87ba1d965194934786a4902e968d50c453aae546c91ab836c711e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -14986,10 +15113,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 17,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "b71a8474ddc7259d5b08caaf5ee3686f144640738e830e5587b36f524c56016b"
+          "locationsSha256": "f913bf81d4dd5c043eb5ae99cdae996e22875e300d773eca16650db474e1aa8a"
         }
       ],
       "differences": null
@@ -15042,10 +15169,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 18,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2c83373d444ef25cefaaab263c2e851c2367a6b1c1abf31cce02f52c2fe37f02"
+          "locationsSha256": "8b90db79adba7fd40074786b93399aff6da9ee79961ecf8a1c62554f5b360f2e"
         }
       ],
       "differences": null
@@ -15123,10 +15250,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 22,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramWorkingSet\"]/Items/Item/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "ba865cf084d64bc396257b6805d22a39f45bda315eb22dd23012e92040269362"
+          "locationsSha256": "a3f32faf55530e4dcc67750c9d4db0b9140e30ac3cfbb5ed5ae5eabcb39b38de"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15211,9 +15338,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 25,
+          "count": 13,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "373b8b0187ab201d0478225073dd6e929ea506123230c82ebce867fe819e5352"
+          "locationsSha256": "ebe822a5a4644597ff993ccdd6fc80d9556a2e39f6bcde4571a24b9c4637f8ae"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15225,10 +15352,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 97,
+          "count": 96,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "7876b4b69b769ef83f0052b6f3f2b17847ec40551270ded380d022cfac589bde"
+          "locationsSha256": "830c50ecce52915fb3d8ba2ea62d7bae63ab3be985333fb4b699ddbf011dd379"
         }
       ],
       "differences": null
@@ -15594,9 +15721,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 35,
+          "count": 18,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7e26ac82da56e8eb8dfa54a95d99c074cabda223d02a212b194e1d7d6b3cc02c"
+          "locationsSha256": "2ff0ee4bd6e2497dba11e5702614a863bf06ea9a56295577fcff0ab89ea77a59"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15608,10 +15735,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 131,
+          "count": 130,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "f71cf12964e16c1a9c9885031521a578f9a4f8639b3e24615dee182cbbc654ea"
+          "locationsSha256": "a28a864d1bc52d02b5c0004717720bf8fac8d6daefc7f4c630383929927b3d39"
         }
       ],
       "differences": null
@@ -15682,9 +15809,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 39,
+          "count": 20,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "24e997490ced134ed25548c70d2e3e90644cbc30bbcfa0445f8f7b933b070289"
+          "locationsSha256": "d2492ccb1f67a3c6beb77215297f51c1764ed2829029218aebda61b4d2d161d6"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15696,10 +15823,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 31,
+          "count": 25,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "2713683576d3430bc7fa284a533289fe171817b5b1d2ffc23d888dc527c11900"
+          "locationsSha256": "82a8d274842cc11f153df6c80a51cd4c425d460860013c8f5d39eebc7fc8c626"
         }
       ],
       "differences": null
@@ -15769,9 +15896,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "7f5b556504420828c3b9066c0838e7b50bdd5b28b4f0ff1fa7798932a8db763b"
+          "locationsSha256": "fb012d4e76a87ba1d965194934786a4902e968d50c453aae546c91ab836c711e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15783,10 +15910,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "61ac607f2f7819aa2ed2d3ac4fc7703c0e244078687e5e770e4e04af0a948117"
+          "locationsSha256": "5736a4f088e762b4642d95366469aba6a377281fe076deba75e40e47653b1626"
         }
       ],
       "differences": null
@@ -15864,9 +15991,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 19,
+          "count": 10,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "6aa5d330aabc340f7ef62bdcfd724a64dde5a76e620eb69ec32b5fde8636e9f4"
+          "locationsSha256": "58711f6015c113794866bb742c1b8114ac3dc877aacd56025d195fc5493b5271"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15878,10 +16005,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 34,
+          "count": 26,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "8d871ff8fbd118173eed0e5010570c2d054c65884ecb959ef807428735c44461"
+          "locationsSha256": "ffa252b6835c758c6716feddca9a84c678411b90439a8b6cc4bb95ceeed4c8a6"
         }
       ],
       "differences": null
@@ -15960,9 +16087,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 6,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "c78bb5fe67d83a7ede0c57bac8ee741b86bedddb9ea5798fbcae13d46d7ea417"
+          "locationsSha256": "6979f5cc051bca6dfb5b12ecde9e670e14ab4c21b1585d5deefec46ab376bd1e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15974,10 +16101,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 24,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "dbfa10e3a72e582ca2f63a63c0902189d033a8003f696d776c78002b0611d263"
+          "locationsSha256": "3c807cefd38bf81f3d932fe977dbe03e6c2c229e924aff4149751e8aa049e454"
         }
       ],
       "differences": null
@@ -16047,9 +16174,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "a11732f29b6065bc2a245949d3d2fd998355fa5f9f09fa7c1dcf822a7e74c9d0"
+          "locationsSha256": "b0632b90aead3637b22818485a1f61f1eff430027946485e27957afd1f34be0b"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16061,10 +16188,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 16,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "0aa831acffb9e3b01cab573bd999ec0236ac2c1657dfd7422a425df2fcb6146e"
+          "locationsSha256": "b7d48f4bc2301180ee4daf848debe17aeb832b1eb1732b399029b9499488153a"
         }
       ],
       "differences": null
@@ -16134,9 +16261,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 10,
+          "count": 6,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "bdedd3a56d411babfd10b85887d39a1f4a863d48aa13764ff40617aba863f146"
+          "locationsSha256": "6aa5f84a47ae20a2220052ce6f7217a1e61887a90c66c35f31a51edb3e27ca15"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16148,10 +16275,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 15,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "481b9c5537d3a59f3a4c22c41120fe9c92d734e89a64b5ce4806453692e3f089"
+          "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
         }
       ],
       "differences": null
@@ -16221,9 +16348,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 57,
+          "count": 29,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "de6c0627925f3d8329e1cce04f4aac107a5da4cefff6c4ec9af3007ca01f75e9"
+          "locationsSha256": "fc0eaea91bd840378aa3cf8108250cd16756739888dfce77884a0e79703c2c02"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16308,9 +16435,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 3,
+          "count": 2,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1386c89133f0dd1542d1560c74f6ce80018a7df025d9d1908986aac0252b51e0"
+          "locationsSha256": "9514b9e666caa01c29920f794e2dfade60a0b35cf32d3e9da77b5886e6c548cf"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16322,10 +16449,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 20,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "d4e6fb331a5211f191fc2d8d7fd259f61e479f9afb956901db019bcd6695e689"
+          "locationsSha256": "c60dcc7e12164297f3ebbd4dd467f47230a137bc80cd6adc930fcf82e20733d9"
         }
       ],
       "differences": null
@@ -16395,9 +16522,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 59,
+          "count": 30,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "8fc7613932e92bf56483fcb5fb5bf0dceab3d3a05a93b2257b69c3872fda7336"
+          "locationsSha256": "3912a65b9c9b4d58d241d334fca0bca61cfffd3a4da449b0ebdbdab2fd2e75be"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16409,10 +16536,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 77,
+          "count": 67,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "f8dbd44d57966ba3d2de64656900d7ea1150ab62bd80d141711a6e16a7f5372a"
+          "locationsSha256": "4c45f2c2fe7615c881fd0e6c32894e6f4ae6d74cff945be9e8a8ce06939a8309"
         }
       ],
       "differences": null
@@ -16483,9 +16610,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 17,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "e7b510cd25b8a5155ae0be15f32ac4b103600ba8f58ec89bb07c68bea054ce39"
+          "locationsSha256": "77605e316aebc6fa550ae03006f975c552f8ce61aea33d4477ae2bd91e23c6e9"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16497,10 +16624,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 33,
+          "count": 24,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "508df60bfdbe543dd42f7c3b70178923bd4d1bc7388ffadd9231f330d8f3f745"
+          "locationsSha256": "05dcbd7969aaaea2803109f82e829fda94372dab95809afb738e028aded69de7"
         }
       ],
       "differences": null
@@ -16578,9 +16705,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 9,
+          "count": 5,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "b5f9125f892235c85ee3a2cc1a28b10c986f25fe72d45f40fdc96092098ed1f4"
+          "locationsSha256": "9c9c6726c2880ac7d2948b4647720cb3057fd701c4dc3ce1cb7d5fbbe387ef5c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16592,10 +16719,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 23,
+          "count": 19,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "61ac607f2f7819aa2ed2d3ac4fc7703c0e244078687e5e770e4e04af0a948117"
+          "locationsSha256": "5736a4f088e762b4642d95366469aba6a377281fe076deba75e40e47653b1626"
         }
       ],
       "differences": null
@@ -16666,9 +16793,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 51,
+          "count": 26,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "1af5596a6d9ff9ce1ffd766dff465f5aa32338a353a311616709ad46a659e45c"
+          "locationsSha256": "403273c07f424b48f66eea27e626039ebd81087628d234225fcc48961271f777"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16755,10 +16882,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 34,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 12,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "fecf6e7a7e013ab3a01588357c2724c217c68780ca98cc6e5a7d5131c99a1166"
+          "locationsSha256": "bb3dc9f92b18e99e274dd272ce289b45141bf9104db37ca4ead2c3237dfb7cf7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16843,10 +16970,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 8,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 4,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1d283bf99f33bc64d12897dbd49a6a5a95a8d7adf7da4f8d331651049da424d2"
+          "locationsSha256": "7f8e3fa8376610256a4bf85cb38a73c0270b2d903e9047517f2ff43d33f7ce51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16947,10 +17074,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 2451,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 1376,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "1e1115d2999d09f34f8fd398427a990dd0aaabc631bf947c3f4df97170697db5"
+          "locationsSha256": "72aabfcf5e04f2ac6268f8c049bb43991d5bced914cc5566c6acba4048c43892"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -16962,10 +17089,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 591,
+          "count": 367,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "342cc6b9d62177dfa349d890c1afe0abd3a36a6f96c01fab53bd8b9a42dc627a"
+          "locationsSha256": "62b60b29c1c11a18678098697b685d66101f57626c7ec5090bea05004bf0c2de"
         },
         {
           "code": "score.note.bend.order",
@@ -17126,10 +17253,10 @@
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 283,
+          "count": 185,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
-          "locationsSha256": "857b7cb7e0c983d18514688fcb5467a1e9ba02d22eafe9f6ced9f0d3206392d5"
+          "locationsSha256": "233bf09919c5d710a7cb617c5fbe31a5a6920623fb7bede0cfdef22f5b228a93"
         }
       ],
       "differences": null
@@ -17575,10 +17702,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "de254e88660e699a00d59f65312fb207fb33f89b71d05ac3c907b639adb82848"
+          "locationsSha256": "c1702fc5a19e60645657344288b6843b70e3aeeb7cd136fb70504e6395ede2c9"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -17663,10 +17790,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 26,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/TransposedPitchStemOrientation",
+          "count": 17,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "f969a98b90325b408ee846d70062ee9e2e336e2dd24131e6176b8deee926091e"
+          "locationsSha256": "60c61ea066c5fb1da6f714441f59ee159f5beb018f40b5c2ad52450b533e9d0c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

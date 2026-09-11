@@ -130,14 +130,20 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 		probe := semanticValidPitchedGP8Song(t)
 		probe.Tracks[0].Measures[0].Voices[0].Direction = direction
 		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
-		run.Enum([]string{"VoiceDirection.VoiceDirectionNone", "VoiceDirection.VoiceDirectionUp", "VoiceDirection.VoiceDirectionDown"}[index], hasExportCode(probeReport, "gp8.omit.voice-direction"), direction != VoiceDirectionNone)
+		code := "gp8.omit.voice-direction"
+		if direction != VoiceDirectionNone {
+			probe.Tracks[0].Measures[0].Voices[0].Beats[0].Display.BeamDirection = direction
+			probeReport = PreflightExport(probe, ExportFormatGP8, ExportOptions{})
+			code = "gp8.omit.beat-display-beam-direction"
+		}
+		run.Enum([]string{"VoiceDirection.VoiceDirectionNone", "VoiceDirection.VoiceDirectionUp", "VoiceDirection.VoiceDirectionDown"}[index], hasExportCode(probeReport, code), direction != VoiceDirectionNone)
 	}
 	for index, bracket := range []TupletBracket{TupletBracketNone, TupletBracketStart, TupletBracketEnd} {
 		run.Field("BeatDisplay.TupletBracket", int(bracket), index)
 		probe := semanticValidPitchedGP8Song(t)
 		probe.Tracks[0].Measures[0].Voices[0].Beats[0].Display.TupletBracket = bracket
 		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
-		run.Enum([]string{"TupletBracket.TupletBracketNone", "TupletBracket.TupletBracketStart", "TupletBracket.TupletBracketEnd"}[index], hasExportCode(probeReport, "gp8.omit.beat-display"), bracket != TupletBracketNone)
+		run.Enum([]string{"TupletBracket.TupletBracketNone", "TupletBracket.TupletBracketStart", "TupletBracket.TupletBracketEnd"}[index], hasExportCode(probeReport, "gp8.omit.beat-display-tuplet-bracket"), bracket != TupletBracketNone)
 	}
 	for index, lineBreak := range []LineBreak{LineBreakNone, LineBreakBreak, LineBreakProtect} {
 		run.Field("Measure.LineBreak", int(lineBreak), index)
@@ -151,13 +157,19 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 	}
 
 	want := map[string]ScoreLocation{
-		"gp8.omit.page-setup":             {},
-		"gp8.omit.marker-color":           {Measure: 0},
-		"gp8.omit.track-display-settings": {Track: 0},
-		"gp8.omit.track-indicate-tuning":  {Track: 0},
-		"gp8.omit.measure-line-break":     {Track: 0, Staff: 0, Measure: 0},
-		"gp8.omit.voice-direction":        {Track: 0, Staff: 0, Measure: 0, Voice: 0},
-		"gp8.omit.beat-display":           {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.page-setup":                          {},
+		"gp8.omit.marker-color":                        {Measure: 0},
+		"gp8.omit.track-display-settings":              {Track: 0},
+		"gp8.omit.track-indicate-tuning":               {Track: 0},
+		"gp8.omit.measure-line-break":                  {Track: 0, Staff: 0, Measure: 0},
+		"gp8.omit.voice-direction":                     {Track: 0, Staff: 0, Measure: 0, Voice: 0},
+		"gp8.omit.beat-display-break-beam":             {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-force-beam":             {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-beam-direction":         {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-tuplet-bracket":         {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-break-secondary":        {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-break-secondary-tuplet": {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
+		"gp8.omit.beat-display-force-bracket":          {Track: 0, Staff: 0, Measure: 0, Voice: 0, Beat: 0},
 	}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for code, location := range want {
@@ -180,7 +192,9 @@ func runConformanceDisplayExportPolicy(run *conformanceRun) {
 		t.Errorf("report has %d entries, want %d: %#v", len(report.Entries), len(want)+len(wantDoubleBarLocations), report.Entries)
 	}
 	run.ClaimReport(claimSite("track-identity", "export", "M02-DISPLAY-EXPORT", "non-default track color")).Report("M02-DISPLAY-EXPORT", sortedSemanticValues(reportCodes(report)), []string{
-		"gp8.normalize.measure-double-bar-authority", "gp8.omit.beat-display", "gp8.omit.marker-color", "gp8.omit.measure-line-break",
+		"gp8.normalize.measure-double-bar-authority", "gp8.omit.beat-display-beam-direction", "gp8.omit.beat-display-break-beam",
+		"gp8.omit.beat-display-break-secondary", "gp8.omit.beat-display-break-secondary-tuplet", "gp8.omit.beat-display-force-beam",
+		"gp8.omit.beat-display-force-bracket", "gp8.omit.beat-display-tuplet-bracket", "gp8.omit.marker-color", "gp8.omit.measure-line-break",
 		"gp8.omit.page-setup", "gp8.omit.track-display-settings", "gp8.omit.track-indicate-tuning", "gp8.omit.voice-direction",
 	})
 

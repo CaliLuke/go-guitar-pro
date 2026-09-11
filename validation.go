@@ -113,6 +113,9 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if header.TripletFeel < TripletFeelNone || header.TripletFeel > TripletFeelScottishSixteenth {
 			add("score.measure.triplet-feel", ScoreDiagnosticValue, location, "triplet feel %d is not defined", header.TripletFeel)
 		}
+		if err := validateBeamingRules(header.BeamingRules); err != nil {
+			add("score.measure.beaming-rules", ScoreDiagnosticValue, location, "beaming rules: %v", err)
+		}
 		measureLength, measureLengthErr := header.ExactLength()
 		for fermataIndex, fermata := range header.Fermatas {
 			if fermata.Type < FermataTypeShort || fermata.Type > FermataTypeLong {
@@ -353,6 +356,12 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			}
 			if beat.BarreShape > BarreShapeHalf {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.barre-shape", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("barre shape %d is not defined", beat.BarreShape)})
+			}
+			if beat.BeamingMode < BeatBeamingAuto || beat.BeamingMode > BeatBeamingForceSplitSecondary {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.beaming-mode", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beaming mode %d is not defined", beat.BeamingMode)})
+			}
+			if beat.PreferredBeamDirection < VoiceDirectionNone || beat.PreferredBeamDirection > VoiceDirectionDown {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.beam-direction", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("preferred beam direction %d is not defined", beat.PreferredBeamDirection)})
 			}
 			duration, err := beat.Duration.ExactScoreTime()
 			if err != nil {

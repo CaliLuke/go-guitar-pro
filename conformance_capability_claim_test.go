@@ -43,6 +43,7 @@ var conformanceIndependentEvidenceExecutors = map[string]func(*testing.T){
 	"alphatab-transposition": TestAlphaTabPreservesTransposition,
 	"alphatab-tremolo":       TestAlphaTabPreservesTremoloPicking,
 	"alphatab-barre":         TestAlphaTabPreservesBeatBarres,
+	"alphatab-beaming":       TestAlphaTabPreservesBeaming,
 	"alphatab-tuning":        TestAlphaTabPreservesTuningLabels,
 }
 

@@ -20,6 +20,7 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		Time: fmt.Sprintf("%d/%d", header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value),
 		Bars: bars,
 	}
+	result.XProperties = gp8BeamingRules(header.BeamingRules)
 	if header.FreeTime {
 		result.FreeTime = &struct{}{}
 	}
@@ -242,6 +243,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
 	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
+	gp8BeatBeaming(beat, &result)
 	if beat.Legato != nil {
 		result.Legato = &gpifLegato{
 			Origin:      strconv.FormatBool(beat.Legato.Origin),

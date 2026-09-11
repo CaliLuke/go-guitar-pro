@@ -24,6 +24,8 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
 | `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The public automation record and GP8 writer preserve ordered tempo values, interpolation, text, and per-event visibility; the remaining partial occurrence contract is tracked separately. |
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
+| `brush` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) | Brush direction has a public destination, while the authored GPIF duration remains explicitly diagnosed as unknown syntax until issue 78 implements its separate timing contract. |
+| `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
 
 ## Parse diagnostics
 
@@ -101,6 +103,12 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Chord.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Dynamic.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Beat.Beaming.XProperty.Duplicate` | `beaming` | `invalid-data` | Each canonical beat beaming XProperty can occur at most once. |
+| `GPIF.Beat.Beaming.XProperty.InvalidValue` | `beaming` | `invalid-data` | A recognized beat beaming XProperty must use its defined integer value. |
+| `GPIF.Beat.XProperty.BrushDuration` | `brush` | `unknown-syntax` | The GPIF brush-duration XProperty is recognized as brush scope but remains unhandled until the separately tracked brush capability is implemented. |
+| `GPIF.Beat.XProperty.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | An unrecognized beat XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container. |
+| `GPIF.Beat.TransposedPitchStemOrientation.InvalidValue` | `beaming` | `invalid-data` | A transposed-pitch stem orientation must be Undefined, Upward, or Downward. |
+| `GPIF.Beat.UserTransposedPitchStemOrientation.InvalidValue` | `beaming` | `invalid-data` | A user stem override must be Undefined, Upward, or Downward. |
 | `GPIF.Beat.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Beat.Fadding.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Fadding.Lossy` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
@@ -142,6 +150,14 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.MasterBar.Bars.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.MasterBar.Directions.Jump.InvalidValue` | `score-core` | `unsupported-feature` | Unknown navigation-jump text has no defined public enum value. |
 | `GPIF.MasterBar.Directions.Target.InvalidValue` | `score-core` | `unsupported-feature` | Unknown navigation-target text has no defined public enum value. |
+| `GPIF.MasterBar.Beaming.Duration.Duplicate` | `beaming` | `invalid-data` | A custom master-bar beaming rule can declare its duration only once. |
+| `GPIF.MasterBar.Beaming.Duration.InvalidValue` | `beaming` | `invalid-data` | A custom beaming duration must use a supported note-value denominator. |
+| `GPIF.MasterBar.Beaming.Duration.Missing` | `beaming` | `invalid-data` | Authored custom groups require their exact duration denominator. |
+| `GPIF.MasterBar.Beaming.Group.Duplicate` | `beaming` | `invalid-data` | Each indexed custom beaming group can occur at most once. |
+| `GPIF.MasterBar.Beaming.Group.Gap` | `beaming` | `invalid-data` | Custom beaming group indices must be contiguous from zero. |
+| `GPIF.MasterBar.Beaming.Group.InvalidValue` | `beaming` | `invalid-data` | A custom group must be positive and fit the checked GPIF integer range; only trailing zero padding is accepted. |
+| `GPIF.MasterBar.Beaming.Groups.Missing` | `beaming` | `invalid-data` | An authored custom beaming duration requires at least one group. |
+| `GPIF.MasterBar.XProperty.Unknown` | `score-core` | `unknown-syntax` | An unrecognized master-bar XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container. |
 | `GPIF.MasterBar.TripletFeel.InvalidValue` | `rhythm` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.MasterTrack.Tracks.Reference` | `staff-ownership` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Note.DuplicateID` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
@@ -222,7 +238,8 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
 | `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
 | `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
-| `MeasureHeader` | `rhythm` | 13 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
+| `MeasureHeader` | `rhythm` | 14 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. BeamingRules is the optional exact-bar custom grouping and never derives from TimeSignature. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
+| `BeamingRules` | `beaming` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | A custom master-bar rule owns its note-value slice duration and an independent ordered group-size array. |
 | `Fermata` | `fermata` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The fermata preserves one authored master-bar offset, symbol type, and finite length. |
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
@@ -240,7 +257,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Beat-level barre fields and legato endpoints are independent authored marks. |
+| `Beat` | `note-and-beat-semantics` | 14 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields and legato endpoints are independent authored marks. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
@@ -269,7 +286,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 219 |
+| `preserved` | 225 |
 | `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -280,7 +297,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 88 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 154 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 89 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 158 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -288,7 +305,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 246 |
+| `schema` | 253 |
 
 ## Source dispatch inventory
 
@@ -391,6 +408,8 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
+| `brush-direction-and-audit` | `brush` | `TestConformanceBeatEffects` | `TestAlphaTabInputConformance` | no | The represented stroke direction remains covered by the public model and pinned corpus comparison, while TestGPIFXPropertyAuditClosure keeps the separately tracked duration loss explicit until issue 78. |
+| `beaming-preservation` | `beaming` | `TestConformanceBeaming` | `TestAlphaTabPreservesBeaming` | yes | Authored master-bar groups, beam connection modes, inverted stems, and explicit up/down directions survive binary or GPIF import, public edits, exact GP8 wire output, and pinned-consumer loading. |
 | `sustain-pedal-preservation` | `sustain-pedal` | `TestConformanceSustainPedals` | `TestAlphaTabPreservesSustainPedals` | no | Ordered staff-0 down and release markers survive import, public editing, and GP8 export while empty continuing bars receive one derived hold marker that is skipped on the wire. Validation rejects a Down in a bar entered with the pedal down because consumers reinterpret it as Hold from bar-entry state. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |

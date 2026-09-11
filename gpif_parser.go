@@ -327,6 +327,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		// Double bar
 		mh.DoubleBar = mb.DoubleBar != nil
 		mh.FreeTime = mb.FreeTime != nil
+		mh.BeamingRules = gpifParseBeamingRules(mb.XProperties)
 
 		if mb.Directions != nil {
 			for _, target := range mb.Directions.Targets {
@@ -446,6 +447,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 									beat.Effect.FadeIn = b.Fadding == "FadeIn"
 									beat.Effect.Hairpin = gpifHairpin(b.Hairpin)
 									gpifApplyBeatEffects(b, &beat)
+									gpifApplyBeaming(b, &beat)
 									if chord, ok := trackChordMaps[trackIdx].resolve(staffIdx, b.Chord); ok {
 										beat.Effect.Chord = &chord
 									}

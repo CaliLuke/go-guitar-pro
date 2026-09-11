@@ -389,17 +389,18 @@ type gpifMasterBars struct {
 }
 
 type gpifMasterBar struct {
-	Section          *gpifSection    `xml:"Section,omitempty"`
-	Key              gpifKey         `xml:"Key"`
-	Time             string          `xml:"Time"`
-	FreeTime         *struct{}       `xml:"FreeTime,omitempty"`
-	Fermatas         *gpifFermatas   `xml:"Fermatas,omitempty"`
-	Bars             string          `xml:"Bars"`
-	AlternateEndings string          `xml:"AlternateEndings,omitempty"`
-	DoubleBar        *struct{}       `xml:"DoubleBar,omitempty"`
-	TripletFeel      string          `xml:"TripletFeel,omitempty"`
-	Repeat           *gpifRepeat     `xml:"Repeat,omitempty"`
-	Directions       *gpifDirections `xml:"Directions,omitempty"`
+	Section          *gpifSection     `xml:"Section,omitempty"`
+	Key              gpifKey          `xml:"Key"`
+	Time             string           `xml:"Time"`
+	FreeTime         *struct{}        `xml:"FreeTime,omitempty"`
+	Fermatas         *gpifFermatas    `xml:"Fermatas,omitempty"`
+	Bars             string           `xml:"Bars"`
+	AlternateEndings string           `xml:"AlternateEndings,omitempty"`
+	DoubleBar        *struct{}        `xml:"DoubleBar,omitempty"`
+	TripletFeel      string           `xml:"TripletFeel,omitempty"`
+	Repeat           *gpifRepeat      `xml:"Repeat,omitempty"`
+	Directions       *gpifDirections  `xml:"Directions,omitempty"`
+	XProperties      *gpifXProperties `xml:"XProperties,omitempty"`
 }
 
 type gpifFermatas struct {
@@ -459,22 +460,34 @@ type gpifBeats struct {
 }
 
 type gpifBeat struct {
-	ID         string         `xml:"id,attr"`
-	Rhythm     gpifRhythmRef  `xml:"Rhythm"`
-	Notes      string         `xml:"Notes,omitempty"`
-	Chord      string         `xml:"Chord,omitempty"`
-	Dynamic    string         `xml:"Dynamic,omitempty"`
-	GraceNotes string         `xml:"GraceNotes,omitempty"`
-	Fadding    string         `xml:"Fadding,omitempty"`
-	Tremolo    string         `xml:"Tremolo,omitempty"`
-	Arpeggio   string         `xml:"Arpeggio,omitempty"`
-	Hairpin    string         `xml:"Hairpin,omitempty"`
-	Legato     *gpifLegato    `xml:"Legato,omitempty"`
-	FreeText   string         `xml:"FreeText,omitempty"`
-	Ottavia    string         `xml:"Ottavia,omitempty"`
-	Wah        string         `xml:"Wah,omitempty"`
-	Whammy     *gpifWhammy    `xml:"Whammy,omitempty"`
-	Properties gpifProperties `xml:"Properties"`
+	ID                                 string           `xml:"id,attr"`
+	Rhythm                             gpifRhythmRef    `xml:"Rhythm"`
+	Notes                              string           `xml:"Notes,omitempty"`
+	Chord                              string           `xml:"Chord,omitempty"`
+	Dynamic                            string           `xml:"Dynamic,omitempty"`
+	GraceNotes                         string           `xml:"GraceNotes,omitempty"`
+	Fadding                            string           `xml:"Fadding,omitempty"`
+	Tremolo                            string           `xml:"Tremolo,omitempty"`
+	Arpeggio                           string           `xml:"Arpeggio,omitempty"`
+	Hairpin                            string           `xml:"Hairpin,omitempty"`
+	Legato                             *gpifLegato      `xml:"Legato,omitempty"`
+	FreeText                           string           `xml:"FreeText,omitempty"`
+	Ottavia                            string           `xml:"Ottavia,omitempty"`
+	TransposedPitchStemOrientation     string           `xml:"TransposedPitchStemOrientation,omitempty"`
+	UserTransposedPitchStemOrientation string           `xml:"UserTransposedPitchStemOrientation,omitempty"`
+	Wah                                string           `xml:"Wah,omitempty"`
+	Whammy                             *gpifWhammy      `xml:"Whammy,omitempty"`
+	Properties                         gpifProperties   `xml:"Properties"`
+	XProperties                        *gpifXProperties `xml:"XProperties,omitempty"`
+}
+
+type gpifXProperties struct {
+	Properties []gpifXProperty `xml:"XProperty"`
+}
+
+type gpifXProperty struct {
+	ID  string  `xml:"id,attr"`
+	Int *string `xml:"Int,omitempty"`
 }
 
 type gpifLegato struct {

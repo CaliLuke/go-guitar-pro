@@ -5,8 +5,8 @@
   "title": "Preserve authored beam groups and stem overrides",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_75",
   "formats": [
     "gp3",
     "gp4",
@@ -26,7 +26,12 @@
     "Preserve a non-default custom grouping and exact ownership without deriving it solely from meter.",
     "GP8/AlphaTab retains representable overrides; incompatible legacy-only display fields get individual dispositions."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Do not infer custom beaming groups from meter or layout defaults when the exact master bar has no authored rule.",
+    "Keep legacy Beat.Display tuplet bracket, secondary-tuplet break, and force-bracket output outside the canonical beam/stem contract; GP8 reports each non-default field separately.",
+    "GPIF grace-beat stem direction remains with the separately scoped grace representation because those source occurrences project to GraceEffect rather than the public Beat type.",
+    "Do not add playback, rendering, or unrelated meter/layout behavior."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -92,22 +97,47 @@
     {
       "kind": "source",
       "reference": "beat.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Imports GP5 following-beat connection flags into the previous beat's canonical mode and preserves explicit up/down direction independently."
+    },
+    {
+      "kind": "source",
+      "reference": "beaming.go",
+      "detail": "Audits, parses, validates, and serializes exact GPIF beaming groups, beat XProperties, stem orientation, and field-specific legacy dispositions."
     },
     {
       "kind": "source",
       "reference": "gpif_types.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Carries master-bar and beat XProperties plus both GPIF stem-orientation elements."
     },
     {
       "kind": "source",
       "reference": "gp8_builder.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Reports every incompatible legacy Beat.Display field separately during GP8 export."
     },
     {
       "kind": "test",
-      "reference": "TestConformanceDisplayExportPolicy",
-      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+      "reference": "TestConformanceBeaming",
+      "detail": "Covers real GP5 and GP7 import, all sequential primary/secondary XProperty precedence cases, two adjacent same-meter headers with one exact owner, every canonical mode, invert-only plus independent up/down fields, exact wire output, strict preservation, and GP8 reimport."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGPIFBeamingDiagnostics",
+      "detail": "Covers malformed GPIF values, strict diagnostics, and invalid public model rejection."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGPIFXPropertyAuditClosure",
+      "detail": "Proves known beaming IDs remain accepted and generic containers do not silence brush-duration or future beat/master-bar XProperty unknown-syntax diagnostics."
+    },
+    {
+      "kind": "test",
+      "reference": "TestBeamingRuleBoundaries",
+      "detail": "Covers minimum and maximum supported denominators, group counts, and group values through GP8 reimport."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesBeaming",
+      "detail": "Pinned AlphaTab proves all ordered XProperty precedence cases, invert-only output without a preferred direction, source and edited output, and adjacent-master-bar ownership for custom groups and every representable beat override."
     }
   ],
   "shared_files": [
@@ -115,7 +145,7 @@
     "gp8_builder.go",
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "Added exact master-bar BeamingRules and independent Beat.BeamingMode, InvertBeamDirection, and PreferredBeamDirection authorities. GP5 following-beat flags now populate the canonical previous-beat connection while raw Beat.Display fields remain compatible; GPIF parsing applies primary and secondary properties in pinned source order and audits duration/group bounds, padding, gaps, XProperty values, and stem tokens. Generic XProperty containers remain audit-closed: brush duration and future beat/master-bar IDs retain stable strict unknown-syntax diagnostics while known beaming IDs are accepted. GP8 writes exact groups, modes, inversion, and both stem-orientation elements, and reports each non-default legacy-only field separately. Focused real-fixture, all ordered-property, invert-only, two-adjacent-header ownership, malformed, numeric-boundary, wire, reimport, strict-preservation, audit-closure, and pinned AlphaTab tests cover the ticket without deriving layout or meter behavior.",
   "verification": [],
   "issue": {
     "number": 75,

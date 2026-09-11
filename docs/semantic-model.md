@@ -231,6 +231,30 @@ flags in the part configuration. The writer reports other non-default track and
 beat display settings. It also reports page setup, marker color, voice direction,
 and line-break data that it cannot emit.
 
+`MeasureHeader.BeamingRules` is the optional authored custom grouping on one
+exact master bar. It owns its duration denominator and one through 32 positive
+group sizes; it does not inherit from adjacent bars or derive from
+`TimeSignature.Beams`. Supported denominators are 1, 2, 4, 8, 16, 32, 64, 128,
+and 256. A group size is limited to 2,147,483,647. GPIF trailing zero group
+properties are padding and are removed during import; a zero before a later
+positive group is invalid.
+
+`Beat.BeamingMode` is the canonical connection from that beat to the next.
+`Beat.InvertBeamDirection` and `Beat.PreferredBeamDirection` are independent
+authored overrides. GP5 stores connection flags on the following beat, so import
+moves them to the previous beat while retaining the raw `Beat.Display` fields.
+GPIF applies primary and secondary beaming XProperties in source order. A later
+primary split or merge replaces an earlier secondary split; a later secondary
+split replaces merge but does not replace primary split.
+The generic beat and master-bar XProperty containers do not make unknown IDs
+valid. Unhandled IDs remain explicit unknown-syntax diagnostics; the known but
+unimplemented brush-duration ID remains assigned to the separate brush scope.
+After import, edits to the canonical fields are authoritative; the legacy fields
+do not reconcile back into them. GP8 writes the canonical fields and reports
+each non-default legacy-only display field separately. A GPIF grace-beat stem
+orientation remains outside this contract because grace occurrences project to
+`GraceEffect`, not to a public `Beat`.
+
 Master bars own key, meter, and double-bar output. A non-default compatibility
 value on `Measure` produces a normalization report when it conflicts with its
 header.
@@ -266,9 +290,11 @@ GP8 export preserves master-bar key changes, meter values, section text,
 repeats, alternate endings, triplet feel, and double bars. It preserves treble,
 bass, alto, tenor, and percussion clefs, including 8va, 8vb, 15ma, and 15mb
 clef shifts. It also preserves every navigation target and jump on a master
-bar. It does not write header-local tempo or authored meter beam groups. Export
-reports each of these omissions. Import and export reject an invalid meter or
-repeat count before a value can wrap to a smaller integer type.
+bar. It writes authored `MeasureHeader.BeamingRules`, but it does not write the
+legacy `TimeSignature.Beams` compatibility array or header-local tempo. Export
+reports each of these omissions. Import and export reject an invalid meter,
+repeat count, or beaming boundary before a value can wrap to a smaller integer
+type.
 
 `MeasureHeader.RepeatStart` marks the start of a repeat section.
 `MeasureHeader.RepeatCount` is the total number of passes displayed at the

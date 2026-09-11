@@ -255,6 +255,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceBeatEffects":                        runConformanceBeatEffects,
 	"TestConformanceLegato":                             runConformanceLegato,
 	"TestConformanceBarre":                              runConformanceBarre,
+	"TestConformanceBeaming":                            runConformanceBeaming,
 	"TestConformanceDynamicQuantization":                runConformanceDynamicQuantization,
 	"TestConformanceTechniqueDispositions":              runConformanceTechniqueDispositions,
 	"TestConformanceTremoloPicking":                     runConformanceTremoloPicking,

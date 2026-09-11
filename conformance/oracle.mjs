@@ -593,6 +593,48 @@ export function loadBarreFacts(fixture) {
   return facts;
 }
 
+export function loadBeamingFacts(fixture) {
+  const score = loadScore(fixture);
+  const masterBars = [];
+  const beats = [];
+  for (const masterBar of score.masterBars) {
+    if (masterBar.beamingRules) {
+      masterBars.push({
+        bar: masterBar.index,
+        rules: Array.from(masterBar.beamingRules.groups, ([duration, groups]) => ({
+          duration: finite(duration),
+          groups: Array.from(groups)
+        }))
+      });
+    }
+  }
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (beat.beamingMode === alphaTab.model.BeatBeamingMode.Auto &&
+                !beat.invertBeamDirection && beat.preferredBeamDirection === null) continue;
+            beats.push({
+              track: track.index,
+              staff: staff.index,
+              bar: bar.index,
+              voice: voice.index,
+              beat: beat.index,
+              mode: enumName(alphaTab.model.BeatBeamingMode, beat.beamingMode),
+              invert: Boolean(beat.invertBeamDirection),
+              direction: beat.preferredBeamDirection === null
+                ? 'none'
+                : enumName(alphaTab.rendering.BeamDirection, beat.preferredBeamDirection)
+            });
+          }
+        }
+      }
+    }
+  }
+  return { masterBars, beats };
+}
+
 export function loadBackingTrackFacts(fixture) {
   const backingTrack = loadScore(fixture).backingTrack;
   return {
@@ -827,6 +869,10 @@ function main() {
   }
   if (args[0] === '--barre' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBarreFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--beaming' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadBeamingFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--fermatas' && args.length === 2) {

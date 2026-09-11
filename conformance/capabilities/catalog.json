@@ -2835,7 +2835,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Direction survives. GPIF brush duration XProperty is not retained. The GP8 writer uses a fixed eighth-note stroke duration.",
+      "finding": "Direction survives. GPIF brush duration XProperty is not retained and now has a stable brush-specific unknown-syntax diagnostic instead of becoming silently accepted by the generic XProperty schema. The GP8 writer uses a fixed eighth-note stroke duration.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.brushType",
@@ -2862,6 +2862,11 @@
           "kind": "test",
           "reference": "TestConformanceBeatEffects",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGPIFXPropertyAuditClosure",
+          "detail": "The four authored brush-duration XProperties in brush.gp are reported and rejected by strict unknown-syntax parsing without implementing brush timing."
         }
       ]
     },
@@ -4436,12 +4441,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Binary display flags exist. GPIF XProperties and stem-direction elements are absent. GP8 omits authored beam groups and beat display overrides.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GP5 following-beat flags, known beaming GPIF XProperties, custom master-bar groups, and independent inverted or preferred stem directions on canonical Beat occurrences have public destinations and GP8 output. The generic XProperty containers remain audit-closed: unhandled beat and master-bar IDs receive stable unknown-syntax diagnostics. Legacy Beat.Display fields remain source-compatible raw data and receive individual omission reports. GPIF grace-beat stem direction is part of the separately scoped grace representation because the public model projects that occurrence to GraceEffect rather than Beat.",
+      "acceptance": "Preserve custom grouping ownership and every beam/stem override through public editing and pinned AlphaTab consumption while retaining exact dispositions for legacy-only display fields.",
       "upstream": [
         "MasterBar.beamingRules",
         "BeamingRules.*",
@@ -4468,8 +4473,18 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceDisplayExportPolicy",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceBeaming",
+          "detail": "Actual GP5 and GP7 import, all ordered primary/secondary XProperty cases, two adjacent same-meter ownership, invert-only plus independent up/down edits, validation, exact XProperty/stem output, GP8 reimport, and legacy display dispositions."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesBeaming",
+          "detail": "Pinned AlphaTab source, all ordered XProperty precedence cases, invert-only output without a preferred direction, edited output, and exact adjacent-master-bar ownership facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGPIFXPropertyAuditClosure",
+          "detail": "Known beaming IDs remain accepted while brush duration and future beat/master-bar IDs retain stable strict unknown-syntax diagnostics."
         },
         {
           "kind": "probe",

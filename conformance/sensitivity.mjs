@@ -121,7 +121,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["Beat.BarreFret","Beat.BarreShape","Song.Album"', after: '"preserved":["Beat.BarreFret","Beat.BarreShape","Song.HideTempo"' },
+      { before: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Song.Album"', after: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Song.HideTempo"' },
       { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
@@ -179,8 +179,8 @@ const mutations = [
     id: 'unclassified-gpif-wire-field',
     category: 'inventory',
     file: 'gpif_types.go',
-    before: '\tGraceNotes string         `xml:"GraceNotes,omitempty"`\n',
-    after: '\tGraceNotes string         `xml:"GraceNotes,omitempty"`\n\tReviewIgnoredText string       `xml:"ReviewIgnoredText,omitempty"`\n',
+    before: '\tGraceNotes                         string           `xml:"GraceNotes,omitempty"`\n',
+    after: '\tGraceNotes                         string           `xml:"GraceNotes,omitempty"`\n\tReviewIgnoredText                  string           `xml:"ReviewIgnoredText,omitempty"`\n',
     test: '^TestSemanticContractInventory$',
     want: 'gpifBeat.ReviewIgnoredText'
   },
@@ -680,6 +680,16 @@ const mutations = [
     after: '\t\t\tif staffIndex < 0 && lineCount != percussionLineCount {\n',
     test: '^TestGP8PercussionLineCountPolicy$',
     want: 'want one staff-1 line-count normalization'
+  },
+  {
+    id: 'beaming-secondary-split-wire',
+    contract: 'beaming-preservation',
+    category: 'serialization',
+    file: 'beaming.go',
+    before: '\t\tproperties = append(properties, gp8IntXProperty(gpifBeatSecondarySplitID, 1))\n',
+    after: '\t\tproperties = append(properties, gp8IntXProperty(gpifBeatBeamingModeID, 1))\n',
+    test: '^TestConformanceBeaming$',
+    want: 'gpifBeat.XProperties'
   }
 ];
 

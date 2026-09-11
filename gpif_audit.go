@@ -295,6 +295,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 
 	for _, beat := range doc.Beats.Beats {
 		path := gpifObjectPath("Beats/Beat", beat.ID)
+		gpifAuditBeamingBeat(context, beat.ID, path, &beat)
 		gpifAuditPropertyConflicts(context, beat.Properties.Properties, path+"/Properties", beat.ID, ParseLocation{BeatID: beat.ID}, gpifBeatPropertyConflictSource)
 		gpifAuditBarrePair(context, beat.ID, path+"/Properties", beat.Properties.Properties)
 		for _, property := range beat.Properties.Properties {
@@ -340,6 +341,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		gpifAuditEnum(context, diagnosticSource("GPIF.Bar.SimileMark.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), bar.SimileMark, []string{"", "Simple", "FirstOfDouble", "SecondOfDouble"}, gpifObjectPath("Bars/Bar", bar.ID)+"/SimileMark", bar.ID, "rhythm")
 	}
 	for index, masterBar := range doc.MasterBars.MasterBars {
+		gpifAuditBeamingMasterBar(context, index, masterBar.XProperties)
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.Key.Mode.InvalidValue", "score-core", ParseDiagnosticUnsupportedFeature), masterBar.Key.Mode, []string{"", "Major", "major", "Minor", "minor"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/Key/Mode", index), "", "score-core")
 		gpifAuditEnum(context, diagnosticSource("GPIF.MasterBar.TripletFeel.InvalidValue", "rhythm", ParseDiagnosticUnsupportedFeature), masterBar.TripletFeel, []string{"", "NoTripletFeel", "Triplet8th", "Triplet16th", "Dotted8th", "Dotted16th", "Scottish8th", "Scottish16th"}, fmt.Sprintf("/GPIF/MasterBars/MasterBar[%d]/TripletFeel", index), "", "rhythm")
 		if masterBar.Fermatas != nil {

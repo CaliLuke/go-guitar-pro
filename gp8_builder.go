@@ -593,7 +593,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 			builder.addReport("gp8.omit.measure-tempo", "tempo-automations", ExportDispositionOmitted, headerLocation, "GP8 writer does not emit the legacy measure-header tempo field")
 		}
 		if header.TimeSignature.Beams != defaultTimeSignature().Beams {
-			builder.addReport("gp8.omit.time-signature-beams", "rhythm", ExportDispositionOmitted, headerLocation, "GP8 writer emits the meter but not its authored beam grouping")
+			builder.addReport("gp8.omit.time-signature-beams", "rhythm", ExportDispositionOmitted, headerLocation, "GP8 writer preserves custom BeamingRules but not the binary TimeSignature.Beams compatibility array")
 		}
 		barIDs := make([]string, 0, len(builder.song.Tracks))
 		for trackIndex := range builder.song.Tracks {
@@ -693,9 +693,7 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Duration.TupletEnters == 0 && beat.Duration.TupletTimes == 0 {
 		builder.addReport("gp8.normalize.tuplet-default", "rhythm", ExportDispositionNormalized, location, "GP8 emits a missing tuplet as the canonical 1:1 legacy ratio")
 	}
-	if beat.Display != (BeatDisplay{}) {
-		builder.addReport("gp8.omit.beat-display", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit beat beam and tuplet display overrides")
-	}
+	builder.reportLegacyBeatDisplay(beat.Display, location)
 	if beat.Status == BeatStatusEmpty {
 		builder.addReport("gp8.normalize.empty-beat", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits an explicit empty beat as a rest")
 	}

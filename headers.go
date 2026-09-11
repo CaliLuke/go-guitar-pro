@@ -24,6 +24,15 @@ type Clipboard struct {
 	SubBarCopy   bool
 }
 
+// BeamingRules contains the authored custom grouping for one master bar.
+// Duration is the note-value denominator used to slice the bar. Groups owns an
+// independent ordered copy of the positive slice counts. A nil rule means the
+// source did not author a custom grouping; it is not derived from the meter.
+type BeamingRules struct {
+	Duration NoteValue
+	Groups   []int
+}
+
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
 	Marker *Marker
@@ -38,6 +47,9 @@ type MeasureHeader struct {
 	// this measure. GP8 export writes the values in canonical DirectionSign
 	// order and removes duplicates without changing this slice.
 	Directions []DirectionSign
+	// BeamingRules is the custom grouping authored on this exact master bar.
+	// It does not inherit from adjacent bars and does not modify TimeSignature.
+	BeamingRules *BeamingRules
 	// Direction is the legacy single-marker compatibility view. Import selects
 	// the final marker in canonical order. For a parsed score, changing this
 	// pointer replaces Directions during export, including clearing the set when
