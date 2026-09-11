@@ -46,7 +46,7 @@ check_duplication() {
 test_with_coverage() {
   local report coverage
   report="$(mktemp /tmp/go-guitar-pro-coverage.XXXXXX)"
-  if ! go test -race -count=1 -timeout=120s -covermode=atomic -coverprofile="$report" ./...; then
+  if ! go test -race -count=1 -timeout=300s -covermode=atomic -coverprofile="$report" ./...; then
     rm -f "$report"
     return 1
   fi

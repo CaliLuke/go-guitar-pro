@@ -9,6 +9,26 @@ const declared = new Set(ledger.semanticContracts.behaviorContracts.map(contract
 
 const mutations = [
   {
+    id: 'track-short-name-wire-drop',
+    contract: 'section-track-names',
+    category: 'serialization',
+    file: 'gp8_builder.go',
+    before: '\t\tShortName: track.ShortName,\n',
+    after: '\t\tShortName: nil,\n',
+    test: '^TestConformanceSectionTrackNames$',
+    want: 'gpifTrack.ShortName'
+  },
+  {
+    id: 'string-number-display-import-drop',
+    contract: 'string-number-display',
+    category: 'import',
+    file: 'gpif_effects.go',
+    before: '\t\t\tnote.ShowStringNumber = p.Enable != nil\n',
+    after: '\t\t\tnote.ShowStringNumber = false\n',
+    test: '^TestConformanceStringNumberDisplay$',
+    want: 'Note.ShowStringNumber'
+  },
+  {
     id: 'supported-capability-claim-removed',
     contract: 'semantic-obligation-shape',
     category: 'capability-closure',
