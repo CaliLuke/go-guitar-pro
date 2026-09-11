@@ -39,7 +39,7 @@ func gpifAuditNoteSpelling(context *parseContext, source *gpifNote, note *Note, 
 	path := gpifObjectPath("Notes/Note", source.ID) + "/Properties"
 	for _, property := range source.Properties.Properties {
 		if property.Name == "Fret" && property.Fret != nil && *property.Fret < 0 {
-			if gpifAuthoredAccidental(source.Properties.Properties) != NoteAccidentalDefault {
+			if mode, _ := gpifAuthoredAccidental(source.Properties.Properties); mode != NoteAccidentalDefault {
 				context.add(gpifPitchContextSource, ParseDiagnostic{SourcePath: path, ObjectID: source.ID, Location: ParseLocation{NoteID: source.ID}, Reason: "negative derived fret uses an absolute-MIDI fallback whose retained string identity cannot preserve authored spelling"})
 			}
 			return
@@ -49,6 +49,16 @@ func gpifAuditNoteSpelling(context *parseContext, source *gpifNote, note *Note, 
 		context.add(gpifPitchContextSource, ParseDiagnostic{SourcePath: path, ObjectID: source.ID, Location: ParseLocation{NoteID: source.ID}, Reason: reason})
 		return
 	}
+	var concertPitch *gpifPitch
+	for _, property := range source.Properties.Properties {
+		if property.Name == "ConcertPitch" {
+			if value, valid := gpifPitchMIDI(property.Pitch); valid && value == soundingNoteMIDI(staff, note) {
+				concertPitch = property.Pitch
+			}
+		}
+	}
+	validSource := true
+	alternateContext := false
 	var concertMode, transposedMode NoteAccidentalMode
 	var concert, transposed bool
 	for _, property := range source.Properties.Properties {
@@ -64,6 +74,7 @@ func gpifAuditNoteSpelling(context *parseContext, source *gpifNote, note *Note, 
 		}
 		actual, valid := gpifPitchMIDI(property.Pitch)
 		if !valid {
+			validSource = false
 			continue
 		}
 		mode, _ := accidentalMode(property.Pitch.Accidental)
@@ -72,11 +83,28 @@ func gpifAuditNoteSpelling(context *parseContext, source *gpifNote, note *Note, 
 		} else {
 			transposedMode = mode
 		}
+		if actual != expected && property.Name == "TransposedPitch" && concertPitch != nil {
+			// Original GPIF may spell a nominal-tuning pitch or omit octave
+			// notation adjustments. Its consistent concert record establishes
+			// the separate numeric pitch; retain the selected authored payload.
+			alternateContext = true
+			continue
+		}
 		if actual != expected {
+			validSource = false
 			context.add(gpifPitchInvalidSource, ParseDiagnostic{SourcePath: path + fmt.Sprintf("/Property[@name=%q]/Pitch", property.Name), ObjectID: source.ID, Location: ParseLocation{NoteID: source.ID}, Reason: fmt.Sprintf("authored pitch %d contradicts numeric %s pitch %d", actual, property.Name, expected)})
 		}
 	}
+	if validSource && note.AccidentalMode != NoteAccidentalDefault {
+		_, selected := gpifAuthoredAccidental(source.Properties.Properties)
+		if selected != nil && selected.Pitch != nil {
+			if !alternateContext {
+				concertPitch = nil
+			}
+			note.rememberAccidentalSource(*selected, concertPitch, staff, measure, beat)
+		}
+	}
 	if concert && transposed && concertMode != transposedMode {
-		context.add(gpifPitchAuthoritySource, ParseDiagnostic{SourcePath: path, ObjectID: source.ID, Location: ParseLocation{NoteID: source.ID}, Reason: "TransposedPitch accidental mode takes precedence over the distinct ConcertPitch spelling"})
+		context.add(gpifPitchAuthoritySource, ParseDiagnostic{SourcePath: path, ObjectID: source.ID, Location: ParseLocation{NoteID: source.ID}, Reason: "TransposedPitch controls the public accidental mode; a distinct ConcertPitch spelling is not independently editable"})
 	}
 }

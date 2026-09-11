@@ -28,12 +28,15 @@ type Note struct {
 	// AccidentalMode is the authored spelling preference. GPIF TransposedPitch
 	// takes precedence over ConcertPitch. Default clears an authored preference.
 	// This field does not rewrite Value or reinterpret SwapAccidentals.
+	// Imported spelling retains its source coordinates until the mode or numeric
+	// pitch context changes; then validation uses the edited written pitch.
 	AccidentalMode NoteAccidentalMode
 	// TieOrigin marks this note as the start of a tie in formats that model
 	// tie direction explicitly, such as GPIF.
 	TieOrigin        bool
 	Kind             NoteType
 	velocityExplicit bool
+	accidentalSource *noteAccidentalSource
 }
 
 func defaultNote() Note {

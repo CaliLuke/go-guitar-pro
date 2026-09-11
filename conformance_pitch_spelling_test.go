@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"encoding/xml"
 	"os"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -285,7 +286,7 @@ func TestPitchSpellingDisplayContext(t *testing.T) {
 
 func TestGPIFPitchSpellingInvalidSource(t *testing.T) {
 	base := pitchSpellingSource(t, false)
-	for _, mutation := range [][2]string{{"<Step>D</Step>", "<Step>E</Step>"}, {"<Step>D</Step>", "<Step>H</Step>"}, {"<Accidental>b</Accidental>", "<Accidental>?</Accidental>"}, {"<Octave>5</Octave>", "<Octave>12</Octave>"}} {
+	for _, mutation := range [][2]string{{"<Step>C</Step>", "<Step>D</Step>"}, {"<Step>D</Step>", "<Step>H</Step>"}, {"<Accidental>b</Accidental>", "<Accidental>?</Accidental>"}, {"<Octave>5</Octave>", "<Octave>12</Octave>"}} {
 		data := rewriteConformanceGPIF(t, base, func(gpif string) string { return strings.Replace(gpif, mutation[0], mutation[1], 1) })
 		result, err := ParseWithOptions(data, ParseOptions{Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticInvalidData}})
 		if err == nil || !slices.ContainsFunc(result.Diagnostics, func(d ParseDiagnostic) bool { return d.Code == "GPIF.Note.Pitch.Invalid" }) {
@@ -367,4 +368,162 @@ func TestGPIFAbsentAccidentalAuthority(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestAlphaTabPitchSpellingSourceContexts(t *testing.T) {
+	requireAlphaTabConformance(t)
+	for _, name := range []string{"serenade", "ottavia", "colors"} {
+		path := "testdata/gp7/" + name + ".gp"
+		parsed, e := ParseFileWithOptions(path, ParseOptions{})
+		if e != nil {
+			t.Fatal(e)
+		}
+		if slices.ContainsFunc(parsed.Diagnostics, func(d ParseDiagnostic) bool { return d.Code == "GPIF.Note.Pitch.Invalid" }) {
+			t.Fatalf("%s original source pitch rejected", name)
+		}
+		if slices.ContainsFunc(ValidateSong(parsed.Song), func(d ScoreDiagnostic) bool { return d.Code == "score.note.accidental-pitch" }) {
+			t.Fatalf("%s original preference rejected", name)
+		}
+		var original []accidentalFact
+		readAlphaTabOracleFacts(t, "--accidental-facts", path, &original)
+		song := parsed.Song
+		for generation := 0; generation < 2; generation++ {
+			data, e := Export(song, ExportFormatGP8)
+			if e != nil {
+				t.Fatal(name, e)
+			}
+			var facts []accidentalFact
+			readAlphaTabOracleFacts(t, "--accidental-facts", writeConformanceFixture(t, data), &facts)
+			// These original fixtures exercise complete ordinary-note contexts, including
+			// nominal-tuning spelling and bar/beat octave notation adjustments.
+			if !reflect.DeepEqual(facts, original) {
+				for i := 0; i < len(facts) && i < len(original); i++ {
+					if facts[i] != original[i] {
+						t.Fatalf("%s generation%d note%d got%#v want%#v", name, generation, i, facts[i], original[i])
+					}
+				}
+				t.Fatalf("%s note counts %d want %d", name, len(facts), len(original))
+			}
+			song, e = Parse(data)
+			if e != nil {
+				t.Fatal(e)
+			}
+		}
+	}
+}
+func TestPitchSpellingImportedContextEdits(t *testing.T) {
+	source := parseTestFixture(t, "testdata/gp7/serenade.gp")
+	note := source.Tracks[0].Measures[0].Voices[0].Beats[4].Notes[0]
+	if note.Value != 1 || note.AccidentalMode != NoteAccidentalNatural {
+		t.Fatal("wrong source sentinel", note)
+	}
+	for _, edit := range []string{"unchanged", "mode", "clear", "fret", "tuning", "capo", "display", "compensated"} {
+		s := accidentalSong(t, NoteAccidentalDefault, 61)
+		staff := &s.Tracks[0].Staves[0]
+		staff.Strings = append([]GuitarString(nil), source.Tracks[0].Staves[0].Strings...)
+		s.Tracks[0].Strings = staff.Strings
+		staff.DisplayTranspositionPitch = -12
+		s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0] = note
+		n := &s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+		switch edit {
+		case "mode":
+			n.AccidentalMode = NoteAccidentalSharp
+		case "clear":
+			n.AccidentalMode = NoteAccidentalDefault
+		case "fret":
+			n.Value = 2
+		case "tuning":
+			staff.Strings[0].Value++
+		case "capo":
+			staff.CapoFret = 1
+		case "display":
+			staff.DisplayTranspositionPitch = -13
+		case "compensated":
+			n.Value++
+			staff.Strings[0].Value--
+		}
+		d := ValidateSong(s)
+		invalid := slices.ContainsFunc(d, func(d ScoreDiagnostic) bool { return d.Code == "score.note.accidental-pitch" })
+		if invalid != (edit == "compensated") {
+			t.Fatalf("edit%s unexpected diagnostics%#v", edit, d)
+		}
+		if invalid {
+			continue
+		}
+		data, e := Export(s, ExportFormatGP8)
+		if e != nil {
+			t.Fatal(edit, e)
+		}
+		var wire struct {
+			Notes []struct {
+				Properties []struct {
+					Name  string `xml:"name,attr"`
+					Pitch *gpifPitch
+				} `xml:"Properties>Property"`
+			} `xml:"Notes>Note"`
+		}
+		if e = xml.Unmarshal(readCurveGPIF(t, data), &wire); e != nil {
+			t.Fatal(e)
+		}
+		pitchCount := 0
+		for _, p := range wire.Notes[0].Properties {
+			if p.Name == "TransposedPitch" {
+				pitchCount++
+				expected := int64(76)
+				switch edit {
+				case "unchanged":
+					expected = 77
+				case "mode":
+					expected = 75
+				}
+				actual, valid := gpifPitchMIDI(p.Pitch)
+				if !valid || actual != expected {
+					t.Fatalf("edit%s pitch%v want%d", edit, actual, expected)
+				}
+			}
+		}
+		expectedCount := 1
+		if edit == "clear" {
+			expectedCount = 0
+		}
+		if pitchCount != expectedCount {
+			t.Fatalf("edit%s pitch count%d want%d", edit, pitchCount, expectedCount)
+		}
+	}
+}
+
+func TestConformancePitchSourceContext(t *testing.T) {
+	runConformancePitchSourceContext(newConformanceRun(t))
+}
+func runConformancePitchSourceContext(run *conformanceRun) {
+	t := run.t
+	s := accidentalSong(t, NoteAccidentalDefault, 63)
+	s.Tracks[0].Staves[0].DisplayTranspositionPitch = -12
+	base, _ := assertConsumerLossPolicy(t, s, []string{})
+	data := rewriteConformanceGPIF(t, base, func(raw string) string {
+		return insertFirstNoteProperty(t, raw, `<Property name="ConcertPitch"><Pitch><Step>D</Step><Accidental>#</Accidental><Octave>5</Octave></Pitch></Property><Property name="TransposedPitch"><Pitch><Step>F</Step><Accidental></Accidental><Octave>6</Octave></Pitch></Property>`)
+	})
+	p, e := Parse(data)
+	if e != nil {
+		t.Fatal(e)
+	}
+	note := p.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0] = note
+	if d := ValidateSong(s); len(d) != 0 {
+		t.Fatal("original contextual preference rejected", d)
+	}
+	out, report := assertConsumerLossPolicy(t, s, []string{})
+	run.Report("M09-PITCH-SOURCE-CONTEXT", reportCodes(report), []string{})
+	run.Field("Note.AccidentalMode", note.AccidentalMode, NoteAccidentalNatural)
+	doc := conformanceWireDocument(t, out)
+	values := map[string]*gpifPitch{}
+	for _, property := range doc.Notes.Notes[0].Properties.Properties {
+		if property.Pitch != nil {
+			values[property.Name] = property.Pitch
+		}
+	}
+	run.Wire("gpifProperty.Pitch", len(values), 2)
+	run.Wire("gpifPitch.Step", []string{values["ConcertPitch"].Step, values["TransposedPitch"].Step}, []string{"D", "F"})
+	run.Wire("gpifPitch.Accidental", []string{*values["ConcertPitch"].Accidental, *values["TransposedPitch"].Accidental}, []string{"#", ""})
+	run.Wire("gpifPitch.Octave", []int{values["ConcertPitch"].Octave, values["TransposedPitch"].Octave}, []int{5, 6})
 }

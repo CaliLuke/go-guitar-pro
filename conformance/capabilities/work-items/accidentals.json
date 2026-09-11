@@ -120,6 +120,21 @@
       "kind": "source",
       "reference": "docs/semantic-model.md",
       "detail": "Authored edit authority, compatibility reconciliation and narrow contextual limits. Fresh independent review and integrated gates remain pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPitchSpellingSourceContexts",
+      "detail": "All raw consumer note facts from original serenade, ottavia and colors remain identical across two exports. Their valid alternate notation coordinates produce no invalid-pitch diagnostics."
+    },
+    {
+      "kind": "test",
+      "reference": "TestPitchSpellingImportedContextEdits",
+      "detail": "Unchanged source payload is preserved; mode, clear, fret, tuning, capo, display and compensated numeric edits invalidate its immutable receipt and use checked written-pitch derivation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePitchSourceContext",
+      "detail": "Exact runtime field and two source wire pitch records; strict preservation without omission and checked private source receipt model contracts."
     }
   ],
   "shared_files": [
@@ -139,7 +154,7 @@
     },
     {
       "command": "go test -count=1 -run 'TestSemanticContractInventory|TestSemanticMatrixInventory' .",
-      "result": "passed; two spelling cases added; 399 public fields, 260 wire fields, 49 dispatches and 178 enum members covered"
+      "result": "passed; one additional source-context case; unchanged totals of 399 public fields, 260 wire fields, 49 dispatches and 178 enum members"
     },
     {
       "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
@@ -148,6 +163,10 @@
     {
       "command": "node conformance/verify.mjs --write-docs",
       "result": "passed"
+    },
+    {
+      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'PitchSpelling|AuthoredAccidental|AccidentalAuthority|PitchSourceContext' .",
+      "result": "passed; original source coordinate regressions and exact two-export raw consumer preservation"
     }
   ],
   "issue": {

@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "slices"
+
 // NoteAccidentalMode selects the authored enharmonic spelling of a note.
 // It does not change the numeric sounding pitch.
 type NoteAccidentalMode uint8
@@ -123,22 +125,79 @@ func accidentalContextLimit(staff *Staff, note *Note) string {
 	return ""
 }
 
-func gpifAuthoredAccidental(properties []gpifProperty) NoteAccidentalMode {
-	var selected *gpifPitch
+func gpifAuthoredAccidental(properties []gpifProperty) (NoteAccidentalMode, *gpifProperty) {
+	var selected *gpifProperty
 	transposed := false
 	for _, p := range properties {
 		if p.Name == "TransposedPitch" {
-			selected = p.Pitch
+			selected = &p
 			transposed = true
 		} else if p.Name == "ConcertPitch" && !transposed {
-			selected = p.Pitch
+			selected = &p
 		}
 	}
-	if selected == nil {
-		return NoteAccidentalDefault
+	if selected == nil || selected.Pitch == nil {
+		return NoteAccidentalDefault, selected
 	}
-	mode, _ := accidentalMode(selected.Accidental)
-	return mode
+	mode, _ := accidentalMode(selected.Pitch.Accidental)
+	return mode, selected
+}
+
+// This immutable source receipt keeps an authored notation coordinate system
+// without adding a second public pitch authority. Any relevant public edit
+// invalidates it, so the writer then derives spelling from the edited model.
+type noteAccidentalSource struct {
+	mode                    NoteAccidentalMode
+	propertyName            string
+	pitch, concert          *noteAccidentalPitch
+	value                   int16
+	stringNumber            int8
+	tuning                  []GuitarString
+	capo, sounding, display int32
+	clef, octave            Octave
+}
+
+func (note *Note) sourceAccidental(staff *Staff, measure *Measure, beat *Beat) *noteAccidentalSource {
+	source := note.accidentalSource
+	if source == nil || source.mode != note.AccidentalMode || source.value != note.Value || source.stringNumber != note.String ||
+		source.capo != staff.CapoFret || source.sounding != staff.TranspositionPitch || source.display != staff.DisplayTranspositionPitch ||
+		source.clef != measure.ClefOctave || source.octave != beat.Octave || !slices.Equal(source.tuning, staff.Strings) {
+		return nil
+	}
+	return source
+}
+
+// noteAccidentalPitch is immutable source spelling, not a public pitch authority.
+type noteAccidentalPitch struct {
+	step       string
+	accidental *string
+	octave     int
+}
+
+func rememberAccidentalPitch(pitch *gpifPitch) *noteAccidentalPitch {
+	if pitch == nil {
+		return nil
+	}
+	copied := &noteAccidentalPitch{step: pitch.Step, octave: pitch.Octave}
+	if pitch.Accidental != nil {
+		value := *pitch.Accidental
+		copied.accidental = &value
+	}
+	return copied
+}
+
+func (pitch *noteAccidentalPitch) gpif() *gpifPitch {
+	if pitch == nil {
+		return nil
+	}
+	return &gpifPitch{Step: pitch.step, Accidental: pitch.accidental, Octave: pitch.octave}
+}
+
+func (note *Note) rememberAccidentalSource(property gpifProperty, concert *gpifPitch, staff *Staff, measure *Measure, beat *Beat) {
+	note.accidentalSource = &noteAccidentalSource{mode: note.AccidentalMode, propertyName: property.Name,
+		pitch: rememberAccidentalPitch(property.Pitch), concert: rememberAccidentalPitch(concert),
+		value: note.Value, stringNumber: note.String, tuning: slices.Clone(staff.Strings), capo: staff.CapoFret, sounding: staff.TranspositionPitch,
+		display: staff.DisplayTranspositionPitch, clef: measure.ClefOctave, octave: beat.Octave}
 }
 
 func validateNoteAccidental(staff *Staff, measure *Measure, beat *Beat, note *Note, percussion bool, location ScoreLocation, diagnostics *[]ScoreDiagnostic) {
@@ -147,6 +206,9 @@ func validateNoteAccidental(staff *Staff, measure *Measure, beat *Beat, note *No
 		return
 	}
 	if percussion || note.AccidentalMode == NoteAccidentalDefault || accidentalContextLimit(staff, note) != "" {
+		return
+	}
+	if note.sourceAccidental(staff, measure, beat) != nil {
 		return
 	}
 	if _, valid := spelledPitch(writtenNoteMIDI(staff, measure, beat, note), note.AccidentalMode); !valid {

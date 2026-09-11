@@ -301,6 +301,8 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
 | `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
 | `ScoreStyle` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
+| `noteAccidentalSource` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Immutable private receipt preserves source notation coordinates while all relevant public context stays unchanged. |
+| `noteAccidentalPitch` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Private source pitch payload; public edits are governed by Note.AccidentalMode and numeric pitch context. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
@@ -317,7 +319,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 138 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 139 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
 
 ## Wire inventory
 
@@ -482,3 +484,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. An explicit empty scope emits an empty array with a precise normalization; two raw consumer exports retain track precedence. |
 | `score-barlines` | `score-core` | `TestConformanceScoreBarlines` | `TestAlphaTabScoreBarlines` | no | Global flags and numbering values retain exact typed records, defaults and other consumer styles; malformed sources and undefined authored enums are rejected. |
 | `multi-rest` | `score-core` | `TestConformanceMultiRest` | `TestAlphaTabMultiRest` | no | Separate global and individual view preferences preserve false and true; absence defaults to false without changing measures or notation. |
+| `pitch-source-context-preservation` | `note-and-beat-semantics` | `TestConformancePitchSourceContext` | `TestAlphaTabPitchSpellingSourceContexts` | no | Retain original source coordinate records without changing numeric pitch; edits invalidate the private receipt and restore checked derivation. |

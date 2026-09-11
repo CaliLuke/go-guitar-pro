@@ -1011,8 +1011,8 @@ The raw grace source and exported artifact record that remaining limit under #10
 `Note.AccidentalMode` owns an authored accidental choice independently of numeric
 pitch. Its zero value, `NoteAccidentalDefault`, leaves spelling to the consumer.
 The other modes request natural, sharp, double sharp, flat, or double flat.
-For a pitched string note, GP8 derives the unique compatible step and octave
-from its written numeric pitch. It emits one `TransposedPitch` property. An
+For a new or edited pitched string note, GP8 derives the compatible step and
+octave from its written numeric pitch. It emits one `TransposedPitch` property. An
 explicit natural emits an empty `Accidental` child. Default emits no pitch
 property.
 
@@ -1022,7 +1022,7 @@ enum values fail validation without changing pitch or mutating the song.
 On GPIF import, `TransposedPitch` wins over `ConcertPitch` regardless of property
 order. An absent accidental child means default. An empty child means natural.
 A distinct concert accidental produces `GPIF.Note.Pitch.Authority`. This reports
-the unretained second spelling.
+the concert spelling that the public mode cannot edit independently.
 
 Numeric fret, tuning, capo, display transposition,
 beat octave, and clef octave remain the pitch context. The `AccidentalMode` field
@@ -1030,8 +1030,9 @@ controls spelling. A default value restores automatic spelling.
 
 After a numeric pitch edit, update or clear an incompatible accidental mode.
 
-Neither edit rewrites the other authority. Invalid source step, token, octave,
-or conflicting numeric pitch produces `GPIF.Note.Pitch.Invalid`.
+Neither edit rewrites the other authority. Invalid source step, token, or octave
+produces `GPIF.Note.Pitch.Invalid`. Numeric source checks account for the original
+notation coordinate system described below.
 
 The legacy `Note.SwapAccidentals` field remains a separate contextual preference.
 It does not overwrite `AccidentalMode` after parsing or editing. GP8 still reports
@@ -1053,6 +1054,21 @@ numeric representation and clears the accidental mode. A matched grace becomes
 an ordered `GraceEffect`, which has no independent accidental field. Its source
 note ID identifies that loss. An orphan grace remains a `Note` and retains its
 mode. Generated grace notes do not inherit their owner's accidental choice.
+
+An unchanged imported note can retain a GPIF spelling in a different notation
+coordinate system. For example, `serenade.gp` uses nominal-tuning transposed
+spelling, and `ottavia.gp` excludes octave marks from that source pitch. The
+numeric concert record establishes sounding pitch. An immutable private receipt
+retains the selected source pitch and its concert context where required.
+This receipt adds no second public pitch authority.
+
+GP8 emits these original pitch records while the mode, fret, string, tuning,
+capo, transpositions, and octave marks remain unchanged. A change to any of
+those values invalidates the receipt. Export then derives spelling from the
+edited numeric context and validates the requested accidental. Clearing the
+mode removes the preference. Reimport retains the original context across
+successive exports. Malformed pitch syntax, contradictory concert pitch, and
+unsubstantiated transposed-only pitch contradictions remain invalid source data.
 
 `Song.SystemLayout` and `Track.SystemLayout` retain independent authored system counts.
 A non-nil track layout controls that track. Export copies score counts to an unspecified track and reports `gp8.normalize.track-layout-inheritance`.

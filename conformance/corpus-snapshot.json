@@ -83,6 +83,113 @@
       "differences": null
     },
     {
+      "path": "testdata/gp3/mix-table-events.gp3",
+      "features": [
+        "tempo-automations"
+      ],
+      "diagnostics": [],
+      "differences": [
+        {
+          "path": "/tempo-automations/0/value/0/linear",
+          "feature": "tempo-automations",
+          "go": true,
+          "alphaTab": false,
+          "semanticPath": "/tempoAutomations/0/linear",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/0/position",
+          "feature": "tempo-automations",
+          "go": 0.25,
+          "alphaTab": 0,
+          "semanticPath": "/tempoAutomations/0/position",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/0/value",
+          "feature": "tempo-automations",
+          "go": 173,
+          "alphaTab": 120,
+          "semanticPath": "/tempoAutomations/0/value",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/1/bar",
+          "feature": "tempo-automations",
+          "go": 4,
+          "alphaTab": 0,
+          "semanticPath": "/tempoAutomations/1/bar",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/1/position",
+          "feature": "tempo-automations",
+          "go": 0,
+          "alphaTab": 0.25,
+          "semanticPath": "/tempoAutomations/1/position",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/1/value",
+          "feature": "tempo-automations",
+          "go": 120,
+          "alphaTab": 173,
+          "semanticPath": "/tempoAutomations/1/value",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/2",
+          "feature": "tempo-automations",
+          "alphaTab": {
+            "bar": 0,
+            "linear": false,
+            "position": 0,
+            "type": "tempo",
+            "value": 120
+          },
+          "semanticPath": "/tempoAutomations/2",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/3",
+          "feature": "tempo-automations",
+          "alphaTab": {
+            "bar": 4,
+            "linear": true,
+            "position": 0,
+            "type": "tempo",
+            "value": 120
+          },
+          "semanticPath": "/tempoAutomations/3",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "issues": [
+            85
+          ]
+        }
+      ]
+    },
+    {
       "path": "testdata/gp3/notes.gp3",
       "features": [
         "score-core",
@@ -473,6 +580,13 @@
       ],
       "diagnostics": [
         {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 14046,
+          "locationsSha256": "98cbdcf8eebeb4b52f4567fa6b1073f85ad152d39b37ebaea48ed426adb92a00"
+        },
+        {
           "code": "Binary.RSE.TrackMetadata",
           "kind": "unsupported-feature",
           "count": 5,
@@ -517,6 +631,13 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
+        {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 3419,
+          "locationsSha256": "725a7d2e2ad42427476c7d46d87b732b208f751ae8b86f84edbf57c5fb77aa3a"
+        },
         {
           "code": "Binary.RSE.MasterMetadata",
           "kind": "unsupported-feature",
@@ -817,6 +938,13 @@
       ],
       "diagnostics": [
         {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 1934,
+          "locationsSha256": "cddf09675e223285c7135e6b5653801da6b41819470ed3302563b25cda5a8de6"
+        },
+        {
           "code": "Binary.RSE.MasterMetadata",
           "kind": "unsupported-feature",
           "count": 1,
@@ -839,6 +967,13 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
+        {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 1928,
+          "locationsSha256": "03795f11717109b453490a26905eb73d3597a56ec03f64a27cc0f1fdd3f187e6"
+        },
         {
           "code": "Binary.RSE.MasterMetadata",
           "kind": "unsupported-feature",
@@ -1448,6 +1583,13 @@
       ],
       "diagnostics": [
         {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 1694,
+          "locationsSha256": "de612c9a2c0dcaacbec2caf5cc83521ffc86892c0575ec8244c5e7080b54c968"
+        },
+        {
           "code": "Binary.RSE.MasterMetadata",
           "kind": "unsupported-feature",
           "count": 1,
@@ -1818,6 +1960,13 @@
       ],
       "diagnostics": [
         {
+          "code": "Binary.Beat.Wah.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "binaryOffset": 1776,
+          "locationsSha256": "3180f5cdb2a0d18ab2f7ca8422a23ac28bd93c38fe23ca87598d3304972cc7be"
+        },
+        {
           "code": "Binary.RSE.MasterMetadata",
           "kind": "unsupported-feature",
           "count": 1,
@@ -2136,14 +2285,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.Wah",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"56\"]/Wah",
-          "objectId": "56",
-          "locationsSha256": "595dedcab246f6073a66111261d58182bca9f274dd03d42cb31dd11d3b0763f4"
-        },
         {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
@@ -2827,14 +2968,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Wah",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"6\"]/Wah",
-          "objectId": "6",
-          "locationsSha256": "91ec8350fd6997acebaf6268610445fd6a777ba0010509bb5f0ae2f122213f21"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3469,14 +3602,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"3\"]/Properties/Property[@name=\"WhammyBarMiddleOffset2\"]/Float",
-          "objectId": "3",
-          "locationsSha256": "963dd53cd7f20bb933848eb18d198dcd00f80ad3c47d7fcf16f0ff232bf05be5"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3685,22 +3810,6 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "be8739f87e3efd616c521f82c9f5a158ca73103e4cd823a01907b4be8af22188"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ad29a69ba13e8d8b0c776c13bb0607fa2bcc9d04819a67f60e97ce381c67b771"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -3763,22 +3872,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "dd8bc2076ddff250f4f5032b060238a00b9e7a8c893c6f11ed461dc361b6c284"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 35,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "fdf98ec50020c061a5f24522ef0e82fcac157efbe8a13ebd70e5a8f5db3282b3"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 35,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d0ca145f97c54dc3b975598c31828fb4b4837fe10e1ff786cb6282be1c922be5"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -3845,22 +3938,6 @@
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 15,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d106eade9cca91d5c31b7bdd7f16c8e4baa23d4bae12ed520791c38b77bf0c6e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 15,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "777e82747ade25d9e196729481a65cbe1526f066379260c480fbeed90cba716e"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -3922,22 +3999,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4004,22 +4065,6 @@
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4083,22 +4128,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4160,22 +4189,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "be8739f87e3efd616c521f82c9f5a158ca73103e4cd823a01907b4be8af22188"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ad29a69ba13e8d8b0c776c13bb0607fa2bcc9d04819a67f60e97ce381c67b771"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4242,22 +4255,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4319,22 +4316,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4401,22 +4382,6 @@
           "locationsSha256": "0e66dd7503871c323510ac50b8879e724ab5042e3d2bc767e9f712e117af80ac"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 31,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "820bc9e11d2ad3fadc20a633aded2cae92b0945b5f6604e1547b7847d132401e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 31,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "4dc8ef5181f7daeffcbd450a1f88145517fe61b5f0d00cdebe3087abc7ff3478"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4478,22 +4443,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4560,22 +4509,6 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "be8739f87e3efd616c521f82c9f5a158ca73103e4cd823a01907b4be8af22188"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ad29a69ba13e8d8b0c776c13bb0607fa2bcc9d04819a67f60e97ce381c67b771"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4637,22 +4570,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b8caa1c8c2850923f5c8fbe6f6fdc9e757b87201eadd3c4e04b7051a688c2907"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5a02b080321133cfc29d7ccc9effbb531d80a9d6d36ff51d46b325745e88333"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "859f27321fc970da761ff8db8049e188ff296321ea8b4ce89e93e01ad69bba37"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4719,22 +4636,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -4797,22 +4698,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4879,28 +4764,20 @@
           "locationsSha256": "70880aa8f8805f8d8b626511b42d4c79c3fc5ce27392a3c1c436c763e22230ae"
         },
         {
+          "code": "GPIF.Note.Pitch.Context",
+          "kind": "unsupported-feature",
+          "count": 4,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"26\"]/Properties",
+          "objectId": "26",
+          "locationsSha256": "32a26b0fc7fb15b88cee6a26ff8ef424f331ca49b69be288b6caa22a16503656"
+        },
+        {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
           "count": 1,
           "sourcePath": "/GPIF/Notes/Note[@id=\"32\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
           "objectId": "32",
           "locationsSha256": "034676d1c87b383f58a9f55c9de3f0e5d4627403d4bca089cfe76a2a61811169"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 40,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "cf40bd0558bd0386f37fee95018f29f0ece1226b6d567e5c4bc6ef133b11322a"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 40,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b2c6b617f988904f11138c9dcde43b27094f3bb1a18adf769b292b945df4ff86"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -4978,22 +4855,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"BendMiddleValue\"]/Float",
           "objectId": "0",
           "locationsSha256": "41af6a9b6878e6ad94e7c0a5846e73f0a64d2cd9dc410a6ea69641851a6e589d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b26eb44d0f67622a6aef07bbe9027ddb5b3f3f18c183b23d98d0502a3a961787"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b1c1974896024095dc62559911386344b348b1925263f9b9f39f58e9ef877dbe"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -5179,22 +5040,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "be8739f87e3efd616c521f82c9f5a158ca73103e4cd823a01907b4be8af22188"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ad29a69ba13e8d8b0c776c13bb0607fa2bcc9d04819a67f60e97ce381c67b771"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -5264,22 +5109,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[1]/@id",
           "objectId": "0",
           "locationsSha256": "7d6784dc4741496e9ca7d21199201f27ae9bea4025f2fc918121b289a16311ff"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -5353,22 +5182,6 @@
           "locationsSha256": "6cbdc981b45a72e96846c0ed3aa8049e2e61065a9bdd37f841cb1299733486cd"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -5440,28 +5253,12 @@
           "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 479,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b51c9d833135076d9cc6cf5dc1bf1e806ec5c856b46a2b8e8ca91677abcfe40d"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 41,
           "sourcePath": "/GPIF/Notes/Note[@id=\"59\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "59",
           "locationsSha256": "0f8dae0f225bc27e90468ec99abb76b986579953fd417787aa530d5e47814bfe"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 479,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "718049eabe30af48ff2d0cb84bd7a5925f12c9b7fb8123c2da8b01d9c5695767"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -5597,22 +5394,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -5685,28 +5466,12 @@
           "locationsSha256": "288f10dd356448a33d576e31d21ccbbb3ebbc81a28ef5b3228fc71aee95103a1"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "1df11496c9776166b451efba741e539950c4cf56aba2e87203af94022507a0b7"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 7,
           "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "5",
           "locationsSha256": "8c2046a1954a968211020442afbe4bba09a1ad04e9ced5cf8a1aa0010a888087"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ed91d5f437938ae29bed98152177f3be7f3e5c83d6a66fe73bbf3a84e426bb10"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -5829,36 +5594,12 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Whammy/@middleOffset1",
-          "objectId": "0",
-          "locationsSha256": "4bf9a9a701d942a2e46a7e4436be673d8b8b12a911aa9b4fcce2a01e21e5bbc4"
-        },
-        {
           "code": "GPIF.Beat.XProperty.Unknown",
           "kind": "unknown-syntax",
           "count": 3,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
           "objectId": "0",
           "locationsSha256": "28e386e0d1bb9ee00c24c1795df3247d95f220bbc6b9897ad6a991cfbec16b9d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 17,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "f7c3de09b4e62d5cec02fd5f4e5add411dd42cab8476251ec29639e065830355"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 17,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "bd2e28d123160d6d753c6804f231efb51e11114f2dea9dedc6ca165eeafa19ab"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6043,22 +5784,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5a02b080321133cfc29d7ccc9effbb531d80a9d6d36ff51d46b325745e88333"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "859f27321fc970da761ff8db8049e188ff296321ea8b4ce89e93e01ad69bba37"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6120,22 +5845,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6200,22 +5909,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6449,22 +6142,6 @@
           "locationsSha256": "f0b929354ab297ff5aceb929038e78b8b02a6cd046a491f2dd762f6dd23917d2"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 94,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "54be5d49abf04faf0f77ef04059fda0e8390342adfe352e6960ef9443485907c"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 94,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "55e019f395f729cfdc3e199a449b66e7507d1d1ae0a836b49621f87ee92e6ccb"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -6526,22 +6203,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6607,20 +6268,12 @@
           "locationsSha256": "5d7d3e95f0f70ef7f882510296c167f40779e1c70fc1e3c18b9467f39f26c887"
         },
         {
-          "code": "GPIF.Beat.Wah",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"60\"]/Wah",
-          "objectId": "60",
-          "locationsSha256": "4f1522c32fc6685c066b03025bf1ca7756c94f103e86f710a4aca529b0c226f7"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 121,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "27a3a75a5e20f5d3fc5e8bfda76f5cb8bb1ad845dfc8ef9f6a535a9e98fdb8ca"
+          "count": 5,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties",
+          "objectId": "4",
+          "locationsSha256": "e83ce0f680d0e1ead5e1a8876ad1df8d3df3090d7799cf871f33aa37ac8adc0e"
         },
         {
           "code": "GPIF.Note.Property.HopoDestination",
@@ -6629,14 +6282,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"35\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "35",
           "locationsSha256": "2d8a60bdd49cfad4d731cea588f479f85c2e479165646873b8806043384627fb"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 121,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "1ed4716dac05d30abd2abad6ccc1f333fbd781d72da6be5a012765b349d1fa44"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6702,22 +6347,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6779,22 +6408,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6861,36 +6474,12 @@
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
         },
         {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"12\"]/Whammy/@middleOffset1",
-          "objectId": "12",
-          "locationsSha256": "98f81380cf03bba9d124fc56c521bf1fe0ecf6c3dcf173d269674ded89433d35"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 346,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "3e5173e53872fd6dd6ce7935cb3b198c48318f708b6e4b7f87515a11655f8188"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 15,
           "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "4",
           "locationsSha256": "01411b63075956ab32a29650b366ecbe9f71722f5a6cc8689c0acbc590d85145"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 346,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "408e22e2debfdb7e8702db54dca9f511250b43c59dfb9cbd755a4772ecaa0c53"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6947,22 +6536,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b3ea632f2daa8731aa13e889ac9e9dca83597c5c7a8696ac527e67ed92c587c7"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 38,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "050cc22809a7e9bec4ed1533492f3da3fa312996051ae59666a713e6e8e6e30f"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 38,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "95191f355abdc48357f98becdff0baf4bd3a1335c986f068591b0a1862f8a501"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7036,22 +6609,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "951614ea369b85eec2beaa210504e90f31abf5fcce03ecb409bbc5dc4b4c098b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "89945c588072ce568a58e98bbe6b65b68d388868d7215768ae557213833d1ed8"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -7114,22 +6671,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 69,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48884c9d15662696e21873e7c7b6250c4e18face6dda1c9eec9d0b0e4f6b3ac4"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 69,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9077d02465ac2c7738441f76ab8623cdb642cb5149958f681562a45d63cb4766"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7203,22 +6744,6 @@
           "locationsSha256": "c126fead9f5e2c2276a2cd56ad204cbcb7aa905fa14bcc1de0632759fd257f5c"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 26,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "a3e1591fe8dd96be8e9bf65f5f6fef13aeece8f40c226f27708d9e64f7d9430e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 26,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "aa44ebdef499e716e0bfb16227464179c5b3c98bee3f8dd0b559d67c0ae5087e"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 12,
@@ -7280,22 +6805,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7362,22 +6871,6 @@
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -7439,22 +6932,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7521,22 +6998,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "951614ea369b85eec2beaa210504e90f31abf5fcce03ecb409bbc5dc4b4c098b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "89945c588072ce568a58e98bbe6b65b68d388868d7215768ae557213833d1ed8"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -7601,20 +7062,12 @@
           "locationsSha256": "1e343c807cbd57af3116b2ca95a380d3b220ac2b8c4df18707edbb82ad74d437"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "951614ea369b85eec2beaa210504e90f31abf5fcce03ecb409bbc5dc4b4c098b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "89945c588072ce568a58e98bbe6b65b68d388868d7215768ae557213833d1ed8"
+          "count": 2,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"1\"]/Properties",
+          "objectId": "1",
+          "locationsSha256": "6acbe21ee13b3a73092864c23e871a0ccdf541886781d36b603d4ffb08b36e63"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7681,12 +7134,12 @@
           "locationsSha256": "1ec12a80f36d0e312f51df29b50b804bb396563e82a92f90ef672b9feb18261e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
+          "count": 7,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"1\"]/Properties",
+          "objectId": "1",
+          "locationsSha256": "2b31b77d38bc051a4b25e9858d7491cc24f1895cf1fbbe8d7292b061ac86b8bb"
         },
         {
           "code": "GPIF.Note.Property.HopoDestination",
@@ -7695,14 +7148,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"2\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "2",
           "locationsSha256": "91c6050606b88b61dd57bf76d8ca2f9032d5d4f1ae2581f0a08ebc037a049504"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7785,20 +7230,12 @@
           "locationsSha256": "45145f80be069cd8d7d8e708dad736200c4d47dc182d83c5a1b41b2262520a77"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 68,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "2538233d327b892b6f38d6ad3e8c912f19d76c39a41235faa88648e4b2dcc7da"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 68,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "2b3148395f64c8a45883350910992ef803eb982a3e3f355cf88dd2c47f5a97cb"
+          "count": 14,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"19\"]/Properties",
+          "objectId": "19",
+          "locationsSha256": "e980e2f3c5178fd400accccd5a084bb37d5c1e24fc34fd3f983ebd4f7d1e0754"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7865,20 +7302,12 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
+          "count": 4,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties",
           "objectId": "0",
-          "locationsSha256": "be8739f87e3efd616c521f82c9f5a158ca73103e4cd823a01907b4be8af22188"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ad29a69ba13e8d8b0c776c13bb0607fa2bcc9d04819a67f60e97ce381c67b771"
+          "locationsSha256": "512d0f9b0319a691e8606f9cec863217d149e4a3632e0252a95fd2edee00be57"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7945,20 +7374,12 @@
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
+          "count": 2,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties",
           "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
+          "locationsSha256": "83d7e9138960512743a23270ab100d9330653fbd81ce46a8bb319bd0c5b3bf3d"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8024,22 +7445,6 @@
           "locationsSha256": "fd90667efccb1d586e81d6c0282f50b6465d289bbd7f88877ece2a6eac7d5c35"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 21,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9dbf0e6931871cbfdab5359e2aaaa36a8d8feb0c843380afbd6b429700c41b46"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 21,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "527400a39e3d688e9c0be040befe4d3ea008561e98b2477072a38f207764d879"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 10,
@@ -8103,28 +7508,12 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 20,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "bc78154e410e89d390c74ebe2d157dd5d1c00c78e6bf39dd39e5824b2a41d2b2"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 9,
           "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "5",
           "locationsSha256": "746018587eb7dd51c97df128ce39600d24cbc32ef606fd4b6723768a407a0d4b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 20,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e89b55ad99ce714f948e6ac6ce66630934a05bbd699ad16aa9200d0df4700db9"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8190,20 +7579,12 @@
           "locationsSha256": "1e343c807cbd57af3116b2ca95a380d3b220ac2b8c4df18707edbb82ad74d437"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
+          "count": 1,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties",
           "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
+          "locationsSha256": "6a3f906b708a6c9aaa0f6650b827700013ab7810820235248ce2a7528cd4c744"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8389,22 +7770,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 31,
@@ -8466,22 +7831,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8547,22 +7896,6 @@
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "334c8ef35d7c167a74b4cc6fe9d5a35aaa8c2419fab839f599b2b19b526804b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12a6804436e2964f1e43a1db837f7566dfbcaeba4cf3773052b1ea2a0e2fdc1d"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -8624,22 +7957,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "334c8ef35d7c167a74b4cc6fe9d5a35aaa8c2419fab839f599b2b19b526804b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12a6804436e2964f1e43a1db837f7566dfbcaeba4cf3773052b1ea2a0e2fdc1d"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8705,22 +8022,6 @@
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "334c8ef35d7c167a74b4cc6fe9d5a35aaa8c2419fab839f599b2b19b526804b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12a6804436e2964f1e43a1db837f7566dfbcaeba4cf3773052b1ea2a0e2fdc1d"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -8782,22 +8083,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "334c8ef35d7c167a74b4cc6fe9d5a35aaa8c2419fab839f599b2b19b526804b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12a6804436e2964f1e43a1db837f7566dfbcaeba4cf3773052b1ea2a0e2fdc1d"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8908,22 +8193,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "334c8ef35d7c167a74b4cc6fe9d5a35aaa8c2419fab839f599b2b19b526804b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 42,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12a6804436e2964f1e43a1db837f7566dfbcaeba4cf3773052b1ea2a0e2fdc1d"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9149,28 +8418,12 @@
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ada884f65a14455713b977a2a204edb1a4be1b9a66484a556c71512326195929"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 6,
           "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "5",
           "locationsSha256": "cdfed561083a755e5844146c7e5b425f9cdf5c233fe509ef17d3ded69c603f56"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c868640ce0832e7ca0695540939813c0f9fa157029e5264efaaa1742326b1b57"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9236,22 +8489,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -9313,22 +8550,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d1853c98f6309a91249ac74276e37ac63974ddb386dd9a461f05042cb0994c27"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "219c9f9ceae9601d806ed0efbaedea6cb2b00e2a9b5cf260c3c1dd24dd94f9a2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9394,22 +8615,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -9472,22 +8677,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "8706186244e61f954548818f89d50b8c95195cfe8a06b4c7eb2bb4c07eaab9bf"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 30,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "74f7e233182b9cfd1b29b09c06624218c2c6c41545b75fc2aea97cc41da8275d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 30,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d9026a76e6ff445e86f2bcb6b1453c3915ace84f0a6877ea06cf8a00ee890f9b"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9600,22 +8789,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 12,
@@ -9677,22 +8850,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9759,22 +8916,6 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ada884f65a14455713b977a2a204edb1a4be1b9a66484a556c71512326195929"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c868640ce0832e7ca0695540939813c0f9fa157029e5264efaaa1742326b1b57"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -9836,22 +8977,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -9965,22 +9090,6 @@
           "locationsSha256": "5b5d99a685330e181a228e02062084c7493721230b96044ef8492c894017c6d1"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 22,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "57e0e7cae799231c0731b6f1f6ca9f44024fefc811be97d7ff66ae976d64d86d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 22,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eeddce2e9666a2812a90313d04fd87a436d68aa72da502469352947d878b35ae"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -10045,28 +9154,20 @@
           "locationsSha256": "967113ef2a4680278c100927313b5ef127f7933280c03b8c034c740cd0bcf198"
         },
         {
-          "code": "GPIF.Beat.Wah",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"326\"]/Wah",
-          "objectId": "326",
-          "locationsSha256": "bf2c3d012aede9eb587809f84afcfceaa09ecac571b27803245664f23ea41752"
-        },
-        {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 44,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"394\"]/Whammy/@middleOffset1",
-          "objectId": "394",
-          "locationsSha256": "a759f4ec33e85ec2ce643aeabcdb6a0077e42ed8fcc5da677448f82f60c54d5a"
-        },
-        {
           "code": "GPIF.Beat.XProperty.Unknown",
           "kind": "unknown-syntax",
           "count": 4,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"239\"]/XProperties/XProperty[0]/@id",
           "objectId": "239",
           "locationsSha256": "965bc20b00671c988dd9bc62f789471672808420887194700a2296689f004a2d"
+        },
+        {
+          "code": "GPIF.Note.Pitch.Context",
+          "kind": "unsupported-feature",
+          "count": 20,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"10\"]/Properties",
+          "objectId": "10",
+          "locationsSha256": "9e7611ce1045847062011f345a1a79cb85646c101bb32d47d1b1b2b6f827d451"
         },
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
@@ -10077,28 +9178,12 @@
           "locationsSha256": "8ed198e3a8d4717efa8fc8dac3625c3e0e36d7cc6e9f88310db4809350840e69"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 756,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "0379c8a93002bdebc6602b43f87bd366554dc70a1dd0ef802dee47ec0d028325"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 24,
           "sourcePath": "/GPIF/Notes/Note[@id=\"100\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "100",
           "locationsSha256": "f90e047e99ba56aa5badc63c0d31b68ac7a2a96a98a2783a2e72995abbac04b0"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 756,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "257a3c65f52ad920b0ec7a79ebf7281725d363cbfa1f97986ac8eeb5b9d3ecae"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10127,22 +9212,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 640,
+          "count": 638,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "834603be40163603a23670f43777f6cff6bc4676ccd20f6066979c78df27dd87"
-        },
-        {
-          "code": "score.note.tie-destination",
-          "kind": "invalid-data",
-          "count": 2,
-          "locationsSha256": "7d696dd1f8fd5c1c075b6d837083f4239e6db35374ca4b3545d5302d3ace3e24"
-        },
-        {
-          "code": "GPIF.UnknownElement.NoteAndBeat",
-          "kind": "unknown-syntax",
-          "count": 643,
-          "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "e59165e7fbd45c787398f3b030e14d0a0e23bae5286c36510b1cbf7d2a911752"
+          "locationsSha256": "00f39a9b3c55d7574062e85b7d80ae60a7060e43f02ea87efd464c7a234293a8"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10158,6 +9230,12 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
           "locationsSha256": "b2e548bc6ae6de4398b8ff098326ead8ea3f10d489563cf062f362ec1ac9cbe8"
+        },
+        {
+          "code": "score.note.tie-destination",
+          "kind": "invalid-data",
+          "count": 2,
+          "locationsSha256": "7d696dd1f8fd5c1c075b6d837083f4239e6db35374ca4b3545d5302d3ace3e24"
         }
       ],
       "differences": null
@@ -10184,22 +9262,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "6ee5c92fa2722be5f10e0251ffcc34cb2dbeac7c4f7b12380a31690c2119134e"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 33,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "cc9bb526f798b290e8ab352cfd42260f8b275900895dfcd3a59c5bca52152670"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 33,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "8db5fb586f433e86dd6a8aed1c7ebfd5f75ea56cde55d6b3641fe93232182dc2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10276,22 +9338,6 @@
           "locationsSha256": "6ee5c92fa2722be5f10e0251ffcc34cb2dbeac7c4f7b12380a31690c2119134e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b26eb44d0f67622a6aef07bbe9027ddb5b3f3f18c183b23d98d0502a3a961787"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b1c1974896024095dc62559911386344b348b1925263f9b9f39f58e9ef877dbe"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -10355,12 +9401,12 @@
           "locationsSha256": "092928b0439b24b81fd5b68ab52e8b8c45b3a93a4803df5e23a67a201b9910d4"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
+          "code": "GPIF.Note.Pitch.Context",
           "kind": "unsupported-feature",
-          "count": 164,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "58764d8310875fde9c3136a809c3d983746eabe71637ad0219e4916f4af54523"
+          "count": 11,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"12\"]/Properties",
+          "objectId": "12",
+          "locationsSha256": "250dea8e39505676f409f631f89530065e8e481e84fc3b8ecd9d5ec1848714c8"
         },
         {
           "code": "GPIF.Note.Property.HopoDestination",
@@ -10369,14 +9415,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"149\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "149",
           "locationsSha256": "64fd2b7c8d36d0d74d97d39fd89a595de7ba9fd9847f051cf60aefb11ab3c25d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 164,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c07609089241adabe257134dfc2655f5470847962c2408879ed8430a7587fe19"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10443,22 +9481,6 @@
           "locationsSha256": "0ff04a8c2e45b8c39f6fd9b095326bc06130230ae336508bbdd2fbbd33243499"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -10521,30 +9543,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
-        },
-        {
-          "code": "GPIF.Beat.Wah",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"6\"]/Wah",
-          "objectId": "6",
-          "locationsSha256": "ca6a06370e4b567137414b8edbb7e70cd2894d85163e4bfbdac7a1f8cd8d7401"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10610,22 +9608,6 @@
           "locationsSha256": "9937e82cef8f493cf397fb389719651142fd2fe861554a0bfbc9927383f0cfe1"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 52,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "8f05f11252606d3c3266473ca6eca5b7097be45d050116e693fce7277e80b52f"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 52,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d019c94c215ab7606feb172c4edb3acbef6fb49296526469b39801eb83223d23"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -10687,22 +9669,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10768,22 +9734,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 31,
@@ -10845,22 +9795,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eb2582995bbf179c6daf3d4ce80d6d48c000d3e42dbf486548b66788a4cc309d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 60,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c01450999e35c1fb260d94172a115113892b257cfa75f50f4e8a69c1b9bbbb2c"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10926,22 +9860,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -11003,22 +9921,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b8caa1c8c2850923f5c8fbe6f6fdc9e757b87201eadd3c4e04b7051a688c2907"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11084,22 +9986,6 @@
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 17,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "f7c3de09b4e62d5cec02fd5f4e5add411dd42cab8476251ec29639e065830355"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 17,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "bd2e28d123160d6d753c6804f231efb51e11114f2dea9dedc6ca165eeafa19ab"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -11161,22 +10047,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "951614ea369b85eec2beaa210504e90f31abf5fcce03ecb409bbc5dc4b4c098b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "89945c588072ce568a58e98bbe6b65b68d388868d7215768ae557213833d1ed8"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11242,22 +10112,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -11319,22 +10173,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "8706790a9b77643247709cd5426d9b573c5c029933d1c3e34fd6a6d0fb0ee856"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "23d111ae1b81c31c9df88af77fcebf5b6a372a9b16f10593398917d8f1423baf"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "32b12231e1e58aff6ba276774a38f3ce7a79184d8096cfa6107d357605f64feb"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11400,30 +10238,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Beat.Property.Rasgueado",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"Rasgueado\"]",
-          "objectId": "0",
-          "locationsSha256": "f9b1aa7e238e14b69d6f16cc4368bd53ea39960702c0f966224ac5116d95d064"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -11450,10 +10264,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 11,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"0\"]/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "c818fae75e262f9c63c77fdf995c9525747af79bb63432c835174ac603037a14"
+          "locationsSha256": "b2bd5fdae0c0c994c88d80e32930108a97cc032bd3f0c902fae85054a00e7e12"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11494,22 +10308,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "bdaf4cf38e05e2c9b460cc687dc5f8b7eaf39a31f0a8145a3e68f13243288a1c"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11575,22 +10373,6 @@
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -11652,22 +10434,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11780,22 +10546,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -11857,22 +10607,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "bff7f68f9542afcd9487eb12fbc888a5bae227427388349a0d9cc18644c60ae0"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 27,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "44e16a7409eb411ee659f34e3e10429bfcc5215173b3c9d408547bd2895ef1d0"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 27,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "6e090f7fc98215a9882f489dfefb20c8b2dc3197dc704ad92e67f7705bfdb8a6"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11938,28 +10672,12 @@
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 27,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "44e16a7409eb411ee659f34e3e10429bfcc5215173b3c9d408547bd2895ef1d0"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 7,
           "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "5",
           "locationsSha256": "b785d77638d5ee7b36b420a4c92a9509b5c235c685373c11a5dcbefd995129de"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 27,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "6e090f7fc98215a9882f489dfefb20c8b2dc3197dc704ad92e67f7705bfdb8a6"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12033,28 +10751,12 @@
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 26,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "a3e1591fe8dd96be8e9bf65f5f6fef13aeece8f40c226f27708d9e64f7d9430e"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 7,
           "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "5",
           "locationsSha256": "8c2046a1954a968211020442afbe4bba09a1ad04e9ced5cf8a1aa0010a888087"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 26,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "aa44ebdef499e716e0bfb16227464179c5b3c98bee3f8dd0b559d67c0ae5087e"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12191,12 +10893,12 @@
           "locationsSha256": "ff60701398d2d5cc23bb9eb47439d9036df024625b37f2fb3810606a22413f31"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2474,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "5ad185a867994588621f33076468d72dcddc2e8cd2656eaadfb751f97c7f47f9"
+          "code": "GPIF.Note.Pitch.Authority",
+          "kind": "lossy-projection",
+          "count": 766,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties",
+          "objectId": "4",
+          "locationsSha256": "2456a5c66a3377e439c5b2df77ce85301e7b7b7ad31ac9ca657339aa497870a3"
         },
         {
           "code": "GPIF.Note.Property.HopoDestination",
@@ -12205,14 +10907,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"6\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "6",
           "locationsSha256": "662221da0ad2d17899f767345b320a5d7dbbe32585c0be05faf5628804e6f2e8"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2474,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "6aba1ed886dc05212999c50af34f43ecbaa8ba5f82570b0640882ce8e01d85b8"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12279,22 +10973,6 @@
           "locationsSha256": "8706186244e61f954548818f89d50b8c95195cfe8a06b4c7eb2bb4c07eaab9bf"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 40,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "cf40bd0558bd0386f37fee95018f29f0ece1226b6d567e5c4bc6ef133b11322a"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 40,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b2c6b617f988904f11138c9dcde43b27094f3bb1a18adf769b292b945df4ff86"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -12356,22 +11034,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "951614ea369b85eec2beaa210504e90f31abf5fcce03ecb409bbc5dc4b4c098b"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "89945c588072ce568a58e98bbe6b65b68d388868d7215768ae557213833d1ed8"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12444,22 +11106,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "bdaf4cf38e05e2c9b460cc687dc5f8b7eaf39a31f0a8145a3e68f13243288a1c"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "23d111ae1b81c31c9df88af77fcebf5b6a372a9b16f10593398917d8f1423baf"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "32b12231e1e58aff6ba276774a38f3ce7a79184d8096cfa6107d357605f64feb"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12572,22 +11218,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -12652,28 +11282,12 @@
           "locationsSha256": "1ec12a80f36d0e312f51df29b50b804bb396563e82a92f90ef672b9feb18261e"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 14,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "6b805a72e1404108b7cfbbd91d4972114579a0e68b8ce6404d5d4a07002344c0"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 1,
           "sourcePath": "/GPIF/Notes/Note[@id=\"9\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "9",
           "locationsSha256": "eef189cd9c64721db88439b7f71cd02d3271a7ada79b7d84545fc49d694197d4"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 14,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "27f60b08c68bcd57348097fb23ac70c39c4cfa1b2a23441afbec30a7b54b2f92"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12740,22 +11354,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -12819,22 +11417,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "23d111ae1b81c31c9df88af77fcebf5b6a372a9b16f10593398917d8f1423baf"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 10,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "32b12231e1e58aff6ba276774a38f3ce7a79184d8096cfa6107d357605f64feb"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -12896,22 +11478,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -12978,22 +11544,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 12,
@@ -13056,22 +11606,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -13184,22 +11718,6 @@
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -13263,28 +11781,12 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "00fdf964edb8040421ed3735599e24db550508ed2e5e14499a6ddc317ea36b48"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 1,
           "sourcePath": "/GPIF/Notes/Note[@id=\"2\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "2",
           "locationsSha256": "91c6050606b88b61dd57bf76d8ca2f9032d5d4f1ae2581f0a08ebc037a049504"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "48c13e327b4a3fcfc2f3fe0f9c1db5684d6bf5161b1d603953bbf8aa8b45b949"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -13351,22 +11853,6 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "1df11496c9776166b451efba741e539950c4cf56aba2e87203af94022507a0b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ed91d5f437938ae29bed98152177f3be7f3e5c83d6a66fe73bbf3a84e426bb10"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -13428,22 +11914,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ada884f65a14455713b977a2a204edb1a4be1b9a66484a556c71512326195929"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 16,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c868640ce0832e7ca0695540939813c0f9fa157029e5264efaaa1742326b1b57"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -13557,22 +12027,6 @@
           "locationsSha256": "8706790a9b77643247709cd5426d9b573c5c029933d1c3e34fd6a6d0fb0ee856"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -13643,22 +12097,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14004,22 +12442,6 @@
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 25,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "c6b45a46921a2a518336efd3e86e050f34bbf48859590628ce363feb0cd604b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 25,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "23acf276dccb32411357632172dfec1d1b077c7ba658f1e4901b7ac54c16d82e"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 41,
@@ -14082,30 +12504,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "15f644f7fc6da55adafcb1ac7f7bd6c2ebba69c11e61b71bd28f9f660c03dc4e"
-        },
-        {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 7,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Whammy/@middleOffset1",
-          "objectId": "0",
-          "locationsSha256": "fab5f860265c3ae4bc7f75a7c4dc5918bc07034b1d936ea5d6346521c9015298"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 18,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "12c8b2ebddf6c56170ea67b917a7472150fa6cede7b267af16a5ddef0f018949"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 18,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "a1f65362cdb543743600d308828384b2dfe184060f3be64b9fc805e33e63792f"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14171,22 +12569,6 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14248,30 +12630,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"6\"]/Whammy/@middleOffset1",
-          "objectId": "6",
-          "locationsSha256": "3a8648ffcf94314702d3eebcbdebea477560f8215fd74bae13ea5517ffd82f17"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d1853c98f6309a91249ac74276e37ac63974ddb386dd9a461f05042cb0994c27"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "219c9f9ceae9601d806ed0efbaedea6cb2b00e2a9b5cf260c3c1dd24dd94f9a2"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14338,30 +12696,6 @@
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
         },
         {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"3\"]/Whammy/@middleOffset2",
-          "objectId": "3",
-          "locationsSha256": "165fd2de1e4a2390b37e0951246f1cb1390388eff6ab18aa90ba0d0cc2527fc3"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14423,22 +12757,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14504,22 +12822,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "02544dbfc97e6b14d3985073ba671ceff7dce7390c50c4edb4c3a1b3ae83712d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "39a09490616f69afed62f25ff0f11501844220c11d6fbfd259adc2457b742216"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14581,22 +12883,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b26eb44d0f67622a6aef07bbe9027ddb5b3f3f18c183b23d98d0502a3a961787"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 28,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b1c1974896024095dc62559911386344b348b1925263f9b9f39f58e9ef877dbe"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14662,22 +12948,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -14739,22 +13009,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 22,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "57e0e7cae799231c0731b6f1f6ca9f44024fefc811be97d7ff66ae976d64d86d"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 22,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "eeddce2e9666a2812a90313d04fd87a436d68aa72da502469352947d878b35ae"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14821,22 +13075,6 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b855bbac286baa3fa62c393522854d083e5f828dd95608583f0f5df7b925d755"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "9b3c269a56d347db86f7f51fa66a77d1a527f3739cc22c96633652c559a67fa2"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14898,22 +13136,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "88d38899faceb838071f365d6159e9395fe5a43a1a5786cbf267fefb6f401db2"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "04d2c2ef0d2e4f553801b0a1f59faa62e77504bb920b547c14b436ff1477c095"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14978,30 +13200,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b5d99a685330e181a228e02062084c7493721230b96044ef8492c894017c6d1"
-        },
-        {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 22,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Whammy/@middleOffset1",
-          "objectId": "0",
-          "locationsSha256": "c966a0253f5461612e35f595ca54ec82122fc19b1e915583c6333dee667fa950"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "1df11496c9776166b451efba741e539950c4cf56aba2e87203af94022507a0b7"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "ed91d5f437938ae29bed98152177f3be7f3e5c83d6a66fe73bbf3a84e426bb10"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -15069,17 +13267,17 @@
         {
           "code": "GPIF.UnknownElement.ScoreCore",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 9,
           "sourcePath": "/GPIF/Score/FirstPageHeader",
-          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+          "locationsSha256": "731bbd6f5467ce770ff79d378ab90eb6f7b0f2b837bf294c1a68c905db7f10c4"
         },
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 24,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "count": 22,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
-          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+          "locationsSha256": "2e2efe4125e4dbf462d6c4a622fd24e3967e18e6f07a5520b8d4456045666759"
         }
       ],
       "differences": null
@@ -15109,17 +13307,17 @@
         {
           "code": "GPIF.UnknownElement.ScoreCore",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 9,
           "sourcePath": "/GPIF/Score/FirstPageHeader",
-          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+          "locationsSha256": "731bbd6f5467ce770ff79d378ab90eb6f7b0f2b837bf294c1a68c905db7f10c4"
         },
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 24,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "count": 22,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
-          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+          "locationsSha256": "2e2efe4125e4dbf462d6c4a622fd24e3967e18e6f07a5520b8d4456045666759"
         }
       ],
       "differences": null
@@ -15149,17 +13347,17 @@
         {
           "code": "GPIF.UnknownElement.ScoreCore",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 9,
           "sourcePath": "/GPIF/Score/FirstPageHeader",
-          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+          "locationsSha256": "731bbd6f5467ce770ff79d378ab90eb6f7b0f2b837bf294c1a68c905db7f10c4"
         },
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 24,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "count": 22,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
-          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+          "locationsSha256": "2e2efe4125e4dbf462d6c4a622fd24e3967e18e6f07a5520b8d4456045666759"
         }
       ],
       "differences": null
@@ -15187,22 +13385,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -15267,22 +13449,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -15365,28 +13531,12 @@
           "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 479,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b51c9d833135076d9cc6cf5dc1bf1e806ec5c856b46a2b8e8ca91677abcfe40d"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 41,
           "sourcePath": "/GPIF/Notes/Note[@id=\"59\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "59",
           "locationsSha256": "0f8dae0f225bc27e90468ec99abb76b986579953fd417787aa530d5e47814bfe"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 479,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "718049eabe30af48ff2d0cb84bd7a5925f12c9b7fb8123c2da8b01d9c5695767"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -15509,17 +13659,17 @@
         {
           "code": "GPIF.UnknownElement.ScoreCore",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 9,
           "sourcePath": "/GPIF/Score/FirstPageHeader",
-          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+          "locationsSha256": "731bbd6f5467ce770ff79d378ab90eb6f7b0f2b837bf294c1a68c905db7f10c4"
         },
         {
           "code": "GPIF.UnknownElement.StaffOwnership",
           "kind": "unknown-syntax",
-          "count": 46,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "count": 42,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
-          "locationsSha256": "39d4d8bef372492784bb470d9b9b16f79981ad0a0da897dfec932d320b1b41b0"
+          "locationsSha256": "3fb5077386a256e3ed6eab1247b4554b2f39bc0ab1a97f96a13be20bbef93a3d"
         }
       ],
       "differences": null
@@ -15547,36 +13697,12 @@
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
         },
         {
-          "code": "GPIF.Beat.Whammy.Quantized",
-          "kind": "lossy-projection",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"12\"]/Whammy/@middleOffset1",
-          "objectId": "12",
-          "locationsSha256": "98f81380cf03bba9d124fc56c521bf1fe0ecf6c3dcf173d269674ded89433d35"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 346,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "3e5173e53872fd6dd6ce7935cb3b198c48318f708b6e4b7f87515a11655f8188"
-        },
-        {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
           "count": 15,
           "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties/Property[@name=\"HopoDestination\"]",
           "objectId": "4",
           "locationsSha256": "01411b63075956ab32a29650b366ecbe9f71722f5a6cc8689c0acbc590d85145"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 346,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "408e22e2debfdb7e8702db54dca9f511250b43c59dfb9cbd755a4772ecaa0c53"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -15969,7 +14095,7 @@
       "importFailure": {
         "goError": {
           "type": "*goguitarpro.ParseError",
-          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity \u0026�� (no semicolon)",
+          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity &\ufffd\ufffd (no semicolon)",
           "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29"
         },
         "alphaTabError": {
@@ -16018,22 +14144,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -16106,22 +14216,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "d255648c9da0263887067faead00bc6af6584e47ab580fd6d6be9129eee8edec"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "7904cd8efc800a835408e3de970fe35cad9a9168d017d0fbfc019c8d5a51ea82"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -16203,22 +14297,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.Note.Property.ConcertPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "b498f85cd62505bfbc2d0b78bde7c2f207828d06c6e918925806720a1e0f52e9"
-        },
-        {
-          "code": "GPIF.Note.Property.TransposedPitch",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
-          "objectId": "0",
-          "locationsSha256": "75fcb4df3c104509de62fa4d3b08642f021b8b97b9a61df7604b88756e4b79db"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",

@@ -392,7 +392,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	note.Ornament = gpifNoteOrnament(*n)
 
 	if !percussion {
-		note.AccidentalMode = gpifAuthoredAccidental(n.Properties.Properties)
+		note.AccidentalMode, _ = gpifAuthoredAccidental(n.Properties.Properties)
 	}
 	if percussion && n.InstrumentArticulation != nil && *n.InstrumentArticulation >= 0 {
 		if _, err := NewPercussionArticulationID(int64(*n.InstrumentArticulation)); err != nil {
