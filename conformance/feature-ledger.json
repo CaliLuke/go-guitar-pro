@@ -2008,7 +2008,7 @@
       "gpifAutomationValue.Text": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBars.Bars": ["M20-SOURCE-AUDIT"],
       "gpifBeat.ID": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
-      "gpifBeat.Ottavia": ["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
       "gpifBeat.Properties": ["M20-SOURCE-AUDIT"],
       "gpifBeat.Tremolo": ["M11-TREMOLO-PICKING","M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBeat.Wah": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT","M10-WAH"],
