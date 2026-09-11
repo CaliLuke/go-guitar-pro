@@ -5,8 +5,8 @@
   "title": "Exclude MusicXML display-duration placeholders from Guitar Pro gaps",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "codex/root",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -108,8 +108,24 @@
     "conformance/sync-upstream-inventory.mjs",
     "conformance/upstream-inventory.json"
   ],
-  "resolution": "Implemented the exact outside-Guitar-Pro scope, stage dispositions and pinned model exclusions. Focused inventory regressions pass. Awaiting independent review before solved status.",
-  "verification": [],
+  "resolution": "Excluded other-format display-duration overrides from Guitar Pro gaps and model obligations. Duration, tuplets and timing retain their existing owners. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "verification": [
+    {
+      "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit cf139522378e4fed5ea487383e2bb5e13d29a45e",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "python3 -B -m unittest discover -s conformance/capabilities -p test_*.py: PASS (41 tests)",
+        "node conformance/verify.mjs; node conformance/sync-upstream-inventory.mjs --check: PASS",
+        "Focused pinned semantic/matrix/duration/notehead/native-percussion and independent numeric 4/4 and 2/2 checks: PASS"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_scope_fresh passed every latest acceptance criterion at source commit 52f29ee69748d81bce56edca133afdc5d54e4911. No scoped blockers remained. Integrated changes after that review contain generated evidence/documentation only.",
+        "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
+        "Excluded other-format display-duration overrides from Guitar Pro gaps and model obligations. Duration, tuplets and timing retain their existing owners."
+      ]
+    }
+  ],
   "issue": {
     "number": 111,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/111",

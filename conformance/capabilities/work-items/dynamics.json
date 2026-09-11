@@ -5,8 +5,8 @@
   "title": "Lock down chord-velocity and beat-dynamic export loss policy",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:implement_dynamics",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -183,8 +183,23 @@
     "gp8_effects.go",
     "gp8_notation.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "verification": [
+    {
+      "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit cf139522378e4fed5ea487383e2bb5e13d29a45e",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(GP8ChordAndRestDynamicPolicy|OpeningTempoVisibility|GP5HiddenOpeningTempo|SoundAutomationOpeningPreroll|SoundAutomationPositionBounds|ConformanceChordAndRestDynamics|AlphaTabChordAndRestDynamics|ConformanceSoundPreroll|AlphaTabSoundPreroll|ConformanceTempoAuthority|AlphaTabPreservesOpeningTempoVisibility|ConformanceAutomationSemantics|ConformanceAutomationValidation)$ ./...: PASS",
+        "go test -count=1 -run ^TestSemanticMatrixInventory$ -v .: PASS"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_first_fixes_fresh passed every latest acceptance criterion at source commit 3ae36e75432c30a9e407487f94d85946c29030b1. No scoped blockers remained. Integrated changes after that review contain generated evidence/documentation only.",
+        "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
+        "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit."
+      ]
+    }
+  ],
   "issue": {
     "number": 61,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/61",

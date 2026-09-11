@@ -5,8 +5,8 @@
   "title": "Preserve authored opening sound-event preroll",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -96,8 +96,23 @@
     "gp8_export.go",
     "gpif_automations.go"
   ],
-  "resolution": "The shared validation and GP8 range check now accept finite sound positions in [-0.125, 0) only at bar zero and retain [0, 1] in every bar. Export preserves exact position, sound reference, and authored slice order without clamping or mutation. Public boundary tests cover adjacent floats, non-finite values, and invalid references; pinned AlphaTab retains the GP7 grace fixture and distinct bank/program changes around zero and repeated preroll positions. This is a bounded library contract, not a universal GPIF limit. Implementation awaits independent review; the issue remains open.",
-  "verification": [],
+  "resolution": "Preserved finite opening sound preroll in [-0.125, 0), authored order and references. Later bars retain [0, 1]. Adjacent boundaries and malformed locations reject without mutation. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "verification": [
+    {
+      "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit cf139522378e4fed5ea487383e2bb5e13d29a45e",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(GP8ChordAndRestDynamicPolicy|OpeningTempoVisibility|GP5HiddenOpeningTempo|SoundAutomationOpeningPreroll|SoundAutomationPositionBounds|ConformanceChordAndRestDynamics|AlphaTabChordAndRestDynamics|ConformanceSoundPreroll|AlphaTabSoundPreroll|ConformanceTempoAuthority|AlphaTabPreservesOpeningTempoVisibility|ConformanceAutomationSemantics|ConformanceAutomationValidation)$ ./...: PASS",
+        "go test -count=1 -run ^TestSemanticMatrixInventory$ -v .: PASS"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_first_fixes_fresh passed every latest acceptance criterion at source commit 3ae36e75432c30a9e407487f94d85946c29030b1. No scoped blockers remained. Integrated changes after that review contain generated evidence/documentation only.",
+        "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
+        "Preserved finite opening sound preroll in [-0.125, 0), authored order and references. Later bars retain [0, 1]. Adjacent boundaries and malformed locations reject without mutation."
+      ]
+    }
+  ],
   "issue": {
     "number": 64,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/64",

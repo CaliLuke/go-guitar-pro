@@ -5,8 +5,8 @@
   "title": "Apply authored HideTempo to the opening GP8 tempo event",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:implement_tempo",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -101,8 +101,23 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Implemented HideTempo for synthesized opening GP8 tempo events. The first explicit opening event owns visibility, with gp8.normalize.tempo-visibility-authority for a conflicting compatibility flag. GPIF import initializes the compatibility mirror. Fractional BPM, text, linearity, authored order and source objects are preserved. Public API and pinned AlphaTab tests include both visibility values and the legacy GP5.1 hidden flag. Standalone conformance and all 77 mutation checks pass. Awaiting fresh review and the integrated prescribed quality gate; the item remains in_progress.",
-  "verification": [],
+  "resolution": "Preserved legacy opening tempo visibility and explicit automation authority, including hidden GP5 input, fractional tempo and ordered events. Conflicting compatibility visibility receives a precise normalization report. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "verification": [
+    {
+      "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit cf139522378e4fed5ea487383e2bb5e13d29a45e",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(GP8ChordAndRestDynamicPolicy|OpeningTempoVisibility|GP5HiddenOpeningTempo|SoundAutomationOpeningPreroll|SoundAutomationPositionBounds|ConformanceChordAndRestDynamics|AlphaTabChordAndRestDynamics|ConformanceSoundPreroll|AlphaTabSoundPreroll|ConformanceTempoAuthority|AlphaTabPreservesOpeningTempoVisibility|ConformanceAutomationSemantics|ConformanceAutomationValidation)$ ./...: PASS",
+        "go test -count=1 -run ^TestSemanticMatrixInventory$ -v .: PASS"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_first_fixes_fresh passed every latest acceptance criterion at source commit 3ae36e75432c30a9e407487f94d85946c29030b1. No scoped blockers remained. Integrated changes after that review contain generated evidence/documentation only.",
+        "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
+        "Preserved legacy opening tempo visibility and explicit automation authority, including hidden GP5 input, fractional tempo and ordered events. Conflicting compatibility visibility receives a precise normalization report."
+      ]
+    }
+  ],
   "issue": {
     "number": 70,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/70",

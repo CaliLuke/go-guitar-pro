@@ -18,10 +18,10 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve bar-level clef octave shifts](work-items/clef-octave.json) | implementation | 1 | done | — | [#44](https://github.com/CaliLuke/go-guitar-pro/issues/44) |
 | [Preserve navigation targets and jumps on each measure](work-items/directions.json) | implementation | 1 | done | — | [#45](https://github.com/CaliLuke/go-guitar-pro/issues/45) |
 | [Correct stale semantic documentation and diagnostic labels](work-items/documentation-contract-drift.json) | implementation | 1 | done | — | [#46](https://github.com/CaliLuke/go-guitar-pro/issues/46) |
-| [Lock down chord-velocity and beat-dynamic export loss policy](work-items/dynamics.json) | implementation | 1 | in_progress | — | [#61](https://github.com/CaliLuke/go-guitar-pro/issues/61) |
+| [Lock down chord-velocity and beat-dynamic export loss policy](work-items/dynamics.json) | implementation | 1 | done | — | [#61](https://github.com/CaliLuke/go-guitar-pro/issues/61) |
 | [Preserve GPIF bend control roles with nonmonotonic offsets](work-items/export-curve-order.json) | implementation | 1 | todo | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) | [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) |
 | [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | done | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |
-| [Preserve authored opening sound-event preroll](work-items/export-negative-sound-position.json) | implementation | 1 | in_progress | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#64](https://github.com/CaliLuke/go-guitar-pro/issues/64) |
+| [Preserve authored opening sound-event preroll](work-items/export-negative-sound-position.json) | implementation | 1 | done | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#64](https://github.com/CaliLuke/go-guitar-pro/issues/64) |
 | [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | done | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
 | [Preserve free-time bars without inventing a meter](work-items/free-time.json) | implementation | 1 | done | — | [#48](https://github.com/CaliLuke/go-guitar-pro/issues/48) |
 | [Verify legacy grace-bend preservation and explicit export omission](work-items/grace.json) | implementation | 1 | todo | — | [#65](https://github.com/CaliLuke/go-guitar-pro/issues/65) |
@@ -36,7 +36,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Prove sound identity independently of MIDI program](work-items/sound-automation.json) | implementation | 1 | todo | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#69](https://github.com/CaliLuke/go-guitar-pro/issues/69) |
 | [Preserve sustain pedal down, hold and release markers](work-items/sustain-pedal.json) | implementation | 1 | done | — | [#54](https://github.com/CaliLuke/go-guitar-pro/issues/54) |
 | [Export authored backing-track synchronization points](work-items/sync-points.json) | implementation | 1 | todo | [#42](https://github.com/CaliLuke/go-guitar-pro/issues/42) | [#55](https://github.com/CaliLuke/go-guitar-pro/issues/55) |
-| [Apply authored HideTempo to the opening GP8 tempo event](work-items/tempo.json) | implementation | 1 | in_progress | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#70](https://github.com/CaliLuke/go-guitar-pro/issues/70) |
+| [Apply authored HideTempo to the opening GP8 tempo event](work-items/tempo.json) | implementation | 1 | done | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#70](https://github.com/CaliLuke/go-guitar-pro/issues/70) |
 | [Preserve sounding and display transposition separately](work-items/transposition.json) | implementation | 1 | done | — | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) |
 | [Export tremolo picking and preserve supported stroke variants](work-items/tremolo.json) | implementation | 1 | done | — | [#57](https://github.com/CaliLuke/go-guitar-pro/issues/57) |
 | [Preserve tuning labels independently from pitches](work-items/tuning.json) | implementation | 1 | done | — | [#58](https://github.com/CaliLuke/go-guitar-pro/issues/58) |
@@ -76,11 +76,11 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve wah pedal state through GPIF and GP8](work-items/wah.json) | implementation | 2 | todo | — | [#94](https://github.com/CaliLuke/go-guitar-pro/issues/94) |
 | [Preserve global extended barlines and bar-number policy](work-items/barlines.json) | implementation | 3 | todo | — | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) |
 | [Preserve independent chord display flags](work-items/chord-display.json) | implementation | 3 | todo | — | [#104](https://github.com/CaliLuke/go-guitar-pro/issues/104) |
-| [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](work-items/common-time.json) | implementation | 3 | in_progress | — | [#110](https://github.com/CaliLuke/go-guitar-pro/issues/110) |
-| [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](work-items/display-duration-override.json) | implementation | 3 | in_progress | — | [#111](https://github.com/CaliLuke/go-guitar-pro/issues/111) |
+| [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](work-items/common-time.json) | implementation | 3 | done | — | [#110](https://github.com/CaliLuke/go-guitar-pro/issues/110) |
+| [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](work-items/display-duration-override.json) | implementation | 3 | done | — | [#111](https://github.com/CaliLuke/go-guitar-pro/issues/111) |
 | [Preserve authored system layouts and bar display scales](work-items/layout.json) | implementation | 3 | todo | — | [#112](https://github.com/CaliLuke/go-guitar-pro/issues/112) |
 | [Preserve score and track multirest preferences](work-items/multi-rest.json) | implementation | 3 | todo | — | [#105](https://github.com/CaliLuke/go-guitar-pro/issues/105) |
-| [Correct pitched note-display scope and protect percussion ownership](work-items/note-display.json) | implementation | 3 | in_progress | — | [#113](https://github.com/CaliLuke/go-guitar-pro/issues/113) |
+| [Correct pitched note-display scope and protect percussion ownership](work-items/note-display.json) | implementation | 3 | done | — | [#113](https://github.com/CaliLuke/go-guitar-pro/issues/113) |
 | [Preserve numbered notation per staff](work-items/numbered.json) | implementation | 3 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#106](https://github.com/CaliLuke/go-guitar-pro/issues/106) |
 | [Preserve supported header and footer templates and visibility](work-items/page-setup.json) | implementation | 3 | blocked | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#114](https://github.com/CaliLuke/go-guitar-pro/issues/114) |
 | [Preserve explicit string-number display requests](work-items/show-string.json) | implementation | 3 | todo | — | [#107](https://github.com/CaliLuke/go-guitar-pro/issues/107) |
