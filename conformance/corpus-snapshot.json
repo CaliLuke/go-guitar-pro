@@ -2286,14 +2286,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"24\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "24",
-          "locationsSha256": "14a08a92959d50c93c1ce79bf8338627467c89379d4a6f60e383a7c1846df752"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -2438,14 +2430,6 @@
           "locationsSha256": "65e2612f02433f26f76d3921bd4311e37fcd29dcd1ccb7f18795c52724ef0313"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"16\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "16",
-          "locationsSha256": "31f87a410604fdc4650bc9d2672e2b840a4ac4200f16163c2e071435493fe5a0"
-        },
-        {
           "code": "GPIF.Note.Property.Octave",
           "kind": "unsupported-feature",
           "count": 418,
@@ -2565,14 +2549,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "746018587eb7dd51c97df128ce39600d24cbc32ef606fd4b6723768a407a0d4b"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3255,14 +3231,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 12,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"6\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "6",
-          "locationsSha256": "b0b1257207af74082cd9299c2d7ab836b4f88cac368bb7be550e4c453fba2c8d"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -5253,14 +5221,6 @@
           "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 41,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"59\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "59",
-          "locationsSha256": "0f8dae0f225bc27e90468ec99abb76b986579953fd417787aa530d5e47814bfe"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 47,
@@ -5464,14 +5424,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "288f10dd356448a33d576e31d21ccbbb3ebbc81a28ef5b3228fc71aee95103a1"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "8c2046a1954a968211020442afbe4bba09a1ad04e9ced5cf8a1aa0010a888087"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -6276,14 +6228,6 @@
           "locationsSha256": "e83ce0f680d0e1ead5e1a8876ad1df8d3df3090d7799cf871f33aa37ac8adc0e"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 3,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"35\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "35",
-          "locationsSha256": "2d8a60bdd49cfad4d731cea588f479f85c2e479165646873b8806043384627fb"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6472,14 +6416,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 15,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "4",
-          "locationsSha256": "01411b63075956ab32a29650b366ecbe9f71722f5a6cc8689c0acbc590d85145"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -7142,14 +7078,6 @@
           "locationsSha256": "2b31b77d38bc051a4b25e9858d7491cc24f1895cf1fbbe8d7292b061ac86b8bb"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"2\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "2",
-          "locationsSha256": "91c6050606b88b61dd57bf76d8ca2f9032d5d4f1ae2581f0a08ebc037a049504"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 12,
@@ -7506,14 +7434,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 9,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "746018587eb7dd51c97df128ce39600d24cbc32ef606fd4b6723768a407a0d4b"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -8418,14 +8338,6 @@
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 6,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "cdfed561083a755e5844146c7e5b425f9cdf5c233fe509ef17d3ded69c603f56"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -9178,14 +9090,6 @@
           "locationsSha256": "8ed198e3a8d4717efa8fc8dac3625c3e0e36d7cc6e9f88310db4809350840e69"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 24,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"100\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "100",
-          "locationsSha256": "f90e047e99ba56aa5badc63c0d31b68ac7a2a96a98a2783a2e72995abbac04b0"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -9407,14 +9311,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"12\"]/Properties",
           "objectId": "12",
           "locationsSha256": "250dea8e39505676f409f631f89530065e8e481e84fc3b8ecd9d5ec1848714c8"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 5,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"149\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "149",
-          "locationsSha256": "64fd2b7c8d36d0d74d97d39fd89a595de7ba9fd9847f051cf60aefb11ab3c25d"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10672,14 +10568,6 @@
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "b785d77638d5ee7b36b420a4c92a9509b5c235c685373c11a5dcbefd995129de"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -10749,14 +10637,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 7,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"5\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "5",
-          "locationsSha256": "8c2046a1954a968211020442afbe4bba09a1ad04e9ced5cf8a1aa0010a888087"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -10899,14 +10779,6 @@
           "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties",
           "objectId": "4",
           "locationsSha256": "2456a5c66a3377e439c5b2df77ce85301e7b7b7ad31ac9ca657339aa497870a3"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 48,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"6\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "6",
-          "locationsSha256": "662221da0ad2d17899f767345b320a5d7dbbe32585c0be05faf5628804e6f2e8"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11280,14 +11152,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "1ec12a80f36d0e312f51df29b50b804bb396563e82a92f90ef672b9feb18261e"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"9\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "9",
-          "locationsSha256": "eef189cd9c64721db88439b7f71cd02d3271a7ada79b7d84545fc49d694197d4"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -11779,14 +11643,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"2\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "2",
-          "locationsSha256": "91c6050606b88b61dd57bf76d8ca2f9032d5d4f1ae2581f0a08ebc037a049504"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -13531,14 +13387,6 @@
           "locationsSha256": "c08634b9dc25d2c3c4bc11a80bb6d51dd6483d5130499b9b8beb33b8f42ecf56"
         },
         {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 41,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"59\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "59",
-          "locationsSha256": "0f8dae0f225bc27e90468ec99abb76b986579953fd417787aa530d5e47814bfe"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 47,
@@ -13695,14 +13543,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
-        },
-        {
-          "code": "GPIF.Note.Property.HopoDestination",
-          "kind": "lossy-projection",
-          "count": 15,
-          "sourcePath": "/GPIF/Notes/Note[@id=\"4\"]/Properties/Property[@name=\"HopoDestination\"]",
-          "objectId": "4",
-          "locationsSha256": "01411b63075956ab32a29650b366ecbe9f71722f5a6cc8689c0acbc590d85145"
         },
         {
           "code": "GPIF.Staff.Property.Unknown",
@@ -14095,7 +13935,7 @@
       "importFailure": {
         "goError": {
           "type": "*goguitarpro.ParseError",
-          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity &\ufffd\ufffd (no semicolon)",
+          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity \u0026�� (no semicolon)",
           "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29"
         },
         "alphaTabError": {
