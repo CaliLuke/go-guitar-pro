@@ -462,6 +462,7 @@ type gpifBeats struct {
 }
 
 type gpifBeat struct {
+	Timer                              *string          `xml:"Timer,omitempty"`
 	ID                                 string           `xml:"id,attr"`
 	Rhythm                             gpifRhythmRef    `xml:"Rhythm"`
 	Notes                              string           `xml:"Notes,omitempty"`

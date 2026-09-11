@@ -13599,10 +13599,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 22,
+          "count": 13,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramWorkingSet\"]/Items/Item/Chord/KeyNote",
           "objectId": "0",
-          "locationsSha256": "a3f32faf55530e4dcc67750c9d4db0b9140e30ac3cfbb5ed5ae5eabcb39b38de"
+          "locationsSha256": "7e5889a93d8878ec73e61df5b500344bf2ea1014026682df0e137f788b69d28a"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15207,6 +15207,14 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/beat-timer.gp",
+      "features": [
+        "note-and-beat-semantics"
+      ],
+      "diagnostics": [],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/canon-audio-track.gp",
       "features": [
         "score-core"
@@ -16054,10 +16062,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 17,
+          "count": 9,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "60c61ea066c5fb1da6f714441f59ee159f5beb018f40b5c2ad52450b533e9d0c"
+          "locationsSha256": "0f922d59d9b4895a7ec58093f4175c8cc5e60ac24af50312cf38d7178da52e88"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

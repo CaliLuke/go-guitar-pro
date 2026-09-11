@@ -125,6 +125,9 @@ type BeatEffects struct {
 
 // Beat contains multiple notes.
 type Beat struct {
+	// Timer owns this beat's timer request. Nil means no timer; a present record
+	// with nil Milliseconds requests a derived timer. Direct edits control export.
+	Timer *BeatTimer
 	// Start is the absolute display-time start in ticks. Voices begin independently
 	// at their measure start. Playback transformations are not applied.
 	Start *int64

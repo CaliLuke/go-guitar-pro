@@ -233,6 +233,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Chord.Diagram.Property.ShowDiagram` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
+| `GPIF.Beat.Timer.InvalidValue` | `note-and-beat-semantics` | `invalid-data` | Timer values must be empty, -1, or an integer in the supported nonnegative safe range. |
+| `GPIF.Beat.Timer.GraceUnsupported` | `grace-relationships` | `unsupported-feature` | The grace-note model has no beat timer destination; strict source import rejects the loss. |
 
 ## Public model inventory
 
@@ -270,7 +272,6 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 16 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatStroke` | `brush` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The stroke preserves authored kind and direction. ExactDuration is the exact tick-timing authority, and Duration is its note-value compatibility view. |
@@ -296,12 +297,14 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
 | `Chord` | `note-and-beat-semantics` | 22 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
+| `Beat` | `note-and-beat-semantics` | 17 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
+| `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 263 |
+| `preserved` | 265 |
 | `normalized` | 37 |
 | `omitted` | 103 |
 | `rejected` | 0 |
@@ -312,7 +315,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 129 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 130 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -320,7 +323,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 263 |
+| `schema` | 264 |
 
 ## Source dispatch inventory
 
@@ -467,3 +470,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `exact-whammy-offsets` | `note-and-beat-semantics` | `TestConformanceExactWhammyOffsets` | `TestAlphaTabExactWhammyOffsets` | no | Shared ExactOffset authority preserves fractional and bounded nonmonotonic whammy roles; raw pinned consumer controls retain distinct35 and35.5 percent middle offsets. |
 | `note-ornaments` | `note-and-beat-semantics` | `TestConformanceNoteOrnaments` | `TestAlphaTabNoteOrnaments` | no | Four authored variants and None remain independent per occurrence; unknown source strings and public enum values are diagnosed without changing string or fret. |
 | `chord-display` | `note-and-beat-semantics` | `TestConformanceChordDisplay` | `TestAlphaTabChordDisplay` | no | Each explicit true and false flag retains scoped and independently editable occurrences through raw final consumer loading. |
+| `beat-timer` | `note-and-beat-semantics` | `TestConformanceBeatTimer` | `TestAlphaTabBeatTimer` | no | Exact absence, derived and authored timer states survive export without calculating playback time; grace conversion has an explicit source limitation. |

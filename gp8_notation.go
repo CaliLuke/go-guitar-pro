@@ -243,7 +243,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 		return "", err
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
-	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
+	result := gpifBeat{Timer: gp8BeatTimer(beat.Timer), ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
 	if beat.DeadSlapped {
 		result.DeadSlapped = &struct{}{}
 	}

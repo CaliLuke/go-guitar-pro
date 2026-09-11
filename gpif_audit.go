@@ -309,6 +309,14 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		for _, property := range beat.Properties.Properties {
 			gpifAuditBeatProperty(context, beat.ID, path, property)
 		}
+		if beat.Timer != nil {
+			if beat.GraceNotes == "OnBeat" || beat.GraceNotes == "BeforeBeat" {
+				context.add(diagnosticSource("GPIF.Beat.Timer.GraceUnsupported", "grace-relationships", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{SourcePath: path + "/Timer", ObjectID: beat.ID, Location: ParseLocation{BeatID: beat.ID}, Reason: "the grace-note model has no beat-timer destination"})
+			}
+			if _, err := parseGPIFBeatTimer(*beat.Timer); err != nil {
+				context.add(diagnosticSource("GPIF.Beat.Timer.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData), ParseDiagnostic{SourcePath: path + "/Timer", ObjectID: beat.ID, Location: ParseLocation{BeatID: beat.ID}, Reason: err.Error()})
+			}
+		}
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.GraceNotes.InvalidValue", "grace-relationships", ParseDiagnosticUnsupportedFeature), beat.GraceNotes, []string{"", "OnBeat", "BeforeBeat"}, path+"/GraceNotes", beat.ID, "grace-relationships")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Arpeggio.InvalidValue", "brush", ParseDiagnosticUnsupportedFeature), beat.Arpeggio, []string{"", "Up", "Down"}, path+"/Arpeggio", beat.ID, "brush")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Hairpin.InvalidValue", "hairpins", ParseDiagnosticUnsupportedFeature), beat.Hairpin, []string{"", "Crescendo", "Decrescendo", "Diminuendo"}, path+"/Hairpin", beat.ID, "hairpins")

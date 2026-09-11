@@ -3319,6 +3319,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/beat-timer.gp",
+      "sha256": "4541a7370c12d3b845068f8ca0747372c27827e7f125272285e183ca64181583",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original minimal absent, derived, zero and exact integer timer boundary fixture with reused beat definitions. Grace timer scope remains explicitly unsupported.",
+      "features": [
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/canon-audio-track.gp",
       "sha256": "dd50673c1d3a7a8d0c3c167001affac79c7ade062541a2acf8f1704fb648cc3d",
       "format": "gp8",

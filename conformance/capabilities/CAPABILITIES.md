@@ -14,9 +14,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 75 | 15 | 7 | 1 |
-| model | 74 | 16 | 7 | 1 |
-| export | 53 | 30 | 13 | 2 |
+| import | 75 | 16 | 6 | 1 |
+| model | 74 | 17 | 6 | 1 |
+| export | 53 | 31 | 12 | 2 |
 
 All three stages have a supported rating in 53 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -637,9 +637,9 @@ Bounded work: [Preserve supported score bracket, track-name and display policies
 
 Notation. Priority 3. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-GPIF Timer and explicit/derived timer visibility have no public destination.
+Beat.Timer distinguishes absent, requested derived and explicit integer milliseconds, including zero, through exact pinned consumption. Occurrence-owned pointers support independent edits; invalid values are diagnosed. GPIF grace beats collapse into GraceEffect records without a timer destination, so that exact source case is reported and remains residual #108 acceptance.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

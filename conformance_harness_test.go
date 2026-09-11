@@ -308,6 +308,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceHarmonicVariants":                   runConformanceHarmonicVariants,
 	"TestConformanceGPIFCompatibilityAndDiagnostics":    runConformanceGPIFCompatibilityAndDiagnostics,
 	"TestConformanceHarmonicAuthorityAndValidation":     runConformanceHarmonicAuthorityAndValidation,
+	"TestConformanceBeatTimer":                          runConformanceBeatTimer,
 	"TestConformanceChordDisplay":                       runConformanceChordDisplay,
 	"TestConformanceChordDefinitions":                   runConformanceChordDefinitions,
 	"TestConformanceChordDefaultsAndLength":             runConformanceChordDefaultsAndLength,

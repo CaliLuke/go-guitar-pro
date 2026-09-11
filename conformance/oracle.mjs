@@ -1374,6 +1374,7 @@ function main() {
     process.stdout.write(`${JSON.stringify(loadBarreFacts(args[1]), null, 2)}\n`);
     return;
   }
+  if (args[0] === '--beat-timer' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadBeatTimerFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--chord-display' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadChordDisplayFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--chord-diagrams' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadChordDiagramFacts(args[1]), null, 2)}\n`);
@@ -1500,4 +1501,9 @@ export function loadPanFacts(fixture) {
 export function loadChordDisplayFacts(fixture) {
  const score=loadScore(fixture);
  return score.tracks.flatMap(track=>track.staves.flatMap(staff=>staff.bars.flatMap(bar=>bar.voices.flatMap(voice=>voice.beats.filter(beat=>beat.chord).map(beat=>({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,name:beat.chord.name,showName:beat.chord.showName,showDiagram:beat.chord.showDiagram,showFingering:beat.chord.showFingering,strings:Array.from(beat.chord.strings)}))))));
+}
+
+export function loadBeatTimerFacts(fixture) {
+ const score=loadScore(fixture);
+ return score.tracks.flatMap(track=>track.staves.flatMap(staff=>staff.bars.flatMap(bar=>bar.voices.flatMap(voice=>voice.beats.map(beat=>({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,show:beat.showTimer,milliseconds:beat.timer,notes:beat.notes.map(note=>({string:note.string,fret:note.fret,midi:note.realValue}))}))))));
 }

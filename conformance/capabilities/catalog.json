@@ -5075,11 +5075,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
       },
-      "finding": "GPIF Timer and explicit/derived timer visibility have no public destination.",
+      "finding": "Beat.Timer distinguishes absent, requested derived and explicit integer milliseconds, including zero, through exact pinned consumption. Occurrence-owned pointers support independent edits; invalid values are diagnosed. GPIF grace beats collapse into GraceEffect records without a timer destination, so that exact source case is reported and remains residual #108 acceptance.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.timer",
@@ -5095,6 +5095,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/timer.gp:timer",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].showTimer. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabBeatTimer",
+          "detail": "Every exact source and edited beat timer state, integer endpoints and original GP7 timer fixture."
+        },
+        {
+          "kind": "test",
+          "reference": "TestBeatTimerGraceSourceLimit",
+          "detail": "Scoped grace source rejection and raw consumer proof that grace timer 99 is lost through the current grace representation."
         }
       ]
     },

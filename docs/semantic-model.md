@@ -926,3 +926,22 @@ GPIF stores Turn, InvertedTurn, UpperMordent, or LowerMordent; an absent element
 Each parsed occurrence owns its value, including occurrences that share a source definition.
 Direct edits preserve string, fret, and adjacent notes. Unknown source strings produce an unsupported-feature diagnostic.
 Export rejects undefined enum values before writing the score.
+
+`Beat.Timer` owns one beat's timer mark. Nil means no timer.
+A present `BeatTimer` with nil `Milliseconds` requests a derived playback timer.
+A non-nil millisecond value is explicit, including zero. Direct edits control export.
+Each parsed beat occurrence owns independent timer pointers, even when definitions are reused.
+Finalization does not calculate playback time. GP8 emits -1 for a derived request.
+The pinned importer retains that request as `showTimer=true` and `timer=null`.
+MIDI generation can later replace a consumer timer with its calculated playback time.
+
+Explicit milliseconds must be integers from zero through 9007199254740991.
+This safe-integer boundary is the library's exact consumer contract, not a universal GPIF limit.
+Empty and -1 source values request derivation. Other negative or malformed values produce `GPIF.Beat.Timer.InvalidValue`.
+Permissive import retains a derived request for invalid text; strict import rejects it.
+Invalid authored millisecond values produce `score.beat.timer` and hard export rejection.
+
+GPIF grace beats become `GraceEffect` records, which have no beat-timer destination.
+A timer on such a source beat produces `GPIF.Beat.Timer.GraceUnsupported`.
+Strict source import rejects this loss; permissive import retains the grace note without its timer.
+The raw grace source and exported artifact record that remaining limit under #108.

@@ -10,6 +10,13 @@ import (
 )
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
+	if b.Timer != nil {
+		beat.Timer = &BeatTimer{}
+		if value, err := parseGPIFBeatTimer(*b.Timer); err == nil {
+			beat.Timer.Milliseconds = value
+		}
+		// The source audit reports invalid values; permissive import keeps the request.
+	}
 	beat.DeadSlapped = b.DeadSlapped != nil
 	beat.Effect.WahPedal = gpifWah(b.Wah)
 	beat.Effect.rememberWah()
