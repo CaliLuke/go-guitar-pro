@@ -188,6 +188,22 @@ are authoritative, and validation rejects incomplete pairs before GP8 export.
 These fields are independent from `Chord.Barres`, which describes fingering
 ranges inside a chord diagram.
 
+`BeatEffects.Stroke.Kind` distinguishes a GPIF `Brush` property from an
+`Arpeggio` element. `KindNone` with a non-none direction retains the historical
+programmatic behavior and exports as an arpeggio. `Duration` remains the
+note-value denominator compatibility view; the supported values 1 through 128
+convert to `3840 / Duration` ticks, while zero requests the target default.
+`ExactDuration` preserves the authored
+960-PPQ tick count, including GPIF XProperty `687935489`. A nil exact value
+preserves source absence. On an imported stroke, exact timing owns export while
+the compatibility duration is unchanged. Editing `Duration` makes that view
+authoritative, including when both views changed; clearing `ExactDuration`
+also falls back to `Duration`. Export computes this reconciliation without
+mutating the score. GP8 can store integral values from 0 through 2147483647;
+fractional or larger exact values receive a brush-specific omission report.
+GP3 through GP5 stroke codes 1 and 2 map to 30 ticks, followed by 60, 120, 240,
+and 480 ticks for codes 3 through 6.
+
 ## Authored values and loss
 
 The model preserves ordered grace effects, staff ownership, chord scope,
@@ -253,9 +269,9 @@ moves them to the previous beat while retaining the raw `Beat.Display` fields.
 GPIF applies primary and secondary beaming XProperties in source order. A later
 primary split or merge replaces an earlier secondary split; a later secondary
 split replaces merge but does not replace primary split.
-The generic beat and master-bar XProperty containers do not make unknown IDs
-valid. Unhandled IDs remain explicit unknown-syntax diagnostics; the known but
-unimplemented brush-duration ID remains assigned to the separate brush scope.
+Known beaming and brush-duration XProperty IDs are accepted and preserved.
+Malformed or orphan brush timing receives scoped invalid-data diagnostics.
+Only future or otherwise unhandled IDs remain explicit unknown syntax.
 After import, edits to the canonical fields are authoritative; the legacy fields
 do not reconcile back into them. GP8 writes the canonical fields and reports
 each non-default legacy-only display field separately. A GPIF grace-beat stem
@@ -353,11 +369,14 @@ attributes. The pinned consumer retains origins and derives each destination
 from the preceding origin, so exact wire and Go reimport checks cover a
 destination that begins before an excerpt.
 
-GP8 preserves fade-in, hairpin, octave, and stroke direction.
-`BeatStroke.Duration` is a note-value denominator, not a tick count. The target
-uses an eighth-note stroke duration. Export reports a different source duration.
-It also reports rasgueado, pick stroke, and slap effects because the writer does
-not emit them.
+GP8 preserves fade-in, hairpin, octave, stroke kind and direction, and integral
+exact stroke timing from 0 through 2147483647 ticks. `BeatStroke.Duration` is a
+note-value-denominator compatibility view, while `ExactDuration` retains the
+authored tick value and source absence. Imported exact timing owns export until
+`Duration` is edited; clearing exact timing also falls back to `Duration`.
+Fractional or larger exact values receive a scoped omission report. GP8 also
+reports rasgueado, pick stroke, and slap effects because the writer does not
+emit them.
 
 `BeatEffects.VibratoStrength` preserves the beat-wide whammy-bar vibrato as
 `Slight` or `Wide`, independently from note vibrato. Binary GP3 through GP5

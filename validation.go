@@ -363,6 +363,24 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.PreferredBeamDirection < VoiceDirectionNone || beat.PreferredBeamDirection > VoiceDirectionDown {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.beam-direction", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("preferred beam direction %d is not defined", beat.PreferredBeamDirection)})
 			}
+			stroke := beat.Effect.Stroke
+			if stroke.Kind > BeatStrokeKindArpeggio {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("stroke kind %d is not defined", stroke.Kind)})
+			}
+			if stroke.Direction < BeatStrokeDirectionNone || stroke.Direction > BeatStrokeDirectionDown {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-direction", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("stroke direction %d is not defined", stroke.Direction)})
+			}
+			if stroke.Kind != BeatStrokeKindNone && stroke.Direction == BeatStrokeDirectionNone {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-pair", Kind: ScoreDiagnosticValue, Location: location, Reason: "stroke kind requires a direction"})
+			}
+			if stroke.Direction == BeatStrokeDirectionNone && (stroke.Duration != 0 || stroke.ExactDuration != nil) {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-pair", Kind: ScoreDiagnosticValue, Location: location, Reason: "stroke timing requires a direction"})
+			}
+			if stroke.Direction != BeatStrokeDirectionNone && stroke.Duration != 0 {
+				if _, ok := beatStrokeDurationTicks(stroke.Duration); !ok {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-duration", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("stroke duration %d is not a supported note value", stroke.Duration)})
+				}
+			}
 			duration, err := beat.Duration.ExactScoreTime()
 			if err != nil {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.duration", Kind: ScoreDiagnosticTiming, Location: location, Reason: err.Error()})

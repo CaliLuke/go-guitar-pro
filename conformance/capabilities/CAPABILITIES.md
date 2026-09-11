@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 65 | 18 | 16 | 2 |
-| model | 64 | 19 | 17 | 1 |
-| export | 42 | 25 | 31 | 3 |
+| import | 66 | 17 | 16 | 2 |
+| model | 65 | 18 | 17 | 1 |
+| export | 43 | 24 | 31 | 3 |
 
-All three stages have a supported rating in 42 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 43 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -33,7 +33,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Authored pitch spelling and accidentals | 157 | 89 | 156 | 0 | 7 |
 | Concert and display transposition | 347 | 16 | 111 | 0 | 7 |
 | Track visibility and standard/tab flags | 77 | 232 | 108 | 0 | 7 |
-| Brush and arpeggio timing | 21 | 337 | 19 | 0 | 7 |
 | Separate section marker and text | 31 | 328 | 18 | 0 | 7 |
 | Left and right hand fingering | 13 | 344 | 13 | 0 | 7 |
 | Double bar lines | 32 | 326 | 12 | 0 | 7 |
@@ -61,6 +60,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Alternate endings | 16 | 341 | 0 | 0 | 7 |
 | Beat barre fret and shape | 2 | 355 | 0 | 0 | 7 |
 | Beat octave shifts | 10 | 348 | 0 | 0 | 7 |
+| Brush and arpeggio timing | 21 | 337 | 0 | 0 | 7 |
 | Common and per-staff capo | 1 | 356 | 0 | 0 | 7 |
 | Common-time and cut-time notation | 0 | 357 | 0 | 0 | 7 |
 | Fade in | 17 | 343 | 0 | 0 | 7 |
@@ -243,11 +243,11 @@ Bounded work: [Preserve and export beat vibrato strength](https://github.com/Cal
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Direction survives. GPIF brush duration XProperty is not retained and now has a stable brush-specific unknown-syntax diagnostic instead of becoming silently accepted by the generic XProperty schema. The GP8 writer uses a fixed eighth-note stroke duration.
+BeatStroke preserves Brush versus Arpeggio, both directions, exact authored timing, source absence, and deterministic legacy Duration edits. GP8 retains integral signed-32-bit tick timing; other exact values receive a narrow report.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep binary stroke-code conversion, distinct GPIF kind spellings, exact XProperty timing, compatibility reconciliation, validation, and pinned AlphaTab consumption covered.
 
 Bounded work: [Preserve authored brush and arpeggio timing](https://github.com/CaliLuke/go-guitar-pro/issues/78).
 

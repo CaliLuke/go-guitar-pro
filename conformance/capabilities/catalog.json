@@ -2856,12 +2856,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "partial"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Direction survives. GPIF brush duration XProperty is not retained and now has a stable brush-specific unknown-syntax diagnostic instead of becoming silently accepted by the generic XProperty schema. The GP8 writer uses a fixed eighth-note stroke duration.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "BeatStroke preserves Brush versus Arpeggio, both directions, exact authored timing, source absence, and deterministic legacy Duration edits. GP8 retains integral signed-32-bit tick timing; other exact values receive a narrow report.",
+      "acceptance": "Keep binary stroke-code conversion, distinct GPIF kind spellings, exact XProperty timing, compatibility reconciliation, validation, and pinned AlphaTab consumption covered.",
       "upstream": [
         "Beat.brushType",
         "Beat.brushDuration",
@@ -2881,17 +2881,17 @@
         {
           "kind": "field",
           "reference": "BeatEffects.Stroke",
-          "detail": "Public contract; linked matrix cases are in obligation."
+          "detail": "Typed kind, direction, compatibility note value, and exact tick timing with a documented edit contract."
         },
         {
           "kind": "test",
-          "reference": "TestConformanceBeatEffects",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceBrush",
+          "detail": "Covers GP3-7 import, exact conversion, source absence, edit authority, validation, GP8 wire output, reimport, and read-only behavior."
         },
         {
           "kind": "test",
-          "reference": "TestGPIFXPropertyAuditClosure",
-          "detail": "The four authored brush-duration XProperties in brush.gp are reported and rejected by strict unknown-syntax parsing without implementing brush timing."
+          "reference": "TestAlphaTabPreservesBrush",
+          "detail": "Pinned AlphaTab retains the GP7 colors fixture's arpeggio kind, direction, and 117-tick duration after GP8 export."
         }
       ]
     },
@@ -4509,7 +4509,7 @@
         {
           "kind": "test",
           "reference": "TestGPIFXPropertyAuditClosure",
-          "detail": "Known beaming IDs remain accepted while brush duration and future beat/master-bar IDs retain stable strict unknown-syntax diagnostics."
+          "detail": "Known beaming and brush-duration IDs remain accepted; only future beat/master-bar IDs retain stable strict unknown-syntax diagnostics."
         },
         {
           "kind": "probe",

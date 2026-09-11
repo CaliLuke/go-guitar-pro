@@ -121,26 +121,33 @@ func gpifAuditBeamingBeat(context *parseContext, beatID, path string, beat *gpif
 	}
 	seen := make(map[string]struct{})
 	unknownPropertySource := diagnosticSource("GPIF.Beat.XProperty.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax)
-	brushDurationSource := diagnosticSource("GPIF.Beat.XProperty.BrushDuration", "brush", ParseDiagnosticUnknownSyntax)
+	brushSeen := false
 	for propertyIndex, property := range beat.XProperties.Properties {
 		allowed := map[string]map[int64]struct{}{
 			gpifBeatBeamDirectionInvertID: {0: {}, 1: {}},
 			gpifBeatBeamingModeID:         {0: {}, 1: {}, 2: {}},
 			gpifBeatSecondarySplitID:      {0: {}, 1: {}},
 		}[property.ID]
-		if allowed == nil {
-			source := unknownPropertySource
-			if property.ID == "687935489" {
-				source = brushDurationSource
+		propertyPath := fmt.Sprintf("%s/XProperties/XProperty[%d]", path, propertyIndex)
+		if property.ID == gpifBeatBrushDurationID {
+			if brushSeen {
+				context.add(diagnosticSource("GPIF.Beat.Brush.Duration.Duplicate", "brush", ParseDiagnosticInvalidData), ParseDiagnostic{SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID}, Reason: "brush duration XProperty is duplicated"})
 			}
-			context.add(source, ParseDiagnostic{
+			brushSeen = true
+			value, ok := gpifXPropertyInt(property)
+			if !ok || value < 0 || value > math.MaxInt32 {
+				context.add(diagnosticSource("GPIF.Beat.Brush.Duration.Invalid", "brush", ParseDiagnosticInvalidData), ParseDiagnostic{SourcePath: propertyPath + "/Int", ObjectID: beatID, Location: ParseLocation{BeatID: beatID}, Reason: fmt.Sprintf("brush duration %q must be an integer within 0..%d", gpifXPropertyText(property), math.MaxInt32)})
+			}
+			continue
+		}
+		if allowed == nil {
+			context.add(unknownPropertySource, ParseDiagnostic{
 				SourcePath: fmt.Sprintf("%s/XProperties/XProperty[%d]/@id", path, propertyIndex),
 				ObjectID:   beatID, Location: ParseLocation{BeatID: beatID},
 				Reason: fmt.Sprintf("unhandled beat XProperty id %q", property.ID),
 			})
 			continue
 		}
-		propertyPath := fmt.Sprintf("%s/XProperties/XProperty[%d]", path, propertyIndex)
 		if _, duplicate := seen[property.ID]; duplicate {
 			context.add(diagnosticSource("GPIF.Beat.Beaming.XProperty.Duplicate", "beaming", ParseDiagnosticInvalidData), ParseDiagnostic{
 				SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID}, Feature: "beaming",
@@ -329,7 +336,10 @@ func gp8BeatBeaming(beat *Beat, target *gpifBeat) {
 		properties = append(properties, gp8IntXProperty(gpifBeatBeamDirectionInvertID, 1))
 	}
 	if len(properties) > 0 {
-		target.XProperties = &gpifXProperties{Properties: properties}
+		if target.XProperties == nil {
+			target.XProperties = &gpifXProperties{}
+		}
+		target.XProperties.Properties = append(target.XProperties.Properties, properties...)
 	}
 }
 

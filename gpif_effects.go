@@ -53,9 +53,11 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 	// Arpeggio / brush stroke
 	switch b.Arpeggio {
 	case "Up":
+		beat.Effect.Stroke.Kind = BeatStrokeKindArpeggio
 		beat.Effect.Stroke.Direction = BeatStrokeDirectionUp
 		beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 	case "Down":
+		beat.Effect.Stroke.Kind = BeatStrokeKindArpeggio
 		beat.Effect.Stroke.Direction = BeatStrokeDirectionDown
 		beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 	}
@@ -99,9 +101,11 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			if p.Direction != nil {
 				switch *p.Direction {
 				case "Up":
+					beat.Effect.Stroke.Kind = BeatStrokeKindBrush
 					beat.Effect.Stroke.Direction = BeatStrokeDirectionUp
 					beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 				case "Down":
+					beat.Effect.Stroke.Kind = BeatStrokeKindBrush
 					beat.Effect.Stroke.Direction = BeatStrokeDirectionDown
 					beat.Effect.Stroke.Duration = NoteValue(DurationEighth)
 				}
@@ -129,6 +133,11 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 				}
 			}
 		}
+	}
+	if beat.Effect.Stroke.Kind != BeatStrokeKindNone {
+		gpifApplyBrushDuration(b, &beat.Effect.Stroke)
+		beat.Effect.Stroke.importedDuration = beat.Effect.Stroke.Duration
+		beat.Effect.Stroke.hasImported = true
 	}
 }
 

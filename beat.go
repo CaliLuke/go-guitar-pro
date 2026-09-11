@@ -17,9 +17,22 @@ type BeatDisplay struct {
 
 // BeatStroke represents a stroke effect for beats.
 type BeatStroke struct {
+	// Kind distinguishes GPIF Brush properties from Arpeggio elements. For
+	// compatibility, KindNone with a non-none Direction exports as an arpeggio.
+	Kind      BeatStrokeKind
 	Direction BeatStrokeDirection
-	// Duration is the note-value denominator used to spread the stroke.
+	// Duration is the note-value denominator used to spread the stroke. Zero
+	// retains the historical target-default behavior for programmatic strokes.
 	Duration NoteValue
+	// ExactDuration is the authored stroke duration in 960-PPQ score ticks.
+	// A nil value preserves the absence of GPIF's timing XProperty. On import,
+	// it remains authoritative until Duration is edited; clearing it falls back
+	// to Duration. If both views are edited incompatibly, Duration wins.
+	ExactDuration *ScoreTime
+
+	importedDuration NoteValue
+	hasImported      bool
+	importedExact    bool
 }
 
 // BeatLegato preserves the authored endpoints of a beat-level legato phrase.
@@ -399,13 +412,23 @@ func (s *Song) readBeatStroke(c *cursor) (BeatStroke, error) {
 	if err != nil {
 		return bs, err
 	}
+	if down < 0 || down > 6 || up < 0 || up > 6 {
+		return bs, fmt.Errorf("stroke codes down=%d up=%d must be within 0..6", down, up)
+	}
+	if down > 0 && up > 0 {
+		return bs, fmt.Errorf("stroke codes contain conflicting up and down values")
+	}
 	if up > 0 {
+		bs.Kind = BeatStrokeKindBrush
 		bs.Direction = BeatStrokeDirectionUp
 		bs.Duration = NoteValue(strokeValue(up))
+		bs.ExactDuration = strokeScoreTime(up)
 	}
 	if down > 0 {
+		bs.Kind = BeatStrokeKindBrush
 		bs.Direction = BeatStrokeDirectionDown
 		bs.Duration = NoteValue(strokeValue(down))
+		bs.ExactDuration = strokeScoreTime(down)
 	}
 	if versionGTE(s.Version.Number, [3]byte{5, 0, 0}) {
 		// Swap direction
@@ -416,7 +439,20 @@ func (s *Song) readBeatStroke(c *cursor) (BeatStroke, error) {
 			bs.Direction = BeatStrokeDirectionUp
 		}
 	}
+	if bs.Kind != BeatStrokeKindNone {
+		bs.importedDuration = bs.Duration
+		bs.hasImported = true
+	}
 	return bs, nil
+}
+
+func strokeScoreTime(value int8) *ScoreTime {
+	ticks := int64(30)
+	if value >= 3 && value <= 6 {
+		ticks = int64(60 << (value - 3))
+	}
+	exact, _ := NewScoreTime(ticks, 1)
+	return &exact
 }
 
 func strokeValue(value int8) uint8 {

@@ -739,8 +739,12 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if _, conflict := beat.Effect.resolvedVibrato(); conflict {
 		builder.addReport("gp8.normalize.beat-vibrato-authority", "beat-vibrato", ExportDispositionNormalized, location, "the typed beat vibrato takes precedence after incompatible edits to both typed and legacy views")
 	}
-	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Duration != NoteValue(DurationEighth) {
-		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")
+	stroke := beat.Effect.Stroke.resolved()
+	if stroke.conflict {
+		builder.addReport("gp8.normalize.stroke-duration-authority", "brush", ExportDispositionNormalized, location, "the edited compatibility duration takes precedence over conflicting exact brush timing")
+	}
+	if stroke.targetLimited {
+		builder.addReport("gp8.omit.stroke-exact-duration", "brush", ExportDispositionOmitted, location, "GP8 stores brush timing as an integer within 0..2147483647 ticks")
 	}
 	if whammy := beat.Effect.TremoloBar; whammy != nil {
 		conversion := gp8ConvertWhammy(whammy)

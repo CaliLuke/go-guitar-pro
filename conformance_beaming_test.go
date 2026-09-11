@@ -290,18 +290,8 @@ func TestGPIFXPropertyAuditClosure(t *testing.T) {
 		t.Fatal(err)
 	}
 	const brushCode = "GPIF.Beat.XProperty.BrushDuration"
-	if got := countParseDiagnostics(brushResult.Diagnostics, brushCode); got != 4 {
-		t.Fatalf("brush duration XProperty diagnostics = %d, want 4", got)
-	}
-	for _, diagnostic := range brushResult.Diagnostics {
-		if diagnostic.Code == brushCode && diagnostic.Feature != "brush" {
-			t.Fatalf("brush duration diagnostic feature = %q, want brush", diagnostic.Feature)
-		}
-	}
-	_, strictErr := ParseWithOptions(brushData, ParseOptions{Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticUnknownSyntax}})
-	var strict *StrictParseError
-	if !errors.As(strictErr, &strict) || countParseDiagnostics(strict.Diagnostics, brushCode) != 4 {
-		t.Fatalf("strict brush XProperty diagnostics = %#v, %v; want 4 %s", strict, strictErr, brushCode)
+	if got := countParseDiagnostics(brushResult.Diagnostics, brushCode); got != 0 {
+		t.Fatalf("handled brush duration XProperty diagnostics = %d, want 0", got)
 	}
 
 	tapData, err := os.ReadFile("testdata/gp7/tap.gp")

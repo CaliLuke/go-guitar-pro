@@ -293,11 +293,24 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	case HairpinDiminuendo:
 		result.Hairpin = "Decrescendo"
 	}
-	switch beat.Effect.Stroke.Direction {
-	case BeatStrokeDirectionUp:
-		result.Arpeggio = "Up"
-	case BeatStrokeDirectionDown:
-		result.Arpeggio = "Down"
+	stroke := beat.Effect.Stroke.resolved()
+	direction := "Up"
+	if stroke.direction == BeatStrokeDirectionDown {
+		direction = "Down"
+	}
+	if stroke.direction != BeatStrokeDirectionNone {
+		switch stroke.kind {
+		case BeatStrokeKindBrush:
+			result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Brush", Direction: &direction})
+		case BeatStrokeKindArpeggio:
+			result.Arpeggio = direction
+		}
+	}
+	if stroke.emitDuration {
+		if result.XProperties == nil {
+			result.XProperties = &gpifXProperties{}
+		}
+		result.XProperties.Properties = append(result.XProperties.Properties, gp8IntXProperty(gpifBeatBrushDurationID, stroke.ticks))
 	}
 	switch beat.Octave {
 	case OctaveOttava:

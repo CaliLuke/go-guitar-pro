@@ -140,9 +140,6 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 		{name: "slap effect", code: "gp8.omit.slap-effect", set: func(beat *Beat, _ *Note) {
 			beat.Effect.SlapEffect = SlapEffectSlapping
 		}},
-		{name: "stroke duration", code: "gp8.normalize.stroke-duration", set: func(beat *Beat, _ *Note) {
-			beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionUp, Duration: NoteValue(DurationSixteenth)}
-		}},
 		{name: "tremolo picking", code: "gp8.omit.tremolo-picking-rate", set: func(_ *Beat, note *Note) {
 			note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: defaultDuration()}
 		}},

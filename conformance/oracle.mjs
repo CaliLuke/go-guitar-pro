@@ -900,6 +900,38 @@ export function loadBeatVibratoFacts(fixture) {
   return facts;
 }
 
+export function loadBrushFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  const brushType = alphaTab.model.BrushType;
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          let regularBeat = 0;
+          for (const beat of voice.beats) {
+            if (beat.graceType !== alphaTab.model.GraceType.None) continue;
+            if (beat.brushType !== brushType.None) {
+              facts.push({
+                track: track.index,
+                staff: staff.index,
+                bar: bar.index,
+                voice: voice.index,
+                beat: regularBeat,
+                kind: beat.brushType === brushType.BrushUp || beat.brushType === brushType.BrushDown ? 'brush' : 'arpeggio',
+                direction: beat.brushType === brushType.BrushUp || beat.brushType === brushType.ArpeggioUp ? 'up' : 'down',
+                duration: finite(beat.brushDuration)
+              });
+            }
+            regularBeat++;
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -932,6 +964,10 @@ function main() {
   }
   if (args[0] === '--beat-vibrato' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBeatVibratoFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--brush' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadBrushFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--beaming' && args.length === 2) {

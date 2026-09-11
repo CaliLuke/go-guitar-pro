@@ -296,13 +296,14 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	for _, beat := range doc.Beats.Beats {
 		path := gpifObjectPath("Beats/Beat", beat.ID)
 		gpifAuditBeamingBeat(context, beat.ID, path, &beat)
+		gpifAuditBrush(context, &beat, path)
 		gpifAuditPropertyConflicts(context, beat.Properties.Properties, path+"/Properties", beat.ID, ParseLocation{BeatID: beat.ID}, gpifBeatPropertyConflictSource)
 		gpifAuditBarrePair(context, beat.ID, path+"/Properties", beat.Properties.Properties)
 		for _, property := range beat.Properties.Properties {
 			gpifAuditBeatProperty(context, beat.ID, path, property)
 		}
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.GraceNotes.InvalidValue", "grace-relationships", ParseDiagnosticUnsupportedFeature), beat.GraceNotes, []string{"", "OnBeat", "BeforeBeat"}, path+"/GraceNotes", beat.ID, "grace-relationships")
-		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Arpeggio.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Arpeggio, []string{"", "Up", "Down"}, path+"/Arpeggio", beat.ID, "note-and-beat-semantics")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Arpeggio.InvalidValue", "brush", ParseDiagnosticUnsupportedFeature), beat.Arpeggio, []string{"", "Up", "Down"}, path+"/Arpeggio", beat.ID, "brush")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Hairpin.InvalidValue", "hairpins", ParseDiagnosticUnsupportedFeature), beat.Hairpin, []string{"", "Crescendo", "Decrescendo", "Diminuendo"}, path+"/Hairpin", beat.ID, "hairpins")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Ottavia.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Ottavia, []string{"", "8va", "8vb", "15ma", "15mb"}, path+"/Ottavia", beat.ID, "note-and-beat-semantics")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Tremolo.InvalidValue", "tremolo-picking", ParseDiagnosticUnsupportedFeature), beat.Tremolo, []string{"", "1/2", "1/4", "1/8"}, path+"/Tremolo", beat.ID, "tremolo-picking")
@@ -647,9 +648,9 @@ var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"BarreFret.InvalidValue":          diagnosticSource("GPIF.Beat.Property.BarreFret.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BarreString.MissingPayload":      diagnosticSource("GPIF.Beat.Property.BarreString.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BarreString.InvalidValue":        diagnosticSource("GPIF.Beat.Property.BarreString.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Brush.MissingDirection":          diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Brush.MissingDirection":          diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "brush", ParseDiagnosticInvalidData),
 	"PickStroke.MissingDirection":     diagnosticSource("GPIF.Beat.Property.PickStroke.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Brush.InvalidDirection":          diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Brush.InvalidDirection":          diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "brush", ParseDiagnosticUnsupportedFeature),
 	"PickStroke.InvalidDirection":     diagnosticSource("GPIF.Beat.Property.PickStroke.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Slapped.MissingEnable":           diagnosticSource("GPIF.Beat.Property.Slapped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"Popped.MissingEnable":            diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),

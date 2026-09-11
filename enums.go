@@ -97,6 +97,16 @@ const (
 	BeatVibratoWide   BeatVibrato = 2
 )
 
+// BeatStrokeKind identifies whether a multi-string stroke is a brush or an arpeggio.
+type BeatStrokeKind uint8
+
+// Beat stroke kinds preserve GPIF's distinct element and property spellings.
+const (
+	BeatStrokeKindNone BeatStrokeKind = iota
+	BeatStrokeKindBrush
+	BeatStrokeKindArpeggio
+)
+
 // NoteVibrato identifies the authored strength of a note vibrato.
 type NoteVibrato uint8
 

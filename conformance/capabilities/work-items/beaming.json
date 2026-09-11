@@ -127,7 +127,7 @@
     {
       "kind": "test",
       "reference": "TestGPIFXPropertyAuditClosure",
-      "detail": "Proves known beaming IDs remain accepted and generic containers do not silence brush-duration or future beat/master-bar XProperty unknown-syntax diagnostics."
+      "detail": "Proves known beaming and brush-duration IDs remain accepted while future beat/master-bar XProperties retain strict unknown-syntax diagnostics."
     },
     {
       "kind": "test",
@@ -145,7 +145,7 @@
     "gp8_builder.go",
     "gpif_types.go"
   ],
-  "resolution": "Added exact master-bar BeamingRules and independent Beat.BeamingMode, InvertBeamDirection, and PreferredBeamDirection authorities. GP5 following-beat flags now populate the canonical previous-beat connection while raw Beat.Display fields remain compatible; GPIF parsing applies primary and secondary properties in pinned source order and audits duration/group bounds, padding, gaps, XProperty values, and stem tokens. Generic XProperty containers remain audit-closed: brush duration and future beat/master-bar IDs retain stable strict unknown-syntax diagnostics while known beaming IDs are accepted. GP8 writes exact groups, modes, inversion, and both stem-orientation elements, and reports each non-default legacy-only field separately. Focused real-fixture, all ordered-property, invert-only, two-adjacent-header ownership, malformed, numeric-boundary, wire, reimport, strict-preservation, audit-closure, and pinned AlphaTab tests cover the ticket without deriving layout or meter behavior.",
+  "resolution": "Added exact master-bar BeamingRules and independent Beat.BeamingMode, InvertBeamDirection, and PreferredBeamDirection authorities. GP5 following-beat flags now populate the canonical previous-beat connection while raw Beat.Display fields remain compatible; GPIF parsing applies primary and secondary properties in pinned source order and audits duration/group bounds, padding, gaps, XProperty values, and stem tokens. Generic XProperty containers remain audit-closed: known beaming and brush-duration IDs are accepted, malformed or orphan brush timing receives its scoped invalid-data diagnostic, and future beat/master-bar IDs retain stable strict unknown-syntax diagnostics. GP8 writes exact groups, modes, inversion, and both stem-orientation elements, and reports each non-default legacy-only field separately. Focused real-fixture, all ordered-property, invert-only, two-adjacent-header ownership, malformed, numeric-boundary, wire, reimport, strict-preservation, audit-closure, and pinned AlphaTab tests cover the ticket without deriving layout or meter behavior.",
   "verification": [],
   "issue": {
     "number": 75,

@@ -2209,14 +2209,6 @@
           "locationsSha256": "595dedcab246f6073a66111261d58182bca9f274dd03d42cb31dd11d3b0763f4"
         },
         {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"74\"]/XProperties/XProperty[0]/@id",
-          "objectId": "74",
-          "locationsSha256": "9e218c1193e2daf1077c4b7129126335be59f66d379127b9bdf55ea56d9f266c"
-        },
-        {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
           "count": 1,
@@ -2384,14 +2376,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"4\"]/XProperties/XProperty[0]/@id",
-          "objectId": "4",
-          "locationsSha256": "64486fb4949f0ea15adb048b9898846bad017d163a0da75020dde78072583c2e"
-        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -3595,14 +3579,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
-          "objectId": "0",
-          "locationsSha256": "3597ce0bab5f6c605896456ae8f97e6a6ed4a25ddda452cefe748bde871a224f"
-        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -5635,14 +5611,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
-          "objectId": "0",
-          "locationsSha256": "be89b0f954aa06f055bbce84806f63525915e7b25f6274308be0003dcfa4556c"
-        },
-        {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
           "count": 1,
@@ -5730,14 +5698,6 @@
           "locationsSha256": "a443c7c9ccb2ff76101d859686eeb33e2ef6be03397cc17d7e604d4e615f701a"
         },
         {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 16,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
-          "objectId": "0",
-          "locationsSha256": "2aac3ec468fff630841bd7147762d8facd209a83a44a7f56f6a4afb1a910e73d"
-        },
-        {
           "code": "GPIF.Beat.XProperty.Unknown",
           "kind": "unknown-syntax",
           "count": 48,
@@ -5823,14 +5783,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 28,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
-          "objectId": "0",
-          "locationsSha256": "566beb0d926b8e456cee36878d54e7f10b7f4d36f2a1fd1f52eaf030cf9e27b7"
         },
         {
           "code": "GPIF.Beat.XProperty.Unknown",
@@ -6440,14 +6392,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Whammy/@middleOffset1",
           "objectId": "0",
           "locationsSha256": "4bf9a9a701d942a2e46a7e4436be673d8b8b12a911aa9b4fcce2a01e21e5bbc4"
-        },
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[2]/@id",
-          "objectId": "0",
-          "locationsSha256": "61ee72c01cb776cdcc3a23497f5166c261b10d342a750d73e59fe9be1fc86bd2"
         },
         {
           "code": "GPIF.Beat.XProperty.Unknown",
@@ -7338,14 +7282,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"60\"]/Wah",
           "objectId": "60",
           "locationsSha256": "4f1522c32fc6685c066b03025bf1ca7756c94f103e86f710a4aca529b0c226f7"
-        },
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"81\"]/XProperties/XProperty[0]/@id",
-          "objectId": "81",
-          "locationsSha256": "814762042164894a0895a65de5d065720f2faa21335b6533ebe42f9f8a3e337e"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
@@ -8614,6 +8550,14 @@
       ],
       "diagnostics": [
         {
+          "code": "GPIF.Beat.Brush.Duration.Orphan",
+          "kind": "invalid-data",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"8\"]/XProperties",
+          "objectId": "8",
+          "locationsSha256": "6ce2c625155fb7482f473a2c8fcb0e36ce23a538ffa20a6b081657e80e8c51d6"
+        },
+        {
           "code": "GPIF.Beat.Property.PrimaryPickupTone",
           "kind": "deliberate-ignore",
           "count": 46,
@@ -8628,14 +8572,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "29c40cff6a8e72c2f579ec48c5bc44ee0ca899a8389e78303e0df0c5af712b84"
-        },
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 16,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[2]/@id",
-          "objectId": "0",
-          "locationsSha256": "6bb77aed22d2751e16aae5b24f0466b5bcc907c52c162e653597798fadbeff7f"
         },
         {
           "code": "GPIF.Beat.XProperty.Unknown",
@@ -14348,14 +14284,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.Beat.XProperty.BrushDuration",
-          "kind": "unknown-syntax",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
-          "objectId": "0",
-          "locationsSha256": "3597ce0bab5f6c605896456ae8f97e6a6ed4a25ddda452cefe748bde871a224f"
         },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
