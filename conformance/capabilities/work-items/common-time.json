@@ -5,8 +5,8 @@
   "title": "Exclude other-format common-time glyphs from the Guitar Pro gap inventory",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/root",
   "formats": [
     "gp3",
     "gp4",
@@ -132,12 +132,12 @@
     "conformance/upstream-inventory.json",
     "headers.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented the exact outside-Guitar-Pro scope, stage dispositions and pinned model exclusions. Focused inventory regressions pass. Awaiting independent review before solved status.",
   "verification": [],
   "issue": {
     "number": 110,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/110",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:15:47.979060+00:00"
+    "checked_at": "2026-09-11T18:59:29.554496+00:00"
   }
 }

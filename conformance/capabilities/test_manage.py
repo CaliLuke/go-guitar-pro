@@ -271,6 +271,54 @@ export class MusicXmlImporter {
                 "InstrumentArticulation.noteHeadWhole"):
             self.assertEqual(model_reviews[declaration]["primary_capability"], "percussion")
 
+    def test_other_format_display_fields_stay_outside_guitar_pro_scope(self):
+        catalog = manage.read_json(manage.HERE / "catalog.json")
+        capabilities = {item["id"]: item for item in catalog["capabilities"]}
+        inventory = manage.read_json(manage.ROOT / "conformance/upstream-inventory.json")
+        symbols = {item["name"]: item for item in inventory["modelSymbols"]}
+        pin = manage.read_json(manage.ROOT / "conformance/oracle.json")["sourceRevision"]
+        cases = {
+            "common-time": (["MasterBar.timeSignatureCommon"], [
+                "importer/MusicXmlImporter.ts#L1960", "importer/CapellaParser.ts#L486",
+                "importer/alphaTex/AlphaTex1LanguageHandler.ts#L641",
+                "importer/GpifParser.ts#L1359", "exporter/GpifWriter.ts#L1614"]),
+            "display-duration-override": (["Beat.overrideDisplayDuration"], [
+                "importer/MusicXmlImporter.ts#L2511", "importer/MusicXmlImporter.ts#L3155",
+                "importer/MusicXmlImporter.ts#L3271"]),
+            "note-display": (["Note.isVisible", "Note.style", "NoteStyle.noteHead",
+                              "NoteStyle.noteHeadCenterOnStem"], [
+                "importer/MusicXmlImporter.ts#L2783", "importer/MusicXmlImporter.ts#L2838",
+                "importer/MusicXmlImporter.ts#L3931",
+                "importer/alphaTex/AlphaTex1LanguageHandler.ts#L2322",
+                "model/Note.ts#L885", "importer/GpifParser.ts#L795"]),
+        }
+        con = self.database()
+        for item in catalog["capabilities"]:
+            self.capability(con, item["id"], item["scope"])
+            con.executemany("INSERT INTO assessment VALUES (?,?,?)", [
+                (item["id"], stage, status) for stage, status in item["stages"].items()])
+        gaps = {row[0] for row in con.execute("SELECT id FROM gaps")}
+        for capability, (names, references) in cases.items():
+            with self.subTest(capability=capability):
+                item = capabilities[capability]
+                self.assertEqual(item["scope"], "excluded")
+                self.assertEqual(item["formats"], ["gp3", "gp4", "gp5", "gp6", "gp7", "gp8"])
+                self.assertEqual(item["stages"], dict.fromkeys(("import", "model", "export"), "out-of-scope"))
+                self.assertNotIn(capability, gaps)
+                urls = {e["reference"] for e in item["evidence"] if e["kind"] == "upstream-source"}
+                for reference in references:
+                    self.assertIn(f"https://github.com/CoderLine/alphaTab/blob/{pin}/packages/alphatab/src/{reference}", urls)
+                for name in names:
+                    self.assertEqual(symbols[name]["disposition"], "out-of-scope")
+                    self.assertIn("GP3-GP8", symbols[name]["reason"])
+                    self.assertIn(pin, symbols[name]["reason"])
+        self.assertEqual(len(inventory["modelSymbols"]), 384)
+        for name in ("meter", "duration", "tuplets", "percussion"):
+            self.assertEqual(capabilities[name]["scope"], "guitar-pro")
+        self.assertEqual(catalog["website_mapping"]["Time Signatures"], ["meter"])
+        self.assertEqual(symbols["Beat.overrideDisplayDuration"]["feature"], "rhythm")
+        self.assertEqual(symbols["MasterBar.timeSignatureCommon"]["feature"], "staff-ownership")
+
     def test_shared_automation_assignments_use_specific_semantic_owners(self):
         ownership = manage.read_upstream_ownership()
         reviews = {review["construct_id"]: review for review in ownership["construct_reviews"]}

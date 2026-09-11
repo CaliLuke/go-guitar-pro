@@ -14,9 +14,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 70 | 16 | 13 | 2 |
-| model | 69 | 17 | 14 | 1 |
-| export | 46 | 26 | 26 | 3 |
+| import | 70 | 16 | 11 | 1 |
+| model | 69 | 17 | 11 | 1 |
+| export | 46 | 26 | 24 | 2 |
 
 All three stages have a supported rating in 46 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -561,18 +561,6 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Bounded work: [Preserve slashed beats and slash staff notation separately](https://github.com/CaliLuke/go-guitar-pro/issues/92).
 
-### display-duration-override: Independent display-duration override
-
-Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
-
-Import: **unverified**. Model: **missing**. GP8 export: **unverified**.
-
-AlphaTab Beat.overrideDisplayDuration has no equivalent public field. Its applicability to Guitar Pro input needs a fixture; other AlphaTab importers can author it.
-
-Completion criterion: Find a valid Guitar Pro source for an independent display duration or document that this is exclusive to other formats.
-
-Bounded work: [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](https://github.com/CaliLuke/go-guitar-pro/issues/111).
-
 ### layout: System layout and forced line breaks
 
 Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
@@ -596,18 +584,6 @@ No public score/track multirest display preferences corresponding to the AlphaTa
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
 Bounded work: [Preserve score and track multirest preferences](https://github.com/CaliLuke/go-guitar-pro/issues/105).
-
-### note-display: Note visibility and notehead overrides
-
-Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
-
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
-
-Pitched-note visibility, custom noteheads and note style are absent. Percussion notehead support is tracked separately.
-
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
-
-Bounded work: [Correct pitched note-display scope and protect percussion ownership](https://github.com/CaliLuke/go-guitar-pro/issues/113).
 
 ### numbered: Numbered staff notation
 
@@ -1143,18 +1119,6 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Bounded work: [Preserve global extended barlines and bar-number policy](https://github.com/CaliLuke/go-guitar-pro/issues/109).
 
-### common-time: Common-time and cut-time notation
-
-Structure. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
-
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
-
-Public TimeSignature contains numeric meter and beam groups, but no common-time display flag. Pinned GPIF import does not expose a dedicated common-time case.
-
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
-
-Bounded work: [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](https://github.com/CaliLuke/go-guitar-pro/issues/110).
-
 ### beat-lyrics: Lyrics authored directly on a beat
 
 Text. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
@@ -1241,6 +1205,30 @@ All seven public triplet-feel variants have import and export evidence.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
+### display-duration-override: Independent display-duration override
+
+Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: excluded.
+
+Import: **out-of-scope**. Model: **out-of-scope**. GP8 export: **out-of-scope**.
+
+MusicXML uses Beat.overrideDisplayDuration for display placeholders. GP3-GP8 have no authored mapping at the pin. Authored duration, dots, tuplets and exact timing retain their existing rhythm contracts.
+
+Completion criterion: A scope change requires a non-default GP3-GP8 fixture, its exact authored source field, and an independent consumer that retains the value.
+
+Bounded work: [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](https://github.com/CaliLuke/go-guitar-pro/issues/111).
+
+### note-display: Note visibility and notehead overrides
+
+Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: excluded.
+
+Import: **out-of-scope**. Model: **out-of-scope**. GP8 export: **out-of-scope**.
+
+Pitched visibility and NoteStyle overrides come from MusicXML, AlphaTex or derived rendering state. GP3-GP8 have no authored pitched override at the pin. GPIF articulation noteheads remain under percussion.
+
+Completion criterion: A scope change requires a non-default GP3-GP8 fixture, its exact authored source field, and an independent consumer that retains the value.
+
+Bounded work: [Correct pitched note-display scope and protect percussion ownership](https://github.com/CaliLuke/go-guitar-pro/issues/113).
+
 ### other-exports: AlphaTex and other export formats
 
 Other AlphaTab services. Priority 3. Formats: alphatex. Scope: excluded.
@@ -1300,3 +1288,15 @@ Import: **out-of-scope**. Model: **out-of-scope**. GP8 export: **out-of-scope**.
 The library stores authored order. AlphaTab repeat groups and MIDI traversal are derived playback services outside the documented package scope.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+
+### common-time: Common-time and cut-time notation
+
+Structure. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: excluded.
+
+Import: **out-of-scope**. Model: **out-of-scope**. GP8 export: **out-of-scope**.
+
+Common-time and cut-time glyphs come from MusicXML, Capella and AlphaTex. GP3-GP8 importers and the GPIF writer use numeric meter. Numeric 4/4 and 2/2 belong to meter.
+
+Completion criterion: A scope change requires a non-default GP3-GP8 fixture, its exact authored source field, and an independent consumer that retains the value.
+
+Bounded work: [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](https://github.com/CaliLuke/go-guitar-pro/issues/110).

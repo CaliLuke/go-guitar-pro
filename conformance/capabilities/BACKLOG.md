@@ -76,11 +76,11 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve wah pedal state through GPIF and GP8](work-items/wah.json) | implementation | 2 | todo | — | [#94](https://github.com/CaliLuke/go-guitar-pro/issues/94) |
 | [Preserve global extended barlines and bar-number policy](work-items/barlines.json) | implementation | 3 | todo | — | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) |
 | [Preserve independent chord display flags](work-items/chord-display.json) | implementation | 3 | todo | — | [#104](https://github.com/CaliLuke/go-guitar-pro/issues/104) |
-| [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](work-items/common-time.json) | implementation | 3 | todo | — | [#110](https://github.com/CaliLuke/go-guitar-pro/issues/110) |
-| [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](work-items/display-duration-override.json) | implementation | 3 | todo | — | [#111](https://github.com/CaliLuke/go-guitar-pro/issues/111) |
+| [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](work-items/common-time.json) | implementation | 3 | in_progress | — | [#110](https://github.com/CaliLuke/go-guitar-pro/issues/110) |
+| [Exclude MusicXML display-duration placeholders from Guitar Pro gaps](work-items/display-duration-override.json) | implementation | 3 | in_progress | — | [#111](https://github.com/CaliLuke/go-guitar-pro/issues/111) |
 | [Preserve authored system layouts and bar display scales](work-items/layout.json) | implementation | 3 | todo | — | [#112](https://github.com/CaliLuke/go-guitar-pro/issues/112) |
 | [Preserve score and track multirest preferences](work-items/multi-rest.json) | implementation | 3 | todo | — | [#105](https://github.com/CaliLuke/go-guitar-pro/issues/105) |
-| [Correct pitched note-display scope and protect percussion ownership](work-items/note-display.json) | implementation | 3 | todo | — | [#113](https://github.com/CaliLuke/go-guitar-pro/issues/113) |
+| [Correct pitched note-display scope and protect percussion ownership](work-items/note-display.json) | implementation | 3 | in_progress | — | [#113](https://github.com/CaliLuke/go-guitar-pro/issues/113) |
 | [Preserve numbered notation per staff](work-items/numbered.json) | implementation | 3 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#106](https://github.com/CaliLuke/go-guitar-pro/issues/106) |
 | [Preserve supported header and footer templates and visibility](work-items/page-setup.json) | implementation | 3 | blocked | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#114](https://github.com/CaliLuke/go-guitar-pro/issues/114) |
 | [Preserve explicit string-number display requests](work-items/show-string.json) | implementation | 3 | todo | — | [#107](https://github.com/CaliLuke/go-guitar-pro/issues/107) |

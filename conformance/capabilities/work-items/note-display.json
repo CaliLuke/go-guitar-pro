@@ -5,8 +5,8 @@
   "title": "Correct pitched note-display scope and protect percussion ownership",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/root",
   "formats": [
     "gp3",
     "gp4",
@@ -22,7 +22,7 @@
   ],
   "scope": "Make the capability database and pinned upstream inventory agree that arbitrary pitched note visibility and NoteStyle overrides are other-format/rendering fields, while percussion articulation notehead metadata remains in scope and separately owned.",
   "acceptance": [
-    "Change only the pitched note-display capability to explicit excluded/out-of-scope import, model and export, with exact source-assignment evidence. Retain a documented reopening criterion: a GP3–GP8 fixture, exact source field and independent retaining consumer for a pitched override.",
+    "Change only the pitched note-display capability to explicit excluded/out-of-scope import, model and export, with exact source-assignment evidence. Retain a documented reopening criterion: a GP3\u2013GP8 fixture, exact source field and independent retaining consumer for a pitched override.",
     "Reconcile Note.isVisible, Note.style, NoteStyle.noteHead and NoteStyle.noteHeadCenterOnStem dispositions. The first two are already out-of-scope in the canonical upstream inventory; the two NoteStyle members currently remain partial and need the same evidence-backed disposition. Preserve each named symbol obligation rather than deleting inventory rows.",
     "Add a focused inventory regression for the exact recorded GP scope, out-of-scope dispositions and source references resolving to the pinned revision. Retain GPIF articulation notehead assignments under percussion, with unchanged owner and symbol identities. Reuse existing ownership/percussion assertions where they already enforce the condition; source drift is enforced by the existing pin/hash checks, not a grep snapshot or an automated judgment about future evidence.",
     "Regenerate SQLite and verify that pitched note-display is excluded from the Guitar Pro gap denominator while percussion ratings/claims and the canonical upstream symbol count remain unchanged. Run the inventory/ownership checks plus existing percussion notehead tests."
@@ -94,7 +94,7 @@
     {
       "kind": "upstream-source",
       "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L2783",
-      "detail": "Sets note.isVisible; custom notehead and centering assignments occur at 2841, 2853, 2876, 3023 and 3931–3958.",
+      "detail": "Sets note.isVisible; custom notehead and centering assignments occur at 2841, 2853, 2876, 3023 and 3931\u20133958.",
       "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L2783",
       "symbol": "packages/alphatab/src/importer/MusicXmlImporter.ts#L2783"
     },
@@ -140,12 +140,12 @@
     "conformance/capabilities/upstream-ownership.json",
     "conformance/upstream-inventory.json"
   ],
-  "resolution": null,
+  "resolution": "Implemented the exact outside-Guitar-Pro scope, stage dispositions and pinned model exclusions. Focused inventory regressions pass. Awaiting independent review before solved status.",
   "verification": [],
   "issue": {
     "number": 113,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/113",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:15:55.430315+00:00"
+    "checked_at": "2026-09-11T18:59:29.574661+00:00"
   }
 }

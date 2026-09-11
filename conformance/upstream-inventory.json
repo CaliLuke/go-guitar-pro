@@ -1222,9 +1222,9 @@
     {
       "name": "Beat.overrideDisplayDuration",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "out-of-scope",
       "feature": "rhythm",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "MusicXML uses Beat.overrideDisplayDuration for display placeholders. GP3-GP8 have no authored mapping at the pin. Authored duration, dots, tuplets and exact timing retain their existing rhythm contracts. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability display-duration-override for exact source references."
     },
     {
       "name": "Beat.pickStroke",
@@ -1719,9 +1719,9 @@
     {
       "name": "MasterBar.timeSignatureCommon",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "out-of-scope",
       "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Common-time and cut-time glyphs come from MusicXML, Capella and AlphaTex. GP3-GP8 importers and the GPIF writer use numeric meter. Numeric 4/4 and 2/2 belong to meter. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability common-time for exact source references."
     },
     {
       "name": "MasterBar.timeSignatureDenominator",
@@ -2134,7 +2134,7 @@
       "kind": "field",
       "disposition": "out-of-scope",
       "feature": "note-and-beat-semantics",
-      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+      "reason": "Pitched visibility and NoteStyle overrides come from MusicXML, AlphaTex or derived rendering state. GP3-GP8 have no authored pitched override at the pin. GPIF articulation noteheads remain under percussion. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability note-display for exact source references."
     },
     {
       "name": "Note.leftHandFinger",
@@ -2295,7 +2295,7 @@
       "kind": "field",
       "disposition": "out-of-scope",
       "feature": "note-and-beat-semantics",
-      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+      "reason": "Pitched visibility and NoteStyle overrides come from MusicXML, AlphaTex or derived rendering state. GP3-GP8 have no authored pitched override at the pin. GPIF articulation noteheads remain under percussion. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability note-display for exact source references."
     },
     {
       "name": "Note.tieDestination",
@@ -2419,16 +2419,16 @@
     {
       "name": "NoteStyle.noteHead",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "out-of-scope",
       "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Pitched visibility and NoteStyle overrides come from MusicXML, AlphaTex or derived rendering state. GP3-GP8 have no authored pitched override at the pin. GPIF articulation noteheads remain under percussion. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability note-display for exact source references."
     },
     {
       "name": "NoteStyle.noteHeadCenterOnStem",
       "kind": "field",
-      "disposition": "partial",
+      "disposition": "out-of-scope",
       "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+      "reason": "Pitched visibility and NoteStyle overrides come from MusicXML, AlphaTex or derived rendering state. GP3-GP8 have no authored pitched override at the pin. GPIF articulation noteheads remain under percussion. Reviewed against AlphaTab 022a45c8e42370f9e12e68949d11eada370da83d. See capability note-display for exact source references."
     },
     {
       "name": "HeaderFooterStyle.buildText",

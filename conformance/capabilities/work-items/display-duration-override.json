@@ -5,8 +5,8 @@
   "title": "Exclude MusicXML display-duration placeholders from Guitar Pro gaps",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/root",
   "formats": [
     "gp3",
     "gp4",
@@ -108,12 +108,12 @@
     "conformance/sync-upstream-inventory.mjs",
     "conformance/upstream-inventory.json"
   ],
-  "resolution": null,
+  "resolution": "Implemented the exact outside-Guitar-Pro scope, stage dispositions and pinned model exclusions. Focused inventory regressions pass. Awaiting independent review before solved status.",
   "verification": [],
   "issue": {
     "number": 111,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/111",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:15:51.371715+00:00"
+    "checked_at": "2026-09-11T18:59:29.556890+00:00"
   }
 }
