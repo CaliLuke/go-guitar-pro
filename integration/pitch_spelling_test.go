@@ -163,8 +163,8 @@ func TestGP8AccidentalWrittenPitchBounds(t *testing.T) {
 			if len(diagnostics) != 0 || err != nil {
 				t.Fatalf("boundary offset %d: %v, %v", offset, diagnostics, err)
 			}
-			if _, err := gp.ParseWithOptions(data, gp.ParseOptions{Strict: true, StrictKinds: []gp.ParseDiagnosticKind{gp.ParseDiagnosticInvalidData}}); err != nil {
-				t.Fatalf("boundary offset %d emits invalid pitch: %v", offset, err)
+			if _, parseErr := gp.ParseWithOptions(data, gp.ParseOptions{Strict: true, StrictKinds: []gp.ParseDiagnosticKind{gp.ParseDiagnosticInvalidData}}); parseErr != nil {
+				t.Fatalf("boundary offset %d emits invalid pitch: %v", offset, parseErr)
 			}
 		} else if len(diagnostics) != 1 || diagnostics[0].Code != "score.note.accidental-pitch" || diagnostics[0].Location.Beat != 1 || diagnostics[0].Location.Note != 0 || err == nil || len(data) != 0 {
 			t.Fatalf("invalid offset %d accepted: %v, %v", offset, diagnostics, err)
