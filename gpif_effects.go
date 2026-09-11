@@ -118,6 +118,11 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 					beat.Effect.PickStroke = BeatStrokeDirectionDown
 				}
 			}
+		case "Rasgueado":
+			if p.Rasgueado != nil {
+				beat.Effect.RasgueadoPattern = gpifRasgueado(*p.Rasgueado)
+				beat.Effect.HasRasgueado = beat.Effect.RasgueadoPattern != RasgueadoNone
+			}
 		case "Slapped":
 			beat.Effect.SlapEffect = SlapEffectSlapping
 		case "Popped":
@@ -133,6 +138,7 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			}
 		}
 	}
+	beat.Effect.rememberRasgueado()
 	if beat.Effect.Stroke.Kind != BeatStrokeKindNone {
 		gpifApplyBrushDuration(b, &beat.Effect.Stroke)
 		beat.Effect.Stroke.importedDuration = beat.Effect.Stroke.Duration

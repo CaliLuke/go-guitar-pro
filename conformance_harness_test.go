@@ -273,6 +273,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceBeatSemantics":                      runConformanceBeatSemantics,
 	"TestConformanceBeatEffects":                        runConformanceBeatEffects,
 	"TestConformanceBeatVibrato":                        runConformanceBeatVibrato,
+	"TestConformanceRasgueado":                          runConformanceRasgueado,
 	"TestConformanceBeatFade":                           runConformanceBeatFade,
 	"TestConformanceDeadSlap":                           runConformanceDeadSlap,
 	"TestConformancePickStroke":                         runConformancePickStroke,

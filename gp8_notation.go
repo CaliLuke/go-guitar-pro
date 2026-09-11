@@ -248,6 +248,10 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 		result.DeadSlapped = &struct{}{}
 	}
 	result.Golpe = gp8Golpe(beat.Effect.Golpe)
+	pattern, _, _ := beat.Effect.resolvedRasgueado()
+	if token := gp8Rasgueado(pattern); token != "" {
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Rasgueado", Rasgueado: &token})
+	}
 	if beat.Lyrics != nil {
 		result.Lyrics = &gpifBeatLyrics{Lines: append([]string{}, beat.Lyrics...)}
 	}

@@ -711,6 +711,20 @@ export function loadChordDiagramFacts(fixture) {
   return facts;
 }
 
+export function loadBeatTechniqueFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) for (const staff of track.staves)
+    for (const bar of staff.bars) for (const voice of bar.voices)
+      for (const beat of voice.beats) facts.push({
+        track: track.index, staff: staff.index, bar: bar.index,
+        voice: voice.index, beat: beat.index, rasgueado: beat.rasgueado,
+        tap: beat.tap, slap: beat.slap, pop: beat.pop, wah: beat.wahPedal,
+        leftHandTapped: beat.notes.map(note => note.isLeftHandTapped)
+      });
+  return facts;
+}
+
 export function loadMetadataTextFacts(fixture) {
   const score = loadScore(fixture);
   return {
@@ -1370,6 +1384,10 @@ function main() {
   }
   if (args[0] === '--assigned-lyrics' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadAssignedLyricFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--beat-techniques' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadBeatTechniqueFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--beat-lyrics' && args.length === 2) {

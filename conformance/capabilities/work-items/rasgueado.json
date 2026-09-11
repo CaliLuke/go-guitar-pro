@@ -5,8 +5,8 @@
   "title": "Preserve named rasgueado finger patterns",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -90,6 +90,11 @@
       "kind": "field",
       "reference": "BeatEffects.HasRasgueado",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabRasgueado",
+      "detail": "All eighteen non-default patterns plus None and original GP7 source/export compare raw pinned consumer values and locations."
     }
   ],
   "shared_files": [
@@ -97,8 +102,12 @@
     "gp8_builder.go",
     "gpif_audit.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "All eighteen GPIF finger patterns have a typed public representation and exact GP8 encoding. Legacy boolean-only marks normalize explicitly to pinned Ii default; edit authority, clearing, conflicts, unknown source and invalid public values are tested. Original GP7 source and all named patterns pass raw AlphaTab checks. Independent final-commit review and combined full gates/probe are assigned to root; GitHub remains open.",
+  "verification": [
+    "Public regression failed before implementation and now passes.",
+    "Focused public/GPIF/matrix and pinned AlphaTab tests pass; all 19 enum constants have separate behavior evidence.",
+    "Full conformance/check.sh, capability probe and prek are assigned to root integration; fresh review pending."
+  ],
   "issue": {
     "number": 89,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/89",

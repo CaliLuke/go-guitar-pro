@@ -138,7 +138,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Property.Popped.MissingEnable` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Property.PrimaryPickupTone` | `note-and-beat-semantics` | `deliberate-ignore` | The notation-focused Song model intentionally excludes this playback metadata. |
 | `GPIF.Beat.Property.PrimaryPickupVolume` | `note-and-beat-semantics` | `deliberate-ignore` | The notation-focused Song model intentionally excludes this playback metadata. |
-| `GPIF.Beat.Property.Rasgueado` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Property.Slapped.MissingEnable` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Beat.Property.VibratoWTremBar.InvalidStrength` | `beat-vibrato` | `unsupported-feature` | Only the GPIF Slight and Wide beat-vibrato strengths are defined. |
@@ -231,6 +230,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.Sound.Channel` | `score-core` | `unsupported-feature` | The public sound model has no destination for a per-sound MIDI channel. |
 | `GPIF.Track.Sound.MIDI.Bank.Invalid` | `midi-bank` | `invalid-data` | Each GPIF bank-select component must fit the seven-bit MIDI MSB or LSB range. |
 | `GPIF.Note.Ornament.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Only Turn, InvertedTurn, UpperMordent and LowerMordent are defined source ornament spellings. |
+| `GPIF.Beat.Property.Rasgueado.MissingPattern` | `note-and-beat-semantics` | `invalid-data` | A named rasgueado property requires its pattern payload. |
+| `GPIF.Beat.Property.Rasgueado` | `note-and-beat-semantics` | `unsupported-feature` | An unknown source pattern has no named semantic destination; no default gesture is substituted. |
 
 ## Public model inventory
 
@@ -271,7 +272,6 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Beat` | `note-and-beat-semantics` | 16 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
-| `BeatEffects` | `note-and-beat-semantics` | 13 authored, 1 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
 | `BeatStroke` | `brush` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The stroke preserves authored kind and direction. ExactDuration is the exact tick-timing authority, and Duration is its note-value compatibility view. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
@@ -294,14 +294,15 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
+| `BeatEffects` | `note-and-beat-semantics` | 13 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 255 |
-| `normalized` | 35 |
-| `omitted` | 105 |
+| `preserved` | 256 |
+| `normalized` | 36 |
+| `omitted` | 104 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -310,7 +311,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 125 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 177 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 126 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 196 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -318,7 +319,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 262 |
+| `schema` | 263 |
 
 ## Source dispatch inventory
 
@@ -330,7 +331,6 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
-| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 7 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifApplyBeatEffects:p.Strength` | `note-and-beat-semantics` | 2 | `beat-vibrato-preservation` | `delegated-to-audit` | The importer preserves each audited GPIF beat-vibrato strength. |
 | `gpifApplyBeatEffects:p.String` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The importer maps the two audited GPIF BarreString values to typed public shapes. |
 | `gpifAuditBarrePair:property.Name` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The audit verifies that the two beat-level barre properties occur as a pair. |
@@ -377,6 +377,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 20 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteOrnament:n.Ornament` | `note-and-beat-semantics` | 4 | `note-ornaments` | `unsupported-feature` | The four GPIF spellings retain exact variants. Absence maps to None; the source audit reports unknown strings before conversion. |
+| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 
 ## Behavioral contracts
 

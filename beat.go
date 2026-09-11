@@ -61,7 +61,12 @@ type BeatEffects struct {
 	TremoloPicking *TremoloPickingEffect
 	MixTableChange *MixTableChange
 	Stroke         BeatStroke
-	HasRasgueado   bool
+	// RasgueadoPattern is the named beat pattern. On imported beats, an edit to
+	// either this field or HasRasgueado controls export; incompatible edits to
+	// both favor the named pattern. A true unspecified boolean defaults to Ii
+	// with an explicit export normalization.
+	RasgueadoPattern RasgueadoPattern
+	HasRasgueado     bool
 	// PickStroke is the authored pick direction, independent from Stroke.
 	// Direct edits control GP8 output; BeatStrokeDirectionNone removes the mark.
 	PickStroke BeatStrokeDirection
@@ -86,6 +91,9 @@ type BeatEffects struct {
 	VibratoStrength BeatVibrato
 	Vibrato         bool
 
+	importedRasgueado       RasgueadoPattern
+	importedHasRasgueado    bool
+	hasImportedRasgueado    bool
 	importedVibratoStrength BeatVibrato
 	importedVibrato         bool
 	hasImportedVibrato      bool
@@ -249,6 +257,7 @@ func (s *Song) readBeat(c *cursor, voice *Voice, start int64, trackIndex int) (i
 		return 0, fmt.Errorf("readBeat notes at %d (flags=0x%02x): %w", c.pos, flags, err)
 	}
 	beat.promoteLegacyTremoloPicking()
+	beat.Effect.rememberRasgueado()
 	if dbg {
 		fmt.Printf("    after notes pos=%d noteCount=%d\n", c.pos, len(beat.Notes))
 	}

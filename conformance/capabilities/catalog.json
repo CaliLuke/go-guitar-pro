@@ -3385,9 +3385,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy boolean data exists. GPIF named finger patterns do not have a public representation. GP8 omits rasgueado.",
+      "finding": "GPIF import/model/GP8 export retain all eighteen named rasgueado finger patterns with separate enum and raw consumer evidence. Typed and legacy boolean edits reconcile without input mutation. Unspecified GP4/GP5 or programmatic boolean marks use the pinned Ii default with an explicit normalization; GP3 has no rasgueado flag. Unknown source and invalid public patterns are diagnosed. Fresh review and full integrated gates are pending.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.rasgueado",
@@ -3418,6 +3418,21 @@
           "kind": "probe",
           "reference": "testdata/gp7/rasgueado.gp:rasgueado",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].rasgueado. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceRasgueado",
+          "detail": "Every named pattern and None have distinct exact wire, Go and enum assertions."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabRasgueado",
+          "detail": "Pinned raw beat locations retain all named values; original rasgueado.gp source and export facts match."
+        },
+        {
+          "kind": "test",
+          "reference": "TestRasgueadoPublicEditAuthority",
+          "detail": "Public parsed edits, clearing, conflicts, boolean defaults and strict policy."
         }
       ]
     },

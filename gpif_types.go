@@ -523,6 +523,7 @@ type gpifProperties struct {
 }
 
 type gpifProperty struct {
+	Rasgueado *string    `xml:"Rasgueado"`
 	Fret      *int       `xml:"Fret"`
 	String    *float64   `xml:"String"`
 	Pitch     *gpifPitch `xml:"Pitch"`

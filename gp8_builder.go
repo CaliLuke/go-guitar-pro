@@ -835,8 +835,10 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 			builder.addReport("gp8.normalize.chord-length", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF derives chord diagram length from the number of string states")
 		}
 	}
-	if beat.Effect.HasRasgueado {
-		builder.addReport("gp8.omit.rasgueado", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit rasgueado")
+	if _, conflict, unspecified := beat.Effect.resolvedRasgueado(); conflict {
+		builder.addReport("gp8.normalize.rasgueado-authority", "rasgueado", ExportDispositionNormalized, location, "the named rasgueado pattern takes precedence after incompatible edits to both named and legacy views")
+	} else if unspecified {
+		builder.addReport("gp8.normalize.rasgueado-unspecified", "rasgueado", ExportDispositionNormalized, location, "the unspecified legacy rasgueado boolean uses the pinned binary consumer default Ii finger pattern")
 	}
 	if beat.Effect.SlapEffect != SlapEffectNone {
 		builder.addReport("gp8.omit.slap-effect", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit slap, pop, or tap effects")

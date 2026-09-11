@@ -925,7 +925,11 @@ func gpifAuditBeatProperty(context *parseContext, beatID, path string, property 
 			Reason: "the GPIF whammy extension marker has no documented playback or notation effect",
 		})
 	case "Rasgueado":
-		gpifAuditUnsupportedBeatProperty(context, diagnosticSource("GPIF.Beat.Property.Rasgueado", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beatID, propertyPath, property.Name)
+		if property.Rasgueado == nil {
+			gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Beat.Property.Rasgueado.MissingPattern", "note-and-beat-semantics", ParseDiagnosticInvalidData), false, propertyPath, beatID, "note-and-beat-semantics", "Rasgueado")
+		} else if gpifRasgueado(*property.Rasgueado) == RasgueadoNone {
+			gpifAuditUnsupportedBeatProperty(context, diagnosticSource("GPIF.Beat.Property.Rasgueado", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beatID, propertyPath, property.Name+"="+*property.Rasgueado)
+		}
 	default:
 		context.add(diagnosticSource("GPIF.Beat.Property.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
 			Kind: ParseDiagnosticUnknownSyntax, SourcePath: propertyPath, ObjectID: beatID,

@@ -64,16 +64,16 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Read and preserve per-staff part notation settings](work-items/notation-visibility.json) | implementation | 2 | todo | — | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) |
 | [Preserve turns and mordents through GPIF and GP8](work-items/ornaments.json) | implementation | 2 | in_progress | — | [#87](https://github.com/CaliLuke/go-guitar-pro/issues/87) |
 | [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | done | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
-| [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | todo | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
+| [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | in_progress | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
 | [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | done | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
 | [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | done | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
 | [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | done | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
 | [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | done | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
 | [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |
 | [Verify duration-percentage export losses against the pinned consumer](work-items/sound-duration.json) | implementation | 2 | done | — | [#102](https://github.com/CaliLuke/go-guitar-pro/issues/102) |
-| [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json) | implementation | 2 | todo | — | [#93](https://github.com/CaliLuke/go-guitar-pro/issues/93) |
+| [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json) | implementation | 2 | in_progress | — | [#93](https://github.com/CaliLuke/go-guitar-pro/issues/93) |
 | [Verify fixed GP8 trill speed and selective normalization policy](work-items/trill.json) | implementation | 2 | done | — | [#103](https://github.com/CaliLuke/go-guitar-pro/issues/103) |
-| [Preserve wah pedal state through GPIF and GP8](work-items/wah.json) | implementation | 2 | todo | — | [#94](https://github.com/CaliLuke/go-guitar-pro/issues/94) |
+| [Preserve wah pedal state through GPIF and GP8](work-items/wah.json) | implementation | 2 | in_progress | — | [#94](https://github.com/CaliLuke/go-guitar-pro/issues/94) |
 | [Preserve global extended barlines and bar-number policy](work-items/barlines.json) | implementation | 3 | todo | — | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) |
 | [Preserve independent chord display flags](work-items/chord-display.json) | implementation | 3 | todo | — | [#104](https://github.com/CaliLuke/go-guitar-pro/issues/104) |
 | [Exclude other-format common-time glyphs from the Guitar Pro gap inventory](work-items/common-time.json) | implementation | 3 | done | — | [#110](https://github.com/CaliLuke/go-guitar-pro/issues/110) |

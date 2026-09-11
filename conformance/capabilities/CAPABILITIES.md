@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 74 | 15 | 8 | 1 |
 | model | 73 | 16 | 8 | 1 |
-| export | 52 | 27 | 17 | 2 |
+| export | 52 | 28 | 16 | 2 |
 
 All three stages have a supported rating in 52 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -333,9 +333,9 @@ Bounded work: [Export existing pick stroke directions](https://github.com/CaliLu
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Legacy boolean data exists. GPIF named finger patterns do not have a public representation. GP8 omits rasgueado.
+GPIF import/model/GP8 export retain all eighteen named rasgueado finger patterns with separate enum and raw consumer evidence. Typed and legacy boolean edits reconcile without input mutation. Unspecified GP4/GP5 or programmatic boolean marks use the pinned Ii default with an explicit normalization; GP3 has no rasgueado flag. Unknown source and invalid public patterns are diagnosed. Fresh review and full integrated gates are pending.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

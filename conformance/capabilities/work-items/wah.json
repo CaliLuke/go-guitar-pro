@@ -5,8 +5,8 @@
   "title": "Preserve wah pedal state through GPIF and GP8",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex implement_preroll",
   "formats": [
     "gp3",
     "gp4",

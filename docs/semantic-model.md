@@ -563,6 +563,16 @@ GP8 preserves up, down, and absent marks independently from `BeatEffects.Stroke`
 Direct edits control output, and `BeatStrokeDirectionNone` removes the pick mark.
 Validation and export reject undefined directions without changing the score.
 
+`BeatEffects.RasgueadoPattern` retains each of the eighteen named GPIF finger patterns.
+`HasRasgueado` remains its legacy presence view. On an imported beat, editing
+only one view controls export, including clearing. Incompatible edits to both
+views favor the named pattern and report `gp8.normalize.rasgueado-authority`.
+A true boolean without a named pattern uses the pinned binary consumer's
+`Ii` default and reports `gp8.normalize.rasgueado-unspecified`.
+GP4 and GP5 source flags do not identify a finger pattern; GP3 has no such flag.
+Unknown GPIF patterns receive a diagnostic and never acquire a substitute gesture.
+Invalid public pattern values are rejected. Export does not mutate either view.
+
 `BeatEffects.Fade` preserves `None`, `FadeIn`, `FadeOut`, and `VolumeSwell`.
 Binary GP3 through GP5 presence maps to `FadeIn`. Those formats cannot author
 the other variants. For a programmatic score, a nonzero typed fade is
