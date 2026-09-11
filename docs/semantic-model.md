@@ -1027,6 +1027,8 @@ A non-nil track layout controls that track. Export copies score counts to an uns
 The pinned consumer uses track counts for one displayed track and score counts for multiple displayed tracks. It does not inherit missing track counts.
 Export never overwrites the authored arrays. Reimport exposes inherited counts as explicit track values.
 Within a layout, a zero default count means the source element is absent. A nil array is absent; an empty array remains explicit.
+If both fields are empty, export emits an empty array to retain the explicit scope and reports `gp8.normalize.empty-layout-array`.
+Reimport then exposes an empty array instead of nil. An explicit empty track scope continues to override score counts.
 Positive counts must fit a signed 32-bit integer. The consumer default for an absent count is three.
 `MeasureHeader.DisplayScale` and `Measure.DisplayScale` retain independent positive finite scales. Nil means absent and resolves to one.
 GPIF uses master XProperty 1124073984 and bar XProperty 1124139520. Both export as Double; bar import also accepts Float, with Double taking precedence.

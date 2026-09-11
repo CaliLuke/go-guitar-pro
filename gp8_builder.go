@@ -135,6 +135,7 @@ func (builder *gp8Builder) buildScore() gpifScore {
 		}
 		break
 	}
+	builder.reportEmptySystemLayout(builder.song.SystemLayout, ScoreLocation{})
 	defaultLayout, systemsLayout := gp8SystemLayout(builder.song.SystemLayout)
 	score := gpifScore{
 		SystemDefault: defaultLayout, SystemLayout: systemsLayout,
@@ -348,6 +349,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		layout = builder.song.SystemLayout
 		builder.addReport("gp8.normalize.track-layout-inheritance", "score-core", ExportDispositionNormalized, location, "an unspecified track layout uses the score layout; GPIF stores the inherited counts explicitly because the pinned consumer does not inherit them")
 	}
+	builder.reportEmptySystemLayout(layout, location)
 	defaultLayout, systemsLayout := gp8SystemLayout(layout)
 	result := gpifTrack{
 		SystemDefault: defaultLayout, SystemLayout: systemsLayout,

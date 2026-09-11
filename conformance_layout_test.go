@@ -35,10 +35,10 @@ func runConformanceSystemLayout(run *conformanceRun) {
 		if e != nil {
 			t.Fatal(e)
 		}
-		run.ClaimPrimary(claimSite("layout", "import", layoutCase, layoutValue), claimSite("layout", "model", layoutCase, layoutValue)).Preserved("Song.SystemLayout", p.SystemLayout, s.SystemLayout)
+		run.ClaimPrimary(claimSite("layout", "import", layoutCase, layoutValue), claimSite("layout", "model", layoutCase, layoutValue)).Normalized("Song.SystemLayout", p.SystemLayout, s.SystemLayout)
 		run.Normalized("Track.SystemLayout", p.Tracks[0].SystemLayout, want)
 		run.Preserved("SystemLayout.DefaultBarsPerSystem", p.SystemLayout.DefaultBarsPerSystem, 5)
-		run.Preserved("SystemLayout.BarsPerSystem", p.SystemLayout.BarsPerSystem, []int{2, 4})
+		run.Normalized("SystemLayout.BarsPerSystem", p.SystemLayout.BarsPerSystem, []int{2, 4})
 		run.Preserved("MeasureHeader.DisplayScale", p.MeasureHeaders[0].DisplayScale, &masterScale)
 		run.Preserved("Measure.DisplayScale", p.Tracks[0].Measures[0].DisplayScale, &barScale)
 		doc := conformanceWireDocument(t, data)
@@ -198,5 +198,28 @@ func TestLayoutLegacyTerminalRemainder(t *testing.T) {
 	source := parseTestFixture(t, "testdata/gp6/file-system-compressed.gpx")
 	if !reflect.DeepEqual(source.Tracks[0].SystemLayout.BarsPerSystem, []int{4, -3}) {
 		t.Fatal(source.Tracks[0].SystemLayout)
+	}
+}
+
+func TestAlphaTabEmptyTrackLayoutAuthority(t *testing.T) {
+	requireAlphaTabConformance(t)
+	s := semanticExportProbeSong(t)
+	s.SystemLayout = &SystemLayout{DefaultBarsPerSystem: 5, BarsPerSystem: []int{2, 4}}
+	s.Tracks[0].SystemLayout = &SystemLayout{}
+	first, _ := assertConsumerLossPolicy(t, s, []string{"gp8.normalize.empty-layout-array"})
+	parsed, e := Parse(first)
+	if e != nil {
+		t.Fatal(e)
+	}
+	second, e := Export(parsed, ExportFormatGP8)
+	if e != nil {
+		t.Fatal(e)
+	}
+	for _, data := range [][]byte{first, second} {
+		var facts layoutConsumerFacts
+		readAlphaTabOracleFacts(t, "--system-layout", writeConformanceFixture(t, data), &facts)
+		if facts.Default != 5 || !reflect.DeepEqual(facts.Systems, []int{2, 4}) || facts.Tracks[0].Default != 3 || len(facts.Tracks[0].Systems) != 0 {
+			t.Fatalf("explicit track scope lost: %#v", facts)
+		}
 	}
 }

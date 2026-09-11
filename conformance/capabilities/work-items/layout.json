@@ -93,7 +93,7 @@
     "gpif_types.go",
     "measure.go"
   ],
-  "resolution": "Implemented independent score and track system counts, exact master/bar scales and checked public/source values. Original GP7 and GP6 raw consumer assertions pass, including bounded unreachable GP6 terminal remainder. Missing track layout inherits score counts with a scoped normalization and no input mutation. Legacy line breaks/displayWidth remain excluded. Awaiting fresh independent review and integrated gates/probe.",
+  "resolution": "Implemented independent score and track system counts, exact master/bar scales and checked public/source values. Original GP7 and GP6 raw consumer assertions pass, including bounded unreachable GP6 terminal remainder. Missing track layout inherits score counts with a scoped normalization and no input mutation. Legacy line breaks/displayWidth remain excluded. Awaiting fresh independent review and integrated gates/probe. Fresh review caught an explicit empty track scope disappearing across exports. The fix emits an empty array with an exact normalization report and retains scope across both raw consumer exports.",
   "verification": [],
   "issue": {
     "number": 112,

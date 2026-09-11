@@ -305,8 +305,8 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 272 |
-| `normalized` | 43 |
+| `preserved` | 270 |
+| `normalized` | 45 |
 | `omitted` | 103 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -477,4 +477,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `staff-notation` | `score-core` | `TestConformanceStaffNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
 | `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |
-| `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. |
+| `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. An explicit empty scope emits an empty array with a precise normalization; two raw consumer exports retain track precedence. |

@@ -153,3 +153,61 @@ func TestPublicLayoutRejectsInvalidValues(t *testing.T) {
 		}
 	}
 }
+
+func TestPublicLayoutEmptyScopeRemainsExplicit(t *testing.T) {
+	for _, scope := range []string{"score", "track"} {
+		t.Run(scope, func(t *testing.T) {
+			s := layoutPublicSong(t)
+			s.SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 5, BarsPerSystem: []int{2, 4}}
+			for i := range s.Tracks {
+				s.Tracks[i].SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 2}
+			}
+			target := &s.SystemLayout
+			if scope == "track" {
+				target = &s.Tracks[0].SystemLayout
+			}
+			*target = &gp.SystemLayout{}
+			code := "gp8.normalize.empty-layout-array"
+			for _, allowed := range [][]string{nil, {"unrelated"}, {code}} {
+				data, report, err := gp.ExportWithReport(s, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
+				if len(report.Entries) != 1 || report.Entries[0].Code != code {
+					t.Fatal(report)
+				}
+				if (*target).BarsPerSystem != nil || (*target).DefaultBarsPerSystem != 0 {
+					t.Fatal("export mutated explicit scope")
+				}
+				if len(allowed) == 0 || allowed[0] != code {
+					if err == nil || len(data) != 0 {
+						t.Fatal("unallowed normalization accepted")
+					}
+					continue
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				p, err := gp.Parse(data)
+				if err != nil {
+					t.Fatal(err)
+				}
+				retained := p.SystemLayout
+				if scope == "track" {
+					retained = p.Tracks[0].SystemLayout
+				}
+				if retained == nil || retained.DefaultBarsPerSystem != 0 || retained.BarsPerSystem == nil || len(retained.BarsPerSystem) != 0 {
+					t.Fatalf("lost explicit scope: %#v", retained)
+				}
+				p.Version = gp.Version{}
+				for i := range p.Tracks {
+					p.Tracks[i].Settings = gp.TrackSettings{Notation: true, Tablature: true}
+				}
+				second, r, e := gp.ExportWithReport(p, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
+				if e != nil || len(r.Entries) != 0 {
+					t.Fatal(e, r)
+				}
+				if !reflect.DeepEqual(publicLayoutWire(t, data), publicLayoutWire(t, second)) {
+					t.Fatal("second export changed layout authority")
+				}
+			}
+		})
+	}
+}

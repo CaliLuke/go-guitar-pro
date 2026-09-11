@@ -20,7 +20,8 @@ type SystemLayout struct {
 	// BarsPerSystem contains counts per explicitly laid-out system. A terminal
 	// negative GP6 remainder is allowed only when it adjusts prior counts to the
 	// score length; all reachable system counts must be positive.
-	// Nil omits the source array; an empty non-nil slice emits an empty array.
+	// Nil omits the source array unless both fields are empty. Export then emits
+	// an empty array with a normalization report to retain the explicit scope.
 	BarsPerSystem []int
 }
 
@@ -73,7 +74,7 @@ func gp8SystemLayout(layout *SystemLayout) (defaultValue, array *string) {
 		value := strconv.Itoa(layout.DefaultBarsPerSystem)
 		defaultValue = &value
 	}
-	if layout.BarsPerSystem != nil {
+	if layout.BarsPerSystem != nil || layout.DefaultBarsPerSystem == 0 {
 		values := make([]string, len(layout.BarsPerSystem))
 		for i, v := range layout.BarsPerSystem {
 			values[i] = strconv.Itoa(v)
@@ -160,4 +161,10 @@ func validSystemCounts(values []int, measureCount int) bool {
 		total += int64(value)
 	}
 	return true
+}
+
+func (builder *gp8Builder) reportEmptySystemLayout(layout *SystemLayout, location ScoreLocation) {
+	if layout != nil && layout.DefaultBarsPerSystem == 0 && layout.BarsPerSystem == nil {
+		builder.addReport("gp8.normalize.empty-layout-array", "score-core", ExportDispositionNormalized, location, "an explicit empty layout requires an empty GPIF array to retain its scope; reimport exposes an empty array instead of nil")
+	}
 }
