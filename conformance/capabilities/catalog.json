@@ -1696,8 +1696,8 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Selected program, channels, volume, balance and mute/solo are retained. Unreferenced legacy channel-table program sentinels remain authored data but do not invalidate export; a selected invalid program remains precisely rejected. Conflicting ports and mute+solo require target normalization.",
-      "acceptance": "Reference-aware program validation is covered with actual GP3 and GP4 sentinel fixtures, selected negative and overflowing values, an out-of-range channel reference, nonmutation, GP8 reimport, and pinned AlphaTab program 73 evidence. Remaining port and playback-state variants stay separately tracked.",
+      "finding": "Selected program, channels, volume, balance and mute/solo are retained. Unreferenced legacy channel-table program sentinels remain authored data but do not invalidate export; a selected invalid program remains precisely rejected. Conflicting ports and mute+solo require target normalization. Independent regression tests establish both target limits: primary-port authority and mute precedence. Each conflict has one scoped report, and selective strict allowances leave other conflicts blocked.",
+      "acceptance": "Reference-aware MIDI program validation and the two routing target limits have focused public, exact-wire, and independent consumer evidence. GP8 cannot preserve distinct primary/effect ports or simultaneous mute and solo; export remains partial.",
       "upstream": [
         "Track.playbackInfo",
         "PlaybackInformation.*"
@@ -1737,6 +1737,31 @@
           "kind": "oracle",
           "reference": "TestAlphaTabPreservesSelectedMIDIProgram",
           "detail": "Pinned AlphaTab verifies that valid selected program 73 survives GP8 export."
+        },
+        {
+          "kind": "test",
+          "reference": "TestMIDIRoutingTargetLimits",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMIDIRoutingTargetLimits",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabMIDIRoutingTargetLimits",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestMIDIRoutingReportsOwningTrack",
+          "detail": "Both conflict reports target track 1, leaving track 0 untouched."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabMIDIRoutingPortControl",
+          "detail": "Raw consumer positive control retains nonzero port 1 with local channels 2 and 3."
         }
       ]
     },
@@ -1918,7 +1943,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85.",
+      "finding": "Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "AutomationType.Instrument"
@@ -1953,6 +1978,36 @@
           "kind": "test",
           "reference": "TestAlphaTabSoundPreroll",
           "detail": "Pinned consumer retains source and exported -0.125 and exact instrument/bank event order."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSoundSelectionIdentityAndEdits",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSoundSelectionIdentity",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSoundSelectionIdentity",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSoundOpeningAuthority",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSoundOpeningAuthority",
+          "detail": "Focused public, runtime matrix, or pinned-consumer evidence for the bounded routing/sound-selection contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSoundOpeningSelectionKeepsBaseProgram",
+          "detail": "Public three-way channel/base/opening conflict asserts strict policy, exact Go result and nonmutation."
         }
       ]
     },

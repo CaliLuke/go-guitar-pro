@@ -187,6 +187,7 @@ type SoundAutomation struct {
 	// Direct edits are authoritative; export preserves the value and slice order.
 	Position float64
 	// Sound is a zero-based index in Track.Sounds.
+	// Remap this index when reordering definitions to preserve its selection.
 	Sound int
 	// Linear means the sound change is applied linearly.
 	Linear bool

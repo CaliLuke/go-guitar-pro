@@ -307,7 +307,11 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
+<<<<<<< HEAD
 The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 102 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+=======
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 105 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+>>>>>>> 6f400f2 (test: verify MIDI routing limits and sound selection)
 
 ## GPIF wire inventory
 

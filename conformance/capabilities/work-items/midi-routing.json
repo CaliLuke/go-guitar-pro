@@ -5,8 +5,8 @@
   "title": "Add independent regression coverage for conflicting MIDI routes and playback states",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -150,6 +150,31 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "test",
+      "reference": "TestMIDIRoutingTargetLimits",
+      "detail": "Focused acceptance regression; exact integrated-commit verification follows fresh review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMIDIRoutingTargetLimits",
+      "detail": "Focused acceptance regression; exact integrated-commit verification follows fresh review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabMIDIRoutingTargetLimits",
+      "detail": "Focused acceptance regression; exact integrated-commit verification follows fresh review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestMIDIRoutingReportsOwningTrack",
+      "detail": "Additional public ownership/authority or non-default raw consumer control."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabMIDIRoutingPortControl",
+      "detail": "Additional public ownership/authority or non-default raw consumer control."
     }
   ],
   "shared_files": [
@@ -159,7 +184,7 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": null,
+  "resolution": "The existing primary-port authority and mute precedence are confirmed GP8 target limits. Separate and combined conflict scores now assert exact wire Port=0, PrimaryChannel=1, SecondaryChannel=2 and PlaybackState=Mute, raw pinned playbackInfo fields, one scoped normalization per conflict, every selective strict allowance, preservation controls, and nonmutation. No routing fields or precedence changes were added. Export remains partial. Awaiting fresh review and integrated full-gate verification; the issue remains open.",
   "verification": [],
   "issue": {
     "number": 66,

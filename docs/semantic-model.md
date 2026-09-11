@@ -142,6 +142,24 @@ MIDI omission. It also reports each legacy master or track RSE record as one
 scoped omission. The RSE tests assert every descendant covered by those parent
 reports.
 
+`Track.Sounds` retains each authored definition independently of its MIDI
+program. The GPIF reference key contains the path, name, and role. Distinct
+definitions can share one program. `SoundAutomation.Sound` is an index into
+that slice. When you reorder definitions, remap the indices to preserve each
+selection.
+
+The first definition supplies the base program and bank; the channel supplies
+them only when no definitions exist. An explicit event at bar zero and position
+zero supplies the opening selection. It does not rewrite the first definition
+or channel mirror. Multiple opening events retain their authored order. A
+conflicting channel mirror receives `gp8.normalize.sound-authority`.
+
+Pinned AlphaTab exposes the base program and instrument events but does not
+retain a public named sound table. Consumer evidence covers event count, order,
+position, program, text, and interpolation. Exact wire references and Go
+reimport establish the named identities. The existing Hidden consumer
+limitation remains explicit.
+
 `SoundAutomation.Position` supports finite values from 0 through 1 in every
 bar. Bar zero also supports opening preroll from -0.125 up to zero. This
 bounded contract follows the GP7 grace fixture; it does not define a universal
@@ -208,9 +226,14 @@ A score must have a valid opening tempo from `Tempo`, `InitialTempo`, or an
 automation at bar zero and position zero. A later automation does not supply
 the missing opening value.
 
-GP8 has one playback-state value and one MIDI port per track. Export reports a
-normalization when mute and solo are both true or when the effect channel uses
-a different port. It also reports a default binding for an unbound track.
+GP8 has one playback-state value and one MIDI port per track. The primary
+channel supplies the port; each channel keeps its local number modulo 16.
+Differing ports receive `gp8.normalize.effect-channel-port`. Mute takes precedence
+when mute and solo are both true, with `gp8.normalize.playback-state`.
+Strict preservation rejects each conflict unless its exact code is allowed.
+These decisions do not mutate the authored channel numbers or playback flags.
+
+Export also reports a default binding for an unbound track.
 String numbers are canonical positions in tuning order. Export reports any
 authored number that differs from that position. The ZIP reader restores track
 visibility from `LayoutConfiguration` when that record is present.

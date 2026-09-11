@@ -817,6 +817,18 @@ export function loadLegatoFacts(fixture) {
   return facts;
 }
 
+// Preserve raw playback fields; the broad semantic projection omits these limits.
+export function loadPlaybackRoutingFacts(fixture) {
+  return loadScore(fixture).tracks.map(track => ({
+    track: track.index,
+    port: track.playbackInfo.port,
+    primaryChannel: track.playbackInfo.primaryChannel,
+    secondaryChannel: track.playbackInfo.secondaryChannel,
+    isMute: track.playbackInfo.isMute,
+    isSolo: track.playbackInfo.isSolo
+  }));
+}
+
 export function loadMidiBankFacts(fixture) {
   const score = loadScore(fixture);
   return score.tracks.map(track => {
@@ -1211,6 +1223,10 @@ function main() {
   }
   if (args[0] === '--legato' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadLegatoFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--playback-routing' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadPlaybackRoutingFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--midi-bank' && args.length === 2) {

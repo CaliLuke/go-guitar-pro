@@ -863,9 +863,9 @@ Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Selected program, channels, volume, balance and mute/solo are retained. Unreferenced legacy channel-table program sentinels remain authored data but do not invalidate export; a selected invalid program remains precisely rejected. Conflicting ports and mute+solo require target normalization.
+Selected program, channels, volume, balance and mute/solo are retained. Unreferenced legacy channel-table program sentinels remain authored data but do not invalidate export; a selected invalid program remains precisely rejected. Conflicting ports and mute+solo require target normalization. Independent regression tests establish both target limits: primary-port authority and mute precedence. Each conflict has one scoped report, and selective strict allowances leave other conflicts blocked.
 
-Completion criterion: Reference-aware program validation is covered with actual GP3 and GP4 sentinel fixtures, selected negative and overflowing values, an out-of-range channel reference, nonmutation, GP8 reimport, and pinned AlphaTab program 73 evidence. Remaining port and playback-state variants stay separately tracked.
+Completion criterion: Reference-aware MIDI program validation and the two routing target limits have focused public, exact-wire, and independent consumer evidence. GP8 cannot preserve distinct primary/effect ports or simultaneous mute and solo; export remains partial.
 
 Bounded work: [Exclude unused legacy MIDI program slots from export rejection](https://github.com/CaliLuke/go-guitar-pro/issues/63); [Add independent regression coverage for conflicting MIDI routes and playback states](https://github.com/CaliLuke/go-guitar-pro/issues/66).
 
@@ -887,7 +887,7 @@ Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85.
+Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
