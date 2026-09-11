@@ -331,7 +331,7 @@
         {
           "kind": "implementation-audit",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5626717898",
-          "detail": "At 8835659, score-tick offsets 1/2 and 3/4 collapse to one hold at 0; offsets 122 and 123 collapse to one hold at 122. Both strict exports return no diagnostics. See IMPLEMENTATION-AUDIT.md and audit-repros/fermata-consumer-repro.go.txt."
+          "detail": "At 8835659, score-tick offsets 1/2 and 3/4 collapse to one hold at 0; offsets 122 and 123 collapse to one hold at 122. Both strict exports return no diagnostics. Runnable reproductions and remediation criteria are in the linked ticket comment and fermata work-item audit evidence."
         }
       ]
     },

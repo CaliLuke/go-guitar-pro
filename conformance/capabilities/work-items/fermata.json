@@ -87,14 +87,44 @@
       "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
       "decision": "follow-up-required",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5626717898",
-      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
       "detail": "Strict export returns no diagnostics for fractional and whole-tick offset pairs that pinned AlphaTab collapses into one fermata. Exact GPIF/model offsets survive; the unreported consumer limit remains unresolved.",
       "commands": [
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS",
         "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^TestAudit(Fractional|Integer)FermataConsumer$' .: FAIL as expected, both pairs collapse from two holds to one"
       ],
-      "reproduction": "conformance/capabilities/audit-repros/fermata-consumer-repro.go.txt"
+      "reproduction": {
+        "instructions": "In a disposable checkout of audited commit 88356593a4ebb9b2f9859200a713838780d566b3 with pinned conformance dependencies, save source_go as progress_audit_test.go in the repository root. Run the command below, then remove the temporary test.",
+        "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^TestAudit(Fractional|Integer)FermataConsumer$' .",
+        "expected_result": "Both tests fail: lost a fermata: got 1, want 2. Both strict exports return bytes with zero diagnostic entries.",
+        "cases": [
+          {
+            "authored_tick_offsets": [
+              "1/2",
+              "3/4"
+            ],
+            "gpif_offsets": [
+              "1/1920",
+              "1/1280"
+            ],
+            "consumer_offset": 0,
+            "consumer_hold_count": 1
+          },
+          {
+            "authored_tick_offsets": [
+              "122",
+              "123"
+            ],
+            "gpif_offsets": [
+              "61/480",
+              "41/320"
+            ],
+            "consumer_offset": 122,
+            "consumer_hold_count": 1
+          }
+        ],
+        "source_go": "package goguitarpro\n\nimport (\n\t\"testing\"\n)\n\nfunc TestAuditFractionalFermataConsumer(t *testing.T) {\n\tsong := semanticValidPitchedGP8Song(t)\n\tsong.Tracks[0].Settings.Notation = true\n\tsong.MeasureHeaders[0].Fermatas = []Fermata{\n\t\t{Offset: mustScoreTime(t, 1, 2), Type: FermataTypeShort, Length: 0.25},\n\t\t{Offset: mustScoreTime(t, 3, 4), Type: FermataTypeLong, Length: 1.5},\n\t}\n\tdata, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Logf(\"Strict export: %d bytes, diagnostics=%#v\", len(data), report.Entries)\n\tvar facts []conformanceAlphaTabFermataBar\n\treadAlphaTabOracleFacts(t, \"--fermatas\", writeConformanceFixture(t, data), &facts)\n\tt.Logf(\"Authored fermatas: %#v\", facts[0].Authored)\n\tif len(facts[0].Authored) != 2 {\n\t\tt.Errorf(\"lost a fermata: got %d, want 2\", len(facts[0].Authored))\n\t}\n}\n\nfunc TestAuditIntegerFermataConsumer(t *testing.T) {\n\tsong := semanticValidPitchedGP8Song(t)\n\tsong.Tracks[0].Settings.Notation = true\n\tsong.MeasureHeaders[0].Fermatas = []Fermata{\n\t\t{Offset: mustScoreTime(t, 122, 1), Type: FermataTypeShort, Length: 0.25},\n\t\t{Offset: mustScoreTime(t, 123, 1), Type: FermataTypeLong, Length: 1.5},\n\t}\n\tdata, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Logf(\"Strict export: %d bytes, diagnostics=%#v\", len(data), report.Entries)\n\tt.Logf(\"Wire fermatas: %#v\", conformanceFermataWire(t, data)[0])\n\tvar facts []conformanceAlphaTabFermataBar\n\treadAlphaTabOracleFacts(t, \"--fermatas\", writeConformanceFixture(t, data), &facts)\n\tt.Logf(\"Authored fermatas: %#v\", facts[0].Authored)\n\tif len(facts[0].Authored) != 2 {\n\t\tt.Errorf(\"lost a fermata: got %d, want 2\", len(facts[0].Authored))\n\t}\n}\n"
+      }
     }
   ],
   "shared_files": [

@@ -51,7 +51,6 @@
       "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
       "decision": "no-blocker-found",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/46#issuecomment-5626717746",
-      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
       "detail": "Compared the documentation changes with the active importer/writer and diagnostic inventory. Typed accent and vibrato authority, independent tapping flags, missing-payload diagnostics, HopoDestination loss, and beat-vibrato loss remain consistent. This documentation review does not extend any supported format/stage.",
       "commands": [
         "prek run --all-files: PASS on clean audited commit",

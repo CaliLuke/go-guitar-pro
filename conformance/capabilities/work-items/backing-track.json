@@ -68,7 +68,6 @@
       "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
       "decision": "no-blocker-found",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/42#issuecomment-5626717180",
-      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
       "detail": "Checked enabled Local audio metadata and exact asset bytes, independent consumer loading, signed-32-bit frame boundaries, missing/empty/reserved assets, and failure without overwriting an existing file. Playback and the separate archive interoperability backlog (#68) remain outside this slice.",
       "commands": [
         "prek run --all-files: PASS on clean audited commit",

@@ -75,7 +75,6 @@
       "commit": "88356593a4ebb9b2f9859200a713838780d566b3",
       "decision": "no-blocker-found",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/48#issuecomment-5626718065",
-      "report": "conformance/capabilities/IMPLEMENTATION-AUDIT.md",
       "detail": "Checked GPIF presence semantics, retained numeric meter and exact timing across empty/short/long voices, flag edits, adjacent bars, and pinned-consumer output. No performance-timing claim is made.",
       "commands": [
         "prek run --all-files: PASS on clean audited commit",
