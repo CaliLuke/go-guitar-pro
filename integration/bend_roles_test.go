@@ -113,3 +113,32 @@ func TestGP8BendRoleBoundaries(t *testing.T) {
 		}
 	}
 }
+
+func TestGP8BendTerminalHoldDoesNotInventControlRoles(t *testing.T) {
+	for _, test := range []struct{ points, want []gp.BendPoint }{
+		{[]gp.BendPoint{{}, {Position: 3, Value: 1}, {Position: 12, Value: 1}}, []gp.BendPoint{{}, {Position: 3, Value: 1}}},
+		{[]gp.BendPoint{{}, {Position: 3, Value: 1}}, []gp.BendPoint{{}, {Position: 3, Value: 1}}},
+		{[]gp.BendPoint{{}, {Position: 3, Value: 1}, {Position: 12, Value: 1}, {Position: 3, Value: 1}}, []gp.BendPoint{{}, {Position: 3, Value: 1}, {Position: 12, Value: 1}, {Position: 3, Value: 1}}},
+	} {
+		song := dynamicPolicySong(t, 47, false)
+		beat := &song.Tracks[0].Measures[0].Voices[0].Beats[1]
+		beat.Notes[1].Velocity = 47
+		beat.Notes[0].Effect.Bend = &gp.BendEffect{Points: test.points}
+		before := append([]gp.BendPoint(nil), test.points...)
+		data, _, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		parsed, err := gp.Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := parsed.Tracks[0].Measures[0].Voices[0].Beats[1].Notes[0].Effect.Bend.Points
+		if !reflect.DeepEqual(got, test.want) {
+			t.Fatalf("authored%#v reparsed%#v want%#v", test.points, got, test.want)
+		}
+		if !reflect.DeepEqual(test.points, before) {
+			t.Fatal("export mutated authored curve")
+		}
+	}
+}

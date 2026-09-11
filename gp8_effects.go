@@ -104,7 +104,9 @@ func gp8ConvertBend(bend *BendEffect) gp8BendConversion {
 		if points[1].Value == points[2].Value {
 			// A destination before the end denotes a bend followed by a hold.
 			destination = cloneBendPoint(points[1])
-			middle2 = points[2]
+			// The final hold is implicit after the destination. Do not create a
+			// nonmonotonic role tuple from the redundant terminal hold point.
+			middle2 = cloneBendPoint(points[1])
 		} else {
 			middle2 = cloneBendPoint(points[1])
 		}

@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"regexp"
 	"slices"
 	"strings"
 	"testing"
@@ -25,6 +26,7 @@ func TestConformanceBendControlRoles(t *testing.T) {
 	runConformanceBendControlRoles(newConformanceRun(t))
 }
 func runConformanceBendControlRoles(run *conformanceRun) {
+	runConformanceBendTerminalHold(run)
 	t := run.t
 	for _, values := range [][4]int8{{0, 2, 2, 0}, {4, 4, 4, 4}, {0, 0, 0, 0}} {
 		song := conformanceRoleSong(t, values)
@@ -216,5 +218,53 @@ func TestAlphaTabBendControlRoles(t *testing.T) {
 		if !reflect.DeepEqual(source[si].Bend, want) || !reflect.DeepEqual(output[oi].Bend, want) {
 			t.Fatalf("canon retained controls source %#v output %#v", source[si], output[oi])
 		}
+	}
+}
+
+func runConformanceBendTerminalHold(run *conformanceRun) {
+	song := conformanceCurveSong(run.t)
+	conformanceCurveSetCurve(song, "bend", &BendEffect{Points: []BendPoint{{}, {Position: 3, Value: 1}, {Position: 12, Value: 1}}})
+	data, report := assertConsumerLossPolicy(run.t, song, []string{"gp8.normalize.bend-curve"})
+	run.Report("M12-BEND-CONTROL-ROLES", reportCodes(report), []string{"gp8.normalize.bend-curve"})
+	run.Wire("gpifProperty.Float", conformanceWireRoleOffsets(readCurveWire(run.t, data).bend), []string{"0", "25", "25", "25"})
+	parsed, err := Parse(data)
+	if err != nil {
+		run.t.Fatal(err)
+	}
+	run.Normalized("BendEffect.Points", firstConformanceBend(run.t, parsed).Points, []BendPoint{{}, {Position: 3, Value: 1}})
+}
+
+func TestAlphaTabBendTerminalHold(t *testing.T) {
+	requireAlphaTabConformance(t)
+	song := conformanceCurveSong(t)
+	conformanceCurveSetCurve(song, "bend", &BendEffect{Points: []BendPoint{{}, {Position: 3, Value: 1}, {Position: 12, Value: 1}}})
+	output, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wire := readCurveWire(t, output).bend
+	if got := conformanceWireRoleOffsets(wire); !slices.Equal(got, []string{"0", "25", "25", "25"}) || wire["BendMiddleValue"] != "25.000000" || wire["BendDestinationValue"] != "25.000000" {
+		t.Fatal("invented nonmonotonic hold controls", wire)
+	}
+	// Compare the prior encoding independently. Its redundant late middle point
+	// has the same final consumer gesture, but now correctly imports as four roles.
+	prior := rewriteConformanceGPIF(t, output, func(source string) string {
+		return regexp.MustCompile(`(<Property name="BendMiddleOffset2">\s*<Float>)25(</Float>)`).ReplaceAllString(source, "${1}100${2}")
+	})
+	for _, data := range [][]byte{output, prior} {
+		var facts []curveGraceFact
+		readAlphaTabOracleFacts(t, "--curve-grace", writeConformanceFixture(t, data), &facts)
+		if len(facts) != 1 || facts[0].Track != 0 || facts[0].Bar != 0 || facts[0].Beat != 0 || facts[0].Note != 0 || !reflect.DeepEqual(facts[0].Bend, []retainedBendControl{{0, 0}, {15, 1}}) {
+			t.Fatalf("consumer endpoint hold=%#v", facts)
+		}
+	}
+	// The old wire form remains a valid authored nonmonotonic tuple. The fix
+	// changes only the writer's synthetic hold encoding, not import semantics.
+	parsed, err := Parse(prior)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := conformanceRoleOffsets(firstConformanceBend(t, parsed).Points); !slices.Equal(got, []float64{0, 25, 100, 25}) {
+		t.Fatal("authored role tuple changed", got)
 	}
 }

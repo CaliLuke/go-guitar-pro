@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "3cb1c6f258648a4d5e2b6039ea66287427cd7198508f80975137f5a198c563a5",
+    "obligationDigest": "0b82e75e242a69acaff03670cff4de05a60dc3847a675848b8db2128677819b8",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -283,9 +283,10 @@
           "named origin/middle1/middle2/destination offsets 0,50,50,35",
           "nonzero and zero equal-height hold controls and hump controls",
           "exact original canon note177",
-          "bounded role tuple and arbitrary unordered rejection"
+          "bounded role tuple and arbitrary unordered rejection",
+          "terminal hold encodes redundant middle at early destination without inventing nonmonotonic roles"
         ],
-        "oracle": "Exact source GPIF, public validation and strict export, exact output GPIF and Go reparse, pinned AlphaTab retained controls.",
+        "oracle": "Exact source GPIF, public validation and strict export, exact output GPIF and Go reparse, pinned AlphaTab retained controls. TestAlphaTabBendTerminalHold compares the corrected hold encoding and prior redundant control against the same raw consumer endpoints.",
         "limitations": [
           "Only four role controls with equal middle values, ordered origin/middles, and destination within origin..middle2 qualify.",
           "Pinned AlphaTab removes middle hold controls; source and export retain the same consumer endpoints.",

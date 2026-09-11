@@ -649,7 +649,9 @@ gesture. Export reports normalization when that interpretation removes an
 interior hold or changes a noncollinear intermediate rate. The report is based
 on the interpreted target curve, not only the emitted XML coordinates.
 
-Standard bends use three or four wire control points to identify one gesture.
+Standard bends use three or four wire control points to identify one gesture. A final
+hold uses its early destination for redundant middle controls; it does not
+create a nonmonotonic tuple from the terminal hold endpoint.
 Import converts these controls to the canonical public gesture. It does not
 change a custom curve or remove a point that has vibrato. A missing GPIF bend
 destination offset means the end of the note. A middle value without middle
