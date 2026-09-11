@@ -48,7 +48,7 @@ func runConformanceStringNumberDisplay(run *conformanceRun) {
 		run.Preserved("Note.ShowStringNumber", note.ShowStringNumber, enable != nil)
 	}
 	context := &parseContext{format: "GP8"}
-	gpifAuditNoteProperty(context, "n0", "/GPIF/Notes/Note", gpifProperty{Name: "ShowStringNumber", Enable: stringPointer("")}, nil)
+	gpifAuditNoteProperty(context, "n0", "/GPIF/Notes/Note", gpifProperty{Name: "ShowStringNumber", Enable: stringPointer("")})
 	run.Dispatch("gpifAuditNoteProperty:property.Name", len(context.diagnostics), 0)
 	beats[0].Notes[0].ShowStringNumber = false
 	if !beats[2].Notes[0].ShowStringNumber {

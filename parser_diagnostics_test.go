@@ -66,7 +66,7 @@ func TestParseWithOptionsReportsGPIFContentLoss(t *testing.T) {
 		{
 			name: "unsupported beat wah",
 			mutate: func(gpif string) string {
-				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Wah>Open</Wah>")
+				return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", "<Wah>UnknownPedal</Wah>")
 			},
 			kind: ParseDiagnosticUnsupportedFeature, feature: "note-and-beat-semantics", pathContains: "Wah",
 		},
@@ -307,7 +307,7 @@ func TestStrictParseAcceptsPitchedGP8Export(t *testing.T) {
 		track.Measures[measureIndex].Voices = []Voice{{Beats: []Beat{{
 			Duration: defaultDuration(),
 			Status:   BeatStatusNormal,
-			Notes:    []Note{{Value: 5, String: 1, Kind: NoteTypeNormal, Velocity: Forte}},
+			Notes:    []Note{{Value: 5, String: 1, Kind: NoteTypeNormal, Velocity: Forte, AccidentalMode: NoteAccidentalNatural}},
 		}}}}
 	}
 	data, err := Export(song, ExportFormatGP8)
@@ -321,7 +321,7 @@ func TestStrictParseAcceptsPitchedGP8Export(t *testing.T) {
 		return strings.Replace(gpif, "<Step>G</Step>", "<Step>A</Step>", 1)
 	})
 	if _, err := ParseWithOptions(contradictory, ParseOptions{Strict: true}); err == nil {
-		t.Fatal("strict parse accepted a concert pitch that contradicts the MIDI value")
+		t.Fatal("strict parse accepted an authored pitch that contradicts the numeric value")
 	}
 }
 

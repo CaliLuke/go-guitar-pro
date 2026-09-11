@@ -9,6 +9,19 @@ const declared = new Set(ledger.semanticContracts.behaviorContracts.map(contract
 
 const mutations = [
   {
+    id: 'slash-notation-import-drop', contract: 'slash-notation', category: 'import',
+    file: 'gpif_effects.go',
+    before: '\tbeat.Slashed = b.Slashed != nil\n',
+    after: '\tbeat.Slashed = false\n',
+    test: '^TestConformanceSlashNotation$', want: 'Beat.Slashed'
+  },
+  {
+    id: 'staff-numbered-notation-import-drop', contract: 'staff-notation', category: 'import',
+    file: 'part_configuration.go',
+    before: 'Numbered: flag&8 != 0}', after: 'Numbered: false}',
+    test: '^TestConformanceStaffNotation$', want: 'exact configuration flags='
+  },
+  {
     id: 'track-short-name-wire-drop',
     contract: 'section-track-names',
     category: 'serialization',
@@ -543,7 +556,7 @@ const mutations = [
     contract: 'whammy-owner-context',
     category: 'ownership',
     file: 'gpif_effects.go',
-    before: '\treturn &BendEffect{Points: canonicalizeStandardWhammyPoints(points)}\n',
+    before: '\treturn &BendEffect{Points: canonicalizeImportedWhammyPoints(points)}\n',
     after: '\treturn &BendEffect{Points: canonicalizeStandardBendPoints(points)}\n',
     test: '^TestConformanceWhammyContexts$',
     want: 'dispatch:gpifBeatWhammyProperties:property.Name'
@@ -574,8 +587,8 @@ const mutations = [
     contract: 'whammy-target-interpretation',
     category: 'loss-report',
     file: 'gp8_effects.go',
-    before: '\t\tnormalized: !slices.Equal(simplifyBendPoints(canonicalizeStandardWhammyPoints(simplifyBendPoints(encoded))), points),\n',
-    after: '\t\tnormalized: !slices.Equal(simplifyBendPoints(encoded), points),\n',
+    before: '\t\tnormalized: !sameBendPoints(simplifyCurvePoints(canonicalizeStandardWhammyPoints(encoded), true), simplifyCurvePoints(points, true)),\n',
+    after: '\t\tnormalized: !sameBendPoints(simplifyCurvePoints(encoded, true), simplifyCurvePoints(points, true)),\n',
     test: '^TestGP8WhammyMiddleHoldReportsInterpretedLoss$',
     want: 'want target GP8 and codes [gp8.normalize.whammy-curve]'
   },
