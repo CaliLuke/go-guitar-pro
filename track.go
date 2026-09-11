@@ -53,7 +53,10 @@ type Staff struct {
 type Track struct {
 	// SystemLayout preserves authored system counts. Nil leaves this scope unspecified.
 	SystemLayout *SystemLayout
-	Name         string
+	// MultiRest requests combined rests when this track is viewed alone. Nil
+	// uses false, independently of ScoreStyle.MultiRest. Measures remain intact.
+	MultiRest *bool
+	Name      string
 	// ShortName is the independent authored abbreviation. Nil means absent.
 	// A non-nil empty string preserves an explicitly empty short name.
 	ShortName *string

@@ -257,7 +257,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Fermata` | `fermata` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The fermata preserves one authored master-bar offset, symbol type, and finite length. |
 | `Marker` | `score-core` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | Letter and Text are independent authored section fields. Title is the legacy caption; a post-parse title edit overrides text and preserves the letter. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
-| `Track` | `staff-ownership` | 23 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
+| `Track` | `staff-ownership` | 24 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
 | `Staff` | `staff-ownership` | 8 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
@@ -300,14 +300,14 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
 | `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
-| `ScoreStyle` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
+| `ScoreStyle` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
 | `preserved` | 272 |
-| `normalized` | 46 |
+| `normalized` | 48 |
 | `omitted` | 103 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -317,7 +317,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 136 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 137 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
 
 ## Wire inventory
 
@@ -325,7 +325,7 @@ The schema inventory records every decoded GPIF field and each explicitly tagged
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 275 |
+| `schema` | 277 |
 
 ## Source dispatch inventory
 
@@ -481,3 +481,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |
 | `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. An explicit empty scope emits an empty array with a precise normalization; two raw consumer exports retain track precedence. |
 | `score-barlines` | `score-core` | `TestConformanceScoreBarlines` | `TestAlphaTabScoreBarlines` | no | Global flags and numbering values retain exact typed records, defaults and other consumer styles; malformed sources and undefined authored enums are rejected. |
+| `multi-rest` | `score-core` | `TestConformanceMultiRest` | `TestAlphaTabMultiRest` | no | Separate global and individual view preferences preserve false and true; absence defaults to false without changing measures or notation. |

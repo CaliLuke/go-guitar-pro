@@ -1455,6 +1455,7 @@ function main() {
     process.stdout.write(`${JSON.stringify(loadStaffNotationFacts(args[1]), null, 2)}\n`);
     return;
   }
+  if (args[0] === '--multi-rest' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadMultiRestFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--score-style' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadScoreStyleFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--string-number-display' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadStringNumberFacts(args[1]), null, 2)}\n`);
@@ -1561,4 +1562,9 @@ export function loadScoreStyleFacts(fixture) {
  const other={};for(const key of ['hideDynamics','bracketExtendMode','useSystemSignSeparator','globalDisplayTuning','globalDisplayChordDiagramsOnTop','globalDisplayChordDiagramsInScore','singleTrackTrackNamePolicy','multiTrackTrackNamePolicy','firstSystemTrackNameMode','otherSystemsTrackNameMode','firstSystemTrackNameOrientation','otherSystemsTrackNameOrientation'])other[key]=s[key];
  const headers=Array.from(score.style?.headerAndFooter??[]).map(([key,value])=>({element:alphaTab.model.ScoreSubElement[key],template:value.template,visible:value.isVisible,align:value.textAlign}));
  return {extended:s.extendBarLines,numbers:alphaTab.model.BarNumberDisplay[s.barNumberDisplay],other,headers};
+}
+
+export function loadMultiRestFacts(fixture) {
+ const score=loadScore(fixture);
+ return {global:score.stylesheet.multiTrackMultiBarRest,tracks:score.stylesheet.perTrackMultiBarRest===null?null:Array.from(score.stylesheet.perTrackMultiBarRest),measureCounts:score.tracks.map(t=>t.staves.map(s=>s.bars.length)),notation:loadStaffNotationFacts(fixture)};
 }

@@ -5342,11 +5342,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "No public score/track multirest display preferences corresponding to the AlphaTab stylesheet.",
+      "finding": "ScoreStyle.MultiRest controls the multi-track view and Track.MultiRest controls each individual view independently. PartConfiguration preserves explicit false/true and the default-false meaning of absent requests without changing measures. The pinned consumer exposes a global boolean and the enabled-track set; empty enabled sets remain null.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "RenderStylesheet.multiTrackMultiBarRest",
@@ -5362,6 +5362,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/grand-staff.gp:multi-rest",
           "detail": "Reproduced at stylesheet.perTrackMultiBarRest. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceMultiRest",
+          "detail": "Exact view wire bytes and all 27 absent/false/true combinations with independent mutable public preferences."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabMultiRest",
+          "detail": "Raw source and edited final consumer preferences, unchanged notation and notes, and measure counts."
         }
       ]
     },

@@ -63,13 +63,23 @@
       "kind": "probe",
       "reference": "testdata/gp7/grand-staff.gp:multi-rest",
       "detail": "Reproduced at stylesheet.perTrackMultiBarRest. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/multi-rest.json",
+      "detail": "Hash-bound source, actual strict exports, exact view bytes and final pinned consumer preferences with notation/measure facts."
     }
   ],
   "shared_files": [
     "track.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented independent optional global and single-track multi-rest preferences through their actual PartConfiguration mapping. False/true values preserve exact preferences; absent requests default to false and materialize explicit view bytes. Measures and notation remain unchanged. Awaiting different-agent final-commit acceptance review and root combined gates.",
+  "verification": [
+    "Focused public tests, all 27 raw consumer combinations and pinned GP7 grand-staff source pass.",
+    "Four-measure source retains two rest measures and surrounding notes at every staff.",
+    "Semantic inventory adds two fields and two binary wire leaves; no enum or dispatch is introduced.",
+    "Corpus accounting refreshed. Full conformance, capability probe and prek remain assigned to root."
+  ],
   "issue": {
     "number": 105,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/105",

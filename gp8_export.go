@@ -177,13 +177,17 @@ func buildGP8PartConfiguration(song *Song) []byte {
 	writeBigEndianInt32(&output, len(song.Tracks)+1)
 
 	// The first view contains every track. Each following view contains one track.
-	output.WriteByte(0)
+	var global *bool
+	if song.Style != nil {
+		global = song.Style.MultiRest
+	}
+	writeGP8OptionalBool(&output, global)
 	writeBigEndianInt32(&output, len(song.Tracks))
 	for index := range song.Tracks {
 		output.WriteByte(gp8TrackViewFlags(&song.Tracks[index]))
 	}
 	for index := range song.Tracks {
-		output.WriteByte(0)
+		writeGP8OptionalBool(&output, song.Tracks[index].MultiRest)
 		writeBigEndianInt32(&output, 1)
 		output.WriteByte(gp8TrackViewFlags(&song.Tracks[index]))
 	}
@@ -444,4 +448,12 @@ func validateGP8ExportOptions(options GP8ExportOptions) error {
 		}
 	}
 	return nil
+}
+
+func writeGP8OptionalBool(output *bytes.Buffer, value *bool) {
+	if value != nil && *value {
+		output.WriteByte(1)
+	} else {
+		output.WriteByte(0)
+	}
 }

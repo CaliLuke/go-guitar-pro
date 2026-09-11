@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 77 | 17 | 3 | 1 |
-| model | 76 | 18 | 3 | 1 |
-| export | 54 | 36 | 7 | 1 |
+| import | 78 | 17 | 2 | 1 |
+| model | 77 | 18 | 2 | 1 |
+| export | 55 | 36 | 6 | 1 |
 
-All three stages have a supported rating in 54 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 55 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -577,9 +577,9 @@ Bounded work: [Preserve authored system layouts and bar display scales](https://
 
 Notation. Priority 3. Formats: gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-No public score/track multirest display preferences corresponding to the AlphaTab stylesheet.
+ScoreStyle.MultiRest controls the multi-track view and Track.MultiRest controls each individual view independently. PartConfiguration preserves explicit false/true and the default-false meaning of absent requests without changing measures. The pinned consumer exposes a global boolean and the enabled-track set; empty enabled sets remain null.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

@@ -1043,7 +1043,8 @@ settings from GP6 through GP8 BinaryStylesheet records. Their values apply to th
 whole score, independently of measure barline fields. Direct public edits control
 export. A nil leaf removes that key and lets the consumer use its default:
 false for extended barlines and AllBars for numbering. A nil `Song.Style` exports
-an empty stylesheet; reimport creates an empty style container.
+an empty stylesheet; reimport creates a style container. PartConfiguration may
+then populate independent view preferences.
 
 The checked binary codec retains other validated records, including their keys,
 types, payload bytes and order. This transport does not establish public semantic
@@ -1053,3 +1054,14 @@ owned keys use the last source value and export as one record. The codec checks
 all eight value types, UTF-8 strings, lengths, boolean bytes and supported policy
 values. It rejects a stylesheet larger than one MiB. Authored undefined numbering
 policies are validation errors and cannot be allowed as export losses.
+
+`ScoreStyle.MultiRest` applies to the multi-track view. `Track.MultiRest` applies
+when that track is viewed alone. PartConfiguration stores these preferences in
+separate ordered score views. Direct edits control their corresponding view.
+There is no inheritance between the global and single-track settings. Parsed
+values use independent pointers. Missing views leave the corresponding field nil.
+Nil requests default to false on export; the generated views contain explicit
+false bytes. The pinned consumer retains the global boolean and a set of enabled
+single-track indices. It leaves that set null when no track is enabled. This
+absence/default normalization does not discard an authored true or false value.
+Changing these requests does not remove measures or change their order.

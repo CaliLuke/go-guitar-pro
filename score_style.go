@@ -16,8 +16,11 @@ const (
 
 // ScoreStyle owns authored score-wide display requests. Nil field pointers mean
 // no authored setting. Direct edits control output; clearing a field removes its
-// corresponding stylesheet record. Other imported records remain unchanged.
+// corresponding configuration record. Other imported records remain unchanged.
 type ScoreStyle struct {
+	// MultiRest requests combined rests in the multi-track score view. Nil uses
+	// false. This preference does not control any single-track view.
+	MultiRest *bool
 	// ExtendedBarLines controls extended barlines across the score.
 	ExtendedBarLines *bool
 	// BarNumbers controls score-wide numbering independently from individual bars.

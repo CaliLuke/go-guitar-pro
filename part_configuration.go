@@ -64,12 +64,29 @@ func (settings StaffNotationSettings) flags() byte {
 	return flags
 }
 
+type partConfigurationView struct {
+	multiRest bool   `wire:"multi-rest"`
+	flags     []byte `wire:"track-flags"`
+}
+
 func applyPartConfiguration(song *Song, data []byte) error {
-	flags, err := readPartConfiguration(data)
+	views, err := readPartConfiguration(data)
 	if err != nil {
 		return fmt.Errorf("reading PartConfiguration: %w", err)
 	}
-	for index, flag := range flags {
+	if len(views) == 0 {
+		return nil
+	}
+	if song.Style == nil {
+		song.Style = &ScoreStyle{}
+	}
+	multiRest := views[0].multiRest
+	song.Style.MultiRest = &multiRest
+	for index := 1; index < len(views) && index <= len(song.Tracks); index++ {
+		value := views[index].multiRest
+		song.Tracks[index-1].MultiRest = &value
+	}
+	for index, flag := range views[0].flags {
 		if index >= len(song.Tracks) {
 			break
 		}
@@ -88,7 +105,7 @@ func applyPartConfiguration(song *Song, data []byte) error {
 	return nil
 }
 
-func readPartConfiguration(data []byte) ([]byte, error) {
+func readPartConfiguration(data []byte) ([]partConfigurationView, error) {
 	if len(data) > maxPartConfigurationSize {
 		return nil, fmt.Errorf("size %d exceeds %d-byte limit", len(data), maxPartConfigurationSize)
 	}
@@ -108,12 +125,16 @@ func readPartConfiguration(data []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	var first []byte
+	var configurations []partConfigurationView
 	for view := 0; view < views; view++ {
 		if position >= len(data) {
 			return nil, fmt.Errorf("score view %d is truncated at offset %d", view, position)
 		}
-		position++ // Multi-rest preferences are separate from notation selection.
+		if data[position] > 1 {
+			return nil, fmt.Errorf("score view %d has invalid multi-rest byte %d", view, data[position])
+		}
+		multiRest := data[position] == 1
+		position++
 		count, readErr := readCount(fmt.Sprintf("score view %d track group count", view))
 		if readErr != nil {
 			return nil, readErr
@@ -126,15 +147,13 @@ func readPartConfiguration(data []byte) ([]byte, error) {
 				return nil, fmt.Errorf("score view %d track group %d has unsupported notation flags %#x", view, group, flags)
 			}
 		}
-		if view == 0 {
-			first = append([]byte(nil), data[position:position+count]...)
-		}
+		configurations = append(configurations, partConfigurationView{multiRest: multiRest, flags: append([]byte(nil), data[position:position+count]...)})
 		position += count
 	}
 	if len(data)-position != 4 {
 		return nil, fmt.Errorf("active view requires 4 bytes at offset %d, found %d", position, len(data)-position)
 	}
-	return first, nil
+	return configurations, nil
 }
 
 func (builder *gp8Builder) reportStaffNotation(trackIndex int) {

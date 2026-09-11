@@ -3495,6 +3495,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/multi-rest-preferences.gp",
+      "sha256": "9acd43294e7591d0bf333e2be6562483f82cc5744ae0b15c5983df3fd50e162f",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original four-measure two-track regression: notes, two whole-rest measures, notes, with global true and conflicting individual false/true view preferences.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/multibar-rest.gp",
       "sha256": "e42fffdba3e9d7b174d72be896e4a858ce4355b1ee6bb5b8b047031224853904",
       "format": "gp8",

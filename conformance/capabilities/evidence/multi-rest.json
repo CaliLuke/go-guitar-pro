@@ -1,0 +1,3091 @@
+{
+  "schema_version": 1,
+  "issue": 105,
+  "status": "implemented-awaiting-independent-review",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "scope": "PartConfiguration stores independent multi-track and individual-track view preferences. Nil requests use false on export, which materializes explicit false bytes. The consumer keeps a global boolean and an enabled-track set, null when none are enabled.",
+  "provenance": "Original two-track GPIF has four distinct ordered measure occurrences: notes, whole rest, whole rest, notes. Each has unique bar, voice and beat definitions. The original pinned GP7 grand-staff source has nine measures per staff.",
+  "cleanup": "Strict artifact export clears unrelated version provenance, track display bits, pan/volume automations, UseRse and authored empty short names. No notation, notes, measure ordering or style preferences are cleared.",
+  "sources": [
+    {
+      "path": "testdata/gp7/grand-staff.gp",
+      "sha256": "782f6be7954a8c3a5f054af884c2cdf39480c4bb073d2b93487b2a961b04a370",
+      "consumer": {
+        "global": false,
+        "tracks": [
+          0
+        ],
+        "measureCounts": [
+          [
+            9,
+            9
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 12,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 10,
+                        "MIDI": 74
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 5,
+                        "MIDI": 60
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 4,
+                        "MIDI": 68
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 9,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 12,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 10,
+                        "MIDI": 74
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 5,
+                        "MIDI": 60
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 7,
+                        "MIDI": 62
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 1,
+                        "fret": 0,
+                        "MIDI": 40
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 1,
+                        "MIDI": 56
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 1,
+                        "fret": 0,
+                        "MIDI": 40
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "0000000200000000010101000000010100000001"
+    },
+    {
+      "path": "testdata/gp8/multi-rest-preferences.gp",
+      "sha256": "9acd43294e7591d0bf333e2be6562483f82cc5744ae0b15c5983df3fd50e162f",
+      "consumer": {
+        "global": true,
+        "tracks": [
+          1
+        ],
+        "measureCounts": [
+          [
+            4,
+            4
+          ],
+          [
+            4
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "000000030100000002010e00000000010101000000010e00000001"
+    }
+  ],
+  "scenarios": [
+    {
+      "path": "conformance/capabilities/evidence/multi-rest/grand-staff.gp-source-export.gp",
+      "sha256": "12bf6f9208a3d86a192a1bd5c6f8a87e7678954623b88e6051e7533e51aad99e",
+      "go": {
+        "global": false,
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "source": "testdata/gp7/grand-staff.gp",
+        "tracks": [
+          true
+        ]
+      },
+      "consumer": {
+        "global": false,
+        "tracks": [
+          0
+        ],
+        "measureCounts": [
+          [
+            9,
+            9
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 12,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 10,
+                        "MIDI": 74
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 5,
+                        "MIDI": 60
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 4,
+                        "MIDI": 68
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 9,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 11,
+                        "MIDI": 75
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 12,
+                        "MIDI": 76
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 12,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 10,
+                        "MIDI": 74
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 5,
+                        "MIDI": 60
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 5,
+                        "fret": 5,
+                        "MIDI": 64
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 7,
+                        "MIDI": 62
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 8,
+                        "MIDI": 72
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 7,
+                        "MIDI": 71
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 6,
+                        "fret": 5,
+                        "MIDI": 69
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 1,
+                        "fret": 0,
+                        "MIDI": 40
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 1,
+                        "MIDI": 56
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 1,
+                        "fret": 0,
+                        "MIDI": 40
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 2,
+                        "fret": 0,
+                        "MIDI": 45
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 3,
+                        "fret": 2,
+                        "MIDI": 52
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 2,
+                        "MIDI": 57
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "0000000200000000010101000000010100000001"
+    },
+    {
+      "path": "conformance/capabilities/evidence/multi-rest/multi-rest-preferences.gp-absent.gp",
+      "sha256": "4fd97193c3d9be51ffece243a168f91dcd27fcda8a2e4f586dfab64bad7e24cc",
+      "go": {
+        "global": null,
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "source": "testdata/gp8/multi-rest-preferences.gp",
+        "tracks": [
+          null,
+          null
+        ]
+      },
+      "consumer": {
+        "global": false,
+        "tracks": null,
+        "measureCounts": [
+          [
+            4,
+            4
+          ],
+          [
+            4
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001"
+    },
+    {
+      "path": "conformance/capabilities/evidence/multi-rest/multi-rest-preferences.gp-edited.gp",
+      "sha256": "1d86128db5b597aa949f29e046ac1135ac024abeb048fe5af32a2b91e7b5bc2a",
+      "go": {
+        "global": false,
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "source": "testdata/gp8/multi-rest-preferences.gp",
+        "tracks": [
+          true,
+          false
+        ]
+      },
+      "consumer": {
+        "global": false,
+        "tracks": [
+          0
+        ],
+        "measureCounts": [
+          [
+            4,
+            4
+          ],
+          [
+            4
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "000000030000000002010e01000000010100000000010e00000001"
+    },
+    {
+      "path": "conformance/capabilities/evidence/multi-rest/multi-rest-preferences.gp-source-export.gp",
+      "sha256": "c9b606caedb988bb26a6a860023b3b125e9e175e9f0626878071d83f3d32fa90",
+      "go": {
+        "global": true,
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "source": "testdata/gp8/multi-rest-preferences.gp",
+        "tracks": [
+          false,
+          true
+        ]
+      },
+      "consumer": {
+        "global": true,
+        "tracks": [
+          1
+        ],
+        "measureCounts": [
+          [
+            4,
+            4
+          ],
+          [
+            4
+          ]
+        ],
+        "notation": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "part_configuration_hex": "000000030100000002010e00000000010101000000010e00000001"
+    }
+  ],
+  "checks": [
+    "All 27 absent/false/true combinations pass exact raw consumer preferences, notation, note values and measure counts.",
+    "Explicit pointer values are independent; export does not mutate the source.",
+    "Missing views leave public preferences absent; export defaults them to false.",
+    "Invalid boolean byte 2 is rejected at each view through Parse and ParseWithOptions.",
+    "The former reader overlay fails the non-default public regression."
+  ]
+}

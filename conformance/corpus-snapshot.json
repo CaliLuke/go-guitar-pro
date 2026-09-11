@@ -15893,6 +15893,14 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/multi-rest-preferences.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/multibar-rest.gp",
       "features": [
         "rhythm"
