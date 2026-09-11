@@ -110,11 +110,30 @@ func gp8FermataOffset(offset ScoreTime) string {
 	return ratio.Num().String() + "/" + ratio.Denom().String()
 }
 
-type gp8GraceGroup struct {
+type graceBeatKey struct {
+	sequence uint8
 	duration Duration
 	velocity int16
 	onBeat   bool
-	notes    []Note
+}
+
+type gp8GraceGroup struct {
+	graceBeatKey
+	timer *BeatTimer
+	notes []Note
+}
+
+func graceBeatIdentity(grace *GraceEffect) graceBeatKey {
+	duration := defaultDuration()
+	duration.Value = uint16(grace.Duration)
+	if _, supported := gp8NoteValue(duration.Value); !supported {
+		duration.Value = uint16(DurationThirtySecond)
+	}
+	velocity := grace.Velocity
+	if velocity == 0 {
+		velocity = DefaultVelocity
+	}
+	return graceBeatKey{sequence: grace.Sequence, duration: duration, velocity: velocity, onBeat: grace.IsOnBeat}
 }
 
 func (builder *gp8Builder) addGraceBeats(trackIndex int, staffStrings []GuitarString, beat *Beat) ([]string, error) {
@@ -154,24 +173,16 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 			if grace.Sequence != sequence {
 				continue
 			}
-			duration := defaultDuration()
-			duration.Value = uint16(grace.Duration)
-			if _, supported := gp8NoteValue(duration.Value); !supported {
-				duration.Value = uint16(DurationThirtySecond)
-			}
-			velocity := grace.Velocity
-			if velocity == 0 {
-				velocity = DefaultVelocity
-			}
+			key := graceBeatIdentity(grace)
 			groupIndex := -1
 			for index := range groups {
-				if groups[index].duration == duration && groups[index].velocity == velocity && groups[index].onBeat == grace.IsOnBeat {
+				if groups[index].graceBeatKey == key {
 					groupIndex = index
 					break
 				}
 			}
 			if groupIndex < 0 {
-				groups = append(groups, gp8GraceGroup{duration: duration, velocity: velocity, onBeat: grace.IsOnBeat})
+				groups = append(groups, gp8GraceGroup{graceBeatKey: key, timer: grace.Timer})
 				groupIndex = len(groups) - 1
 			}
 			graceNote := *note
@@ -188,7 +199,7 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 					graceNote.Value = int16(*grace.ExactFret)
 				}
 			}
-			graceNote.Velocity = velocity
+			graceNote.Velocity = key.velocity
 			graceNote.Kind = NoteTypeNormal
 			graceNote.Effect = defaultNoteEffect()
 			if grace.IsDead {
@@ -219,6 +230,7 @@ func (builder *gp8Builder) addGraceGroups(trackIndex int, staffStrings []GuitarS
 			graceKind = "OnBeat"
 		}
 		result := gpifBeat{
+			Timer:      gp8BeatTimer(group.timer),
 			ID:         id,
 			Rhythm:     gpifRhythmRef{Ref: rhythmID},
 			Dynamic:    gp8VelocityToDynamic(group.velocity),

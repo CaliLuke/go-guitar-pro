@@ -3429,6 +3429,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/grace-timer.gp",
+      "sha256": "e3f17b92481cacb9c81bf516c2be47fb38d868171022740d215f23caee605d6c",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Focused source covers ordered matched grace chords with absent, derived, zero, nonzero and maximum exact timers; exact timer consumer evidence is in TestAlphaTabGraceTimers.",
+      "features": [
+        "rhythm"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/header-footer.gp",
       "sha256": "86a24c8025295267a713511e4fbd348ee71ae00addaf097d9955bb90cc4bf812",
       "format": "gp8",

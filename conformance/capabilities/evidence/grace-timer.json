@@ -1,0 +1,1922 @@
+{
+  "schema_version": 1,
+  "issue": 108,
+  "status": "grace-extension-awaiting-fresh-independent-review",
+  "base_commit": "27346ac",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "source_provenance": "Synthetic GP8 source has five ordered grace chords and one owner per bar. Timer states are absent, derived -1, zero, 99, 9007199254740991, and owner 25. Two bars reference the same beat definitions through distinct voices. Partial source removes one owner chord note, preserving both source grace notes.",
+  "artifacts": [
+    {
+      "path": "testdata/gp8/grace-timer.gp",
+      "sha256": "e3f17b92481cacb9c81bf516c2be47fb38d868171022740d215f23caee605d6c",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/grace-timer/export-1.gp",
+      "sha256": "01f97b391b50e7107a0877bedcbea82b405746a0eed5c1dd74adc953e50be3d8",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/grace-timer/export-2.gp",
+      "sha256": "01f97b391b50e7107a0877bedcbea82b405746a0eed5c1dd74adc953e50be3d8",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "midi": 64
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/grace-timer/partial-source.gp",
+      "sha256": "42f01a0dd0f81abd53972782fd64ae481b455c9a9da6a128d3b0b698ba8de250",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/grace-timer/partial-export-1.gp",
+      "sha256": "7bc69d6b9c94a4bd7b405380ae179b2103b8af1cf58424e9552817ad1a21074a",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/grace-timer/partial-export-2.gp",
+      "sha256": "7bc69d6b9c94a4bd7b405380ae179b2103b8af1cf58424e9552817ad1a21074a",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 1,
+          "show": true,
+          "milliseconds": null,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 2,
+          "show": true,
+          "milliseconds": 0,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 3,
+          "show": true,
+          "milliseconds": 99,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 4,
+          "show": true,
+          "milliseconds": 9007199254740991,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 3,
+              "midi": 67
+            },
+            {
+              "string": 2,
+              "fret": 3,
+              "midi": 62
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 0,
+          "beat": 5,
+          "show": true,
+          "milliseconds": 25,
+          "notes": [
+            {
+              "string": 1,
+              "fret": 5,
+              "midi": 69
+            }
+          ]
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 1,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 2,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 1,
+          "voice": 3,
+          "beat": 0,
+          "show": false,
+          "milliseconds": null,
+          "notes": []
+        }
+      ]
+    }
+  ],
+  "acceptance": [
+    "Ordinary Beat.Timer and attached GraceEffect.Timer preserve absent, derived and explicit safe-integer values at exact consumer beat addresses.",
+    "Independent parsed occurrence storage supports public edits and clears; contradictory requests in one grace chord reject before export.",
+    "Timed partial-match groups retain all original standalone grace beats, preventing duplicate marks or changed source note membership."
+  ],
+  "limits": [
+    "Milliseconds must lie in 0..9007199254740991. A derived request has a nil milliseconds pointer and emits -1.",
+    "No playback timer is calculated. Consumer values are read after import, before MIDI generation.",
+    "Notes grouped by sequence, effective duration, effective velocity and on-beat placement must request equal timer states by value."
+  ],
+  "tests": [
+    "TestGraceTimerPublicSource",
+    "TestGraceTimerPublicInvalidAndConflictingEdits",
+    "TestConformanceGraceTimers",
+    "TestAlphaTabGraceTimers",
+    "TestGraceTimerSourceValidationAndContexts",
+    "TestGraceTimerPartialMatchRetainsSourceBeats",
+    "TestGraceTimerIndependentVoiceScopes",
+    "TestGraceTimerIndependentStaffScopes"
+  ]
+}

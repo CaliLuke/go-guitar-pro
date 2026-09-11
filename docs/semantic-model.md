@@ -1002,10 +1002,22 @@ Empty and -1 source values request derivation. Other negative or malformed value
 Permissive import retains a derived request for invalid text; strict import rejects it.
 Invalid authored millisecond values produce `score.beat.timer` and hard export rejection.
 
-GPIF grace beats become `GraceEffect` records, which have no beat-timer destination.
-A timer on such a source beat produces `GPIF.Beat.Timer.GraceUnsupported`.
-Strict source import rejects this loss; permissive import retains the grace note without its timer.
-The raw grace source and exported artifact record that remaining limit under #108.
+`GraceEffect.Timer` owns the timer request on an attached grace beat.
+It uses the same absence, derived, explicit-value, and numeric-boundary rules as `Beat.Timer`.
+Each parsed grace occurrence owns independent timer storage, including notes in one source grace chord.
+A direct edit controls the timer on the generated grace beat. Clearing all chord members removes that mark.
+Finalization does not calculate or replace timers.
+
+Notes in one grace group must request equal timer states by value.
+The group uses the existing sequence, duration, velocity, and on-beat placement.
+Unequal requests produce `score.grace.timer-conflict` at the conflicting owner note, with the grace index in the reason.
+Invalid grace milliseconds produce `score.grace.timer` at the owner note and cannot pass through an export allowance.
+Groups in separate beats, voices, or staves remain independent.
+
+If a timed pending group contains an unmatched note, the importer retains the complete ordered group as standalone grace beats.
+This representation preserves each source chord and its single timer without splitting or reordering notes.
+These beats retain their timer in `Beat.Timer` and have zero ordinary duration during finalization.
+Groups without timers keep the existing attachment behavior.
 
 `Note.AccidentalMode` owns an authored accidental choice independently of numeric
 pitch. Its zero value, `NoteAccidentalDefault`, leaves spelling to the consumer.

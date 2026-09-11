@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "issue": 108,
-  "status": "bounded-implementation-with-grace-residual-awaiting-independent-review",
+  "status": "historical-ordinary-timer-evidence-grace-residual-superseded",
   "oracle": {
     "schemaVersion": 1,
     "package": "@coderline/alphatab",
@@ -1910,5 +1910,6 @@
     "TestBeatTimerInvalidSource",
     "TestAlphaTabBeatTimer",
     "TestBeatTimerGraceSourceLimit"
-  ]
+  ],
+  "superseded_by": "conformance/capabilities/evidence/grace-timer.json"
 }

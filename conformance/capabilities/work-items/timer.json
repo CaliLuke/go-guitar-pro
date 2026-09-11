@@ -6,7 +6,7 @@
   "kind": "implementation",
   "priority": 3,
   "status": "in_progress",
-  "owner": "Codex",
+  "owner": "agent:grace-timer",
   "formats": [
     "gp6",
     "gp7",
@@ -81,26 +81,68 @@
       "detail": "Exact ordinary-beat source and edited output values before MIDI generation."
     },
     {
-      "kind": "test",
-      "reference": "TestBeatTimerGraceSourceLimit",
-      "detail": "Reproducible retaining-source grace timer99 with exact diagnostic and target omission."
-    },
-    {
       "kind": "source",
       "reference": "conformance/capabilities/evidence/beat-timer.json",
       "detail": "Hash-bound source, actual output artifacts, raw consumer values and residual acceptance."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerPublicSource",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerPublicInvalidAndConflictingEdits",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceGraceTimers",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabGraceTimers",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerSourceValidationAndContexts",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerPartialMatchRetainsSourceBeats",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerIndependentVoiceScopes",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGraceTimerIndependentStaffScopes",
+      "detail": "Exact grace timer retention, public edits, numeric/conflict diagnostics, independent occurrences and pinned consumer addresses."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/grace-timer.json",
+      "detail": "Original matched and partial-match source with two exported artifacts each, hashes and all raw consumer facts."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "Implemented Beat.Timer as the sole authority for absence, requested derived time and an explicit integer millisecond value including zero. Ordinary-beat source and public edits retain exact final pinned consumer states and independent repeated occurrences. Invalid source and authored values are diagnosed. Grace-beat conversion has no timer destination and now reports that exact source loss; broader any-beat acceptance remains residual under #108. Awaiting fresh different-agent review and integrated gates/probe; not marked solved.",
+  "resolution": "Beat.Timer and GraceEffect.Timer retain absent, derived and explicitly authored safe-integer milliseconds. Matched grace chords use independent per-note requests that must agree by value. Timed partially matched groups retain complete ordered source grace beats to avoid duplicate marks and changed chord membership. Public edits, clears, numeric invalids, chord conflicts and exact pinned consumer output are covered. Fresh independent review and serial integrated gates/probe remain pending; no issue state or solved label changed.",
   "verification": [
     "Public valid source regression fails against the previous effect reader and passes with three distinct timer states.",
     "Exact raw source/output facts retain all 14 beat addresses, notes, derived/null flags and explicit safe-integer boundary values; original GP7 timer fixture also passes.",
     "Negative, fractional, nonnumeric and overflowing source values fail strict parsing; invalid public values hard reject even with an allowance.",
-    "Grace timer 99 retaining-source versus omitted-target artifacts reproduce the remaining source limitation with a strict parse diagnostic.",
-    "Focused checks only; root owns full conformance, capability probe and prek."
+    "Focused checks only; root owns full conformance, capability probe and prek.",
+    "New TestGraceTimerPublicSource failed before implementation with 4 grace-source unsupported diagnostics and passes after retention.",
+    "ALPHATAB_CONFORMANCE=1 go test ./... -run \"(Grace|BeatTimer|PitchSpelling|Hammer)\" -count=1: PASS.",
+    "Semantic matrix covers 452/452 public fields, including the new GraceEffect.Timer; existing two stale private model contracts from base are left for root integration."
   ],
   "issue": {
     "number": 108,

@@ -429,6 +429,7 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.Timer != nil && beat.Timer.Milliseconds != nil && (*beat.Timer.Milliseconds < 0 || *beat.Timer.Milliseconds > maxBeatTimerMilliseconds) {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.timer", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("timer milliseconds %d is outside 0..%d", *beat.Timer.Milliseconds, maxBeatTimerMilliseconds)})
 			}
+			validateGraceTimers(beat, location, diagnostics)
 			if beat.Effect.Golpe > GolpeTypeFinger {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.golpe", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat golpe %d is not defined", beat.Effect.Golpe)})
 			}

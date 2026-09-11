@@ -303,9 +303,6 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 			gpifAuditBeatProperty(context, beat.ID, path, property)
 		}
 		if beat.Timer != nil {
-			if beat.GraceNotes == "OnBeat" || beat.GraceNotes == "BeforeBeat" {
-				context.add(diagnosticSource("GPIF.Beat.Timer.GraceUnsupported", "grace-relationships", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{SourcePath: path + "/Timer", ObjectID: beat.ID, Location: ParseLocation{BeatID: beat.ID}, Reason: "the grace-note model has no beat-timer destination"})
-			}
 			if _, err := parseGPIFBeatTimer(*beat.Timer); err != nil {
 				context.add(diagnosticSource("GPIF.Beat.Timer.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData), ParseDiagnostic{SourcePath: path + "/Timer", ObjectID: beat.ID, Location: ParseLocation{BeatID: beat.ID}, Reason: err.Error()})
 			}

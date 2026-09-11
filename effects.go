@@ -49,6 +49,10 @@ type BendEffect struct {
 
 // GraceEffect represents a grace note effect.
 type GraceEffect struct {
+	// Timer owns the timer mark on this grace beat. Nil means no timer.
+	// Notes in one grace chord must request equal timer states. Each parsed
+	// occurrence owns independent storage; edit all chord members together.
+	Timer *BeatTimer
 	// Duration is a note-value denominator such as 16 or 32.
 	Duration uint8
 	Fret     int8

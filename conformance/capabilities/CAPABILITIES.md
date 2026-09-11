@@ -639,7 +639,7 @@ Notation. Priority 3. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Beat.Timer distinguishes absent, requested derived and explicit integer milliseconds, including zero, through exact pinned consumption. Occurrence-owned pointers support independent edits; invalid values are diagnosed. GPIF grace beats collapse into GraceEffect records without a timer destination, so that exact source case is reported and remains residual #108 acceptance.
+Beat.Timer and GraceEffect.Timer preserve absent, derived and explicit safe-integer milliseconds at ordinary and grace beats. Occurrences own their pointers. Contradictory grace-chord requests and invalid values reject explicitly. Timed partial-match groups retain complete source beats instead of duplicating the timer. Exact raw source/output facts pass across two exports; fresh independent review and integrated gates remain pending.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

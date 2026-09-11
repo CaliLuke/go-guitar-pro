@@ -5165,7 +5165,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Beat.Timer distinguishes absent, requested derived and explicit integer milliseconds, including zero, through exact pinned consumption. Occurrence-owned pointers support independent edits; invalid values are diagnosed. GPIF grace beats collapse into GraceEffect records without a timer destination, so that exact source case is reported and remains residual #108 acceptance.",
+      "finding": "Beat.Timer and GraceEffect.Timer preserve absent, derived and explicit safe-integer milliseconds at ordinary and grace beats. Occurrences own their pointers. Contradictory grace-chord requests and invalid values reject explicitly. Timed partial-match groups retain complete source beats instead of duplicating the timer. Exact raw source/output facts pass across two exports; fresh independent review and integrated gates remain pending.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.timer",
@@ -5189,8 +5189,13 @@
         },
         {
           "kind": "test",
-          "reference": "TestBeatTimerGraceSourceLimit",
-          "detail": "Scoped grace source rejection and raw consumer proof that grace timer 99 is lost through the current grace representation."
+          "reference": "TestAlphaTabGraceTimers",
+          "detail": "All ordered grace timer states, note tuples, owner values, public edits and repeated occurrences preserve exact raw consumer addresses."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGraceTimerPartialMatchRetainsSourceBeats",
+          "detail": "Timed partial-match source groups retain complete beat membership and timer count across two exports."
         }
       ]
     },

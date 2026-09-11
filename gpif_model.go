@@ -17,6 +17,15 @@ type gpifPendingGrace struct {
 }
 
 func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion bool, context *parseContext) []Beat {
+	if gpifRetainTimedGraceGroup(target, pending, percussion) {
+		beats := make([]Beat, len(pending))
+		for i, grace := range pending {
+			beats[i] = grace.beat
+			beats[i].isGrace = true
+			beats[i].graceOnBeat = grace.onBeat
+		}
+		return beats
+	}
 	var orphans []Beat
 	for pendingIndex, pendingBeat := range pending {
 		orphan := pendingBeat.beat
@@ -26,6 +35,7 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 		for noteIndex := range pendingBeat.beat.Notes {
 			graceNote := pendingBeat.beat.Notes[noteIndex]
 			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat, pendingIndex)
+			effect.Timer = cloneBeatTimer(pendingBeat.beat.Timer)
 			targetIndex := gpifGraceTarget(target, &graceNote, percussion)
 			if targetIndex >= 0 {
 				noteID := ""
@@ -48,6 +58,22 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 		}
 	}
 	return orphans
+}
+
+// Keep a timed source group intact when attachment would split a chord or
+// move an orphan ahead of earlier attached graces. A timer belongs to its beat.
+func gpifRetainTimedGraceGroup(target *Beat, pending []gpifPendingGrace, percussion bool) bool {
+	hasTimer, hasOrphan := false, false
+	for _, grace := range pending {
+		hasTimer = hasTimer || grace.beat.Timer != nil
+		hasOrphan = hasOrphan || len(grace.beat.Notes) == 0
+		for i := range grace.beat.Notes {
+			if gpifGraceTarget(target, &grace.beat.Notes[i], percussion) < 0 {
+				hasOrphan = true
+			}
+		}
+	}
+	return hasTimer && hasOrphan
 }
 
 func gpifGraceTarget(target *Beat, grace *Note, percussion bool) int {

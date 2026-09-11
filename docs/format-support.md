@@ -229,7 +229,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 | `GPIF.Beat.Timer.InvalidValue` | `note-and-beat-semantics` | `invalid-data` | Timer values must be empty, -1, or an integer in the supported nonnegative safe range. |
-| `GPIF.Beat.Timer.GraceUnsupported` | `grace-relationships` | `unsupported-feature` | The grace-note model has no beat timer destination; strict source import rejects the loss. |
 | `GPIF.Note.Pitch.Authority` | `note-and-beat-semantics` | `lossy-projection` | TransposedPitch takes precedence over a distinct ConcertPitch accidental mode. |
 | `GPIF.Note.Pitch.Context` | `note-and-beat-semantics` | `unsupported-feature` | The note spelling has a contextual distinction outside the compact accidental-mode representation. |
 | `GPIF.Note.Pitch.Invalid` | `note-and-beat-semantics` | `invalid-data` | Pitch syntax or authored step/accidental/octave contradicts its numeric note context. |
@@ -277,7 +276,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `NoteEffect` | `note-and-beat-semantics` | 24 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The bend point preserves authored curve data. Position is the legacy note-offset view when ExactOffset is present. |
-| `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
+| `GraceEffect` | `grace-relationships` | 11 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
 | `HarmonicEffect` | `harmonics` | 4 authored, 1 compatibility, 0 derived, 0 out-of-scope | The harmonic effect preserves authored kind and pitch data. Fret is a legacy view. |
 | `TremoloPickingEffect` | `tremolo-picking` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The effect preserves the authored tremolo subdivision and independently classifies its notation style. |
 | `TrillEffect` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The trill effect contains authored fret and duration data. |
@@ -308,7 +307,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 289 |
+| `preserved` | 290 |
 | `normalized` | 69 |
 | `omitted` | 93 |
 | `rejected` | 0 |
@@ -319,7 +318,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 142 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 143 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -477,7 +476,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `exact-whammy-offsets` | `note-and-beat-semantics` | `TestConformanceExactWhammyOffsets` | `TestAlphaTabExactWhammyOffsets` | no | Shared ExactOffset authority preserves fractional and bounded nonmonotonic whammy roles; raw pinned consumer controls retain distinct35 and35.5 percent middle offsets. |
 | `note-ornaments` | `note-and-beat-semantics` | `TestConformanceNoteOrnaments` | `TestAlphaTabNoteOrnaments` | no | Four authored variants and None remain independent per occurrence; unknown source strings and public enum values are diagnosed without changing string or fret. |
 | `chord-display` | `note-and-beat-semantics` | `TestConformanceChordDisplay` | `TestAlphaTabChordDisplay` | no | Each explicit true and false flag retains scoped and independently editable occurrences through raw final consumer loading. |
-| `beat-timer` | `note-and-beat-semantics` | `TestConformanceBeatTimer` | `TestAlphaTabBeatTimer` | no | Exact absence, derived and authored timer states survive export without calculating playback time; grace conversion has an explicit source limitation. |
+| `beat-timer` | `note-and-beat-semantics` | `TestConformanceBeatTimer` | `TestAlphaTabBeatTimer` | no | Exact ordinary-beat timer states survive export without calculating playback time; the grace-timer contract covers attached occurrences. |
 | `slash-notation` | `note-and-beat-semantics` | `TestConformanceSlashNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `staff-notation` | `score-core` | `TestConformanceStaffNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
@@ -489,3 +488,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `hammer-endpoint-preservation` | `note-and-beat-semantics` | `TestConformanceHammerEndpoints` | `TestAlphaTabHammerEndpoints` | no | Exact endpoint booleans and wire properties survive with precise pinned-consumer limits for dangling or unlinked endpoints. |
 | `header-footer` | `score-core` | `TestConformanceHeaderFooter` | `TestAlphaTabHeaderFooter` | no | Exact raw typed records retain templates, visibility, existing source alignment and independent legacy edit reconciliation; physical geometry remains an explicit limit. |
 | `score-display` | `score-core` | `TestConformanceScoreDisplay` | `TestAlphaTabScoreDisplay` | no | Optional authored keys retain exact values, types and precedence. The page-specific name mode has an explicit final-consumer normalization report. |
+| `grace-timer` | `grace-relationships` | `TestConformanceGraceTimers` | `TestAlphaTabGraceTimers` | no | Owned timer requests retain ordered source grace-beat addresses and edits; same-group conflicts reject before export. |
