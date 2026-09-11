@@ -66,7 +66,7 @@ func TestWahPublicStatesAndEdits(t *testing.T) {
 		}, gp.WahPedalClosed, []string{"gp8.normalize.wah-authority", "gp8.omit.wah-display"}},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			song := wahPublicSong(t)
+			song := notationPublicSong(t)
 			beat := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
 			beat.Effect.WahPedal = gp.WahPedalOpen
 			data, e := gp.Export(song, gp.ExportFormatGP8)
@@ -129,7 +129,7 @@ func TestWahPublicStatesAndEdits(t *testing.T) {
 func TestWahLegacyValuesAndPolicy(t *testing.T) {
 	for _, value := range []int8{-128, -2, -1, 0, 1, 99, 100, 101, 127} {
 		for _, display := range []bool{false, true} {
-			song := wahPublicSong(t)
+			song := notationPublicSong(t)
 			b := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
 			b.Effect.MixTableChange = &gp.MixTableChange{Wah: &gp.WahEffect{Value: value, Display: display}}
 			want := gp.WahPedalNone
@@ -186,7 +186,7 @@ func TestWahLegacyValuesAndPolicy(t *testing.T) {
 			}
 		}
 	}
-	song := wahPublicSong(t)
+	song := notationPublicSong(t)
 	song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.WahPedal = gp.WahPedal(255)
 	if !slices.ContainsFunc(gp.ValidateSong(song), func(d gp.ScoreDiagnostic) bool { return d.Code == "score.beat.wah" }) {
 		t.Fatal("invalid state undiagnosed")
@@ -194,19 +194,6 @@ func TestWahLegacyValuesAndPolicy(t *testing.T) {
 	if data, _, e := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{}); e == nil || len(data) != 0 {
 		t.Fatal("invalid state exported")
 	}
-}
-
-func wahPublicSong(t *testing.T) *gp.Song {
-	t.Helper()
-	song, e := gp.ParseFile("../testdata/gp8/section-track-names.gp")
-	if e != nil {
-		t.Fatal(e)
-	}
-	song.Version = gp.Version{}
-	for i := range song.Tracks {
-		song.Tracks[i].Settings = gp.TrackSettings{Notation: true, Tablature: true}
-	}
-	return song
 }
 
 func TestWahCompleteBinaryBoundaries(t *testing.T) {
@@ -270,7 +257,7 @@ func TestWahImportedLegacyAuthority(t *testing.T) {
 			if e != nil {
 				t.Fatal(e)
 			}
-			song := wahPublicSong(t)
+			song := notationPublicSong(t)
 			b := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
 			b.Effect = source.Tracks[0].Measures[0].Voices[0].Beats[0].Effect
 			raw := *b.Effect.MixTableChange.Wah

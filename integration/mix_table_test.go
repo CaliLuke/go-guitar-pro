@@ -154,7 +154,7 @@ func TestMixTableControllerLossPolicies(t *testing.T) {
 		{"tempo-label", func(c *gp.MixTableChange) { c.TempoName = "orphan label" }},
 	} {
 		t.Run(test.code, func(t *testing.T) {
-			song := wahPublicSong(t)
+			song := notationPublicSong(t)
 			song.TempoAutomations = nil
 			c := &gp.MixTableChange{}
 			test.set(c)
@@ -205,7 +205,7 @@ func TestMixTableExactTimingAndBounds(t *testing.T) {
 		{"volume", func(c *gp.MixTableChange) *gp.MixTableItem { c.Volume = &gp.MixTableItem{}; return c.Volume }, 17},
 		{"balance", func(c *gp.MixTableChange) *gp.MixTableItem { c.Balance = &gp.MixTableItem{}; return c.Balance }, -1},
 	} {
-		s := wahPublicSong(t)
+		s := notationPublicSong(t)
 		c := &gp.MixTableChange{}
 		test.item(c).Value = test.bad
 		s.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.MixTableChange = c

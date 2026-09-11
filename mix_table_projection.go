@@ -92,36 +92,7 @@ func projectMixTableAutomations(song *Song) (*Song, []legacyMixConflict) {
 			}
 		}
 		for target := range song.Tracks {
-			if mt.Volume != nil && mt.Volume.Value >= 0 && mt.Volume.Value <= 16 && (target == location.Track || mt.Volume.AllTracks) {
-				a := VolumeAutomation{Track: target, Bar: location.Measure, Position: event.position, Value: float64(mt.Volume.Value) / 16, Linear: true}
-				found, equal := false, false
-				for _, existing := range song.VolumeAutomations {
-					if existing.Track == target && existing.Bar == a.Bar && existing.Position == a.Position {
-						found = true
-						equal = equal || existing == a
-					}
-				}
-				if !found {
-					result.VolumeAutomations = append(result.VolumeAutomations, a)
-				} else if !equal {
-					conflicts = append(conflicts, legacyMixConflict{"volume", location, target})
-				}
-			}
-			if mt.Balance != nil && mt.Balance.Value >= 0 && mt.Balance.Value <= 16 && (target == location.Track || mt.Balance.AllTracks) {
-				a := PanAutomation{Track: target, Bar: location.Measure, Position: event.position, Value: float64(mt.Balance.Value) / 16, Linear: true}
-				found, equal := false, false
-				for _, existing := range song.PanAutomations {
-					if existing.Track == target && existing.Bar == a.Bar && existing.Position == a.Position {
-						found = true
-						equal = equal || existing == a
-					}
-				}
-				if !found {
-					result.PanAutomations = append(result.PanAutomations, a)
-				} else if !equal {
-					conflicts = append(conflicts, legacyMixConflict{"balance", location, target})
-				}
-			}
+			conflicts = append(conflicts, projectMixTableLevels(song, result, target, event)...)
 			if mt.Instrument != nil && mt.Instrument.Value >= 0 && mt.Instrument.Value <= 127 && (target == location.Track || mt.Instrument.AllTracks) {
 				if projectMixTableInstrument(song, result, target, event) {
 					conflicts = append(conflicts, legacyMixConflict{"instrument", location, target})
@@ -219,4 +190,46 @@ func validateMixTable(change *MixTableChange, location ScoreLocation, diagnostic
 			*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.mix-table." + check.name, Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("legacy %s value %d is outside %d..%d", check.name, check.item.Value, check.minimum, check.maximum)})
 		}
 	}
+}
+
+// appendMixTableControl reports a conflict when authored events at the same
+// position contain no equivalent value. Authored order and values remain intact.
+func appendMixTableControl[T VolumeAutomation | PanAutomation](authored []T, output *[]T, value T) bool {
+	position := VolumeAutomation(value)
+	found, equal := false, false
+	for _, existing := range authored {
+		candidate := VolumeAutomation(existing)
+		if candidate.Track == position.Track && candidate.Bar == position.Bar && candidate.Position == position.Position {
+			found = true
+			equal = equal || existing == value
+		}
+	}
+	if !found {
+		*output = append(*output, value)
+	}
+	return found && !equal
+}
+
+func projectMixTableLevels(song, result *Song, target int, event legacyMixEvent) []legacyMixConflict {
+	var conflicts []legacyMixConflict
+	for _, control := range []struct {
+		name string
+		item *MixTableItem
+	}{{"volume", event.change.Volume}, {"balance", event.change.Balance}} {
+		item := control.item
+		if item == nil || item.Value < 0 || item.Value > 16 || (target != event.location.Track && !item.AllTracks) {
+			continue
+		}
+		value := VolumeAutomation{Track: target, Bar: event.location.Measure, Position: event.position, Value: float64(item.Value) / 16, Linear: true}
+		var conflict bool
+		if control.name == "volume" {
+			conflict = appendMixTableControl(song.VolumeAutomations, &result.VolumeAutomations, value)
+		} else {
+			conflict = appendMixTableControl(song.PanAutomations, &result.PanAutomations, PanAutomation(value))
+		}
+		if conflict {
+			conflicts = append(conflicts, legacyMixConflict{control.name, event.location, target})
+		}
+	}
+	return conflicts
 }

@@ -75,20 +75,8 @@ func TestPublicLayoutPreservesSourceFields(t *testing.T) {
 	}
 }
 
-func layoutPublicSong(t *testing.T) *gp.Song {
-	t.Helper()
-	s, e := gp.ParseFile("../testdata/gp8/section-track-names.gp")
-	if e != nil {
-		t.Fatal(e)
-	}
-	s.Version = gp.Version{}
-	for i := range s.Tracks {
-		s.Tracks[i].Settings = gp.TrackSettings{Notation: true, Tablature: true}
-	}
-	return s
-}
 func TestPublicLayoutEditsAndInheritance(t *testing.T) {
-	s := layoutPublicSong(t)
+	s := notationPublicSong(t)
 	s.SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 5, BarsPerSystem: []int{2, 4}}
 	s.Tracks[0].SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 2, BarsPerSystem: []int{1, 3, 2}}
 	s.Tracks[1].SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 6, BarsPerSystem: []int{4, 2}}
@@ -137,7 +125,7 @@ func TestPublicLayoutEditsAndInheritance(t *testing.T) {
 }
 func TestPublicLayoutRejectsInvalidValues(t *testing.T) {
 	for _, count := range []int{-1, 0, 2147483648} {
-		s := layoutPublicSong(t)
+		s := notationPublicSong(t)
 		s.SystemLayout = &gp.SystemLayout{BarsPerSystem: []int{count}}
 		out, _, e := gp.ExportWithReport(s, gp.ExportFormatGP8, gp.ExportOptions{})
 		if e == nil || len(out) != 0 {
@@ -145,7 +133,7 @@ func TestPublicLayoutRejectsInvalidValues(t *testing.T) {
 		}
 	}
 	for _, scale := range []float64{0, -1, math.NaN(), math.Inf(1)} {
-		s := layoutPublicSong(t)
+		s := notationPublicSong(t)
 		s.Tracks[0].Measures[0].DisplayScale = &scale
 		out, _, e := gp.ExportWithReport(s, gp.ExportFormatGP8, gp.ExportOptions{})
 		if e == nil || len(out) != 0 {
@@ -157,7 +145,7 @@ func TestPublicLayoutRejectsInvalidValues(t *testing.T) {
 func TestPublicLayoutEmptyScopeRemainsExplicit(t *testing.T) {
 	for _, scope := range []string{"score", "track"} {
 		t.Run(scope, func(t *testing.T) {
-			s := layoutPublicSong(t)
+			s := notationPublicSong(t)
 			s.SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 5, BarsPerSystem: []int{2, 4}}
 			for i := range s.Tracks {
 				s.Tracks[i].SystemLayout = &gp.SystemLayout{DefaultBarsPerSystem: 2}
