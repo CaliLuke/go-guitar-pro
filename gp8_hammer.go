@@ -39,9 +39,11 @@ func (beat *gp8HammerBeat) noteOnString(str int) int {
 	if str <= 0 || beat.stringCount == 0 {
 		return -1
 	}
-	// The consumer's string lookup keeps the last note on a repeated string.
+	// AlphaTab numbers strings from the lowest tuning entry; the public Go
+	// model counts from the highest. Keep this search in consumer coordinates.
+	// Its string lookup keeps the last note on a repeated string.
 	for i := len(beat.notes) - 1; i >= 0; i-- {
-		if int(beat.notes[i].String) == str {
+		if beat.notes[i].String > 0 && beat.stringCount+1-int(beat.notes[i].String) == str {
 			return i
 		}
 	}
@@ -79,9 +81,9 @@ func (builder *gp8Builder) reportHammerConsumerLimits() {
 			if !note.Effect.Hammer {
 				continue
 			}
-			str := int(note.String)
-			if beat.stringCount == 0 {
-				str = 0
+			str := -1
+			if beat.stringCount > 0 && note.String > 0 {
+				str = beat.stringCount + 1 - int(note.String)
 			}
 			for j := beat.next; j >= 0 && builder.hammerBeats[j].location.Measure <= beat.location.Measure+1; j = builder.hammerBeats[j].next {
 				if target := builder.hammerBeats[j].hammerTarget(str); target >= 0 {

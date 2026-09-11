@@ -101,6 +101,11 @@
       "kind": "source",
       "reference": "docs/semantic-model.md",
       "detail": "Authored endpoint authority and exact fresh-import consumer limits. Fresh independent review and integrated gates/probe remain pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabHammerBothSidedTapPriority",
+      "detail": "Regression from independent review: AlphaTab string coordinates prioritize public Go string 4 over string 2 around origin string 3; exact omitted destination report and consumer paths."
     }
   ],
   "shared_files": [

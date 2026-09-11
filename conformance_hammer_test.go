@@ -292,3 +292,24 @@ func TestAlphaTabHammerVoiceIsolation(t *testing.T) {
 		t.Fatal("crossed voice scope", facts)
 	}
 }
+
+func TestAlphaTabHammerBothSidedTapPriority(t *testing.T) {
+	requireAlphaTabConformance(t)
+	s, _ := hammerSong(t, "tap")
+	beats := s.Tracks[0].Measures[0].Voices[0].Beats
+	beats[0].Notes[0].String = 3
+	beats[1].Notes[0].String = 2
+	other := beats[1].Notes[0]
+	other.String = 4
+	other.Effect.HammerDestination = false
+	beats[1].Notes = append(beats[1].Notes, other)
+	data, report := assertConsumerLossPolicy(t, s, []string{"gp8.omit.hammer-destination-consumer"})
+	if report.Entries[0].Location != (ScoreLocation{Beat: 1}) {
+		t.Fatal("wrong lost destination location", report)
+	}
+	var facts []hammerFact
+	readAlphaTabOracleFacts(t, "--hammer-facts", writeConformanceFixture(t, data), &facts)
+	if len(facts) != 3 || !facts[0].Origin || facts[1].Destination || !facts[2].Destination || !reflect.DeepEqual(facts[0].To, &hammerRef{Beat: 1, Note: 1}) {
+		t.Fatal("consumer tap priority", facts)
+	}
+}

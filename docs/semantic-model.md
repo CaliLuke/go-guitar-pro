@@ -1126,8 +1126,8 @@ Repeated source definitions produce independent note occurrences.
 The pinned consumer ignores the authored destination property. It derives links
 from an origin to a later note on the same string. It also searches nearby
 strings for left-hand tapping. An intervening ordinary note blocks that search
-direction. The search prefers the same string, then lower string numbers, then
-higher string numbers. These derived links do not overwrite the public markers.
+direction. In public Go coordinates, the search prefers the same string, then
+higher string numbers, then lower string numbers. These derived links do not overwrite the public markers.
 
 On fresh GPIF import, the consumer searches the remaining beats in the current
 voice and the first beat of the next bar. Later beat links do not yet exist

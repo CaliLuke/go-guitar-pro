@@ -354,6 +354,7 @@ func noteEffectsEffectSong(t *testing.T, effect NoteEffect) *Song {
 	song := conformanceTechniqueSong(t)
 	song.Tracks[0].Settings.Notation = true
 	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect = effect
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Tap = effect.Tapped
 	return song
 }
 
