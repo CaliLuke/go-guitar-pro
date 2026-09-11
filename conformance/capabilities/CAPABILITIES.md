@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 57 | 22 | 20 | 2 |
-| model | 57 | 22 | 21 | 1 |
-| export | 38 | 23 | 38 | 2 |
+| import | 58 | 22 | 19 | 2 |
+| model | 58 | 22 | 20 | 1 |
+| export | 39 | 23 | 37 | 2 |
 
-All three stages have a supported rating in 36 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 37 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -60,7 +60,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Key signatures and key mode spelling | 44 | 1 | 25 |
 | Pan and balance automation events | 1 | 1 | 25 |
 | Rasgueado patterns | 1 | 1 | 25 |
-| Sustain pedal markers | 1 | 1 | 25 |
 | Turns and mordents | 1 | 1 | 25 |
 | Alternate endings | 16 | 0 | 25 |
 | Beat octave shifts | 10 | 0 | 25 |
@@ -77,6 +76,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | One-bar and two-bar simile marks | 4 | 0 | 25 |
 | Repeat starts and displayed pass counts | 28 | 0 | 25 |
 | String tuning and tuning labels | 360 | 0 | 25 |
+| Sustain pedal markers | 1 | 0 | 25 |
 | Tenuto accent | 1 | 0 | 25 |
 
 ## Reviewed capabilities
@@ -917,11 +917,11 @@ Bounded work: [Preserve authored opening sound-event preroll](https://github.com
 
 Playback data. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-AlphaTab parses SustainPedal automation into bar markers. The Go model and writer have no pedal collection.
+GPIF reference 1 and 3 automations survive as ordered staff-0 down and release markers. Empty continuing bars derive one position-0 hold, which GP8 intentionally skips while the consumer reconstructs it.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Covered by exact fixture, public edit, validation, strict source diagnostics, GP8 wire, Go reimport, and isolated pinned AlphaTab tests.
 
 Bounded work: [Preserve sustain pedal down, hold and release markers](https://github.com/CaliLuke/go-guitar-pro/issues/54).
 

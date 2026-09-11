@@ -33,7 +33,10 @@ type Measure struct {
 	ClefOctave Octave
 	// SimileMark preserves a one- or two-measure repeat symbol on this measure.
 	SimileMark SimileMark
-	LineBreak  LineBreak
+	// SustainPedals preserves the ordered sustain-pedal markers on this measure.
+	// GPIF track automations attach these markers to the first staff.
+	SustainPedals []SustainPedalMarker
+	LineBreak     LineBreak
 }
 
 func defaultMeasure() Measure {

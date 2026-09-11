@@ -94,6 +94,20 @@ pinned consumer does not retain hidden visibility on the instrument automation
 it derives from a sound record, so export reports that specific omission. The
 separate legacy `Song.HideTempo` contract remains a target limitation.
 
+`Measure.SustainPedals` is the ordered sustain-pedal sequence for that track's
+first staff and measure. GPIF reference 1 maps to `SustainPedalTypeDown`, and
+reference 3 maps to `SustainPedalTypeRelease`. If a down state continues into a
+bar with no explicit marker, import derives one `SustainPedalTypeHold` marker at
+position 0. A hold is valid only in that canonical form. Marker positions must
+be finite, within 0 through 1, and strictly increasing inside a measure. GP8
+writes down and release records in public order and skips derived holds; the
+consumer reconstructs the hold from the surrounding pedal state. A bar entered
+with the pedal down cannot contain a Down marker, even after an earlier Release
+in that bar. GPIF consumers determine Down-versus-Hold from the state at bar
+entry and would otherwise silently reinterpret that Down as Hold. Validation
+and preflight reject this non-representable sequence. Pedal playback links and
+GP3 through GP5 storage are outside this contract.
+
 A score must have a valid opening tempo from `Tempo`, `InitialTempo`, or an
 automation at bar zero and position zero. A later automation does not supply
 the missing opening value.

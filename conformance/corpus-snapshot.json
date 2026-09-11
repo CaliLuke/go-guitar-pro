@@ -15428,14 +15428,6 @@
           "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
         },
         {
-          "code": "GPIF.Track.Automation.SustainPedal",
-          "kind": "unsupported-feature",
-          "count": 14,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Automations/Automation[1]/Type/SustainPedal",
-          "objectId": "0",
-          "locationsSha256": "fd119d296b7b573e90926dfbab44313328caeee6eb90f5e93baaa2804282170e"
-        },
-        {
           "code": "GPIF.Track.Transpose",
           "kind": "unsupported-feature",
           "count": 1,

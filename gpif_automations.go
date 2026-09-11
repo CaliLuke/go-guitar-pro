@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"fmt"
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -89,7 +90,9 @@ func gpifAuditSyncPointAutomation(automation gpifAutomation, index int, context 
 	}
 }
 
-func gpifAuditTrackAutomations(track gpifTrack, context *parseContext) {
+func gpifAuditTrackAutomations(track gpifTrack, measureCount int, context *parseContext) {
+	lastSustainPosition := make(map[int]float64)
+	hasSustainPosition := make(map[int]bool)
 	for index, automation := range track.Automations.Automations {
 		path := fmt.Sprintf("/GPIF/Tracks/Track[@id=%q]/Automations/Automation[%d]", track.ID, index)
 		switch automation.Type {
@@ -108,16 +111,118 @@ func gpifAuditTrackAutomations(track gpifTrack, context *parseContext) {
 				})
 			}
 		case "SustainPedal":
-			context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
-				SourcePath: path + "/Type/SustainPedal", ObjectID: track.ID,
-				Reason: "sustain-pedal automation has no Song destination",
-			})
+			pedalType, valueOK := gpifSustainPedalType(automation.Value.Text)
+			if !valueOK {
+				context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal.Value.Invalid", "sustain-pedal", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Value", ObjectID: track.ID,
+					Reason: fmt.Sprintf("sustain-pedal value %q must contain a finite value and reference 1 (down) or 3 (release)", automation.Value.Text),
+				})
+				continue
+			}
+			_ = pedalType
+			if automation.Bar < 0 || automation.Bar >= measureCount {
+				context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal.Bar.Invalid", "sustain-pedal", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Bar", ObjectID: track.ID,
+					Reason: fmt.Sprintf("sustain-pedal bar %d must be within 0..%d", automation.Bar, measureCount-1),
+				})
+				continue
+			}
+			if math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 {
+				context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal.Position.Invalid", "sustain-pedal", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Position", ObjectID: track.ID,
+					Reason: fmt.Sprintf("sustain-pedal position %v must be finite and within 0..1", automation.Position),
+				})
+				continue
+			}
+			if hasSustainPosition[automation.Bar] && automation.Position <= lastSustainPosition[automation.Bar] {
+				context.add(diagnosticSource("GPIF.Track.Automation.SustainPedal.Order.Invalid", "sustain-pedal", ParseDiagnosticInvalidData), ParseDiagnostic{
+					SourcePath: path + "/Position", ObjectID: track.ID,
+					Reason: fmt.Sprintf("sustain-pedal position %v must be after %v in bar %d", automation.Position, lastSustainPosition[automation.Bar], automation.Bar),
+				})
+				continue
+			}
+			lastSustainPosition[automation.Bar] = automation.Position
+			hasSustainPosition[automation.Bar] = true
 		default:
 			context.add(diagnosticSource("GPIF.Track.Automation.Type.Unknown", "score-core", ParseDiagnosticUnknownSyntax), ParseDiagnostic{
 				SourcePath: path + "/Type", ObjectID: track.ID,
 				Reason: fmt.Sprintf("track automation type %q is not recognized", automation.Type),
 			})
 		}
+	}
+}
+
+func gpifSustainPedalType(value string) (SustainPedalType, bool) {
+	parts := strings.Fields(value)
+	if len(parts) == 0 || len(parts) > 2 {
+		return 0, false
+	}
+	number, err := strconv.ParseFloat(parts[0], 64)
+	if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
+		return 0, false
+	}
+	reference := 1
+	if len(parts) == 2 {
+		reference, err = strconv.Atoi(parts[1])
+		if err != nil {
+			return 0, false
+		}
+	}
+	switch reference {
+	case 1:
+		return SustainPedalTypeDown, true
+	case 3:
+		return SustainPedalTypeRelease, true
+	default:
+		return 0, false
+	}
+}
+
+func gpifReadSustainPedals(sourceTracks []gpifTrack, trackIDs []string, song *Song) {
+	for trackIndex, trackID := range trackIDs {
+		if trackIndex >= len(song.Tracks) {
+			break
+		}
+		sourceIndex := slices.IndexFunc(sourceTracks, func(track gpifTrack) bool { return track.ID == trackID })
+		if sourceIndex < 0 {
+			continue
+		}
+		track := &song.Tracks[trackIndex]
+		if len(track.Staves) == 0 {
+			continue
+		}
+		measures := track.Staves[0].Measures
+		authored := make([][]SustainPedalMarker, len(measures))
+		lastPosition := make(map[int]float64)
+		hasPosition := make(map[int]bool)
+		for _, automation := range sourceTracks[sourceIndex].Automations.Automations {
+			if automation.Type != "SustainPedal" || automation.Bar < 0 || automation.Bar >= len(measures) ||
+				math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 {
+				continue
+			}
+			pedalType, ok := gpifSustainPedalType(automation.Value.Text)
+			if !ok || hasPosition[automation.Bar] && automation.Position <= lastPosition[automation.Bar] {
+				continue
+			}
+			authored[automation.Bar] = append(authored[automation.Bar], SustainPedalMarker{Type: pedalType, Position: automation.Position})
+			lastPosition[automation.Bar] = automation.Position
+			hasPosition[automation.Bar] = true
+		}
+
+		pedalDown := false
+		for measureIndex := range measures {
+			markers := authored[measureIndex]
+			if len(markers) == 0 && pedalDown {
+				measures[measureIndex].SustainPedals = []SustainPedalMarker{{Type: SustainPedalTypeHold}}
+				continue
+			}
+			measures[measureIndex].SustainPedals = append([]SustainPedalMarker(nil), markers...)
+			for _, marker := range markers {
+				pedalDown = marker.Type == SustainPedalTypeDown
+			}
+		}
+		track.Staves[0].Measures = measures
+		track.Measures = track.Staves[0].Measures
 	}
 }
 

@@ -172,6 +172,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
 			tiedNotes := make(map[int]map[int8]int16)
+			pedalDown := false
 			if len(staves[staffIndex].Measures) != len(song.MeasureHeaders) {
 				add("score.staff.measure-count", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "measure count %d does not match header count %d", len(staves[staffIndex].Measures), len(song.MeasureHeaders))
 			}
@@ -205,6 +206,35 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 				}
 				if measure.ClefOctave < OctaveNone || measure.ClefOctave > OctaveQuindicesimaBassa {
 					add("score.measure.clef-octave", ScoreDiagnosticValue, location, "clef octave %d is not defined", measure.ClefOctave)
+				}
+				if staffIndex > 0 && len(measure.SustainPedals) != 0 {
+					add("score.measure.sustain-pedal.staff", ScoreDiagnosticStructural, location, "sustain-pedal markers must belong to staff 0")
+				}
+				enteringDown := pedalDown
+				for markerIndex, marker := range measure.SustainPedals {
+					if marker.Type < SustainPedalTypeDown || marker.Type > SustainPedalTypeRelease {
+						add("score.measure.sustain-pedal.type", ScoreDiagnosticValue, location, "sustain-pedal marker %d type %d is not defined", markerIndex, marker.Type)
+					}
+					if math.IsNaN(marker.Position) || math.IsInf(marker.Position, 0) || marker.Position < 0 || marker.Position > 1 {
+						add("score.measure.sustain-pedal.position", ScoreDiagnosticValue, location, "sustain-pedal marker %d position %v must be finite and within 0..1", markerIndex, marker.Position)
+					}
+					if markerIndex > 0 && marker.Position <= measure.SustainPedals[markerIndex-1].Position {
+						add("score.measure.sustain-pedal.order", ScoreDiagnosticValue, location, "sustain-pedal marker %d position %v must be after %v", markerIndex, marker.Position, measure.SustainPedals[markerIndex-1].Position)
+					}
+					switch marker.Type {
+					case SustainPedalTypeDown:
+						if enteringDown {
+							add("score.measure.sustain-pedal.down", ScoreDiagnosticValue, location, "down marker %d cannot occur in a bar entered with the pedal down because GPIF consumers reinterpret it as hold", markerIndex)
+						}
+						pedalDown = true
+					case SustainPedalTypeHold:
+						if len(measure.SustainPedals) != 1 || marker.Position != 0 || !enteringDown {
+							add("score.measure.sustain-pedal.hold", ScoreDiagnosticValue, location, "hold must be the sole position-0 marker in a bar entered with the pedal down")
+						}
+						pedalDown = true
+					case SustainPedalTypeRelease:
+						pedalDown = false
+					}
 				}
 				for voiceIndex := range measure.Voices {
 					if int(measure.Voices[voiceIndex].MeasureIndex) != measureIndex {

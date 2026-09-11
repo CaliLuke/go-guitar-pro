@@ -246,7 +246,6 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 		"GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid",
 		"GPIF.MasterTrack.Automation.Type.Unknown",
 		"GPIF.Track.Automation.Sound.Reference",
-		"GPIF.Track.Automation.SustainPedal",
 		"GPIF.Track.Automation.Type.Unknown",
 		"GPIF.ChannelStrip.Automation.Volume.Value.Invalid",
 		"GPIF.ChannelStrip.Automation.Unsupported",
@@ -306,8 +305,8 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	run.Dispatch("gpifReadSyncPoints:automation.Type", len(syncSong.SyncPoints), 1)
 
 	trackContext := &parseContext{format: "GP8"}
-	gpifAuditTrackAutomations(gpifTrack{ID: "t", Sounds: gpifSounds{Sounds: []gpifSound{{Name: "Lead", Path: "a", Role: "main"}}}, Automations: gpifAutomations{Automations: []gpifAutomation{{Type: "Sound", Value: gpifAutomationValue{Text: "a;Lead;main"}}, {Type: "SustainPedal"}}}}, trackContext)
-	run.Dispatch("gpifAuditTrackAutomations:automation.Type", len(trackContext.diagnostics), 1)
+	gpifAuditTrackAutomations(gpifTrack{ID: "t", Sounds: gpifSounds{Sounds: []gpifSound{{Name: "Lead", Path: "a", Role: "main"}}}, Automations: gpifAutomations{Automations: []gpifAutomation{{Type: "Sound", Value: gpifAutomationValue{Text: "a;Lead;main"}}, {Type: "SustainPedal", Value: gpifAutomationValue{Text: "0 1"}}}}}, 1, trackContext)
+	run.Dispatch("gpifAuditTrackAutomations:automation.Type", len(trackContext.diagnostics), 0)
 	channelContext := &parseContext{format: "GP8"}
 	gpifAuditChannelStripAutomations([]gpifAutomation{{Type: "DSPParam_12", Value: gpifAutomationValue{Text: "0.5"}}, {Type: "DSPParam_00"}, {Type: "DSPParam_01"}, {Type: "DSPParam_11"}}, "t", channelContext)
 	run.Dispatch("gpifAuditChannelStripAutomations:automation.Type", len(channelContext.diagnostics), 3)

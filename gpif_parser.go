@@ -115,7 +115,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		chordMap := gpifChordScope{}
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
-				gpifAuditTrackAutomations(t, context)
+				gpifAuditTrackAutomations(t, len(doc.MasterBars.MasterBars), context)
 				track.Name = t.Name
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
@@ -490,6 +490,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			track.Strings = track.Staves[0].Strings
 		}
 	}
+	gpifReadSustainPedals(doc.Tracks.Tracks, trackIDs, song)
 
 	if err := song.finalizeTiming(); err != nil {
 		return nil, fmt.Errorf("finalizing GPIF timing: %w", err)

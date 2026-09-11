@@ -213,15 +213,16 @@ func TestGPIFAutomationDispatchDiagnostics(t *testing.T) {
 		name         string
 		mutate       func(string) string
 		kind         ParseDiagnosticKind
+		feature      string
 		code         string
 		pathContains string
 	}{
 		{
-			name: "unsupported sustain pedal",
+			name: "invalid sustain pedal reference",
 			mutate: func(gpif string) string {
-				return strings.Replace(gpif, "<Staves>", `<Automations><Automation><Type>SustainPedal</Type><Bar>0</Bar><Position>0</Position><Value>1</Value></Automation></Automations><Staves>`, 1)
+				return strings.Replace(gpif, "<Staves>", `<Automations><Automation><Type>SustainPedal</Type><Bar>0</Bar><Position>0</Position><Value>0 2</Value></Automation></Automations><Staves>`, 1)
 			},
-			kind: ParseDiagnosticUnsupportedFeature, code: "GPIF.Track.Automation.SustainPedal", pathContains: "SustainPedal",
+			kind: ParseDiagnosticInvalidData, feature: "sustain-pedal", code: "GPIF.Track.Automation.SustainPedal.Value.Invalid", pathContains: "Value",
 		},
 		{
 			name: "unknown master automation",
@@ -267,7 +268,11 @@ func TestGPIFAutomationDispatchDiagnostics(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			diagnostic := findParseDiagnostic(result.Diagnostics, test.kind, "score-core")
+			feature := test.feature
+			if feature == "" {
+				feature = "score-core"
+			}
+			diagnostic := findParseDiagnostic(result.Diagnostics, test.kind, feature)
 			if diagnostic == nil || diagnostic.Code != test.code || !strings.Contains(diagnostic.SourcePath, test.pathContains) {
 				t.Fatalf("diagnostics = %#v, want %s at path containing %q", result.Diagnostics, test.kind, test.pathContains)
 			}

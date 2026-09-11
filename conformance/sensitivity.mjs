@@ -114,17 +114,17 @@ const mutations = [
     before: '\t\tcase "SustainPedal":\n',
     after: '\t\tcase "DisabledSustainPedal":\n',
     test: '^TestGPIFAutomationDispatchDiagnostics$',
-    want: 'unsupported_sustain_pedal'
+    want: 'want invalid-data at path containing "Value"'
   },
   {
     id: 'removed-automation-diagnostic',
     contract: 'automation-dispatch-diagnostic',
     category: 'diagnostic',
     file: 'gpif_automations.go',
-    before: '\t\tcase "SustainPedal":\n\t\t\tcontext.add(diagnosticSource("GPIF.Track.Automation.SustainPedal", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{\n\t\t\t\tSourcePath: path + "/Type/SustainPedal", ObjectID: track.ID,\n\t\t\t\tReason: "sustain-pedal automation has no Song destination",\n\t\t\t})\n',
-    after: '\t\tcase "SustainPedal":\n',
+    before: '\t\t\tif !valueOK {\n\t\t\t\tcontext.add(diagnosticSource("GPIF.Track.Automation.SustainPedal.Value.Invalid", "sustain-pedal", ParseDiagnosticInvalidData), ParseDiagnostic{\n\t\t\t\t\tSourcePath: path + "/Value", ObjectID: track.ID,\n\t\t\t\t\tReason: fmt.Sprintf("sustain-pedal value %q must contain a finite value and reference 1 (down) or 3 (release)", automation.Value.Text),\n\t\t\t\t})\n\t\t\t\tcontinue\n\t\t\t}\n',
+    after: '\t\t\tif !valueOK {\n\t\t\t\tcontinue\n\t\t\t}\n',
     test: '^TestGPIFAutomationDispatchDiagnostics$',
-    want: 'want unsupported-feature'
+    want: 'want invalid-data at path containing "Value"'
   },
   {
     id: 'supported-effect-serialization',

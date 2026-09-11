@@ -667,6 +667,30 @@ export function loadMidiBankFacts(fixture) {
   });
 }
 
+export function loadSustainPedalFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        if (bar.sustainPedals.length === 0) continue;
+        facts.push({
+          track: track.index,
+          staff: staff.index,
+          bar: bar.index,
+          markers: bar.sustainPedals.map(marker => ({
+            position: finite(marker.ratioPosition),
+            type: marker.pedalType === alphaTab.model.SustainPedalMarkerType.Up
+              ? 'release'
+              : enumName(alphaTab.model.SustainPedalMarkerType, marker.pedalType)
+          }))
+        });
+      }
+    }
+  }
+  return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -703,6 +727,10 @@ function main() {
   }
   if (args[0] === '--midi-bank' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadMidiBankFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--sustain-pedals' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadSustainPedalFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

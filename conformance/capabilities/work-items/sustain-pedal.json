@@ -5,8 +5,8 @@
   "title": "Preserve sustain pedal down, hold and release markers",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -23,7 +23,11 @@
     "Test down, hold and release, including a marker at a bar boundary and different tracks.",
     "Public edits have deterministic order and validated positions; no playback engine is required."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Playback-engine pedal linking or duration changes.",
+    "GP3 through GP5 sustain-pedal import or export.",
+    "A general automation model or refactor."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -115,12 +119,30 @@
       "kind": "probe",
       "reference": "testdata/gp7/sustain.gp:sustain-pedal",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].sustainPedals. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceSustainPedals",
+      "detail": "Covers exact fixture import, staff-0 and multi-track ownership, derived holds, public edits and validation, rejection of a Down after a same-bar Release when that bar was entered down, exact GP8 automation leaves, strict source diagnostics, and Go reimport."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabPreservesSustainPedals",
+      "detail": "Uses an isolated pinned AlphaTab adapter to compare the original fixture with Go-exported GP8 and a post-parse public edit, and proves that AlphaTab reinterprets Down as Hold from bar-entry state even after a same-bar Release."
     }
   ],
   "shared_files": [
-    "gpif_automations.go"
+    "measure.go",
+    "sustain_pedal.go",
+    "gpif_automations.go",
+    "gpif_parser.go",
+    "gp8_builder.go",
+    "validation.go",
+    "conformance_sustain_pedal_test.go",
+    "conformance/oracle.mjs",
+    "conformance/feature-ledger.json"
   ],
-  "resolution": null,
+  "resolution": "Measure.SustainPedals now preserves each track's ordered GPIF sustain-pedal automations on staff 0. Reference 1 maps to Down and reference 3 maps to Release; a pedal-down state continuing through a bar with no explicit record derives one Hold marker at position 0. Public validation requires finite positions within 0 through 1, strictly increasing per-measure order, defined types, canonical continuing holds, and staff-0 ownership. It also rejects any Down in a bar entered with the pedal down, including a Down after a same-bar Release, because the pinned GPIF consumer determines Down-versus-Hold once from bar-entry state and would silently reinterpret the marker. GP8 emits exact down and release records, skips derived holds, and pinned AlphaTab reconstructs the same complete sequence. Focused evidence covers the sustain fixture, a bar-boundary release, different tracks, independent edits, malformed source data, public-model rejection, exact wire values, Go reimport, and pinned consumer output. Playback links, GP3 through GP5, and general automation refactoring remain outside this ticket.",
   "verification": [],
   "issue": {
     "number": 54,

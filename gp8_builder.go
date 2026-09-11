@@ -348,6 +348,24 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			Bar: automation.Bar, Position: automation.Position,
 		})
 	}
+	staves := gp8ExportStaves(track)
+	if len(staves) > 0 {
+		for barIndex := range staves[0].Measures {
+			for _, marker := range staves[0].Measures[barIndex].SustainPedals {
+				if marker.Type == SustainPedalTypeHold {
+					continue
+				}
+				reference := 1
+				if marker.Type == SustainPedalTypeRelease {
+					reference = 3
+				}
+				result.Automations.Automations = append(result.Automations.Automations, gpifAutomation{
+					Type: "SustainPedal", Value: gpifAutomationValue{Text: fmt.Sprintf("0 %d", reference)},
+					Visible: "true", Bar: barIndex, Position: marker.Position,
+				})
+			}
+		}
+	}
 	if len(track.Lyrics) > 0 {
 		result.Lyrics = &gpifLyrics{Dispatched: true, Lines: make([]gpifLyricLine, 0, len(track.Lyrics))}
 		for _, line := range track.Lyrics {
@@ -361,7 +379,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		result.PlaybackState = "Solo"
 	}
 
-	staves := gp8ExportStaves(track)
+	staves = gp8ExportStaves(track)
 	percussionLineCount := 5
 	if track.PercussionTrack && len(staves) > 0 && staves[0].StandardNotationLineCount > 0 {
 		percussionLineCount = staves[0].StandardNotationLineCount

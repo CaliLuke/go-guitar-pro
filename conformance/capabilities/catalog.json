@@ -2115,12 +2115,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "AlphaTab parses SustainPedal automation into bar markers. The Go model and writer have no pedal collection.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GPIF reference 1 and 3 automations survive as ordered staff-0 down and release markers. Empty continuing bars derive one position-0 hold, which GP8 intentionally skips while the consumer reconstructs it.",
+      "acceptance": "Covered by exact fixture, public edit, validation, strict source diagnostics, GP8 wire, Go reimport, and isolated pinned AlphaTab tests.",
       "upstream": [
         "Bar.sustainPedals",
         "SustainPedalMarker.*"
@@ -2135,6 +2135,16 @@
           "kind": "probe",
           "reference": "testdata/gp7/sustain.gp:sustain-pedal",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].sustainPedals. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSustainPedals",
+          "detail": "Exact public, validation, strict source, GP8 wire, and Go reimport evidence."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesSustainPedals",
+          "detail": "Pinned AlphaTab comparison of original and Go-output sustain markers."
         }
       ]
     },

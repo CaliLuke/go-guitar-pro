@@ -8,6 +8,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | --- | --- | --- | --- | --- |
 | `score-core` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix accounts for the public score model, fixtures, validation, and explicit GP8 conversion limits; audited upstream-only model surface is recorded by issue 34. |
 | `midi-bank` | gp5, gp6, gp7, gp8 | supported | none | Legacy track banks and GPIF sound-bank definitions survive import, public editing, GP8 export, and pinned AlphaTab consumption with exact event order. |
+| `sustain-pedal` | gp6, gp7, gp8 | supported | none | GPIF sustain-pedal down and release automations survive in exact source order on staff 0. Continuing bars without an explicit marker derive one position-0 hold, and GP8 writes only down and release records for pinned AlphaTab to reconstruct. |
 | `rhythm` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public duration, exact timing, meter, tuplets, rests, and binary discriminants; audited upstream-only model surface is recorded by issue 34. |
 | `timing` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public exact time and finalized graph validation, with no corpus timing differences; audited upstream-only model surface is recorded by issue 34. |
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
@@ -175,7 +176,10 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Track.EmptyID` | `staff-ownership` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Track.Automation.Sound.Reference` | `score-core` | `invalid-data` | The sound automation must reference a sound in its track. |
 | `GPIF.MasterBar.Key.Mode.InvalidValue` | `score-core` | `unsupported-feature` | The key mode must use an accepted major or minor spelling; permissive parsing projects an unknown spelling to major. |
-| `GPIF.Track.Automation.SustainPedal` | `score-core` | `unsupported-feature` | Song has no destination for sustain-pedal automation. |
+| `GPIF.Track.Automation.SustainPedal.Bar.Invalid` | `sustain-pedal` | `invalid-data` | A sustain-pedal automation must reference an existing measure. |
+| `GPIF.Track.Automation.SustainPedal.Order.Invalid` | `sustain-pedal` | `invalid-data` | Sustain-pedal positions within one measure must be strictly increasing in source order. |
+| `GPIF.Track.Automation.SustainPedal.Position.Invalid` | `sustain-pedal` | `invalid-data` | A sustain-pedal position must be finite and within 0 through 1. |
+| `GPIF.Track.Automation.SustainPedal.Value.Invalid` | `sustain-pedal` | `invalid-data` | A sustain-pedal value must use reference 1 for down or 3 for release. |
 | `GPIF.Track.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The track automation type is not recognized. |
 | `GPIF.Track.Lyrics.Undispatched` | `score-core` | `lossy-projection` | The public lyric model keeps the lines but not the source dispatch state. |
 | `GPIF.Track.Transpose` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -229,7 +233,8 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
 | `RseInstrument` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The RSE instrument contains authored playback values. |
 | `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
-| `Measure` | `timing` | 10 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation and finalized ownership and timing. |
+| `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
+| `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
 | `Beat` | `note-and-beat-semantics` | 9 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Legato owns the authored beat-level phrase endpoints. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
@@ -260,7 +265,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 210 |
+| `preserved` | 213 |
 | `normalized` | 34 |
 | `omitted` | 116 |
 | `rejected` | 0 |
@@ -271,7 +276,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 81 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 82 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 149 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -295,10 +300,11 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
-| `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation and checks sound references before import. |
+| `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation, checks sound references, and validates sustain-pedal values, locations, and order before import. |
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
 | `parseGPIFWithContext:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only sound automations after the audit classifies all track automation types. |
 | `gpifReadVolumeAutomations:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only validated volume automations after the channel-strip audit. |
+| `gpifReadSustainPedals:automation.Type` | `sustain-pedal` | 1 | `sustain-pedal-preservation` | `delegated-to-audit` | The importer maps validated track sustain-pedal automations to staff-0 measures and derives holds across bars with no explicit marker. |
 | `gpifReadSyncPoints:automation.Type` | `timing` | 1 | `timing-finalization` | `delegated-to-audit` | The importer maps sync points after the master automation audit. |
 | `gpifReadTempoAutomations:auto.Type` | `tempo-automations` | 1 | `tempo-compatibility-authority` | `delegated-to-audit` | The importer maps tempo automations after the master automation audit. |
 | `gpifAuditNoteProperty:property.HType` | `harmonics` | 7 | `harmonic-conversion` | `unsupported-feature` | The audit classifies each harmonic type before import. |
@@ -374,6 +380,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
+| `sustain-pedal-preservation` | `sustain-pedal` | `TestConformanceSustainPedals` | `TestAlphaTabPreservesSustainPedals` | no | Ordered staff-0 down and release markers survive import, public editing, and GP8 export while empty continuing bars receive one derived hold marker that is skipped on the wire. Validation rejects a Down in a bar entered with the pedal down because consumers reinterpret it as Hold from bar-entry state. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |
 | `whammy-corpus-projection` | `note-and-beat-semantics` | `TestWhammyProjectionAdaptersExposeBeatCurves` | `TestAlphaTabWhammyCorpusConformance` | yes | Both corpus adapters must expose whammy curves so semantic comparison can detect regressions. |
