@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "issue": 116,
+  "status": "awaiting-fresh-review",
+  "implementation_support": "not-promoted",
+  "acceptance": [
+    {
+      "criterion": 1,
+      "result": "evidence-delivered",
+      "evidence": [
+        "authoring-receipt.json",
+        "../../../../testdata/gp8/protection-unprotected.gp",
+        "../../../../testdata/gp8/protection-edit-locked.gp",
+        "../../../../testdata/gp8/protection-open-locked.gp"
+      ],
+      "detail": "Original minimal score; Guitar Pro 8.1.5 Build 31; owner authorization and public test-only credential; exact hashes and protection modes."
+    },
+    {
+      "criterion": 2,
+      "result": "evidence-delivered",
+      "evidence": [
+        "authoring-receipt.json",
+        "control-reopen.txt",
+        "edit-final-reopen.txt",
+        "edit-final-read-only-menu.txt",
+        "edit-final-unlocked-menu.txt",
+        "open-correct-password.txt",
+        "open-wrong-password.txt",
+        "truncated-result.txt"
+      ],
+      "detail": "Hash-bound operator observations cover control opening, editing restrictions, unlock, correct/wrong opening credentials and malformed input. Wrong-password accessibility text does not retain the visible invalid-password notification; that outcome is the operator observation recorded in authoring-receipt.json."
+    },
+    {
+      "criterion": 3,
+      "result": "evidence-delivered",
+      "evidence": [
+        "authoring-receipt.json",
+        "integration/protection_test.go:TestGP8ProtectionEvidence"
+      ],
+      "detail": "Three readable ZIP archives; ordinary member flags; non-XML score bytes in both locked variants; malformed 64-byte control is not a ZIP. No algorithm inferred."
+    },
+    {
+      "criterion": 4,
+      "result": "evidence-delivered",
+      "evidence": [
+        "go-results.json",
+        "alphatab-results.json",
+        "integration/protection_test.go:TestGP8ProtectionEvidence"
+      ],
+      "detail": "Both public Go APIs and pinned AlphaTab exercised on each exact fixture; errors and absent scores checked. Raw Go message hex preserves non-UTF-8 bytes. Neither API takes credentials."
+    },
+    {
+      "criterion": 5,
+      "result": "evidence-delivered",
+      "evidence": [
+        "conformance/capabilities/work-items/password.json",
+        "conformance/capabilities/catalog.json",
+        "conformance/capabilities/capabilities.sqlite",
+        "conformance/fixture-inventory.json",
+        "conformance/corpus-snapshot.json"
+      ],
+      "detail": "Inputs available with actual references; canonical database contains structured error receipts. Work remains in_progress and issue remains open pending final review. No decryption follow-up is proposed without authoritative member encoding and credential derivation."
+    }
+  ],
+  "limits": [
+    "The pinned AlphaTab failures are unsupported-format and invalid-data boundaries, not independent decryption behavior.",
+    "Only Guitar Pro 8.1.5 Build 31 and the exact authored files were observed; member names are not asserted as universal protection signatures.",
+    "Locked inputs return no public score, so model and export preservation are not exercised; all capability ratings remain missing."
+  ]
+}

@@ -1,0 +1,108 @@
+Window: "protection-edit-locked", App: Guitar Pro 8.
+0 standard window protection-edit-locked, Secondary Actions: Raise
+	1 button Browse (⌘B)
+	2 checkbox Description: Show/Hide Editing Palette (F2), Value: 0
+	3 checkbox Description: Show/Hide Global View (F8), Value: 1
+	4 checkbox Description: Show/Hide Inspector (F5, F6), Value: 0
+	5 menu button View: Page - Grid
+	6 menu button 100%, Description: Zoom: 100%
+	7 button Go to first bar (⌘↖)
+	8 button Go to last bar (⌘↘)
+	9 button Go to previous bar (⌘←)
+	10 button Go to next bar (⌘→)
+	11 checkbox Description: Play (Space), Value: 0
+	12 checkbox Description: Enable loop (F9), Value: 0
+	13 checkbox 100%, Value: 0, Description: <nobr>Relative speed (⌘F9)</nobr><br><nobr><b>100%</b> of normal speed</nobr><br><nobr>(Use + and − keys when playing to modify relative speed)</nobr>
+	14 checkbox 0, Description: Enable/Disable relative tonality
+	15 button Increase relative tonality by one semitone
+	16 button Decrease relative tonality by one semitone
+	17 checkbox Description: Show/Hide Audio Track, Value: 0
+	18 checkbox Description: Show/Hide Fretboard View (⌘F6), Value: 0
+	19 checkbox Description: Show/Hide Keyboard View, Value: 0
+	20 checkbox Description: Show/Hide Virtual Drum Kit, Value: 0
+	21 button Tuner
+	22 checkbox Description: Line-in, Value: 0
+	23 menu button 1. Steel Guitar, Description: 
+<p>Current track
+<br>
+<nobr>(Click to change)</nobr></p>
+
+	24 checkbox Description: Activate/Deactivate count-in, Value: 0
+	25 checkbox Description: Activate/Deactivate metronome, Value: 0
+	26 button Metronome & Count-in settings
+	27 button 1/1, Description: 
+<p>Bar position
+<br>
+<nobr>(Click to open Go to dialog)</nobr></p>
+
+	28 button 4.0:4.0, Description: Bar current duration<br>No bar completion error
+	29 button 00:00 / 00:02, Description: Time
+	30 button No triplet feel
+	31 button 120, Description: 
+<p>Current tempo
+<br>
+<nobr>(Click to open Tempo Automation dialog)</nobr></p>
+
+	32 button Time signature
+	33 button Undo (⌘Z)
+	34 button Redo (⇧⌘Z)
+	35 button Print... (⌘P)
+	36 progress indicator (settable) 4999
+	37 menu button Add tab
+	38 text :tmp:gp-authoring-evidence:control control protection-open-locked
+	39 button
+	40 text protection-edit-locked
+	41 button Add Track
+	42 text Tracks
+	43 menu button Global view options
+	44 button Move current track down
+	45 button Move current track up
+	46 checkbox Description: Switch single track / multitrack, Value: 0
+	47 button Reset mute
+	48 button Reset solo
+	49 text Vol. Pan. Eq.
+	50 button
+	51 text 1. Steel Guitar
+	52 checkbox Description: Visibility, Value: 1
+	53 checkbox Description: Mute, Value: 0
+	54 checkbox Description: Solo, Value: 0
+	55 slider (settable) Description: 0.0dB, Value: 79
+	56 button
+	57 checkbox Description: Volume automation, Value: 0
+	58 container (settable) Description: Center, Value: 50
+	59 checkbox Description: Pan automation, Value: 0
+	60 checkbox Description: Equalizer, Value: 0
+	61 text Master
+	62 button
+	63 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	64 slider (settable) Description: 0 dB, Value: 75
+	65 button
+	66 checkbox Description: Master volume automation, Value: 0
+	67 container (settable) Description: Center, Value: 50
+	68 checkbox Description: Master pan automation, Value: 0
+	69 button
+	70 button
+	71 text Error
+	72 button Previous notification
+	73 button Next notification
+	74 text 3/3
+	75 button Close this notification
+	76 text Failed to open file: file:///private/tmp/gp-authoring-evidence/protection-truncated.gp. 
+	77 close button
+	78 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	79 minimize button
+	80 text protection-edit-locked
+81 menu bar
+	82 Guitar Pro 8
+	83 File
+	84 Edit
+	85 Track
+	86 Bar
+	87 Note
+	88 Effects
+	89 Section
+	90 Tools
+	91 Sound
+	92 View
+	93 Window
+	94 Help

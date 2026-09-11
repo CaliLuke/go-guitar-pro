@@ -1,0 +1,64 @@
+[
+  {
+    "api": "Parse",
+    "error_message": null,
+    "error_type": null,
+    "file": "testdata/gp8/protection-unprotected.gp",
+    "score_returned": true
+  },
+  {
+    "api": "ParseWithOptions",
+    "error_message": null,
+    "error_type": null,
+    "file": "testdata/gp8/protection-unprotected.gp",
+    "score_returned": true
+  },
+  {
+    "api": "Parse",
+    "error_message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: illegal character code U+001A",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696c6c6567616c2063686172616374657220636f646520552b30303141",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-edit-locked.gp",
+    "score_returned": false
+  },
+  {
+    "api": "ParseWithOptions",
+    "error_message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: illegal character code U+001A",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696c6c6567616c2063686172616374657220636f646520552b30303141",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-edit-locked.gp",
+    "score_returned": false
+  },
+  {
+    "api": "Parse",
+    "error_message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity &�� (no semicolon)",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-open-locked.gp",
+    "score_returned": false
+  },
+  {
+    "api": "ParseWithOptions",
+    "error_message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity &�� (no semicolon)",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-open-locked.gp",
+    "score_returned": false
+  },
+  {
+    "api": "Parse",
+    "error_message": "unparseable Guitar Pro file: opening ZIP: zip: not a valid zip file",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a206f70656e696e67205a49503a207a69703a206e6f7420612076616c6964207a69702066696c65",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-truncated.gp",
+    "score_returned": false
+  },
+  {
+    "api": "ParseWithOptions",
+    "error_message": "unparseable Guitar Pro file: opening ZIP: zip: not a valid zip file",
+    "error_message_hex": "756e706172736561626c65204775697461722050726f2066696c653a206f70656e696e67205a49503a207a69703a206e6f7420612076616c6964207a69702066696c65",
+    "error_type": "*goguitarpro.ParseError",
+    "file": "testdata/gp8/protection-truncated.gp",
+    "score_returned": false
+  }
+]

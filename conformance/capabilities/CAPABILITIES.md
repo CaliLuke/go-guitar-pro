@@ -22,7 +22,7 @@ All three stages have a supported rating in 47 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `true`.
+The receipt contains 364 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -381,9 +381,9 @@ Formats. Priority 3. Formats: gp8. Scope: guitar-pro.
 
 Import: **missing**. Model: **missing**. GP8 export: **missing**.
 
-No decryption support. The format website also lists this as unsupported by AlphaTab.
+Owned Guitar Pro 8.1.5 controls now characterize both modes: Lock Editing and Lock Opening are readable ZIPs whose score.gpif bytes are not XML. Both public Go APIs return ParseError with no score; AlphaTab 1.8.4 returns UnsupportedFormatError. A separate truncated control returns a ZIP parse error in Go and EndOfReaderError in AlphaTab. Guitar Pro opens the original control, enforces edit locking, unlocks with the test credential, and accepts/rejects the correct/wrong opening credentials. Import, model and export support remain missing; no algorithm or credential API is inferred.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Review the owned fixture-acquisition package under #116. A future implementation requires authoritative member encoding and credential derivation plus independent decryption outcomes; acquisition does not promote support.
 
 Bounded work: [Acquire owned GP8 protection-mode fixtures and error receipts](https://github.com/CaliLuke/go-guitar-pro/issues/116).
 

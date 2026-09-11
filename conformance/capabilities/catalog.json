@@ -5084,8 +5084,8 @@
         "model": "missing",
         "export": "missing"
       },
-      "finding": "No decryption support. The format website also lists this as unsupported by AlphaTab.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Owned Guitar Pro 8.1.5 controls now characterize both modes: Lock Editing and Lock Opening are readable ZIPs whose score.gpif bytes are not XML. Both public Go APIs return ParseError with no score; AlphaTab 1.8.4 returns UnsupportedFormatError. A separate truncated control returns a ZIP parse error in Go and EndOfReaderError in AlphaTab. Guitar Pro opens the original control, enforces edit locking, unlocks with the test credential, and accepts/rejects the correct/wrong opening credentials. Import, model and export support remain missing; no algorithm or credential API is inferred.",
+      "acceptance": "Review the owned fixture-acquisition package under #116. A future implementation requires authoritative member encoding and credential derivation plus independent decryption outcomes; acquisition does not promote support.",
       "upstream": [],
       "evidence": [
         {
@@ -5097,6 +5097,16 @@
           "kind": "source",
           "reference": "gp7_zip.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "fixture-package",
+          "reference": "conformance/capabilities/evidence/protection/authoring-receipt.json",
+          "detail": "Owned original score and exact mode-specific Guitar Pro observations, hashes, credentials and ZIP member metadata."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8ProtectionEvidence",
+          "detail": "Exact public Go and pinned AlphaTab error contracts, absent scores, valid control semantics, and raw message bytes."
         }
       ]
     },

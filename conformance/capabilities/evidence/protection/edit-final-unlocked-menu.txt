@@ -1,0 +1,98 @@
+Window: "edit-verification-copy", App: Guitar Pro 8.
+0 File, Secondary Actions: Cancel, Pick
+	1 menu Secondary Actions: Cancel
+		2 New, ID: qt_itemFired:
+		3 New from Template, ID: qt_itemFired:
+			4 menu Secondary Actions: Cancel
+				5 Empty (default), ID: qt_itemFired:
+				6 Acoustic Bass, ID: qt_itemFired:
+				7 Acoustic Piano, ID: qt_itemFired:
+				8 Blues Power Trio, ID: qt_itemFired:
+				9 Californian Punk Band, ID: qt_itemFired:
+				10 Classical Guitar, ID: qt_itemFired:
+				11 Drumkit, ID: qt_itemFired:
+				12 Electric Bass, ID: qt_itemFired:
+				13 Electric Guitar Clean, ID: qt_itemFired:
+				14 Electric Guitar Distortion, ID: qt_itemFired:
+				15 Electric Guitar Overdrive, ID: qt_itemFired:
+				16 Funk Orchestra, ID: qt_itemFired:
+				17 Guitar Vocals, ID: qt_itemFired:
+				18 Jazz Guitar, ID: qt_itemFired:
+				19 Jazz Quintet, ID: qt_itemFired:
+				20 Jazz Trio, ID: qt_itemFired:
+				21 Metal Band, ID: qt_itemFired:
+				22 Modern Rock Band, ID: qt_itemFired:
+				23 Nylon Guitar, ID: qt_itemFired:
+				24 Progressive Rock Band, ID: qt_itemFired:
+				25 Rock Experience Band, ID: qt_itemFired:
+				26 Steel Guitar, ID: qt_itemFired:
+				27 Stoner Band, ID: qt_itemFired:
+				28 Thrash Band, ID: qt_itemFired:
+		29 Open..., ID: qt_itemFired:
+		30 Open Recent, ID: qt_itemFired:
+			31 menu Secondary Actions: Cancel
+				32 edit-verification-copy.gp, ID: qt_itemFired:
+				33 protection-authoring.gp, ID: qt_itemFired:
+				34 protection-edit-locked.gp, ID: qt_itemFired:
+				35 protection-open-locked.gp, ID: qt_itemFired:
+				36 control.gp, ID: qt_itemFired:
+				37 Empty.gp, ID: qt_itemFired:
+				38 Clear Recent Files, ID: qt_itemFired:
+		39 Open Example, ID: qt_itemFired:
+			40 menu Secondary Actions: Cancel
+				41 All of Them Witches, ID: qt_itemFired:
+				42 Hard Rock, ID: qt_itemFired:
+				43 Keystone, ID: qt_itemFired:
+				44 Adelita (Tarrega), ID: qt_itemFired:
+				45 Bourree (Bach), ID: qt_itemFired:
+				46 Moonlight Sonata (Beethoven), ID: qt_itemFired:
+				47 Anatole, ID: qt_itemFired:
+				48 Blueberry, ID: qt_itemFired:
+				49 Blues, ID: qt_itemFired:
+				50 Empty Room, ID: qt_itemFired:
+				51 Funky Horn, ID: qt_itemFired:
+				52 Slow Blues, ID: qt_itemFired:
+				53 Amazing Grace, ID: qt_itemFired:
+				54 Angelo (Francois Sciortino), ID: qt_itemFired:
+				55 Bluesy and Groovy, ID: qt_itemFired:
+				56 Bossamba, ID: qt_itemFired:
+				57 Conversation, ID: qt_itemFired:
+				58 Elea (Jeremy Cauliez), ID: qt_itemFired:
+				59 Flamenco Style, ID: qt_itemFired:
+				60 La Escapada Zapateado (El Mati), ID: qt_itemFired:
+				61 Manouche, ID: qt_itemFired:
+				62 Moon Over Shanghai (Francois Sciortino), ID: qt_itemFired:
+				63 Pick It Out, ID: qt_itemFired:
+				64 Seven Bossa, ID: qt_itemFired:
+				65 Twelve, ID: qt_itemFired:
+				66 Arpeggio Practice, ID: qt_itemFired:
+				67 Pentatonic Patterns, ID: qt_itemFired:
+		68 Browse, ID: qt_itemFired:
+		69 Close, ID: qt_itemFired:
+		70 Close All, ID: qt_itemFired:
+		71 Save, ID: qt_itemFired:
+		72 Save As..., ID: qt_itemFired:
+		73 Save As Template..., ID: qt_itemFired:
+		74 Open Containing Folder, ID: qt_itemFired:
+		75 Import, ID: qt_itemFired:
+			76 menu Secondary Actions: Cancel
+				77 MIDI..., ID: qt_itemFired:
+				78 MusicXML..., ID: qt_itemFired:
+				79 ASCII..., ID: qt_itemFired:
+				80 TablEdit..., ID: qt_itemFired:
+				81 PowerTab..., ID: qt_itemFired:
+		82 Export, ID: qt_itemFired:
+			83 menu Secondary Actions: Cancel
+				84 GPX..., ID: qt_itemFired:
+				85 GP5..., ID: qt_itemFired:
+				86 MIDI..., ID: qt_itemFired:
+				87 ASCII..., ID: qt_itemFired:
+				88 MusicXML..., ID: qt_itemFired:
+				89 PDF..., ID: qt_itemFired:
+				90 SVG..., ID: qt_itemFired:
+				91 PNG..., ID: qt_itemFired:
+				92 Audio..., ID: qt_itemFired:
+		93 Batch Converter..., ID: qt_itemFired:
+		94 Print..., ID: qt_itemFired:
+		95 Lock/Unlock..., ID: qt_itemFired:
+		96 Stylesheet..., ID: qt_itemFired:

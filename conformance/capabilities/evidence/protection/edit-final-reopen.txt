@@ -1,0 +1,112 @@
+Window: "edit-verification-copy", App: Guitar Pro 8.
+0 standard window edit-verification-copy, Secondary Actions: Raise
+	1 button Browse (⌘B)
+	2 checkbox Description: Show/Hide Editing Palette (F2), Value: 0
+	3 checkbox Description: Show/Hide Global View (F8), Value: 1
+	4 checkbox Description: Show/Hide Inspector (F5, F6), Value: 0
+	5 menu button View: Page - Grid
+	6 menu button 100%, Description: Zoom: 100%
+	7 button Go to first bar (⌘↖)
+	8 button Go to last bar (⌘↘)
+	9 button Go to previous bar (⌘←)
+	10 button Go to next bar (⌘→)
+	11 checkbox Description: Play (Space), Value: 0
+	12 checkbox Description: Enable loop (F9), Value: 0
+	13 checkbox 100%, Value: 0, Description: <nobr>Relative speed (⌘F9)</nobr><br><nobr><b>100%</b> of normal speed</nobr><br><nobr>(Use + and − keys when playing to modify relative speed)</nobr>
+	14 checkbox 0, Description: Enable/Disable relative tonality
+	15 button Increase relative tonality by one semitone
+	16 button Decrease relative tonality by one semitone
+	17 checkbox Description: Show/Hide Audio Track, Value: 0
+	18 checkbox Description: Show/Hide Fretboard View (⌘F6), Value: 0
+	19 checkbox Description: Show/Hide Keyboard View, Value: 0
+	20 checkbox Description: Show/Hide Virtual Drum Kit, Value: 0
+	21 button Tuner
+	22 checkbox Description: Line-in, Value: 0
+	23 menu button 1. Steel Guitar, Description: 
+<p>Current track
+<br>
+<nobr>(Click to change)</nobr></p>
+
+	24 checkbox Description: Activate/Deactivate count-in, Value: 0
+	25 checkbox Description: Activate/Deactivate metronome, Value: 0
+	26 button Metronome & Count-in settings
+	27 button 1/1, Description: 
+<p>Bar position
+<br>
+<nobr>(Click to open Go to dialog)</nobr></p>
+
+	28 button 4.0:4.0, Description: Bar current duration<br>No bar completion error
+	29 button 00:00 / 00:02, Description: Time
+	30 button No triplet feel
+	31 button 120, Description: 
+<p>Current tempo
+<br>
+<nobr>(Click to open Tempo Automation dialog)</nobr></p>
+
+	32 button Time signature
+	33 button Undo (⌘Z)
+	34 button Redo (⇧⌘Z)
+	35 button Print... (⌘P)
+	36 progress indicator (settable) 4999
+	37 menu button Add tab
+	38 text :tmp:gp-authori…vidence:control control protection-open-locked
+	39 button
+	40 text protection-edit-locked
+	41 button Unlock
+	42 text protection-authoring
+	43 button Unlock
+	44 text edit-verification-copy
+	45 button Add Track
+	46 text Tracks
+	47 menu button Global view options
+	48 button Move current track down
+	49 button Move current track up
+	50 checkbox Description: Switch single track / multitrack, Value: 0
+	51 button Reset mute
+	52 button Reset solo
+	53 text Vol. Pan. Eq.
+	54 button
+	55 text 1. Steel Guitar
+	56 checkbox Description: Visibility, Value: 1
+	57 checkbox Description: Mute, Value: 0
+	58 checkbox Description: Solo, Value: 0
+	59 slider (settable) Description: 0.0dB, Value: 79
+	60 button
+	61 checkbox Description: Volume automation, Value: 0
+	62 container (settable) Description: Center, Value: 50
+	63 checkbox Description: Pan automation, Value: 0
+	64 checkbox Description: Equalizer, Value: 0
+	65 text Master
+	66 button
+	67 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	68 slider (settable) Description: 0 dB, Value: 75
+	69 button
+	70 checkbox Description: Master volume automation, Value: 0
+	71 container (settable) Description: Center, Value: 50
+	72 checkbox Description: Master pan automation, Value: 0
+	73 button
+	74 button
+	75 text Information
+	76 button Previous notification
+	77 button Next notification
+	78 text 4/4
+	79 button Close this notification
+	80 text The document is currently locked: no edition is possible. If you want to edit the file, you must unlock it first. 
+	81 close button
+	82 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	83 minimize button
+	84 text edit-verification-copy
+85 menu bar
+	86 Guitar Pro 8
+	87 File
+	88 Edit
+	89 Track
+	90 Bar
+	91 Note
+	92 Effects
+	93 Section
+	94 Tools
+	95 Sound
+	96 View
+	97 Window
+	98 Help

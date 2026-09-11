@@ -11,6 +11,12 @@ import (
 	guitarpro "github.com/CaliLuke/go-guitar-pro"
 )
 
+var knownUnsupportedFixtures = map[string]string{
+	"../testdata/gp8/protection-edit-locked.gp": "Lock Editing protection (#116); exact error in TestGP8ProtectionEvidence",
+	"../testdata/gp8/protection-open-locked.gp": "Lock Opening protection (#116); exact error in TestGP8ProtectionEvidence",
+	"../testdata/gp8/protection-truncated.gp":   "deliberately malformed ZIP control (#116); exact error in TestGP8ProtectionEvidence",
+}
+
 func TestParseFixtures(t *testing.T) {
 	err := filepath.WalkDir("../testdata", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -22,6 +28,12 @@ func TestParseFixtures(t *testing.T) {
 
 		t.Run(path, func(t *testing.T) {
 			song, err := guitarpro.ParseFile(path)
+			if reason, unsupported := knownUnsupportedFixtures[path]; unsupported {
+				if err == nil || song != nil {
+					t.Fatalf("known unsupported fixture returned score=%v, error=%v: %s", song != nil, err, reason)
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("ParseFile() error = %v", err)
 			}

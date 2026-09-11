@@ -1102,6 +1102,16 @@ function main() {
     console.error('usage: node oracle.mjs FIXTURE | --batch FIXTURE...');
     process.exit(2);
   }
+  if (args[0] === '--batch-receipts') {
+    process.stdout.write(`${JSON.stringify(args.slice(1).map(fixture => {
+      try {
+        return { fixture, score: loadNormalizedScore(fixture) };
+      } catch (error) {
+        return { fixture, score: null, error: { type: error.constructor.name, message: error.message } };
+      }
+    }))}\n`);
+    return;
+  }
   if (args[0] === '--batch') {
     const fixtures = args.slice(1);
     process.stdout.write(`${JSON.stringify(fixtures.map(fixture => ({

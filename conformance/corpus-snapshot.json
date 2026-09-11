@@ -17385,6 +17385,151 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/protection-edit-locked.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [],
+      "differences": null,
+      "importFailure": {
+        "goError": {
+          "type": "*goguitarpro.ParseError",
+          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: illegal character code U+001A",
+          "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696c6c6567616c2063686172616374657220636f646520552b30303141"
+        },
+        "alphaTabError": {
+          "type": "UnsupportedFormatError",
+          "message": "No compatible importer found for file"
+        }
+      }
+    },
+    {
+      "path": "testdata/gp8/protection-open-locked.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [],
+      "differences": null,
+      "importFailure": {
+        "goError": {
+          "type": "*goguitarpro.ParseError",
+          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity \u0026�� (no semicolon)",
+          "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29"
+        },
+        "alphaTabError": {
+          "type": "UnsupportedFormatError",
+          "message": "No compatible importer found for file"
+        }
+      }
+    },
+    {
+      "path": "testdata/gp8/protection-truncated.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [],
+      "differences": null,
+      "importFailure": {
+        "goError": {
+          "type": "*goguitarpro.ParseError",
+          "message": "unparseable Guitar Pro file: opening ZIP: zip: not a valid zip file",
+          "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a206f70656e696e67205a49503a207a69703a206e6f7420612076616c6964207a69702066696c65"
+        },
+        "alphaTabError": {
+          "type": "EndOfReaderError",
+          "message": "Unexpected end of data within reader"
+        }
+      }
+    },
+    {
+      "path": "testdata/gp8/protection-unprotected.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Beat.Property.PrimaryPickupTone",
+          "kind": "deliberate-ignore",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupTone\"]",
+          "objectId": "0",
+          "locationsSha256": "a0b44a3c2678de30836f70d2c266c63a7304e5dd0bcf7f25f8d1fdd16c5c8e62"
+        },
+        {
+          "code": "GPIF.Beat.Property.PrimaryPickupVolume",
+          "kind": "deliberate-ignore",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
+          "objectId": "0",
+          "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
+        },
+        {
+          "code": "GPIF.ChannelStrip.Automation.Unsupported",
+          "kind": "unsupported-feature",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
+          "objectId": "0",
+          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
+        },
+        {
+          "code": "GPIF.Note.Property.ConcertPitch",
+          "kind": "unsupported-feature",
+          "count": 6,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"ConcertPitch\"]",
+          "objectId": "0",
+          "locationsSha256": "e5f756d2a5c2aedee471eb1fb1d02d0e7169157d7e10990c5dbaa6d375a2986e"
+        },
+        {
+          "code": "GPIF.Note.Property.TransposedPitch",
+          "kind": "unsupported-feature",
+          "count": 6,
+          "sourcePath": "/GPIF/Notes/Note[@id=\"0\"]/Properties/Property[@name=\"TransposedPitch\"]",
+          "objectId": "0",
+          "locationsSha256": "039b240dd7ce4fbf873ec6584d13ab89a9065217e4cf584c15c9df37b032fa36"
+        },
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 6,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "11f17de3b0a4978fa3c4cb8ded698f9abd2c6644d123c2f1a0c1d27ac2d10eba"
+        },
+        {
+          "code": "GPIF.UnknownElement.NoteAndBeat",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
+          "objectId": "0",
+          "locationsSha256": "38b3bc44b28f17f73b8cdc90c64d63b7a2e084ce328ce9137491a8b827b7baa4"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 11,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 20,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
+          "objectId": "0",
+          "locationsSha256": "c35066dd88cdf07a9424ae25846a205102e289aca576760750d5c6e3042bc915"
+        }
+      ],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/slash.gp",
       "features": [
         "score-core"

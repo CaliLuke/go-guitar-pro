@@ -1,0 +1,451 @@
+{
+  "schema_version": 1,
+  "authoring_application": "Guitar Pro 8.1.5 Build 31",
+  "authoring_date": "2026-09-11",
+  "provenance": "Original minimal score created locally by Codex for repository tests under the repository owner request to work all outstanding tickets. No third-party score. One six-string standard-tuning open-string chord, whole note, one 4/4 bar, tempo 120.",
+  "test_credential": "gp-fixture-test-only-2026",
+  "wrong_test_credential": "deliberately-wrong-test-password",
+  "credential_scope": "Public test-only fixture credential, not an account password.",
+  "observed_ui": {
+    "unprotected": "Reopened protection-unprotected.gp with no credential prompt. One complete 4/4 bar.",
+    "edit_locked": "Reopened byte-identical edit-verification-copy.gp without credentials. Save, Save As, MIDI/GPX/GP5 export were disabled. File > Lock/Unlock with the test credential restored enabled Save and MIDI commands. Unlock rewrites the working file, so the final locked fixture was preserved separately.",
+    "open_locked": "Opening protection-open-locked.gp prompted for a password. Wrong test credential yielded Invalid password for the file protection-open-locked.gp and Failed to open file notification. Reopened the same bytes with the correct test credential; score loaded with one complete 4/4 bar.",
+    "truncated": "Opening protection-truncated.gp produced Failed to open file notification, no password prompt or score. It is exactly the first 64 bytes of the unprotected control."
+  },
+  "ui_receipts": {
+    "unprotected": "control-reopen.txt",
+    "edit_reopen": "edit-final-reopen.txt",
+    "edit_read_only": "edit-final-read-only-menu.txt",
+    "edit_unlocked": "edit-final-unlocked-menu.txt",
+    "open_correct": "open-correct-password.txt",
+    "truncated": "truncated-result.txt",
+    "open_wrong": "open-wrong-password.txt"
+  },
+  "files": [
+    {
+      "file": "protection-unprotected.gp",
+      "mode": "unprotected",
+      "sha256": "64ce1d269c0c64a27674a1e3a1cb84d26bd4140a092704de2aed81c5a6223ccc",
+      "size": 12255,
+      "prefix_hex": "504b03041400000000000000000000000000000000000000000008000000436f6e74656e742f504b030414000800080000000000000000000000000000000000",
+      "is_zip": true,
+      "members": [
+        {
+          "name": "Content/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/BinaryStylesheet",
+          "flags": 8,
+          "compression": 8,
+          "size": 21980,
+          "readable": true,
+          "sha256": "cfcb484bf781c5a2674aa9ffc31da309293d14915a0e884f4b2e376c8dad3952"
+        },
+        {
+          "name": "Content/LayoutConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "88957daa3ec981bd61cda0c1e6bdaffb2b85a86b39de587157104dfbd8659865"
+        },
+        {
+          "name": "Content/PartConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 20,
+          "readable": true,
+          "sha256": "ad06fb810986971fcb46afbdd99e5bc587084b5c403ef4232b66a0e20ffc4b09"
+        },
+        {
+          "name": "Content/Preferences.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 303,
+          "readable": true,
+          "sha256": "96f2441c9e690e1f60b2014b1a8f7bc3df22944950e0037d8b30de8723ed84fe"
+        },
+        {
+          "name": "Content/ScoreViews/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/ScoreViews/0.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "038d43bdf5f2bce7992a49656c1d977fa727873b139707d4f261be60665ce4ca"
+        },
+        {
+          "name": "Content/ScoreViews/1.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 207,
+          "readable": true,
+          "sha256": "5e593415666c081dcf2f8d58e11251a6a6adbc5ab6f1e87205ed3da5cf1a3c8d"
+        },
+        {
+          "name": "Content/Stylesheets/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/Stylesheets/score.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 3445,
+          "readable": true,
+          "sha256": "14948403ff5aea244910a46095f56b990e120b86e2584b8e140123d67753fdd4"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview0.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview1.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/score.gpif",
+          "flags": 8,
+          "compression": 8,
+          "size": 11864,
+          "readable": true,
+          "sha256": "a08acc56124f0f5c3e839cc8549ae47f46572566a4d28ca49b5df787e36e601c"
+        },
+        {
+          "name": "VERSION",
+          "flags": 8,
+          "compression": 8,
+          "size": 3,
+          "readable": true,
+          "sha256": "0de7cf39e1e6366122309794e86d197d025a81235881e67ec4f011c9db2df252"
+        },
+        {
+          "name": "meta.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 4,
+          "readable": true,
+          "sha256": "d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817"
+        }
+      ],
+      "score_gpif_prefix_hex": "3c3f786d6c2076657273696f6e3d22312e302220656e636f64696e673d227574662d38223f3e0a3c475049463e0a3c475056657273696f6e3e382e312e353c2f",
+      "path": "testdata/gp8/protection-unprotected.gp"
+    },
+    {
+      "file": "protection-edit-locked.gp",
+      "mode": "Lock Editing",
+      "sha256": "dc3e90467f5b240f3529c8841b24911f91a7b6c0134dcbe75dabe00d855235e4",
+      "size": 21764,
+      "prefix_hex": "504b03041400000000000000000000000000000000000000000008000000436f6e74656e742f504b030414000800080000000000000000000000000000000000",
+      "is_zip": true,
+      "members": [
+        {
+          "name": "Content/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/BinaryStylesheet",
+          "flags": 8,
+          "compression": 8,
+          "size": 21980,
+          "readable": true,
+          "sha256": "cfcb484bf781c5a2674aa9ffc31da309293d14915a0e884f4b2e376c8dad3952"
+        },
+        {
+          "name": "Content/LayoutConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "88957daa3ec981bd61cda0c1e6bdaffb2b85a86b39de587157104dfbd8659865"
+        },
+        {
+          "name": "Content/PartConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 20,
+          "readable": true,
+          "sha256": "ad06fb810986971fcb46afbdd99e5bc587084b5c403ef4232b66a0e20ffc4b09"
+        },
+        {
+          "name": "Content/Preferences.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 303,
+          "readable": true,
+          "sha256": "96f2441c9e690e1f60b2014b1a8f7bc3df22944950e0037d8b30de8723ed84fe"
+        },
+        {
+          "name": "Content/ScoreViews/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/ScoreViews/0.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "038d43bdf5f2bce7992a49656c1d977fa727873b139707d4f261be60665ce4ca"
+        },
+        {
+          "name": "Content/ScoreViews/1.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 207,
+          "readable": true,
+          "sha256": "5e593415666c081dcf2f8d58e11251a6a6adbc5ab6f1e87205ed3da5cf1a3c8d"
+        },
+        {
+          "name": "Content/Stylesheets/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/Stylesheets/score.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 3445,
+          "readable": true,
+          "sha256": "14948403ff5aea244910a46095f56b990e120b86e2584b8e140123d67753fdd4"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview0.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview1.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/score.gpif",
+          "flags": 8,
+          "compression": 8,
+          "size": 11888,
+          "readable": true,
+          "sha256": "f547bf1ac81c5d4bbb40111aed9e52cd03ed1de64fe27db6a8f855fc4db91767"
+        },
+        {
+          "name": "VERSION",
+          "flags": 8,
+          "compression": 8,
+          "size": 3,
+          "readable": true,
+          "sha256": "0de7cf39e1e6366122309794e86d197d025a81235881e67ec4f011c9db2df252"
+        },
+        {
+          "name": "editLocked",
+          "flags": 8,
+          "compression": 8,
+          "size": 97,
+          "readable": true,
+          "sha256": "f5ac9fab6baa1c2660824468c427835a0f05c08a31cdd760daa6ab3f92d90e35"
+        },
+        {
+          "name": "meta.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 4,
+          "readable": true,
+          "sha256": "d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817"
+        }
+      ],
+      "score_gpif_prefix_hex": "1a473d9fd89f8627808fef88fcb20bb6944d32adefffa2d16f34a924623f78c09e20a564ba8242e05d7fa3686d294479a7668ffdaac440ead24041c0635e3606",
+      "path": "testdata/gp8/protection-edit-locked.gp"
+    },
+    {
+      "file": "protection-open-locked.gp",
+      "mode": "Lock Opening",
+      "sha256": "958bf4aa37c1bcacfaad2bf93e60f9b2958f7a88d3fa92b4fca75418247eab36",
+      "size": 21701,
+      "prefix_hex": "504b03041400000000000000000000000000000000000000000008000000436f6e74656e742f504b030414000800080000000000000000000000000000000000",
+      "is_zip": true,
+      "members": [
+        {
+          "name": "Content/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/BinaryStylesheet",
+          "flags": 8,
+          "compression": 8,
+          "size": 21980,
+          "readable": true,
+          "sha256": "cfcb484bf781c5a2674aa9ffc31da309293d14915a0e884f4b2e376c8dad3952"
+        },
+        {
+          "name": "Content/LayoutConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "88957daa3ec981bd61cda0c1e6bdaffb2b85a86b39de587157104dfbd8659865"
+        },
+        {
+          "name": "Content/PartConfiguration",
+          "flags": 8,
+          "compression": 8,
+          "size": 20,
+          "readable": true,
+          "sha256": "ad06fb810986971fcb46afbdd99e5bc587084b5c403ef4232b66a0e20ffc4b09"
+        },
+        {
+          "name": "Content/Preferences.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 303,
+          "readable": true,
+          "sha256": "96f2441c9e690e1f60b2014b1a8f7bc3df22944950e0037d8b30de8723ed84fe"
+        },
+        {
+          "name": "Content/ScoreViews/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/ScoreViews/0.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 12,
+          "readable": true,
+          "sha256": "038d43bdf5f2bce7992a49656c1d977fa727873b139707d4f261be60665ce4ca"
+        },
+        {
+          "name": "Content/ScoreViews/1.gpsv",
+          "flags": 8,
+          "compression": 8,
+          "size": 207,
+          "readable": true,
+          "sha256": "5e593415666c081dcf2f8d58e11251a6a6adbc5ab6f1e87205ed3da5cf1a3c8d"
+        },
+        {
+          "name": "Content/Stylesheets/",
+          "flags": 0,
+          "compression": 0,
+          "size": 0,
+          "readable": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "Content/Stylesheets/score.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 3445,
+          "readable": true,
+          "sha256": "14948403ff5aea244910a46095f56b990e120b86e2584b8e140123d67753fdd4"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview0.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/Stylesheets/scoreview1.gpss",
+          "flags": 8,
+          "compression": 8,
+          "size": 285,
+          "readable": true,
+          "sha256": "95f80bf7084c4b3c9775328c0693f501d5d6d3f15b819213049dd53395e52a8c"
+        },
+        {
+          "name": "Content/score.gpif",
+          "flags": 8,
+          "compression": 8,
+          "size": 11888,
+          "readable": true,
+          "sha256": "b7e8c864217717de8ef44092cba9c7a9413d3bd716c4e317a8a2a85a572cde91"
+        },
+        {
+          "name": "VERSION",
+          "flags": 8,
+          "compression": 8,
+          "size": 3,
+          "readable": true,
+          "sha256": "0de7cf39e1e6366122309794e86d197d025a81235881e67ec4f011c9db2df252"
+        },
+        {
+          "name": "meta.json",
+          "flags": 8,
+          "compression": 8,
+          "size": 4,
+          "readable": true,
+          "sha256": "d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817"
+        },
+        {
+          "name": "openLocked",
+          "flags": 8,
+          "compression": 8,
+          "size": 6,
+          "readable": true,
+          "sha256": "14493f5f5470ed48c3f103d917ec52ae9005fa3913128031d0fac2a49ac3cc41"
+        }
+      ],
+      "score_gpif_prefix_hex": "47bef4b2d31645b0ff376b1c4e00428be4d5a5e848677f6fb4bd38b9931ba6a2fcba1c4da59cb9165ccb8a44a2db0938e694df19f3102db2b85468498763ec72",
+      "path": "testdata/gp8/protection-open-locked.gp"
+    },
+    {
+      "file": "protection-truncated.gp",
+      "mode": "malformed control",
+      "sha256": "2ee5f4ea39c9c3efd2ecc53da434238e5f86c56d2f9ca1f56033200062841334",
+      "size": 64,
+      "prefix_hex": "504b03041400000000000000000000000000000000000000000008000000436f6e74656e742f504b030414000800080000000000000000000000000000000000",
+      "is_zip": false,
+      "path": "testdata/gp8/protection-truncated.gp"
+    }
+  ],
+  "ui_receipt_limits": "Accessibility text files supplement the hash-bound operator observations above. The wrong-password text file contains only the unchanged-tree result; the invalid-password text and failed-open notification were visually observed by the authoring operator.",
+  "container_interpretation": "All three complete variants are readable ZIP containers. No ZIP member has the encryption flag set. Both locked score.gpif members are readable as bytes but are not XML; editLocked/openLocked names distinguish these authored variants. This does not identify a cryptographic algorithm, key derivation, universal signature, or decryption API.",
+  "decision": "Fixture-acquisition evidence delivered; awaiting fresh acceptance review. Import remains unsupported for both locked variants; no protected score reaches the public model or export. The malformed control is separate invalid data. Guitar Pro supplies mode-specific independent opening/unlocking evidence. A programmatic decryption implementation remains undefined because the member encoding and credential derivation are unknown. No decryption or password API is proposed and capability ratings remain missing.",
+  "go_error_encoding": "Go XML errors can contain raw non-UTF-8 bytes from the protected member. go-results.json keeps the JSON-readable error_message and lossless error_message_hex; both are verified without changing the parser error."
+}

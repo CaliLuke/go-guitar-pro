@@ -325,6 +325,18 @@ for (let index = 0; index < corpus.fixtures.length; index++) {
   if (JSON.stringify(receipt.features) !== JSON.stringify(fixture.features)) {
     fail(`${receipt.path} corpus feature mapping is stale`);
   }
+  if (receipt.importFailure) {
+    if (fixture.disposition !== 'unsupported' || receipt.diagnostics?.length || receipt.differences?.length) {
+      fail(`${receipt.path} import failure must have an unsupported fixture disposition and no semantic claims`);
+    }
+    for (const key of ['goError', 'alphaTabError']) {
+      const error = receipt.importFailure[key];
+      if (!error?.type || !error?.message) fail(`${receipt.path} lacks an exact ${key} receipt`);
+      if (key === 'goError' && !/^(?:[0-9a-f]{2})+$/.test(error.messageHex ?? '')) {
+        fail(`${receipt.path} lacks lossless Go error message bytes`);
+      }
+    }
+  }
   for (const diagnostic of receipt.diagnostics ?? []) {
     if (!diagnostic.code || !allowedDiagnosticDispositions.has(diagnostic.kind) || !Number.isInteger(diagnostic.count) || diagnostic.count < 1 || !/^[0-9a-f]{64}$/.test(diagnostic.locationsSha256 ?? '')) {
       fail(`${receipt.path} has an invalid counted diagnostic receipt`);

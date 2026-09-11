@@ -3440,6 +3440,50 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/protection-edit-locked.gp",
+      "sha256": "dc3e90467f5b240f3529c8841b24911f91a7b6c0134dcbe75dabe00d855235e4",
+      "format": "gp8",
+      "disposition": "unsupported",
+      "reason": "Authorized Lock Editing fixture; readable ZIP contains non-XML score member; Go and pinned AlphaTab reject it (#116).",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/protection-open-locked.gp",
+      "sha256": "958bf4aa37c1bcacfaad2bf93e60f9b2958f7a88d3fa92b4fca75418247eab36",
+      "format": "gp8",
+      "disposition": "unsupported",
+      "reason": "Authorized Lock Opening fixture; readable ZIP contains non-XML score member; Go and pinned AlphaTab reject it (#116).",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/protection-truncated.gp",
+      "sha256": "2ee5f4ea39c9c3efd2ecc53da434238e5f86c56d2f9ca1f56033200062841334",
+      "format": "gp8",
+      "disposition": "unsupported",
+      "reason": "Deliberately truncated invalid ZIP; exact independent failure receipts distinguish corruption from protected input (#116).",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/protection-unprotected.gp",
+      "sha256": "64ce1d269c0c64a27674a1e3a1cb84d26bd4140a092704de2aed81c5a6223ccc",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original Guitar Pro 8.1.5 unprotected control; exact score-content public assertions in TestGP8ProtectionEvidence.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/slash.gp",
       "sha256": "905caaf7c94f8606801525491717c4cbefd68bd0e6c95cf22641a50192e09588",
       "format": "gp8",

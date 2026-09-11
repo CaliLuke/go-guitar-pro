@@ -25,10 +25,22 @@ type conformanceCorpusSnapshot struct {
 }
 
 type conformanceCorpusFixtureReceipt struct {
-	Path        string                               `json:"path"`
-	Features    []string                             `json:"features"`
-	Diagnostics []conformanceCorpusDiagnosticReceipt `json:"diagnostics"`
-	Differences []conformanceCorpusDifferenceReceipt `json:"differences"`
+	Path          string                               `json:"path"`
+	Features      []string                             `json:"features"`
+	Diagnostics   []conformanceCorpusDiagnosticReceipt `json:"diagnostics"`
+	Differences   []conformanceCorpusDifferenceReceipt `json:"differences"`
+	ImportFailure *conformanceCorpusImportFailure      `json:"importFailure,omitempty"`
+}
+
+type conformanceCorpusErrorReceipt struct {
+	Type       string `json:"type"`
+	Message    string `json:"message"`
+	MessageHex string `json:"messageHex,omitempty"`
+}
+
+type conformanceCorpusImportFailure struct {
+	GoError       *conformanceCorpusErrorReceipt `json:"goError"`
+	AlphaTabError *conformanceCorpusErrorReceipt `json:"alphaTabError"`
 }
 
 type conformanceCorpusDiagnosticReceipt struct {
@@ -49,8 +61,9 @@ type conformanceCorpusDifferenceReceipt struct {
 }
 
 type conformanceCorpusOracleResult struct {
-	Fixture string `json:"fixture"`
-	Score   any    `json:"score"`
+	Fixture string                         `json:"fixture"`
+	Score   any                            `json:"score"`
+	Error   *conformanceCorpusErrorReceipt `json:"error"`
 }
 
 var conformanceCorpusRun struct {
@@ -99,18 +112,28 @@ func verifyCorpusSnapshot(t *testing.T) error {
 			return readErr
 		}
 		result, parseErr := ParseWithOptions(data, ParseOptions{})
-		if parseErr != nil {
-			return fmt.Errorf("%s: %w", fixture.Path, parseErr)
-		}
-		receipt := conformanceCorpusFixtureReceipt{
-			Path:        fixture.Path,
-			Features:    fixture.Features,
-			Diagnostics: conformanceCorpusDiagnostics(result.Diagnostics),
-		}
-		alphaScore, ok := oracleScores[fixture.Path]
+		alphaResult, ok := oracleScores[fixture.Path]
 		if !ok {
 			return fmt.Errorf("%s has no AlphaTab batch result", fixture.Path)
 		}
+		receipt := conformanceCorpusFixtureReceipt{Path: fixture.Path, Features: fixture.Features}
+		if parseErr != nil || alphaResult.Error != nil {
+			if fixture.Disposition != "unsupported" {
+				return fmt.Errorf("%s has an unclassified import failure: Go=%w AlphaTab=%v", fixture.Path, parseErr, alphaResult.Error)
+			}
+			if result != nil || alphaResult.Score != nil {
+				return fmt.Errorf("%s import failure unexpectedly returned a score", fixture.Path)
+			}
+			receipt.Diagnostics = []conformanceCorpusDiagnosticReceipt{}
+			receipt.ImportFailure = &conformanceCorpusImportFailure{AlphaTabError: alphaResult.Error}
+			if parseErr != nil {
+				receipt.ImportFailure.GoError = &conformanceCorpusErrorReceipt{Type: fmt.Sprintf("%T", parseErr), Message: string([]rune(parseErr.Error())), MessageHex: fmt.Sprintf("%x", parseErr.Error())}
+			}
+			actual.Fixtures = append(actual.Fixtures, receipt)
+			continue
+		}
+		receipt.Diagnostics = conformanceCorpusDiagnostics(result.Diagnostics)
+		alphaScore := alphaResult.Score
 		goFeatures := selectConformanceFeatures(normalizeGoScore(result.Song), fixture.Features)
 		alphaFeatures := selectConformanceFeatures(alphaScore, fixture.Features)
 		goFeatures = conformanceCorpusApplyOracleLimitations(fixture.Path, goFeatures)
@@ -286,8 +309,8 @@ func conformanceCorpusDifferenceKey(fixture string, difference conformanceCorpus
 	return fixture + "\x00" + string(encoded)
 }
 
-func readCorpusOracleScores(paths []string) (map[string]any, error) {
-	args := append([]string{alphaTabOracleScript(), "--batch"}, paths...)
+func readCorpusOracleScores(paths []string) (map[string]conformanceCorpusOracleResult, error) {
+	args := append([]string{alphaTabOracleScript(), "--batch-receipts"}, paths...)
 	output, err := exec.Command("node", args...).CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("AlphaTab batch oracle: %w\n%s", err, output)
@@ -296,12 +319,12 @@ func readCorpusOracleScores(paths []string) (map[string]any, error) {
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, fmt.Errorf("decode AlphaTab batch oracle: %w", err)
 	}
-	scores := make(map[string]any, len(results))
+	scores := make(map[string]conformanceCorpusOracleResult, len(results))
 	for _, result := range results {
 		if _, duplicate := scores[result.Fixture]; duplicate {
 			return nil, fmt.Errorf("duplicate AlphaTab batch result for %s", result.Fixture)
 		}
-		scores[result.Fixture] = result.Score
+		scores[result.Fixture] = result
 	}
 	return scores, nil
 }
