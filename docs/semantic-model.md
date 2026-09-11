@@ -154,8 +154,19 @@ visible default for programmatic callers. `Song.TempoName` remains the
 compatibility authority for the opening tempo label; clear it to edit that label
 through `TempoAutomation.Text`. GP8 preserves the automation wire values. The
 pinned consumer does not retain hidden visibility on the instrument automation
-it derives from a sound record, so export reports that specific omission. The
-separate legacy `Song.HideTempo` contract remains a target limitation.
+it derives from a sound record, so export reports that specific omission.
+
+`Song.HideTempo` supplies visibility when GP8 synthesizes an opening tempo
+at bar zero and position zero. The first explicit opening event, wherever it
+appears in authored order, owns visibility. A disagreement with `Song.HideTempo`
+produces `gp8.normalize.tempo-visibility-authority`; strict preservation requires
+an explicit allowance. GPIF import initializes the compatibility flag from that
+opening event. To edit visibility on a parsed GPIF score, update its opening
+`TempoAutomation.Hidden` and matching `Song.HideTempo`. Export does not mutate
+either view.
+
+GP5.1's hide-tempo flag survives through the synthesized event;
+pinned AlphaTab discards that legacy source flag but retains GPIF visibility.
 
 `Song.VolumeAutomations` owns the channel-strip volume events. Direct edits
 control GP8 output. The writer retains track ownership, bar, position, value,

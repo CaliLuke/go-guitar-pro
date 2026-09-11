@@ -121,8 +121,14 @@ func (builder *gp8Builder) buildScore() gpifScore {
 	if song.TripletFeel != TripletFeelNone {
 		builder.addReport("gp8.normalize.song-triplet-feel-authority", "rhythm", ExportDispositionNormalized, ScoreLocation{}, "GP8 stores triplet feel on master bars and does not emit the legacy song-level value")
 	}
-	if song.HideTempo {
-		builder.addReport("gp8.omit.tempo-visibility", "tempo-automations", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer emits the opening tempo as visible")
+	for _, tempo := range song.TempoAutomations {
+		if tempo.Bar != 0 || tempo.Position != 0 {
+			continue
+		}
+		if tempo.Hidden != song.HideTempo {
+			builder.addReport("gp8.normalize.tempo-visibility-authority", "tempo-automations", ExportDispositionNormalized, ScoreLocation{}, "the first explicit opening tempo event controls visibility instead of the conflicting Song.HideTempo compatibility value")
+		}
+		break
 	}
 	return gpifScore{
 		Title:        song.Name,
@@ -153,7 +159,7 @@ func buildGP8TempoAutomations(song *Song) gpifAutomations {
 	}
 	if !hasInitial {
 		if openingTempo > 0 {
-			tempos = append([]TempoAutomation{{Tempo: openingTempo}}, tempos...)
+			tempos = append([]TempoAutomation{{Tempo: openingTempo, Hidden: song.HideTempo}}, tempos...)
 		}
 	}
 

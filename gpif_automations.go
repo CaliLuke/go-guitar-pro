@@ -432,6 +432,9 @@ func gpifReadTempoAutomations(automations []gpifAutomation, song *Song, context 
 				song.Tempo = legacyTempo
 			}
 			song.TempoName = auto.Text
+			if change.Bar == 0 && change.Position == 0 {
+				song.HideTempo = change.Hidden
+			}
 		}
 	}
 }

@@ -3,9 +3,9 @@
 package goguitarpro
 
 import (
-	"errors"
 	"math"
-	"slices"
+	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -50,20 +50,12 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 	run.Preserved("SourceValue.Raw", song.InitialTempo.Raw, "")
 	run.Normalized("Song.Tempo", song.Tempo, int16(0))
 	run.Preserved("Song.TempoName", song.TempoName, "Fractional")
-	run.Omitted("Song.HideTempo", song.HideTempo, true)
+	run.Preserved("Song.HideTempo", song.HideTempo, true)
 	run.ClaimPrimary(claimSite("tempo", "import", "M06-TEMPO-AUTHORITY", "fractional opening tempo")).Preserved("Song.TempoAutomations", song.TempoAutomations, []TempoAutomation{{Bar: 1, Position: 0.75, Tempo: 90}})
 	run.Preserved("TempoAutomation.Bar", song.TempoAutomations[0].Bar, 1)
 	run.Preserved("TempoAutomation.Position", song.TempoAutomations[0].Position, 0.75)
-	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	if !slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Code == "gp8.omit.tempo-visibility" }) {
-		t.Fatalf("report = %#v, want tempo visibility omission", report.Entries)
-	}
-	strictData, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
-	var lossErr *ExportLossError
-	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
-		t.Fatalf("strict export = %d bytes, %v", len(strictData), strictErr)
-	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.tempo-visibility"}}})
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	run.ClaimReport(claimSite("tempo", "export", "M06-TEMPO-AUTHORITY", "hidden fractional opening tempo")).Report("M06-TEMPO-AUTHORITY", reportCodes(report), []string{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -74,7 +66,7 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 	run.Field("Song.InitialTempo", roundTrip.InitialTempo, KnownSourceValue(BPM(132.5)))
 	run.Field("Song.Tempo", roundTrip.Tempo, int16(133))
 	run.Field("Song.TempoName", roundTrip.TempoName, "Fractional")
-	run.Field("Song.HideTempo", roundTrip.HideTempo, false)
+	run.ClaimPrimary(claimSite("tempo", "export", "M06-TEMPO-AUTHORITY", "hidden fractional opening tempo")).Field("Song.HideTempo", roundTrip.HideTempo, true)
 	if len(roundTrip.TempoAutomations) != 2 || roundTrip.TempoAutomations[1] != (TempoAutomation{Bar: 1, Position: 0.75, Tempo: 90}) {
 		t.Fatalf("round-trip automations = %#v", roundTrip.TempoAutomations)
 	}
@@ -85,7 +77,7 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 	run.Wire("gpifAutomation.Text", values["GPIF/MasterTrack/Automations/Automation/Text"], "Fractional")
 	run.Wire("gpifAutomation.Bar", roundTrip.TempoAutomations[1].Bar, 1)
 	run.Wire("gpifAutomation.Position", roundTrip.TempoAutomations[1].Position, 0.75)
-	run.Wire("gpifAutomation.Visible", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Visible"], "true"), 2)
+	run.ClaimSerialization(claimSite("tempo", "export", "M06-TEMPO-AUTHORITY", "hidden fractional opening tempo")).Wire("gpifAutomation.Visible", values["GPIF/MasterTrack/Automations/Automation/Visible"], "falsetrue")
 	run.Wire("gpifAutomation.Linear", strings.Count(values["GPIF/MasterTrack/Automations/Automation/Linear"], "false"), 2)
 
 	for _, invalid := range []float64{0, -1, math.NaN(), math.Inf(1)} {
@@ -108,4 +100,59 @@ func runConformanceTempoAuthority(run *conformanceRun) {
 		t.Fatal(err)
 	}
 	run.Field("Song.InitialTempo", editedRoundTrip.InitialTempo, KnownSourceValue(BPM(132.5)))
+}
+
+func TestAlphaTabPreservesOpeningTempoVisibility(t *testing.T) {
+	requireAlphaTabConformance(t)
+	for _, hidden := range []bool{false, true} {
+		song := semanticValidPitchedGP8Song(t)
+		song.Tempo = 0
+		song.InitialTempo = KnownSourceValue(BPM(132.5))
+		song.TempoName = "Fractional"
+		song.HideTempo = hidden
+		song.TempoAutomations = nil
+		assertOpeningTempoConsumer(t, song, 132.5, "Fractional", hidden)
+		if hidden {
+			conformanceIndependentClaim(t, "field:Song.HideTempo", claimSite("tempo", "export", "M06-TEMPO-AUTHORITY", "hidden fractional opening tempo"))
+		}
+	}
+	legacy, err := ParseFile("testdata/gp5/nightwish.gp5")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !legacy.HideTempo || legacy.Version.Number != [3]byte{5, 1, 0} || len(legacy.TempoAutomations) != 0 {
+		t.Fatalf("GP5 hidden source = %#v, hidden %v, automations %#v", legacy.Version, legacy.HideTempo, legacy.TempoAutomations)
+	}
+	// This corpus label contains non-UTF-8 bytes. Author a valid label while
+	// retaining the imported GP5 tempo and visibility.
+	legacy.TempoName = "Legacy hidden"
+	assertOpeningTempoConsumer(t, legacy, float64(legacy.InitialTempo.Value), legacy.TempoName, true)
+}
+
+func assertOpeningTempoConsumer(t *testing.T, song *Song, bpm float64, text string, hidden bool) {
+	t.Helper()
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if hasExportCode(report, "gp8.omit.tempo-visibility") || hasExportCode(report, "gp8.normalize.tempo-visibility-authority") {
+		t.Fatalf("unexpected visibility report %#v", report.Entries)
+	}
+	wire := extractAutomationWireDocument(t, data)
+	if len(wire.masterAutomations) != 1 || wire.masterAutomations[0].Visible != strconv.FormatBool(!hidden) {
+		t.Fatalf("opening visibility wire %#v", wire.masterAutomations)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []TempoAutomation{{Tempo: bpm, Text: text, Hidden: hidden}}
+	if !reflect.DeepEqual(roundTrip.TempoAutomations, want) || roundTrip.HideTempo != hidden {
+		t.Fatalf("round trip = %#v hidden %v", roundTrip.TempoAutomations, roundTrip.HideTempo)
+	}
+	facts := readAlphaTabAutomationFacts(t, writeConformanceFixture(t, data)).(map[string]any)
+	expected := []any{map[string]any{"bar": float64(0), "position": float64(0), "type": "tempo", "value": bpm, "linear": false, "text": text, "visible": !hidden}}
+	if differences := semanticDifferences(facts["tempo"], expected); len(differences) != 0 {
+		t.Fatalf("consumer tempo differs %#v", differences)
+	}
 }

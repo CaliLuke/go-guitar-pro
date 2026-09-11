@@ -1805,9 +1805,9 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "partial"
+        "export": "supported"
       },
-      "finding": "Fractional opening tempo and ordered tempo events survive. HideTempo cannot be emitted. Interpolation and event annotations are tracked separately.",
+      "finding": "Fractional opening tempo, names, and ordered events survive. Song.HideTempo controls synthesized opening visibility; an explicit opening event takes precedence with a precise compatibility conflict. GPIF import initializes the compatibility mirror. Interpolation and event annotations retain their existing authority.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "MasterBar.tempoAutomations",
@@ -1838,6 +1838,16 @@
           "kind": "test",
           "reference": "TestConformanceTempoAuthority",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestOpeningTempoVisibility",
+          "detail": "Public API regression for both visibility values, explicit precedence, strict conflict policy, nonmutation, fractional BPM and stable unsorted event order."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesOpeningTempoVisibility",
+          "detail": "Pinned AlphaTab preserves fractional synthesized visibility and the hidden opening mark exported from testdata/gp5/nightwish.gp5."
         }
       ]
     },

@@ -16,13 +16,13 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 70 | 16 | 11 | 1 |
 | model | 69 | 17 | 11 | 1 |
-| export | 46 | 26 | 24 | 2 |
+| export | 47 | 25 | 24 | 2 |
 
-All three stages have a supported rating in 46 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 47 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `true`.
+The receipt contains 364 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -921,9 +921,9 @@ Bounded work: [Export authored backing-track synchronization points](https://git
 
 Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Fractional opening tempo and ordered tempo events survive. HideTempo cannot be emitted. Interpolation and event annotations are tracked separately.
+Fractional opening tempo, names, and ordered events survive. Song.HideTempo controls synthesized opening visibility; an explicit opening event takes precedence with a precise compatibility conflict. GPIF import initializes the compatibility mirror. Interpolation and event annotations retain their existing authority.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

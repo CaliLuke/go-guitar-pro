@@ -47,8 +47,11 @@ type Song struct {
 	InitialTempo SourceValue[BPM]
 	Tempo        int16
 	Key          KeySignature
-	HideTempo    bool
-	TripletFeel  TripletFeel
+	// HideTempo controls synthesized opening tempo visibility. An explicit opening
+	// TempoAutomation.Hidden takes precedence; export reports disagreement. GPIF
+	// import initializes this compatibility value from the first opening event.
+	HideTempo   bool
+	TripletFeel TripletFeel
 }
 
 // BackingTrack describes the external audio attached to a GPIF score. Its

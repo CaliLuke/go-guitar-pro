@@ -39,6 +39,7 @@ var conformanceIndependentEvidenceExecutors = map[string]func(*testing.T){
 	"alphatab-ownership":     TestAlphaTabMultiStaffTrackOrdering,
 	"alphatab-simile":        TestAlphaTabPreservesSimileMarks,
 	"alphatab-sustain-pedal": TestAlphaTabPreservesSustainPedals,
+	"alphatab-hide-tempo":    TestAlphaTabPreservesOpeningTempoVisibility,
 	"alphatab-tempo":         TestAlphaTabTempoReferences,
 	"alphatab-timing":        TestAlphaTabGPIFTiming,
 	"alphatab-transposition": TestAlphaTabPreservesTransposition,

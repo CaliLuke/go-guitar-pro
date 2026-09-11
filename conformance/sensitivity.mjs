@@ -121,12 +121,12 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.HideTempo"' },
-      { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
+      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","SoundAutomation.Hidden"' },
+      { before: '"TimeSignature.Beams","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',
-    want: 'Song.HideTempo executable evidence proves omitted, but the field partition claims preserved'
+    want: 'SoundAutomation.Hidden executable evidence proves omitted, but the field partition claims preserved'
   },
   {
     id: 'beat-lyrics-probe-import-drop',
