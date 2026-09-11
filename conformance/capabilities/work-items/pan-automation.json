@@ -5,8 +5,8 @@
   "title": "Preserve pan automation independently from static balance",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/implement-preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -87,6 +87,36 @@
       "kind": "test",
       "reference": "TestConformanceBinaryMixTable",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8PanAutomation",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestPanAutomationBoundsAndPolicy",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestLegacyPanEvents",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformancePanAutomations",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPanAutomations",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "isolated pan-sync implementation checks",
+      "detail": "Focused public API and pinned consumer tests PASS; inventory 404/404 fields, 260/260 wire fields, 49/49 dispatches, 172/172 enum members PASS; node conformance/verify.mjs PASS; golangci-lint run PASS (0 issues); go vet ./... PASS; dupl -threshold 75 . PASS (0 groups). Full gates and broad probe are centralized in parent integration."
     }
   ],
   "shared_files": [
@@ -94,7 +124,7 @@
     "gpif_automations.go",
     "mix_table.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented canonical pan events, GPIF DSPParam_11 and legacy balance conversion with precise validation and per-event pinned-consumer loss. Pinned AlphaTab cannot retain exported channel-strip pan; complete consumer preservation is not satisfied at this pin. Awaiting fresh review and integrated gates.",
   "verification": [],
   "issue": {
     "number": 52,

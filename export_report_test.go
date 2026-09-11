@@ -17,13 +17,13 @@ func TestExportPreflightReportsActualGP8Losses(t *testing.T) {
 
 	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.BackingTrack = &BackingTrack{Name: "omitted audio", AudioData: []byte("audio")}
-	song.SyncPoints = []SyncPoint{{Bar: 0}}
+	song.SyncPoints = []SyncPoint{{Bar: 0, ModifiedTempo: 120}}
 	beat := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
 	beat.Notes = append(beat.Notes, beat.Notes[0])
 	beat.Notes[1].Velocity = beat.Notes[0].Velocity + 1
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-points", "gp8.normalize.note-velocity"} {
+	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.note-velocity"} {
 		if !hasExportReportEntry(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
@@ -95,12 +95,12 @@ func TestExportPreflightRejectsUnsupportedBeatDuration(t *testing.T) {
 
 func TestExportPreflightLocatesEachOmittedAutomation(t *testing.T) {
 	song := syntheticGP8Song()
-	song.SyncPoints = []SyncPoint{{Bar: 0}, {Bar: 1}}
+	song.SyncPoints = []SyncPoint{{Bar: 0, ModifiedTempo: 120}, {Bar: 1, OriginalTempo: 120}}
 	song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 0}, {Track: 0, Bar: 1}}
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	want := map[string][]ScoreLocation{
-		"gp8.omit.sync-points": {
+		"gp8.omit.sync-point-consumer-tempo": {
 			{Measure: 0},
 			{Measure: 1},
 		},

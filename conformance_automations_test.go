@@ -266,7 +266,7 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	for code, want := range map[string]int{
 		"GPIF.MasterTrack.Automation.Tempo.Invalid":           2,
 		"GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid": 2,
-		"GPIF.ChannelStrip.Automation.Unsupported":            3,
+		"GPIF.ChannelStrip.Automation.Unsupported":            2,
 	} {
 		got := 0
 		for _, diagnostic := range result.Diagnostics {

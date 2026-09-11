@@ -222,5 +222,6 @@ func parseBinaryGPWithContext(data []byte, context *parseContext) (*Song, error)
 	if song.Version.Number[0] >= 3 && song.Version.Number[0] <= 5 {
 		context.setFormat(fmt.Sprintf("GP%d", song.Version.Number[0]))
 	}
+	readBinaryPanAutomations(song)
 	return song, nil
 }

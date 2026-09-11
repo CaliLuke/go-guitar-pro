@@ -48,6 +48,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		builder.doc.MasterTrack.Anacrusis = &struct{}{}
 	}
 	builder.doc.MasterTrack.Automations = buildGP8TempoAutomations(song)
+	builder.doc.MasterTrack.Automations.Automations = append(builder.doc.MasterTrack.Automations.Automations, buildGP8SyncPoints(song)...)
 	buildGP8BackingTrack(song.BackingTrack, &builder.doc)
 
 	for trackIndex := range song.Tracks {
@@ -337,7 +338,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		}}},
 		RSE: &gpifTrackRSE{ChannelStrip: gpifChannelStrip{
 			Parameters:  gp8ChannelStripParameters(channel),
-			Automations: buildGP8VolumeAutomations(builder.song, trackIndex),
+			Automations: buildGP8ChannelStripAutomations(builder.song, trackIndex),
 		}},
 		MidiConnection: gpifMidiConnection{
 			Port:             int(channel.Channel) / 16,

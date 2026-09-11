@@ -236,6 +236,27 @@ with `gp8.omit.volume-automation-consumer`; strict preservation requires an
 explicit allowance. This contract follows the accepted revision of issue #59.
 Legacy beat-local mix-table volume changes remain a separate capability.
 
+`Song.PanAutomations` owns authored pan events independently from static channel
+balance. `Value` uses 0 for left, 0.5 for center, and 1 for right. GPIF
+`DSPParam_11` uses these units. Legacy mix-table balance values use 0 through
+16; import divides them by 16 and marks interpolation as linear.
+
+Events must use valid track and bar indexes and finite positions and values
+within 0 through 1. Each track's events must be chronological. Equal positions
+retain their authored order. GPIF groups events by track; cross-track slice
+interleaving is not retained. Clearing or editing the public slice controls
+export, without changing initial `MidiChannel.Balance`.
+
+Legacy import expands an all-tracks balance event to each track. Its raw
+mix-table record remains available with transition duration and ownership flags.
+That record does not override later edits to `PanAutomations`. The remaining
+mix-table export omission still covers its unrepresented metadata and controllers.
+
+GP8 retains pan events in GPIF and Go reimport. Pinned AlphaTab ignores these
+channel-strip events. Each event receives `gp8.omit.pan-automation-consumer`;
+strict export requires that allowance. Original legacy Balance events provide
+a positive consumer control, but GP8 export remains partial.
+
 `Measure.SustainPedals` is the ordered sustain-pedal sequence for that track's
 first staff and measure. GPIF reference 1 maps to `SustainPedalTypeDown`, and
 reference 3 maps to `SustainPedalTypeRelease`. If a down state continues into a
@@ -704,8 +725,28 @@ GP8 export embeds enabled `Local` backing tracks, using the public record as the
 edit authority for asset metadata, path, bytes, and padding. The GP8 target uses
 a signed 32-bit frame-padding field, so export rejects values outside that range.
 Asset paths that collide with fixed GP8 archive members are also rejected.
-Disabled and non-local backing-track records remain explicit omissions. Sync
-points remain a separate export omission.
+Disabled and non-local backing-track records remain explicit omissions.
+
+GP8 emits `Song.SyncPoints` in authored order. `AudioFrame` and `BarPosition`
+are authoritative; conflicting `FrameOffset` and `Position` compatibility views
+receive their existing normalization reports. Set both views when editing them
+together. `MediaTimeMS` must match `(AudioFrame - FramePadding) / 44100 * 1000`;
+validation rejects a stale projection. Export does not mutate these fields.
+
+Frame offsets remain exact decimal integers in GPIF. Pinned AlphaTab converts
+them to binary64 media time. Nonrepresentable integers receive
+`gp8.normalize.sync-point-consumer-integer`. Exact bar positions that cannot
+survive the numeric GPIF representation receive
+`gp8.reject.sync-point-position-precision`. Neither path silently narrows authored
+values. Occurrence, position, interpolation, and visibility survive independent
+consumption for representable values.
+
+GPIF and Go retain `ModifiedTempo` and `OriginalTempo`. Pinned AlphaTab ignores
+these metadata fields. Nonzero values receive `gp8.omit.sync-point-consumer-tempo`.
+If an omitted backing track has nonzero padding, each point also receives
+`gp8.normalize.sync-point-consumer-padding`: its frame survives, but target media
+time changes. Strict export requires each applicable allowance. Export remains
+partial for these documented consumer limits.
 
 The GPIF source audit accounts for every known wire field and named dispatch.
 It rejects conflicting duplicate properties. It also keeps an explicit source

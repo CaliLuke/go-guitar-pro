@@ -48,6 +48,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 
 | Source construct | Feature | Disposition | Reason |
 | --- | --- | --- | --- |
+| `GPIF.ChannelStrip.Automation.Pan.Value.Invalid` | `score-core` | `invalid-data` | The pan automation value must be numeric. |
 | `GPIF.ChannelStrip.Automation.Type.Unknown` | `score-core` | `unknown-syntax` | The channel-strip automation type is not recognized. |
 | `GPIF.ChannelStrip.Automation.Volume.Range.Invalid` | `score-core` | `invalid-data` | The volume automation position and value must be within 0..1. |
 | `GPIF.ChannelStrip.Automation.Volume.Value.Invalid` | `score-core` | `invalid-data` | The volume automation value must be finite. |
@@ -236,7 +237,6 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 
 | Type | Feature | Field roles | Reason |
 | --- | --- | --- | --- |
-| `Song` | `score-core` | 31 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Version` | `score-core` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The source version is preserved. Number is parsed from Data. |
 | `Clipboard` | `score-core` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The binary clipboard range is authored source data. |
 | `BackingTrack` | `score-core` | 9 authored, 0 compatibility, 0 derived, 0 out-of-scope | The backing-track record and embedded asset are authored source data. |
@@ -291,14 +291,16 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Chord` | `note-and-beat-semantics` | 19 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
 | `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
+| `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
+| `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 246 |
+| `preserved` | 253 |
 | `normalized` | 34 |
-| `omitted` | 107 |
+| `omitted` | 106 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -307,7 +309,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 112 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 114 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -336,7 +338,6 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
 | `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation, checks sound references, and validates sustain-pedal values, locations, and order before import. |
-| `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit preserves volume automation and reports every other recognized channel-strip automation. |
 | `parseGPIFWithContext:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only sound automations after the audit classifies all track automation types. |
 | `gpifReadVolumeAutomations:automation.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The importer maps only validated volume automations after the channel-strip audit. |
 | `gpifReadSustainPedals:automation.Type` | `sustain-pedal` | 1 | `sustain-pedal-preservation` | `delegated-to-audit` | The importer maps validated track sustain-pedal automations to staff-0 measures and derives holds across bars with no explicit marker. |
@@ -372,6 +373,8 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifApplyBeatEffects:b.Ottavia` | `note-and-beat-semantics` | 4 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps each supported octave-shift value. |
 | `gpifApplyBeatEffects:b.Arpeggio` | `brush` | 2 | `brush-preservation` | `delegated-to-audit` | The importer maps each supported arpeggio direction. |
 | `gpifAuditDiagnostics:track.AudioEngineState` | `score-core` | 3 | `audio-engine-state` | `unknown-syntax` | The audit accepts the two known playback engines and reports any other token. |
+| `gpifReadPanAutomations:a.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The channel-strip pan event is retained independently from static channel balance. |
+| `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | Volume and pan have authored destinations; other recognized channel-strip automation remains omitted. |
 
 ## Behavioral contracts
 

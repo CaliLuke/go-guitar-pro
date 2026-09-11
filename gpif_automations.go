@@ -243,7 +243,9 @@ func gpifAuditChannelStripAutomations(automations []gpifAutomation, trackID stri
 					Reason: fmt.Sprintf("volume automation position %v and value %v must be within 0..1", automation.Position, value),
 				})
 			}
-		case "DSPParam_00", "DSPParam_01", "DSPParam_11":
+		case "DSPParam_11":
+			gpifAuditPanAutomation(automation, path, trackID, context)
+		case "DSPParam_00", "DSPParam_01":
 			context.add(diagnosticSource("GPIF.ChannelStrip.Automation.Unsupported", "score-core", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{
 				SourcePath: path + "/Type", ObjectID: trackID,
 				Reason: fmt.Sprintf("channel-strip automation type %q has no Song destination", automation.Type),

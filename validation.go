@@ -290,6 +290,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			add("score.tempo-automation.value", ScoreDiagnosticValue, ScoreLocation{}, "tempo automation %d has bar %d position %v tempo %v", index, automation.Bar, automation.Position, automation.Tempo)
 		}
 	}
+	validatePanAutomations(song, &diagnostics)
 	for index, automation := range song.VolumeAutomations {
 		if automation.Track < 0 || automation.Track >= len(song.Tracks) || automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 || math.IsNaN(automation.Value) || math.IsInf(automation.Value, 0) || automation.Value < 0 || automation.Value > 1 {
 			add("score.volume-automation.value", ScoreDiagnosticValue, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "volume automation %d has track %d bar %d position %v value %v", index, automation.Track, automation.Bar, automation.Position, automation.Value)

@@ -80,7 +80,7 @@ func (builder *gp8Builder) reportChordConsumerLimit(chord *Chord, location Score
 	}
 }
 
-func buildGP8VolumeAutomations(song *Song, trackIndex int) gpifAutomations {
+func buildGP8ChannelStripAutomations(song *Song, trackIndex int) gpifAutomations {
 	var result gpifAutomations
 	for _, automation := range song.VolumeAutomations {
 		if automation.Track == trackIndex {
@@ -88,6 +88,11 @@ func buildGP8VolumeAutomations(song *Song, trackIndex int) gpifAutomations {
 				Type: "DSPParam_12", Bar: automation.Bar, Position: automation.Position, Linear: automation.Linear,
 				Value: gpifAutomationValue{Text: strconv.FormatFloat(automation.Value, 'g', -1, 64)},
 			})
+		}
+	}
+	for _, automation := range song.PanAutomations {
+		if automation.Track == trackIndex {
+			result.Automations = append(result.Automations, gpifAutomation{Type: "DSPParam_11", Bar: automation.Bar, Position: automation.Position, Linear: automation.Linear, Value: gpifAutomationValue{Text: strconv.FormatFloat(automation.Value, 'g', -1, 64)}})
 		}
 	}
 	return result

@@ -356,22 +356,22 @@ func runConformanceBackingSyncTempo(run *conformanceRun) {
 	run.Field("SyncPoint.AudioFrame", song.SyncPoints[0].AudioFrame, audioFrame)
 	run.Field("Song.InitialTempo", song.InitialTempo.Value, BPM(132.5))
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-points"} {
+	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.sync-point-consumer-padding"} {
 		if !hasExportCode(report, code) {
 			t.Fatalf("backing combination report = %#v, want %s", report.Entries, code)
 		}
 	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.backing-track", "gp8.omit.sync-points"}}})
+	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.sync-point-consumer-padding"}}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	wire := extractAutomationWireDocument(t, data)
-	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.masterAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"132.5 2"})
+	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.masterAutomations[:1], func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"132.5 2"})
 	got, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.BackingTrack != nil || len(got.SyncPoints) != 0 || got.InitialTempo.Value != BPM(132.5) {
+	if got.BackingTrack != nil || len(got.SyncPoints) != 1 || got.InitialTempo.Value != BPM(132.5) {
 		t.Fatalf("backing combination round trip = %#v", got)
 	}
 }

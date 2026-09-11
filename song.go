@@ -39,9 +39,11 @@ type Song struct {
 	TempoAutomations []TempoAutomation
 	// VolumeAutomations contains each track gain point in a GPIF file.
 	VolumeAutomations []VolumeAutomation
-	Lyrics            Lyrics
-	MasterEffect      RseMasterEffect
-	PageSetup         PageSetup
+	// PanAutomations owns track pan events independently from initial channel balance.
+	PanAutomations []PanAutomation
+	Lyrics         Lyrics
+	MasterEffect   RseMasterEffect
+	PageSetup      PageSetup
 	// InitialTempo preserves the authored opening BPM, including fractions. Tempo
 	// remains the rounded legacy compatibility projection.
 	InitialTempo SourceValue[BPM]
@@ -75,15 +77,15 @@ type BackingTrack struct {
 type SyncPoint struct {
 	// Bar is the zero-based master-bar index.
 	Bar int
-	// Position is the point position as a fraction of the bar length.
+	// Position is the compatibility projection of BarPosition as a bar fraction.
 	Position float64
-	// BarPosition is the checked, exact representation of Position.
+	// BarPosition is the exact authored position and takes precedence during export.
 	BarPosition BarPosition
 	// BarOccurrence identifies a particular playback occurrence when repeats are present.
 	BarOccurrence int
-	// FrameOffset is the raw 44.1 kHz project-frame position persisted for the point.
+	// FrameOffset preserves the raw 44.1 kHz source frame; AudioFrame controls export.
 	FrameOffset int64
-	// AudioFrame is the checked non-negative representation of FrameOffset.
+	// AudioFrame is the checked non-negative frame and takes precedence during export.
 	AudioFrame AudioFrame
 	// MediaTimeMS is the absolute backing-track position after subtracting FramePadding.
 	MediaTimeMS float64

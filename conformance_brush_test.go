@@ -111,7 +111,7 @@ func runConformanceBrush(run *conformanceRun) {
 
 	before := conformanceContractSnapshot(colors, false)
 	report := PreflightExport(colors, ExportFormatGP8, ExportOptions{})
-	run.ClaimReport(claimSite("brush", "export", conformanceBrushCase, "arpeggio down with 117 exact ticks")).Report(conformanceBrushCase, reportCodes(report), []string{"gp8.omit.volume-automation-consumer", "gp8.normalize.source-version", "gp8.omit.track-use-rse", "gp8.omit.track-display-settings"})
+	run.ClaimReport(claimSite("brush", "export", conformanceBrushCase, "arpeggio down with 117 exact ticks")).Report(conformanceBrushCase, reportCodes(report), []string{"gp8.omit.pan-automation-consumer", "gp8.omit.volume-automation-consumer", "gp8.normalize.source-version", "gp8.omit.track-use-rse", "gp8.omit.track-display-settings"})
 	data, _, err := ExportWithReport(colors, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)

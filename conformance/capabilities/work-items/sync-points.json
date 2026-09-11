@@ -5,8 +5,8 @@
   "title": "Export authored backing-track synchronization points",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/implement-preroll",
   "formats": [
     "gp8"
   ],
@@ -67,6 +67,31 @@
       "kind": "test",
       "reference": "TestConformanceBackingAssetsAndSyncPoints",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8SyncPointExport",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestSyncPointCheckedAuthority",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceSyncPointExport",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabSyncPointExport",
+      "detail": "Implemented non-default contract and exact scoped loss checks; awaiting fresh acceptance review."
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "isolated pan-sync implementation checks",
+      "detail": "Focused public API and pinned consumer tests PASS; inventory 404/404 fields, 260/260 wire fields, 49/49 dispatches, 172/172 enum members PASS; node conformance/verify.mjs PASS; golangci-lint run PASS (0 issues); go vet ./... PASS; dupl -threshold 75 . PASS (0 groups). Full gates and broad probe are centralized in parent integration."
     }
   ],
   "shared_files": [
@@ -74,7 +99,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented exact authored sync-point serialization using existing checked field authority. Independent consumer retains occurrence, position, media timing, interpolation and visibility. Persisted tempo metadata remains a reported consumer limit; integer precision and missing backing padding are reported and unrepresentable exact positions rejected. Awaiting fresh review and integrated gates.",
   "verification": [],
   "issue": {
     "number": 55,

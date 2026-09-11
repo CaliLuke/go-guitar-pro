@@ -233,6 +233,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if t.RSE != nil {
 					gpifApplyChannelStrip(t.RSE.ChannelStrip.Parameters, &ch)
 					gpifAuditChannelStripAutomations(t.RSE.ChannelStrip.Automations.Automations, t.ID, context)
+					gpifReadPanAutomations(t.RSE.ChannelStrip.Automations.Automations, len(song.Tracks), song)
 					gpifReadVolumeAutomations(
 						t.RSE.ChannelStrip.Automations.Automations,
 						len(song.Tracks),

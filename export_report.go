@@ -124,7 +124,21 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		if legacyPosition, err := NewBarPositionFromFloat64(point.Position); err == nil && point.BarPosition.Ratio().Compare(legacyPosition.Ratio()) != 0 {
 			add("gp8.normalize.sync-point-position-authority", "timing", ExportDispositionNormalized, location, "the exact bar position takes precedence over its conflicting legacy position")
 		}
-		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit this backing-track sync point")
+		if song.BackingTrack != nil && !gp8EmbedsBackingTrack(song.BackingTrack) && song.BackingTrack.FramePadding != 0 {
+			add("gp8.normalize.sync-point-consumer-padding", "sync-points", ExportDispositionNormalized, location, "the omitted backing track cannot supply frame padding; sync-point frame offsets remain exact but target media time changes")
+		}
+		if !gp8SyncPositionExact(point) {
+			add("gp8.reject.sync-point-position-precision", "sync-points", ExportDispositionRejected, location, "the checked sync-point position cannot be retained exactly by the GPIF numeric position")
+		}
+		if point.ModifiedTempo != 0 || point.OriginalTempo != 0 {
+			add("gp8.omit.sync-point-consumer-tempo", "sync-points", ExportDispositionOmitted, location, "GPIF retains ModifiedTempo and OriginalTempo; pinned AlphaTab ignores both persisted sync-point tempo fields")
+		}
+		if !gp8SyncIntegerExact(int64(point.AudioFrame)) || !gp8SyncIntegerExact(int64(point.BarOccurrence)) {
+			add("gp8.normalize.sync-point-consumer-integer", "sync-points", ExportDispositionNormalized, location, "GPIF retains exact frame and occurrence integers; the pinned consumer rounds these integers to binary64")
+		}
+	}
+	for index, automation := range song.PanAutomations {
+		add("gp8.omit.pan-automation-consumer", "pan-automation", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, fmt.Sprintf("pinned AlphaTab ignores channel-strip pan automation[%d] at position %g; GPIF retains the event", index, automation.Position))
 	}
 	for index, automation := range song.VolumeAutomations {
 		add("gp8.omit.volume-automation-consumer", "volume-automation", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, fmt.Sprintf("pinned AlphaTab ignores channel-strip volume automation[%d] at position %g with value %g and linear=%t; GPIF retains the event", index, automation.Position, automation.Value, automation.Linear))

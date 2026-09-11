@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "56f904ab9f3d2dec9b2d1692ae00afc0ff6ab9ab35530f965ca634b7e987ce2d",
+    "obligationDigest": "697965833e60499fc8cc897605c125b33ce98f425ebd1fc2c3d69827b9674587",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -120,7 +120,7 @@
       {"id":"M19-BACKING-ASSETS-SYNC","family":"M19","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire"],"test":"TestConformanceBackingAssetsAndSyncPoints","formats":["GP7","GP8"],"stages":["import","oracle"],"values":["two assets and two sync points","selected and unused embedded bytes","local and external sources","negative frame padding","frame and position endpoints","distinct tempos and visibility","enabled local asset","two sync points"],"oracle":"Independent ZIP entries and XML decoding with exact 44.1 kHz frame arithmetic.","limitations":[]},
       {"id":"M19-BACKING-EXPORT","family":"M19","evidenceRole":"behavior","evidenceSources":["public-api","independent-consumer","diagnostic-policy"],"test":"TestConformanceBackingTrackExport","formats":["GP8","programmatic"],"stages":["programmatic","validation","preflight","export","policy","oracle"],"values":["enabled local asset","non-default asset identity and path","negative frame padding","exact embedded audio bytes","strict preservation"],"oracle":"GP8 reimport plus pinned AlphaTab enabled-state and raw-audio consumption.","limitations":["Disabled and non-local backing-track records remain explicit GP8 omissions."]},
       {"id":"M19-SOURCE-DIAGNOSTICS","family":"M19","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceBackingSourceDiagnostics","formats":["GP7","GP8"],"stages":["import","policy"],"values":["missing and malformed padding","missing, empty, duplicate, and broken asset references","invalid frame, bar, position, occurrence, and tempo values"],"oracle":"Hand-authored GPIF and archive entries with stable source locations and selected strict-kind refusal.","limitations":[]},
-      {"id":"M19-VALIDATION-EXPORT-POLICY","family":"M19","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceValidationAndExportPolicy","formats":["GP8","programmatic"],"stages":["programmatic","validation","preflight","export","policy"],"values":["frame and exact-position authority conflicts","invalid numeric boundaries","point-scoped omissions","matching and unrelated allowlists","preserved backing-track GPIF and archive asset","two sync points"],"oracle":"Shared validation, independent GPIF and archive checks, and identical preflight/export decisions.","limitations":["GP8 export still omits sync points."]},
+      {"id":"M19-VALIDATION-EXPORT-POLICY","family":"M19","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceValidationAndExportPolicy","formats":["GP8","programmatic"],"stages":["programmatic","validation","preflight","export","policy"],"values":["frame and exact-position authority conflicts","invalid numeric boundaries","point-scoped omissions","matching and unrelated allowlists","preserved backing-track GPIF and archive asset","two sync points"],"oracle":"Shared validation, independent GPIF and archive checks, and identical preflight/export decisions.","limitations":["Sync-point tempo metadata is retained in GPIF and Go but ignored by pinned AlphaTab. Checked fields remain authoritative over compatibility projections."]},
       {"id":"M20-SOURCE-AUDIT","family":"M20","evidenceRole":"structural","evidenceSources":["schema-round-trip","independent-wire","diagnostic-policy"],"test":"TestConformanceSourceAudit","formats":["GP5","GP6","GP7","GP8"],"stages":["import","oracle","policy"],"values":["every discovered GPIF wire field and source-dispatch branch","unknown element, attribute, enum, flag, and type","missing, malformed, non-finite, duplicate, dangling, wrong-scope, and conflicting values","reused definitions","binary diagnostic offsets","strict-kind filtering","each single and complete allowlist"],"oracle":"Inventory-derived XML round trip, exact dispatch reconciliation, hand-authored malformed inputs, and binary offsets.","limitations":[]},
       {"id":"M20-BEHAVIOR-RECONCILIATION","family":"M20","evidenceRole":"behavior","evidenceSources":["public-api","independent-wire","diagnostic-policy"],"test":"TestConformanceBehaviorReconciliation","formats":["GP6","GP7","GP8"],"stages":["import","policy"],"values":["non-default producer metadata","routing and playback parameters","pickup marker","rhythm reference identity","unknown beat property and XML element","unsupported tremolo, wah, fade, and transpose","unknown audio engine"],"oracle":"Exact public values and stable source diagnostics from hand-authored GPIF values.","limitations":["GP revision and encoding producer metadata are intentionally outside the public Song model."]},
       {"id":"M21-SHARED-VALIDATION","family":"M21","evidenceRole":"behavior","evidenceSources":["public-api","diagnostic-policy"],"test":"TestConformanceSharedValidation","formats":["GP8","programmatic"],"stages":["validation","preflight","export","policy"],"values":["channel, sound, articulation, measure, duration, tempo, and automation invariants","NaN and infinity","exact diagnostic locations"],"oracle":"One-invariant mutations with identical validation, preflight, and export refusal receipts.","limitations":[]},
@@ -329,6 +329,81 @@
           "Pinned legacy importer ignores transition2; matching consumer absence does not prove preservation.",
           "Pinned consumer finalizes authored duration32 to8 for these graces.",
           "GP8 retains gp8.omit.grace-bend-transition; future preservation needs independently verified curve semantics."
+        ]
+      },
+      {
+        "id": "M17-PAN-EVENTS",
+        "family": "M17",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformancePanAutomations",
+        "formats": [
+          "GP3",
+          "GP4",
+          "GP5",
+          "GP6",
+          "GP7",
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "import",
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "normalized left center right",
+          "two tracks and equal positions",
+          "legacy balances zero and sixteen",
+          "chronological ordering and scoped boundaries"
+        ],
+        "oracle": "Public GPIF/Go preservation and raw pinned Balance automation facts; original GP5 is a positive control, exported channel-strip events are explicitly ignored.",
+        "limitations": [
+          "Pinned AlphaTab ignores channel-strip pan events; each receives a consumer omission. Legacy duration and mix-table ownership metadata remain in the separate mix-table record."
+        ]
+      },
+      {
+        "id": "M19-SYNC-EXPORT",
+        "family": "M19",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceSyncPointExport",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "two sync points with distinct occurrences positions frames tempos visibility",
+          "exact checked frame authority",
+          "binary64 integer precision boundary"
+        ],
+        "oracle": "Public GPIF/Go preservation, exact frame strings and raw pinned sync point occurrence, position, milliseconds, interpolation and visibility.",
+        "limitations": [
+          "Pinned AlphaTab ignores persisted ModifiedTempo and OriginalTempo. Nonrepresentable binary64 integers and omitted backing padding are reported separately."
         ]
       }
     ],
@@ -753,7 +828,7 @@
       "BackingTrack.OriginalFileSHA1": ["M19-BACKING-ASSETS-SYNC","M19-BACKING-EXPORT"],
       "BackingTrack.Source": ["M19-BACKING-ASSETS-SYNC","M19-BACKING-EXPORT"],
       "Song.BackingTrack": ["M19-BACKING-ASSETS-SYNC","M19-BACKING-EXPORT","M22-BACKING-SYNC-TEMPO"],
-      "Song.SyncPoints": ["M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"],
+      "Song.SyncPoints": ["M19-SYNC-EXPORT","M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"],
       "SyncPoint.AudioFrame": ["M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M22-BACKING-SYNC-TEMPO"],
       "SyncPoint.Bar": ["M19-BACKING-ASSETS-SYNC"],
       "SyncPoint.BarOccurrence": ["M19-BACKING-ASSETS-SYNC","M22-BACKING-SYNC-TEMPO"],
@@ -773,6 +848,24 @@
       ],
       "Marker.Letter": [
         "M02-SECTION-TRACK-NAMES"
+      ],
+      "Song.PanAutomations": [
+        "M17-PAN-EVENTS"
+      ],
+      "PanAutomation.Track": [
+        "M17-PAN-EVENTS"
+      ],
+      "PanAutomation.Bar": [
+        "M17-PAN-EVENTS"
+      ],
+      "PanAutomation.Position": [
+        "M17-PAN-EVENTS"
+      ],
+      "PanAutomation.Value": [
+        "M17-PAN-EVENTS"
+      ],
+      "PanAutomation.Linear": [
+        "M17-PAN-EVENTS"
       ]
     },
     "wireFieldCases": {
@@ -818,12 +911,12 @@
       "gpifSound.LSB": ["M05-MIDI-BANK","M20-SOURCE-AUDIT"],
       "gpifSound.MSB": ["M05-MIDI-BANK","M20-SOURCE-AUDIT"],
       "gpifSound.Channel": ["M05-PLAYBACK-ROUTING","M20-SOURCE-AUDIT"],
-      "gpifAutomation.Type": ["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M20-SOURCE-AUDIT","M17-SOUND-PREROLL"],
+      "gpifAutomation.Type": ["M19-SYNC-EXPORT","M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M19-VALIDATION-EXPORT-POLICY","M20-SOURCE-AUDIT","M17-SOUND-PREROLL"],
       "gpifAutomation.Value": ["M05-MIDI-BANK","M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M22-BACKING-SYNC-TEMPO","M22-LEGACY-EDIT-AUTHORITY","M20-SOURCE-AUDIT","M17-SOUND-PREROLL","M17-SOUND-IDENTITY","M17-SOUND-AUTHORITY"],
       "gpifAutomation.Text": ["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M20-SOURCE-AUDIT"],
       "gpifAutomation.Bar": ["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M20-SOURCE-AUDIT","M17-SOUND-PREROLL"],
-      "gpifAutomation.Position": ["M05-MIDI-BANK","M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M20-SOURCE-AUDIT","M17-SOUND-PREROLL","M17-SOUND-IDENTITY"],
-      "gpifAutomation.Visible": ["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomation.Position": ["M19-SYNC-EXPORT","M05-MIDI-BANK","M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M22-PICKUP-TUPLET-TEMPO","M20-SOURCE-AUDIT","M17-SOUND-PREROLL","M17-SOUND-IDENTITY"],
+      "gpifAutomation.Visible": ["M19-SYNC-EXPORT","M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifAutomation.Linear": ["M06-TEMPO-AUTHORITY","M17-AUTOMATION-SEMANTICS","M17-SUSTAIN-PEDALS","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifMasterBar.Key": ["M07-MASTER-BARS","M07-KEY-MODES","M07-AUTHORITY-BOUNDARIES","M20-SOURCE-AUDIT"],
       "gpifKey.Mode": ["M07-MASTER-BARS","M07-KEY-MODES","M20-SOURCE-AUDIT"],
@@ -968,10 +1061,10 @@
       "gpifAsset.OriginalFileSHA1": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifAssets.Assets": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifAutomationValue.BarIndex": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
-      "gpifAutomationValue.BarOccurrence": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
-      "gpifAutomationValue.FrameOffset": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
-      "gpifAutomationValue.ModifiedTempo": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
-      "gpifAutomationValue.OriginalTempo": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomationValue.BarOccurrence": ["M19-SYNC-EXPORT","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomationValue.FrameOffset": ["M19-SYNC-EXPORT","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomationValue.ModifiedTempo": ["M19-SYNC-EXPORT","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
+      "gpifAutomationValue.OriginalTempo": ["M19-SYNC-EXPORT","M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifBackingTrack.AssetID": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifBackingTrack.Enabled": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
       "gpifBackingTrack.FramePadding": ["M19-BACKING-ASSETS-SYNC","M20-SOURCE-AUDIT"],
@@ -988,7 +1081,7 @@
       "gpifBeat.Tremolo": ["M11-TREMOLO-PICKING","M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBeat.Wah": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBeats.Beats": ["M20-SOURCE-AUDIT"],
-      "gpifChannelStrip.Automations": ["M20-SOURCE-AUDIT","M17-VOLUME-CONSUMER"],
+      "gpifChannelStrip.Automations": ["M17-PAN-EVENTS","M20-SOURCE-AUDIT","M17-VOLUME-CONSUMER"],
       "gpifChannelStrip.Parameters": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifDocument.Bars": ["M20-SOURCE-AUDIT"],
       "gpifDocument.Beats": ["M20-SOURCE-AUDIT"],
@@ -1093,7 +1186,11 @@
       "gpifAuditDiagnostics:beat.Fadding": ["M10-FADE","M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifAuditDiagnostics:property.Name": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifXMLAuditStart:element.Name.Local": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
-      "gpifAuditDiagnostics:track.AudioEngineState": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"]
+      "gpifAuditDiagnostics:track.AudioEngineState": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
+      "gpifReadPanAutomations:a.Type": [
+        "M17-PAN-EVENTS",
+        "M20-SOURCE-AUDIT"
+      ]
     },
     "reportCases": {
       "M10-PICK-STROKE": ["M10-PICK-STROKE"],
@@ -1154,6 +1251,12 @@
       ],
       "M15-GRACE-BEND-POLICY": [
         "M15-GRACE-BEND-POLICY"
+      ],
+      "M17-PAN-EVENTS": [
+        "M17-PAN-EVENTS"
+      ],
+      "M19-SYNC-EXPORT": [
+        "M19-SYNC-EXPORT"
       ]
     },
     "capabilityClaims": [
@@ -1477,1101 +1580,1107 @@
     }
   ],
   "diagnosticReceipts": [
-  {
-    "source": "GPIF.ChannelStrip.Automation.Type.Unknown",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The channel-strip automation type is not recognized."
-  },
-  {
-    "source": "GPIF.ChannelStrip.Automation.Volume.Range.Invalid",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The volume automation position and value must be within 0..1."
-  },
-  {
-    "source": "GPIF.ChannelStrip.Automation.Volume.Value.Invalid",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The volume automation value must be finite."
-  },
-  {
-    "source": "GPIF.ChannelStrip.Automation.Unsupported",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "The channel-strip automation has no Song destination."
-  },
-  {
-    "source": "GPIF.MasterTrack.Automation.Type.Unknown",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The master-track automation type is not recognized."
-  },
-  {
-    "source": "GPIF.MasterTrack.Automation.Tempo.Invalid",
-    "feature": "tempo-automations",
-    "disposition": "invalid-data",
-    "reason": "The opening tempo must be finite and positive."
-  },
-  {
-    "source": "GPIF.MasterTrack.Automation.Tempo.LegacyOverflow",
-    "feature": "tempo-automations",
-    "disposition": "lossy-projection",
-    "reason": "The exact opening BPM is preserved but cannot be projected into the legacy int16 field."
-  },
-  {
-    "source": "GPIF.MasterTrack.Automation.Tempo.Reference.Invalid",
-    "feature": "tempo-automations",
-    "disposition": "invalid-data",
-    "reason": "Applying the authored tempo reference unit must produce a finite positive BPM."
-  },
-  {
-    "source": "GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "A sync point must contain a valid non-negative frame offset and score location."
-  },
-  {
-    "source": "GPIF.Note.Property.Muted.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The muted property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.PalmMuted.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The palm-muted property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.Tapped.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The tapped property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.HopoOrigin.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The hammer origin property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.HopoDestination.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The hammer destination property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.LeftHandTapped.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The left-hand-tapped property must contain its Enable payload."
-  },
-  {
-    "source": "GPIF.Note.Property.Slide.InvalidFlags",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "Slide flags must be a non-negative integer."
-  },
-  {
-    "source": "GPIF.Note.Property.Slide.UnknownFlags",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The slide flag contains a bit that the public enum does not define."
-  },
-  {
-    "source": "GPIF.Note.Property.BendNumber.Invalid",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A bend number must be finite and inside the public curve range."
-  },
-  {
-    "source": "GPIF.Note.Property.BendNumber.Quantized",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "Note bend heights still use a narrower integer semitone scale; exact note offsets are preserved separately."
-  },
-  {
-    "source": "GPIF.Beat.Whammy.Invalid",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A whammy number must be finite and inside the public curve range."
-  },
-  {
-    "source": "GPIF.Beat.Whammy.Quantized",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "The public whammy curve uses a narrower integer scale."
-  },
-  {
-    "source": "GPIF.Note.Property.ConcertPitch.Redundant",
-    "feature": "note-and-beat-semantics",
-    "disposition": "deliberate-ignore",
-    "reason": "The pitch agrees with the mapped absolute MIDI value."
-  },
-  {
-    "source": "GPIF.Note.Property.TransposedPitch.Redundant",
-    "feature": "note-and-beat-semantics",
-    "disposition": "deliberate-ignore",
-    "reason": "The pitch agrees with the mapped absolute MIDI value."
-  },
-  {
-    "source": "GPIF.Chord.Diagram.Property.ShowDiagram",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Chord.Diagram.Property.ShowFingering",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Chord.Diagram.Property.ShowName",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Chord.Diagram.Property.Unknown",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.Staff.Property.CapoFret.MissingFret",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "A capo property needs an explicit fret value."
-  },
-  {
-    "source": "GPIF.Staff.Property.CapoFret.Negative",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "A capo fret cannot be negative."
-  },
-  {
-    "source": "GPIF.Staff.Property.Tuning.MissingPitches",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The recognized source construct is missing its required payload."
-  },
-  {
-    "source": "GPIF.Staff.Property.Unknown",
-    "feature": "staff-ownership",
-    "disposition": "unknown-syntax",
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.Track.Property.CapoFret.MissingFret",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "A capo property needs an explicit fret value."
-  },
-  {
-    "source": "GPIF.Track.Property.CapoFret.Negative",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "A capo fret cannot be negative."
-  },
-  {
-    "source": "GPIF.Track.Property.Tuning.MissingPitches",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The recognized source construct is missing its required payload."
-  },
-  {
-    "source": "GPIF.Track.Property.Unknown",
-    "feature": "staff-ownership",
-    "disposition": "unknown-syntax",
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownAttribute.ScoreCore",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownElement.ScoreCore",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "Binary.Note.TimeIndependentDuration",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "Binary.Duration.Tuplet.Unsupported",
-    "feature": "rhythm",
-    "disposition": "unsupported-feature",
-    "reason": "The binary tuplet discriminator is outside the supported mapping."
-  },
-  {
-    "source": "Binary.Note.TremoloPicking.Subdivision.Unsupported",
-    "feature": "tremolo-picking",
-    "disposition": "unsupported-feature",
-    "reason": "The binary tremolo-picking subdivision is outside the supported mapping."
-  },
-  {
-    "source": "Binary.Note.Trill.Period.Unsupported",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The binary trill period is outside the supported mapping."
-  },
-  {
-    "source": "Binary.Note.Harmonic.Kind.Unsupported",
-    "feature": "harmonics",
-    "disposition": "unsupported-feature",
-    "reason": "The GP3/4 harmonic kind is outside the supported mapping."
-  },
-  {
-    "source": "Binary.Note.HarmonicV5.Kind.Unsupported",
-    "feature": "harmonics",
-    "disposition": "unsupported-feature",
-    "reason": "The GP5 harmonic kind is outside the supported mapping."
-  },
-  {
-    "source": "Binary.RSE.MasterMetadata",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "Binary.RSE.TrackMetadata",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Asset.DuplicateID",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Asset.EmptyID",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.BackingTrack.AssetId.Reference",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.BackingTrack.EmbeddedFile.Empty",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "An enabled local backing-track asset must contain audio bytes."
-  },
-  {
-    "source": "GPIF.BackingTrack.EmbeddedFile.Reference",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "An enabled local backing-track asset must name an archive entry that exists."
-  },
-  {
-    "source": "GPIF.BackingTrack.FramePadding.Invalid",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "Backing-track frame padding must be a signed 64-bit frame count."
-  },
-  {
-    "source": "GPIF.Bar.DuplicateID",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Bar.EmptyID",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Bar.Voices.Reference",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Beat.Arpeggio.InvalidValue",
-    "feature": "brush",
-    "disposition": "unsupported-feature",
-    "reason": "Arpeggio direction must be Up or Down; other values have no lossless public representation."
-  },
-  {
-    "source": "GPIF.Beat.Chord.Reference",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Beat.DuplicateID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Beat.Dynamic.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Beaming.XProperty.Duplicate",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "Each canonical beat beaming XProperty can occur at most once."
-  },
-  {
-    "source": "GPIF.Beat.Beaming.XProperty.InvalidValue",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A recognized beat beaming XProperty must use its defined integer value."
-  },
-  {
-    "source": "GPIF.Beat.Brush.Duration.Duplicate",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "A beat can contain at most one exact brush-duration XProperty."
-  },
-  {
-    "source": "GPIF.Beat.Brush.Duration.Invalid",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "GPIF brush timing must be an integral value within the signed 32-bit target range."
-  },
-  {
-    "source": "GPIF.Beat.Brush.Duration.Orphan",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "Exact brush timing requires a Brush property or Arpeggio element on the same beat."
-  },
-  {
-    "source": "GPIF.Beat.Brush.Kind.Conflict",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "A beat cannot declare both Brush and Arpeggio ownership."
-  },
-  {
-    "source": "GPIF.Beat.Brush.Property.Duplicate",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "A beat can contain at most one Brush property."
-  },
-  {
-    "source": "GPIF.Beat.XProperty.Unknown",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "reason": "An unrecognized beat XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container."
-  },
-  {
-    "source": "GPIF.Beat.TransposedPitchStemOrientation.InvalidValue",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A transposed-pitch stem orientation must be Undefined, Upward, or Downward."
-  },
-  {
-    "source": "GPIF.Beat.UserTransposedPitchStemOrientation.InvalidValue",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A user stem override must be Undefined, Upward, or Downward."
-  },
-  {
-    "source": "GPIF.Beat.EmptyID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Beat.Fadding.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The source fade value is not a defined GPIF Fadding token."
-  },
-  {
-    "source": "GPIF.Beat.Golpe.InvalidValue",
-    "feature": "golpe",
-    "disposition": "unsupported-feature",
-    "reason": "The source golpe value is not Thumb, Finger, or absent."
-  },
-  {
-    "source": "GPIF.Beat.GraceNotes.InvalidValue",
-    "feature": "grace-relationships",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Hairpin.InvalidValue",
-    "feature": "hairpins",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Legato.InvalidDestination",
-    "feature": "legato-slurs",
-    "disposition": "invalid-data",
-    "reason": "An authored beat-level legato destination attribute must contain the exact GPIF boolean true or false."
-  },
-  {
-    "source": "GPIF.Beat.Legato.InvalidOrigin",
-    "feature": "legato-slurs",
-    "disposition": "invalid-data",
-    "reason": "An authored beat-level legato origin attribute must contain the exact GPIF boolean true or false."
-  },
-  {
-    "source": "GPIF.Beat.Notes.Reference",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Beat.Ottavia.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Property.Barre.Incomplete",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A beat-level barre fret and shape must occur as a pair."
-  },
-  {
-    "source": "GPIF.Beat.Property.BarreFret.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A beat-level barre fret must fit the checked public Fret range."
-  },
-  {
-    "source": "GPIF.Beat.Property.BarreFret.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A BarreFret property must contain its Fret payload."
-  },
-  {
-    "source": "GPIF.Beat.Property.BarreString.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A beat-level BarreString payload must be 0 for full or 1 for half."
-  },
-  {
-    "source": "GPIF.Beat.Property.BarreString.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "A BarreString property must contain its String payload."
-  },
-  {
-    "source": "GPIF.Beat.Property.Brush.InvalidDirection",
-    "feature": "brush",
-    "disposition": "unsupported-feature",
-    "reason": "Brush direction must be Up or Down; other values have no lossless public representation."
-  },
-  {
-    "source": "GPIF.Beat.Property.Brush.MissingDirection",
-    "feature": "brush",
-    "disposition": "invalid-data",
-    "reason": "A Brush property must contain its Direction payload."
-  },
-  {
-    "source": "GPIF.Beat.Property.PickStroke.InvalidDirection",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Property.PickStroke.MissingDirection",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Beat.Property.Popped.MissingEnable",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Beat.Property.PrimaryPickupTone",
-    "feature": "note-and-beat-semantics",
-    "disposition": "deliberate-ignore",
-    "reason": "The notation-focused Song model intentionally excludes this playback metadata."
-  },
-  {
-    "source": "GPIF.Beat.Property.PrimaryPickupVolume",
-    "feature": "note-and-beat-semantics",
-    "disposition": "deliberate-ignore",
-    "reason": "The notation-focused Song model intentionally excludes this playback metadata."
-  },
-  {
-    "source": "GPIF.Beat.Property.Rasgueado",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Property.Slapped.MissingEnable",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Beat.Property.Unknown",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.Beat.Property.VibratoWTremBar.InvalidStrength",
-    "feature": "beat-vibrato",
-    "disposition": "unsupported-feature",
-    "reason": "Only the GPIF Slight and Wide beat-vibrato strengths are defined."
-  },
-  {
-    "source": "GPIF.Beat.Property.VibratoWTremBar.MissingStrength",
-    "feature": "beat-vibrato",
-    "disposition": "invalid-data",
-    "reason": "A beat-vibrato property must contain its Strength payload."
-  },
-  {
-    "source": "GPIF.Beat.Property.WhammyBarExtend",
-    "feature": "note-and-beat-semantics",
-    "disposition": "deliberate-ignore",
-    "reason": "The GPIF extension marker has no documented playback or notation effect."
-  },
-  {
-    "source": "GPIF.Beat.Rhythm.Reference",
-    "feature": "rhythm",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Beat.Tremolo.InvalidValue",
-    "feature": "tremolo-picking",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Beat.Wah",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.ChordDefinition.DuplicateID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.ChordDefinition.EmptyID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Bar.SimileMark.InvalidValue",
-    "feature": "rhythm",
-    "disposition": "unsupported-feature",
-    "reason": "Unknown simile-mark text has no defined public enum value."
-  },
-  {
-    "source": "GPIF.Bar.Ottavia.InvalidValue",
-    "feature": "clef-octave",
-    "disposition": "unsupported-feature",
-    "reason": "Unknown clef-octave text has no defined public enum value."
-  },
-  {
-    "source": "GPIF.MasterBar.Fermata.Type.InvalidValue",
-    "feature": "fermata",
-    "disposition": "unsupported-feature",
-    "reason": "Unknown fermata type text has no defined public enum value."
-  },
-  {
-    "source": "GPIF.MasterBar.Fermata.Length.InvalidValue",
-    "feature": "fermata",
-    "disposition": "invalid-data",
-    "reason": "A fermata length must be finite and non-negative before conversion."
-  },
-  {
-    "source": "GPIF.MasterBar.Fermata.Offset.InvalidValue",
-    "feature": "fermata",
-    "disposition": "invalid-data",
-    "reason": "A fermata offset must be a non-negative rational value representable as exact score ticks."
-  },
-  {
-    "source": "GPIF.MasterBar.Fermata.Offset.Duplicate",
-    "feature": "fermata",
-    "disposition": "invalid-data",
-    "reason": "One master bar cannot contain two authored fermatas at the same exact offset."
-  },
-  {
-    "source": "GPIF.MasterBar.Bars.Cardinality",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track."
-  },
-  {
-    "source": "GPIF.MasterBar.Bars.Reference",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.MasterBar.Directions.Jump.InvalidValue",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "Unknown navigation-jump text has no defined public enum value."
-  },
-  {
-    "source": "GPIF.MasterBar.Directions.Target.InvalidValue",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "Unknown navigation-target text has no defined public enum value."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Duration.Duplicate",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A custom master-bar beaming rule can declare its duration only once."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Duration.InvalidValue",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A custom beaming duration must use a supported note-value denominator."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Duration.Missing",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "Authored custom groups require their exact duration denominator."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Group.Duplicate",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "Each indexed custom beaming group can occur at most once."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Group.Gap",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "Custom beaming group indices must be contiguous from zero."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Group.InvalidValue",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "A custom group must be positive and fit the checked GPIF integer range; only trailing zero padding is accepted."
-  },
-  {
-    "source": "GPIF.MasterBar.Beaming.Groups.Missing",
-    "feature": "beaming",
-    "disposition": "invalid-data",
-    "reason": "An authored custom beaming duration requires at least one group."
-  },
-  {
-    "source": "GPIF.MasterBar.XProperty.Unknown",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "An unrecognized master-bar XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container."
-  },
-  {
-    "source": "GPIF.MasterBar.TripletFeel.InvalidValue",
-    "feature": "rhythm",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.MasterTrack.Tracks.Reference",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Note.DuplicateID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Note.EmptyID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Note.InstrumentArticulation.Invalid",
-    "feature": "percussion-articulations",
-    "disposition": "invalid-data",
-    "reason": "A percussion articulation identity must be non-negative before conversion."
-  },
-  {
-    "source": "GPIF.Note.Property.BendDestinationOffset.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendDestinationValue.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendMiddleOffset1.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendMiddleOffset2.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendMiddleValue.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendOriginOffset.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.BendOriginValue.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.ConcertPitch",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.Element",
-    "feature": "percussion-articulations",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.Fret.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.HarmonicFret.Invalid",
-    "feature": "harmonics",
-    "disposition": "invalid-data",
-    "reason": "A harmonic fret must be finite and within the public harmonic-fret range."
-  },
-  {
-    "source": "GPIF.Note.Property.HarmonicFret.MissingPayload",
-    "feature": "harmonics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.HarmonicType.MissingPayload",
-    "feature": "harmonics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.HarmonicType.Unsupported",
-    "feature": "harmonics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.HopoDestination",
-    "feature": "note-and-beat-semantics",
-    "disposition": "lossy-projection",
-    "reason": "Song derives hammer destinations and has no authored field for the GPIF HopoDestination marker."
-  },
-  {
-    "source": "GPIF.Note.Property.Midi.MissingPayload",
-    "feature": "percussion-articulations",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.Octave",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.Slide.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.String.MissingPayload",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The property must contain its required typed payload."
-  },
-  {
-    "source": "GPIF.Note.Property.Tone",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.TransposedPitch",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.Unknown",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.Note.Property.Variation",
-    "feature": "percussion-articulations",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Note.LeftFingering.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The source left-hand fingering token is not one of P, I, M, A, or C."
-  },
-  {
-    "source": "GPIF.Note.RightFingering.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The source right-hand fingering token is not one of P, I, M, A, or C."
-  },
-  {
-    "source": "GPIF.Note.Vibrato.InvalidValue",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unsupported-feature",
-    "reason": "The source note vibrato token is not one of None, Slight, or Wide."
-  },
-  {
-    "source": "GPIF.Rhythm.DuplicateID",
-    "feature": "rhythm",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Rhythm.EmptyID",
-    "feature": "rhythm",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Rhythm.NoteValue.InvalidValue",
-    "feature": "rhythm",
-    "disposition": "unsupported-feature",
-    "reason": "Song has no lossless destination for this recognized source construct."
-  },
-  {
-    "source": "GPIF.Track.DuplicateID",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Track.EmptyID",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Track.Automation.Sound.Reference",
-    "feature": "score-core",
-    "disposition": "invalid-data",
-    "reason": "The sound automation must reference a sound in its track."
-  },
-  {
-    "source": "GPIF.MasterBar.Key.Mode.InvalidValue",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "The key mode must use an accepted major or minor spelling; permissive parsing projects an unknown spelling to major."
-  },
-  {
-    "source": "GPIF.Track.Automation.SustainPedal.Bar.Invalid",
-    "feature": "sustain-pedal",
-    "disposition": "invalid-data",
-    "reason": "A sustain-pedal automation must reference an existing measure."
-  },
-  {
-    "source": "GPIF.Track.Automation.SustainPedal.Order.Invalid",
-    "feature": "sustain-pedal",
-    "disposition": "invalid-data",
-    "reason": "Sustain-pedal positions within one measure must be strictly increasing in source order."
-  },
-  {
-    "source": "GPIF.Track.Automation.SustainPedal.Position.Invalid",
-    "feature": "sustain-pedal",
-    "disposition": "invalid-data",
-    "reason": "A sustain-pedal position must be finite and within 0 through 1."
-  },
-  {
-    "source": "GPIF.Track.Automation.SustainPedal.Value.Invalid",
-    "feature": "sustain-pedal",
-    "disposition": "invalid-data",
-    "reason": "A sustain-pedal value must use reference 1 for down or 3 for release."
-  },
-  {
-    "source": "GPIF.Track.Automation.Type.Unknown",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The track automation type is not recognized."
-  },
-  {
-    "source": "GPIF.Track.Lyrics.Undispatched",
-    "feature": "score-core",
-    "disposition": "lossy-projection",
-    "reason": "The public lyric model keeps the lines but not the source dispatch state."
-  },
-  {
-    "source": "GPIF.Track.PartSounding.NominalKey.Conflict",
-    "feature": "transposition",
-    "disposition": "lossy-projection",
-    "reason": "The PartSounding nominal key conflicts with the authoritative Transpose key offset."
-  },
-  {
-    "source": "GPIF.Track.PartSounding.NominalKey.InvalidValue",
-    "feature": "transposition",
-    "disposition": "unsupported-feature",
-    "reason": "The PartSounding nominal key is neither Neutral nor one of the twelve recognized GPIF spellings."
-  },
-  {
-    "source": "GPIF.Track.Transposition.ConflictingValues",
-    "feature": "transposition",
-    "disposition": "lossy-projection",
-    "reason": "Transpose is authoritative when it conflicts with the legacy PartSounding pitch."
-  },
-  {
-    "source": "GPIF.UnknownAttribute.NoteAndBeat",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownAttribute.Rhythm",
-    "feature": "rhythm",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownAttribute.StaffOwnership",
-    "feature": "staff-ownership",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownElement.NoteAndBeat",
-    "feature": "note-and-beat-semantics",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownElement.Rhythm",
-    "feature": "rhythm",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.UnknownElement.StaffOwnership",
-    "feature": "staff-ownership",
-    "disposition": "unknown-syntax",
-    "family": true,
-    "reason": "The GPIF audit does not recognize this source construct."
-  },
-  {
-    "source": "GPIF.Voice.Beats.Reference",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source reference must resolve to an object of the requested type."
-  },
-  {
-    "source": "GPIF.Voice.DuplicateID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object ID must be unique within its collection."
-  },
-  {
-    "source": "GPIF.Voice.EmptyID",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "The source object must have a non-empty ID."
-  },
-  {
-    "source": "GPIF.Beat.Property.ConflictingDuplicate",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "Repeated beat properties must not provide conflicting authored values."
-  },
-  {
-    "source": "GPIF.Note.Property.ConflictingDuplicate",
-    "feature": "note-and-beat-semantics",
-    "disposition": "invalid-data",
-    "reason": "Repeated note properties must not provide conflicting authored values."
-  },
-  {
-    "source": "GPIF.Staff.Property.ConflictingDuplicate",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "Repeated staff properties must not provide conflicting authored values."
-  },
-  {
-    "source": "GPIF.Track.AudioEngineState.InvalidValue",
-    "feature": "score-core",
-    "disposition": "unknown-syntax",
-    "reason": "The source audio-engine state must be MIDI or RSE."
-  },
-  {
-    "source": "GPIF.Track.Property.ConflictingDuplicate",
-    "feature": "staff-ownership",
-    "disposition": "invalid-data",
-    "reason": "Repeated track properties must not provide conflicting authored values."
-  },
-  {
-    "source": "GPIF.Track.Sound.Channel",
-    "feature": "score-core",
-    "disposition": "unsupported-feature",
-    "reason": "The public sound model has no destination for a per-sound MIDI channel."
-  },
-  {
-    "source": "GPIF.Track.Sound.MIDI.Bank.Invalid",
-    "feature": "midi-bank",
-    "disposition": "invalid-data",
-    "reason": "Each GPIF bank-select component must fit the seven-bit MIDI MSB or LSB range."
-  }
-],
+    {
+      "source": "GPIF.ChannelStrip.Automation.Pan.Value.Invalid",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The pan automation value must be numeric."
+    },
+    {
+      "source": "GPIF.ChannelStrip.Automation.Type.Unknown",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The channel-strip automation type is not recognized."
+    },
+    {
+      "source": "GPIF.ChannelStrip.Automation.Volume.Range.Invalid",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The volume automation position and value must be within 0..1."
+    },
+    {
+      "source": "GPIF.ChannelStrip.Automation.Volume.Value.Invalid",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The volume automation value must be finite."
+    },
+    {
+      "source": "GPIF.ChannelStrip.Automation.Unsupported",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "The channel-strip automation has no Song destination."
+    },
+    {
+      "source": "GPIF.MasterTrack.Automation.Type.Unknown",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The master-track automation type is not recognized."
+    },
+    {
+      "source": "GPIF.MasterTrack.Automation.Tempo.Invalid",
+      "feature": "tempo-automations",
+      "disposition": "invalid-data",
+      "reason": "The opening tempo must be finite and positive."
+    },
+    {
+      "source": "GPIF.MasterTrack.Automation.Tempo.LegacyOverflow",
+      "feature": "tempo-automations",
+      "disposition": "lossy-projection",
+      "reason": "The exact opening BPM is preserved but cannot be projected into the legacy int16 field."
+    },
+    {
+      "source": "GPIF.MasterTrack.Automation.Tempo.Reference.Invalid",
+      "feature": "tempo-automations",
+      "disposition": "invalid-data",
+      "reason": "Applying the authored tempo reference unit must produce a finite positive BPM."
+    },
+    {
+      "source": "GPIF.MasterTrack.Automation.SyncPoint.Value.Invalid",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "A sync point must contain a valid non-negative frame offset and score location."
+    },
+    {
+      "source": "GPIF.Note.Property.Muted.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The muted property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.PalmMuted.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The palm-muted property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.Tapped.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The tapped property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.HopoOrigin.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The hammer origin property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.HopoDestination.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The hammer destination property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.LeftHandTapped.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The left-hand-tapped property must contain its Enable payload."
+    },
+    {
+      "source": "GPIF.Note.Property.Slide.InvalidFlags",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "Slide flags must be a non-negative integer."
+    },
+    {
+      "source": "GPIF.Note.Property.Slide.UnknownFlags",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The slide flag contains a bit that the public enum does not define."
+    },
+    {
+      "source": "GPIF.Note.Property.BendNumber.Invalid",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A bend number must be finite and inside the public curve range."
+    },
+    {
+      "source": "GPIF.Note.Property.BendNumber.Quantized",
+      "feature": "note-and-beat-semantics",
+      "disposition": "lossy-projection",
+      "reason": "Note bend heights still use a narrower integer semitone scale; exact note offsets are preserved separately."
+    },
+    {
+      "source": "GPIF.Beat.Whammy.Invalid",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A whammy number must be finite and inside the public curve range."
+    },
+    {
+      "source": "GPIF.Beat.Whammy.Quantized",
+      "feature": "note-and-beat-semantics",
+      "disposition": "lossy-projection",
+      "reason": "The public whammy curve uses a narrower integer scale."
+    },
+    {
+      "source": "GPIF.Note.Property.ConcertPitch.Redundant",
+      "feature": "note-and-beat-semantics",
+      "disposition": "deliberate-ignore",
+      "reason": "The pitch agrees with the mapped absolute MIDI value."
+    },
+    {
+      "source": "GPIF.Note.Property.TransposedPitch.Redundant",
+      "feature": "note-and-beat-semantics",
+      "disposition": "deliberate-ignore",
+      "reason": "The pitch agrees with the mapped absolute MIDI value."
+    },
+    {
+      "source": "GPIF.Chord.Diagram.Property.ShowDiagram",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Chord.Diagram.Property.ShowFingering",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Chord.Diagram.Property.ShowName",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Chord.Diagram.Property.Unknown",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.Staff.Property.CapoFret.MissingFret",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "A capo property needs an explicit fret value."
+    },
+    {
+      "source": "GPIF.Staff.Property.CapoFret.Negative",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "A capo fret cannot be negative."
+    },
+    {
+      "source": "GPIF.Staff.Property.Tuning.MissingPitches",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The recognized source construct is missing its required payload."
+    },
+    {
+      "source": "GPIF.Staff.Property.Unknown",
+      "feature": "staff-ownership",
+      "disposition": "unknown-syntax",
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.Track.Property.CapoFret.MissingFret",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "A capo property needs an explicit fret value."
+    },
+    {
+      "source": "GPIF.Track.Property.CapoFret.Negative",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "A capo fret cannot be negative."
+    },
+    {
+      "source": "GPIF.Track.Property.Tuning.MissingPitches",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The recognized source construct is missing its required payload."
+    },
+    {
+      "source": "GPIF.Track.Property.Unknown",
+      "feature": "staff-ownership",
+      "disposition": "unknown-syntax",
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownAttribute.ScoreCore",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownElement.ScoreCore",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "Binary.Note.TimeIndependentDuration",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "Binary.Duration.Tuplet.Unsupported",
+      "feature": "rhythm",
+      "disposition": "unsupported-feature",
+      "reason": "The binary tuplet discriminator is outside the supported mapping."
+    },
+    {
+      "source": "Binary.Note.TremoloPicking.Subdivision.Unsupported",
+      "feature": "tremolo-picking",
+      "disposition": "unsupported-feature",
+      "reason": "The binary tremolo-picking subdivision is outside the supported mapping."
+    },
+    {
+      "source": "Binary.Note.Trill.Period.Unsupported",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The binary trill period is outside the supported mapping."
+    },
+    {
+      "source": "Binary.Note.Harmonic.Kind.Unsupported",
+      "feature": "harmonics",
+      "disposition": "unsupported-feature",
+      "reason": "The GP3/4 harmonic kind is outside the supported mapping."
+    },
+    {
+      "source": "Binary.Note.HarmonicV5.Kind.Unsupported",
+      "feature": "harmonics",
+      "disposition": "unsupported-feature",
+      "reason": "The GP5 harmonic kind is outside the supported mapping."
+    },
+    {
+      "source": "Binary.RSE.MasterMetadata",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "Binary.RSE.TrackMetadata",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Asset.DuplicateID",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Asset.EmptyID",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.BackingTrack.AssetId.Reference",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.BackingTrack.EmbeddedFile.Empty",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "An enabled local backing-track asset must contain audio bytes."
+    },
+    {
+      "source": "GPIF.BackingTrack.EmbeddedFile.Reference",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "An enabled local backing-track asset must name an archive entry that exists."
+    },
+    {
+      "source": "GPIF.BackingTrack.FramePadding.Invalid",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "Backing-track frame padding must be a signed 64-bit frame count."
+    },
+    {
+      "source": "GPIF.Bar.DuplicateID",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Bar.EmptyID",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Bar.Voices.Reference",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Beat.Arpeggio.InvalidValue",
+      "feature": "brush",
+      "disposition": "unsupported-feature",
+      "reason": "Arpeggio direction must be Up or Down; other values have no lossless public representation."
+    },
+    {
+      "source": "GPIF.Beat.Chord.Reference",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Beat.DuplicateID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Beat.Dynamic.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Beaming.XProperty.Duplicate",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "Each canonical beat beaming XProperty can occur at most once."
+    },
+    {
+      "source": "GPIF.Beat.Beaming.XProperty.InvalidValue",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A recognized beat beaming XProperty must use its defined integer value."
+    },
+    {
+      "source": "GPIF.Beat.Brush.Duration.Duplicate",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "A beat can contain at most one exact brush-duration XProperty."
+    },
+    {
+      "source": "GPIF.Beat.Brush.Duration.Invalid",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "GPIF brush timing must be an integral value within the signed 32-bit target range."
+    },
+    {
+      "source": "GPIF.Beat.Brush.Duration.Orphan",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "Exact brush timing requires a Brush property or Arpeggio element on the same beat."
+    },
+    {
+      "source": "GPIF.Beat.Brush.Kind.Conflict",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "A beat cannot declare both Brush and Arpeggio ownership."
+    },
+    {
+      "source": "GPIF.Beat.Brush.Property.Duplicate",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "A beat can contain at most one Brush property."
+    },
+    {
+      "source": "GPIF.Beat.XProperty.Unknown",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "reason": "An unrecognized beat XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container."
+    },
+    {
+      "source": "GPIF.Beat.TransposedPitchStemOrientation.InvalidValue",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A transposed-pitch stem orientation must be Undefined, Upward, or Downward."
+    },
+    {
+      "source": "GPIF.Beat.UserTransposedPitchStemOrientation.InvalidValue",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A user stem override must be Undefined, Upward, or Downward."
+    },
+    {
+      "source": "GPIF.Beat.EmptyID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Beat.Fadding.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The source fade value is not a defined GPIF Fadding token."
+    },
+    {
+      "source": "GPIF.Beat.Golpe.InvalidValue",
+      "feature": "golpe",
+      "disposition": "unsupported-feature",
+      "reason": "The source golpe value is not Thumb, Finger, or absent."
+    },
+    {
+      "source": "GPIF.Beat.GraceNotes.InvalidValue",
+      "feature": "grace-relationships",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Hairpin.InvalidValue",
+      "feature": "hairpins",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Legato.InvalidDestination",
+      "feature": "legato-slurs",
+      "disposition": "invalid-data",
+      "reason": "An authored beat-level legato destination attribute must contain the exact GPIF boolean true or false."
+    },
+    {
+      "source": "GPIF.Beat.Legato.InvalidOrigin",
+      "feature": "legato-slurs",
+      "disposition": "invalid-data",
+      "reason": "An authored beat-level legato origin attribute must contain the exact GPIF boolean true or false."
+    },
+    {
+      "source": "GPIF.Beat.Notes.Reference",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Beat.Ottavia.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Property.Barre.Incomplete",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A beat-level barre fret and shape must occur as a pair."
+    },
+    {
+      "source": "GPIF.Beat.Property.BarreFret.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A beat-level barre fret must fit the checked public Fret range."
+    },
+    {
+      "source": "GPIF.Beat.Property.BarreFret.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A BarreFret property must contain its Fret payload."
+    },
+    {
+      "source": "GPIF.Beat.Property.BarreString.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A beat-level BarreString payload must be 0 for full or 1 for half."
+    },
+    {
+      "source": "GPIF.Beat.Property.BarreString.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "A BarreString property must contain its String payload."
+    },
+    {
+      "source": "GPIF.Beat.Property.Brush.InvalidDirection",
+      "feature": "brush",
+      "disposition": "unsupported-feature",
+      "reason": "Brush direction must be Up or Down; other values have no lossless public representation."
+    },
+    {
+      "source": "GPIF.Beat.Property.Brush.MissingDirection",
+      "feature": "brush",
+      "disposition": "invalid-data",
+      "reason": "A Brush property must contain its Direction payload."
+    },
+    {
+      "source": "GPIF.Beat.Property.PickStroke.InvalidDirection",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Property.PickStroke.MissingDirection",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Beat.Property.Popped.MissingEnable",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Beat.Property.PrimaryPickupTone",
+      "feature": "note-and-beat-semantics",
+      "disposition": "deliberate-ignore",
+      "reason": "The notation-focused Song model intentionally excludes this playback metadata."
+    },
+    {
+      "source": "GPIF.Beat.Property.PrimaryPickupVolume",
+      "feature": "note-and-beat-semantics",
+      "disposition": "deliberate-ignore",
+      "reason": "The notation-focused Song model intentionally excludes this playback metadata."
+    },
+    {
+      "source": "GPIF.Beat.Property.Rasgueado",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Property.Slapped.MissingEnable",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Beat.Property.Unknown",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.Beat.Property.VibratoWTremBar.InvalidStrength",
+      "feature": "beat-vibrato",
+      "disposition": "unsupported-feature",
+      "reason": "Only the GPIF Slight and Wide beat-vibrato strengths are defined."
+    },
+    {
+      "source": "GPIF.Beat.Property.VibratoWTremBar.MissingStrength",
+      "feature": "beat-vibrato",
+      "disposition": "invalid-data",
+      "reason": "A beat-vibrato property must contain its Strength payload."
+    },
+    {
+      "source": "GPIF.Beat.Property.WhammyBarExtend",
+      "feature": "note-and-beat-semantics",
+      "disposition": "deliberate-ignore",
+      "reason": "The GPIF extension marker has no documented playback or notation effect."
+    },
+    {
+      "source": "GPIF.Beat.Rhythm.Reference",
+      "feature": "rhythm",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Beat.Tremolo.InvalidValue",
+      "feature": "tremolo-picking",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Beat.Wah",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.ChordDefinition.DuplicateID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.ChordDefinition.EmptyID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Bar.SimileMark.InvalidValue",
+      "feature": "rhythm",
+      "disposition": "unsupported-feature",
+      "reason": "Unknown simile-mark text has no defined public enum value."
+    },
+    {
+      "source": "GPIF.Bar.Ottavia.InvalidValue",
+      "feature": "clef-octave",
+      "disposition": "unsupported-feature",
+      "reason": "Unknown clef-octave text has no defined public enum value."
+    },
+    {
+      "source": "GPIF.MasterBar.Fermata.Type.InvalidValue",
+      "feature": "fermata",
+      "disposition": "unsupported-feature",
+      "reason": "Unknown fermata type text has no defined public enum value."
+    },
+    {
+      "source": "GPIF.MasterBar.Fermata.Length.InvalidValue",
+      "feature": "fermata",
+      "disposition": "invalid-data",
+      "reason": "A fermata length must be finite and non-negative before conversion."
+    },
+    {
+      "source": "GPIF.MasterBar.Fermata.Offset.InvalidValue",
+      "feature": "fermata",
+      "disposition": "invalid-data",
+      "reason": "A fermata offset must be a non-negative rational value representable as exact score ticks."
+    },
+    {
+      "source": "GPIF.MasterBar.Fermata.Offset.Duplicate",
+      "feature": "fermata",
+      "disposition": "invalid-data",
+      "reason": "One master bar cannot contain two authored fermatas at the same exact offset."
+    },
+    {
+      "source": "GPIF.MasterBar.Bars.Cardinality",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The ordered bar references must cover each track and staff exactly once, except that -1 can replace one whole track."
+    },
+    {
+      "source": "GPIF.MasterBar.Bars.Reference",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.MasterBar.Directions.Jump.InvalidValue",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "Unknown navigation-jump text has no defined public enum value."
+    },
+    {
+      "source": "GPIF.MasterBar.Directions.Target.InvalidValue",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "Unknown navigation-target text has no defined public enum value."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Duration.Duplicate",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A custom master-bar beaming rule can declare its duration only once."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Duration.InvalidValue",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A custom beaming duration must use a supported note-value denominator."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Duration.Missing",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "Authored custom groups require their exact duration denominator."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Group.Duplicate",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "Each indexed custom beaming group can occur at most once."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Group.Gap",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "Custom beaming group indices must be contiguous from zero."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Group.InvalidValue",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "A custom group must be positive and fit the checked GPIF integer range; only trailing zero padding is accepted."
+    },
+    {
+      "source": "GPIF.MasterBar.Beaming.Groups.Missing",
+      "feature": "beaming",
+      "disposition": "invalid-data",
+      "reason": "An authored custom beaming duration requires at least one group."
+    },
+    {
+      "source": "GPIF.MasterBar.XProperty.Unknown",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "An unrecognized master-bar XProperty must remain visible to strict parsing instead of becoming structurally accepted through the generic integer container."
+    },
+    {
+      "source": "GPIF.MasterBar.TripletFeel.InvalidValue",
+      "feature": "rhythm",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.MasterTrack.Tracks.Reference",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Note.DuplicateID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Note.EmptyID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Note.InstrumentArticulation.Invalid",
+      "feature": "percussion-articulations",
+      "disposition": "invalid-data",
+      "reason": "A percussion articulation identity must be non-negative before conversion."
+    },
+    {
+      "source": "GPIF.Note.Property.BendDestinationOffset.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendDestinationValue.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendMiddleOffset1.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendMiddleOffset2.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendMiddleValue.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendOriginOffset.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.BendOriginValue.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.ConcertPitch",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.Element",
+      "feature": "percussion-articulations",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.Fret.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.HarmonicFret.Invalid",
+      "feature": "harmonics",
+      "disposition": "invalid-data",
+      "reason": "A harmonic fret must be finite and within the public harmonic-fret range."
+    },
+    {
+      "source": "GPIF.Note.Property.HarmonicFret.MissingPayload",
+      "feature": "harmonics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.HarmonicType.MissingPayload",
+      "feature": "harmonics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.HarmonicType.Unsupported",
+      "feature": "harmonics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.HopoDestination",
+      "feature": "note-and-beat-semantics",
+      "disposition": "lossy-projection",
+      "reason": "Song derives hammer destinations and has no authored field for the GPIF HopoDestination marker."
+    },
+    {
+      "source": "GPIF.Note.Property.Midi.MissingPayload",
+      "feature": "percussion-articulations",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.Octave",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.Slide.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.String.MissingPayload",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The property must contain its required typed payload."
+    },
+    {
+      "source": "GPIF.Note.Property.Tone",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.TransposedPitch",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.Unknown",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.Note.Property.Variation",
+      "feature": "percussion-articulations",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Note.LeftFingering.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The source left-hand fingering token is not one of P, I, M, A, or C."
+    },
+    {
+      "source": "GPIF.Note.RightFingering.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The source right-hand fingering token is not one of P, I, M, A, or C."
+    },
+    {
+      "source": "GPIF.Note.Vibrato.InvalidValue",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unsupported-feature",
+      "reason": "The source note vibrato token is not one of None, Slight, or Wide."
+    },
+    {
+      "source": "GPIF.Rhythm.DuplicateID",
+      "feature": "rhythm",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Rhythm.EmptyID",
+      "feature": "rhythm",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Rhythm.NoteValue.InvalidValue",
+      "feature": "rhythm",
+      "disposition": "unsupported-feature",
+      "reason": "Song has no lossless destination for this recognized source construct."
+    },
+    {
+      "source": "GPIF.Track.DuplicateID",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Track.EmptyID",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Track.Automation.Sound.Reference",
+      "feature": "score-core",
+      "disposition": "invalid-data",
+      "reason": "The sound automation must reference a sound in its track."
+    },
+    {
+      "source": "GPIF.MasterBar.Key.Mode.InvalidValue",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "The key mode must use an accepted major or minor spelling; permissive parsing projects an unknown spelling to major."
+    },
+    {
+      "source": "GPIF.Track.Automation.SustainPedal.Bar.Invalid",
+      "feature": "sustain-pedal",
+      "disposition": "invalid-data",
+      "reason": "A sustain-pedal automation must reference an existing measure."
+    },
+    {
+      "source": "GPIF.Track.Automation.SustainPedal.Order.Invalid",
+      "feature": "sustain-pedal",
+      "disposition": "invalid-data",
+      "reason": "Sustain-pedal positions within one measure must be strictly increasing in source order."
+    },
+    {
+      "source": "GPIF.Track.Automation.SustainPedal.Position.Invalid",
+      "feature": "sustain-pedal",
+      "disposition": "invalid-data",
+      "reason": "A sustain-pedal position must be finite and within 0 through 1."
+    },
+    {
+      "source": "GPIF.Track.Automation.SustainPedal.Value.Invalid",
+      "feature": "sustain-pedal",
+      "disposition": "invalid-data",
+      "reason": "A sustain-pedal value must use reference 1 for down or 3 for release."
+    },
+    {
+      "source": "GPIF.Track.Automation.Type.Unknown",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The track automation type is not recognized."
+    },
+    {
+      "source": "GPIF.Track.Lyrics.Undispatched",
+      "feature": "score-core",
+      "disposition": "lossy-projection",
+      "reason": "The public lyric model keeps the lines but not the source dispatch state."
+    },
+    {
+      "source": "GPIF.Track.PartSounding.NominalKey.Conflict",
+      "feature": "transposition",
+      "disposition": "lossy-projection",
+      "reason": "The PartSounding nominal key conflicts with the authoritative Transpose key offset."
+    },
+    {
+      "source": "GPIF.Track.PartSounding.NominalKey.InvalidValue",
+      "feature": "transposition",
+      "disposition": "unsupported-feature",
+      "reason": "The PartSounding nominal key is neither Neutral nor one of the twelve recognized GPIF spellings."
+    },
+    {
+      "source": "GPIF.Track.Transposition.ConflictingValues",
+      "feature": "transposition",
+      "disposition": "lossy-projection",
+      "reason": "Transpose is authoritative when it conflicts with the legacy PartSounding pitch."
+    },
+    {
+      "source": "GPIF.UnknownAttribute.NoteAndBeat",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownAttribute.Rhythm",
+      "feature": "rhythm",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownAttribute.StaffOwnership",
+      "feature": "staff-ownership",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownElement.NoteAndBeat",
+      "feature": "note-and-beat-semantics",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownElement.Rhythm",
+      "feature": "rhythm",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.UnknownElement.StaffOwnership",
+      "feature": "staff-ownership",
+      "disposition": "unknown-syntax",
+      "family": true,
+      "reason": "The GPIF audit does not recognize this source construct."
+    },
+    {
+      "source": "GPIF.Voice.Beats.Reference",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source reference must resolve to an object of the requested type."
+    },
+    {
+      "source": "GPIF.Voice.DuplicateID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object ID must be unique within its collection."
+    },
+    {
+      "source": "GPIF.Voice.EmptyID",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "The source object must have a non-empty ID."
+    },
+    {
+      "source": "GPIF.Beat.Property.ConflictingDuplicate",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "Repeated beat properties must not provide conflicting authored values."
+    },
+    {
+      "source": "GPIF.Note.Property.ConflictingDuplicate",
+      "feature": "note-and-beat-semantics",
+      "disposition": "invalid-data",
+      "reason": "Repeated note properties must not provide conflicting authored values."
+    },
+    {
+      "source": "GPIF.Staff.Property.ConflictingDuplicate",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "Repeated staff properties must not provide conflicting authored values."
+    },
+    {
+      "source": "GPIF.Track.AudioEngineState.InvalidValue",
+      "feature": "score-core",
+      "disposition": "unknown-syntax",
+      "reason": "The source audio-engine state must be MIDI or RSE."
+    },
+    {
+      "source": "GPIF.Track.Property.ConflictingDuplicate",
+      "feature": "staff-ownership",
+      "disposition": "invalid-data",
+      "reason": "Repeated track properties must not provide conflicting authored values."
+    },
+    {
+      "source": "GPIF.Track.Sound.Channel",
+      "feature": "score-core",
+      "disposition": "unsupported-feature",
+      "reason": "The public sound model has no destination for a per-sound MIDI channel."
+    },
+    {
+      "source": "GPIF.Track.Sound.MIDI.Bank.Invalid",
+      "feature": "midi-bank",
+      "disposition": "invalid-data",
+      "reason": "Each GPIF bank-select component must fit the seven-bit MIDI MSB or LSB range."
+    }
+  ],
   "features": [
     {
       "id": "score-core",
@@ -2887,7 +2996,7 @@
     }
   ],
   "semanticContracts": {
-    "fieldDispositions": {"preserved":["BeatEffects.PickStroke","BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album","Song.Anacrusis","Song.Artist","Song.Author","Song.BackingTrack","Song.Channels","Song.Copyright","Song.HideTempo","Song.InitialTempo","Song.Instructions","Song.MeasureHeaders","Song.Name","Song.Subtitle","Song.TempoAutomations","Song.TempoName","Song.Tracks","Song.Transcriber","Song.Words","BackingTrack.AssetID","BackingTrack.AudioData","BackingTrack.EmbeddedFilePath","BackingTrack.Enabled","BackingTrack.FramePadding","BackingTrack.Name","BackingTrack.OriginalFilePath","BackingTrack.OriginalFileSHA1","BackingTrack.Source","SyncPoint.Bar","SyncPoint.BarOccurrence","SyncPoint.Linear","SyncPoint.ModifiedTempo","SyncPoint.OriginalTempo","SyncPoint.Visible","VolumeAutomation.Bar","VolumeAutomation.Linear","VolumeAutomation.Position","VolumeAutomation.Track","VolumeAutomation.Value","TempoAutomation.Bar","TempoAutomation.Hidden","TempoAutomation.Linear","TempoAutomation.Position","TempoAutomation.Tempo","TempoAutomation.Text","Lyrics.Lines","Lyrics.TrackIndex","LyricLine.StartMeasureIndex","LyricLine.Text","MidiChannel.Balance","MidiChannel.Bank","MidiChannel.Channel","MidiChannel.Instrument","MidiChannel.Volume","MeasureHeader.Fermatas","MeasureHeader.FreeTime","Fermata.Offset","Fermata.Type","Fermata.Length","MeasureHeader.Direction","MeasureHeader.Directions","MeasureHeader.DoubleBar","MeasureHeader.KeySignature","MeasureHeader.Marker","MeasureHeader.Number","MeasureHeader.RepeatAlternative","MeasureHeader.RepeatCount","MeasureHeader.RepeatStart","MeasureHeader.TimeSignature","MeasureHeader.TripletFeel","Marker.Title","SourceValue.Raw","SourceValue.State","SourceValue.Value","Track.Color","Track.Lyrics","Track.Name","Track.Number","Track.CapoFret","Track.PercussionArticulations","Track.PercussionTrack","Track.SoundAutomations","Track.Sounds","Track.Staves","Track.Visible","Staff.CapoFret","Staff.DisplayTranspositionPitch","Staff.Measures","Staff.Strings","Staff.TuningName","PercussionArticulation.ElementName","PercussionArticulation.ElementSoundbankName","PercussionArticulation.ElementType","PercussionArticulation.InputMIDINumbers","PercussionArticulation.Name","PercussionArticulation.NoteheadDefault","PercussionArticulation.NoteheadHalf","PercussionArticulation.NoteheadWhole","PercussionArticulation.OutputMIDINumber","PercussionArticulation.OutputRSESound","PercussionArticulation.StaffLine","PercussionArticulation.TechniquePlacement","PercussionArticulation.TechniqueSymbol","TrackSound.Bank","TrackSound.Label","TrackSound.Name","TrackSound.Path","TrackSound.Program","TrackSound.Role","SoundAutomation.Bar","SoundAutomation.Linear","SoundAutomation.Position","SoundAutomation.Sound","SoundAutomation.Text","TrackLyricLine.Offset","TrackLyricLine.Text","GuitarString.Value","Measure.Clef","Measure.ClefOctave","Measure.SustainPedals","SustainPedalMarker.Type","SustainPedalMarker.Position","Measure.SimileMark","Measure.HeaderIndex","Measure.Number","Measure.Voices","Voice.Beats","Beat.Duration","Beat.Effect","Beat.Notes","Beat.Octave","Beat.Text","Beat.Legato","BeatLegato.Destination","BeatLegato.Origin","BeatEffects.Chord","BeatEffects.Fade","BeatEffects.FadeIn","BeatEffects.Golpe","BeatEffects.Hairpin","BeatEffects.TremoloBar","BeatEffects.TremoloPicking","BeatEffects.Vibrato","BeatEffects.VibratoStrength","BeatStroke.Direction","BeatStroke.Duration","Note.Effect","Note.HasPercussionArticulation","Note.Kind","Note.PercussionArticulation","Note.String","Note.TieOrigin","Note.Value","Note.Velocity","NoteEffect.Accent","NoteEffect.AccentuatedNote","NoteEffect.Bend","NoteEffect.DeadNote","NoteEffect.GhostNote","NoteEffect.Graces","NoteEffect.Hammer","NoteEffect.HasLeftHandFinger","NoteEffect.HasRightHandFinger","NoteEffect.LeftHandFinger","NoteEffect.RightHandFinger","NoteEffect.LeftHandTapped","NoteEffect.Harmonic","NoteEffect.HeavyAccentuatedNote","NoteEffect.LetRing","NoteEffect.PalmMute","NoteEffect.Slides","NoteEffect.Staccato","NoteEffect.Tapped","NoteEffect.Trill","NoteEffect.Vibrato","NoteEffect.VibratoStrength","BendPoint.Position","BendPoint.ExactOffset","BendPoint.Value","GraceEffect.Duration","GraceEffect.ExactFret","GraceEffect.HasPercussionArticulation","GraceEffect.IsDead","GraceEffect.IsOnBeat","GraceEffect.PercussionArticulation","GraceEffect.RawFret","GraceEffect.Sequence","GraceEffect.Velocity","HarmonicEffect.FretFloat","HarmonicEffect.Kind","TremoloPickingEffect.Duration","TrillEffect.Fret","MixTableChange.Balance","MixTableChange.Chorus","MixTableChange.HideTempo","MixTableChange.Instrument","MixTableChange.Phaser","MixTableChange.Reverb","MixTableChange.Rse","MixTableChange.Tempo","MixTableChange.TempoName","MixTableChange.Tremolo","MixTableChange.UseRse","MixTableChange.Volume","MixTableChange.Wah","MixTableItem.AllTracks","MixTableItem.Duration","MixTableItem.Value","WahEffect.Display","WahEffect.Value","Duration.Value","TimeSignature.Denominator","TimeSignature.Numerator","KeySignature.IsMinor","KeySignature.Key","Chord.FirstFret","Chord.Length","Chord.Name","Chord.Strings","PitchClass.Accidental","PitchClass.Just","PitchClass.Note","PitchClass.Sharp","PitchClass.Value","Barre.End","Barre.Fret","Barre.Start","Song.VolumeAutomations","Marker.Letter","Marker.Text","Track.ShortName"],"normalized":["MidiChannel.EffectChannel","Track.Solo","Track.Mute","Track.ChannelIndex","GuitarString.Number","Track.Settings","TrackSettings.Notation","TrackSettings.Tablature","Measure.HasDoubleBar","Measure.KeySignature","Measure.TimeSignature","Song.Key","Song.Notice","Song.TripletFeel","Song.Version","Version.Data","BendEffect.Points","Song.Tempo","SyncPoint.FrameOffset","SyncPoint.Position","Track.Measures","Track.Strings","NoteEffect.TremoloPicking","Duration.Dotted","Duration.DoubleDotted","Duration.TupletEnters","Duration.TupletTimes","Beat.Status","Beat.Dynamics","GraceEffect.Fret","GraceEffect.Transition","HarmonicEffect.Fret","TrillEffect.Duration","Staff.StandardNotationLineCount"],"omitted":["MeasureHeader.Tempo","TimeSignature.Beams","SoundAutomation.Hidden","MidiChannel.Tremolo","MidiChannel.Phaser","MidiChannel.Reverb","MidiChannel.Chorus","RseInstrument.Unknown","RseInstrument.SoundBank","RseInstrument.Instrument","RseInstrument.EffectNumber","RseInstrument.EffectCategory","RseInstrument.Effect","TrackRse.Instrument","TrackRse.Humanize","TrackRse.Equalizer","TrackRse.AutoAccentuation","Track.Rse","Track.UseRse","RseEqualizer.Knobs","RseEqualizer.Gain","RseMasterEffect.Volume","RseMasterEffect.Reverb","RseMasterEffect.Equalizer","Song.MasterEffect","Song.PageSetup","PageSetup.Album","PageSetup.Artist","PageSetup.Copyright","PageSetup.HeaderAndFooter","PageSetup.MarginBottom","PageSetup.MarginLeft","PageSetup.MarginRight","PageSetup.MarginTop","PageSetup.Music","PageSetup.PageHeight","PageSetup.PageNumber","PageSetup.PageWidth","PageSetup.ScoreSizeProportion","PageSetup.Subtitle","PageSetup.Title","PageSetup.WordAndMusic","PageSetup.Words","Marker.Color","Track.IndicateTuning","TrackSettings.AutoBrush","TrackSettings.AutoLetRing","TrackSettings.DiagramAreBelow","TrackSettings.DiagramInScore","TrackSettings.DiagramList","TrackSettings.ExtendRhythmic","TrackSettings.ForceChannels","TrackSettings.ForceHorizontal","TrackSettings.ShowRhythm","Measure.LineBreak","Voice.Direction","Beat.Display","BeatDisplay.BeamDirection","BeatDisplay.BreakBeam","BeatDisplay.BreakSecondary","BeatDisplay.BreakSecondaryTuplet","BeatDisplay.ForceBeam","BeatDisplay.ForceBracket","BeatDisplay.TupletBracket","Song.Clipboard","Song.Comments","Song.Date","Song.Writer","Version.Clipboard","Clipboard.StartBeat","Clipboard.StartMeasure","Clipboard.StartTrack","Clipboard.StopBeat","Clipboard.StopMeasure","Clipboard.StopTrack","Clipboard.SubBarCopy","Chord.Omissions","Chord.Root","Chord.Bass","Chord.Kind","Chord.Extension","Chord.Fifth","Chord.Ninth","Chord.Eleventh","Chord.Tonality","Chord.Add","Chord.Sharp","Chord.NewFormat","Chord.Show","Note.DurationPercent","Note.SwapAccidentals","Song.Lyrics","Song.SyncPoints","BeatEffects.HasRasgueado","BeatEffects.MixTableChange","BeatEffects.SlapEffect","BendEffect.Kind","BendEffect.Value","BendPoint.Vibrato","HarmonicEffect.Octave","HarmonicEffect.Pitch","TremoloPickingEffect.Style","Track.BanjoTrack","Track.FretCount","Track.Port","Track.TwelveStringedGuitarTrack","Staff.TranspositionPitch"],"rejected":[],"derived":["Version.Number","SyncPoint.AudioFrame","SyncPoint.BarPosition","SyncPoint.MediaTimeMS","MeasureHeader.ExactStart","MeasureHeader.Start","Staff.PercussionTrack","Measure.ExactStart","Measure.StaffIndex","Measure.Start","Measure.TrackIndex","Voice.MeasureIndex","Beat.ExactStart","Beat.Start"],"out-of-scope":[]},
+    "fieldDispositions": {"preserved":["BeatEffects.PickStroke","BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album","Song.Anacrusis","Song.Artist","Song.Author","Song.BackingTrack","Song.Channels","Song.Copyright","Song.HideTempo","Song.InitialTempo","Song.Instructions","Song.MeasureHeaders","Song.Name","Song.Subtitle","Song.TempoAutomations","Song.TempoName","Song.Tracks","Song.Transcriber","Song.Words","BackingTrack.AssetID","BackingTrack.AudioData","BackingTrack.EmbeddedFilePath","BackingTrack.Enabled","BackingTrack.FramePadding","BackingTrack.Name","BackingTrack.OriginalFilePath","BackingTrack.OriginalFileSHA1","BackingTrack.Source","SyncPoint.Bar","SyncPoint.BarOccurrence","SyncPoint.Linear","SyncPoint.ModifiedTempo","SyncPoint.OriginalTempo","SyncPoint.Visible","VolumeAutomation.Bar","VolumeAutomation.Linear","VolumeAutomation.Position","VolumeAutomation.Track","VolumeAutomation.Value","TempoAutomation.Bar","TempoAutomation.Hidden","TempoAutomation.Linear","TempoAutomation.Position","TempoAutomation.Tempo","TempoAutomation.Text","Lyrics.Lines","Lyrics.TrackIndex","LyricLine.StartMeasureIndex","LyricLine.Text","MidiChannel.Balance","MidiChannel.Bank","MidiChannel.Channel","MidiChannel.Instrument","MidiChannel.Volume","MeasureHeader.Fermatas","MeasureHeader.FreeTime","Fermata.Offset","Fermata.Type","Fermata.Length","MeasureHeader.Direction","MeasureHeader.Directions","MeasureHeader.DoubleBar","MeasureHeader.KeySignature","MeasureHeader.Marker","MeasureHeader.Number","MeasureHeader.RepeatAlternative","MeasureHeader.RepeatCount","MeasureHeader.RepeatStart","MeasureHeader.TimeSignature","MeasureHeader.TripletFeel","Marker.Title","SourceValue.Raw","SourceValue.State","SourceValue.Value","Track.Color","Track.Lyrics","Track.Name","Track.Number","Track.CapoFret","Track.PercussionArticulations","Track.PercussionTrack","Track.SoundAutomations","Track.Sounds","Track.Staves","Track.Visible","Staff.CapoFret","Staff.DisplayTranspositionPitch","Staff.Measures","Staff.Strings","Staff.TuningName","PercussionArticulation.ElementName","PercussionArticulation.ElementSoundbankName","PercussionArticulation.ElementType","PercussionArticulation.InputMIDINumbers","PercussionArticulation.Name","PercussionArticulation.NoteheadDefault","PercussionArticulation.NoteheadHalf","PercussionArticulation.NoteheadWhole","PercussionArticulation.OutputMIDINumber","PercussionArticulation.OutputRSESound","PercussionArticulation.StaffLine","PercussionArticulation.TechniquePlacement","PercussionArticulation.TechniqueSymbol","TrackSound.Bank","TrackSound.Label","TrackSound.Name","TrackSound.Path","TrackSound.Program","TrackSound.Role","SoundAutomation.Bar","SoundAutomation.Linear","SoundAutomation.Position","SoundAutomation.Sound","SoundAutomation.Text","TrackLyricLine.Offset","TrackLyricLine.Text","GuitarString.Value","Measure.Clef","Measure.ClefOctave","Measure.SustainPedals","SustainPedalMarker.Type","SustainPedalMarker.Position","Measure.SimileMark","Measure.HeaderIndex","Measure.Number","Measure.Voices","Voice.Beats","Beat.Duration","Beat.Effect","Beat.Notes","Beat.Octave","Beat.Text","Beat.Legato","BeatLegato.Destination","BeatLegato.Origin","BeatEffects.Chord","BeatEffects.Fade","BeatEffects.FadeIn","BeatEffects.Golpe","BeatEffects.Hairpin","BeatEffects.TremoloBar","BeatEffects.TremoloPicking","BeatEffects.Vibrato","BeatEffects.VibratoStrength","BeatStroke.Direction","BeatStroke.Duration","Note.Effect","Note.HasPercussionArticulation","Note.Kind","Note.PercussionArticulation","Note.String","Note.TieOrigin","Note.Value","Note.Velocity","NoteEffect.Accent","NoteEffect.AccentuatedNote","NoteEffect.Bend","NoteEffect.DeadNote","NoteEffect.GhostNote","NoteEffect.Graces","NoteEffect.Hammer","NoteEffect.HasLeftHandFinger","NoteEffect.HasRightHandFinger","NoteEffect.LeftHandFinger","NoteEffect.RightHandFinger","NoteEffect.LeftHandTapped","NoteEffect.Harmonic","NoteEffect.HeavyAccentuatedNote","NoteEffect.LetRing","NoteEffect.PalmMute","NoteEffect.Slides","NoteEffect.Staccato","NoteEffect.Tapped","NoteEffect.Trill","NoteEffect.Vibrato","NoteEffect.VibratoStrength","BendPoint.Position","BendPoint.ExactOffset","BendPoint.Value","GraceEffect.Duration","GraceEffect.ExactFret","GraceEffect.HasPercussionArticulation","GraceEffect.IsDead","GraceEffect.IsOnBeat","GraceEffect.PercussionArticulation","GraceEffect.RawFret","GraceEffect.Sequence","GraceEffect.Velocity","HarmonicEffect.FretFloat","HarmonicEffect.Kind","TremoloPickingEffect.Duration","TrillEffect.Fret","MixTableChange.Balance","MixTableChange.Chorus","MixTableChange.HideTempo","MixTableChange.Instrument","MixTableChange.Phaser","MixTableChange.Reverb","MixTableChange.Rse","MixTableChange.Tempo","MixTableChange.TempoName","MixTableChange.Tremolo","MixTableChange.UseRse","MixTableChange.Volume","MixTableChange.Wah","MixTableItem.AllTracks","MixTableItem.Duration","MixTableItem.Value","WahEffect.Display","WahEffect.Value","Duration.Value","TimeSignature.Denominator","TimeSignature.Numerator","KeySignature.IsMinor","KeySignature.Key","Chord.FirstFret","Chord.Length","Chord.Name","Chord.Strings","PitchClass.Accidental","PitchClass.Just","PitchClass.Note","PitchClass.Sharp","PitchClass.Value","Barre.End","Barre.Fret","Barre.Start","Song.VolumeAutomations","Marker.Letter","Marker.Text","Track.ShortName","Song.SyncPoints","Song.PanAutomations","PanAutomation.Track","PanAutomation.Bar","PanAutomation.Position","PanAutomation.Value","PanAutomation.Linear"],"normalized":["MidiChannel.EffectChannel","Track.Solo","Track.Mute","Track.ChannelIndex","GuitarString.Number","Track.Settings","TrackSettings.Notation","TrackSettings.Tablature","Measure.HasDoubleBar","Measure.KeySignature","Measure.TimeSignature","Song.Key","Song.Notice","Song.TripletFeel","Song.Version","Version.Data","BendEffect.Points","Song.Tempo","SyncPoint.FrameOffset","SyncPoint.Position","Track.Measures","Track.Strings","NoteEffect.TremoloPicking","Duration.Dotted","Duration.DoubleDotted","Duration.TupletEnters","Duration.TupletTimes","Beat.Status","Beat.Dynamics","GraceEffect.Fret","GraceEffect.Transition","HarmonicEffect.Fret","TrillEffect.Duration","Staff.StandardNotationLineCount"],"omitted":["MeasureHeader.Tempo","TimeSignature.Beams","SoundAutomation.Hidden","MidiChannel.Tremolo","MidiChannel.Phaser","MidiChannel.Reverb","MidiChannel.Chorus","RseInstrument.Unknown","RseInstrument.SoundBank","RseInstrument.Instrument","RseInstrument.EffectNumber","RseInstrument.EffectCategory","RseInstrument.Effect","TrackRse.Instrument","TrackRse.Humanize","TrackRse.Equalizer","TrackRse.AutoAccentuation","Track.Rse","Track.UseRse","RseEqualizer.Knobs","RseEqualizer.Gain","RseMasterEffect.Volume","RseMasterEffect.Reverb","RseMasterEffect.Equalizer","Song.MasterEffect","Song.PageSetup","PageSetup.Album","PageSetup.Artist","PageSetup.Copyright","PageSetup.HeaderAndFooter","PageSetup.MarginBottom","PageSetup.MarginLeft","PageSetup.MarginRight","PageSetup.MarginTop","PageSetup.Music","PageSetup.PageHeight","PageSetup.PageNumber","PageSetup.PageWidth","PageSetup.ScoreSizeProportion","PageSetup.Subtitle","PageSetup.Title","PageSetup.WordAndMusic","PageSetup.Words","Marker.Color","Track.IndicateTuning","TrackSettings.AutoBrush","TrackSettings.AutoLetRing","TrackSettings.DiagramAreBelow","TrackSettings.DiagramInScore","TrackSettings.DiagramList","TrackSettings.ExtendRhythmic","TrackSettings.ForceChannels","TrackSettings.ForceHorizontal","TrackSettings.ShowRhythm","Measure.LineBreak","Voice.Direction","Beat.Display","BeatDisplay.BeamDirection","BeatDisplay.BreakBeam","BeatDisplay.BreakSecondary","BeatDisplay.BreakSecondaryTuplet","BeatDisplay.ForceBeam","BeatDisplay.ForceBracket","BeatDisplay.TupletBracket","Song.Clipboard","Song.Comments","Song.Date","Song.Writer","Version.Clipboard","Clipboard.StartBeat","Clipboard.StartMeasure","Clipboard.StartTrack","Clipboard.StopBeat","Clipboard.StopMeasure","Clipboard.StopTrack","Clipboard.SubBarCopy","Chord.Omissions","Chord.Root","Chord.Bass","Chord.Kind","Chord.Extension","Chord.Fifth","Chord.Ninth","Chord.Eleventh","Chord.Tonality","Chord.Add","Chord.Sharp","Chord.NewFormat","Chord.Show","Note.DurationPercent","Note.SwapAccidentals","Song.Lyrics","BeatEffects.HasRasgueado","BeatEffects.MixTableChange","BeatEffects.SlapEffect","BendEffect.Kind","BendEffect.Value","BendPoint.Vibrato","HarmonicEffect.Octave","HarmonicEffect.Pitch","TremoloPickingEffect.Style","Track.BanjoTrack","Track.FretCount","Track.Port","Track.TwelveStringedGuitarTrack","Staff.TranspositionPitch"],"rejected":[],"derived":["Version.Number","SyncPoint.AudioFrame","SyncPoint.BarPosition","SyncPoint.MediaTimeMS","MeasureHeader.ExactStart","MeasureHeader.Start","Staff.PercussionTrack","Measure.ExactStart","Measure.StaffIndex","Measure.Start","Measure.TrackIndex","Voice.MeasureIndex","Beat.ExactStart","Beat.Start"],"out-of-scope":[]},
     "wireFieldDispositions": {"schema":["gpifBeat.Golpe","gpifArticulation.InputMIDINumbers","gpifArticulation.Name","gpifArticulation.Noteheads","gpifArticulation.OutputMIDINumber","gpifArticulation.OutputRSESound","gpifArticulation.StaffLine","gpifArticulation.TechniquePlacement","gpifArticulation.TechniqueSymbol","gpifArticulations.Articulations","gpifAsset.EmbeddedFilePath","gpifAsset.ID","gpifAsset.OriginalFilePath","gpifAsset.OriginalFileSHA1","gpifAssets.Assets","gpifAugDot.Count","gpifAutomation.Bar","gpifAutomation.Linear","gpifAutomation.Position","gpifAutomation.Text","gpifAutomation.Type","gpifAutomation.Value","gpifAutomation.Visible","gpifAutomationValue.BarIndex","gpifAutomationValue.BarOccurrence","gpifAutomationValue.FrameOffset","gpifAutomationValue.ModifiedTempo","gpifAutomationValue.OriginalTempo","gpifAutomationValue.Text","gpifAutomations.Automations","gpifBackingTrack.AssetID","gpifBackingTrack.Enabled","gpifBackingTrack.FramePadding","gpifBackingTrack.Name","gpifBackingTrack.Source","gpifBar.Clef","gpifBar.ID","gpifBar.Ottavia","gpifBar.SimileMark","gpifBar.Voices","gpifBars.Bars","gpifBeat.Arpeggio","gpifBeat.Chord","gpifBeat.DeadSlapped","gpifBeat.Dynamic","gpifBeat.Fadding","gpifBeat.FreeText","gpifBeat.GraceNotes","gpifBeat.Hairpin","gpifBeat.ID","gpifBeat.Legato","gpifBeat.Lyrics","gpifBeatLyrics.Lines","gpifLegato.Destination","gpifLegato.Origin","gpifBeat.Notes","gpifBeat.Ottavia","gpifBeat.Properties","gpifBeat.Rhythm","gpifBeat.Tremolo","gpifBeat.Wah","gpifBeat.TransposedPitchStemOrientation","gpifBeat.UserTransposedPitchStemOrientation","gpifBeat.XProperties","gpifBeat.Whammy","gpifBeats.Beats","gpifChannelStrip.Automations","gpifChannelStrip.Parameters","gpifDiagram.BaseFret","gpifDiagram.Fingering","gpifDiagram.FretCount","gpifDiagram.Frets","gpifDiagram.Properties","gpifDiagram.StringCount","gpifDiagramFingering.Positions","gpifDiagramFret.Fret","gpifDiagramFret.String","gpifDiagramPosition.Finger","gpifDiagramPosition.Fret","gpifDiagramPosition.String","gpifDiagramProperty.Name","gpifDiagramProperty.Type","gpifDiagramProperty.Value","gpifDirections.Jumps","gpifDirections.Targets","gpifDocument.Assets","gpifDocument.BackingTrack","gpifDocument.Bars","gpifDocument.Beats","gpifDocument.Encoding","gpifDocument.GPRevision","gpifDocument.GPVersion","gpifDocument.MasterBars","gpifDocument.MasterTrack","gpifDocument.Notes","gpifDocument.Rhythms","gpifDocument.Score","gpifDocument.Tracks","gpifDocument.Voices","gpifDocument.XMLName","gpifElement.Articulations","gpifElement.Name","gpifElement.SoundbankName","gpifElement.Type","gpifElements.Elements","gpifEncoding.Description","gpifFermata.Length","gpifFermata.Offset","gpifFermata.Type","gpifFermatas.Fermatas","gpifMasterBar.Fermatas","gpifMasterBar.FreeTime","gpifMasterBar.XProperties","gpifXProperties.Properties","gpifXProperty.ID","gpifXProperty.Int","gpifGeneralMidi.Port","gpifGeneralMidi.PrimaryChannel","gpifGeneralMidi.Program","gpifGeneralMidi.SecondaryChannel","gpifInstrument.Ref","gpifInstrumentSet.Elements","gpifInstrumentSet.LineCount","gpifInstrumentSet.Name","gpifInstrumentSet.Type","gpifItem.Chord","gpifItem.Diagram","gpifItem.ID","gpifItem.Name","gpifItems.Items","gpifKey.AccidentalCount","gpifKey.Mode","gpifLyricLine.Offset","gpifLyricLine.Text","gpifLyrics.Dispatched","gpifLyrics.Lines","gpifMasterBar.AlternateEndings","gpifMasterBar.Bars","gpifMasterBar.Directions","gpifMasterBar.DoubleBar","gpifMasterBar.Key","gpifMasterBar.Repeat","gpifMasterBar.Section","gpifMasterBar.Time","gpifMasterBar.TripletFeel","gpifMasterBars.MasterBars","gpifMasterTrack.Anacrusis","gpifMasterTrack.Automations","gpifMasterTrack.Tracks","gpifMidiConnection.Port","gpifMidiConnection.PrimaryChannel","gpifMidiConnection.SecondaryChannel","gpifNote.Accent","gpifNote.AntiAccent","gpifNote.ID","gpifNote.InstrumentArticulation","gpifNote.LeftFingering","gpifNote.RightFingering","gpifNote.LetRing","gpifNote.Properties","gpifNote.Tie","gpifNote.Trill","gpifNote.Vibrato","gpifNotes.Notes","gpifPartSounding.NominalKey","gpifPartSounding.TranspositionPitch","gpifPitch.Accidental","gpifPitch.Octave","gpifPitch.Step","gpifProperties.Properties","gpifProperty.Direction","gpifProperty.Enable","gpifProperty.Flags","gpifProperty.Float","gpifProperty.Fret","gpifProperty.HFret","gpifProperty.HType","gpifProperty.Name","gpifProperty.Number","gpifProperty.Pitch","gpifProperty.Strength","gpifProperty.String","gpifRepeat.Count","gpifRepeat.End","gpifRepeat.Start","gpifRevision.Recommended","gpifRevision.Required","gpifRevision.Value","gpifRhythm.AugmentationDot","gpifRhythm.ID","gpifRhythm.NoteValue","gpifRhythm.PrimaryTuplet","gpifRhythmRef.Ref","gpifRhythms.Rhythms","gpifScore.Album","gpifScore.Artist","gpifScore.Copyright","gpifScore.Instructions","gpifScore.Music","gpifScore.Notices","gpifScore.SubTitle","gpifScore.Tabber","gpifScore.Title","gpifScore.Words","gpifScore.WordsAndMusic","gpifSection.Letter","gpifSection.Text","gpifSound.Channel","gpifSound.LSB","gpifSound.Label","gpifSound.MSB","gpifSound.Name","gpifSound.Path","gpifSound.Program","gpifSound.Role","gpifSounds.Sounds","gpifStaff.Properties","gpifStaffProperty.Fret","gpifStaffProperty.Items","gpifStaffProperty.Label","gpifStaffProperty.Name","gpifStaffProperty.Pitches","gpifStaves.Staff","gpifTie.Destination","gpifTie.Origin","gpifTrack.AudioEngineState","gpifTrack.Automations","gpifTrack.Color","gpifTrack.GeneralMidi","gpifTrack.ID","gpifTrack.Instrument","gpifTrack.InstrumentSet","gpifTrack.Lyrics","gpifTrack.MidiConnection","gpifTrack.Name","gpifTrack.NotationPatch","gpifTrack.PartSounding","gpifTrack.PlaybackState","gpifTrack.Properties","gpifTrack.RSE","gpifTrack.Sounds","gpifTrack.Staves","gpifTrack.Transpose","gpifTrackRSE.ChannelStrip","gpifTracks.Tracks","gpifTranspose.Chromatic","gpifTranspose.Octave","gpifTrill.Fret","gpifTuplet.Den","gpifTuplet.Num","gpifVoice.Beats","gpifVoice.ID","gpifVoices.Voices","gpifWhammy.DestinationOffset","gpifWhammy.DestinationValue","gpifWhammy.MiddleOffset1","gpifWhammy.MiddleOffset2","gpifWhammy.MiddleValue","gpifWhammy.OriginOffset","gpifWhammy.OriginValue","gpifTrack.ShortName"]},
     "behaviorContracts": [
       {"id":"pick-stroke-preservation","feature":"note-and-beat-semantics","construct":"BeatEffects.PickStroke GP8 export","test":"TestConformancePickStroke","independentTest":"TestAlphaTabPreservesPickStroke","reason":"Up, down, and absent pick marks retain their exact direction independently from brush through strict GP8 export, Go reimport, and pinned AlphaTab."},
@@ -2985,7 +3094,6 @@
       }
     ],
     "modelTypes": [
-      {"type":"Song","feature":"score-core","fields":["Album","Anacrusis","Artist","Author","BackingTrack","Channels","Clipboard","Comments","Copyright","Date","HideTempo","InitialTempo","Instructions","Key","Lyrics","MasterEffect","MeasureHeaders","Name","Notice","PageSetup","Subtitle","SyncPoints","Tempo","TempoAutomations","TempoName","Tracks","Transcriber","TripletFeel","Version","VolumeAutomations","Words","Writer"],"compatibility":["Tempo"],"reason":"The root contains authored score data. Tempo is the legacy view of InitialTempo."},
       {"type":"Version","feature":"score-core","fields":["Clipboard","Data","Number"],"derived":["Number"],"reason":"The source version is preserved. Number is parsed from Data."},
       {"type":"Clipboard","feature":"score-core","fields":["StartBeat","StartMeasure","StartTrack","StopBeat","StopMeasure","StopTrack","SubBarCopy"],"reason":"The binary clipboard range is authored source data."},
       {"type":"BackingTrack","feature":"score-core","fields":["AssetID","AudioData","EmbeddedFilePath","Enabled","FramePadding","Name","OriginalFilePath","OriginalFileSHA1","Source"],"reason":"The backing-track record and embedded asset are authored source data."},
@@ -3039,7 +3147,51 @@
       {"type":"BarPosition","feature":"timing","fields":[],"derived":[],"reason":"The private reduced terms provide a checked authored bar position."},
       {"type":"Chord","feature":"note-and-beat-semantics","fields":["Add","Barres","Bass","Eleventh","Extension","Fifth","Fingerings","FirstFret","Kind","Length","Name","NewFormat","Ninth","Omissions","Root","Sharp","Show","Strings","Tonality"],"reason":"The chord contains authored identity, pitch, fingering, and diagram data."},
       {"type":"PitchClass","feature":"note-and-beat-semantics","fields":["Accidental","Just","Note","Sharp","Value"],"reason":"The pitch class contains authored spelling data."},
-      {"type":"Barre","feature":"note-and-beat-semantics","fields":["End","Fret","Start"],"reason":"The barre contains authored chord fingering data."}
+      {"type":"Barre","feature":"note-and-beat-semantics","fields":["End","Fret","Start"],"reason":"The barre contains authored chord fingering data."},
+      {"type":"PanAutomation","feature":"score-core","fields":["Bar","Linear","Position","Track","Value"],"reason":"Authored normalized pan points are independent from initial channel balance."},
+      {
+        "type": "Song",
+        "feature": "score-core",
+        "fields": [
+          "Album",
+          "Anacrusis",
+          "Artist",
+          "Author",
+          "BackingTrack",
+          "Channels",
+          "Clipboard",
+          "Comments",
+          "Copyright",
+          "Date",
+          "HideTempo",
+          "InitialTempo",
+          "Instructions",
+          "Key",
+          "Lyrics",
+          "MasterEffect",
+          "MeasureHeaders",
+          "Name",
+          "Notice",
+          "PageSetup",
+          "PanAutomations",
+          "Subtitle",
+          "SyncPoints",
+          "Tempo",
+          "TempoAutomations",
+          "TempoName",
+          "Tracks",
+          "Transcriber",
+          "TripletFeel",
+          "Version",
+          "VolumeAutomations",
+          "Words",
+          "Writer"
+        ],
+        "compatibility": [
+          "Tempo"
+        ],
+        "reason": "The root contains authored score data. Tempo is the legacy view of InitialTempo."
+      }
     ],
     "sourceDispatches": [
       {"function":"buildTrack","selector":"track.Name","feature":"score-core","cases":{"":"preserved"},"evidence":"section-track-names","defaultDisposition":"unsupported-feature","reason":"An authored empty short name remains empty in the final consumer only when the full name is also empty; a nonempty full name produces a scoped consumer-loss report."},
@@ -3055,7 +3207,6 @@
       {"function":"gpifNoteToNote","selector":"n.Vibrato","feature":"note-and-beat-semantics","cases":{"Slight":"preserved","Wide":"preserved"},"evidence":"gpif-property-dispatch","defaultDisposition":"delegated-to-audit","reason":"The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values."},
       {"function":"gpifAuditMasterAutomations","selector":"automation.Type","feature":"score-core","cases":{"SyncPoint":"preserved","Tempo":"preserved"},"caseHandling":{"SyncPoint":"dispatch:gpifReadSyncPoints:automation.Type","Tempo":"dispatch:gpifReadTempoAutomations:auto.Type"},"evidence":"automation-dispatch-diagnostic","defaultDisposition":"unknown-syntax","reason":"The audit classifies each master-track automation before import."},
       {"function":"gpifAuditTrackAutomations","selector":"automation.Type","feature":"score-core","cases":{"Sound":"preserved","SustainPedal":"preserved"},"caseHandling":{"Sound":"dispatch:parseGPIFWithContext:automation.Type","SustainPedal":"dispatch:gpifReadSustainPedals:automation.Type"},"evidence":"automation-dispatch-diagnostic","defaultDisposition":"unknown-syntax","reason":"The audit classifies each track automation, checks sound references, and validates sustain-pedal values, locations, and order before import."},
-      {"function":"gpifAuditChannelStripAutomations","selector":"automation.Type","feature":"score-core","cases":{"DSPParam_00":"omitted","DSPParam_01":"omitted","DSPParam_11":"omitted","DSPParam_12":"preserved"},"caseHandling":{"DSPParam_00":"diagnostic:GPIF.ChannelStrip.Automation.Unsupported","DSPParam_01":"diagnostic:GPIF.ChannelStrip.Automation.Unsupported","DSPParam_11":"diagnostic:GPIF.ChannelStrip.Automation.Unsupported","DSPParam_12":"dispatch:gpifReadVolumeAutomations:automation.Type"},"evidence":"automation-dispatch-diagnostic","defaultDisposition":"unknown-syntax","reason":"The audit preserves volume automation and reports every other recognized channel-strip automation."},
       {"function":"parseGPIFWithContext","selector":"automation.Type","feature":"score-core","cases":{"Sound":"preserved"},"evidence":"automation-dispatch-diagnostic","defaultDisposition":"delegated-to-audit","reason":"The importer maps only sound automations after the audit classifies all track automation types."},
       {"function":"gpifReadVolumeAutomations","selector":"automation.Type","feature":"score-core","cases":{"DSPParam_12":"preserved"},"evidence":"automation-dispatch-diagnostic","defaultDisposition":"delegated-to-audit","reason":"The importer maps only validated volume automations after the channel-strip audit."},
       {"function":"gpifReadSustainPedals","selector":"automation.Type","feature":"sustain-pedal","cases":{"SustainPedal":"preserved"},"evidence":"sustain-pedal-preservation","defaultDisposition":"delegated-to-audit","reason":"The importer maps validated track sustain-pedal automations to staff-0 measures and derives holds across bars with no explicit marker."},
@@ -3090,18 +3241,37 @@
       {"function":"gpifAuditDiagnostics","selector":"beat.Fadding","feature":"note-and-beat-semantics","cases":{"":"preserved","FadeIn":"preserved","FadeOut":"normalized","VolumeSwell":"normalized"},"evidence":"gpif-property-dispatch","defaultDisposition":"unsupported-feature","reason":"The audit classifies each fading value before the importer maps it."},
       {"function":"gpifApplyBeatEffects","selector":"b.Ottavia","feature":"note-and-beat-semantics","cases":{"15ma":"preserved","15mb":"preserved","8va":"preserved","8vb":"preserved"},"evidence":"gpif-property-dispatch","defaultDisposition":"delegated-to-audit","reason":"The importer maps each supported octave-shift value."},
       {"function":"gpifApplyBeatEffects","selector":"b.Arpeggio","feature":"brush","cases":{"Down":"preserved","Up":"preserved"},"evidence":"brush-preservation","defaultDisposition":"delegated-to-audit","reason":"The importer maps each supported arpeggio direction."},
+      {"function":"gpifAuditDiagnostics","selector":"track.AudioEngineState","feature":"score-core","cases":{"":"preserved","MIDI":"preserved","RSE":"preserved"},"evidence":"audio-engine-state","defaultDisposition":"unknown-syntax","reason":"The audit accepts the two known playback engines and reports any other token."},
       {
-        "function": "gpifAuditDiagnostics",
-        "selector": "track.AudioEngineState",
+        "function": "gpifReadPanAutomations",
+        "selector": "a.Type",
         "feature": "score-core",
         "cases": {
-          "": "preserved",
-          "MIDI": "preserved",
-          "RSE": "preserved"
+          "DSPParam_11": "preserved"
         },
-        "evidence": "audio-engine-state",
+        "evidence": "automation-dispatch-diagnostic",
+        "defaultDisposition": "delegated-to-audit",
+        "reason": "The channel-strip pan event is retained independently from static channel balance."
+      },
+      {
+        "function": "gpifAuditChannelStripAutomations",
+        "selector": "automation.Type",
+        "feature": "score-core",
+        "cases": {
+          "DSPParam_00": "omitted",
+          "DSPParam_01": "omitted",
+          "DSPParam_11": "preserved",
+          "DSPParam_12": "preserved"
+        },
+        "caseHandling": {
+          "DSPParam_00": "diagnostic:GPIF.ChannelStrip.Automation.Unsupported",
+          "DSPParam_01": "diagnostic:GPIF.ChannelStrip.Automation.Unsupported",
+          "DSPParam_11": "dispatch:gpifReadPanAutomations:a.Type",
+          "DSPParam_12": "dispatch:gpifReadVolumeAutomations:automation.Type"
+        },
+        "evidence": "automation-dispatch-diagnostic",
         "defaultDisposition": "unknown-syntax",
-        "reason": "The audit accepts the two known playback engines and reports any other token."
+        "reason": "Volume and pan have authored destinations; other recognized channel-strip automation remains omitted."
       }
     ]
   }

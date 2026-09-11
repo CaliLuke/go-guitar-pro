@@ -84,7 +84,7 @@ func runConformanceBackingAssetsAndSyncPoints(run *conformanceRun) {
 	if len(result.Song.SyncPoints) != 2 {
 		t.Fatalf("sync points = %#v, want two", result.Song.SyncPoints)
 	}
-	run.ClaimPrimary(claimSite("sync-points", "import", "M19-BACKING-ASSETS-SYNC", "two sync points")).Omitted("Song.SyncPoints", len(result.Song.SyncPoints), 2)
+	run.ClaimPrimary(claimSite("sync-points", "import", "M19-BACKING-ASSETS-SYNC", "two sync points")).Preserved("Song.SyncPoints", len(result.Song.SyncPoints), 2)
 	zero, err := NewBarPosition(0, 1)
 	if err != nil {
 		t.Fatal(err)
@@ -255,14 +255,14 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	t := run.t
 	valid := conformanceBackingProgrammaticSong(t)
 	report := PreflightExport(valid, ExportFormatGP8, ExportOptions{})
-	run.Report("M19-VALIDATION-EXPORT-POLICY", reportCodes(report), []string{"gp8.omit.sync-points", "gp8.omit.sync-points"})
+	run.Report("M19-VALIDATION-EXPORT-POLICY", reportCodes(report), []string{"gp8.omit.sync-point-consumer-tempo", "gp8.omit.sync-point-consumer-tempo"})
 	if hasExportCode(report, "gp8.normalize.sync-point-frame-authority") || hasExportCode(report, "gp8.normalize.sync-point-position-authority") {
 		t.Fatalf("agreeing sync points report = %#v", report.Entries)
 	}
 	if backingEntries := conformanceBackingExportEntries(report, "gp8.omit.backing-track"); len(backingEntries) != 0 {
 		t.Fatalf("implemented backing track report = %#v, want no omission", backingEntries)
 	}
-	syncEntries := conformanceBackingExportEntries(report, "gp8.omit.sync-points")
+	syncEntries := conformanceBackingExportEntries(report, "gp8.omit.sync-point-consumer-tempo")
 	wantLocations := []ScoreLocation{{Measure: 0}, {Measure: 1}}
 	gotLocations := make([]ScoreLocation, len(syncEntries))
 	for index := range syncEntries {
@@ -273,12 +273,12 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}
 	data, strictReport, err := ExportWithReport(valid, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError
-	if len(data) != 0 || !errors.As(err, &lossErr) || len(conformanceBackingExportEntries(strictReport, "gp8.omit.sync-points")) != 2 {
+	if len(data) != 0 || !errors.As(err, &lossErr) || len(conformanceBackingExportEntries(strictReport, "gp8.omit.sync-point-consumer-tempo")) != 2 {
 		t.Fatalf("strict omission export = %d bytes, %#v, %v", len(data), strictReport.Entries, err)
 	}
 	data, _, err = ExportWithReport(valid, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
 		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.sync-points"},
+		AllowedCodes:        []string{"gp8.omit.sync-point-consumer-tempo"},
 	}})
 	if err != nil {
 		t.Fatal(err)
@@ -302,8 +302,8 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	})
 	run.Wire("gpifDocument.BackingTrack", outputWire.BackingTrack != nil, true)
 	run.Wire("gpifDocument.Assets", len(outputWire.Assets.Items), 1)
-	run.Wire("gpifAutomation.Type", hasSyncPoint, false)
-	if outputWire.BackingTrack == nil || len(outputWire.Assets.Items) != 1 || hasSyncPoint {
+	run.Wire("gpifAutomation.Type", hasSyncPoint, true)
+	if outputWire.BackingTrack == nil || len(outputWire.Assets.Items) != 1 || !hasSyncPoint {
 		t.Fatalf("independent GPIF backing data = %#v", outputWire)
 	}
 	if got := outputWire.BackingTrack; got.Name != valid.BackingTrack.Name || got.Enabled != valid.BackingTrack.Enabled || got.Source != valid.BackingTrack.Source || got.AssetID != valid.BackingTrack.AssetID || got.FramePadding != "-22050" {
@@ -336,7 +336,7 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}
 	data, _, err = ExportWithReport(conflict, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
 		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.sync-points"},
+		AllowedCodes:        []string{"gp8.omit.sync-point-consumer-tempo"},
 	}})
 	if len(data) != 0 || !errors.As(err, &lossErr) {
 		t.Fatalf("strict compatibility export = %d bytes, %v, want refusal", len(data), err)

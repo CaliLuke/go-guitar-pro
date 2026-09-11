@@ -1841,14 +1841,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -1896,14 +1888,6 @@
         "rhythm"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -1953,14 +1937,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -2008,14 +1984,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowFingering",
           "kind": "unsupported-feature",
@@ -2081,14 +2049,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "fd631855b2fdfbadb79125bd09e9f815c2f15a3d1ae5c54bf8cff2abf14db7b1"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 4,
@@ -2136,14 +2096,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -2199,14 +2151,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"56\"]/Wah",
           "objectId": "56",
           "locationsSha256": "595dedcab246f6073a66111261d58182bca9f274dd03d42cb31dd11d3b0763f4"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.HopoDestination",
@@ -2265,14 +2209,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 2,
@@ -2312,14 +2248,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -2368,14 +2296,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "6f66ab18706eae2000e2df255668358c82a2e85494164bf888ec3a8acb6f174b"
-        },
         {
           "code": "GPIF.Note.Property.Element",
           "kind": "unsupported-feature",
@@ -2465,14 +2385,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -2520,14 +2432,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
@@ -2585,14 +2489,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -2641,14 +2537,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 2,
@@ -2688,14 +2576,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -2737,14 +2617,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 4,
@@ -2784,14 +2656,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -2833,14 +2697,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 4,
@@ -2880,14 +2736,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -2938,14 +2786,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3003,14 +2843,6 @@
           "locationsSha256": "91ec8350fd6997acebaf6268610445fd6a777ba0010509bb5f0ae2f122213f21"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3058,14 +2890,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3115,14 +2939,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3170,14 +2986,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3227,14 +3035,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3283,14 +3083,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 2,
@@ -3338,14 +3130,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "fd631855b2fdfbadb79125bd09e9f815c2f15a3d1ae5c54bf8cff2abf14db7b1"
-        },
         {
           "code": "GPIF.Note.Property.HopoDestination",
           "kind": "lossy-projection",
@@ -3403,14 +3187,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 3,
@@ -3458,14 +3234,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3516,14 +3284,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3571,14 +3331,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3628,14 +3380,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 3,
@@ -3683,14 +3427,6 @@
         "rhythm"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3749,14 +3485,6 @@
           "locationsSha256": "963dd53cd7f20bb933848eb18d198dcd00f80ad3c47d7fcf16f0ff232bf05be5"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3804,14 +3532,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3861,14 +3581,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 1,
@@ -3916,14 +3628,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
@@ -3987,14 +3691,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -4077,14 +3773,6 @@
           "locationsSha256": "dd8bc2076ddff250f4f5032b060238a00b9e7a8c893c6f11ed461dc361b6c284"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 35,
@@ -4163,14 +3851,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -4252,14 +3932,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -4338,14 +4010,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -4506,14 +4170,6 @@
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 8,
@@ -4594,14 +4250,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 3,
@@ -4679,14 +4327,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -4848,14 +4488,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 3,
@@ -5015,14 +4647,6 @@
           "locationsSha256": "b8caa1c8c2850923f5c8fbe6f6fdc9e757b87201eadd3c4e04b7051a688c2907"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 9,
@@ -5103,14 +4727,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -5189,14 +4805,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5443,14 +5051,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"6\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "6",
-          "locationsSha256": "f1a4925e03b3c2c08601f466f327bd222e1488067ecf7607863bc09d5f647fab"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 66,
@@ -5491,14 +5091,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"6\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "6",
-          "locationsSha256": "f1a4925e03b3c2c08601f466f327bd222e1488067ecf7607863bc09d5f647fab"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 66,
@@ -5538,14 +5130,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"6\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "6",
-          "locationsSha256": "f1a4925e03b3c2c08601f466f327bd222e1488067ecf7607863bc09d5f647fab"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -5601,14 +5185,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5785,14 +5361,6 @@
           "locationsSha256": "6cbdc981b45a72e96846c0ed3aa8049e2e61065a9bdd37f841cb1299733486cd"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 6,
@@ -5870,14 +5438,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "19219a02967725602d926135daa6aace8fd871128981b91f9c717e92fdee5620"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "783aa1ddf1a348156901a761682c29b40a714ca4db4b6e378931ba4056dd0a3f"
         },
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
@@ -5982,14 +5542,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -6051,14 +5603,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
@@ -6173,14 +5717,6 @@
           "locationsSha256": "288f10dd356448a33d576e31d21ccbbb3ebbc81a28ef5b3228fc71aee95103a1"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 3,
@@ -6284,14 +5820,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6371,14 +5899,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
           "objectId": "0",
           "locationsSha256": "28e386e0d1bb9ee00c24c1795df3247d95f220bbc6b9897ad6a991cfbec16b9d"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
@@ -6477,14 +5997,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6548,14 +6060,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -6617,14 +6121,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -6704,14 +6200,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -6794,14 +6282,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -6881,14 +6361,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -6953,14 +6425,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -7008,14 +6472,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -7152,14 +6608,6 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -7245,14 +6693,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"60\"]/Wah",
           "objectId": "60",
           "locationsSha256": "4f1522c32fc6685c066b03025bf1ca7756c94f103e86f710a4aca529b0c226f7"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -7342,14 +6782,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -7427,14 +6859,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -7692,14 +7116,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 7,
@@ -7778,14 +7194,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
@@ -7899,14 +7307,6 @@
           "locationsSha256": "c126fead9f5e2c2276a2cd56ad204cbcb7aa905fa14bcc1de0632759fd257f5c"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 26,
@@ -7984,14 +7384,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -8074,14 +7466,6 @@
           "locationsSha256": "fa351515be8f93c5e9b45f83e66b13d51aec2d0e5cc476fb1acfe10e7d8528a0"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 6,
@@ -8159,14 +7543,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -8247,14 +7623,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -8417,14 +7785,6 @@
           "locationsSha256": "1ec12a80f36d0e312f51df29b50b804bb396563e82a92f90ef672b9feb18261e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 12,
@@ -8529,14 +7889,6 @@
           "locationsSha256": "45145f80be069cd8d7d8e708dad736200c4d47dc182d83c5a1b41b2262520a77"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 68,
@@ -8615,14 +7967,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -8705,14 +8049,6 @@
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -8792,14 +8128,6 @@
           "locationsSha256": "fd90667efccb1d586e81d6c0282f50b6465d289bbd7f88877ece2a6eac7d5c35"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 21,
@@ -8877,14 +8205,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -8972,14 +8292,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "1e343c807cbd57af3116b2ca95a380d3b220ac2b8c4df18707edbb82ad74d437"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -9085,14 +8397,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -9132,14 +8436,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -9195,14 +8491,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -9284,14 +8572,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 60,
@@ -9369,14 +8649,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -9458,14 +8730,6 @@
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 42,
@@ -9543,14 +8807,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -9632,14 +8888,6 @@
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 42,
@@ -9703,14 +8951,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"1\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "1",
-          "locationsSha256": "127fb3ae6b90c46656c98b78b8e89145998ed9d210f73e54164558d9d674c359"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 30,
@@ -9772,14 +9012,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "cd57a907c640330a9a7f812d5778eb03a77fd04977cd30118fa189ceed9d2676"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -9845,14 +9077,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 18,
@@ -9892,14 +9116,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -9941,14 +9157,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 18,
@@ -9988,14 +9196,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -10051,14 +9251,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -10148,14 +9340,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 3,
@@ -10235,14 +9419,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 11,
@@ -10320,14 +9496,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -10410,14 +9578,6 @@
           "locationsSha256": "8706186244e61f954548818f89d50b8c95195cfe8a06b4c7eb2bb4c07eaab9bf"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 30,
@@ -10481,14 +9641,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -10550,14 +9702,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
         },
         {
           "code": "GPIF.MasterBar.XProperty.Unknown",
@@ -10646,14 +9790,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 60,
@@ -10734,14 +9870,6 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 16,
@@ -10819,14 +9947,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11060,14 +10180,6 @@
           "locationsSha256": "965bc20b00671c988dd9bc62f789471672808420887194700a2296689f004a2d"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 7,
@@ -11202,14 +10314,6 @@
           "locationsSha256": "6ee5c92fa2722be5f10e0251ffcc34cb2dbeac7c4f7b12380a31690c2119134e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 1,
@@ -11324,14 +10428,6 @@
           "locationsSha256": "6ee5c92fa2722be5f10e0251ffcc34cb2dbeac7c4f7b12380a31690c2119134e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 28,
@@ -11409,14 +10505,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "092928b0439b24b81fd5b68ab52e8b8c45b3a93a4803df5e23a67a201b9910d4"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11507,14 +10595,6 @@
           "locationsSha256": "0ff04a8c2e45b8c39f6fd9b095326bc06130230ae336508bbdd2fbbd33243499"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -11601,14 +10681,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"6\"]/Wah",
           "objectId": "6",
           "locationsSha256": "ca6a06370e4b567137414b8edbb7e70cd2894d85163e4bfbdac7a1f8cd8d7401"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11769,14 +10841,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 60,
@@ -11854,14 +10918,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11943,14 +10999,6 @@
           "locationsSha256": "c72c3f7faed7d155e5d47a4f71322dc7fd499c8c9aa6980bc27709bdd50369e3"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 6,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "ee495daab61fbc48486aa127dd92376058079b818318da495f007682c3b08bca"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 60,
@@ -12028,14 +11076,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -12275,14 +11315,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 7,
@@ -12362,14 +11394,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 5,
@@ -12447,14 +11471,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "8706790a9b77643247709cd5426d9b573c5c029933d1c3e34fd6a6d0fb0ee856"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -12542,14 +11558,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"Rasgueado\"]",
           "objectId": "0",
           "locationsSha256": "f9b1aa7e238e14b69d6f16cc4368bd53ea39960702c0f966224ac5116d95d064"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
@@ -12664,14 +11672,6 @@
           "locationsSha256": "bdaf4cf38e05e2c9b460cc687dc5f8b7eaf39a31f0a8145a3e68f13243288a1c"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 5,
@@ -12749,14 +11749,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -12838,14 +11830,6 @@
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 12,
@@ -12909,14 +11893,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -12978,14 +11954,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -13146,14 +12114,6 @@
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 3,
@@ -13271,14 +12231,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
@@ -13400,14 +12352,6 @@
           "locationsSha256": "81e8e2159fdbbe61a755487cca6108f13ca6572f1113caf09fcb5f2bfa44ab2a"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 10,
@@ -13469,14 +12413,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "ff60701398d2d5cc23bb9eb47439d9036df024625b37f2fb3810606a22413f31"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 4,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "fd631855b2fdfbadb79125bd09e9f815c2f15a3d1ae5c54bf8cff2abf14db7b1"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -13646,14 +12582,6 @@
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
           "kind": "unsupported-feature",
           "count": 2,
@@ -13766,14 +12694,6 @@
           "locationsSha256": "bdaf4cf38e05e2c9b460cc687dc5f8b7eaf39a31f0a8145a3e68f13243288a1c"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 10,
@@ -13837,14 +12757,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -13906,14 +12818,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -13994,14 +12898,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "1ec12a80f36d0e312f51df29b50b804bb396563e82a92f90ef672b9feb18261e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -14092,14 +12988,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 6,
@@ -14177,14 +13065,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -14426,14 +13306,6 @@
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 3,
@@ -14497,14 +13369,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14566,14 +13430,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "745679ea37a823c5c09bf38fbe6701ac4f5c076573f7ba2eed733df149fabad1"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -14653,14 +13509,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "5b6243d827cb1d8944127fd5ad0c33a0c28b2a22bf1ed54ccf45af9eff7c7d83"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -14830,14 +13678,6 @@
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 16,
@@ -14902,14 +13742,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 5,
@@ -14971,14 +13803,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "8706790a9b77643247709cd5426d9b573c5c029933d1c3e34fd6a6d0fb0ee856"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15067,14 +13891,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 5,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "7866042ff91f4feafed76b29dc86b3c9a026389449c9da9c63ffdd1d3a16ac44"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15340,14 +14156,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -15387,14 +14195,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -15450,14 +14250,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "a96a73c9d8b68f85d40d2a1389fc1b1fab81ae6cbcbc3b6798b7f66ef7c634db"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f3ee01e205a4a84b8dba433720469ddda882a73167cdc4bf82505fba7f4238cf"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15625,14 +14417,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "f2a3d208da03c2db4b5a70262762f7708983647e9d0251abff08873c66fe96f5"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15810,14 +14594,6 @@
           "locationsSha256": "165fd2de1e4a2390b37e0951246f1cb1390388eff6ab18aa90ba0d0cc2527fc3"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -15895,14 +14671,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15984,14 +14752,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 4,
@@ -16069,14 +14829,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -16158,14 +14910,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -16243,14 +14987,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -16333,14 +15069,6 @@
           "locationsSha256": "3aea404c9faed3db9824380e0e147bd2cb0e4e885845b1a55bb611207c430f4c"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 12,
@@ -16418,14 +15146,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -16597,14 +15317,6 @@
           "locationsSha256": "b70b78b028661b4a28bb1a0810d58b443d58975cdb45780cfbaa6fa492eb4e5d"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 2,
@@ -16685,14 +15397,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -16771,14 +15475,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "19219a02967725602d926135daa6aace8fd871128981b91f9c717e92fdee5620"
-        },
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 9,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "783aa1ddf1a348156901a761682c29b40a714ca4db4b6e378931ba4056dd0a3f"
         },
         {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
@@ -16866,14 +15562,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -17043,14 +15731,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -17090,14 +15770,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -17139,14 +15811,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 18,
@@ -17186,14 +15850,6 @@
         "staff-ownership"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -17235,14 +15891,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 18,
@@ -17283,14 +15931,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 18,
@@ -17330,14 +15970,6 @@
         "rhythm"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "df03518c0b43efb0cd9438871b236cff9497bfb3733c4e162ab7b80232ba8bd7"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
@@ -17452,14 +16084,6 @@
           "locationsSha256": "76406495d0f70d2f30ebbc4b0a01f97312b0a0b8f32a51c693990c562e34364f"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 6,
@@ -17548,14 +16172,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "2b09c62a894945263eeb635a6c6e1ead6e021fee3ed1ef2627587f31346b06b7"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 2,
@@ -17636,14 +16252,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 1,
@@ -17708,14 +16316,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
-        {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 6,
@@ -17755,14 +16355,6 @@
         "score-core"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.ChannelStrip.Automation.Unsupported",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/Automations/Automation[0]/Type",
-          "objectId": "0",
-          "locationsSha256": "f6cd8523509a54a69b156871654960348a1b47ebfb02d98c1e8ea2e800ca942f"
-        },
         {
           "code": "GPIF.Staff.Property.Unknown",
           "kind": "unknown-syntax",

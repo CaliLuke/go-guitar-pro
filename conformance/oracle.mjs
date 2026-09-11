@@ -1232,6 +1232,9 @@ function main() {
     })))}\n`);
     return;
   }
+  if (args[0] === '--sync-points' && args.length === 2) { process.stdout.write(JSON.stringify(loadSyncPointFacts(args[1]))); return; }
+  if (args[0] === '--pan-initial-balances' && args.length === 2) { process.stdout.write(JSON.stringify(loadScore(args[1]).tracks.map(t => t.playbackInfo.balance))); return; }
+  if (args[0] === '--pan-automations' && args.length === 2) { process.stdout.write(JSON.stringify(loadPanFacts(args[1]))); return; }
   if (args[0] === '--volume-automations' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadVolumeAutomationFacts(args[1]), null, 2)}\n`);
     return;
@@ -1341,4 +1344,19 @@ function main() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
+}
+
+export function loadSyncPointFacts(fixture) {
+  const score = loadScore(fixture);
+  return score.masterBars.flatMap(bar => (bar.syncPoints ?? []).map(a => ({
+    bar: bar.index, position: a.ratioPosition, occurrence: a.syncPointValue.barOccurence,
+    milliseconds: a.syncPointValue.millisecondOffset, linear: a.isLinear, visible: a.isVisible,
+    modifiedTempoPresent: Object.hasOwn(a.syncPointValue, 'modifiedTempo'),
+    originalTempoPresent: Object.hasOwn(a.syncPointValue, 'originalTempo')
+  })));
+}
+
+export function loadPanFacts(fixture) {
+  const score = loadScore(fixture);
+  return score.tracks.flatMap(track => track.staves.flatMap(staff => staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.automations.filter(a => a.type === alphaTab.model.AutomationType.Balance).map(a => ({track:track.index,bar:bar.index,beat:beat.index,value:a.value,linear:a.isLinear})))))));
 }

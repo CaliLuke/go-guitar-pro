@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 72 | 15 | 10 | 1 |
 | model | 71 | 16 | 10 | 1 |
-| export | 50 | 24 | 22 | 2 |
+| export | 50 | 26 | 20 | 2 |
 
 All three stages have a supported rating in 50 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -873,9 +873,9 @@ Bounded work: [Exclude unused legacy MIDI program slots from export rejection](h
 
 Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Legacy mix-table balance changes parse. There is no general pan automation collection corresponding to volume events. GP8 omits beat-local changes.
+Song.PanAutomations retains normalized channel-strip pan and legacy balance/16 events independently from initial MIDI balance. Track ownership, chronological order, equal positions, direct edits and endpoints are validated. GP8 retains DSPParam_11 records; pinned AlphaTab ignores them, with a scoped per-event consumer omission. Legacy mix-table duration and ownership metadata remain separately reported.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -909,9 +909,9 @@ Bounded work: [Preserve sustain pedal down, hold and release markers](https://gi
 
 Playback data. Priority 1. Formats: gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Authored bar occurrence, frame offsets, tempo and visibility are modeled. GP8 omits sync points.
+GP8 retains exact checked-authority sync point frames, positions, occurrences, interpolation, visibility and tempo metadata. Pinned AlphaTab retains occurrence and timing but ignores ModifiedTempo/OriginalTempo; nonzero metadata has a scoped omission. Nonrepresentable binary64 integers and omitted backing padding have separate reports; unrepresentable exact positions are rejected. No equivalent-projection or full consumer preservation is claimed.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

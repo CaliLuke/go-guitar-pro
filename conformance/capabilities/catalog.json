@@ -2177,9 +2177,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy mix-table balance changes parse. There is no general pan automation collection corresponding to volume events. GP8 omits beat-local changes.",
+      "finding": "Song.PanAutomations retains normalized channel-strip pan and legacy balance/16 events independently from initial MIDI balance. Track ownership, chronological order, equal positions, direct edits and endpoints are validated. GP8 retains DSPParam_11 records; pinned AlphaTab ignores them, with a scoped per-event consumer omission. Legacy mix-table duration and ownership metadata remain separately reported.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "AutomationType.Balance"
@@ -2209,6 +2209,31 @@
           "kind": "probe",
           "reference": "testdata/gp5/motherload-percussion-grace.gp5:pan-automation",
           "detail": "Reproduced at tracks[2].staves[0].bars[143].voices[0].beats[0].automations[1]. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8PanAutomation",
+          "detail": "Public authored pan, exact GPIF/Go preservation, legacy normalized units, scoped bounds/order/ownership and independent original/target Balance facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestPanAutomationBoundsAndPolicy",
+          "detail": "Public authored pan, exact GPIF/Go preservation, legacy normalized units, scoped bounds/order/ownership and independent original/target Balance facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestLegacyPanEvents",
+          "detail": "Public authored pan, exact GPIF/Go preservation, legacy normalized units, scoped bounds/order/ownership and independent original/target Balance facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePanAutomations",
+          "detail": "Public authored pan, exact GPIF/Go preservation, legacy normalized units, scoped bounds/order/ownership and independent original/target Balance facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPanAutomations",
+          "detail": "Public authored pan, exact GPIF/Go preservation, legacy normalized units, scoped bounds/order/ownership and independent original/target Balance facts."
         }
       ]
     },
@@ -2367,9 +2392,9 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Authored bar occurrence, frame offsets, tempo and visibility are modeled. GP8 omits sync points.",
+      "finding": "GP8 retains exact checked-authority sync point frames, positions, occurrences, interpolation, visibility and tempo metadata. Pinned AlphaTab retains occurrence and timing but ignores ModifiedTempo/OriginalTempo; nonzero metadata has a scoped omission. Nonrepresentable binary64 integers and omitted backing padding have separate reports; unrepresentable exact positions are rejected. No equivalent-projection or full consumer preservation is claimed.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "MasterBar.syncPoints",
@@ -2401,6 +2426,26 @@
           "kind": "source",
           "reference": "export_report.go",
           "detail": "Target omission reports."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8SyncPointExport",
+          "detail": "Exact public API and GPIF frames/metadata, checked compatibility authority, selective strict policy, binary64 boundary and independent occurrence/timing/visibility facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSyncPointCheckedAuthority",
+          "detail": "Exact public API and GPIF frames/metadata, checked compatibility authority, selective strict policy, binary64 boundary and independent occurrence/timing/visibility facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSyncPointExport",
+          "detail": "Exact public API and GPIF frames/metadata, checked compatibility authority, selective strict policy, binary64 boundary and independent occurrence/timing/visibility facts."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSyncPointExport",
+          "detail": "Exact public API and GPIF frames/metadata, checked compatibility authority, selective strict policy, binary64 boundary and independent occurrence/timing/visibility facts."
         }
       ]
     },
