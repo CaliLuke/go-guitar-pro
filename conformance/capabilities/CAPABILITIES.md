@@ -13,9 +13,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 59 | 22 | 18 | 2 |
+| import | 60 | 21 | 18 | 2 |
 | model | 59 | 22 | 19 | 1 |
-| export | 39 | 24 | 36 | 2 |
+| export | 39 | 25 | 35 | 2 |
 
 All three stages have a supported rating in 37 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -37,7 +37,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Whammy-bar vibrato strength | 17 | 17 | 25 |
 | Separate section marker and text | 31 | 16 | 25 |
 | Left and right hand fingering | 13 | 13 | 25 |
-| Tremolo picking and stroke styles | 14 | 13 | 25 |
 | Double bar lines | 32 | 12 | 25 |
 | Extended barline and bar-number controls | 32 | 12 | 25 |
 | Tap, slap and pop distinctions | 13 | 12 | 25 |
@@ -78,6 +77,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | String tuning and tuning labels | 360 | 0 | 25 |
 | Sustain pedal markers | 1 | 0 | 25 |
 | Tenuto accent | 1 | 0 | 25 |
+| Tremolo picking and stroke styles | 14 | 0 | 25 |
 
 ## Reviewed capabilities
 
@@ -181,11 +181,11 @@ Bounded work: [Bound remaining grace chord and transition semantics](https://git
 
 Expression. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **partial**. GP8 export: **partial**.
 
-Legacy durations parse. GPIF durations project into legacy note effects. GP8 omits tremolo picking. Extended marks/styles require new model evidence.
+Binary marks 1 through 3 and GPIF 1/2, 1/4, and 1/8 map to one beat-wide duration authority and export exactly when plain. Dots, double dots, and non-default tuplets receive the scoped rate omission. The legacy note field is an explicit fallback with complete-duration conflict checks. AlphaTab model marks 0, 4, and 5 plus BuzzRoll are not Guitar Pro GPIF variants; unsupported rates and styles receive separate export reports.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: The supported Guitar Pro variants are complete. Keep model-only AlphaTab extensions explicitly bounded unless a Guitar Pro source and target representation is proven.
 
 Bounded work: [Export tremolo picking and preserve supported stroke variants](https://github.com/CaliLuke/go-guitar-pro/issues/57).
 

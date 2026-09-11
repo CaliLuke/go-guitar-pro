@@ -5,8 +5,8 @@
   "title": "Export tremolo picking and preserve supported stroke variants",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -26,7 +26,10 @@
     "Inventory extended marks/styles in the pinned model and prove GP source/target support before promising each variant.",
     "Strict export accepts supported variants and reports unsupported styles individually rather than dropping all tremolo picking."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "GP3 has no tremolo-picking source record.",
+    "AlphaTab model marks 0, 4, and 5 and the BuzzRoll style have no Guitar Pro GPIF source/target representation in the pinned importer and writer."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -86,13 +89,28 @@
       "kind": "probe",
       "reference": "testdata/gp7/colors.gp:tremolo",
       "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[0].tremoloPicking. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTremoloPicking",
+      "detail": "Covers GP4 binary marks, GP7 GPIF subdivisions, beat-wide authority, legacy fallback, exact GP8 wire, reimport, validation, and strict loss policy."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesTremoloPicking",
+      "detail": "Uses isolated pinned-consumer facts for the GP4 source, Go GP8 output, and AlphaTab model mark/style bounds."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts",
+      "detail": "Pinned Guitar Pro writer emits only default-style marks 1, 2, and 3 as 1/2, 1/4, and 1/8."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_parser.go"
   ],
-  "resolution": null,
+  "resolution": "Promoted tremolo picking to a beat-wide authority, corrected binary mark ordering, preserved the legacy note-local fallback with a complete-duration conflict report, and emitted supported plain subdivisions in GP8. Dotted, double-dotted, tupletted, otherwise unsupported rates, and notation styles now have explicit target-loss reports.",
   "verification": [],
   "issue": {
     "number": 57,

@@ -97,6 +97,18 @@ const (
 	NoteVibratoWide   NoteVibrato = 2
 )
 
+// TremoloPickingStyle identifies the notation style of a tremolo-picking effect.
+type TremoloPickingStyle uint8
+
+// Tremolo-picking styles include the Guitar Pro default and AlphaTab's
+// model-only buzz-roll spelling.
+const (
+	// TremoloPickingStyleDefault uses diagonal marks across the note stem.
+	TremoloPickingStyleDefault TremoloPickingStyle = iota
+	// TremoloPickingStyleBuzzRoll uses AlphaTab's z-shaped buzz-roll glyph.
+	TremoloPickingStyleBuzzRoll
+)
+
 // NoteAccent identifies the authored articulation accent on a note.
 type NoteAccent uint8
 

@@ -672,6 +672,21 @@ func (builder *gp8Builder) addReport(code, feature string, disposition ExportDis
 }
 
 func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocation) {
+	if tremolo, conflict := beat.resolvedTremoloPicking(); tremolo != nil {
+		if conflict {
+			reason := "the final legacy note-local tremolo-picking effect takes precedence over earlier conflicting notes"
+			if beat.Effect.TremoloPicking != nil {
+				reason = "the beat-wide tremolo-picking effect takes precedence over conflicting legacy note-local effects"
+			}
+			builder.addReport("gp8.normalize.tremolo-picking-authority", "tremolo-picking", ExportDispositionNormalized, location, reason)
+		}
+		if _, supported := gp8TremoloPickingValue(tremolo); !supported {
+			builder.addReport("gp8.omit.tremolo-picking-rate", "tremolo-picking", ExportDispositionOmitted, location, "GP8 supports only plain eighth-, sixteenth-, and thirty-second-note tremolo-picking subdivisions")
+		}
+		if tremolo.Style != TremoloPickingStyleDefault {
+			builder.addReport("gp8.omit.tremolo-picking-style", "tremolo-picking", ExportDispositionOmitted, location, "GP8 does not represent the authored tremolo-picking notation style")
+		}
+	}
 	if beat.Duration.Dotted && beat.Duration.DoubleDotted {
 		builder.addReport("gp8.normalize.duration-dot-flags", "rhythm", ExportDispositionNormalized, location, "GP8 emits the double-dot value when both legacy dot flags are set")
 	}
@@ -749,9 +764,6 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	}
 	if note.DurationPercent != 1 {
 		builder.addReport("gp8.omit.note-duration-percent", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 has no note duration-percent field")
-	}
-	if note.Effect.TremoloPicking != nil {
-		builder.addReport("gp8.omit.tremolo-picking", "tremolo-picking", ExportDispositionOmitted, location, "GP8 writer does not emit tremolo picking")
 	}
 	if _, conflict := gp8ResolveNoteAccent(note.Effect); conflict {
 		builder.addReport("gp8.normalize.note-accent-authority", "note-and-beat-semantics", ExportDispositionNormalized, location, "the typed note accent takes precedence over conflicting legacy accent booleans")

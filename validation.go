@@ -350,6 +350,14 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				}
 			}
 			validateBendEffect(beat.Effect.TremoloBar, "score.beat.whammy", location, diagnostics)
+			if tremolo, _ := beat.resolvedTremoloPicking(); tremolo != nil {
+				if _, err := tremolo.Duration.MusicalDuration(); err != nil {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.tremolo-picking-duration", Kind: ScoreDiagnosticValue, Location: location, Reason: err.Error()})
+				}
+				if tremolo.Style > TremoloPickingStyleBuzzRoll {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.tremolo-picking-style", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("tremolo-picking style %d is not defined", tremolo.Style)})
+				}
+			}
 			for noteIndex, note := range beat.Notes {
 				noteLocation := location
 				noteLocation.Note = noteIndex

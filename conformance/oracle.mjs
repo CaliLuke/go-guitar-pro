@@ -691,6 +691,43 @@ export function loadSustainPedalFacts(fixture) {
   return facts;
 }
 
+export function loadTremoloPickingFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (!beat.tremoloPicking) continue;
+            facts.push({
+              track: track.index,
+              staff: staff.index,
+              bar: bar.index,
+              voice: voice.index,
+              beat: beat.index,
+              marks: finite(beat.tremoloPicking.marks),
+              style: enumName(alphaTab.model.TremoloPickingStyle, beat.tremoloPicking.style)
+            });
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
+export function loadTremoloPickingModelFacts() {
+  const effect = new alphaTab.model.TremoloPickingEffect();
+  return {
+    minMarks: alphaTab.model.TremoloPickingEffect.minMarks,
+    maxMarks: alphaTab.model.TremoloPickingEffect.maxMarks,
+    defaultMarks: effect.marks,
+    defaultStyle: enumName(alphaTab.model.TremoloPickingStyle, effect.style),
+    buzzRollStyle: enumName(alphaTab.model.TremoloPickingStyle, alphaTab.model.TremoloPickingStyle.BuzzRoll)
+  };
+}
+
 export function loadTranspositionFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -753,6 +790,14 @@ function main() {
   }
   if (args[0] === '--sustain-pedals' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadSustainPedalFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--tremolo-picking' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadTremoloPickingFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--tremolo-picking-model' && args.length === 1) {
+    process.stdout.write(`${JSON.stringify(loadTremoloPickingModelFacts(), null, 2)}\n`);
     return;
   }
   if (args[0] === '--transposition' && args.length === 2) {

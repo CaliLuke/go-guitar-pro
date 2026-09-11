@@ -467,7 +467,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 											beat.Notes = append(beat.Notes, note)
 										}
 									}
-									gpifApplyTremoloPicking(b.Tremolo, beat.Notes)
+									gpifApplyTremoloPicking(b.Tremolo, &beat)
 									if len(beat.Notes) == 0 {
 										beat.Status = BeatStatusRest
 									}

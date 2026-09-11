@@ -288,6 +288,27 @@ uses an eighth-note stroke duration. Export reports a different source duration.
 It also reports rasgueado, pick stroke, slap effects, and beat vibrato because
 the writer does not emit them.
 
+`BeatEffects.TremoloPicking` is the beat-wide authored authority, matching the
+Guitar Pro and AlphaTab models. `TremoloPickingEffect.Duration` is the authored
+subdivision: eighth, sixteenth, and thirty-second values map to GPIF `1/2`,
+`1/4`, and `1/8`. These target values must be plain: a dot, double dot, or
+non-default tuplet changes the authored duration and receives the scoped rate
+omission instead of being flattened to its base value. Binary marks 1, 2, and
+3 use the same order. The legacy
+`NoteEffect.TremoloPicking` field remains a compatibility fallback when the
+beat-wide pointer is nil; the final note-local value wins when legacy notes
+conflict. Equality includes the complete authored duration, not only its note
+value. A non-nil beat-wide value wins over all note-local values, and export
+reports that conflict without mutating the score. Clear the beat-wide pointer
+before editing through the legacy field.
+
+Guitar Pro GPIF supports only the default notation style and marks 1 through 3.
+AlphaTab's general model also admits marks 0, 4, and 5 plus the `BuzzRoll` style,
+but its Guitar Pro writer does not serialize those extensions. GP8 export
+therefore reports an unsupported subdivision separately from an unsupported
+style. A supported rate is still emitted when only the style is omitted. GP3
+has no tremolo-picking source record.
+
 GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
 hammer origin, tapping flags, slide flags, harmonic kind, and trill fret.
 `NoteEffect.Accent` is authoritative when it is nonzero and emits the exact
@@ -305,8 +326,8 @@ when more than one is set. GP8 export writes each property independently. GPIF
 `HopoDestination` remains a lossy derived destination because `Song` has no
 authored hammer-destination field.
 
-The writer reports fingerings and tremolo picking because GP8 export does not
-emit them. This rule includes an authored thumb value.
+The writer reports fingerings because GP8 export does not emit them. This rule
+includes an authored thumb value.
 Use `HasLeftHandFinger` or `HasRightHandFinger` to mark an authored `Thumb` or
 `Open` value. Nonzero named fingers remain compatible without these markers.
 

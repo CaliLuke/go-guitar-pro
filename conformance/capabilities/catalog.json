@@ -3048,12 +3048,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
+        "import": "supported",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy durations parse. GPIF durations project into legacy note effects. GP8 omits tremolo picking. Extended marks/styles require new model evidence.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Binary marks 1 through 3 and GPIF 1/2, 1/4, and 1/8 map to one beat-wide duration authority and export exactly when plain. Dots, double dots, and non-default tuplets receive the scoped rate omission. The legacy note field is an explicit fallback with complete-duration conflict checks. AlphaTab model marks 0, 4, and 5 plus BuzzRoll are not Guitar Pro GPIF variants; unsupported rates and styles receive separate export reports.",
+      "acceptance": "The supported Guitar Pro variants are complete. Keep model-only AlphaTab extensions explicitly bounded unless a Guitar Pro source and target representation is proven.",
       "upstream": [
         "Beat.tremoloPicking",
         "TremoloPickingEffect.*"
@@ -3071,8 +3071,13 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceTechniqueDispositions",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceTremoloPicking",
+          "detail": "GP4 and GP7 fixtures, public edits, validation, strict policy, exact GPIF wire values, reimport, and compatibility reconciliation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesTremoloPicking",
+          "detail": "Pinned AlphaTab source and Go-output facts plus the general model's mark and style bounds."
         },
         {
           "kind": "probe",

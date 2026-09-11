@@ -19,7 +19,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `free-time` | gp6, gp7, gp8 | supported | none | The authored GPIF FreeTime marker survives exact master-bar import, post-parse editing, GP8 export, and pinned AlphaTab consumption without replacing numeric meter timing. |
 | `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix inventories and tests public note and beat fields, effects, strict export decisions, and independent consumption; audited upstream-only model surface is recorded by issue 34. |
-| `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | none | Binary and GPIF tremolo-picking subdivisions are retained on notes; all six GPIF fixture beats agree with AlphaTab. |
+| `tremolo-picking` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#57](https://github.com/CaliLuke/go-guitar-pro/issues/57) | Binary and GPIF marks 1 through 3 are retained on the beat and export as exact GPIF subdivisions. The legacy note field remains a documented fallback. GP3 has no source record, and AlphaTab's model-only marks 0, 4, and 5 plus BuzzRoll are not representable in Guitar Pro GPIF. |
 | `harmonics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | GPIF and binary harmonic kinds and fret values are compared on import and GP8 export, including feedback harmonics; audited upstream-only model surface is recorded by issue 34. |
 | `hairpins` | gp6, gp7, gp8 | supported | none | All eight GPIF hairpins and GP8 Decrescendo output agree with AlphaTab; legacy Diminuendo input remains accepted. |
 | `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The public automation record and GP8 writer preserve ordered tempo values, interpolation, text, and per-event visibility; the remaining partial occurrence contract is tracked separately. |
@@ -242,7 +242,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Beat` | `note-and-beat-semantics` | 9 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Legato owns the authored beat-level phrase endpoints. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
-| `BeatEffects` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
+| `BeatEffects` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
 | `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and note-value duration. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
@@ -250,7 +250,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend point contains authored curve data. |
 | `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
 | `HarmonicEffect` | `harmonics` | 4 authored, 1 compatibility, 0 derived, 0 out-of-scope | The harmonic effect preserves authored kind and pitch data. Fret is a legacy view. |
-| `TremoloPickingEffect` | `tremolo-picking` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | The effect preserves the authored tremolo subdivision. |
+| `TremoloPickingEffect` | `tremolo-picking` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The effect preserves the authored tremolo subdivision and independently classifies its notation style. |
 | `TrillEffect` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The trill effect contains authored fret and duration data. |
 | `MixTableChange` | `score-core` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The mix-table change contains authored playback changes. |
 | `MixTableItem` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The mix-table item contains an authored value and transition duration. |
@@ -268,8 +268,8 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 214 |
-| `normalized` | 34 |
+| `preserved` | 215 |
+| `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -279,7 +279,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 83 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 149 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 84 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -365,7 +365,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `grace-order-preservation` | `grace-relationships` | `TestExportGP8PreservesOrderedMultipleGraceNotes` | `TestAlphaTabExportConformance` | no | Grace order and attachment survive GP8 conversion. |
 | `timing-finalization` | `timing` | `TestFinalizeSongIsIdempotentAndAcceptsSpecialStructures` | `TestAlphaTabGPIFTiming` | no | Finalization is stable and exact timing agrees with the independent consumer. |
 | `staff-ownership` | `staff-ownership` | `TestParseGPIFPreservesGrandStaff` | `TestAlphaTabMultiStaffTrackOrdering` | no | Grand-staff ownership and ordering survive public parsing. |
-| `tremolo-import` | `tremolo-picking` | `TestParseGPIFRetainsTremoloPicking` | `TestAlphaTabInputConformance` | no | Non-default tremolo subdivisions agree with the independent consumer on import. |
+| `tremolo-import` | `tremolo-picking` | `TestConformanceTremoloPicking` | `TestAlphaTabPreservesTremoloPicking` | no | Binary and GPIF marks 1 through 3 retain their exact rate on the beat and through the independent GP8 consumer. |
 | `harmonic-conversion` | `harmonics` | `TestExportGP8PreservesHarmonicsAndWhammyCurves` | `TestAlphaTabExportConformance` | no | Represented harmonic values survive GP8 conversion. |
 | `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |
 | `native-percussion-fallbacks` | `percussion-articulations` | `TestConformanceNativePercussionFallbacks` | `TestAlphaTabPreservesNativePercussionFallbacks` | no | Every scoped native input keeps its exact element, notation, playback, main-note, and grace-note identity; IDs without a matching native definition remain precisely rejected. |

@@ -261,6 +261,9 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	if beat.Effect.FadeIn {
 		result.Fadding = "FadeIn"
 	}
+	if tremolo, _ := beat.resolvedTremoloPicking(); tremolo != nil {
+		result.Tremolo, _ = gp8TremoloPickingValue(tremolo)
+	}
 	result.Whammy = gp8Whammy(beat.Effect.TremoloBar)
 	switch beat.Effect.Hairpin {
 	case HairpinCrescendo:

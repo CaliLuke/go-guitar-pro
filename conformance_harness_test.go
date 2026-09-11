@@ -126,6 +126,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceLegato":                             runConformanceLegato,
 	"TestConformanceDynamicQuantization":                runConformanceDynamicQuantization,
 	"TestConformanceTechniqueDispositions":              runConformanceTechniqueDispositions,
+	"TestConformanceTremoloPicking":                     runConformanceTremoloPicking,
 	"TestConformanceSourceDistinctions":                 runConformanceSourceDistinctions,
 	"TestConformanceValidation":                         runConformanceValidation,
 	"TestConformanceCurvePreservation":                  runConformanceCurvePreservation,

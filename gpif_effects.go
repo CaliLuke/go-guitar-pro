@@ -160,7 +160,7 @@ func gpifBeatWhammyProperties(properties []gpifProperty) *BendEffect {
 	return &BendEffect{Points: canonicalizeStandardWhammyPoints(points)}
 }
 
-func gpifApplyTremoloPicking(value string, notes []Note) {
+func gpifApplyTremoloPicking(value string, beat *Beat) {
 	if value == "" {
 		return
 	}
@@ -173,9 +173,10 @@ func gpifApplyTremoloPicking(value string, notes []Note) {
 	case "1/8":
 		effect.Duration.Value = uint16(DurationThirtySecond)
 	}
-	for noteIndex := range notes {
+	beat.Effect.TremoloPicking = cloneTremoloPickingEffect(&effect)
+	for noteIndex := range beat.Notes {
 		noteEffect := effect
-		notes[noteIndex].Effect.TremoloPicking = &noteEffect
+		beat.Notes[noteIndex].Effect.TremoloPicking = &noteEffect
 	}
 }
 

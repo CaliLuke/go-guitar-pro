@@ -231,7 +231,7 @@ func normalizeGoBeat(song *Song, measureIndex int, track *Track, staff *Staff, b
 		"text":           beat.Text,
 		"octave":         goOctave(beat.Octave),
 		"hairpin":        goHairpin(beat.Effect.Hairpin),
-		"tremoloPicking": goTremoloPicking(beat.Notes),
+		"tremoloPicking": goTremoloPicking(beat),
 		"whammy":         normalizeGoBend(beat.Effect.TremoloBar),
 		"notes":          notes,
 	}
@@ -443,13 +443,12 @@ func goDurationDots(duration Duration) int {
 	return 0
 }
 
-func goTremoloPicking(notes []Note) any {
-	for _, note := range notes {
-		if note.Effect.TremoloPicking != nil {
-			return note.Effect.TremoloPicking.Duration.Value
-		}
+func goTremoloPicking(beat *Beat) any {
+	effect, _ := beat.resolvedTremoloPicking()
+	if effect == nil {
+		return nil
 	}
-	return nil
+	return effect.Duration.Value
 }
 
 func goDynamic(velocity int16) string {

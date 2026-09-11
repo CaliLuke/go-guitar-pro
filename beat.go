@@ -41,8 +41,11 @@ type Voice struct {
 
 // BeatEffects contains all beat effects.
 type BeatEffects struct {
-	Chord          *Chord
-	TremoloBar     *BendEffect
+	Chord      *Chord
+	TremoloBar *BendEffect
+	// TremoloPicking is the beat-wide authored authority. The legacy
+	// NoteEffect.TremoloPicking field is used only when this pointer is nil.
+	TremoloPicking *TremoloPickingEffect
 	MixTableChange *MixTableChange
 	Stroke         BeatStroke
 	HasRasgueado   bool
@@ -181,6 +184,7 @@ func (s *Song) readBeat(c *cursor, voice *Voice, start int64, trackIndex int) (i
 	if err := s.readNotes(c, trackIndex, &beat, &duration, noteEffect); err != nil {
 		return 0, fmt.Errorf("readBeat notes at %d (flags=0x%02x): %w", c.pos, flags, err)
 	}
+	beat.promoteLegacyTremoloPicking()
 	if dbg {
 		fmt.Printf("    after notes pos=%d noteCount=%d\n", c.pos, len(beat.Notes))
 	}

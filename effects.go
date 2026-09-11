@@ -71,7 +71,11 @@ type HarmonicEffect struct {
 
 // TremoloPickingEffect represents a tremolo picking effect.
 type TremoloPickingEffect struct {
+	// Duration is the authored note-value subdivision and remains the rate
+	// authority for compatibility. Guitar Pro GPIF supports values 8, 16, and 32.
 	Duration Duration
+	// Style controls the notation glyph independently from the subdivision.
+	Style TremoloPickingStyle
 }
 
 // TrillEffect represents a trill effect.
@@ -311,9 +315,9 @@ func (s *Song) readTremoloPicking(c *cursor) (TremoloPickingEffect, error) {
 	switch val {
 	case 1:
 		tp.Duration.Value = uint16(DurationEighth)
-	case 3:
-		tp.Duration.Value = uint16(DurationSixteenth)
 	case 2:
+		tp.Duration.Value = uint16(DurationSixteenth)
+	case 3:
 		tp.Duration.Value = uint16(DurationThirtySecond)
 	default:
 		c.report(diagnosticSource("Binary.Note.TremoloPicking.Subdivision.Unsupported", "tremolo-picking", ParseDiagnosticUnsupportedFeature), "binary tremolo-picking subdivision is not supported")

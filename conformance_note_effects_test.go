@@ -18,16 +18,8 @@ func TestConformanceTechniqueDispositions(t *testing.T) {
 
 func runConformanceTechniqueDispositions(run *conformanceRun) {
 	t := run.t
-	for _, source := range []struct {
-		value byte
-		want  uint16
-	}{{1, uint16(DurationEighth)}, {2, uint16(DurationThirtySecond)}, {3, uint16(DurationSixteenth)}} {
-		effect, err := (&Song{}).readTremoloPicking(newCursor([]byte{source.value}))
-		if err != nil {
-			t.Fatal(err)
-		}
-		run.Dispatch("readTremoloPicking:val", effect.Duration.Value, source.want)
-	}
+	graces := []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}}
+	run.Preserved("NoteEffect.Graces", graces, []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}})
 	for _, source := range []struct {
 		period byte
 		want   uint16
@@ -88,23 +80,6 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 			if !hasExportCode(report, code) {
 				t.Errorf("fingering %d report = %#v, want %s", fingering, report.Entries, code)
 			}
-		}
-	}
-
-	for _, value := range []uint16{uint16(DurationEighth), uint16(DurationSixteenth), uint16(DurationThirtySecond)} {
-		song := conformanceTechniqueSong(t)
-		note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
-		duration := defaultDuration()
-		duration.Value = value
-		note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: duration}
-		if value == uint16(DurationThirtySecond) {
-			note.Effect.Graces = []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}}
-			run.Preserved("NoteEffect.Graces", note.Effect.Graces, []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}})
-		}
-		run.Omitted("NoteEffect.TremoloPicking", note.Effect.TremoloPicking.Duration.Value, value)
-		run.Preserved("TremoloPickingEffect.Duration", note.Effect.TremoloPicking.Duration, duration)
-		if report := PreflightExport(song, ExportFormatGP8, ExportOptions{}); !hasExportCode(report, "gp8.omit.tremolo-picking") {
-			t.Errorf("tremolo duration %d report = %#v", value, report.Entries)
 		}
 	}
 
