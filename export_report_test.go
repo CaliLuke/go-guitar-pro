@@ -131,11 +131,11 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 		{name: "beat mix table", code: "gp8.omit.beat-mix-table-change", set: func(beat *Beat, _ *Note) {
 			beat.Effect.MixTableChange = &MixTableChange{}
 		}},
-		{name: "rasgueado", code: "gp8.omit.rasgueado", set: func(beat *Beat, _ *Note) {
+		{name: "rasgueado", code: "gp8.normalize.rasgueado-unspecified", set: func(beat *Beat, _ *Note) {
 			beat.Effect.HasRasgueado = true
 		}},
-		{name: "slap effect", code: "gp8.omit.slap-effect", set: func(beat *Beat, _ *Note) {
-			beat.Effect.SlapEffect = SlapEffectSlapping
+		{name: "beat tap note flag", code: "gp8.normalize.beat-tap-note-flag", set: func(beat *Beat, _ *Note) {
+			beat.Effect.SlapEffect = SlapEffectTapping
 		}},
 		{name: "tremolo picking", code: "gp8.omit.tremolo-picking-rate", set: func(_ *Beat, note *Note) {
 			note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: defaultDuration()}
