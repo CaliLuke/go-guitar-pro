@@ -5,8 +5,8 @@
   "title": "Emit GP8 archives readable by the pinned AlphaTab inflater",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp8"
   ],
@@ -46,6 +46,26 @@
       "detail": "Reviewed implementation or documented contract."
     },
     {
+      "kind": "source",
+      "reference": "gp8_export.go",
+      "detail": "The fixed production GP8 members use Store; generic raw-Deflate archive construction remains available for parser and malformed-input tests."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8ExportUsesConsumerCompatibleArchiveMembers",
+      "detail": "Checks exact member order, names, methods, UTF-8 and data-descriptor flags, modes, sizes, CRCs, payload identity, and optional backing-track bytes."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabLoadsGP8StoredArchiveMembers",
+      "detail": "For all fifteen named fixtures, pinned AlphaTab loads source and stored target facts while a byte-identical legacy raw-Deflate target reproduces Invalid huffman."
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/probe-results.json",
+      "detail": "Broad probe clears exactly seventeen prior target Invalid huffman failures, including all fifteen scoped transposition-tonality fixtures, with unchanged source hashes and facts."
+    },
+    {
       "kind": "investigation-review",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/68#issuecomment-5624493029",
       "detail": "implementation-ready: Reproduced on current code: pinned AlphaTab loads all 15 sources, rejects all 15 Go targets, and loads all 15 targets repackaged as Store with identical member bytes. The old source-side diagnosis was incorrect.",
@@ -61,7 +81,7 @@
     "conformance_go_adapter_test.go",
     "gp8_export.go"
   ],
-  "resolution": null,
+  "resolution": "Changed only the five fixed production GP8 members from raw Deflate to Store. VERSION, Content/, and optional backing assets remain stored; generic CreateRaw and raw-Deflate support remains unchanged for malformed and metamorphic fixtures. The archive retains member order, names, uncompressed bytes, CRCs, UTF-8 flags, no-data-descriptor headers, modes, and backing audio. Pinned AlphaTab now loads all fifteen scoped targets with their source transposition facts, while the regression still reproduces the prior Invalid huffman failure from byte-identical legacy targets. The broad probe also clears two previously blocked GP5-derived targets without changing source fixtures or expanding the oracle-breadth capability claim.",
   "verification": [],
   "issue": {
     "number": 68,

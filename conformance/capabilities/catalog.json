@@ -4871,7 +4871,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "The corpus oracle omits many authored fields. Zero current differences only describes its selected projection. Broad probes record additional raw consumer differences.",
+      "finding": "The corpus oracle omits many authored fields. Zero current differences only describes its selected projection. Broad probes record additional raw consumer differences. GP8 exports now use stored fixed members so the pinned consumer can inspect targets that its inflater rejected, but this interoperability fix does not broaden the selected semantic projection.",
       "acceptance": "Extend independent comparisons for each new public capability with valid non-default fixtures and narrow normalization rules.",
       "upstream": [],
       "evidence": [
@@ -4884,6 +4884,16 @@
           "kind": "source",
           "reference": "conformance_go_adapter_test.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabLoadsGP8StoredArchiveMembers",
+          "detail": "Pinned AlphaTab loads all fifteen transposition-tonality sources and stored-member targets; byte-identical legacy raw-Deflate targets reproduce Invalid huffman."
+        },
+        {
+          "kind": "runtime",
+          "reference": "conformance/capabilities/probe-results.json",
+          "detail": "The broad runtime receipt clears exactly seventeen prior target inflater failures without source fixture changes."
         }
       ]
     },

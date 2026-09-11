@@ -96,12 +96,12 @@ func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([
 
 	entries := []gp8ArchiveEntry{
 		{name: "VERSION", method: zip.Store, data: []byte(gp8ContainerVersion)},
-		{name: "meta.json", method: zip.Deflate, data: []byte("{\n}\n")},
+		{name: "meta.json", method: zip.Store, data: []byte("{\n}\n")},
 		{name: "Content/", method: zip.Store},
-		{name: "Content/BinaryStylesheet", method: zip.Deflate, data: buildGP8BinaryStylesheet()},
-		{name: "Content/PartConfiguration", method: zip.Deflate, data: buildGP8PartConfiguration(song)},
-		{name: "Content/LayoutConfiguration", method: zip.Deflate, data: buildGP8LayoutConfiguration(song)},
-		{name: "Content/score.gpif", method: zip.Deflate, data: gpif},
+		{name: "Content/BinaryStylesheet", method: zip.Store, data: buildGP8BinaryStylesheet()},
+		{name: "Content/PartConfiguration", method: zip.Store, data: buildGP8PartConfiguration(song)},
+		{name: "Content/LayoutConfiguration", method: zip.Store, data: buildGP8LayoutConfiguration(song)},
+		{name: "Content/score.gpif", method: zip.Store, data: gpif},
 	}
 	if plan.backingTrackAsset != nil {
 		entries = append(entries, gp8ArchiveEntry{
