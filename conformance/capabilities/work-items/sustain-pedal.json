@@ -5,8 +5,8 @@
   "title": "Preserve sustain pedal down, hold and release markers",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -129,6 +129,20 @@
       "kind": "oracle",
       "reference": "TestAlphaTabPreservesSustainPedals",
       "detail": "Uses an isolated pinned AlphaTab adapter to compare the original fixture with Go-exported GP8 and a post-parse public edit, and proves that AlphaTab reinterprets Down as Hold from bar-entry state even after a same-bar Release."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/54#issuecomment-5637310904",
+      "detail": "Checked the exact sustain.gp sequence, Down/Hold/Release at bar boundaries, multiple tracks, deterministic ordering, public edits, finite positions, and independent output. Canonical derived holds and non-representable Down-after-Release in an entered-down bar have explicit validated rules; playback links remain excluded.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -143,11 +157,27 @@
     "conformance/feature-ledger.json"
   ],
   "resolution": "Measure.SustainPedals now preserves each track's ordered GPIF sustain-pedal automations on staff 0. Reference 1 maps to Down and reference 3 maps to Release; a pedal-down state continuing through a bar with no explicit record derives one Hold marker at position 0. Public validation requires finite positions within 0 through 1, strictly increasing per-measure order, defined types, canonical continuing holds, and staff-0 ownership. It also rejects any Down in a bar entered with the pedal down, including a Down after a same-bar Release, because the pinned GPIF consumer determines Down-versus-Hold once from bar-entry state and would silently reinterpret the marker. GP8 emits exact down and release records, skips derived holds, and pinned AlphaTab reconstructs the same complete sequence. Focused evidence covers the sustain fixture, a bar-boundary release, different tracks, independent edits, malformed source data, public-model rejection, exact wire values, Go reimport, and pinned consumer output. Playback links, GP3 through GP5, and general automation refactoring remain outside this ticket.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/54#issuecomment-5637310904",
+        "TestConformanceSustainPedals; TestAlphaTabPreservesSustainPedals",
+        "Checked the exact sustain.gp sequence, Down/Hold/Release at bar boundaries, multiple tracks, deterministic ordering, public edits, finite positions, and independent output.",
+        "Canonical derived holds and non-representable Down-after-Release in an entered-down bar have explicit validated rules; playback links remain excluded."
+      ]
+    }
+  ],
   "issue": {
     "number": 54,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/54",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.756916+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Preserve MIDI bank selection and bank changes",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp5",
     "gp6",
@@ -70,6 +70,20 @@
       "kind": "oracle",
       "reference": "TestAlphaTabPreservesMIDIBanks",
       "detail": "Uses pinned upstream fixtures and verifies ordered bank/program changes in Go-exported GP8."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/51#issuecomment-5637309125",
+      "detail": "Checked GP5 banks 0/77, GPIF banks 0/77/256, bank-change.gp at exact bar/position, duplicate-position bank/program event order, explicit-sound/channel authority, and full 14-bit boundaries. Bank edits do not imply support for unrelated controllers.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -77,11 +91,27 @@
     "gpif_types.go"
   ],
   "resolution": "MidiChannel.Bank and TrackSound.Bank now retain the checked 14-bit MIDI bank range. GP5 track bytes and GPIF sound MSB/LSB components import without narrowing; the first explicit TrackSound is authoritative and mirrors into the channel, while MidiChannel supplies the GP8 fallback only when no explicit sound table exists. GP8 emits exact LSB/MSB components and retains SoundAutomation order, including distinct changes at the same position, so pinned AlphaTab observes each bank immediately before its program event. Invalid public and wire values are rejected with scoped diagnostics. General automation refactoring and pan, sustain, and volume changes remain outside this ticket.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/51#issuecomment-5637309125",
+        "TestConformanceMIDIBank; TestAlphaTabPreservesMIDIBanks",
+        "Checked GP5 banks 0/77, GPIF banks 0/77/256, bank-change.gp at exact bar/position, duplicate-position bank/program event order, explicit-sound/channel authority, and full 14-bit boundaries.",
+        "Bank edits do not imply support for unrelated controllers."
+      ]
+    }
+  ],
   "issue": {
     "number": 51,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/51",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.745216+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

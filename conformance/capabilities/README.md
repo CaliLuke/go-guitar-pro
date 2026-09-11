@@ -3,7 +3,7 @@
 This directory tracks Guitar Pro capability gaps against pinned AlphaTab 1.8.4.
 It contains development tools. The production Go library has no database dependency.
 
-Start with [the audit](AUDIT.md), [the capability list](CAPABILITIES.md), and [the work backlog](BACKLOG.md).
+Use [the capability list](CAPABILITIES.md) and [the work backlog](BACKLOG.md) to browse the database.
 The SQLite file is [capabilities.sqlite](capabilities.sqlite).
 
 The database separates three stages: import, public model, and GP8 export.
@@ -265,6 +265,5 @@ Publish all items, regenerate the database, then commit the links and reports to
 
 ## Enriched investigation review
 
-The [investigation review](INVESTIGATION-REVIEW.md) records 15 implementation conversions and the reasons 16 tickets remain investigations.
 Review decisions and links to the original enrichment comments are stored in each work item and in SQLite `evidence_json`.
 They do not change capability support ratings or close tickets automatically.

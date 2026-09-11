@@ -5,8 +5,8 @@
   "title": "Correct stale semantic documentation and diagnostic labels",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -56,17 +56,47 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/46#issuecomment-5637305725",
+      "detail": "Compared documentation and diagnostic inventory with the current importer/writer: typed accent/vibrato authority, independent tapping flags, missing-payload diagnostics, and HopoDestination loss are consistent. Beat vibrato has since been implemented and separately reviewed under #77, so its former omission is correctly removed by that implementation.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
     "conformance/sync-upstream-inventory.mjs"
   ],
   "resolution": "The semantic model now documents typed authority and compatibility fallback for note vibrato and accents, including exact Slight, Wide, normal, heavy, and tenuto GP8 output. It also documents Hammer, Tapped, and LeftHandTapped as independent fields while retaining beat-vibrato omission and the authored HopoDestination loss. The inactive Tapped, HopoOrigin, and LeftHandTapped lossy diagnostic declarations and receipts were removed, the HopoDestination receipt now names the exact missing destination field, and the catalog evidence was aligned without changing any stage assessment.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/46#issuecomment-5637305725",
+        "TestConformanceTechniqueDispositions; TestConformanceSourceDistinctions; TestConformanceValidation; TestSemanticContractInventory",
+        "Compared documentation and diagnostic inventory with the current importer/writer: typed accent/vibrato authority, independent tapping flags, missing-payload diagnostics, and HopoDestination loss are consistent.",
+        "Beat vibrato has since been implemented and separately reviewed under #77, so its former omission is correctly removed by that implementation."
+      ]
+    }
+  ],
   "issue": {
     "number": 46,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/46",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.736280+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

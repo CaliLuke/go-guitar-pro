@@ -5,8 +5,8 @@
   "title": "Export embedded audio backing-track assets",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp8"
   ],
@@ -73,6 +73,20 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/42#issuecomment-5637302557",
+      "detail": "Checked enabled Local backing-track metadata, exact nonempty asset bytes, independent loading, frame boundaries, asset validation, and failure without overwriting an existing file. Audio playback is excluded. Archive compatibility was also independently verified under #68.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -81,11 +95,27 @@
     "gpif_automations.go"
   ],
   "resolution": "GP8 export now writes enabled Local backing-track metadata and the referenced nonempty audio bytes at the authored asset path. Strict preflight rejects missing asset IDs, missing or reserved archive paths, empty audio, and frame padding outside the signed 32-bit target range before file output. Disabled and non-local records remain explicit target omissions; sync-point export remains separately scoped in #55.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/42#issuecomment-5637302557",
+        "TestConformanceBackingTrackExport; TestGP8BackingTrackExportRejectsInvalidAssets",
+        "Checked enabled Local backing-track metadata, exact nonempty asset bytes, independent loading, frame boundaries, asset validation, and failure without overwriting an existing file.",
+        "Audio playback is excluded. Archive compatibility was also independently verified under #68."
+      ]
+    }
+  ],
   "issue": {
     "number": 42,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/42",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.728501+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

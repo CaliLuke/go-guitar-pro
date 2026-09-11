@@ -5,8 +5,8 @@
   "title": "Preserve lowercase GPIF minor key modes",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -95,6 +95,20 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/49#issuecomment-5637307717",
+      "detail": "Checked Major/major/Minor/minor with nonzero accidentals and adjacent key changes, post-parse edits, and strict/permissive unknown-mode diagnostics. Unknown modes remain explicit unsupported input.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -102,11 +116,27 @@
     "gpif_parser.go"
   ],
   "resolution": "GPIF key import now accepts the exact Major, major, Minor, and minor spellings plus an empty major default. Each adjacent measure header retains its independent nonzero accidental count and minor flag, while GP8 emits canonical Major or Minor tokens and Go reimport preserves the values. Unknown mode text keeps permissive parsing compatible by projecting to major, but now produces GPIF.MasterBar.Key.Mode.InvalidValue as an unsupported-feature diagnostic for selected strict rejection. Focused public API, exact wire, reimport, and isolated pinned AlphaTab evidence covers the supported spellings and unknown behavior. Transposition-derived key behavior remains outside this ticket.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/49#issuecomment-5637307717",
+        "TestConformanceKeyModes; TestAlphaTabPreservesKeyModes",
+        "Checked Major/major/Minor/minor with nonzero accidentals and adjacent key changes, post-parse edits, and strict/permissive unknown-mode diagnostics.",
+        "Unknown modes remain explicit unsupported input."
+      ]
+    }
+  ],
   "issue": {
     "number": 49,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/49",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.742734+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

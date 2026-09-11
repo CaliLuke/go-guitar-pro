@@ -5,8 +5,8 @@
   "title": "Preserve free-time bars without inventing a meter",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -80,6 +80,20 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/48#issuecomment-5637307031",
+      "detail": "Checked presence-sensitive FreeTime flags, empty/short/long voice timing against numeric meter, edited flags, adjacent bars, and exact consumer output. Performance timing remains excluded.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -91,11 +105,27 @@
     "conformance/feature-ledger.json"
   ],
   "resolution": "MeasureHeader.FreeTime now preserves the authored GPIF presence marker independently on every master bar. Import treats element presence as true without inheriting or interpreting text payloads. Non-pickup finalization continues to use exact numeric meter length even when free-time voice content is empty, shorter, or longer; only the existing opening anacrusis rule uses content. GP8 emits FreeTime exactly when true without a loss report. Focused fixture, timing, exact wire, Go reimport, post-parse edit, strict export, and pinned AlphaTab evidence covers the scoped behavior.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/48#issuecomment-5637307031",
+        "TestConformanceFreeTime; TestAlphaTabPreservesFreeTime",
+        "Checked presence-sensitive FreeTime flags, empty/short/long voice timing against numeric meter, edited flags, adjacent bars, and exact consumer output.",
+        "Performance timing remains excluded."
+      ]
+    }
+  ],
   "issue": {
     "number": 48,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/48",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.740707+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

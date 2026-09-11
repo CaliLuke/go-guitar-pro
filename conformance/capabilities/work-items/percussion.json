@@ -5,8 +5,8 @@
   "title": "Export valid percussion notes currently rejected by GP8",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -92,6 +92,20 @@
       "kind": "oracle",
       "reference": "TestAlphaTabPreservesNativePercussionFallbacks",
       "detail": "The pinned consumer verifies every input, output MIDI exception, staff line, notehead, and technique marker."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/53#issuecomment-5637310069",
+      "detail": "Checked all 39 scoped native percussion fallbacks, exact notation/output-MIDI metadata, custom identity precedence, main/grace notes across staffs, and the four required source fixtures. Inputs 27, 28, and 32 remain precise rejections; unrelated staff-line limits are unchanged.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -101,11 +115,27 @@
     "conformance/feature-ledger.json"
   ],
   "resolution": "GP8 export now creates exact native Guitar Pro percussion definitions for identity-free note and grace inputs 29-31, 33-34, 39-40, 54, 56, and 58-87. Each definition retains its authored input identity, native element and soundbank, staff line, duration-specific noteheads, technique marker, RSE sound, and output MIDI, including the seven nonidentity output mappings and AlphaTab's last-write Tinkle Bell selection for input 83. Custom track articulations remain authoritative, including an explicit exact grace input outside the native table; only a legacy zero sentinel with no ExactFret inherits the parent note identity. The three corpus fixtures now export, the upstream all-values fixture isolates only 27, 28, and 32, and unmatched or out-of-MIDI-range exact grace values retain location-specific rejection. Blanket MIDI aliases and staff-line-count redesign remain outside this ticket.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/53#issuecomment-5637310069",
+        "TestConformanceNativePercussionFallbacks; TestGP5NativePercussionFallbackFixtures; TestAlphaTabPreservesNativePercussionFallbacks",
+        "Checked all 39 scoped native percussion fallbacks, exact notation/output-MIDI metadata, custom identity precedence, main/grace notes across staffs, and the four required source fixtures.",
+        "Inputs 27, 28, and 32 remain precise rejections; unrelated staff-line limits are unchanged."
+      ]
+    }
+  ],
   "issue": {
     "number": 53,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/53",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.750881+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

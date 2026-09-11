@@ -5,8 +5,8 @@
   "title": "Preserve authored brush and arpeggio timing",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "codex-ticket-78",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -90,6 +90,20 @@
       "kind": "test",
       "reference": "TestAlphaTabPreservesBrush",
       "detail": "Pinned AlphaTab retains the GP7 colors fixture's arpeggio kind, direction, and 117-tick timing after Go GP8 export."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/78#issuecomment-5637322131",
+      "detail": "Checked Brush/Arpeggio and both directions, exact XProperty timing including 117 ticks, legacy note-value conversion and edits, source absence, validation, fractional/overflow loss reports, and independent timing output. Fractional and out-of-int32 timing remains explicitly reported; rasgueado patterns are separate.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -97,11 +111,27 @@
     "gpif_effects.go"
   ],
   "resolution": "Added BeatStrokeKind plus BeatStroke.ExactDuration to preserve Brush versus Arpeggio and exact 960-PPQ timing while retaining Direction and note-value Duration compatibility. GP3-5 codes map to checked 30, 60, 120, 240, and 480 tick values. GPIF XProperty 687935489 preserves integral timing and source absence, coexists with beaming XProperties, and receives malformed, duplicate, orphan, and conflicting-kind diagnostics. Imported exact timing owns export until Duration is edited; an edited compatibility value wins conflicts, and clearing exact timing falls back without mutating the score. GP8 writes exact supported timing and reports only fractional or larger-than-int32 values narrowly. Focused real-fixture, wire, reimport, validation, read-only, authority, and pinned AlphaTab tests cover the contract. The structural probe retained the same 364-fixture set and changed exactly 19 brush comparisons: every added target fact is brushDuration, all affected comparisons now match their source, and no other capability comparison changed. Ten obsolete binary duration-normalization report groups and ten obsolete GPIF brush-XProperty diagnostics were removed.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/78#issuecomment-5637322131",
+        "TestConformanceBrush; TestGPIFBrushDiagnostics; TestAlphaTabPreservesBrush",
+        "Checked Brush/Arpeggio and both directions, exact XProperty timing including 117 ticks, legacy note-value conversion and edits, source absence, validation, fractional/overflow loss reports, and independent timing output.",
+        "Fractional and out-of-int32 timing remains explicitly reported; rasgueado patterns are separate."
+      ]
+    }
+  ],
   "issue": {
     "number": 78,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/78",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.731911+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Emit GP8 archives readable by the pinned AlphaTab inflater",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp8"
   ],
@@ -72,6 +72,20 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/68#issuecomment-5637317290",
+      "detail": "Checked all fifteen transposition-tonality source and target archives, data-identical legacy Deflate failure reproduction, stored-member consumer loading, Go reparse, ordinary ZIP integrity, member metadata/CRC/order, and backing bytes. Only container encoding is claimed; no transposition mapping is hidden or normalized by this fix.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -82,11 +96,27 @@
     "gp8_export.go"
   ],
   "resolution": "Changed only the five fixed production GP8 members from raw Deflate to Store. VERSION, Content/, and optional backing assets remain stored; generic CreateRaw and raw-Deflate support remains unchanged for malformed and metamorphic fixtures. The archive retains member order, names, uncompressed bytes, CRCs, UTF-8 flags, no-data-descriptor headers, modes, and backing audio. Pinned AlphaTab now loads all fifteen scoped targets with their source transposition facts, while the regression still reproduces the prior Invalid huffman failure from byte-identical legacy targets. The broad probe also clears two previously blocked GP5-derived targets without changing source fixtures or expanding the oracle-breadth capability claim.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/68#issuecomment-5637317290",
+        "TestGP8ExportUsesConsumerCompatibleArchiveMembers; TestAlphaTabLoadsGP8StoredArchiveMembers",
+        "Checked all fifteen transposition-tonality source and target archives, data-identical legacy Deflate failure reproduction, stored-member consumer loading, Go reparse, ordinary ZIP integrity, member metadata/CRC/order, and backing bytes.",
+        "Only container encoding is claimed; no transposition mapping is hidden or normalized by this fix."
+      ]
+    }
+  ],
   "issue": {
     "number": 68,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/68",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

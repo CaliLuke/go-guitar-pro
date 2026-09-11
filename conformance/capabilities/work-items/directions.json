@@ -5,8 +5,8 @@
   "title": "Preserve navigation targets and jumps on each measure",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp5",
     "gp6",
@@ -105,6 +105,20 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/45#issuecomment-5637305001",
+      "detail": "Checked all five targets and fourteen jumps in GP5 and GPIF, simultaneous markers, canonical deduplication, legacy-pointer/collection editing and clearing, and exact consumer locations. Navigation traversal remains excluded.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -113,11 +127,27 @@
     "headers.go"
   ],
   "resolution": "MeasureHeader.Directions now preserves the complete canonical navigation-marker set while Direction remains a documented legacy singleton view. GP5 collects all 19 table entries in stable order, GPIF imports and audits repeated Target and Jump values, validation follows the reconciled edit authority, and GP8 emits exact direction tokens without mutating authored slices. Focused tests cover real GP5 and GPIF fixtures, simultaneous markers, duplicate removal, post-parse slice and legacy edits, invalid values, exact XML, GP8 reimport, and pinned AlphaTab consumption. Playback traversal remains out of scope.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/45#issuecomment-5637305001",
+        "TestConformanceDirections; TestAlphaTabPreservesDirections",
+        "Checked all five targets and fourteen jumps in GP5 and GPIF, simultaneous markers, canonical deduplication, legacy-pointer/collection editing and clearing, and exact consumer locations.",
+        "Navigation traversal remains excluded."
+      ]
+    }
+  ],
   "issue": {
     "number": 45,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/45",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.735199+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

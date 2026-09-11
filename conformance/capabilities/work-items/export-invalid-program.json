@@ -5,8 +5,8 @@
   "title": "Exclude unused legacy MIDI program slots from export rejection",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -110,6 +110,20 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/63#issuecomment-5637315516",
+      "detail": "Checked both required fixtures and their actual channel references, unused -1 retention, selected invalid programs (including values other than -1), invalid references, preflight/export agreement, nonmutation, and selected-program consumer output. Bank/mixer validation and referenced-invalid-program rejection remain intact.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -120,11 +134,27 @@
     "validation.go"
   ],
   "resolution": "Made MIDI program validation reference-aware without changing table-wide bank or mixer validation. Unused legacy channel-table sentinels remain authored values and no longer block GP8 export, while selected negative or overflowing programs remain track-located rejections. Binary pitched-track channel selection no longer coerces a selected negative program; percussion normalization is unchanged.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/63#issuecomment-5637315516",
+        "TestConformanceMIDIProgramReferences; TestBinarySelectedMIDIProgramIsNotCoerced; TestAlphaTabPreservesSelectedMIDIProgram",
+        "Checked both required fixtures and their actual channel references, unused -1 retention, selected invalid programs (including values other than -1), invalid references, preflight/export agreement, nonmutation, and selected-program consumer output.",
+        "Bank/mixer validation and referenced-invalid-program rejection remain intact."
+      ]
+    }
+  ],
   "issue": {
     "number": 63,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/63",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

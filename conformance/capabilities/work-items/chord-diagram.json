@@ -5,8 +5,8 @@
   "title": "Preserve representable chord diagram barres and fingerings",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "codex-ticket-79",
+  "status": "todo",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -24,7 +24,8 @@
   "acceptance": [
     "Use a chord with two barre ranges, explicit thumb/open fingering and muted/open/fretted strings.",
     "Preserve first fret, string orientation and track/staff definition scope in the independent consumer.",
-    "Classify any legacy spelling/omission fields lacking a GPIF destination separately; strict export no longer reports resolved diagram losses."
+    "Classify any legacy spelling/omission fields lacking a GPIF destination separately; strict export no longer reports resolved diagram losses.",
+    "Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified."
   ],
   "exclusions": [
     "Chord display flags are owned by issue 104.",
@@ -33,21 +34,12 @@
   ],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp5/Unknown Chord Extension.gp5",
-    "capability": "chord-diagram",
-    "differences": [
-      {
-        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].chord.barreFrets",
-        "source": [
-          3
-        ],
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "conformance_chords_test.go",
+      "gp8_builder.go"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Run the complete TestReviewChordAnnularConsumer reproduction embedded in the latest implementation-audit evidence and linked ticket comment with ALPHATAB_CONFORMANCE=1. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch."
   },
   "evidence": [
     {
@@ -79,18 +71,33 @@
       "kind": "test",
       "reference": "TestConformanceChordDefinitions",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "further-work-required",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/79#issuecomment-5637322913",
+      "detail": "An authored annular-finger barre is silently dropped by pinned AlphaTab despite strict export reporting no loss. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+      ],
+      "next_steps": "Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
+      "source": "Pinned GpifParser.ts _parseDiagramItemForChord handles Rank at line 1103 and derives barre frets from repeated recognized fingers; GpifWriter.ts emits Ring around line 1395. This is a pinned consumer mismatch, not permission to change the authored finger.",
+      "reproduction_go": "package goguitarpro\nimport (\"reflect\"; \"testing\")\n\nfunc TestReviewChordAnnularConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n firstFret:=uint8(3)\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord=&Chord{\n  Name:\"Audit chord\", FirstFret:&firstFret, Length:7,\n  Strings:[]int8{3,3,-1,0,5,5,7},\n  Barres:[]Barre{{Fret:3,Start:1,End:2},{Fret:5,Start:5,End:6}},\n  Fingerings:[]Fingering{FingeringIndex,FingeringIndex,FingeringOpen,FingeringOpen,FingeringAnnular,FingeringAnnular,FingeringThumb},\n }\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatalf(\"export failed: %v; %#v\",err,report.Entries) }\n var facts []conformanceAlphaTabChordDiagramFact\n readAlphaTabOracleFacts(t,\"--chord-diagrams\",writeConformanceFixture(t,data),&facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n for _,f:=range facts { if f.Name==\"Audit chord\" { if !reflect.DeepEqual(f.BarreFrets,[]int{3,5}) {t.Fatalf(\"barre frets=%v, want [3 5]\",f.BarreFrets)}; return } }\n t.Fatal(\"chord disappeared\")\n}\n"
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_model.go"
   ],
-  "resolution": "Added checked GPIF string-position and fret mappings for chord finger assignments, including canonical Ring plus legacy Rank input and the unsigned muted-string sentinel. Chord.Fingerings now distinguishes missing positions with FingeringUnknown while retaining explicit None positions for muted and open strings. Repeated known finger/fret groups derive ordered one-based Barre ranges. GP4 and GP5 finger arrays are trimmed from seven storage slots to the actual diagram width. GP8 emits exact position strings, relative frets, and canonical finger tokens; when Fingerings is nil it synthesizes distinct fingers only for representable barre endpoints. Shared validation rejects invalid counts, indices, fret mismatches, unintended repeated groups, overlapping synthetic endpoints, and checked arithmetic boundaries without mutating the song. Focused evidence covers the actual Unknown Chord Extension GP5 fixture, a seven-string diagram with two barres and thumb/open/muted/fretted positions, staff-local precedence, occurrence isolation, exact wire/reimport behavior, and pinned AlphaTab first-fret, string-order, and barre facts. The separate chord-omissions and chord-legacy-details reports remain intact; resolved barre and fingering losses no longer report.",
+  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch. Next: Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
   "verification": [],
   "issue": {
     "number": 79,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/79",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.732816+00:00"
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

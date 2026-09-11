@@ -5,8 +5,8 @@
   "title": "Preserve bar-level clef octave shifts",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -80,17 +80,47 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/44#issuecomment-5637304215",
+      "detail": "Checked all four clef octave shifts across staffs, simultaneous distinct beat octaves, parsed edits, exact wire/consumer output, and invalid source/public enums. Clef octave and beat octave remain independent.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
   "resolution": "Measure.ClefOctave now preserves GPIF Bar.Ottavia independently for every staff measure. Import audits and maps 8va, 8vb, 15ma, and 15mb; validation rejects undefined programmatic values at the exact location; GP8 export writes each authored bar value without changing Beat.Octave. Focused public, wire, reimport, post-parse edit, and pinned AlphaTab evidence covers the complete scoped behavior.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/44#issuecomment-5637304215",
+        "TestConformanceClefOctave; TestAlphaTabPreservesClefOctaves",
+        "Checked all four clef octave shifts across staffs, simultaneous distinct beat octaves, parsed edits, exact wire/consumer output, and invalid source/public enums.",
+        "Clef octave and beat octave remain independent."
+      ]
+    }
+  ],
   "issue": {
     "number": 44,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/44",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.733709+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Export tremolo picking and preserve supported stroke variants",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -104,6 +104,20 @@
       "kind": "upstream-source",
       "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts",
       "detail": "Pinned Guitar Pro writer emits only default-style marks 1, 2, and 3 as 1/2, 1/4, and 1/8."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/57#issuecomment-5637312513",
+      "detail": "Checked GP4 Effects.gp4 and binary mark order, 8th/16th/32nd rates, beat authority/legacy note fallback, decorated duration conflicts, and independent consumption. Extended marks, BuzzRoll style, and decorated rates retain separate scoped reports; supported rates are still emitted when only style is omitted.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -111,11 +125,27 @@
     "gpif_parser.go"
   ],
   "resolution": "Promoted tremolo picking to a beat-wide authority, corrected binary mark ordering, preserved the legacy note-local fallback with a complete-duration conflict report, and emitted supported plain subdivisions in GP8. Dotted, double-dotted, tupletted, otherwise unsupported rates, and notation styles now have explicit target-loss reports.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/57#issuecomment-5637312513",
+        "TestConformanceTremoloPicking; TestAlphaTabPreservesTremoloPicking",
+        "Checked GP4 Effects.gp4 and binary mark order, 8th/16th/32nd rates, beat authority/legacy note fallback, decorated duration conflicts, and independent consumption.",
+        "Extended marks, BuzzRoll style, and decorated rates retain separate scoped reports; supported rates are still emitted when only style is omitted."
+      ]
+    }
+  ],
   "issue": {
     "number": 57,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/57",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.760254+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

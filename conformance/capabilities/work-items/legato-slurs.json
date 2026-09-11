@@ -5,8 +5,8 @@
   "title": "Preserve authored legato and slur endpoints",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "todo",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -21,38 +21,18 @@
   "acceptance": [
     "Retain Beat.Legato in the numbered fixture and verify exact origin locations.",
     "Show valid source evidence for any separate note slur endpoints before adding their public contract.",
-    "Test a supported slur across beats and an excerpt boundary; preserve independent consumer state and mutable occurrence ownership."
+    "Test a supported slur across beats and an excerpt boundary; preserve independent consumer state and mutable occurrence ownership.",
+    "Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered."
   ],
   "exclusions": [],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp7/numbered.gp",
-    "capability": "legato-slurs",
-    "differences": [
-      {
-        "path": "tracks[0].staves[0].bars[39].voices[0].beats[0].isLegatoOrigin",
-        "source": true,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      },
-      {
-        "path": "tracks[0].staves[0].bars[39].voices[0].beats[1].isLegatoOrigin",
-        "source": true,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      },
-      {
-        "path": "tracks[0].staves[0].bars[39].voices[0].beats[2].isLegatoOrigin",
-        "source": true,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "conformance_legato_test.go",
+      "gp8_notation.go"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Run the complete TestReviewLegatoExcerptConsumer reproduction embedded in the latest implementation-audit evidence and linked ticket comment with ALPHATAB_CONFORMANCE=1. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain."
   },
   "evidence": [
     {
@@ -89,6 +69,21 @@
       "kind": "probe",
       "reference": "testdata/gp7/numbered.gp:legato-slurs",
       "detail": "Reproduced at tracks[0].staves[0].bars[39].voices[0].beats[0].isLegatoOrigin. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "further-work-required",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/50#issuecomment-5637308523",
+      "detail": "A destination-only excerpt endpoint disappears in pinned AlphaTab while strict GP8 export reports no loss. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+      ],
+      "next_steps": "Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
+      "source": "Pinned GpifParser.ts _parseBeat reads only the origin attribute (around line 1806); model/Beat.ts isLegatoDestination derives the destination (around line 294).",
+      "reproduction_go": "package goguitarpro\nimport \"testing\"\n\nfunc TestReviewLegatoExcerptConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = &BeatLegato{Destination: true}\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatal(err) }\n var facts []conformanceLegatoFact\n readAlphaTabOracleFacts(t, \"--legato\", writeConformanceFixture(t,data), &facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n if len(facts)==0 || !facts[0].Destination { t.Fatal(\"authored destination-only endpoint disappeared in pinned consumer\") }\n}\n\n"
     }
   ],
   "shared_files": [
@@ -100,12 +95,12 @@
     "conformance_legato_test.go",
     "conformance/feature-ledger.json"
   ],
-  "resolution": "Beat.Legato now preserves GPIF beat-level origin and destination endpoints in an occurrence-owned BeatLegato record, including origin-only and destination-only excerpt boundaries. GP8 writes both exact attributes, malformed or missing attributes produce scoped invalid-data diagnostics, and focused tests cover the numbered fixture chain, reused beat definitions, post-parse edits, Go reimport, exact wire values, and pinned AlphaTab origin plus derived-destination consumption. No note-level slur field was added because the scoped source review found no separate authored source contract.",
+  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain. Next: Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
   "verification": [],
   "issue": {
     "number": 50,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/50",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.743964+00:00"
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

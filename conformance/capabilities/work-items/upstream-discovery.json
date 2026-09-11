@@ -5,8 +5,8 @@
   "title": "Classify authored GP constructs with importer-backed ownership",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -85,6 +85,20 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/71#issuecomment-5637318213",
+      "detail": "Reviewed declaring-class discovery, importer/configuration applicability and ownership, stable canonical migrations, conservative exclusions, negative tests for missing owners/scopes, and the correction of all 22 percussion-notehead dispatch owners. Applicability is conservative at source-file/format-family scope and does not claim every branch runs in every version.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -94,11 +108,27 @@
     "conformance/upstream-inventory.json"
   ],
   "resolution": "Implemented class-aware canonical discovery and importer-backed ownership without changing the production Go API or semantic model. The canonical model inventory remains 384 symbols: 356 identities are unchanged and exactly 28 stale filename owners migrate to declaring classes, with zero additions, removals, or unexplained removals. The expanded audit retains all 4,365 prior constructs and adds 2,291 assignments for 6,656 total constructs across 119 files; 1,227 GP importer/configuration constructs are reviewed as 1,157 authored, 29 derived, and 41 excluded, and all 312 importer-populated public model declarations are independently derived and owned. The 22 GpifParser.parseNoteHead dispatches use the percussion owner because parseNoteHead only populates InstrumentArticulation.noteHeadDefault, noteHeadHalf, and noteHeadWhole. Applicability is intentionally conservative at reachable GP importer/configuration file and format-family scope, not an exact branch-by-version claim. Other-product importers, exporters, playback, renderer, and container infrastructure remain visible but excluded by explicit path policy. Focused checks and mutation sensitivity pass; prior bounded reviews found gaps that are now addressed, and the exact final tree still requires a fresh bounded review plus independent final verification before closure.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/71#issuecomment-5637318213",
+        "CapabilityDatabaseTests ownership/discovery negative tests; TestSemanticContractInventory; conformance/sync-upstream-inventory.mjs --check",
+        "Reviewed declaring-class discovery, importer/configuration applicability and ownership, stable canonical migrations, conservative exclusions, negative tests for missing owners/scopes, and the correction of all 22 percussion-notehead dispatch owners.",
+        "Applicability is conservative at source-file/format-family scope and does not claim every branch runs in every version."
+      ]
+    }
+  ],
   "issue": {
     "number": 71,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/71",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

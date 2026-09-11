@@ -5,8 +5,8 @@
   "title": "Preserve beat barre fret and shape",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_74",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -107,17 +107,47 @@
       "kind": "probe",
       "reference": "testdata/gp7/barre.gp:barre",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].barreFret. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/74#issuecomment-5637318892",
+      "detail": "Checked distinct barre frets/full-half shapes, coexistence with independent chord-diagram barres, paired-field validation, boundaries, occurrence isolation, public edits, exact GP8 and consumer output. Chord-diagram finger/barre behavior remains separately tracked in #79.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
     "gpif_audit.go"
   ],
   "resolution": "Added paired Beat.BarreFret and Beat.BarreShape authorities, checked GPIF import diagnostics, exact GP8 property output, public validation, and independent pinned-consumer evidence. The refreshed probe now preserves all 22 non-default barre facts in testdata/gp7/barre.gp and all 6 in testdata/gp7/beat-barre.gp. Chord diagram barre ranges remain separate and explicitly outside this ticket.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/74#issuecomment-5637318892",
+        "TestConformanceBarre; TestGPIFBarreDiagnostics; TestAlphaTabPreservesBeatBarres",
+        "Checked distinct barre frets/full-half shapes, coexistence with independent chord-diagram barres, paired-field validation, boundaries, occurrence isolation, public edits, exact GP8 and consumer output.",
+        "Chord-diagram finger/barre behavior remains separately tracked in #79."
+      ]
+    }
+  ],
   "issue": {
     "number": 74,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/74",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.729521+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

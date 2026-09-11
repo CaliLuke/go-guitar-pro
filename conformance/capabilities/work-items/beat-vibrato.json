@@ -5,8 +5,8 @@
   "title": "Preserve and export beat vibrato strength",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_77_vibrato",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -87,6 +87,20 @@
       "kind": "test",
       "reference": "TestAlphaTabPreservesBeatVibrato",
       "detail": "Pinned AlphaTab verifies all 50 Wide occurrences in the GP7 faulty fixture before and after Go GP8 export."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/77#issuecomment-5637321265",
+      "detail": "Checked Slight/Wide beat vibrato independently of note vibrato, binary presence, typed/boolean precedence and parsed clearing/conflicts, exact output, malformed values, and consumer retention. Beat vibrato is supported; unrelated note-vibrato and whammy-curve limits are unchanged.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -94,11 +108,27 @@
     "gpif_effects.go"
   ],
   "resolution": "Added BeatVibrato None, Slight, and Wide plus BeatEffects.VibratoStrength as the explicit beat-wide authority, separate from note vibrato. GP3-5 presence imports as Slight; GPIF retains Slight and Wide exactly. Programmatic nonzero typed values win while legacy true falls back to Slight. Imported beats track both source views so either single-side edit wins, compatible double edits remain exact, and only incompatible double edits receive a normalization report with typed precedence. GP8 emits the resolved VibratoWTremBar Strength without mutating the model. Focused tests cover actual binary and GP7 fixtures, exact wire values, reimport, validation, malformed source values, strict policy, all enum values, the complete edit matrix, and pinned AlphaTab consumption of mixed Slight/Wide plus all 50 Wide faulty-fixture occurrences. The structural probe retained the same 364-fixture set and changed exactly 17 beat-vibrato comparisons (143 authored values) from different to equal-nondefault; no other capability comparison changed. The same 17 obsolete omission reports and the 10 obsolete source lossy-projection diagnostic groups were removed.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/77#issuecomment-5637321265",
+        "TestConformanceBeatVibrato; TestAlphaTabPreservesBeatVibrato",
+        "Checked Slight/Wide beat vibrato independently of note vibrato, binary presence, typed/boolean precedence and parsed clearing/conflicts, exact output, malformed values, and consumer retention.",
+        "Beat vibrato is supported; unrelated note-vibrato and whammy-curve limits are unchanged."
+      ]
+    }
+  ],
   "issue": {
     "number": 77,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/77",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.730829+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -57,7 +57,7 @@ func runConformanceLegato(run *conformanceRun) {
 		{Origin: "true", Destination: "true"},
 		{Origin: "false", Destination: "true"},
 	}
-	run.ClaimSerialization(claimSite("legato-slurs", "export", "M10-LEGATO", "origin and destination endpoints")).Wire("gpifBeat.Legato", wire, wantWire)
+	run.Wire("gpifBeat.Legato", wire, wantWire)
 	run.Wire("gpifLegato.Origin", conformanceLegatoWireOrigins(wire), []string{"true", "true", "true", "false"})
 	run.Wire("gpifLegato.Destination", conformanceLegatoWireDestinations(wire), []string{"false", "true", "true", "true"})
 
@@ -77,7 +77,7 @@ func runConformanceLegato(run *conformanceRun) {
 	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("destination-only legato export = %v, %#v", err, report.Entries)
 	}
-	run.ClaimReport(claimSite("legato-slurs", "export", "M10-LEGATO", "origin and destination endpoints")).Report("M10-LEGATO", reportCodes(report), []string{})
+	run.Report("M10-LEGATO", reportCodes(report), []string{})
 	excerptWire := conformanceLegatoWire(t, excerptData, 0)
 	if !slices.Equal(excerptWire, []conformanceLegatoWireFact{{Origin: "false", Destination: "true"}}) {
 		t.Fatalf("destination-only legato wire = %#v, want exact false/true attributes", excerptWire)
@@ -86,7 +86,7 @@ func runConformanceLegato(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.ClaimPrimary(claimSite("legato-slurs", "export", "M10-LEGATO", "origin and destination endpoints")).Preserved("Beat.Legato", *excerptRoundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Legato, BeatLegato{Destination: true})
+	run.Preserved("Beat.Legato", *excerptRoundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Legato, BeatLegato{Destination: true})
 
 	// A reused GPIF definition produces independent mutable occurrence state.
 	reusedResult, err := ParseWithOptions(conformanceGPIFArchive(t, conformanceReusedLegatoGPIF()), ParseOptions{Strict: true})
@@ -183,7 +183,7 @@ func TestAlphaTabPreservesLegato(t *testing.T) {
 	if !slices.Equal(facts, want) {
 		t.Fatalf("AlphaTab edited legato facts = %#v, want %#v", facts, want)
 	}
-	conformanceIndependentClaim(t, "field:Beat.Legato", claimSite("legato-slurs", "import", "M10-LEGATO", "origin and destination endpoints"), claimSite("legato-slurs", "model", "M10-LEGATO", "origin and destination endpoints"), claimSite("legato-slurs", "export", "M10-LEGATO", "origin and destination endpoints"))
+	conformanceIndependentClaim(t, "field:Beat.Legato", claimSite("legato-slurs", "import", "M10-LEGATO", "origin and destination endpoints"), claimSite("legato-slurs", "model", "M10-LEGATO", "origin and destination endpoints"))
 }
 
 func conformanceBeatLegatos(t *testing.T, beats []Beat) []BeatLegato {

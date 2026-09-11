@@ -147,7 +147,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name"), claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
+	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
 	strictData, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError
 	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
@@ -172,7 +172,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	run.Wire("gpifDiagramFret.String", conformanceChordWireFretStrings(wire.frets), []int{6, 5, 3, 2, 1, 0})
 	run.Wire("gpifDiagramFret.Fret", conformanceChordWireFretValues(wire.frets), []int{1, 1, -2, 3, 3, 5})
 	run.Wire("gpifDiagram.Fingering", wire.hasFingering, true)
-	run.ClaimSerialization(claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Wire("gpifDiagramFingering.Positions", wire.positions, []conformanceChordWirePosition{{Fret: 1, Finger: "Index", String: 6}, {Fret: 1, Finger: "Index", String: 5}, {Fret: 4294967295, Finger: "None", String: 4}, {Fret: -2, Finger: "None", String: 3}, {Fret: 3, Finger: "Ring", String: 2}, {Fret: 3, Finger: "Ring", String: 1}, {Fret: 5, Finger: "Thumb", String: 0}})
+	run.Wire("gpifDiagramFingering.Positions", wire.positions, []conformanceChordWirePosition{{Fret: 1, Finger: "Index", String: 6}, {Fret: 1, Finger: "Index", String: 5}, {Fret: 4294967295, Finger: "None", String: 4}, {Fret: -2, Finger: "None", String: 3}, {Fret: 3, Finger: "Ring", String: 2}, {Fret: 3, Finger: "Ring", String: 1}, {Fret: 5, Finger: "Thumb", String: 0}})
 	run.Wire("gpifDiagramPosition.Fret", []int{wire.positions[0].Fret, wire.positions[2].Fret, wire.positions[3].Fret, wire.positions[6].Fret}, []int{1, 4294967295, -2, 5})
 	run.Wire("gpifDiagramPosition.Finger", []string{wire.positions[0].Finger, wire.positions[2].Finger, wire.positions[4].Finger, wire.positions[6].Finger}, []string{"Index", "None", "Ring", "Thumb"})
 	run.Wire("gpifDiagramPosition.String", []int{wire.positions[0].String, wire.positions[2].String, wire.positions[4].String, wire.positions[6].String}, []int{6, 4, 2, 0})
@@ -240,7 +240,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 	run.Field("Chord.Length", got.Length, chord.Length)
 	run.Field("Chord.Strings", got.Strings, chord.Strings)
 	run.Field("Chord.FirstFret", *got.FirstFret, *chord.FirstFret)
-	run.ClaimPrimary(claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings")).Field("Chord.Barres", got.Barres, chord.Barres)
+	run.Field("Chord.Barres", got.Barres, chord.Barres)
 	run.Field("Chord.Fingerings", got.Fingerings, chord.Fingerings)
 	if len(got.Omissions) != 0 || got.Root != nil || got.Bass != nil || got.Kind != nil || got.Show != nil {
 		t.Fatalf("round-trip kept omitted chord details: %#v", got)
@@ -564,7 +564,6 @@ func TestAlphaTabPreservesChordDiagrams(t *testing.T) {
 	sites := []conformanceClaimSite{
 		claimSite("chord-diagram", "import", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
 		claimSite("chord-diagram", "model", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
-		claimSite("chord-diagram", "export", "M14-CHORD-DEFINITIONS", "two barre ranges and seven strings"),
 	}
 	conformanceIndependentClaim(t, "field:Chord.Barres", sites...)
 }

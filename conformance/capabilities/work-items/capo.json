@@ -5,8 +5,8 @@
   "title": "Preserve independent capo values on multiple staves",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -77,6 +77,20 @@
         "prek run --all-files: PASS on clean audited commit",
         "ALPHATAB_CONFORMANCE=1 focused existing acceptance tests: PASS"
       ]
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/43#issuecomment-5637303377",
+      "detail": "Checked independent staff capos 2/5, resulting pitches 69/57, legacy/staff edit authority, zero, and checked numeric boundaries. No partial-capo contract is implied.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -84,11 +98,27 @@
     "track.go"
   ],
   "resolution": "Staff.CapoFret now owns each staff's non-negative capo value. GPIF import and GP8 export preserve distinct staff capos, sounding pitches, zero, and the int32 maximum; negative values are rejected before output. Track.CapoFret remains a first-staff compatibility scalar: an edit that changes its parsed value applies uniformly and wins a simultaneous staff edit, while unchanged parsed scalars leave direct staff edits authoritative. Programmatic nonzero staff values are authoritative; a legacy scalar applies uniformly only when all staff capos are zero.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/43#issuecomment-5637303377",
+        "TestConformanceStaffCapo; TestAlphaTabPreservesIndependentStaffCapos",
+        "Checked independent staff capos 2/5, resulting pitches 69/57, legacy/staff edit authority, zero, and checked numeric boundaries.",
+        "No partial-capo contract is implied."
+      ]
+    }
+  ],
   "issue": {
     "number": 43,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/43",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.732307+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

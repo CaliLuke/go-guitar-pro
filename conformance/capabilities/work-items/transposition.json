@@ -5,8 +5,8 @@
   "title": "Preserve sounding and display transposition separately",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -78,6 +78,20 @@
       "kind": "oracle",
       "reference": "TestAlphaTabPreservesTransposition",
       "detail": "Uses pinned AlphaTab 1.8.4 to verify guitarpro8/e.gp plus independent PartSounding D and Neutral effective keys, display offsets, string, fret, and sounding MIDI values."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/56#issuecomment-5637311708",
+      "detail": "Checked upstream e.gp Chromatic=4 and four-flat effective key, signed chromatic/octave offsets, sounding/display separation, Transpose precedence, PartSounding independent key, staff edits, and checked boundaries. Nonzero sounding offsets and independent later-staff/coupled-key target combinations retain precise loss reports.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -85,11 +99,27 @@
     "gpif_types.go"
   ],
   "resolution": "Added distinct per-staff sounding and display semitone offsets. GPIF Transpose imports with checked int32 conversion and remains authoritative when present. Legacy PartSounding imports TranspositionPitch as the display offset and NominalKey independently as the effective-key offset, with Neutral mapped to zero. GP8 preserves the first staff display offset and reports an independent effective key with gp8.normalize.measure-key-authority. Nonzero sounding offsets, differing later-staff display offsets, and percussion display offsets are also explicit target omissions.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/56#issuecomment-5637311708",
+        "TestConformanceTransposition; TestAlphaTabPreservesTransposition",
+        "Checked upstream e.gp Chromatic=4 and four-flat effective key, signed chromatic/octave offsets, sounding/display separation, Transpose precedence, PartSounding independent key, staff edits, and checked boundaries.",
+        "Nonzero sounding offsets and independent later-staff/coupled-key target combinations retain precise loss reports."
+      ]
+    }
+  ],
   "issue": {
     "number": 56,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/56",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.759781+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

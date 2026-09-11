@@ -5,8 +5,8 @@
   "title": "Preserve tuning labels independently from pitches",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -97,6 +97,20 @@
       "kind": "upstream-source",
       "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts",
       "detail": "Pinned GPIF writer emits the staff tuning label alongside the independently ordered pitch array."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/58#issuecomment-5637313308",
+      "detail": "Checked identical string pitches with different staff labels, label-only edits, track fallback, absent versus explicitly empty labels, exact GPIF, and independent consumer labels/pitches/capos. GP3-5 do not author tuning labels.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -104,11 +118,27 @@
     "track.go"
   ],
   "resolution": "Added Staff.TuningName as the authored staff-local label, imported track-level fallback and staff-level overrides including explicit empty labels, removed the obsolete label-loss diagnostic, and emitted every pitched staff's label independently from pitches, string order, and capo in GP8.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/58#issuecomment-5637313308",
+        "TestConformanceTuningLabels; TestAlphaTabPreservesTuningLabels",
+        "Checked identical string pitches with different staff labels, label-only edits, track fallback, absent versus explicitly empty labels, exact GPIF, and independent consumer labels/pitches/capos.",
+        "GP3-5 do not author tuning labels."
+      ]
+    }
+  ],
   "issue": {
     "number": 58,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/58",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.761343+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -30,23 +30,13 @@
   ],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp5/RSE.gp5",
-    "capability": "volume-automation",
-    "differences": [
-      {
-        "path": "tracks[0].staves[0].bars[1].voices[0].beats[0].automations[0]",
-        "source": {
-          "ratioPosition": 0,
-          "text": "7",
-          "type": 1
-        },
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "gpif_automations.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Run TestReviewVolumeConsumerPrerequisite from the embedded latest implementation-audit evidence and linked comment with ALPHATAB_CONFORMANCE=1. Go retains two DSPParam_12 channel-strip events; the required pinned consumer reads zero. GP5 RSE.gp5 is a separate beat-local mix-table domain tracked in #85."
   },
   "evidence": [
     {
@@ -56,13 +46,13 @@
     },
     {
       "kind": "upstream-source",
-      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GPIFParser.ts#L513-L572",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L513-L572",
       "symbol": "GpifParser._parseAutomation",
       "detail": "The pinned GPIF automation dispatcher has cases only for Tempo, SyncPoint, Sound, and SustainPedal; it has no volume or DSPParam_12 case."
     },
     {
       "kind": "upstream-source",
-      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GPIFParser.ts#L1309-L1337",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1309-L1337",
       "symbol": "GpifParser._parseChannelStrip",
       "detail": "The pinned RSE channel-strip importer reads only the static Parameters child and ignores an Automations child."
     },
@@ -91,6 +81,21 @@
       "kind": "source",
       "reference": "export_report.go",
       "detail": "Target omission reports."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "further-work-required",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/59#issuecomment-5637313985",
+      "detail": "The proposed channel-strip volume export is still blocked by the required consumer, not complete implementation. Injected two DSPParam_12 ChannelStrip events at positions 0.25/0.75 with values 0.25/0.875 and different Linear flags. The public Go parser retains both; pinned AlphaTab reads zero volume automation events from the identical valid source archive. The original GP5 RSE.gp5 difference belongs to beat-local MixTableChange, not Song.VolumeAutomations.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+      ],
+      "next_steps": "Keep export=missing and gp8.omit.volume-automations. Before implementation, name and test an independent consumer that actually retains this channel-strip contract, or propose an explicit acceptance revision/consumer-pin upgrade. Do not treat wire plus self-round-trip as equivalent to the current acceptance criterion. Keep GP5 beat-local projection in #85. This remains an evidence prerequisite, so it should not carry to be verified.",
+      "source": "Pinned GpifParser.ts _parseChannelStrip at lines 1319-1327 reads only Parameters; _parseAutomation dispatches Tempo, SyncPoint, Sound and SustainPedal, not Volume/DSPParam_12.",
+      "reproduction_go": "package goguitarpro\nimport(\"strings\";\"testing\")\nfunc TestReviewVolumeConsumerPrerequisite(t *testing.T){\n song:=semanticValidPitchedGP8Song(t)\n data,err:=Export(song,ExportFormatGP8);if err!=nil{t.Fatal(err)}\n source:=rewriteConformanceGPIF(t,data,func(s string)string{return strings.Replace(s,\"</ChannelStrip>\",`<Automations><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>0.25</Position><Linear>false</Linear><Value>0.25</Value></Automation><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>0.75</Position><Linear>true</Linear><Value>0.875</Value></Automation></Automations></ChannelStrip>`,1)})\n parsed,err:=Parse(source);if err!=nil{t.Fatal(err)}\n if len(parsed.VolumeAutomations)!=2{t.Fatalf(\"Go source events=%#v\",parsed.VolumeAutomations)}\n facts:=readAlphaTabScore(t,writeConformanceFixture(t,source))\n count:=0\n var visit func(any)\n visit=func(v any){switch x:=v.(type){case map[string]any: if x[\"type\"]==\"volume\"{count++};for _,c:=range x{visit(c)};case []any:for _,c:=range x{visit(c)}}}\n visit(facts)\n t.Logf(\"Go events=%#v; pinned volume automation count=%d\",parsed.VolumeAutomations,count)\n if count!=2{t.Fatalf(\"required independent volume events=%d, want 2\",count)}\n}\n"
     }
   ],
   "shared_files": [
@@ -98,12 +103,12 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Blocked against the required AlphaTab 1.8.4 oracle at revision 022a45c8e42370f9e12e68949d11eada370da83d. Its GPIF parser accepts track-level Automations but dispatches only Tempo, SyncPoint, Sound, and SustainPedal, while its RSE/ChannelStrip parser reads only static Parameters and ignores Automations. Therefore an otherwise valid DSPParam_12 channel-strip event cannot satisfy the acceptance requirement that pinned AlphaTab read equivalent volume values. The cited testdata/gp5/RSE.gp5 difference is a separate legacy domain: AlphaTab's GP3-to-GP5 importer creates a beat-local volume automation from MixTableChange, whereas Song.VolumeAutomations models GPIF channel-strip records. Keep GP8 export missing and gp8.omit.volume-automations active until acceptance names a consumer that observes the proposed wire contract or the pinned consumer gains support.",
+  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Injected two DSPParam_12 ChannelStrip events at positions 0.25/0.75 with values 0.25/0.875 and different Linear flags. The public Go parser retains both; pinned AlphaTab reads zero volume automation events from the identical valid source archive. The original GP5 RSE.gp5 difference belongs to beat-local MixTableChange, not Song.VolumeAutomations. Next: Keep export=missing and gp8.omit.volume-automations. Before implementation, name and test an independent consumer that actually retains this channel-strip contract, or propose an explicit acceptance revision/consumer-pin upgrade. Do not treat wire plus self-round-trip as equivalent to the current acceptance criterion. Keep GP5 beat-local projection in #85. This remains an evidence prerequisite, so it should not carry to be verified.",
   "verification": [],
   "issue": {
     "number": 59,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/59",
     "state": "OPEN",
-    "checked_at": "2026-09-11T03:59:55+00:00"
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

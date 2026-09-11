@@ -5,8 +5,8 @@
   "title": "Preserve dead-slapped beats without reducing them to rests",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_80_dead_slap",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp7",
     "gp8"
@@ -72,6 +72,20 @@
       "kind": "test",
       "reference": "TestAlphaTabPreservesDeadSlap",
       "detail": "Pinned AlphaTab checks the colors occurrence and all nine dead-slap fixture occurrences before and after export."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/80#issuecomment-5637323451",
+      "detail": "Checked note-free dead slaps, ordinary rest/empty distinctions, presence semantics, direct toggles, exact independent marker locations, occurrence ownership, and no fabricated notes or implied note/slap effects. Explicit empty-beat normalization remains separate and reported.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -79,11 +93,27 @@
     "gpif_types.go"
   ],
   "resolution": "Added Beat.DeadSlapped as an independent authored beat marker. GPIF element presence maps to true even when element text says false. Note-free marked beats import as BeatStatusNormal; ordinary note-free beats remain rests. GP8 writes DeadSlapped iff the field is true, writes no synthetic Notes element, and does not mutate status, notes, note kinds, or tap/slap/pop effects. M10-DEAD-SLAP covers actual GP7 colors and dead-slap fixtures, the ordinary-rest/explicit-empty/dead-slap distinction, marker absence and text-bearing presence, direct toggles, exact wire output, Go reimport, nonmutation, strict parsing, binary-source exclusion, and pinned AlphaTab deadSlapped/isEmpty/isRest/note-count facts. The 364-fixture structural probe retained the exact fixture set and changed only the two dead-slap comparisons: colors.gp moved from 1/0 different to 1/1 equal-nondefault and dead-slap.gp moved from 9/0 different to 9/9 equal-nondefault. Recognizing the marker removed exactly one and five corresponding generic unknown-element diagnostics; no report or unrelated capability comparison changed. GP3 through GP5 and rendering/playback remain outside this contract.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/80#issuecomment-5637323451",
+        "TestConformanceDeadSlap; TestAlphaTabPreservesDeadSlap",
+        "Checked note-free dead slaps, ordinary rest/empty distinctions, presence semantics, direct toggles, exact independent marker locations, occurrence ownership, and no fabricated notes or implied note/slap effects.",
+        "Explicit empty-beat normalization remains separate and reported."
+      ]
+    }
+  ],
   "issue": {
     "number": 80,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/80",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.734663+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

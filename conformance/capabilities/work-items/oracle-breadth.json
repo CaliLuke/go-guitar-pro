@@ -5,8 +5,8 @@
   "title": "Require executable evidence for supported capability claims",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -59,6 +59,20 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/67#issuecomment-5637316455",
+      "detail": "Reviewed claim-site binding and executable primary/wire/report/independent receipts, scoped limits, migration, and negative/sensitivity checks for deleted or redirected obligations. Default-only, unresolved, source-blocked and target-blocked comparisons remain distinct. This verifies the evidence gate, not every value in every supported capability. The separately reproduced #47/#50/#79 failures remain open and visible.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -70,11 +84,27 @@
     "conformance_go_adapter_test.go"
   ],
   "resolution": "The semantic ledger now requires one assertion-site receipt for each supported catalog stage. Each receipt emits its exact source, value, stage, and primary obligation from the assertion. Export receipts also emit exact serialization and report assertions from the same claim context. AlphaTab callbacks emit the matching independent claim identity. The database stores all 159 supported-stage claims. One prior supported rating was downgraded because its evidence used an unrelated obligation. The runtime probe keeps default-only rows and source or target consumer blockers visible.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/67#issuecomment-5637316455",
+        "TestConformanceCapabilityIndependentEvidence; TestSemanticMatrixInventory; conformance/sensitivity.mjs; capability Python tests",
+        "Reviewed claim-site binding and executable primary/wire/report/independent receipts, scoped limits, migration, and negative/sensitivity checks for deleted or redirected obligations. Default-only, unresolved, source-blocked and target-blocked comparisons remain distinct.",
+        "This verifies the evidence gate, not every value in every supported capability. The separately reproduced #47/#50/#79 failures remain open and visible."
+      ]
+    }
+  ],
   "issue": {
     "number": 67,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/67",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

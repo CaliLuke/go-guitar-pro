@@ -5,8 +5,8 @@
   "title": "Preserve lyrics authored directly on beats",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_76",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -112,6 +112,20 @@
       "kind": "probe",
       "reference": "testdata/gp7/faulty.gp:beat-lyrics",
       "detail": "Reproduced at tracks[0].staves[0].bars[9].voices[0].beats[0].lyrics. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/76#issuecomment-5637320426",
+      "detail": "Checked two ordered lyric lines including empty/Unicode text alongside independent FreeText, nil versus authored empty elements, reused-definition ownership across staffs, parsed edits, and exact consumer lyrics. Score and track lyric assignment remain separate contracts.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -121,11 +135,27 @@
     "gpif_types.go"
   ],
   "resolution": "Added Beat.Lyrics as the direct, documented authority for ordered beat-scoped GPIF lines. Import clones every referenced definition into independent occurrence storage; nil means absent while a non-nil empty slice preserves an authored empty Lyrics element. GP8 export writes that exact distinction and keeps Beat.Text, Track.Lyrics, and Song.Lyrics independent. Focused tests cover ordered empty and Unicode lines, separate FreeText, multi-staff reused definitions, post-parse edits, malformed nested syntax, exact GPIF, Go reimport, and pinned AlphaTab consumption. The refreshed authored-source probe preserves 6/6 beat-lyrics.gp facts and 1812/1812 facts in each GP7 and GP8 faulty fixture; legacy score/track lyric application remains excluded under ticket #98.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/76#issuecomment-5637320426",
+        "TestConformanceBeatLyrics; TestGPIFBeatLyricsMalformedChildrenAreDiagnosed; TestAlphaTabPreservesBeatLyrics",
+        "Checked two ordered lyric lines including empty/Unicode text alongside independent FreeText, nil versus authored empty elements, reused-definition ownership across staffs, parsed edits, and exact consumer lyrics.",
+        "Score and track lyric assignment remain separate contracts."
+      ]
+    }
+  ],
   "issue": {
     "number": 76,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/76",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.730399+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Preserve fade-out and volume-swell beat effects",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_81_fade",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -115,6 +115,20 @@
       "kind": "probe",
       "reference": "testdata/gp7/fade.gp:fade-other",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].fade. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/81#issuecomment-5637324249",
+      "detail": "Checked None/FadeIn/FadeOut/VolumeSwell, parsed fade-out-to-swell edits, legacy/typed reconciliation, unknown values, independent output, and continued fade-in support. Playback envelopes, dynamics, and volume automation remain independent.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -122,11 +136,27 @@
     "gpif_parser.go"
   ],
   "resolution": "Added BeatFade None, FadeIn, FadeOut, and VolumeSwell. BeatEffects.Fade is the typed authority, and FadeIn remains a compatibility view. GP3-5 fade presence imports as FadeIn. GPIF preserves every valid Fadding token and reports only unknown values. Programmatic nonzero typed values win while legacy true falls back to FadeIn. Imported beats track both source views. Either single-side edit wins, and compatible double edits remain exact. Only incompatible double edits receive gp8.normalize.fade-authority with typed precedence. GP8 emits the resolved exact token without model changes. M10-FADE covers actual GP3-5 Effects and the GP7 fade fixture. It covers all enum values, all compatibility edits, exact output, reimport, validation, and strict policy. Pinned AlphaTab checks source and output facts, including a FadeOut-to-VolumeSwell edit. The probe retained the same 364-fixture set. Only testdata/gp7/fade.gp:fade-other changed, from 3/0 different to 3/3 equal-nondefault. The obsolete two-occurrence Fadding lossy diagnostic was removed. No other capability comparison changed. Dynamics, hairpins, volume controls, automation, playback, and envelope shape remain outside this contract.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/81#issuecomment-5637324249",
+        "TestConformanceBeatFade; TestAlphaTabPreservesBeatFade",
+        "Checked None/FadeIn/FadeOut/VolumeSwell, parsed fade-out-to-swell edits, legacy/typed reconciliation, unknown values, independent output, and continued fade-in support.",
+        "Playback envelopes, dynamics, and volume automation remain independent."
+      ]
+    }
+  ],
   "issue": {
     "number": 81,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/81",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.739227+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Export existing left and right hand fingerings",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "implement_ticket_82_fingering",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -100,6 +100,20 @@
       "kind": "probe",
       "reference": "testdata/gp7/effects.gp:fingering",
       "detail": "Reproduced at tracks[0].staves[0].bars[23].voices[0].beats[0].notes[0].leftHandFinger. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/82#issuecomment-5637325070",
+      "detail": "Checked independent left/right Thumb through Little, presence markers distinguishing authored Thumb from absence, Open-specific loss, exact GP8 names, validation, ownership, and pinned consumer preservation. Authored Open remains distinguished in the model and precisely omitted under GP8; strict export refuses that unsupported slice.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
@@ -110,11 +124,27 @@
     "gpif_types.go"
   ],
   "resolution": "GPIF note import and GP8 export now preserve independent left- and right-hand Thumb, Index, Middle, Annular, and Little fingerings as P, I, M, A, and C. Existing HasLeftHandFinger and HasRightHandFinger markers distinguish an authored zero-valued Thumb or Open value from absence, while nonzero values retain their compatibility fallback without a marker. Explicit Open remains a narrow target omission because GPIF has no note-level Open/NoOrDead spelling; strict export succeeds without a fingering report for every representable value and rejects only that explicit omission. Unknown GPIF tokens receive side-specific diagnostics. M11-FINGERING covers exact wire values, reimport, absence, the Open target limit, strict policy, and source diagnostics, with a serialization mutant. Pinned AlphaTab preserves the full GP7 effects fingering fact set. The 364-fixture probe moves the eight exact GP6/GP7 fingering fixtures to equal-nondefault, preserves representable values in GP4/GP5 while leaving their authored Open values different, and leaves one authored Open in notation-legend as the only GP7 difference. The left/right omission reports drop from ten occurrences per binary fixture to five per side, matching only Open values. Generic unknown-element diagnostics drop only for newly recognized LeftFingering and RightFingering elements. No unrelated capability comparison changes. Chord diagram fingerings, hammer effects, rendering, and playback remain outside this change.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/82#issuecomment-5637325070",
+        "TestConformanceFingering; TestAlphaTabPreservesFingering",
+        "Checked independent left/right Thumb through Little, presence markers distinguishing authored Thumb from absence, Open-specific loss, exact GP8 names, validation, ownership, and pinned consumer preservation.",
+        "Authored Open remains distinguished in the model and precisely omitted under GP8; strict export refuses that unsupported slice."
+      ]
+    }
+  ],
   "issue": {
     "number": 82,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/82",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.740239+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

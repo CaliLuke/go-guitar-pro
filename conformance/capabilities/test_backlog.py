@@ -15,6 +15,11 @@ import manage
 class BacklogTests(unittest.TestCase):
     def setUp(self):
         self.items = backlog.load()
+        # Exercise workflow transitions independently of live ticket progress.
+        for item in self.items:
+            item.update(status='todo', owner=None, resolution=None, verification=[])
+            if item.get('issue'):
+                item['issue']['state'] = 'OPEN'
         self.catalog = backlog.read(backlog.HERE / 'catalog.json')
         self.meta = {'published': False}
 

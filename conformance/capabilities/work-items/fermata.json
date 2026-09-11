@@ -5,8 +5,8 @@
   "title": "Preserve fermata position, type and length",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "todo",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -125,17 +125,31 @@
         ],
         "source_go": "package goguitarpro\n\nimport (\n\t\"testing\"\n)\n\nfunc TestAuditFractionalFermataConsumer(t *testing.T) {\n\tsong := semanticValidPitchedGP8Song(t)\n\tsong.Tracks[0].Settings.Notation = true\n\tsong.MeasureHeaders[0].Fermatas = []Fermata{\n\t\t{Offset: mustScoreTime(t, 1, 2), Type: FermataTypeShort, Length: 0.25},\n\t\t{Offset: mustScoreTime(t, 3, 4), Type: FermataTypeLong, Length: 1.5},\n\t}\n\tdata, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Logf(\"Strict export: %d bytes, diagnostics=%#v\", len(data), report.Entries)\n\tvar facts []conformanceAlphaTabFermataBar\n\treadAlphaTabOracleFacts(t, \"--fermatas\", writeConformanceFixture(t, data), &facts)\n\tt.Logf(\"Authored fermatas: %#v\", facts[0].Authored)\n\tif len(facts[0].Authored) != 2 {\n\t\tt.Errorf(\"lost a fermata: got %d, want 2\", len(facts[0].Authored))\n\t}\n}\n\nfunc TestAuditIntegerFermataConsumer(t *testing.T) {\n\tsong := semanticValidPitchedGP8Song(t)\n\tsong.Tracks[0].Settings.Notation = true\n\tsong.MeasureHeaders[0].Fermatas = []Fermata{\n\t\t{Offset: mustScoreTime(t, 122, 1), Type: FermataTypeShort, Length: 0.25},\n\t\t{Offset: mustScoreTime(t, 123, 1), Type: FermataTypeLong, Length: 1.5},\n\t}\n\tdata, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Logf(\"Strict export: %d bytes, diagnostics=%#v\", len(data), report.Entries)\n\tt.Logf(\"Wire fermatas: %#v\", conformanceFermataWire(t, data)[0])\n\tvar facts []conformanceAlphaTabFermataBar\n\treadAlphaTabOracleFacts(t, \"--fermatas\", writeConformanceFixture(t, data), &facts)\n\tt.Logf(\"Authored fermatas: %#v\", facts[0].Authored)\n\tif len(facts[0].Authored) != 2 {\n\t\tt.Errorf(\"lost a fermata: got %d, want 2\", len(facts[0].Authored))\n\t}\n}\n"
       }
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "further-work-required",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5637306449",
+      "detail": "The existing fractional and whole-tick fermata collision blocker still reproduces. Reran both stored reproductions: offsets 1/2 and 3/4 collapse into one hold at 0; offsets 122 and 123 collapse into one hold at 122. Both strict exports return output with zero report entries. The ZIP change does not fix this semantic loss.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+      ],
+      "next_steps": "Keep the existing updated checklist: exact authored offsets, precise consumer movement/collision reports, strict refusal for unallowed loss, and pinned tests for both pairs plus retained ordinary positions. This is implementation-ready follow-up; the prior completion label is removed.",
+      "source": "Existing runnable reproductions remain in the earlier audit comment and canonical fermata work-item evidence."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "MeasureHeader.Fermatas now preserves authoritative GPIF master-bar holds as independent values with exact ScoreTime offsets, Short, Medium, and Long types, and finite non-negative lengths. Import audits malformed types, lengths, rational offsets, overflow, and duplicates before conversion; validation rejects undefined types, invalid lengths, duplicate offsets, and offsets outside the exact measure. GP8 emits reduced rational offsets, exact lengths, and types without adding a mutable Beat copy. Focused public, wire, reimport, post-parse edit, fixture, and pinned AlphaTab evidence covers authored master-bar locations and derived consumer beat association. Playback stretching and GP3 through GP5 remain out of scope. Independent audit at 88356593a4ebb9b2f9859200a713838780d566b3 found an unresolved consumer limit: strict export accepts distinct fractional or whole-tick offsets with no loss report, but AlphaTab truncates them to the same map key and drops a hold. See the audit reproduction and updated acceptance checklist; this implementation is not yet accepted.",
+  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Reran both stored reproductions: offsets 1/2 and 3/4 collapse into one hold at 0; offsets 122 and 123 collapse into one hold at 122. Both strict exports return output with zero report entries. The ZIP change does not fix this semantic loss. Next: Keep the existing updated checklist: exact authored offsets, precise consumer movement/collision reports, strict refusal for unallowed loss, and pinned tests for both pairs plus retained ordinary positions. This is implementation-ready follow-up; the prior completion label is removed.",
   "verification": [],
   "issue": {
     "number": 47,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/47",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.739696+00:00"
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-09-10",
-  "reviewed_commit": "339113c",
+  "reviewed_at": "2026-09-11",
+  "reviewed_commit": "6151967aa813bb32351db6248956688f69834a2d",
   "capabilities": [
     {
       "id": "repeat-count",
@@ -22,7 +22,7 @@
         "model": "supported",
         "export": "supported"
       },
-      "finding": "Current API uses total passes: no end=0, ordinary repeat=2, displayed 6x=6. Supported maximum is 128. Issue 38 describes the old API.",
+      "finding": "Public repeat counts use total passes: no end=0, ordinary repeat=2, displayed 6x=6; maximum 128. Ticket #38 is independently verified and closed.",
       "acceptance": "Keep direct public values for 0, 1, 2, 6, and 128 across applicable codecs and the independent consumer.",
       "upstream": [
         "MasterBar.isRepeatStart",
@@ -67,7 +67,21 @@
         {
           "kind": "issue",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/38",
-          "detail": "Open ticket describes previous offset API; current checkout already contains the semantic fields."
+          "detail": "Verified total-pass API on 6151967aa813bb32351db6248956688f69834a2d; ticket closed after independent acceptance review."
+        },
+        {
+          "kind": "implementation-audit",
+          "commit": "6151967aa813bb32351db6248956688f69834a2d",
+          "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+          "decision": "accepted",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/38#issuecomment-5637301070",
+          "detail": "Checked the public total-pass contract (0/no end, 2, 6, and maximum 128), reader normalization, GP8 count output, boundary rejection, and removal of adapter count offsets. No playback/repeat traversal expansion is claimed.",
+          "commands": [
+            "prek run --all-files: PASS on the reviewed commit",
+            "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+            "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+            "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+          ]
         }
       ]
     },
@@ -2426,10 +2440,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "supported"
+        "export": "partial"
       },
-      "finding": "Representable first fret, string order, barre ranges and explicit or synthesized finger positions survive GP3-8 import and GP8 export. Interval omissions and legacy chord descriptions remain separate losses.",
-      "acceptance": "Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports.",
+      "finding": "An authored annular-finger barre is silently dropped by pinned AlphaTab despite strict export reporting no loss. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch.",
+      "acceptance": "Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports. Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
       "upstream": [
         "Chord.firstFret",
         "Chord.strings",
@@ -2465,6 +2479,21 @@
           "kind": "field",
           "reference": "Chord.Fingerings",
           "detail": "The optional slice parallels Chord.Strings and preserves explicit None, thumb, and named finger positions."
+        },
+        {
+          "kind": "implementation-audit",
+          "commit": "6151967aa813bb32351db6248956688f69834a2d",
+          "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+          "decision": "further-work-required",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/79#issuecomment-5637322913",
+          "detail": "An authored annular-finger barre is silently dropped by pinned AlphaTab despite strict export reporting no loss. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch.",
+          "commands": [
+            "prek run --all-files: PASS on the reviewed commit",
+            "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+          ],
+          "next_steps": "Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
+          "source": "Pinned GpifParser.ts _parseDiagramItemForChord handles Rank at line 1103 and derives barre frets from repeated recognized fingers; GpifWriter.ts emits Ring around line 1395. This is a pinned consumer mismatch, not permission to change the authored finger.",
+          "reproduction_go": "package goguitarpro\nimport (\"reflect\"; \"testing\")\n\nfunc TestReviewChordAnnularConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n firstFret:=uint8(3)\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord=&Chord{\n  Name:\"Audit chord\", FirstFret:&firstFret, Length:7,\n  Strings:[]int8{3,3,-1,0,5,5,7},\n  Barres:[]Barre{{Fret:3,Start:1,End:2},{Fret:5,Start:5,End:6}},\n  Fingerings:[]Fingering{FingeringIndex,FingeringIndex,FingeringOpen,FingeringOpen,FingeringAnnular,FingeringAnnular,FingeringThumb},\n }\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatalf(\"export failed: %v; %#v\",err,report.Entries) }\n var facts []conformanceAlphaTabChordDiagramFact\n readAlphaTabOracleFacts(t,\"--chord-diagrams\",writeConformanceFixture(t,data),&facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n for _,f:=range facts { if f.Name==\"Audit chord\" { if !reflect.DeepEqual(f.BarreFrets,[]int{3,5}) {t.Fatalf(\"barre frets=%v, want [3 5]\",f.BarreFrets)}; return } }\n t.Fatal(\"chord disappeared\")\n}\n"
         }
       ]
     },
@@ -3740,10 +3769,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "supported"
+        "export": "partial"
       },
-      "finding": "Beat.Legato preserves authored origin and destination endpoints as an occurrence-owned record. No separate note-level slur contract is inferred without source evidence.",
-      "acceptance": "Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption.",
+      "finding": "A destination-only excerpt endpoint disappears in pinned AlphaTab while strict GP8 export reports no loss. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain.",
+      "acceptance": "Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption. Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
       "upstream": [
         "Beat.isLegatoOrigin",
         "Note.isSlurDestination",
@@ -3784,6 +3813,21 @@
           "kind": "test",
           "reference": "TestAlphaTabPreservesLegato",
           "detail": "Pinned AlphaTab consumes Go GP8 output and exposes exact origin plus derived destination state for the numbered fixture chain and a post-parse edit."
+        },
+        {
+          "kind": "implementation-audit",
+          "commit": "6151967aa813bb32351db6248956688f69834a2d",
+          "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+          "decision": "further-work-required",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/50#issuecomment-5637308523",
+          "detail": "A destination-only excerpt endpoint disappears in pinned AlphaTab while strict GP8 export reports no loss. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain.",
+          "commands": [
+            "prek run --all-files: PASS on the reviewed commit",
+            "ALPHATAB_CONFORMANCE=1 focused review reproduction: FAIL (confirmed blocker; full runnable source in this evidence or the prior fermata audit evidence)"
+          ],
+          "next_steps": "Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
+          "source": "Pinned GpifParser.ts _parseBeat reads only the origin attribute (around line 1806); model/Beat.ts isLegatoDestination derives the destination (around line 294).",
+          "reproduction_go": "package goguitarpro\nimport \"testing\"\n\nfunc TestReviewLegatoExcerptConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = &BeatLegato{Destination: true}\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatal(err) }\n var facts []conformanceLegatoFact\n readAlphaTabOracleFacts(t, \"--legato\", writeConformanceFixture(t,data), &facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n if len(facts)==0 || !facts[0].Destination { t.Fatal(\"authored destination-only endpoint disappeared in pinned consumer\") }\n}\n\n"
         }
       ]
     },
@@ -5266,10 +5310,10 @@
     },
     {
       "number": 38,
-      "state": "OPEN",
+      "state": "CLOSED",
       "title": "Replace count-minus-one repeat fields with a semantic repeat API",
       "url": "https://github.com/CaliLuke/go-guitar-pro/issues/38",
-      "checked_at": "2026-09-10"
+      "checked_at": "2026-09-11T16:13:48.367029+00:00"
     },
     {
       "number": 39,

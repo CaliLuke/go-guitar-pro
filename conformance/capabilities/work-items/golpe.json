@@ -5,8 +5,8 @@
   "title": "Preserve thumb and finger golpe marks",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "/root/implement_ticket_83_golpe",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -94,20 +94,50 @@
       "kind": "probe",
       "reference": "testdata/gp7/golpe.gp:golpe",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].golpe. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "reviewed_at": "2026-09-11T16:13:48.367029+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/83#issuecomment-5637325812",
+      "detail": "Checked Finger/Thumb/absence, simultaneous notes and independent techniques, exact source and consumer locations, post-parse edits, unknown values, occurrence ownership, and no unrelated probe changes. GP3-5 have no authored golpe source record.",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ]
     }
   ],
   "shared_files": [
-	"gpif_audit.go",
-	"gpif_effects.go",
-	"gpif_types.go",
-	"gp8_notation.go"
+    "gpif_audit.go",
+    "gpif_effects.go",
+    "gpif_types.go",
+    "gp8_notation.go"
   ],
   "resolution": "Added GolpeType None, Thumb, and Finger plus BeatEffects.Golpe as the sole authored authority. GP6 through GP8 import the direct GPIF Golpe element, GP8 emits the exact non-default token, and unknown tokens receive the scoped GPIF.Beat.Golpe.InvalidValue diagnostic. Validation rejects undefined public enum values before export. M10-GOLPE covers absence and both variants, all 24 real GP7 occurrences, GP6-8 parsing, exact wire output and Go reimport, a two-note beat with an independent FadeOut, reused-definition occurrence isolation, direct edits, nonmutation, validation, diagnostics, and strict policy. Pinned AlphaTab preserves all values and paths and observes a Finger-to-Thumb edit at the same beat. The 364-fixture probe changed only testdata/gp7/golpe.gp and testdata/gp7/golpe-tab.gp from 24/0 different to 24/24 equal-nondefault. Recognizing the source element removed 9 and 8 generic unknown-element diagnostics respectively. Reports, failures, target-blocked fixtures, and unrelated capability comparisons were unchanged. GP3 through GP5, tap/slap/pop, percussion, rasgueado, dead-slap, rendering, and playback remain outside this contract.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "6151967aa813bb32351db6248956688f69834a2d",
+      "commands": [
+        "prek run --all-files: PASS on the reviewed commit",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformance|TestAlphaTab|TestGP8|TestGP5NativePercussionFallbackFixtures|TestBinarySelectedMIDIProgramIsNotCoerced|TestRepeatAPIUsesDisplayedPassCounts)' ./...: PASS",
+        "node conformance/capabilities/probe.mjs: completed all 364 inputs; raw fixture receipts unchanged; limitations reviewed",
+        "python3 conformance/capabilities/manage.py refresh && python3 conformance/capabilities/manage.py check: PASS"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/83#issuecomment-5637325812",
+        "TestConformanceGolpe; TestAlphaTabPreservesGolpe",
+        "Checked Finger/Thumb/absence, simultaneous notes and independent techniques, exact source and consumer locations, post-parse edits, unknown values, occurrence ownership, and no unrelated probe changes.",
+        "GP3-5 have no authored golpe source record."
+      ]
+    }
+  ],
   "issue": {
     "number": 83,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/83",
-    "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.741071+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T16:13:48.367029+00:00"
   }
 }
