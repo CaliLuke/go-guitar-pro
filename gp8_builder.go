@@ -658,6 +658,9 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		header := &builder.song.MeasureHeaders[measureIndex]
 		headerLocation := ScoreLocation{Measure: measureIndex}
 		builder.reportFermataConsumerLimits(header, headerLocation)
+		if header.DoubleBar && measureIndex == len(builder.song.MeasureHeaders)-1 {
+			builder.addReport("gp8.omit.double-bar-consumer-terminal", "score-core", ExportDispositionOmitted, headerLocation, "GPIF retains the authored final DoubleBar flag, but pinned AlphaTab clears it and resolves the terminal line to LightHeavy")
+		}
 		if header.Marker != nil && header.Marker.Color != 0 {
 			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer emits section text but not marker color")
 		}

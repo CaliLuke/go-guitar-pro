@@ -296,9 +296,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 242 |
+| `preserved` | 243 |
 | `normalized` | 34 |
-| `omitted` | 108 |
+| `omitted` | 107 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -307,11 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-<<<<<<< HEAD
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 102 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
-=======
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 105 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
->>>>>>> 6f400f2 (test: verify MIDI routing limits and sound selection)
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 107 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -382,6 +378,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `pick-stroke-preservation` | `note-and-beat-semantics` | `TestConformancePickStroke` | `TestAlphaTabPreservesPickStroke` | no | Up, down, and absent pick marks retain their exact direction independently from brush through strict GP8 export, Go reimport, and pinned AlphaTab. |
 | `chord-rest-dynamic-policy` | `note-and-beat-semantics` | `TestConformanceChordAndRestDynamics` | `TestAlphaTabChordAndRestDynamics` | no | Two-note velocities 47/95 and explicit beat/rest dynamics 47/48 preserve authored values, emit P, and report exact target losses; strict export requires each applicable code. |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `key-mode-preservation` | `score-core` | `TestConformanceKeyModes` | `TestAlphaTabPreservesKeyModes` | no | Exact supported major and minor spellings retain independent nonzero accidental counts across adjacent master bars and canonical GP8 export; unknown spellings remain explicit. |

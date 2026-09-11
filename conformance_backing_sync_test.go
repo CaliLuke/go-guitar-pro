@@ -542,7 +542,7 @@ func conformanceBackingProgrammaticSong(t *testing.T) *Song {
 	if err != nil {
 		t.Fatal(err)
 	}
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.BackingTrack = &BackingTrack{
 		Name: "Selected audio", Source: "Local", AssetID: "asset-b",
 		OriginalFilePath: "/selected/b.wav", OriginalFileSHA1: "sha-b",

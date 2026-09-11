@@ -353,6 +353,14 @@ Master bars own key, meter, and double-bar output. A non-default compatibility
 value on `Measure` produces a normalization report when it conflicts with its
 header.
 
+GP8 retains an authored final `DoubleBar` element. Pinned AlphaTab clears that
+flag and resolves the terminal bar line to `LightHeavy`. A legacy explicit
+`LightLight` line therefore changes after export. This is a consumer loss,
+not an equivalent projection. Preflight reports
+`gp8.omit.double-bar-consumer-terminal` at the final master bar. Strict export
+requires that exact allowance. Nonfinal double bars retain their flag and
+`LightLight` consumer line. The writer never deletes the authored final flag.
+
 `MeasureHeader.Directions` is the complete authored set of navigation targets
 and jumps. GP5 and GPIF import canonicalize it in `DirectionSign` order and
 remove duplicates. `MeasureHeader.Direction` remains the legacy single-marker

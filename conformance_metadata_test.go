@@ -140,7 +140,7 @@ func TestConformanceOracleKeepsAuthorAndWriterDistinct(t *testing.T) {
 
 func runConformanceOracleKeepsAuthorAndWriterDistinct(run *conformanceRun) {
 	t := run.t
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.Author = "author sentinel"
 	song.Writer = "writer sentinel"
 	data, err := Export(song, ExportFormatGP8)
@@ -320,7 +320,7 @@ func runConformanceMetadataExportPolicy(run *conformanceRun) {
 }
 
 func conformanceMetadataSong() *Song {
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.Name = "Title & 名"
 	song.Subtitle = "Subtitle <one>"
 	song.Artist = "Artist"

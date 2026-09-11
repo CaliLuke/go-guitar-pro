@@ -657,7 +657,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Ordinary double bars are emitted. The pinned GPIF consumer clears the final DoubleBar flag. The original Slides.gp4 final LightLight becomes LightHeavy after GP8 export despite retaining the XML and Go flag; the current strict exporter does not report this consumer loss. #95 specifies a scoped report and independent terminal/nonterminal regression.",
+      "finding": "GPIF and Go retain authored final and nonfinal DoubleBar flags. Pinned AlphaTab clears only the final flag: the original Slides.gp4 LightLight becomes LightHeavy after export. Preflight reports gp8.omit.double-bar-consumer-terminal at the final master bar, and strict export requires that exact allowance. Export remains partial.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "MasterBar.isDoubleBar"
@@ -682,6 +682,26 @@
           "kind": "actionability-review",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5638814998",
           "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTerminalDoubleBar",
+          "detail": "Exact source and GPIF flags, Go reparse, raw pinned requested/resolved line styles, final/nonfinal controls, scoped report and selective strict policy."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabTerminalDoubleBar",
+          "detail": "Exact source and GPIF flags, Go reparse, raw pinned requested/resolved line styles, final/nonfinal controls, scoped report and selective strict policy."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8TerminalDoubleBarPolicy",
+          "detail": "Exact source and GPIF flags, Go reparse, raw pinned requested/resolved line styles, final/nonfinal controls, scoped report and selective strict policy."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP4TerminalDoubleBarPreservation",
+          "detail": "Exact source and GPIF flags, Go reparse, raw pinned requested/resolved line styles, final/nonfinal controls, scoped report and selective strict policy."
         }
       ]
     },

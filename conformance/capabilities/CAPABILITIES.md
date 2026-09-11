@@ -1089,7 +1089,7 @@ Structure. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Ordinary double bars are emitted. The pinned GPIF consumer clears the final DoubleBar flag. The original Slides.gp4 final LightLight becomes LightHeavy after GP8 export despite retaining the XML and Go flag; the current strict exporter does not report this consumer loss. #95 specifies a scoped report and independent terminal/nonterminal regression.
+GPIF and Go retain authored final and nonfinal DoubleBar flags. Pinned AlphaTab clears only the final flag: the original Slides.gp4 LightLight becomes LightHeavy after export. Preflight reports gp8.omit.double-bar-consumer-terminal at the final master bar, and strict export requires that exact allowance. Export remains partial.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

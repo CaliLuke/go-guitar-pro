@@ -5,8 +5,8 @@
   "title": "Report terminal double-bar consumer loss without stripping authored XML",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/root",
   "formats": [
     "gp3",
     "gp4",
@@ -195,7 +195,7 @@
     "conformance_measures_test.go",
     "gp8_notation.go"
   ],
-  "resolution": null,
+  "resolution": "Added the terminal consumer-loss report with exact GPIF and Go preservation. Raw pinned-consumer regressions distinguish LightLight from LightHeavy. Awaiting independent review.",
   "verification": [],
   "issue": {
     "number": 95,

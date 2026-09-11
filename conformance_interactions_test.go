@@ -205,7 +205,7 @@ func runConformanceGraceCombinations(run *conformanceRun) {
 	})
 
 	t.Run("percussion", func(t *testing.T) {
-		song := syntheticGP8Song()
+		song := syntheticGP8SongWithoutTerminalDoubleBar()
 		track := &song.Tracks[0]
 		track.Mute = true
 		track.PercussionArticulations = []PercussionArticulation{

@@ -244,6 +244,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceMIDIProgramReferences":              runConformanceMIDIProgramReferences,
 	"TestConformanceMIDIBank":                           runConformanceMIDIBank,
 	"TestConformanceTempoAuthority":                     runConformanceTempoAuthority,
+	"TestConformanceTerminalDoubleBar":                  runConformanceTerminalDoubleBar,
 	"TestConformanceMasterBars":                         runConformanceMasterBars,
 	"TestConformanceKeyModes":                           runConformanceKeyModes,
 	"TestConformanceDirections":                         runConformanceDirections,
@@ -338,7 +339,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 
 func semanticValidGP8Song(t *testing.T) *Song {
 	t.Helper()
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	for index := range song.Tracks[0].Measures {
 		song.Tracks[0].Measures[index].HeaderIndex = index
 	}
@@ -353,7 +354,7 @@ func semanticValidGP8Song(t *testing.T) *Song {
 
 func semanticValidPitchedGP8Song(t *testing.T) *Song {
 	t.Helper()
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	track := &song.Tracks[0]
 	track.PercussionTrack = false
 	track.FretCount = 24
@@ -437,4 +438,13 @@ func assertConsumerLossPolicy(t *testing.T, song *Song, codes []string) ([]byte,
 		t.Fatalf("export mutated the public model: %v", err)
 	}
 	return data, report
+}
+
+// General semantic probes exclude the terminal consumer loss. Dedicated
+// master-bar cases author and verify their own final and nonfinal flags.
+func syntheticGP8SongWithoutTerminalDoubleBar() *Song {
+	song := syntheticGP8Song()
+	song.MeasureHeaders[len(song.MeasureHeaders)-1].DoubleBar = false
+	song.Tracks[0].Measures[len(song.Tracks[0].Measures)-1].HasDoubleBar = false
+	return song
 }

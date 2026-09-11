@@ -293,7 +293,7 @@ func runConformanceCombinedGraceEffects(run *conformanceRun) {
 	})
 
 	t.Run("percussion grace identity and mute", func(t *testing.T) {
-		song := syntheticGP8Song()
+		song := syntheticGP8SongWithoutTerminalDoubleBar()
 		track := &song.Tracks[0]
 		track.PercussionArticulations = []PercussionArticulation{
 			{ElementName: "Kit", ElementType: "percussion", Name: "Main", NoteheadDefault: "noteheadBlack", InputMIDINumbers: []int{38}, OutputMIDINumber: 38},

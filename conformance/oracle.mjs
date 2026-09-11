@@ -530,6 +530,17 @@ export function loadNormalizedScore(fixture) {
   return normalizeScore(loadScore(fixture));
 }
 
+export function loadDoubleBarFacts(fixture) {
+  const score = loadScore(fixture);
+  return {
+    flags: score.masterBars.map(bar => bar.isDoubleBar),
+    tracks: score.tracks.map(track => track.staves.map(staff => staff.bars.map(bar => ({
+      requested: alphaTab.model.BarLineStyle[bar.barLineRight],
+      actual: alphaTab.model.BarLineStyle[bar.getActualBarLineRight()]
+    }))))
+  };
+}
+
 export function loadVolumeAutomationFacts(fixture) {
   const facts = [];
   const score = loadScore(fixture);
@@ -1167,6 +1178,10 @@ function main() {
   }
   if (args[0] === '--backing-track' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBackingTrackFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--double-bars' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadDoubleBarFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--barre' && args.length === 2) {

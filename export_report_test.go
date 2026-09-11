@@ -10,12 +10,12 @@ import (
 )
 
 func TestExportPreflightReportsActualGP8Losses(t *testing.T) {
-	clean := PreflightExport(syntheticGP8Song(), ExportFormatGP8, ExportOptions{})
+	clean := PreflightExport(syntheticGP8SongWithoutTerminalDoubleBar(), ExportFormatGP8, ExportOptions{})
 	if len(clean.Entries) != 0 {
 		t.Fatalf("clean preflight = %#v", clean.Entries)
 	}
 
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.BackingTrack = &BackingTrack{Name: "omitted audio", AudioData: []byte("audio")}
 	song.SyncPoints = []SyncPoint{{Bar: 0}}
 	beat := &song.Tracks[0].Measures[0].Voices[0].Beats[0]
@@ -35,7 +35,7 @@ func TestExportPreflightReportsActualGP8Losses(t *testing.T) {
 }
 
 func TestExportStrictLossPolicyUsesStableAllowlist(t *testing.T) {
-	song := syntheticGP8Song()
+	song := syntheticGP8SongWithoutTerminalDoubleBar()
 	song.BackingTrack = &BackingTrack{Name: "omitted audio", AudioData: []byte("audio")}
 
 	options := ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}}
