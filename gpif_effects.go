@@ -77,6 +77,21 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 	// Beat properties
 	for _, p := range b.Properties.Properties {
 		switch p.Name {
+		case "BarreFret":
+			if p.Fret != nil {
+				if fret, err := NewFret(int64(*p.Fret)); err == nil {
+					beat.BarreFret = &fret
+				}
+			}
+		case "BarreString":
+			if p.String != nil {
+				switch *p.String {
+				case 0:
+					beat.BarreShape = BarreShapeFull
+				case 1:
+					beat.BarreShape = BarreShapeHalf
+				}
+			}
 		case "Brush":
 			if p.Direction != nil {
 				switch *p.Direction {

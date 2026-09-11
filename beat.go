@@ -67,10 +67,17 @@ type Beat struct {
 	// Legato is nil when the source has no authored beat-level legato marker.
 	// Each parsed beat owns its own record, including when GPIF reuses a beat
 	// definition in more than one score occurrence.
-	Legato   *BeatLegato
-	Text     string
-	Notes    []Note
-	Duration Duration
+	Legato *BeatLegato
+	// BarreFret is the authored non-negative fret for a beat-level barre mark.
+	// Nil means that no barre was authored. A present fret must be paired with
+	// BarreShapeFull or BarreShapeHalf.
+	BarreFret *Fret
+	// BarreShape is the authored full- or half-barre shape. BarreShapeNone must
+	// be paired with a nil BarreFret.
+	BarreShape BarreShape
+	Text       string
+	Notes      []Note
+	Duration   Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
 	// absent and lets export use the first note velocity. A nonzero value must be
 	// within 1..127. GP3-5 stores the value on notes, but the last explicit value

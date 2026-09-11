@@ -110,8 +110,11 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Legato.InvalidOrigin` | `legato-slurs` | `invalid-data` | An authored beat-level legato origin attribute must contain the exact GPIF boolean true or false. |
 | `GPIF.Beat.Notes.Reference` | `note-and-beat-semantics` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.Ottavia.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.BarreFret` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Beat.Property.BarreString` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Beat.Property.Barre.Incomplete` | `note-and-beat-semantics` | `invalid-data` | A beat-level barre fret and shape must occur as a pair. |
+| `GPIF.Beat.Property.BarreFret.InvalidValue` | `note-and-beat-semantics` | `invalid-data` | A beat-level barre fret must fit the checked public Fret range. |
+| `GPIF.Beat.Property.BarreFret.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | A BarreFret property must contain its Fret payload. |
+| `GPIF.Beat.Property.BarreString.InvalidValue` | `note-and-beat-semantics` | `invalid-data` | A beat-level BarreString payload must be 0 for full or 1 for half. |
+| `GPIF.Beat.Property.BarreString.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | A BarreString property must contain its String payload. |
 | `GPIF.Beat.Property.Brush.InvalidDirection` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Property.Brush.MissingDirection` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Property.PickStroke.InvalidDirection` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -237,7 +240,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 9 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Legato owns the authored beat-level phrase endpoints. |
+| `Beat` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. Beat-level barre fields and legato endpoints are independent authored marks. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
@@ -266,7 +269,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 217 |
+| `preserved` | 219 |
 | `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -277,7 +280,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 87 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 88 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 154 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -297,7 +300,9 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
-| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 5 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 7 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifApplyBeatEffects:p.String` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The importer maps the two audited GPIF BarreString values to typed public shapes. |
+| `gpifAuditBarrePair:property.Name` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The audit verifies that the two beat-level barre properties occur as a pair. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
@@ -385,6 +390,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
+| `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
 | `sustain-pedal-preservation` | `sustain-pedal` | `TestConformanceSustainPedals` | `TestAlphaTabPreservesSustainPedals` | no | Ordered staff-0 down and release markers survive import, public editing, and GP8 export while empty continuing bars receive one derived hold marker that is skipped on the wire. Validation rejects a Down in a bar entered with the pedal down because consumers reinterpret it as Hold from bar-entry state. |
 | `unclassified-public-enum-member` | `note-and-beat-semantics` | `TestSemanticMatrixInventory` | none | yes | A new public enum member must have focused behavioral evidence. |
 | `whammy-owner-context` | `note-and-beat-semantics` | `TestParseBinaryWhammyPreservesDipsAndHolds` | none | yes | Beat whammy dips and holds must not pass through note-bend canonicalization or discard negative controls. |

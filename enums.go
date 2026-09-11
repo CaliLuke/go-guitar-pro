@@ -143,6 +143,19 @@ const (
 	BeatStatusRest   BeatStatus = 2
 )
 
+// BarreShape describes the strings covered by a beat-level barre mark.
+type BarreShape uint8
+
+// Beat-level barre shapes distinguish no mark from full- and half-barre marks.
+const (
+	// BarreShapeNone indicates that the beat has no authored barre mark.
+	BarreShapeNone BarreShape = iota
+	// BarreShapeFull indicates a barre across all strings.
+	BarreShapeFull
+	// BarreShapeHalf indicates a barre across half of the strings.
+	BarreShapeHalf
+)
+
 // VoiceDirection represents the direction of beams for a voice.
 type VoiceDirection int8
 

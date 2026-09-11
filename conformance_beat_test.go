@@ -140,13 +140,18 @@ func runConformanceBeatEffects(run *conformanceRun) {
 		gpifApplyBeatEffects(&gpifBeat{Arpeggio: source.value}, &beat)
 		run.Dispatch("gpifApplyBeatEffects:b.Arpeggio", beat.Effect.Stroke.Direction, source.want)
 	}
-	for _, source := range []struct{ name, want string }{{"Brush", "stroke-down"}, {"PickStroke", "pick-down"}, {"Slapped", "slap"}, {"Popped", "pop"}, {"VibratoWTremBar", "vibrato"}} {
+	for _, source := range []struct{ name, want string }{{"BarreFret", "barre-fret"}, {"BarreString", "barre-half"}, {"Brush", "stroke-down"}, {"PickStroke", "pick-down"}, {"Slapped", "slap"}, {"Popped", "pop"}, {"VibratoWTremBar", "vibrato"}} {
 		direction, strength := "Down", "Wide"
-		property := gpifProperty{Name: source.name, Direction: &direction, Strength: &strength}
+		fret, barreString := 3, float64(1)
+		property := gpifProperty{Name: source.name, Direction: &direction, Strength: &strength, Fret: &fret, String: &barreString}
 		beat := Beat{}
 		gpifApplyBeatEffects(&gpifBeat{Properties: gpifProperties{Properties: []gpifProperty{property}}}, &beat)
 		got := ""
 		switch {
+		case beat.BarreFret != nil:
+			got = "barre-fret"
+		case beat.BarreShape == BarreShapeHalf:
+			got = "barre-half"
 		case beat.Effect.Stroke.Direction == BeatStrokeDirectionDown:
 			got = "stroke-down"
 		case beat.Effect.PickStroke == BeatStrokeDirectionDown:

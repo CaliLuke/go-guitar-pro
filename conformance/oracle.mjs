@@ -567,6 +567,32 @@ export function loadAutomationFacts(fixture) {
   return { tempo, sound };
 }
 
+export function loadBarreFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (beat.barreFret < 0 && beat.barreShape === alphaTab.model.BarreShape.None) continue;
+            facts.push({
+              track: track.index,
+              staff: staff.index,
+              bar: bar.index,
+              voice: voice.index,
+              beat: beat.index,
+              fret: finite(beat.barreFret),
+              shape: enumName(alphaTab.model.BarreShape, beat.barreShape)
+            });
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadBackingTrackFacts(fixture) {
   const backingTrack = loadScore(fixture).backingTrack;
   return {
@@ -797,6 +823,10 @@ function main() {
   }
   if (args[0] === '--backing-track' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBackingTrackFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--barre' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadBarreFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--fermatas' && args.length === 2) {

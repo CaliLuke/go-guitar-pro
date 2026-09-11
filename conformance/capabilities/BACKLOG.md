@@ -44,7 +44,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Bound remaining grace chord and transition semantics](work-items/grace.json) | investigation | 1 | todo | — | [#65](https://github.com/CaliLuke/go-guitar-pro/issues/65) |
 | [Classify conflicting MIDI port and playback-state limits](work-items/midi-routing.json) | investigation | 1 | todo | — | [#66](https://github.com/CaliLuke/go-guitar-pro/issues/66) |
 | [Preserve authored pitch spelling and accidental choices](work-items/accidentals.json) | implementation | 2 | blocked | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | [#73](https://github.com/CaliLuke/go-guitar-pro/issues/73) |
-| [Preserve beat barre fret and shape](work-items/barre.json) | implementation | 2 | todo | — | [#74](https://github.com/CaliLuke/go-guitar-pro/issues/74) |
+| [Preserve beat barre fret and shape](work-items/barre.json) | implementation | 2 | in_progress | — | [#74](https://github.com/CaliLuke/go-guitar-pro/issues/74) |
 | [Preserve authored beam groups and stem overrides](work-items/beaming.json) | implementation | 2 | todo | — | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) |
 | [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | todo | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |
 | [Preserve and export beat vibrato strength](work-items/beat-vibrato.json) | implementation | 2 | todo | — | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) |

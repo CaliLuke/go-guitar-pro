@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 61 | 20 | 18 | 2 |
-| model | 60 | 21 | 19 | 1 |
-| export | 38 | 25 | 35 | 3 |
+| import | 62 | 20 | 17 | 2 |
+| model | 61 | 21 | 18 | 1 |
+| export | 39 | 25 | 34 | 3 |
 
-All three stages have a supported rating in 38 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 39 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -53,7 +53,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord name, diagram and fingering visibility | 3 | 354 | 3 | 0 | 7 |
 | Numbered staff notation | 3 | 354 | 3 | 0 | 7 |
 | Authored timer marks | 2 | 355 | 2 | 0 | 7 |
-| Beat barre fret and shape | 2 | 355 | 2 | 0 | 7 |
 | Dead-slapped beats | 2 | 355 | 2 | 0 | 7 |
 | Golpe thumb and finger marks | 2 | 355 | 2 | 0 | 7 |
 | Explicit note string-number display | 1 | 356 | 1 | 0 | 7 |
@@ -62,6 +61,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Rasgueado patterns | 1 | 356 | 1 | 0 | 7 |
 | Turns and mordents | 1 | 356 | 1 | 0 | 7 |
 | Alternate endings | 16 | 341 | 0 | 0 | 7 |
+| Beat barre fret and shape | 2 | 355 | 0 | 0 | 7 |
 | Beat octave shifts | 10 | 348 | 0 | 0 | 7 |
 | Common and per-staff capo | 1 | 356 | 0 | 0 | 7 |
 | Common-time and cut-time notation | 0 | 357 | 0 | 0 | 7 |
@@ -209,11 +209,11 @@ Bounded work: [Apply exact authored offset preservation to whammy curves](https:
 
 Expression. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-BarreFret and BarreString properties are audited as omissions. Chord diagram barres are a separate concept.
+Beat.BarreFret and Beat.BarreShape preserve the paired GPIF BarreFret and BarreString properties. Full and half shapes, checked fret boundaries, post-parse edits, and exact GP8 output have public, wire, and pinned-consumer evidence. Chord diagram barres remain a separate concept.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep beat-level barre fret and shape paired, checked, and independent from chord diagram barre ranges.
 
 Bounded work: [Preserve beat barre fret and shape](https://github.com/CaliLuke/go-guitar-pro/issues/74).
 

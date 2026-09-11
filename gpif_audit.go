@@ -296,6 +296,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 	for _, beat := range doc.Beats.Beats {
 		path := gpifObjectPath("Beats/Beat", beat.ID)
 		gpifAuditPropertyConflicts(context, beat.Properties.Properties, path+"/Properties", beat.ID, ParseLocation{BeatID: beat.ID}, gpifBeatPropertyConflictSource)
+		gpifAuditBarrePair(context, beat.ID, path+"/Properties", beat.Properties.Properties)
 		for _, property := range beat.Properties.Properties {
 			gpifAuditBeatProperty(context, beat.ID, path, property)
 		}
@@ -640,14 +641,40 @@ var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"PrimaryPickupVolume":         diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"PrimaryPickupTone":           diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
 	"WhammyBarExtend":             diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"BarreFret":                   diagnosticSource("GPIF.Beat.Property.BarreFret", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"BarreString":                 diagnosticSource("GPIF.Beat.Property.BarreString", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"BarreFret.MissingPayload":    diagnosticSource("GPIF.Beat.Property.BarreFret.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreFret.InvalidValue":      diagnosticSource("GPIF.Beat.Property.BarreFret.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreString.MissingPayload":  diagnosticSource("GPIF.Beat.Property.BarreString.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreString.InvalidValue":    diagnosticSource("GPIF.Beat.Property.BarreString.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"Brush.MissingDirection":      diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"PickStroke.MissingDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"Brush.InvalidDirection":      diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"PickStroke.InvalidDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Slapped.MissingEnable":       diagnosticSource("GPIF.Beat.Property.Slapped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"Popped.MissingEnable":        diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+}
+
+func gpifAuditBarrePair(context *parseContext, beatID, path string, properties []gpifProperty) {
+	hasFret := false
+	hasShape := false
+	for _, property := range properties {
+		switch property.Name {
+		case "BarreFret":
+			hasFret = true
+		case "BarreString":
+			hasShape = true
+		}
+	}
+	if hasFret == hasShape {
+		return
+	}
+	missing := "BarreString"
+	if hasShape {
+		missing = "BarreFret"
+	}
+	context.add(diagnosticSource("GPIF.Beat.Property.Barre.Incomplete", "note-and-beat-semantics", ParseDiagnosticInvalidData), ParseDiagnostic{
+		SourcePath: path, ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
+		Reason: fmt.Sprintf("beat-level barre is missing its %s property", missing),
+	})
 }
 
 func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty, mappedMIDI *int) {
@@ -835,6 +862,28 @@ func gpifAuditBendNumber(context *parseContext, raw string, offset bool, path st
 func gpifAuditBeatProperty(context *parseContext, beatID, path string, property gpifProperty) {
 	propertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)
 	switch property.Name {
+	case "BarreFret":
+		if property.Fret == nil {
+			gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingPayload"], false, propertyPath, beatID, "note-and-beat-semantics", "Fret")
+			return
+		}
+		if _, err := NewFret(int64(*property.Fret)); err != nil {
+			context.add(gpifBeatPropertySources[property.Name+".InvalidValue"], ParseDiagnostic{
+				SourcePath: propertyPath + "/Fret", ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
+				Reason: err.Error(),
+			})
+		}
+	case "BarreString":
+		if property.String == nil {
+			gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingPayload"], false, propertyPath, beatID, "note-and-beat-semantics", "String")
+			return
+		}
+		if *property.String != 0 && *property.String != 1 {
+			context.add(gpifBeatPropertySources[property.Name+".InvalidValue"], ParseDiagnostic{
+				SourcePath: propertyPath + "/String", ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
+				Reason: fmt.Sprintf("barre string %v must be 0 (full) or 1 (half)", *property.String),
+			})
+		}
 	case "Brush", "PickStroke":
 		if property.Direction == nil {
 			gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingDirection"], false, propertyPath, beatID, "note-and-beat-semantics", "Direction")
@@ -867,8 +916,6 @@ func gpifAuditBeatProperty(context *parseContext, beatID, path string, property 
 			SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID},
 			Reason: "the GPIF whammy extension marker has no documented playback or notation effect",
 		})
-	case "BarreFret", "BarreString":
-		gpifAuditUnsupportedBeatProperty(context, gpifBeatPropertySources[property.Name], beatID, propertyPath, property.Name)
 	case "Rasgueado":
 		gpifAuditUnsupportedBeatProperty(context, diagnosticSource("GPIF.Beat.Property.Rasgueado", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beatID, propertyPath, property.Name)
 	default:

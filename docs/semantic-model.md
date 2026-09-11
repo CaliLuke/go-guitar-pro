@@ -174,6 +174,13 @@ conflict. Binary note-bend offsets are checked on their native 0-through-60
 scale before conversion. Bend heights retain their existing whole-semitone
 projection. This exact-offset contract does not apply to beat whammy curves.
 
+`Beat.BarreFret` and `Beat.BarreShape` are the paired authority for an authored
+beat-level barre mark. A nil fret must use `BarreShapeNone`; a present checked
+fret must use `BarreShapeFull` or `BarreShapeHalf`. Direct edits to either field
+are authoritative, and validation rejects incomplete pairs before GP8 export.
+These fields are independent from `Chord.Barres`, which describes fingering
+ranges inside a chord diagram.
+
 ## Authored values and loss
 
 The model preserves ordered grace effects, staff ownership, chord scope,

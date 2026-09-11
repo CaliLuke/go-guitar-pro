@@ -4514,22 +4514,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Property.BarreFret",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"BarreFret\"]",
-          "objectId": "0",
-          "locationsSha256": "513207baf08098b694b8ccffbb1f8ef23d066f418025afd5230abaaff9d322c5"
-        },
-        {
-          "code": "GPIF.Beat.Property.BarreString",
-          "kind": "unsupported-feature",
-          "count": 11,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"BarreString\"]",
-          "objectId": "0",
-          "locationsSha256": "671d6f4cf9d7dc92deb6f06be26af1871c7cf94fd21410eec6e91b49b97b3393"
-        },
-        {
           "code": "GPIF.Beat.Property.PrimaryPickupTone",
           "kind": "deliberate-ignore",
           "count": 12,
@@ -4871,22 +4855,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.Property.BarreFret",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"BarreFret\"]",
-          "objectId": "0",
-          "locationsSha256": "542621230043690565466443301dead91611bd3f5efea895bdc60391ed2fad75"
-        },
-        {
-          "code": "GPIF.Beat.Property.BarreString",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"BarreString\"]",
-          "objectId": "0",
-          "locationsSha256": "8d2c0aab268f141b60c0c8484e0d211fe6cedae8c7851c37e18c5d8eb2ba8e4a"
-        },
         {
           "code": "GPIF.Beat.Property.PrimaryPickupTone",
           "kind": "deliberate-ignore",

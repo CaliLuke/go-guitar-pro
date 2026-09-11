@@ -5,8 +5,8 @@
   "title": "Preserve beat barre fret and shape",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_74",
   "formats": [
     "gp6",
     "gp7",
@@ -23,7 +23,10 @@
     "A beat-level barre can coexist with a chord diagram containing different barre data.",
     "Check fret and enum boundaries and independently assert edited GP8 output."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "GP3 through GP5 do not expose GPIF beat-level barre properties.",
+    "Chord diagram barre ranges are independent and remain owned by ticket #79."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -78,7 +81,27 @@
     {
       "kind": "source",
       "reference": "gpif_audit.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Audits paired payloads, exact shape values, and checked fret boundaries."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Imports checked beat-level fret and shape values without narrowing wrap."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Writes exact paired BarreFret/Fret and BarreString/String properties."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBarre",
+      "detail": "Covers actual GP7 import, distinct full/half marks, chord independence, validation, exact GP8 wire, strict policy, and int16 boundaries."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesBeatBarres",
+      "detail": "Uses pinned AlphaTab facts for source, Go output, and a post-parse edit."
     },
     {
       "kind": "probe",
@@ -89,7 +112,7 @@
   "shared_files": [
     "gpif_audit.go"
   ],
-  "resolution": null,
+  "resolution": "Added paired Beat.BarreFret and Beat.BarreShape authorities, checked GPIF import diagnostics, exact GP8 property output, public validation, and independent pinned-consumer evidence. The refreshed probe now preserves all 22 non-default barre facts in testdata/gp7/barre.gp and all 6 in testdata/gp7/beat-barre.gp. Chord diagram barre ranges remain separate and explicitly outside this ticket.",
   "verification": [],
   "issue": {
     "number": 74,

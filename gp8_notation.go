@@ -255,6 +255,17 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 		}
 	}
 	result.Dynamic = gp8ConvertBeatDynamic(beat).marking
+	if beat.BarreFret != nil {
+		fret := int(*beat.BarreFret)
+		barreString := float64(0)
+		if beat.BarreShape == BarreShapeHalf {
+			barreString = 1
+		}
+		result.Properties.Properties = append(result.Properties.Properties,
+			gpifProperty{Name: "BarreFret", Fret: &fret},
+			gpifProperty{Name: "BarreString", String: &barreString},
+		)
+	}
 	if beat.Effect.Chord != nil {
 		result.Chord = builder.chordIDs[trackIndex][beat.Effect.Chord]
 	}

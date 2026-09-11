@@ -339,6 +339,21 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.Dynamics < 0 || beat.Dynamics > 127 {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.dynamics", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat dynamics %d must be absent (0) or within MIDI velocity 1..127", beat.Dynamics)})
 			}
+			if beat.BarreFret == nil {
+				if beat.BarreShape != BarreShapeNone {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.barre-pair", Kind: ScoreDiagnosticValue, Location: location, Reason: "barre shape requires a barre fret"})
+				}
+			} else {
+				if *beat.BarreFret < 0 {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.barre-fret", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("barre fret %d must be non-negative", *beat.BarreFret)})
+				}
+				if beat.BarreShape == BarreShapeNone {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.barre-pair", Kind: ScoreDiagnosticValue, Location: location, Reason: "barre fret requires a full or half shape"})
+				}
+			}
+			if beat.BarreShape > BarreShapeHalf {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.barre-shape", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("barre shape %d is not defined", beat.BarreShape)})
+			}
 			duration, err := beat.Duration.ExactScoreTime()
 			if err != nil {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.duration", Kind: ScoreDiagnosticTiming, Location: location, Reason: err.Error()})

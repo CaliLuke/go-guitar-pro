@@ -121,7 +121,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["Song.Album"', after: '"preserved":["Song.HideTempo"' },
+      { before: '"preserved":["Beat.BarreFret","Beat.BarreShape","Song.Album"', after: '"preserved":["Beat.BarreFret","Beat.BarreShape","Song.HideTempo"' },
       { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
@@ -151,8 +151,8 @@ const mutations = [
     id: 'unclassified-source-dispatch',
     category: 'inventory',
     file: 'gpif_audit.go',
-    before: '\tswitch property.Name {\n\tcase "Brush", "PickStroke":',
-    after: '\tswitch property.Name {\n\tcase "SemanticMutationProbe":\n\t\treturn\n\tcase "Brush", "PickStroke":',
+    before: '\tpropertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)\n\tswitch property.Name {\n\tcase "BarreFret":',
+    after: '\tpropertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)\n\tswitch property.Name {\n\tcase "SemanticMutationProbe":\n\t\treturn\n\tcase "BarreFret":',
     test: '^TestSemanticContractInventory$',
     want: 'SemanticMutationProbe'
   },
