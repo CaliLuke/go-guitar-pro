@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 70 | 16 | 11 | 1 |
-| model | 69 | 17 | 11 | 1 |
-| export | 48 | 25 | 23 | 2 |
+| import | 72 | 15 | 10 | 1 |
+| model | 71 | 16 | 10 | 1 |
+| export | 50 | 24 | 22 | 2 |
 
-All three stages have a supported rating in 48 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 50 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -507,9 +507,9 @@ Bounded work: [Preserve metadata text in AlphaTab and verify legacy metadata los
 
 Metadata. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF ShortName is absent from the decoded track and public Track.
+Track.ShortName is an independent optional string: nil means absent, and a pointer to an empty string means authored empty. Go import and GP8 retain exact values without truncation. Nonempty Unicode/XML-sensitive names survive the final pinned consumer. Explicit empty names replaced by AlphaTab full-name derivation, and boundary whitespace combined with a CDATA terminator, receive scoped loss reports; strict preservation requires those allowances.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -1099,9 +1099,9 @@ Bounded work: [Report terminal double-bar consumer loss without stripping author
 
 Structure. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **partial**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF Letter and Text collapse into Marker.Title. A section containing both loses its separate letter. Export writes text.
+Marker.Letter and Marker.Text retain independent GPIF fields. Unchanged legacy Title leaves both authoritative; a changed parsed Title overrides Text and preserves Letter, with conflicting simultaneous edits reported. Legacy binary and programmatic title-only captions remain text. Empty sections remain distinct from absence. Literal Unicode/XML-sensitive values survive exact GP8 and final AlphaTab consumption; boundary whitespace together with a CDATA terminator has a scoped consumer-loss report.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

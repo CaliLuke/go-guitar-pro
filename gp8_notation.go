@@ -47,7 +47,8 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		}
 	}
 	if header.Marker != nil {
-		result.Section = &gpifSection{Text: header.Marker.Title}
+		letter, text := header.Marker.sectionValues()
+		result.Section = &gpifSection{Letter: letter, Text: text}
 	}
 	if header.RepeatStart || header.RepeatCount > 0 {
 		result.Repeat = &gpifRepeat{}

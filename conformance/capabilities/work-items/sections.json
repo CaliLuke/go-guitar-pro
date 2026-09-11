@@ -5,8 +5,8 @@
   "title": "Keep section letters separate from section text",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp3",
     "gp4",
@@ -47,7 +47,7 @@
         "target_present": true
       }
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage. Focused regression: ALPHATAB_CONFORMANCE=1 go test ./... -run \"^(TestSectionAndTrackNames|TestSectionTitlePublicEdits|TestShortNamePublicPresenceAndPolicy|TestConformanceSectionTrackNames|TestAlphaTabSectionTrackNames)$\". The original synthetic fixture and canonical receipt are committed; full probe refresh remains part of root integration."
   },
   "evidence": [
     {
@@ -84,13 +84,28 @@
       "kind": "test",
       "reference": "TestConformanceMasterBars",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceSectionTrackNames",
+      "detail": "Exact field/wire/runtime claims, nonmutation, occurrence ownership, legacy authority and consumer-loss policy."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabSectionTrackNames",
+      "detail": "Exact raw and final pinned-consumer values are independently asserted; final empty-name derivation is an explicit limit."
+    },
+    {
+      "kind": "focused-receipt",
+      "reference": "conformance/capabilities/evidence/section-track-names.json",
+      "detail": "Hash-bound synthetic source and exact exported source/edit/empty/whitespace consumer facts and reports."
     }
   ],
   "shared_files": [
     "gp8_notation.go",
     "gpif_parser.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented independent Marker.Letter/Marker.Text and legacy Title reconciliation. Parsed Title edits override text while preserving the letter; conflicting simultaneous edits receive gp8.normalize.section-title. Empty versus absent sections, Unicode/XML-sensitive text, programmatic captions, and exact final pinned-consumer values are covered. Narrow boundary-whitespace loss for CDATA terminators is reported explicitly. Awaiting independent final-commit review and root combined gates.",
   "verification": [],
   "issue": {
     "number": 90,

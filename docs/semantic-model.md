@@ -68,6 +68,33 @@ do not change the beat's notes or its other techniques. Each parsed occurrence
 owns its value even when several score positions reuse one GPIF beat definition.
 GP3 through GP5 have no golpe source record.
 
+
+`Marker.Letter` and `Marker.Text` preserve the independent GPIF section fields.
+A nil `MeasureHeader.Marker` means no section. A non-nil empty marker preserves
+an authored empty section. Import initializes `Marker.Title` from nonempty text,
+then from the letter. While the parsed title is unchanged, letter and text edits
+are authoritative. A changed parsed title overrides text and preserves the letter.
+Conflicting simultaneous title and text edits receive `gp8.normalize.section-title`.
+For a programmatic marker, nonempty letter or text is authoritative. A title-only
+marker exports its title as text. GP3 through GP5 supply only this legacy caption.
+Reconciliation does not mutate the marker.
+
+`Track.ShortName` is the independent authored abbreviation. Nil means the GPIF
+field was absent. A non-nil value preserves exact text, including an empty string.
+Direct edits control GP8 output without changing the full name or truncating text.
+Each parsed track occurrence owns its pointer. GP3 through GP5 have no authored
+short-name field.
+
+Pinned AlphaTab derives an empty short name from the full name during finalization.
+When that derived name differs, GP8 reports `gp8.omit.short-name-consumer-empty`
+and retains the authored empty text. Raw importer evidence does not establish final
+consumer preservation. Section fields and nonempty short names preserve Unicode,
+XML-sensitive characters, and CDATA terminators. When a CDATA terminator requires ordinary XML text, the pinned XML consumer
+trims boundary whitespace.
+The corresponding `gp8.omit.section-consumer-whitespace` or
+`gp8.omit.short-name-consumer-whitespace` report identifies that narrow loss.
+Strict preservation requires an explicit allowance for each applicable report.
+
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
 are compatibility views of the first staff. A non-nil compatibility slice is
 the authority for staff 0. This rule applies to finalization, validation, and

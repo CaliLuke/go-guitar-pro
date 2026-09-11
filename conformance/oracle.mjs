@@ -1144,6 +1144,22 @@ export function loadBrushFacts(fixture) {
   return facts;
 }
 
+export function loadSectionTrackNameFacts(fixture) {
+  const rawNames = [];
+  const finish = alphaTab.model.Track.prototype.finish;
+  alphaTab.model.Track.prototype.finish = function(...args) {
+    rawNames[this.index] = this.shortName;
+    return finish.apply(this, args);
+  };
+  let score;
+  try { score = loadScore(fixture); }
+  finally { alphaTab.model.Track.prototype.finish = finish; }
+  return {
+    tracks: score.tracks.map(track => ({ name: track.name, rawShortName: rawNames[track.index], shortName: track.shortName })),
+    sections: score.masterBars.map(bar => bar.section ? { letter: bar.section.marker, text: bar.section.text } : null)
+  };
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -1158,6 +1174,10 @@ function main() {
         return { fixture, score: null, error: { type: error.constructor.name, message: error.message } };
       }
     }))}\n`);
+    return;
+  }
+  if (args[0] === '--section-track-names' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadSectionTrackNameFacts(args[1]))}\n`);
     return;
   }
   if (args[0] === '--batch') {

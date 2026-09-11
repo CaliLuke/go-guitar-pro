@@ -3484,6 +3484,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/section-track-names.gp",
+      "sha256": "091e8929937c589b8c9b2cfc67947b18dc253ba6b71bba42afce0eb5668f694b",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original synthetic GPIF regression: separate section letter/text and two Unicode track abbreviations. Focused public and pinned consumer assertions also cover empty records and CDATA terminators (#90, #91).",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/slash.gp",
       "sha256": "905caaf7c94f8606801525491717c4cbefd68bd0e6c95cf22641a50192e09588",
       "format": "gp8",

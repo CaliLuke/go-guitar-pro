@@ -251,9 +251,9 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `MeasureHeader` | `rhythm` | 14 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. BeamingRules is the optional exact-bar custom grouping and never derives from TimeSignature. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
 | `BeamingRules` | `beaming` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | A custom master-bar rule owns its note-value slice duration and an independent ordered group-size array. |
 | `Fermata` | `fermata` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The fermata preserves one authored master-bar offset, symbol type, and finite length. |
-| `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
+| `Marker` | `score-core` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | Letter and Text are independent authored section fields. Title is the legacy caption; a post-parse title edit overrides text and preserves the letter. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
-| `Track` | `staff-ownership` | 21 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
+| `Track` | `staff-ownership` | 22 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
 | `Staff` | `staff-ownership` | 7 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
@@ -296,7 +296,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 243 |
+| `preserved` | 246 |
 | `normalized` | 34 |
 | `omitted` | 107 |
 | `rejected` | 0 |
@@ -307,7 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 107 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 108 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -315,7 +315,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 260 |
+| `schema` | 261 |
 
 ## Source dispatch inventory
 
@@ -323,6 +323,7 @@ The gate compares these cases with the source switches. Each default has an expl
 
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `buildTrack:track.Name` | `score-core` | 1 | `section-track-names` | `unsupported-feature` | An authored empty short name remains empty in the final consumer only when the full name is also empty; a nonempty full name produces a scoped consumer-loss report. |
 | `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
@@ -446,3 +447,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `isolated-midi-controller-report` | `score-core` | `TestConformancePlaybackRouting` | none | yes | Each grouped MIDI-effect loss condition is exercised with only one controller set. |
 | `isolated-harmonic-member-report` | `harmonics` | `TestConformanceHarmonicVariants` | none | yes | Pitch and octave each trigger the shared harmonic omission report in isolation. |
 | `isolated-chord-legacy-report` | `note-and-beat-semantics` | `TestConformanceChordDefinitions` | none | yes | Every legacy chord field triggers the shared omission report in isolation. |
+| `section-track-names` | `score-core` | `TestConformanceSectionTrackNames` | `TestAlphaTabSectionTrackNames` | yes | Distinct authored values, empty and absent records, post-parse authority, exact XML and final consumer results, with scoped empty-name and boundary-whitespace reports. |

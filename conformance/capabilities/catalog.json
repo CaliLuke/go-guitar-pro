@@ -600,11 +600,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "partial"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Letter and Text collapse into Marker.Title. A section containing both loses its separate letter. Export writes text.",
+      "finding": "Marker.Letter and Marker.Text retain independent GPIF fields. Unchanged legacy Title leaves both authoritative; a changed parsed Title overrides Text and preserves Letter, with conflicting simultaneous edits reported. Legacy binary and programmatic title-only captions remain text. Empty sections remain distinct from absence. Literal Unicode/XML-sensitive values survive exact GP8 and final AlphaTab consumption; boundary whitespace together with a CDATA terminator has a scoped consumer-loss report.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "MasterBar.section",
@@ -635,6 +635,21 @@
           "kind": "probe",
           "reference": "testdata/gp7/slash.gp:sections",
           "detail": "Reproduced at masterBars[1].section. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSectionAndTrackNames",
+          "detail": "Public API regression uses distinct sections and two independent track names."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSectionTrackNames",
+          "detail": "Exact public field, wire, policy, authority and occurrence assertions; stage-specific closure claims."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSectionTrackNames",
+          "detail": "Raw importer values and final consumer values are separate; exact nonempty edits and scoped empty/whitespace losses are checked."
         }
       ]
     },
@@ -1141,11 +1156,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF ShortName is absent from the decoded track and public Track.",
+      "finding": "Track.ShortName is an independent optional string: nil means absent, and a pointer to an empty string means authored empty. Go import and GP8 retain exact values without truncation. Nonempty Unicode/XML-sensitive names survive the final pinned consumer. Explicit empty names replaced by AlphaTab full-name derivation, and boundary whitespace combined with a CDATA terminator, receive scoped loss reports; strict preservation requires those allowances.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Track.shortName"
@@ -1165,6 +1180,21 @@
           "kind": "probe",
           "reference": "testdata/gp7/dead.gp:short-name",
           "detail": "Reproduced at tracks[0].shortName. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSectionAndTrackNames",
+          "detail": "Public API regression uses distinct sections and two independent track names."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSectionTrackNames",
+          "detail": "Exact public field, wire, policy, authority and occurrence assertions; stage-specific closure claims."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSectionTrackNames",
+          "detail": "Raw importer values and final consumer values are separate; exact nonempty edits and scoped empty/whitespace losses are checked."
         }
       ]
     },

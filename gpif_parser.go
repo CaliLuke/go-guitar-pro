@@ -119,6 +119,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			if t.ID == trackID {
 				gpifAuditTrackAutomations(t, len(doc.MasterBars.MasterBars), context)
 				track.Name = t.Name
+				if t.ShortName != nil {
+					name := *t.ShortName
+					track.ShortName = &name
+				}
 				track.PercussionTrack = t.isPercussionTrack()
 				if track.PercussionTrack {
 					track.PercussionArticulations = gpifReadPercussionArticulations(t.InstrumentSet, t.NotationPatch)
@@ -321,7 +325,11 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 			if title == "" {
 				title = mb.Section.Letter
 			}
-			mh.Marker = &Marker{Title: title}
+			mh.Marker = &Marker{
+				Title: title, Letter: mb.Section.Letter, Text: mb.Section.Text,
+				titleCompatibility: title, textCompatibility: mb.Section.Text,
+				sectionCompatibilitySet: true,
+			}
 		}
 
 		// Double bar

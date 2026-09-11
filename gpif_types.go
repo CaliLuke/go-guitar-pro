@@ -130,6 +130,7 @@ type gpifTracks struct {
 type gpifTrack struct {
 	ID               string              `xml:"id,attr"`
 	Name             string              `xml:"Name"`
+	ShortName        *string             `xml:"ShortName,omitempty"`
 	Color            string              `xml:"Color,omitempty"`
 	Instrument       *gpifInstrument     `xml:"Instrument,omitempty"`
 	GeneralMidi      *gpifGeneralMidi    `xml:"GeneralMidi,omitempty"`

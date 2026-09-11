@@ -46,6 +46,9 @@ type Staff struct {
 // Track represents a track.
 type Track struct {
 	Name string
+	// ShortName is the independent authored abbreviation. Nil means absent.
+	// A non-nil empty string preserves an explicitly empty short name.
+	ShortName *string
 	// Staves preserves every staff in GPIF track order. Binary GP3–5 tracks have one staff.
 	Staves []Staff
 	// Measures is the first staff's compatibility view. Use Staves for lossless multi-staff access.

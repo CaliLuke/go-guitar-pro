@@ -108,10 +108,37 @@ func (mh *MeasureHeader) ExactLength() (ScoreTime, error) {
 	return duration.Multiply(int64(mh.TimeSignature.Numerator))
 }
 
-// Marker is a marker annotation for beats.
+// Marker identifies an authored section at a measure boundary.
 type Marker struct {
+	// Title is the legacy section caption. Import selects Text, then Letter.
+	// Editing a parsed Title overrides Text at export and preserves Letter.
 	Title string
-	Color int32
+	// Letter is the independently authored section identifier.
+	Letter string
+	// Text is the independently authored section description.
+	Text                    string
+	Color                   int32
+	titleCompatibility      string
+	textCompatibility       string
+	sectionCompatibilitySet bool
+}
+
+func (marker *Marker) sectionValues() (string, string) {
+	if marker.sectionCompatibilitySet {
+		if marker.Title != marker.titleCompatibility {
+			return marker.Letter, marker.Title
+		}
+		return marker.Letter, marker.Text
+	}
+	if marker.Letter == "" && marker.Text == "" {
+		return "", marker.Title
+	}
+	return marker.Letter, marker.Text
+}
+
+func (marker *Marker) sectionTitleConflict() bool {
+	return marker.sectionCompatibilitySet && marker.Title != marker.titleCompatibility &&
+		marker.Text != marker.textCompatibility && marker.Title != marker.Text
 }
 
 func (s *Song) readClipboard(c *cursor) error {

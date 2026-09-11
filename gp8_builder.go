@@ -312,14 +312,22 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		builder.addReport("gp8.normalize.sound-authority", "midi-bank", ExportDispositionNormalized, location, "the first explicit track sound is authoritative over the channel program and bank mirror")
 	}
 
+	if track.ShortName != nil && gpifTextConsumerTrims(*track.ShortName) {
+		builder.addReport("gp8.omit.short-name-consumer-whitespace", "score-core", ExportDispositionOmitted, location, "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator")
+	}
+	if track.ShortName != nil && *track.ShortName == "" && track.Name != "" {
+		builder.addReport("gp8.omit.short-name-consumer-empty", "score-core", ExportDispositionOmitted, location, "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation")
+	}
+
 	red := (uint32(track.Color) >> 16) & 0xff
 	green := (uint32(track.Color) >> 8) & 0xff
 	blue := uint32(track.Color) & 0xff
 	primaryChannel := int(channel.Channel % 16)
 	result := gpifTrack{
-		ID:    strconv.Itoa(trackIndex),
-		Name:  track.Name,
-		Color: fmt.Sprintf("%d %d %d", red, green, blue),
+		ID:        strconv.Itoa(trackIndex),
+		Name:      track.Name,
+		ShortName: track.ShortName,
+		Color:     fmt.Sprintf("%d %d %d", red, green, blue),
 		Sounds: gpifSounds{Sounds: []gpifSound{{
 			Name:    track.Name,
 			Program: int(channel.Instrument),
@@ -660,6 +668,15 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		builder.reportFermataConsumerLimits(header, headerLocation)
 		if header.DoubleBar && measureIndex == len(builder.song.MeasureHeaders)-1 {
 			builder.addReport("gp8.omit.double-bar-consumer-terminal", "score-core", ExportDispositionOmitted, headerLocation, "GPIF retains the authored final DoubleBar flag, but pinned AlphaTab clears it and resolves the terminal line to LightHeavy")
+		}
+		if header.Marker != nil {
+			letter, text := header.Marker.sectionValues()
+			if gpifTextConsumerTrims(letter) || gpifTextConsumerTrims(text) {
+				builder.addReport("gp8.omit.section-consumer-whitespace", "score-core", ExportDispositionOmitted, headerLocation, "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator")
+			}
+		}
+		if header.Marker != nil && header.Marker.sectionTitleConflict() {
+			builder.addReport("gp8.normalize.section-title", "score-core", ExportDispositionNormalized, headerLocation, "the edited legacy marker title overrides the conflicting section text and preserves its letter")
 		}
 		if header.Marker != nil && header.Marker.Color != 0 {
 			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer emits section text but not marker color")

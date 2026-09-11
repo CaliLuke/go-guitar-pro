@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "issues": [
+    90,
+    91
+  ],
+  "status": "implemented-awaiting-independent-review",
+  "source": {
+    "path": "testdata/gp8/section-track-names.gp",
+    "sha256": "091e8929937c589b8c9b2cfc67947b18dc253ba6b71bba42afce0eb5668f694b",
+    "provenance": "Original synthetic minimal GPIF regression, generated in this task. Two tracks, six master bars, whole rests and distinct literal section/name text. No third-party musical content.",
+    "consumer": {
+      "tracks": [
+        {
+          "name": "Lead guitar",
+          "rawShortName": "Gtr Ω <&>",
+          "shortName": "Gtr Ω <&>"
+        },
+        {
+          "name": "Bass guitar",
+          "rawShortName": "Bass long label 日本語",
+          "shortName": "Bass long label 日本語"
+        }
+      ],
+      "sections": [
+        {
+          "letter": "A",
+          "text": "Verse"
+        },
+        {
+          "letter": "",
+          "text": "Text Ω <&> \" ]]>"
+        },
+        {
+          "letter": "B <&>",
+          "text": ""
+        },
+        {
+          "letter": "",
+          "text": ""
+        },
+        null,
+        {
+          "letter": "C",
+          "text": "Coda"
+        }
+      ]
+    }
+  },
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "scenarios": [
+    {
+      "reports": null,
+      "scenario": "source",
+      "export_sha256": "550cbe1b4ca8d21a1ea615937a560556d39a3b117be7127972d1c1ee490c3a34",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "Gtr Ω <&>",
+            "shortName": "Gtr Ω <&>"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "A",
+            "text": "Verse"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": null,
+      "scenario": "edited",
+      "export_sha256": "17a6b721a564042e2f8102447156a25ca8eddbf0332265281a5a22b47d3e71da",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "Edited Ω <&> \" long",
+            "shortName": "Edited Ω <&> \" long"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "新 <&>",
+            "text": "Edited Ω <&>"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": [
+        {
+          "Code": "gp8.omit.short-name-consumer-empty",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation"
+        }
+      ],
+      "scenario": "empty-short-name",
+      "export_sha256": "786eef2790bf19dd47e515e3e61ecd7376b5997ab7c39e17d61bf6dc072f5745",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "",
+            "shortName": "Lead guita"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "A",
+            "text": "Verse"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": [
+        {
+          "Code": "gp8.omit.short-name-consumer-whitespace",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator"
+        },
+        {
+          "Code": "gp8.omit.section-consumer-whitespace",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator"
+        }
+      ],
+      "scenario": "terminator-whitespace",
+      "export_sha256": "d3fa4064eed0661443736933c773e0f5c954513e207295ea125e807ccf496ffb",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "x ]]>",
+            "shortName": "x ]]>"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "A",
+            "text": "x ]]>"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    }
+  ],
+  "limits": [
+    "An absent short name is distinct from an authored empty string. AlphaTab finalization derives a full-name abbreviation for empty short names; the raw value is recorded separately.",
+    "Single CDATA preserves XML-sensitive text and boundary whitespace. Text containing a CDATA terminator uses escaped ordinary XML with decimal whitespace references; AlphaTab then trims boundary whitespace. Both affected fields receive explicit scoped consumer-loss reports.",
+    "The broad capability probe and full conformance/prek gates remain assigned to root integration; these are focused current-source receipts."
+  ],
+  "tests": [
+    "TestSectionAndTrackNames",
+    "TestSectionTitlePublicEdits",
+    "TestShortNamePublicPresenceAndPolicy",
+    "TestConformanceSectionTrackNames",
+    "TestAlphaTabSectionTrackNames"
+  ]
+}

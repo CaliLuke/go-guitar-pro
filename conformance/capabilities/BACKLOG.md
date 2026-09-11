@@ -67,8 +67,8 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | todo | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
 | [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | todo | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
 | [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | todo | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
-| [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | todo | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
-| [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | todo | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
+| [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | in_progress | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
+| [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | in_progress | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
 | [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |
 | [Verify duration-percentage export losses against the pinned consumer](work-items/sound-duration.json) | implementation | 2 | todo | — | [#102](https://github.com/CaliLuke/go-guitar-pro/issues/102) |
 | [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json) | implementation | 2 | todo | — | [#93](https://github.com/CaliLuke/go-guitar-pro/issues/93) |
