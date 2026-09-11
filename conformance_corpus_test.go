@@ -101,7 +101,7 @@ func verifyCorpusSnapshot(t *testing.T) error {
 	for _, fixture := range inventory.Fixtures {
 		paths = append(paths, fixture.Path)
 	}
-	oracleScores, err := readCorpusOracleScores(paths)
+	oracleScores, err := readCorpusOracleReceipts(paths)
 	if err != nil {
 		return err
 	}
@@ -309,7 +309,7 @@ func conformanceCorpusDifferenceKey(fixture string, difference conformanceCorpus
 	return fixture + "\x00" + string(encoded)
 }
 
-func readCorpusOracleScores(paths []string) (map[string]conformanceCorpusOracleResult, error) {
+func readCorpusOracleReceipts(paths []string) (map[string]conformanceCorpusOracleResult, error) {
 	args := append([]string{alphaTabOracleScript(), "--batch-receipts"}, paths...)
 	output, err := exec.Command("node", args...).CombinedOutput()
 	if err != nil {
@@ -378,4 +378,19 @@ func TestCorpusDiagnosticsAccountsForEveryLocation(t *testing.T) {
 	if reflect.DeepEqual(conformanceCorpusDiagnostics(first), conformanceCorpusDiagnostics(second)) {
 		t.Fatal("counted diagnostics hid a non-representative location change")
 	}
+}
+
+func readCorpusOracleScores(paths []string) (map[string]any, error) {
+	receipts, err := readCorpusOracleReceipts(paths)
+	if err != nil {
+		return nil, err
+	}
+	scores := make(map[string]any, len(receipts))
+	for path, receipt := range receipts {
+		if receipt.Error != nil || receipt.Score == nil {
+			return nil, fmt.Errorf("%s: expected an AlphaTab score, got import error %v", path, receipt.Error)
+		}
+		scores[path] = receipt.Score
+	}
+	return scores, nil
 }
