@@ -46,6 +46,13 @@ The hierarchy is `Score -> Track -> Staff -> Measure -> Voice -> Beat -> Note`.
 Each parsed beat and note is an independent occurrence. Reused GPIF definitions
 do not share mutable effect data.
 
+`Beat.Lyrics` is the ordered, beat-scoped authored lyric sequence. It is
+independent from `Beat.Text`, `Track.Lyrics`, and `Song.Lyrics`. Nil means that
+the GPIF `Lyrics` element was absent; a non-nil empty slice preserves an
+authored empty element. Direct public edits are authoritative for GP8 export.
+Each parsed occurrence owns independent lyric storage, even when multiple
+voices reference one GPIF beat definition.
+
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
 are compatibility views of the first staff. A non-nil compatibility slice is
 the authority for staff 0. This rule applies to finalization, validation, and

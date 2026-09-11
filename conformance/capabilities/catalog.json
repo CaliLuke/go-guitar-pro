@@ -2270,12 +2270,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Beat.Lyrics has no dedicated public destination. FreeText and track lyrics cannot preserve this source scope.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Beat.Lyrics preserves ordered GPIF beat-scoped lines, including empty and Unicode values, as independent occurrences through public edits and GP8 export. Nil remains distinct from an authored empty Lyrics element, and FreeText plus score and track lyrics remain separate.",
+      "acceptance": "Keep beat-scoped lyrics ordered, occurrence-owned, and distinct from FreeText and score or track lyric scopes through GPIF import, public edits, and GP8 export.",
       "upstream": [
         "Beat.lyrics",
         "GpifParser._parseBeat:Lyrics"
@@ -2283,8 +2283,28 @@
       "evidence": [
         {
           "kind": "source",
-          "reference": "gpif_types.go",
-          "detail": "Reviewed implementation or documented contract."
+          "reference": "gpif_effects.go",
+          "detail": "Copies GPIF beat lyric lines into independently owned public beat slices."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_notation.go",
+          "detail": "Emits nil, authored-empty, and populated beat lyric elements without merging other lyric scopes."
+        },
+        {
+          "kind": "field",
+          "reference": "Beat.Lyrics",
+          "detail": "Ordered beat-scoped public authority with a documented nil-versus-empty contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatLyrics",
+          "detail": "Exact GPIF import, independent reused occurrences, public edits, wire output, reimport, and scope separation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesBeatLyrics",
+          "detail": "Pinned AlphaTab checks source and Go-output locations, ordering, empty lines, Unicode, FreeText, and post-parse edits."
         },
         {
           "kind": "probe",

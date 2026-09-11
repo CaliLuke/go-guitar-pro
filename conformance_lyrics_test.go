@@ -213,6 +213,168 @@ func runConformanceSourceLyricsDispatch(run *conformanceRun) {
 	}
 }
 
+const conformanceBeatLyricsCase = "M18-BEAT-LYRICS"
+const conformanceBeatLyricsValue = "ordered empty and Unicode beat lines"
+
+type conformanceBeatLyricFact struct {
+	Track  int      `json:"track"`
+	Staff  int      `json:"staff"`
+	Bar    int      `json:"bar"`
+	Voice  int      `json:"voice"`
+	Beat   int      `json:"beat"`
+	Lyrics []string `json:"lyrics"`
+	Text   string   `json:"text"`
+}
+
+func TestConformanceBeatLyrics(t *testing.T) {
+	runConformanceBeatLyrics(newConformanceRun(t))
+}
+
+func runConformanceBeatLyrics(run *conformanceRun) {
+	t := run.t
+	source := conformanceBeatLyricsGPIF()
+	parsed, err := ParseWithOptions(conformanceGPIFArchive(t, source), ParseOptions{Strict: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	upper := parsed.Song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats
+	lower := parsed.Song.Tracks[0].Staves[1].Measures[0].Voices[0].Beats
+	wantLines := []string{"", "日本語 café"}
+	if len(upper) != 2 || len(lower) != 3 {
+		t.Fatalf("beat lyric occurrence counts = %d, %d; want 2, 3", len(upper), len(lower))
+	}
+	run.ClaimPrimary(claimSite("beat-lyrics", "import", conformanceBeatLyricsCase, conformanceBeatLyricsValue)).Preserved("Beat.Lyrics", upper[0].Lyrics, wantLines)
+	run.Preserved("Beat.Lyrics", upper[1].Lyrics, wantLines)
+	run.Preserved("Beat.Lyrics", lower[0].Lyrics, wantLines)
+	if lower[1].Lyrics == nil || len(lower[1].Lyrics) != 0 {
+		t.Fatalf("authored empty beat lyrics = %#v, want non-nil empty", lower[1].Lyrics)
+	}
+	if lower[2].Lyrics != nil {
+		t.Fatalf("absent beat lyrics = %#v, want nil", lower[2].Lyrics)
+	}
+	for _, beat := range []Beat{upper[0], upper[1], lower[0]} {
+		if beat.Text != "separate free text" {
+			t.Fatalf("beat text = %q, want separate free text", beat.Text)
+		}
+	}
+
+	// Reused GPIF beat definitions create independently editable public slices.
+	upper[0].Lyrics[0] = "edited first"
+	if upper[1].Lyrics[0] != "" || lower[0].Lyrics[0] != "" {
+		t.Fatalf("editing one reused lyric occurrence changed another: %#v, %#v", upper[1].Lyrics, lower[0].Lyrics)
+	}
+
+	allowed := []string{"gp8.normalize.source-version", "gp8.omit.track-display-settings"}
+	data, report, err := ExportWithReport(parsed.Song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
+	if err != nil || !slices.Equal(reportCodes(report), allowed) {
+		t.Fatalf("beat lyric export = %v, %#v", err, report.Entries)
+	}
+	run.ClaimReport(claimSite("beat-lyrics", "export", conformanceBeatLyricsCase, conformanceBeatLyricsValue)).Report(conformanceBeatLyricsCase, reportCodes(report), allowed)
+	wire := extractLyricWire(t, data)
+	if len(wire.Beats) != 5 {
+		t.Fatalf("wire beats = %d, want 5", len(wire.Beats))
+	}
+	wantWire := [][]string{{"edited first", "日本語 café"}, wantLines, wantLines, nil, nil}
+	gotWire := make([][]string, len(wire.Beats))
+	gotPresent := make([]bool, len(wire.Beats))
+	for index, beat := range wire.Beats {
+		if beat.Lyrics != nil {
+			gotPresent[index] = true
+			gotWire[index] = beat.Lyrics.Lines
+		}
+	}
+	run.ClaimSerialization(claimSite("beat-lyrics", "export", conformanceBeatLyricsCase, conformanceBeatLyricsValue)).Wire("gpifBeat.Lyrics", gotPresent, []bool{true, true, true, true, false})
+	run.Wire("gpifBeatLyrics.Lines", gotWire, wantWire)
+	if wire.Beats[3].Lyrics == nil || wire.Beats[4].Lyrics != nil {
+		t.Fatalf("wire empty/absent lyric elements = %#v, %#v", wire.Beats[3].Lyrics, wire.Beats[4].Lyrics)
+	}
+	for index := range 3 {
+		if wire.Beats[index].FreeText != "separate free text" {
+			t.Fatalf("wire beat %d FreeText = %q", index, wire.Beats[index].FreeText)
+		}
+	}
+
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundUpper := roundTrip.Tracks[0].Staves[0].Measures[0].Voices[0].Beats
+	roundLower := roundTrip.Tracks[0].Staves[1].Measures[0].Voices[0].Beats
+	run.ClaimPrimary(
+		claimSite("beat-lyrics", "model", conformanceBeatLyricsCase, conformanceBeatLyricsValue),
+		claimSite("beat-lyrics", "export", conformanceBeatLyricsCase, conformanceBeatLyricsValue),
+	).Preserved("Beat.Lyrics", roundUpper[0].Lyrics, []string{"edited first", "日本語 café"})
+	run.Preserved("Beat.Lyrics", roundUpper[1].Lyrics, wantLines)
+	run.Preserved("Beat.Lyrics", roundLower[0].Lyrics, wantLines)
+	if roundLower[1].Lyrics == nil || len(roundLower[1].Lyrics) != 0 || roundLower[2].Lyrics != nil {
+		t.Fatalf("round-trip empty/absent beat lyrics = %#v, %#v", roundLower[1].Lyrics, roundLower[2].Lyrics)
+	}
+	if parsed.Song.Tracks[0].Lyrics != nil || len(parsed.Song.Lyrics.Lines) != 0 {
+		t.Fatal("beat lyrics leaked into track- or score-scoped lyrics")
+	}
+}
+
+func TestGPIFBeatLyricsMalformedChildrenAreDiagnosed(t *testing.T) {
+	source := strings.Replace(conformanceBeatLyricsGPIF(), "</Lyrics>", "<Future>lost</Future></Lyrics>", 1)
+	result, err := ParseWithOptions(conformanceGPIFArchive(t, source), ParseOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !slices.ContainsFunc(result.Diagnostics, func(diagnostic ParseDiagnostic) bool {
+		return diagnostic.Code == "GPIF.UnknownElement.NoteAndBeat" &&
+			diagnostic.Kind == ParseDiagnosticUnknownSyntax &&
+			diagnostic.ObjectID == "0" && strings.HasSuffix(diagnostic.SourcePath, "/Lyrics/Future")
+	}) {
+		t.Fatalf("malformed beat lyric diagnostics = %#v", result.Diagnostics)
+	}
+	if _, strictErr := ParseWithOptions(conformanceGPIFArchive(t, source), ParseOptions{Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticUnknownSyntax}}); strictErr == nil {
+		t.Fatal("strict parsing accepted an unknown beat lyric child")
+	}
+}
+
+func TestAlphaTabPreservesBeatLyrics(t *testing.T) {
+	requireAlphaTabConformance(t)
+	sourceData := conformanceGPIFArchive(t, conformanceBeatLyricsGPIF())
+	sourcePath := writeConformanceFixture(t, sourceData)
+	var source []conformanceBeatLyricFact
+	readAlphaTabOracleFacts(t, "--beat-lyrics", sourcePath, &source)
+	wantLines := []string{"", "日本語 café"}
+	want := []conformanceBeatLyricFact{
+		{Track: 0, Staff: 0, Bar: 0, Voice: 0, Beat: 0, Lyrics: wantLines, Text: "separate free text"},
+		{Track: 0, Staff: 0, Bar: 0, Voice: 0, Beat: 1, Lyrics: wantLines, Text: "separate free text"},
+		{Track: 0, Staff: 1, Bar: 0, Voice: 0, Beat: 0, Lyrics: wantLines, Text: "separate free text"},
+		{Track: 0, Staff: 1, Bar: 0, Voice: 0, Beat: 1, Lyrics: []string{}, Text: ""},
+	}
+	if !reflect.DeepEqual(source, want) {
+		t.Fatalf("AlphaTab source beat lyrics = %#v, want %#v", source, want)
+	}
+
+	song, err := Parse(sourceData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Lyrics[0] = "edited first"
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var output []conformanceBeatLyricFact
+	readAlphaTabOracleFacts(t, "--beat-lyrics", writeConformanceFixture(t, data), &output)
+	want[0].Lyrics = []string{"edited first", "日本語 café"}
+	if !reflect.DeepEqual(output, want) {
+		t.Fatalf("AlphaTab output beat lyrics = %#v, want %#v", output, want)
+	}
+	conformanceIndependentClaim(t, "field:Beat.Lyrics", claimAllStages("beat-lyrics", conformanceBeatLyricsCase, conformanceBeatLyricsValue)...)
+}
+
+func conformanceBeatLyricsGPIF() string {
+	source := strings.Replace(staffScopedChordGPIF, `<Beats>0</Beats>`, `<Beats>0 0</Beats>`, 1)
+	source = strings.Replace(source, `<Beats>1</Beats>`, `<Beats>0 1 2</Beats>`, 1)
+	source = strings.Replace(source, `<Beat id="0"><Rhythm ref="0"/><Chord>0</Chord></Beat>`, `<Beat id="0"><Rhythm ref="0"/><FreeText>separate free text</FreeText><Lyrics><Line></Line><Line>日本語 café</Line></Lyrics></Beat>`, 1)
+	source = strings.Replace(source, `<Beat id="1"><Rhythm ref="0"/><Chord>0</Chord></Beat>`, `<Beat id="1"><Rhythm ref="0"/><Lyrics></Lyrics></Beat><Beat id="2"><Rhythm ref="0"/></Beat>`, 1)
+	return source
+}
+
 type conformanceLyricWireDocument struct {
 	Tracks []conformanceLyricWireTrack `xml:"Tracks>Track"`
 	Beats  []conformanceLyricWireBeat  `xml:"Beats>Beat"`
@@ -233,7 +395,8 @@ type conformanceLyricWireLyricLine struct {
 }
 
 type conformanceLyricWireBeat struct {
-	FreeText string `xml:"FreeText"`
+	Lyrics   *gpifBeatLyrics `xml:"Lyrics"`
+	FreeText string          `xml:"FreeText"`
 }
 
 func extractLyricWire(t *testing.T, data []byte) conformanceLyricWireDocument {

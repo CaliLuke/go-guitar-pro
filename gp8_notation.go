@@ -243,6 +243,9 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	}
 	beatID := strconv.Itoa(len(builder.doc.Beats.Beats))
 	result := gpifBeat{ID: beatID, Rhythm: gpifRhythmRef{Ref: rhythmID}, FreeText: beat.Text}
+	if beat.Lyrics != nil {
+		result.Lyrics = &gpifBeatLyrics{Lines: append([]string{}, beat.Lyrics...)}
+	}
 	gp8BeatBeaming(beat, &result)
 	if beat.Legato != nil {
 		result.Legato = &gpifLegato{

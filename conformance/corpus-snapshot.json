@@ -5018,9 +5018,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 15,
+          "count": 9,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "12ba7a834d97267a2953b642382558226637ca9c3da8a24ff45d258b4135ddee"
+          "locationsSha256": "fb012d4e76a87ba1d965194934786a4902e968d50c453aae546c91ab836c711e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7704,14 +7704,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
           "objectId": "0",
           "locationsSha256": "34ff80fe9f67abfdf61bbd9cdc53a9ec85a81023e54e1e668ffc338041c9ad2c"
-        },
-        {
-          "code": "GPIF.UnknownElement.NoteAndBeat",
-          "kind": "unknown-syntax",
-          "count": 1552,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"9\"]/Lyrics",
-          "objectId": "9",
-          "locationsSha256": "018e920d9ae6662d2fa0e8c090d89e281bcd70fee1ccbf4051190e68eeb2be51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -17234,14 +17226,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
           "objectId": "0",
           "locationsSha256": "34ff80fe9f67abfdf61bbd9cdc53a9ec85a81023e54e1e668ffc338041c9ad2c"
-        },
-        {
-          "code": "GPIF.UnknownElement.NoteAndBeat",
-          "kind": "unknown-syntax",
-          "count": 1552,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"9\"]/Lyrics",
-          "objectId": "9",
-          "locationsSha256": "018e920d9ae6662d2fa0e8c090d89e281bcd70fee1ccbf4051190e68eeb2be51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

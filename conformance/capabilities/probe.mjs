@@ -58,7 +58,7 @@ function plain(value) {
   return Object.fromEntries(keys.filter(k => Object.hasOwn(value, k)).map(k => [k, plain(value[k])]));
 }
 
-function project(score) {
+function project(score, options = {}) {
   const out = {};
   const add = (capability, location, value, defaultValue = null) => {
     const normalized = plain(value);
@@ -69,6 +69,7 @@ function project(score) {
   const collect = (type, object, location) => {
     const defaults = new alphaTab.model[type]();
     for (const [capability, fields] of Object.entries(definitions[type])) {
+      if (capability === 'beat-lyrics' && !options.authoredBeatLyrics) continue;
       for (const field of fields) {
         // These rows isolate the non-default variant named by the capability.
         if (capability === 'fade-other' && ![alphaTab.model.FadeType.FadeOut, alphaTab.model.FadeType.VolumeSwell].includes(object[field])) continue;
@@ -165,14 +166,18 @@ try {
   const catalogIDs = new Set(catalog.capabilities.map(c => c.id));
   for (const [index, result] of output.trim().split('\n').map(line => JSON.parse(line)).entries()) {
     let source = null, target = null, sourceConsumerError = null, targetConsumerError = null;
+    // Gate AlphaTab's beat.lyrics projection from the original GPIF container,
+    // independently of the Go model under test. This excludes legacy lyrics
+    // applied by AlphaTab while keeping an import regression visible.
+    const authoredBeatLyrics = result.SourceBeatLyrics;
     try {
-      source = project(load(path.resolve(root, result.Path)));
+      source = project(load(path.resolve(root, result.Path)), { authoredBeatLyrics });
     } catch (error) {
       sourceConsumerError = String(error);
     }
     if (result.Output) {
       try {
-        target = project(load(result.Output));
+        target = project(load(result.Output), { authoredBeatLyrics });
       } catch (error) {
         targetConsumerError = String(error);
       }

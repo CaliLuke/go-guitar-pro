@@ -5,8 +5,8 @@
   "title": "Preserve lyrics authored directly on beats",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_76",
   "formats": [
     "gp6",
     "gp7",
@@ -81,7 +81,32 @@
     {
       "kind": "source",
       "reference": "gpif_types.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Defines the optional GPIF beat Lyrics element and ordered Line payloads."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_effects.go",
+      "detail": "Copies every source occurrence into independent public Beat.Lyrics storage."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_notation.go",
+      "detail": "Emits absent, authored-empty, and populated beat lyric elements exactly."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBeatLyrics",
+      "detail": "Covers two ordered lines including an empty line and Unicode, separate FreeText, nil versus empty elements, reused definition ownership, public edits, exact wire output, and Go reimport."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGPIFBeatLyricsMalformedChildrenAreDiagnosed",
+      "detail": "Covers permissive and strict diagnostics for unknown content nested in Beat.Lyrics."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesBeatLyrics",
+      "detail": "Pinned AlphaTab verifies exact source and edited-output lyric facts at each track, staff, bar, voice, and beat location."
     },
     {
       "kind": "probe",
@@ -90,9 +115,12 @@
     }
   ],
   "shared_files": [
+    "beat.go",
+    "gp8_notation.go",
+    "gpif_effects.go",
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "Added Beat.Lyrics as the direct, documented authority for ordered beat-scoped GPIF lines. Import clones every referenced definition into independent occurrence storage; nil means absent while a non-nil empty slice preserves an authored empty Lyrics element. GP8 export writes that exact distinction and keeps Beat.Text, Track.Lyrics, and Song.Lyrics independent. Focused tests cover ordered empty and Unicode lines, separate FreeText, multi-staff reused definitions, post-parse edits, malformed nested syntax, exact GPIF, Go reimport, and pinned AlphaTab consumption. The refreshed authored-source probe preserves 6/6 beat-lyrics.gp facts and 1812/1812 facts in each GP7 and GP8 faulty fixture; legacy score/track lyric application remains excluded under ticket #98.",
   "verification": [],
   "issue": {
     "number": 76,

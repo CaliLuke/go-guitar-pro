@@ -471,6 +471,7 @@ type gpifBeat struct {
 	Arpeggio                           string           `xml:"Arpeggio,omitempty"`
 	Hairpin                            string           `xml:"Hairpin,omitempty"`
 	Legato                             *gpifLegato      `xml:"Legato,omitempty"`
+	Lyrics                             *gpifBeatLyrics  `xml:"Lyrics,omitempty"`
 	FreeText                           string           `xml:"FreeText,omitempty"`
 	Ottavia                            string           `xml:"Ottavia,omitempty"`
 	TransposedPitchStemOrientation     string           `xml:"TransposedPitchStemOrientation,omitempty"`
@@ -479,6 +480,10 @@ type gpifBeat struct {
 	Whammy                             *gpifWhammy      `xml:"Whammy,omitempty"`
 	Properties                         gpifProperties   `xml:"Properties"`
 	XProperties                        *gpifXProperties `xml:"XProperties,omitempty"`
+}
+
+type gpifBeatLyrics struct {
+	Lines []string `xml:"Line"`
 }
 
 type gpifXProperties struct {

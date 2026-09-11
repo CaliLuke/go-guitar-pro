@@ -290,6 +290,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceLyricScopes":                        runConformanceLyricScopes,
 	"TestConformanceBinaryScoreLyrics":                  runConformanceBinaryScoreLyrics,
 	"TestConformanceSourceLyricsDispatch":               runConformanceSourceLyricsDispatch,
+	"TestConformanceBeatLyrics":                         runConformanceBeatLyrics,
 	"TestConformanceBackingAssetsAndSyncPoints":         runConformanceBackingAssetsAndSyncPoints,
 	"TestConformanceBackingTrackExport":                 runConformanceBackingTrackExport,
 	"TestConformanceBackingSourceDiagnostics":           runConformanceBackingSourceDiagnostics,

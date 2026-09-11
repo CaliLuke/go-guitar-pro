@@ -85,9 +85,14 @@ type Beat struct {
 	// PreferredBeamDirection is the authored up/down stem override. None means
 	// no explicit direction and is independent from InvertBeamDirection.
 	PreferredBeamDirection VoiceDirection
-	Text                   string
-	Notes                  []Note
-	Duration               Duration
+	// Lyrics preserves the ordered lines authored directly on this beat. Nil
+	// means that the GPIF Lyrics element was absent. A non-nil empty slice means
+	// that an empty Lyrics element was authored. The slice is independent from
+	// Beat.Text, Track.Lyrics, and Song.Lyrics, and direct edits are authoritative.
+	Lyrics   []string
+	Text     string
+	Notes    []Note
+	Duration Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
 	// absent and lets export use the first note velocity. A nonzero value must be
 	// within 1..127. GP3-5 stores the value on notes, but the last explicit value

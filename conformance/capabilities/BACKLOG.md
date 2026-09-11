@@ -46,7 +46,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve authored pitch spelling and accidental choices](work-items/accidentals.json) | implementation | 2 | blocked | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | [#73](https://github.com/CaliLuke/go-guitar-pro/issues/73) |
 | [Preserve beat barre fret and shape](work-items/barre.json) | implementation | 2 | in_progress | — | [#74](https://github.com/CaliLuke/go-guitar-pro/issues/74) |
 | [Preserve authored beam groups and stem overrides](work-items/beaming.json) | implementation | 2 | in_progress | — | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) |
-| [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | todo | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |
+| [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | in_progress | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |
 | [Preserve and export beat vibrato strength](work-items/beat-vibrato.json) | implementation | 2 | todo | — | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) |
 | [Preserve authored brush and arpeggio timing](work-items/brush.json) | implementation | 2 | todo | — | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) |
 | [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json) | implementation | 2 | todo | — | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) |

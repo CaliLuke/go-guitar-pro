@@ -121,12 +121,22 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Song.Album"', after: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Song.HideTempo"' },
+      { before: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","Song.Album"', after: '"preserved":["BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","Song.HideTempo"' },
       { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
     test: '^TestSemanticMatrixInventory$',
     want: 'Song.HideTempo executable evidence proves omitted, but the field partition claims preserved'
+  },
+  {
+    id: 'beat-lyrics-probe-import-drop',
+    contract: 'beat-lyrics-preservation',
+    category: 'probe-evidence',
+    file: 'gpif_effects.go',
+    before: '\tif b.Lyrics != nil {\n\t\tbeat.Lyrics = append([]string{}, b.Lyrics.Lines...)\n\t}\n',
+    after: '',
+    command: 'probe-beat-lyrics-test',
+    want: 'beat-lyrics probe target count = 0, want 6'
   },
   {
     id: 'removed-represented-field-serialization',
@@ -742,6 +752,14 @@ try {
       result = spawnSync('node', ['conformance/sync-upstream-inventory.mjs', '--check'], {
         cwd: root, encoding: 'utf8', env: { ...process.env, UPSTREAM_INVENTORY_OVERLAY: mutated }
       });
+    } else if (mutation.command === 'probe-beat-lyrics-test') {
+      const overlay = path.join(temporary, `${mutation.id}-overlay.json`);
+      fs.writeFileSync(overlay, JSON.stringify({ Replace: { [original]: mutated } }));
+      result = spawnSync('node', ['conformance/capabilities/probe-beat-lyrics-contract.mjs'], {
+        cwd: root,
+        encoding: 'utf8',
+        env: { ...process.env, BEAT_LYRICS_PROBE_GOFLAGS: `-overlay=${overlay}` }
+      });
     } else if (mutation.command === 'oracle-test') {
       result = spawnSync('go', ['test', '-count=1', '-run', mutation.test, '.'], {
         cwd: root,
@@ -769,7 +787,7 @@ try {
     }
     const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
     if (result.status === 0) throw new Error(`${mutation.id} survived ${mutation.test ?? mutation.command}`);
-    const expectedFailure = ['verify', 'capability-test', 'capability-check', 'upstream-check'].includes(mutation.command) || output.includes('--- FAIL:');
+    const expectedFailure = ['verify', 'capability-test', 'capability-check', 'upstream-check', 'probe-beat-lyrics-test'].includes(mutation.command) || output.includes('--- FAIL:');
     if (!expectedFailure || !output.includes(mutation.want)) {
       throw new Error(`${mutation.id} failed for an unexpected reason:\n${output}`);
     }

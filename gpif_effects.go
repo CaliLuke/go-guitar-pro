@@ -10,6 +10,9 @@ import (
 )
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
+	if b.Lyrics != nil {
+		beat.Lyrics = append([]string{}, b.Lyrics.Lines...)
+	}
 	if b.Legato != nil {
 		beat.Legato = &BeatLegato{
 			Origin:      b.Legato.Origin == "true",

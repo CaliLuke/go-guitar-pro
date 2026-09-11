@@ -25,6 +25,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `tempo-automations` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The public automation record and GP8 writer preserve ordered tempo values, interpolation, text, and per-event visibility; the remaining partial occurrence contract is tracked separately. |
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `brush` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) | Brush direction has a public destination, while the authored GPIF duration remains explicitly diagnosed as unknown syntax until issue 78 implements its separate timing contract. |
+| `beat-lyrics` | gp6, gp7, gp8 | supported | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) | Beat.Lyrics preserves GPIF beat-scoped lines as independent ordered occurrence data through public edits and GP8 export, without merging them into beat text or score and track lyrics. |
 | `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
 
 ## Parse diagnostics
@@ -257,7 +258,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 14 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields and legato endpoints are independent authored marks. |
+| `Beat` | `note-and-beat-semantics` | 15 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, legato endpoints, and ordered lyric lines are independent authored marks. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
@@ -286,7 +287,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 225 |
+| `preserved` | 226 |
 | `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -297,7 +298,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 89 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 158 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 90 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 158 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -305,7 +306,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 253 |
+| `schema` | 255 |
 
 ## Source dispatch inventory
 
@@ -408,6 +409,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
+| `beat-lyrics-preservation` | `beat-lyrics` | `TestConformanceBeatLyrics` | `TestAlphaTabPreservesBeatLyrics` | yes | Ordered beat-scoped lyric lines, including empty and Unicode values, survive as independently editable occurrences with exact absent-versus-empty GPIF representation and remain distinct from FreeText and score or track lyrics. |
 | `brush-direction-and-audit` | `brush` | `TestConformanceBeatEffects` | `TestAlphaTabInputConformance` | no | The represented stroke direction remains covered by the public model and pinned corpus comparison, while TestGPIFXPropertyAuditClosure keeps the separately tracked duration loss explicit until issue 78. |
 | `beaming-preservation` | `beaming` | `TestConformanceBeaming` | `TestAlphaTabPreservesBeaming` | yes | Authored master-bar groups, beam connection modes, inverted stems, and explicit up/down directions survive binary or GPIF import, public edits, exact GP8 wire output, and pinned-consumer loading. |
 | `sustain-pedal-preservation` | `sustain-pedal` | `TestConformanceSustainPedals` | `TestAlphaTabPreservesSustainPedals` | no | Ordered staff-0 down and release markers survive import, public editing, and GP8 export while empty continuing bars receive one derived hold marker that is skipped on the wire. Validation rejects a Down in a bar entered with the pedal down because consumers reinterpret it as Hold from bar-entry state. |
