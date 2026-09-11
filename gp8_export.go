@@ -393,6 +393,16 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 							if grace.HasPercussionArticulation && (grace.PercussionArticulation < 0 || grace.PercussionArticulation >= len(track.PercussionArticulations)) {
 								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d uses percussion articulation %d with %d definitions", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, grace.PercussionArticulation, len(track.PercussionArticulations))
 							}
+							graceNote := gp8PercussionGraceNote(&note, &grace)
+							if graceNote.Value < 0 || graceNote.Value > 127 {
+								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d has MIDI value %d outside 0..127", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, graceNote.Value)
+							}
+							if _, ok := gp8PercussionArticulationIndex(track, &graceNote); !ok {
+								element := gp8DrumElement(graceNote.Value, GP8ExportOptions{})
+								if element.Type == "percussion" {
+									return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d uses percussion MIDI value %d without a native Guitar Pro drum-kit articulation", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, graceNote.Value)
+								}
+							}
 						}
 					}
 					midi := gp8NoteMIDI(track, staff.Strings, &note)

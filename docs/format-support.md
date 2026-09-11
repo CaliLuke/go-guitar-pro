@@ -271,7 +271,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 80 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 81 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 146 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -358,6 +358,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `tremolo-import` | `tremolo-picking` | `TestParseGPIFRetainsTremoloPicking` | `TestAlphaTabInputConformance` | no | Non-default tremolo subdivisions agree with the independent consumer on import. |
 | `harmonic-conversion` | `harmonics` | `TestExportGP8PreservesHarmonicsAndWhammyCurves` | `TestAlphaTabExportConformance` | no | Represented harmonic values survive GP8 conversion. |
 | `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |
+| `native-percussion-fallbacks` | `percussion-articulations` | `TestConformanceNativePercussionFallbacks` | `TestAlphaTabPreservesNativePercussionFallbacks` | no | Every scoped native input keeps its exact element, notation, playback, main-note, and grace-note identity; IDs without a matching native definition remain precisely rejected. |
 | `gpif-property-dispatch` | `note-and-beat-semantics` | `TestParseWithOptionsReportsGPIFContentLoss` | `TestAlphaTabInputConformance` | no | Named properties are preserved or produce explicit parse diagnostics. |
 | `master-bar-denominator-boundary` | `rhythm` | `TestGPIFMasterBarValuesDoNotWrapAtLegacyBoundaries` | `TestAlphaTabInputConformance` | yes | A denominator that exceeds uint16 cannot wrap to a valid value. |
 | `unclassified-semantic-selector` | `grace-relationships` | `TestSemanticContractInventory` | none | yes | A case on any selector switch must receive a source disposition. |

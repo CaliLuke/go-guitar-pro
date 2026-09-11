@@ -26,6 +26,7 @@ func TestGP8PercussionUsesEveryResolvedStaff(t *testing.T) {
 		{name: "canonical staff without legacy measures", regular: [][]int16{{38}}, grace: map[int]int16{0: 42}, wantMIDIs: []int{38, 42}, wantInputs: []int{38, 42}},
 		{name: "two staves", regular: [][]int16{{38}, {36}}, wantMIDIs: []int{36, 38}, wantInputs: []int{36, 38}},
 		{name: "three staves and last-only drum", regular: [][]int16{{38}, {42}, {36}}, wantMIDIs: []int{36, 38, 42}, wantInputs: []int{36, 38, 42}},
+		{name: "native fallbacks across staves and grace", regular: [][]int16{{69}, {85}}, grace: map[int]int16{1: 87}, wantMIDIs: []int{69, 85, 87}, wantInputs: []int{69, 85, 87}},
 		{name: "empty first staff", regular: [][]int16{nil, {36}}, wantMIDIs: []int{36}, wantInputs: []int{36}},
 		{name: "later grace-only drum", regular: [][]int16{{38}, {42}}, grace: map[int]int16{1: 46}, wantMIDIs: []int{38, 42, 46}, wantInputs: []int{38, 42, 46}},
 	}

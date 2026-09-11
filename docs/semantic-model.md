@@ -326,7 +326,14 @@ Percussion articulations retain separate notation and playback identities even
 when two definitions use the same output MIDI value. GP8 also creates builtin
 fallback definitions for identity-free main and grace notes. Import and public
 validation reject invalid articulation identities and MIDI ranges. Notehead
-options change only the requested output notation.
+options change only the requested output notation. The builtin table uses exact
+native Guitar Pro definitions for inputs 29-31, 33-34, 39-40, 54, 56, and
+58-87, including distinct input and output MIDI values and notation metadata.
+Inputs 27, 28, and 32 remain rejected because the pinned native table has no
+matching definition; a nearby convenience alias is not treated as equivalent.
+An explicit percussion grace `ExactFret` is its input identity, including
+values outside the native table. Only a legacy zero sentinel without an exact
+value inherits the parent note identity.
 
 GP8 keeps the authored order of tempo and sound automations. It does not sort
 same-bar events by position. Parse diagnostics report missing values, broken

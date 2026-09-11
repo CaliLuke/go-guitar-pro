@@ -1119,10 +1119,10 @@ func TestExportRejectsUnsupportedInput(t *testing.T) {
 		t.Fatal("Export accepted an out-of-range percussion MIDI value")
 	}
 	song = syntheticGP8Song()
-	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 40
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 27
 	if _, err := Export(song, ExportFormatGP8); err == nil {
 		t.Fatal("Export accepted percussion without native Guitar Pro drum-kit metadata")
-	} else if !strings.Contains(err.Error(), "percussion MIDI value 40 without a native Guitar Pro drum-kit articulation") {
+	} else if !strings.Contains(err.Error(), "percussion MIDI value 27 without a native Guitar Pro drum-kit articulation") {
 		t.Fatalf("unsupported percussion error = %v", err)
 	}
 	song = syntheticGP8Song()

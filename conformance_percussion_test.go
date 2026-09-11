@@ -7,7 +7,9 @@ import (
 	"bytes"
 	"encoding/xml"
 	"io"
+	"os"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -254,10 +256,299 @@ func runConformanceSourceAndValidation(run *conformanceRun) {
 
 	unsupported := semanticValidGP8Song(t)
 	unsupported.Tracks[0].PercussionArticulations = nil
-	unsupported.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 40
+	unsupported.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Value = 27
 	unsupported.Tracks[0].Staves[0].Measures = unsupported.Tracks[0].Measures
 	report := PreflightExport(unsupported, ExportFormatGP8, ExportOptions{})
 	run.Dispatch("validateGP8Staff:element.Type", slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Disposition == ExportDispositionRejected }), true)
+}
+
+func TestConformanceNativePercussionFallbacks(t *testing.T) {
+	runConformanceNativePercussionFallbacks(newConformanceRun(t))
+}
+
+func runConformanceNativePercussionFallbacks(run *conformanceRun) {
+	t := run.t
+	for _, test := range conformanceNativePercussionCases() {
+		t.Run(test.name, func(t *testing.T) {
+			song := conformancePercussionBuiltinPercussionSong(t, test.midi)
+			exact, err := NewFret(int64(test.midi))
+			if err != nil {
+				t.Fatal(err)
+			}
+			note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+			note.Effect.Graces = []GraceEffect{{
+				Fret:       int8(test.midi),
+				ExactFret:  &exact,
+				Duration:   DurationThirtySecond,
+				Velocity:   Forte,
+				Transition: GraceEffectTransitionNone,
+			}}
+			song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
+
+			data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
+				LossPolicy: ExportLossPolicy{RequirePreservation: true},
+			})
+			if err != nil || len(report.Entries) != 0 {
+				t.Fatalf("native percussion export = %v, %#v", err, report.Entries)
+			}
+			wire := extractPercussionWire(t, data)
+			flat := flattenPercussionWireArticulations(wire.tracks[0].InstrumentSet.Elements)
+			if len(flat) != 1 {
+				t.Fatalf("wire articulations = %#v, want one", flat)
+			}
+			articulation := flat[0]
+			run.Wire("gpifArticulation.InputMIDINumbers", articulation.InputMIDINumbers, test.input)
+			run.Wire("gpifArticulation.Name", articulation.Name, test.articulation)
+			run.Wire("gpifArticulation.StaffLine", articulation.StaffLine, test.staffLine)
+			run.Wire("gpifArticulation.Noteheads", articulation.Noteheads, test.noteheads)
+			run.Wire("gpifArticulation.TechniquePlacement", articulation.TechniquePlacement, test.placement)
+			run.Wire("gpifArticulation.TechniqueSymbol", articulation.TechniqueSymbol, test.symbol)
+			run.Wire("gpifArticulation.OutputRSESound", articulation.OutputRSESound, test.rse)
+			run.Wire("gpifArticulation.OutputMIDINumber", articulation.OutputMIDINumber, test.outputMIDI)
+			element := wire.tracks[0].InstrumentSet.Elements[0]
+			run.Wire("gpifElement.Name", element.Name, test.element)
+			run.Wire("gpifElement.Type", element.Type, test.kind)
+			run.Wire("gpifElement.SoundbankName", element.SoundbankName, test.soundbank)
+			run.Wire("gpifNote.Properties", conformancePercussionWireNoteMIDIs(wire.notes), []int{int(test.midi), int(test.midi)})
+
+			roundTrip, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			gotTrack := &roundTrip.Tracks[0]
+			gotNote := gotTrack.Staves[0].Measures[0].Voices[0].Beats[0].Notes[0]
+			run.Preserved("Note.Value", gotNote.Value, test.midi)
+			if len(gotNote.Effect.Graces) != 1 {
+				t.Fatalf("round-trip graces = %#v, want one", gotNote.Effect.Graces)
+			}
+			run.Preserved("GraceEffect.ExactFret", *gotNote.Effect.Graces[0].ExactFret, exact)
+			if len(gotTrack.PercussionArticulations) != 1 {
+				t.Fatalf("round-trip articulations = %#v, want one", gotTrack.PercussionArticulations)
+			}
+			run.Preserved("Track.PercussionArticulations", gotTrack.PercussionArticulations[0].InputMIDINumbers, []int{int(test.midi)})
+		})
+	}
+
+	for _, midi := range []int16{27, 28, 32} {
+		t.Run("unsupported "+strconv.Itoa(int(midi)), func(t *testing.T) {
+			song := conformancePercussionBuiltinPercussionSong(t, midi)
+			_, err := Export(song, ExportFormatGP8)
+			want := "percussion MIDI value " + strconv.Itoa(int(midi)) + " without a native Guitar Pro drum-kit articulation"
+			if err == nil || !strings.Contains(err.Error(), want) {
+				t.Fatalf("unsupported main-note export = %v, want %q", err, want)
+			}
+
+			graceSong := conformancePercussionBuiltinPercussionSong(t, 38)
+			exact, newErr := NewFret(int64(midi))
+			if newErr != nil {
+				t.Fatal(newErr)
+			}
+			graceSong.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces = []GraceEffect{{Fret: int8(midi), ExactFret: &exact, Duration: DurationThirtySecond, Velocity: Forte}}
+			graceSong.Tracks[0].Staves[0].Measures = graceSong.Tracks[0].Measures
+			_, err = Export(graceSong, ExportFormatGP8)
+			if err == nil || !strings.Contains(err.Error(), "grace 0 uses "+want) {
+				t.Fatalf("unsupported grace export = %v, want grace-scoped %q", err, want)
+			}
+		})
+	}
+
+	for _, test := range []struct {
+		name  string
+		exact Fret
+		want  string
+	}{
+		{name: "exact below native table", exact: 26, want: "grace 0 uses percussion MIDI value 26 without a native Guitar Pro drum-kit articulation"},
+		{name: "exact above native table", exact: 88, want: "grace 0 uses percussion MIDI value 88 without a native Guitar Pro drum-kit articulation"},
+		{name: "exact above MIDI range", exact: 128, want: "grace 0 has MIDI value 128 outside 0..127"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			song := conformancePercussionBuiltinPercussionSong(t, 38)
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces = []GraceEffect{{
+				Fret: 0, ExactFret: &test.exact, Duration: DurationThirtySecond, Velocity: Forte,
+			}}
+			song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
+			if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("unsupported exact grace export = %v, want %q", err, test.want)
+			}
+		})
+	}
+
+	t.Run("custom exact grace input remains authoritative", func(t *testing.T) {
+		song := conformancePercussionBuiltinPercussionSong(t, 38)
+		track := &song.Tracks[0]
+		track.PercussionArticulations = []PercussionArticulation{{
+			ElementName: "Custom", ElementType: "percussion", Name: "Exact 26", StaffLine: 4,
+			NoteheadDefault: "noteheadDiamondWhite", InputMIDINumbers: []int{26}, OutputMIDINumber: 26,
+		}}
+		exact := Fret(26)
+		track.Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces = []GraceEffect{{
+			Fret: 26, ExactFret: &exact, Duration: DurationThirtySecond, Velocity: Forte,
+		}}
+		track.Staves[0].Measures = track.Measures
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+		if err != nil || len(report.Entries) != 0 {
+			t.Fatalf("custom exact grace export = %v, %#v", err, report.Entries)
+		}
+		wire := extractPercussionWire(t, data)
+		if got := conformancePercussionWireNoteMIDIs(wire.notes); !slices.Equal(got, []int{26, 38}) {
+			t.Fatalf("custom exact grace wire MIDI = %v, want [26 38]", got)
+		}
+		if got := flattenPercussionWireArticulations(wire.tracks[0].InstrumentSet.Elements); len(got) != 2 || got[0].InputMIDINumbers != "26" || got[0].Name != "Exact 26" {
+			t.Fatalf("custom exact grace definitions = %#v", got)
+		}
+	})
+}
+
+func TestGP5NativePercussionFallbackFixtures(t *testing.T) {
+	for _, test := range []struct {
+		path   string
+		values []int16
+	}{
+		{path: "testdata/gp5/canon.gp5", values: []int16{31, 59}},
+		{path: "testdata/gp5/full-song.gp5", values: []int16{54}},
+		{path: "testdata/gp5/nightwish.gp5", values: []int16{40, 54}},
+	} {
+		t.Run(test.path, func(t *testing.T) {
+			song := parseTestFixture(t, test.path)
+			if _, err := Export(song, ExportFormatGP8); err != nil {
+				t.Fatalf("GP8 export still rejects native values %v: %v", test.values, err)
+			}
+			got := conformancePercussionValues(song)
+			for _, want := range test.values {
+				if !slices.Contains(got, want) {
+					t.Errorf("source percussion values = %v, want %d", got, want)
+				}
+			}
+		})
+	}
+
+	const upstream = "references/alphaTab/packages/alphatab/test-data/guitarpro5/percussion-all.gp5"
+	if _, err := os.Stat(upstream); err != nil {
+		t.Skip("pinned AlphaTab source checkout is unavailable")
+	}
+	song := parseTestFixture(t, upstream)
+	got := conformancePercussionValues(song)
+	want := make([]int16, 0, 61)
+	for value := int16(27); value <= 87; value++ {
+		want = append(want, value)
+	}
+	if !slices.Equal(got, want) {
+		t.Fatalf("upstream percussion values = %v, want %v", got, want)
+	}
+	if _, err := Export(song, ExportFormatGP8); err == nil || !strings.Contains(err.Error(), "percussion MIDI value 27 without a native Guitar Pro drum-kit articulation") {
+		t.Fatalf("upstream unsupported-value rejection = %v", err)
+	}
+}
+
+func conformancePercussionValues(song *Song) []int16 {
+	seen := make(map[int16]bool)
+	for trackIndex := range song.Tracks {
+		track := &song.Tracks[trackIndex]
+		if !track.PercussionTrack {
+			continue
+		}
+		for _, staff := range gp8ExportStaves(track) {
+			for _, measure := range staff.Measures {
+				for _, voice := range measure.Voices {
+					for _, beat := range voice.Beats {
+						for _, note := range beat.Notes {
+							seen[note.Value] = true
+							for index := range note.Effect.Graces {
+								seen[gp8PercussionGraceNote(&note, &note.Effect.Graces[index]).Value] = true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	values := make([]int16, 0, len(seen))
+	for value := range seen {
+		values = append(values, value)
+	}
+	slices.Sort(values)
+	return values
+}
+
+type conformanceNativePercussionCase struct {
+	name, input, element, kind, soundbank, articulation string
+	midi                                                int16
+	staffLine, outputMIDI                               int
+	noteheads, placement, symbol, rse                   string
+}
+
+func conformanceNativePercussionCases() []conformanceNativePercussionCase {
+	black := "noteheadBlack noteheadHalf noteheadWhole"
+	x := "noteheadXBlack noteheadXBlack noteheadXBlack"
+	triangle := "noteheadTriangleUpBlack noteheadTriangleUpBlack noteheadTriangleUpBlack"
+	makeCase := func(midi int16, element, kind, soundbank, articulation string, staffLine int, noteheads, rse string) conformanceNativePercussionCase {
+		return conformanceNativePercussionCase{name: strconv.Itoa(int(midi)) + " " + element, input: strconv.Itoa(int(midi)), midi: midi, element: element, kind: kind, soundbank: soundbank, articulation: articulation, staffLine: staffLine, noteheads: noteheads, placement: "outside", outputMIDI: int(midi), rse: rse}
+	}
+	cases := []conformanceNativePercussionCase{
+		makeCase(29, "Ride Cymbal 2", "ride", "Ride-Percu", "Ride (choke)", 2, x, "stick.hit.choke"),
+		makeCase(30, "Reverse Cymbal", "crash", "Reverse-Cymbal", "Reverse Cymbal (hit)", -3, x, "stick.hit.hit"),
+		makeCase(31, "Sticks", "snare", "Stick-Percu", "Snare (side stick)", 3, "noteheadSlashedBlack2 noteheadSlashedBlack2 noteheadSlashedBlack2", "stick.hit.sidestick"),
+		makeCase(33, "Metronome", "snare", "Metronome-Percu", "Metronome (hit)", 3, x, "stick.hit.sidestick"),
+		makeCase(34, "Metronome", "snare", "Metronome-Percu", "Metronome (bell)", 3, "noteheadBlack noteheadBlack noteheadBlack", "stick.hit.hit"),
+		makeCase(39, "Hand Clap", "handClap", "GroupHandClap-Percu", "Hand Clap (hit)", 3, black, "hand.hit.hit"),
+		makeCase(40, "Electric Snare", "snare", "ElectricSnare-Percu", "Electric Snare (hit)", 3, black, "stick.hit.hit"),
+		makeCase(54, "Tambourine", "tambourine", "Tambourine-Percu", "Tambourine (hit)", 3, triangle, "hand.hit.hit"),
+		makeCase(56, "Cowbell Medium", "cowbell", "CowbellMid-Percu", "Cowbell medium (hit)", 0, "noteheadTriangleUpBlack noteheadTriangleUpHalf noteheadTriangleUpWhole", "stick.hit.hit"),
+		makeCase(58, "Vibraslap", "vibraslap", "Vibraslap-Percu", "Vibraslap (hit)", 28, black, "hand.hit.hit"),
+		makeCase(59, "Ride Cymbal 2", "ride", "Ride-Percu", "Ride (edge)", 2, x, "stick.hit.edge"),
+		makeCase(60, "Bongo High", "bongo", "BongoHigh-Percu", "Bongo High (hit)", -4, black, "hand.hit.hit"),
+		makeCase(61, "Bongo Low", "bongo", "BongoLow-Percu", "Bongo Low (hit)", -7, black, "hand.hit.hit"),
+		makeCase(62, "Conga High", "conga", "CongaHigh-Percu", "Conga high (mute)", 19, black, "hand.hit.mute"),
+		makeCase(63, "Conga High", "conga", "CongaHigh-Percu", "Conga high (hit)", 14, black, "hand.hit.hit"),
+		makeCase(64, "Conga Low", "conga", "CongaLow-Percu", "Conga low (hit)", 17, black, "hand.hit.hit"),
+		makeCase(65, "Timbale High", "timbale", "TimbaleHigh-Percu", "Timbale high (hit)", 9, black, "stick.hit.hit"),
+		makeCase(66, "Timbale Low", "timbale", "TimbaleLow-Percu", "Timbale low (hit)", 10, black, "stick.hit.hit"),
+		makeCase(67, "Agogo High", "agogo", "AgogoHigh-Percu", "Agogo high (hit)", 11, black, "stick.hit.hit"),
+		makeCase(68, "Agogo Low", "agogo", "AgogoLow-Percu", "Agogo low (hit)", 12, black, "stick.hit.hit"),
+		makeCase(69, "Cabasa", "cabasa", "Cabasa-Percu", "Cabasa (hit)", 23, black, "hand.hit.hit"),
+		makeCase(70, "Left Maraca", "maraca", "Maracas-Percu", "Left Maraca (hit)", -12, black, "hand.hit.hit"),
+		makeCase(71, "Whistle High", "whistle", "WhistleHigh-Percu", "Whistle high (hit)", -17, black, "blow.hit.hit"),
+		makeCase(72, "Whistle Low", "whistle", "WhistleLow-Percu", "Whistle low (hit)", -11, black, "blow.hit.hit"),
+		makeCase(73, "Guiro", "guiro", "Guiro-Percu", "Guiro (hit)", 38, black, "stick.hit.hit"),
+		makeCase(74, "Guiro", "guiro", "Guiro-Percu", "Guiro (scrap-return)", 37, black, "stick.scrape.return"),
+		makeCase(75, "Claves", "claves", "Claves-Percu", "Claves (hit)", 20, black, "stick.hit.hit"),
+		makeCase(76, "Woodblock High", "woodblock", "WoodblockHigh-Percu", "Woodblock high (hit)", -10, triangle, "stick.hit.hit"),
+		makeCase(77, "Woodblock Low", "woodblock", "WoodblockLow-Percu", "Woodblock low (hit)", -9, triangle, "stick.hit.hit"),
+		makeCase(78, "Cuica", "cuica", "Cuica-Percu", "Cuica (mute)", 29, x, "hand.hit.mute"),
+		makeCase(79, "Cuica", "cuica", "Cuica-Percu", "Cuica (open)", 30, black, "hand.hit.hit"),
+		makeCase(80, "Triangle", "triangle", "Triangle-Percu", "Triangle (mute)", 26, x, "stick.hit.mute"),
+		makeCase(81, "Triangle", "triangle", "Triangle-Percu", "Triangle (hit)", 27, black, "stick.hit.hit"),
+		makeCase(82, "Shaker", "shaker", "ShakerStudio-Percu", "Shaker (hit)", -23, black, "hand.hit.hit"),
+		makeCase(83, "Tinkle Bell", "jingleBell", "JingleBell-Percu", "Tinkle Bell (hit)", -20, black, "stick.hit.hit"),
+		makeCase(84, "Bell Tree", "bellTree", "BellTree-Percu", "Bell Tree (hit)", -18, black, "stick.hit.hit"),
+		makeCase(85, "Castanets", "castanets", "Castanets-Percu", "Castanets (hit)", 21, black, "hand.hit.hit"),
+		makeCase(86, "Surdo", "surdo", "Surdo-Percu", "Surdo (hit)", 36, black, "brush.hit.hit"),
+		makeCase(87, "Surdo", "surdo", "Surdo-Percu", "Surdo (mute)", 35, x, "brush.hit.mute"),
+	}
+	for index := range cases {
+		switch cases[index].midi {
+		case 29:
+			cases[index].outputMIDI = 59
+			cases[index].symbol = "articStaccatoAbove"
+		case 30:
+			cases[index].outputMIDI = 49
+		case 31:
+			cases[index].outputMIDI = 40
+		case 33:
+			cases[index].outputMIDI = 37
+		case 34:
+			cases[index].outputMIDI = 38
+		case 59:
+			cases[index].placement = "above"
+			cases[index].symbol = "pictEdgeOfCymbal"
+		case 62, 80, 87:
+			cases[index].placement = "inside"
+			cases[index].symbol = "noteheadParenthesis"
+		case 83, 84:
+			cases[index].outputMIDI = 53
+		}
+	}
+	return cases
 }
 
 func TestConformanceNoteheadOptions(t *testing.T) {
@@ -346,6 +637,21 @@ func conformancePercussionBuiltinPercussionSong(t *testing.T, midi int16) *Song 
 	track.PercussionArticulations = nil
 	track.Measures[0].Voices = []Voice{{Beats: []Beat{{Duration: defaultDuration(), Status: BeatStatusNormal, Dynamics: Forte, Notes: []Note{{Value: midi, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1}}}}}}
 	track.Staves[0].Measures = track.Measures
+	if err := FinalizeSong(song); err != nil {
+		t.Fatal(err)
+	}
+	return song
+}
+
+func conformanceNativePercussionSong(t *testing.T) *Song {
+	t.Helper()
+	song := conformancePercussionBuiltinPercussionSong(t, 38)
+	notes := make([]Note, 0, len(conformanceNativePercussionCases()))
+	for _, percussion := range conformanceNativePercussionCases() {
+		notes = append(notes, Note{Value: percussion.midi, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1})
+	}
+	song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes = notes
+	song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
 	if err := FinalizeSong(song); err != nil {
 		t.Fatal(err)
 	}

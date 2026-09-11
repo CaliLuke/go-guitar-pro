@@ -5,8 +5,8 @@
   "title": "Export valid percussion notes currently rejected by GP8",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -77,13 +77,30 @@
       "kind": "test",
       "reference": "TestConformancePercussionIdentity",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceNativePercussionFallbacks",
+      "detail": "Covers all 39 newly supported native inputs through exact wire metadata, public reimport, main and grace notes, and scoped unsupported rejection."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP5NativePercussionFallbackFixtures",
+      "detail": "Reproduces canon.gp5, full-song.gp5, nightwish.gp5, and upstream percussion-all.gp5."
+    },
+    {
+      "kind": "oracle",
+      "reference": "TestAlphaTabPreservesNativePercussionFallbacks",
+      "detail": "The pinned consumer verifies every input, output MIDI exception, staff line, notehead, and technique marker."
     }
   ],
   "shared_files": [
+    "conformance_percussion_test.go",
+    "gp8_export.go",
     "gp8_percussion.go",
-    "gpif_types.go"
+    "conformance/feature-ledger.json"
   ],
-  "resolution": null,
+  "resolution": "GP8 export now creates exact native Guitar Pro percussion definitions for identity-free note and grace inputs 29-31, 33-34, 39-40, 54, 56, and 58-87. Each definition retains its authored input identity, native element and soundbank, staff line, duration-specific noteheads, technique marker, RSE sound, and output MIDI, including the seven nonidentity output mappings and AlphaTab's last-write Tinkle Bell selection for input 83. Custom track articulations remain authoritative, including an explicit exact grace input outside the native table; only a legacy zero sentinel with no ExactFret inherits the parent note identity. The three corpus fixtures now export, the upstream all-values fixture isolates only 27, 28, and 32, and unmatched or out-of-MIDI-range exact grace values retain location-specific rejection. Blanket MIDI aliases and staff-line-count redesign remain outside this ticket.",
   "verification": [],
   "issue": {
     "number": 53,

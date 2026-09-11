@@ -332,6 +332,62 @@ func TestAlphaTabPreservesSimileMarks(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesNativePercussionFallbacks(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformanceNativePercussionSong(t)
+	data, report, err := ExportWithReport(source, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("native percussion export = %v, %#v", err, report.Entries)
+	}
+	score := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	track := score["tracks"].([]any)[0].(map[string]any)
+	definitions := track["percussionArticulations"].([]any)
+	if len(definitions) != len(conformanceNativePercussionCases()) {
+		t.Fatalf("AlphaTab percussion definitions = %d, want %d", len(definitions), len(conformanceNativePercussionCases()))
+	}
+	byInput := make(map[int]map[string]any, len(definitions))
+	for _, item := range definitions {
+		definition := item.(map[string]any)
+		byInput[int(definition["inputMidiNumber"].(float64))] = definition
+	}
+	for _, want := range conformanceNativePercussionCases() {
+		definition, ok := byInput[int(want.midi)]
+		if !ok {
+			t.Errorf("AlphaTab has no definition for input MIDI %d", want.midi)
+			continue
+		}
+		wantHeads := strings.Fields(strings.ToLower(want.noteheads))
+		got := []any{
+			definition["elementName"], definition["staffLine"], definition["noteheadDefault"], definition["noteheadHalf"], definition["noteheadWhole"],
+			definition["techniquePlacement"], definition["techniqueSymbol"], definition["outputMidiNumber"],
+		}
+		wantDefinition := []any{
+			want.element, float64(want.staffLine), wantHeads[0], wantHeads[1], wantHeads[2],
+			want.placement, map[bool]string{true: strings.ToLower(want.symbol), false: "none"}[want.symbol != ""], float64(want.outputMIDI),
+		}
+		if !slices.Equal(got, wantDefinition) {
+			t.Errorf("AlphaTab definition %d = %#v, want %#v", want.midi, got, wantDefinition)
+		}
+	}
+
+	staff := track["staves"].([]any)[0].(map[string]any)
+	bar := staff["bars"].([]any)[0].(map[string]any)
+	voice := bar["voices"].([]any)[0].(map[string]any)
+	beat := voice["beats"].([]any)[0].(map[string]any)
+	notes := beat["notes"].([]any)
+	if len(notes) != len(conformanceNativePercussionCases()) {
+		t.Fatalf("AlphaTab percussion notes = %d, want %d", len(notes), len(conformanceNativePercussionCases()))
+	}
+	for index, want := range conformanceNativePercussionCases() {
+		note := notes[index].(map[string]any)
+		if note["percussionInput"] != float64(want.midi) || note["midi"] != float64(want.outputMIDI) {
+			t.Errorf("AlphaTab note %d input/output = %#v/%#v, want %d/%d", index, note["percussionInput"], note["midi"], want.midi, want.outputMIDI)
+		}
+	}
+}
+
 func TestAlphaTabGPIFCapoPrecedence(t *testing.T) {
 	requireAlphaTabConformance(t)
 	gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",

@@ -21,63 +21,63 @@ All three stages have a supported rating in 36 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `false`.
+The receipt contains 364 input files. Probe freshness against the current source: `true`.
 Raw consumer differences require review. Default-only cases do not prove feature support.
 
 | Capability | Files with non-default source values | Files with differences | Blocked comparisons |
 | --- | ---: | ---: | ---: |
-| Stylesheet, brackets and track-name policies | 364 | 338 | 26 |
-| Concert and display transposition | 347 | 322 | 26 |
-| System layout and forced line breaks | 250 | 230 | 26 |
-| Track short names | 364 | 194 | 26 |
-| Beam grouping, direction and stem overrides | 200 | 180 | 26 |
-| Authored pitch spelling and accidentals | 157 | 137 | 26 |
-| Track visibility and standard/tab flags | 77 | 90 | 26 |
-| Brush and arpeggio timing | 21 | 17 | 26 |
-| Whammy-bar vibrato strength | 17 | 17 | 26 |
-| Separate section marker and text | 31 | 16 | 26 |
-| Left and right hand fingering | 13 | 13 | 26 |
-| Tremolo picking and stroke styles | 14 | 13 | 26 |
-| Double bar lines | 32 | 12 | 26 |
-| Extended barline and bar-number controls | 32 | 12 | 26 |
-| Tap, slap and pop distinctions | 13 | 12 | 26 |
-| Chord diagrams, barres and fingering | 11 | 11 | 26 |
-| Pick stroke direction | 11 | 11 | 26 |
-| Wah pedal state | 11 | 11 | 26 |
-| Slashed beats and slash staff notation | 8 | 8 | 26 |
-| Lyrics authored directly on a beat | 5 | 5 | 26 |
-| Authored note duration percentage | 6 | 4 | 26 |
-| Multiple-bar rest preferences | 4 | 4 | 26 |
-| Volume automation events | 8 | 4 | 26 |
-| Chord name, diagram and fingering visibility | 3 | 3 | 26 |
-| Numbered staff notation | 3 | 3 | 26 |
-| Authored timer marks | 2 | 2 | 26 |
-| Beat barre fret and shape | 2 | 2 | 26 |
-| Dead-slapped beats | 2 | 2 | 26 |
-| Golpe thumb and finger marks | 2 | 2 | 26 |
-| Explicit note string-number display | 1 | 1 | 26 |
-| Fade out and volume swell | 1 | 1 | 26 |
-| Key signatures and key mode spelling | 44 | 1 | 26 |
-| Pan and balance automation events | 1 | 1 | 26 |
-| Rasgueado patterns | 1 | 1 | 26 |
-| Sustain pedal markers | 1 | 1 | 26 |
-| Turns and mordents | 1 | 1 | 26 |
-| Alternate endings | 16 | 0 | 26 |
-| Beat octave shifts | 10 | 0 | 26 |
-| Common and per-staff capo | 1 | 0 | 26 |
-| Fade in | 17 | 0 | 26 |
-| Fermata placement, kind and length | 4 | 0 | 26 |
-| Free-time bars | 1 | 0 | 26 |
-| Left-hand tapping identity | 1 | 0 | 26 |
-| Legato and authored slurs | 2 | 0 | 26 |
-| MIDI bank selection and bank changes | 8 | 0 | 26 |
-| Navigation targets and jumps | 8 | 0 | 26 |
-| Note vibrato strength | 21 | 0 | 26 |
-| Octave shifts attached to clefs | 2 | 0 | 26 |
-| One-bar and two-bar simile marks | 4 | 0 | 26 |
-| Repeat starts and displayed pass counts | 28 | 0 | 26 |
-| String tuning and tuning labels | 360 | 0 | 26 |
-| Tenuto accent | 1 | 0 | 26 |
+| Stylesheet, brackets and track-name policies | 364 | 339 | 25 |
+| Concert and display transposition | 347 | 323 | 25 |
+| System layout and forced line breaks | 250 | 230 | 25 |
+| Track short names | 364 | 194 | 25 |
+| Beam grouping, direction and stem overrides | 200 | 180 | 25 |
+| Authored pitch spelling and accidentals | 157 | 138 | 25 |
+| Track visibility and standard/tab flags | 77 | 91 | 25 |
+| Brush and arpeggio timing | 21 | 17 | 25 |
+| Whammy-bar vibrato strength | 17 | 17 | 25 |
+| Separate section marker and text | 31 | 16 | 25 |
+| Left and right hand fingering | 13 | 13 | 25 |
+| Tremolo picking and stroke styles | 14 | 13 | 25 |
+| Double bar lines | 32 | 12 | 25 |
+| Extended barline and bar-number controls | 32 | 12 | 25 |
+| Tap, slap and pop distinctions | 13 | 12 | 25 |
+| Chord diagrams, barres and fingering | 11 | 11 | 25 |
+| Pick stroke direction | 11 | 11 | 25 |
+| Wah pedal state | 11 | 11 | 25 |
+| Slashed beats and slash staff notation | 8 | 8 | 25 |
+| Authored note duration percentage | 6 | 5 | 25 |
+| Lyrics authored directly on a beat | 5 | 5 | 25 |
+| Volume automation events | 8 | 5 | 25 |
+| Multiple-bar rest preferences | 4 | 4 | 25 |
+| Chord name, diagram and fingering visibility | 3 | 3 | 25 |
+| Numbered staff notation | 3 | 3 | 25 |
+| Authored timer marks | 2 | 2 | 25 |
+| Beat barre fret and shape | 2 | 2 | 25 |
+| Dead-slapped beats | 2 | 2 | 25 |
+| Golpe thumb and finger marks | 2 | 2 | 25 |
+| Explicit note string-number display | 1 | 1 | 25 |
+| Fade out and volume swell | 1 | 1 | 25 |
+| Key signatures and key mode spelling | 44 | 1 | 25 |
+| Pan and balance automation events | 1 | 1 | 25 |
+| Rasgueado patterns | 1 | 1 | 25 |
+| Sustain pedal markers | 1 | 1 | 25 |
+| Turns and mordents | 1 | 1 | 25 |
+| Alternate endings | 16 | 0 | 25 |
+| Beat octave shifts | 10 | 0 | 25 |
+| Common and per-staff capo | 1 | 0 | 25 |
+| Fade in | 17 | 0 | 25 |
+| Fermata placement, kind and length | 4 | 0 | 25 |
+| Free-time bars | 1 | 0 | 25 |
+| Left-hand tapping identity | 1 | 0 | 25 |
+| Legato and authored slurs | 2 | 0 | 25 |
+| MIDI bank selection and bank changes | 8 | 0 | 25 |
+| Navigation targets and jumps | 8 | 0 | 25 |
+| Note vibrato strength | 21 | 0 | 25 |
+| Octave shifts attached to clefs | 2 | 0 | 25 |
+| One-bar and two-bar simile marks | 4 | 0 | 25 |
+| Repeat starts and displayed pass counts | 28 | 0 | 25 |
+| String tuning and tuning labels | 360 | 0 | 25 |
+| Tenuto accent | 1 | 0 | 25 |
 
 ## Reviewed capabilities
 
@@ -433,9 +433,9 @@ Instrument. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Separate articulation identities and MIDI output survive. Some notation resources and conflicting staff line counts have explicit target limits. Four existing corpus files fail GP8 export on percussion values without native articulation mappings.
+Separate articulation identities and MIDI output survive. GP8 export now supplies exact native definitions for identity-free inputs 29-31, 33-34, 39-40, 54, 56 and 58-87; inputs 27, 28 and 32 remain precisely rejected because Guitar Pro has no matching native definition. Some notation resources and conflicting staff line counts retain explicit target limits.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Resolve the remaining notation-resource and staff-line-count target limits with independent representability evidence.
 
 Bounded work: [Export valid percussion notes currently rejected by GP8](https://github.com/CaliLuke/go-guitar-pro/issues/53).
 

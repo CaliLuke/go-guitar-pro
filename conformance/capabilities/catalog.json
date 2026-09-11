@@ -1524,8 +1524,8 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Separate articulation identities and MIDI output survive. Some notation resources and conflicting staff line counts have explicit target limits. Four existing corpus files fail GP8 export on percussion values without native articulation mappings.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Separate articulation identities and MIDI output survive. GP8 export now supplies exact native definitions for identity-free inputs 29-31, 33-34, 39-40, 54, 56 and 58-87; inputs 27, 28 and 32 remain precisely rejected because Guitar Pro has no matching native definition. Some notation resources and conflicting staff line counts retain explicit target limits.",
+      "acceptance": "Resolve the remaining notation-resource and staff-line-count target limits with independent representability evidence.",
       "upstream": [
         "Track.percussionArticulations",
         "InstrumentArticulation.*",
@@ -1560,6 +1560,16 @@
           "kind": "test",
           "reference": "TestConformanceNoteheadOptions",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNativePercussionFallbacks",
+          "detail": "Covers every newly supported native input, exact wire metadata, reimport, main and grace notes, and precise rejection of 27, 28 and 32."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesNativePercussionFallbacks",
+          "detail": "Pinned AlphaTab verifies exact native notation, input identity, and output MIDI for every scoped fallback."
         }
       ]
     },

@@ -173,14 +173,16 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 				groupIndex = len(groups) - 1
 			}
 			graceNote := *note
-			graceNote.Value = int16(grace.Fret)
-			if grace.ExactFret != nil {
-				graceNote.Value = int16(*grace.ExactFret)
-			}
-			graceNote.PercussionArticulation = grace.PercussionArticulation
-			graceNote.HasPercussionArticulation = grace.HasPercussionArticulation
-			if builder.song.Tracks[trackIndex].PercussionTrack && (graceNote.Value < 27 || graceNote.Value > 87) {
-				graceNote.Value = note.Value
+			if builder.song.Tracks[trackIndex].PercussionTrack {
+				percussionGrace := gp8PercussionGraceNote(note, grace)
+				graceNote.Value = percussionGrace.Value
+				graceNote.PercussionArticulation = percussionGrace.PercussionArticulation
+				graceNote.HasPercussionArticulation = percussionGrace.HasPercussionArticulation
+			} else {
+				graceNote.Value = int16(grace.Fret)
+				if grace.ExactFret != nil {
+					graceNote.Value = int16(*grace.ExactFret)
+				}
 			}
 			graceNote.Velocity = velocity
 			graceNote.Kind = NoteTypeNormal

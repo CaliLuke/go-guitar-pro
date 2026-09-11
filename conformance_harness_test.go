@@ -145,6 +145,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceCombinedGraceEffects":               runConformanceCombinedGraceEffects,
 	"TestConformancePercussionIdentity":                 runConformancePercussionIdentity,
 	"TestConformanceSourceAndValidation":                runConformanceSourceAndValidation,
+	"TestConformanceNativePercussionFallbacks":          runConformanceNativePercussionFallbacks,
 	"TestConformanceNoteheadOptions":                    runConformanceNoteheadOptions,
 	"TestConformanceAutomationSemantics":                runConformanceAutomationSemantics,
 	"TestConformanceSourceDispatchAndDiagnostics":       runConformanceSourceDispatchAndDiagnostics,
