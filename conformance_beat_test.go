@@ -96,7 +96,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 		run.Omitted("BeatEffects.SlapEffect", BeatEffects{SlapEffect: value}.SlapEffect, value)
 	}
 	for _, value := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
-		run.ClaimPrimary(claimSite("pick-stroke", "import", "M10-BEAT-EFFECTS", "up and down pick strokes")).Omitted("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
+		run.ClaimPrimary(claimSite("pick-stroke", "import", "M10-BEAT-EFFECTS", "up and down pick strokes")).Preserved("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
 	}
 	for _, source := range []struct {
 		name  string
@@ -186,12 +186,12 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	run.Field("BeatEffects.SlapEffect", beat.Effect.SlapEffect, SlapEffectPopping)
 	run.Preserved("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect"} {
+	for _, code := range []string{"gp8.omit.rasgueado", "gp8.omit.slap-effect"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect"})
+	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.omit.rasgueado", "gp8.omit.slap-effect"})
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)

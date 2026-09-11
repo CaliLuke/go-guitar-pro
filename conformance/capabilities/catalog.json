@@ -3107,9 +3107,9 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "supported"
       },
-      "finding": "Pick stroke parses into the public model, but GP8 export reports it as omitted.",
+      "finding": "Up, down, and absent pick marks survive GP8 export independently from brush direction. Direct public edits control output. Undefined pick directions receive scoped validation and export rejection.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.pickStroke",
@@ -3140,6 +3140,26 @@
           "kind": "probe",
           "reference": "testdata/gp7/effects.gp:pick-stroke",
           "detail": "Reproduced at tracks[0].staves[0].bars[24].voices[0].beats[2].pickStroke. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8PickStroke",
+          "detail": "Public strict export covers all nine pick/brush combinations, direct clearing, and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestPickStrokeValidation",
+          "detail": "Undefined signed enum values produce scoped validation and zero-output preflight/export rejection."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformancePickStroke",
+          "detail": "Exact GPIF PickStroke direction and absence, Go reimport, and a bound export report claim."
+        },
+        {
+          "kind": "oracle",
+          "reference": "TestAlphaTabPreservesPickStroke",
+          "detail": "Pinned consumer retains each pick and opposite brush direction, including both GP7 effects source marks."
         }
       ]
     },

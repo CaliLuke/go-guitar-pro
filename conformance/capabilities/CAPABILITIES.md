@@ -16,9 +16,9 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 70 | 16 | 11 | 1 |
 | model | 69 | 17 | 11 | 1 |
-| export | 47 | 25 | 24 | 2 |
+| export | 48 | 25 | 23 | 2 |
 
-All three stages have a supported rating in 47 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 48 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -321,9 +321,9 @@ Completion criterion: Keep Slight and Wide distinct through import, typed model 
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Pick stroke parses into the public model, but GP8 export reports it as omitted.
+Up, down, and absent pick marks survive GP8 export independently from brush direction. Direct public edits control output. Undefined pick directions receive scoped validation and export rejection.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

@@ -62,7 +62,9 @@ type BeatEffects struct {
 	MixTableChange *MixTableChange
 	Stroke         BeatStroke
 	HasRasgueado   bool
-	PickStroke     BeatStrokeDirection
+	// PickStroke is the authored pick direction, independent from Stroke.
+	// Direct edits control GP8 output; BeatStrokeDirectionNone removes the mark.
+	PickStroke BeatStrokeDirection
 	// Fade is the typed authored fade view. For a programmatic score, a
 	// nonzero value is authoritative and FadeIn=true is the legacy fallback.
 	// On an imported beat, editing only one view makes that view authoritative;

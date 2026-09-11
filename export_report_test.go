@@ -134,9 +134,6 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 		{name: "rasgueado", code: "gp8.omit.rasgueado", set: func(beat *Beat, _ *Note) {
 			beat.Effect.HasRasgueado = true
 		}},
-		{name: "pick stroke", code: "gp8.omit.pick-stroke", set: func(beat *Beat, _ *Note) {
-			beat.Effect.PickStroke = BeatStrokeDirectionUp
-		}},
 		{name: "slap effect", code: "gp8.omit.slap-effect", set: func(beat *Beat, _ *Note) {
 			beat.Effect.SlapEffect = SlapEffectSlapping
 		}},

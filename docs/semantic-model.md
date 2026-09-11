@@ -444,8 +444,12 @@ note-value-denominator compatibility view, while `ExactDuration` retains the
 authored tick value and source absence. Imported exact timing owns export until
 `Duration` is edited; clearing exact timing also falls back to `Duration`.
 Fractional or larger exact values receive a scoped omission report. GP8 also
-reports rasgueado, pick stroke, and slap effects because the writer does not
-emit them.
+reports rasgueado and slap effects because the writer does not emit them.
+
+`BeatEffects.PickStroke` is the authority for an authored pick direction.
+GP8 preserves up, down, and absent marks independently from `BeatEffects.Stroke`.
+Direct edits control output, and `BeatStrokeDirectionNone` removes the pick mark.
+Validation and export reject undefined directions without changing the score.
 
 `BeatEffects.Fade` preserves `None`, `FadeIn`, `FadeOut`, and `VolumeSwell`.
 Binary GP3 through GP5 presence maps to `FadeIn`. Those formats cannot author

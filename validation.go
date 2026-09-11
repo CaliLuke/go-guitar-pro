@@ -368,6 +368,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.chord.diagram", Kind: ScoreDiagnosticValue, Location: location, Reason: err.Error()})
 				}
 			}
+			if pick := beat.Effect.PickStroke; pick < BeatStrokeDirectionNone || pick > BeatStrokeDirectionDown {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.pick-stroke", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("pick-stroke direction %d is not defined", pick)})
+			}
 			stroke := beat.Effect.Stroke
 			if stroke.Kind > BeatStrokeKindArpeggio {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.stroke-kind", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("stroke kind %d is not defined", stroke.Kind)})

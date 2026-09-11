@@ -801,9 +801,6 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.HasRasgueado {
 		builder.addReport("gp8.omit.rasgueado", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit rasgueado")
 	}
-	if beat.Effect.PickStroke != BeatStrokeDirectionNone {
-		builder.addReport("gp8.omit.pick-stroke", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit pick-stroke direction")
-	}
 	if beat.Effect.SlapEffect != SlapEffectNone {
 		builder.addReport("gp8.omit.slap-effect", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit slap, pop, or tap effects")
 	}

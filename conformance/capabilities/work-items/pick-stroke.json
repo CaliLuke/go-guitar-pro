@@ -5,8 +5,8 @@
   "title": "Export existing pick stroke directions",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:pick-stroke",
   "formats": [
     "gp3",
     "gp4",
@@ -88,13 +88,29 @@
       "kind": "test",
       "reference": "TestConformanceBeatEffects",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestGP8PickStroke",
+      "detail": "All nine pick/brush combinations survive strict GP8 export and Go reimport. Direct clearing preserves brush direction and the source remains unchanged."
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestAlphaTabPreservesPickStroke",
+      "detail": "Pinned AlphaTab 1.8.4 retains exact up/down/none pick enums and opposite brush enums, plus both original GP7 effects marks.",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestPickStrokeValidation",
+      "detail": "Undefined -1, 3, and 127 directions produce score.beat.pick-stroke and aligned zero-output GP8 rejection. A baseline Go overlay demonstrates failure of both new public regressions before the implementation."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "GP8 writes the authored PickStroke Direction as Up or Down and omits the property for None. Pick marks remain independent from brush kind, direction, and timing. Strict export preserves both directions without the old omission report. Undefined public directions receive scoped validation and export rejection. Public and pinned-consumer tests cover absence, opposite brushes, direct clearing, nonmutation, and both source marks in testdata/gp7/effects.gp. The implementation awaits independent review and the centralized full gate and capability probe.",
   "verification": [],
   "issue": {
     "number": 88,

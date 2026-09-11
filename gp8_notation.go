@@ -297,6 +297,13 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	case HairpinDiminuendo:
 		result.Hairpin = "Decrescendo"
 	}
+	if pick := beat.Effect.PickStroke; pick != BeatStrokeDirectionNone {
+		direction := "Up"
+		if pick == BeatStrokeDirectionDown {
+			direction = "Down"
+		}
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "PickStroke", Direction: &direction})
+	}
 	stroke := beat.Effect.Stroke.resolved()
 	direction := "Up"
 	if stroke.direction == BeatStrokeDirectionDown {

@@ -1064,6 +1064,31 @@ export function loadFingeringFacts(fixture) {
   return facts;
 }
 
+export function loadPickStrokeFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          let regularBeat = 0;
+          for (const beat of voice.beats) {
+            if (beat.graceType !== alphaTab.model.GraceType.None) continue;
+            facts.push({
+              track: track.index, staff: staff.index, bar: bar.index,
+              voice: voice.index, beat: regularBeat,
+              pickStroke: enumName(alphaTab.model.PickStroke, beat.pickStroke),
+              brushType: enumName(alphaTab.model.BrushType, beat.brushType)
+            });
+            regularBeat++;
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadBrushFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -1162,6 +1187,10 @@ function main() {
   }
   if (args[0] === '--dead-slap' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadDeadSlapFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--pick-stroke' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadPickStrokeFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--brush' && args.length === 2) {
