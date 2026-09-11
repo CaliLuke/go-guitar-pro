@@ -640,19 +640,21 @@ var gpifRedundantPitchSources = map[string]parseDiagnosticSource{
 }
 
 var gpifBeatPropertySources = map[string]parseDiagnosticSource{
-	"PrimaryPickupVolume":         diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"PrimaryPickupTone":           diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"WhammyBarExtend":             diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"BarreFret.MissingPayload":    diagnosticSource("GPIF.Beat.Property.BarreFret.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"BarreFret.InvalidValue":      diagnosticSource("GPIF.Beat.Property.BarreFret.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"BarreString.MissingPayload":  diagnosticSource("GPIF.Beat.Property.BarreString.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"BarreString.InvalidValue":    diagnosticSource("GPIF.Beat.Property.BarreString.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Brush.MissingDirection":      diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"PickStroke.MissingDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Brush.InvalidDirection":      diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"PickStroke.InvalidDirection": diagnosticSource("GPIF.Beat.Property.PickStroke.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"Slapped.MissingEnable":       diagnosticSource("GPIF.Beat.Property.Slapped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Popped.MissingEnable":        diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"PrimaryPickupVolume":             diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"PrimaryPickupTone":               diagnosticSource("GPIF.Beat.Property.PrimaryPickupTone", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"WhammyBarExtend":                 diagnosticSource("GPIF.Beat.Property.WhammyBarExtend", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
+	"BarreFret.MissingPayload":        diagnosticSource("GPIF.Beat.Property.BarreFret.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreFret.InvalidValue":          diagnosticSource("GPIF.Beat.Property.BarreFret.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreString.MissingPayload":      diagnosticSource("GPIF.Beat.Property.BarreString.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"BarreString.InvalidValue":        diagnosticSource("GPIF.Beat.Property.BarreString.InvalidValue", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Brush.MissingDirection":          diagnosticSource("GPIF.Beat.Property.Brush.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"PickStroke.MissingDirection":     diagnosticSource("GPIF.Beat.Property.PickStroke.MissingDirection", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Brush.InvalidDirection":          diagnosticSource("GPIF.Beat.Property.Brush.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"PickStroke.InvalidDirection":     diagnosticSource("GPIF.Beat.Property.PickStroke.InvalidDirection", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"Slapped.MissingEnable":           diagnosticSource("GPIF.Beat.Property.Slapped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"Popped.MissingEnable":            diagnosticSource("GPIF.Beat.Property.Popped.MissingEnable", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"VibratoWTremBar.MissingStrength": diagnosticSource("GPIF.Beat.Property.VibratoWTremBar.MissingStrength", "beat-vibrato", ParseDiagnosticInvalidData),
+	"VibratoWTremBar.InvalidStrength": diagnosticSource("GPIF.Beat.Property.VibratoWTremBar.InvalidStrength", "beat-vibrato", ParseDiagnosticUnsupportedFeature),
 }
 
 func gpifAuditBarrePair(context *parseContext, beatID, path string, properties []gpifProperty) {
@@ -895,11 +897,11 @@ func gpifAuditBeatProperty(context *parseContext, beatID, path string, property 
 	case "Slapped", "Popped":
 		gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingEnable"], property.Enable != nil, propertyPath, beatID, "note-and-beat-semantics", "Enable")
 	case "VibratoWTremBar":
-		context.add(diagnosticSource("GPIF.Beat.Property.VibratoWTremBar", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
-			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: beatID,
-			Location: ParseLocation{BeatID: beatID}, Feature: "note-and-beat-semantics",
-			Reason: "Song represents typed beat vibrato as a boolean",
-		})
+		if property.Strength == nil {
+			gpifAuditPropertyPayload(context, gpifBeatPropertySources[property.Name+".MissingStrength"], false, propertyPath, beatID, "beat-vibrato", "Strength")
+			return
+		}
+		gpifAuditEnum(context, gpifBeatPropertySources[property.Name+".InvalidStrength"], *property.Strength, []string{"Slight", "Wide"}, propertyPath+"/Strength", beatID, "beat-vibrato")
 	case "PrimaryPickupVolume", "PrimaryPickupTone":
 		context.add(gpifBeatPropertySources[property.Name], ParseDiagnostic{
 			SourcePath: propertyPath, ObjectID: beatID, Location: ParseLocation{BeatID: beatID},

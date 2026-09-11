@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 64 | 19 | 16 | 2 |
-| model | 63 | 20 | 17 | 1 |
-| export | 41 | 25 | 32 | 3 |
+| import | 65 | 18 | 16 | 2 |
+| model | 64 | 19 | 17 | 1 |
+| export | 42 | 25 | 31 | 3 |
 
-All three stages have a supported rating in 41 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 42 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -35,7 +35,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Track visibility and standard/tab flags | 77 | 232 | 108 | 0 | 7 |
 | Brush and arpeggio timing | 21 | 337 | 19 | 0 | 7 |
 | Separate section marker and text | 31 | 328 | 18 | 0 | 7 |
-| Whammy-bar vibrato strength | 17 | 340 | 17 | 0 | 7 |
 | Left and right hand fingering | 13 | 344 | 13 | 0 | 7 |
 | Double bar lines | 32 | 326 | 12 | 0 | 7 |
 | Extended barline and bar-number controls | 32 | 326 | 12 | 0 | 7 |
@@ -82,6 +81,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Sustain pedal markers | 1 | 356 | 0 | 0 | 7 |
 | Tenuto accent | 1 | 356 | 0 | 0 | 7 |
 | Tremolo picking and stroke styles | 14 | 344 | 0 | 0 | 7 |
+| Whammy-bar vibrato strength | 17 | 340 | 0 | 0 | 7 |
 
 ## Reviewed capabilities
 
@@ -231,11 +231,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF strength collapses into BeatEffects.Vibrato. GP8 omits beat vibrato.
+BeatEffects.VibratoStrength preserves Slight and Wide independently from note vibrato. Binary presence maps to Slight, legacy boolean edits reconcile deterministically, and GP8 plus pinned AlphaTab retain the resolved strength.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep binary Slight import, exact GPIF strengths, typed and legacy edit authority, validation, GP8 wire output, and pinned AlphaTab consumption covered.
 
 Bounded work: [Preserve and export beat vibrato strength](https://github.com/CaliLuke/go-guitar-pro/issues/77).
 
@@ -313,7 +313,7 @@ Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-NoteEffect.VibratoStrength preserves Slight and Wide and is authoritative when nonzero. A true legacy Vibrato value falls back to Slight, while beat-level vibrato remains a separate export omission.
+NoteEffect.VibratoStrength preserves Slight and Wide and is authoritative when nonzero. A true legacy Vibrato value falls back to Slight, while BeatEffects.VibratoStrength independently preserves and exports beat-level vibrato.
 
 Completion criterion: Keep Slight and Wide distinct through import, typed model edits, GP8 output, and pinned AlphaTab consumption while retaining the documented legacy Slight fallback.
 

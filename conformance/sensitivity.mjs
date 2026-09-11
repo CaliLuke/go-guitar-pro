@@ -700,6 +700,16 @@ const mutations = [
     after: '\t\tproperties = append(properties, gp8IntXProperty(gpifBeatBeamingModeID, 1))\n',
     test: '^TestConformanceBeaming$',
     want: 'gpifBeat.XProperties'
+  },
+  {
+    id: 'beat-vibrato-wide-wire',
+    contract: 'beat-vibrato-preservation',
+    category: 'serialization',
+    file: 'beat_vibrato.go',
+    before: '\tcase BeatVibratoWide:\n\t\treturn "Wide"\n',
+    after: '\tcase BeatVibratoWide:\n\t\treturn "Slight"\n',
+    test: '^TestConformanceBeatVibrato$',
+    want: 'gpifProperty.Strength'
   }
 ];
 

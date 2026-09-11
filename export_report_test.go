@@ -140,9 +140,6 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 		{name: "slap effect", code: "gp8.omit.slap-effect", set: func(beat *Beat, _ *Note) {
 			beat.Effect.SlapEffect = SlapEffectSlapping
 		}},
-		{name: "beat vibrato", code: "gp8.omit.beat-vibrato", set: func(beat *Beat, _ *Note) {
-			beat.Effect.Vibrato = true
-		}},
 		{name: "stroke duration", code: "gp8.normalize.stroke-duration", set: func(beat *Beat, _ *Note) {
 			beat.Effect.Stroke = BeatStroke{Direction: BeatStrokeDirectionUp, Duration: NoteValue(DurationSixteenth)}
 		}},

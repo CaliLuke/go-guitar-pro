@@ -2697,7 +2697,7 @@
         "model": "supported",
         "export": "supported"
       },
-      "finding": "NoteEffect.VibratoStrength preserves Slight and Wide and is authoritative when nonzero. A true legacy Vibrato value falls back to Slight, while beat-level vibrato remains a separate export omission.",
+      "finding": "NoteEffect.VibratoStrength preserves Slight and Wide and is authoritative when nonzero. A true legacy Vibrato value falls back to Slight, while BeatEffects.VibratoStrength independently preserves and exports beat-level vibrato.",
       "acceptance": "Keep Slight and Wide distinct through import, typed model edits, GP8 output, and pinned AlphaTab consumption while retaining the documented legacy Slight fallback.",
       "upstream": [
         "Note.vibrato",
@@ -2751,12 +2751,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF strength collapses into BeatEffects.Vibrato. GP8 omits beat vibrato.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "BeatEffects.VibratoStrength preserves Slight and Wide independently from note vibrato. Binary presence maps to Slight, legacy boolean edits reconcile deterministically, and GP8 plus pinned AlphaTab retain the resolved strength.",
+      "acceptance": "Keep binary Slight import, exact GPIF strengths, typed and legacy edit authority, validation, GP8 wire output, and pinned AlphaTab consumption covered.",
       "upstream": [
         "Beat.vibrato"
       ],
@@ -2773,13 +2773,18 @@
         },
         {
           "kind": "field",
-          "reference": "BeatEffects.Vibrato",
-          "detail": "Public contract; linked matrix cases are in obligation."
+          "reference": "BeatEffects.VibratoStrength",
+          "detail": "Typed beat-wide authority with the documented legacy boolean reconciliation contract."
         },
         {
           "kind": "test",
-          "reference": "TestConformanceBeatEffects",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceBeatVibrato",
+          "detail": "Covers GP3-8 import, all public variants, post-parse edits, exact wire output, validation, strict policy, and note-vibrato independence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesBeatVibrato",
+          "detail": "Pinned AlphaTab retains all 50 Wide occurrences from the GP7 faulty fixture after GP8 export."
         },
         {
           "kind": "probe",

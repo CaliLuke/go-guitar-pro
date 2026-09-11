@@ -87,6 +87,16 @@ const (
 	SlidePickSlideUp   SlideType = 6
 )
 
+// BeatVibrato identifies the authored strength of a beat-wide whammy-bar vibrato.
+type BeatVibrato uint8
+
+// Beat vibrato values preserve GPIF's explicit strength.
+const (
+	BeatVibratoNone   BeatVibrato = 0
+	BeatVibratoSlight BeatVibrato = 1
+	BeatVibratoWide   BeatVibrato = 2
+)
+
 // NoteVibrato identifies the authored strength of a note vibrato.
 type NoteVibrato uint8
 

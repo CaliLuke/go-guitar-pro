@@ -736,8 +736,8 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if beat.Effect.SlapEffect != SlapEffectNone {
 		builder.addReport("gp8.omit.slap-effect", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit slap, pop, or tap effects")
 	}
-	if beat.Effect.Vibrato {
-		builder.addReport("gp8.omit.beat-vibrato", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-wide vibrato")
+	if _, conflict := beat.Effect.resolvedVibrato(); conflict {
+		builder.addReport("gp8.normalize.beat-vibrato-authority", "beat-vibrato", ExportDispositionNormalized, location, "the typed beat vibrato takes precedence after incompatible edits to both typed and legacy views")
 	}
 	if beat.Effect.Stroke.Direction != BeatStrokeDirectionNone && beat.Effect.Stroke.Duration != NoteValue(DurationEighth) {
 		builder.addReport("gp8.normalize.stroke-duration", "note-and-beat-semantics", ExportDispositionNormalized, location, "GP8 writer emits the stroke with an eighth-note duration")

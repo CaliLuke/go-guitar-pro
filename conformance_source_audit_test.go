@@ -150,7 +150,7 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	beat := Beat{}
 	gpifApplyBeatEffects(&gpifBeat{Properties: gpifProperties{Properties: []gpifProperty{{Name: "Brush", Direction: &direction}, {Name: "VibratoWTremBar", Strength: &strength}}}}, &beat)
 	run.Wire("gpifProperty.Direction", beat.Effect.Stroke.Direction, BeatStrokeDirectionUp)
-	run.Wire("gpifProperty.Strength", beat.Effect.Vibrato, true)
+	run.Wire("gpifProperty.Strength", beat.Effect.VibratoStrength, BeatVibratoWide)
 
 	context := &parseContext{format: "GP8"}
 	gpifAuditBeatProperty(context, "beat-id", "/GPIF/Beats/Beat", gpifProperty{Name: "FutureBeatProperty"})

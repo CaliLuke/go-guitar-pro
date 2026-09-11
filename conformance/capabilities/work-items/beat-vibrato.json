@@ -5,8 +5,8 @@
   "title": "Preserve and export beat vibrato strength",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_77_vibrato",
   "formats": [
     "gp3",
     "gp4",
@@ -66,29 +66,34 @@
     {
       "kind": "source",
       "reference": "gpif_effects.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Preserves GPIF Slight and Wide on the typed beat field and initializes the legacy import baseline."
     },
     {
       "kind": "source",
-      "reference": "gp8_builder.go",
-      "detail": "Reviewed implementation or documented contract."
+      "reference": "beat_vibrato.go",
+      "detail": "Implements deterministic typed, legacy, and post-parse edit reconciliation without model mutation."
     },
     {
       "kind": "field",
-      "reference": "BeatEffects.Vibrato",
-      "detail": "Public contract; linked matrix cases are in obligation."
+      "reference": "BeatEffects.VibratoStrength",
+      "detail": "Typed beat-wide Slight or Wide authority, independent from NoteEffect.VibratoStrength."
     },
     {
       "kind": "test",
-      "reference": "TestConformanceBeatEffects",
-      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+      "reference": "TestConformanceBeatVibrato",
+      "detail": "Covers GP3-8 import, enum members, compatibility reconciliation, exact GPIF, reimport, validation, strict policy, malformed strengths, and note-vibrato independence."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesBeatVibrato",
+      "detail": "Pinned AlphaTab verifies all 50 Wide occurrences in the GP7 faulty fixture before and after Go GP8 export."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "Added BeatVibrato None, Slight, and Wide plus BeatEffects.VibratoStrength as the explicit beat-wide authority, separate from note vibrato. GP3-5 presence imports as Slight; GPIF retains Slight and Wide exactly. Programmatic nonzero typed values win while legacy true falls back to Slight. Imported beats track both source views so either single-side edit wins, compatible double edits remain exact, and only incompatible double edits receive a normalization report with typed precedence. GP8 emits the resolved VibratoWTremBar Strength without mutating the model. Focused tests cover actual binary and GP7 fixtures, exact wire values, reimport, validation, malformed source values, strict policy, all enum values, the complete edit matrix, and pinned AlphaTab consumption of mixed Slight/Wide plus all 50 Wide faulty-fixture occurrences. The structural probe retained the same 364-fixture set and changed exactly 17 beat-vibrato comparisons (143 authored values) from different to equal-nondefault; no other capability comparison changed. The same 17 obsolete omission reports and the 10 obsolete source lossy-projection diagnostic groups were removed.",
   "verification": [],
   "issue": {
     "number": 77,

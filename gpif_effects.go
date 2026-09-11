@@ -121,7 +121,12 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			beat.Effect.SlapEffect = SlapEffectPopping
 		case "VibratoWTremBar":
 			if p.Strength != nil {
-				beat.Effect.Vibrato = true
+				switch *p.Strength {
+				case "Slight":
+					beat.Effect.setImportedVibrato(BeatVibratoSlight)
+				case "Wide":
+					beat.Effect.setImportedVibrato(BeatVibratoWide)
+				}
 			}
 		}
 	}

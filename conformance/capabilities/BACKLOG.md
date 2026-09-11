@@ -47,7 +47,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve beat barre fret and shape](work-items/barre.json) | implementation | 2 | in_progress | — | [#74](https://github.com/CaliLuke/go-guitar-pro/issues/74) |
 | [Preserve authored beam groups and stem overrides](work-items/beaming.json) | implementation | 2 | in_progress | — | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) |
 | [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | in_progress | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |
-| [Preserve and export beat vibrato strength](work-items/beat-vibrato.json) | implementation | 2 | todo | — | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) |
+| [Preserve and export beat vibrato strength](work-items/beat-vibrato.json) | implementation | 2 | in_progress | — | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) |
 | [Preserve authored brush and arpeggio timing](work-items/brush.json) | implementation | 2 | todo | — | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) |
 | [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json) | implementation | 2 | todo | — | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) |
 | [Preserve dead-slapped beats without reducing them to rests](work-items/dead-slap.json) | implementation | 2 | todo | — | [#80](https://github.com/CaliLuke/go-guitar-pro/issues/80) |

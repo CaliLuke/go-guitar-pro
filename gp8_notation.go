@@ -271,6 +271,12 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 			gpifProperty{Name: "BarreString", String: &barreString},
 		)
 	}
+	resolvedVibrato, _ := beat.Effect.resolvedVibrato()
+	if strength := gp8BeatVibratoStrength(resolvedVibrato); strength != "" {
+		result.Properties.Properties = append(result.Properties.Properties,
+			gpifProperty{Name: "VibratoWTremBar", Strength: &strength},
+		)
+	}
 	if beat.Effect.Chord != nil {
 		result.Chord = builder.chordIDs[trackIndex][beat.Effect.Chord]
 	}

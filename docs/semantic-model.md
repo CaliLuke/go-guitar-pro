@@ -356,8 +356,17 @@ destination that begins before an excerpt.
 GP8 preserves fade-in, hairpin, octave, and stroke direction.
 `BeatStroke.Duration` is a note-value denominator, not a tick count. The target
 uses an eighth-note stroke duration. Export reports a different source duration.
-It also reports rasgueado, pick stroke, slap effects, and beat vibrato because
-the writer does not emit them.
+It also reports rasgueado, pick stroke, and slap effects because the writer does
+not emit them.
+
+`BeatEffects.VibratoStrength` preserves the beat-wide whammy-bar vibrato as
+`Slight` or `Wide`, independently from note vibrato. Binary GP3 through GP5
+presence maps to `Slight`. For a programmatic score, a nonzero typed strength is
+authoritative and a true legacy `BeatEffects.Vibrato` falls back to `Slight`.
+For an imported beat, editing only one view makes that view authoritative,
+including clearing it. If both views are edited incompatibly, the typed view
+wins and GP8 export reports the conflict. Reconciliation does not mutate the
+public model.
 
 `BeatEffects.TremoloPicking` is the beat-wide authored authority, matching the
 Guitar Pro and AlphaTab models. `TremoloPickingEffect.Duration` is the authored
@@ -389,7 +398,7 @@ fallbacks. A conflicting typed and legacy accent produces a normalization
 report, and the typed value wins. `NoteEffect.VibratoStrength` is likewise
 authoritative when nonzero and preserves `Slight` and `Wide` exactly. A true
 legacy `Vibrato` value falls back to `Slight` when the typed strength is absent.
-Beat-level `BeatEffects.Vibrato` remains a separate GP8 export omission.
+Beat-level vibrato uses the separate `BeatEffects.VibratoStrength` contract.
 
 `NoteEffect.Hammer`, `Tapped`, and `LeftHandTapped` retain the GPIF
 `HopoOrigin`, `Tapped`, and `LeftHandTapped` properties independently, including

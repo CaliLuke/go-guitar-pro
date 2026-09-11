@@ -2201,14 +2201,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"45\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "45",
-          "locationsSha256": "fc88e5e317aedd5f36bbb2352a6c0b7581ac3ddee2a8c3f86e7c7ba5b02cce06"
-        },
-        {
           "code": "GPIF.Beat.Wah",
           "kind": "unsupported-feature",
           "count": 1,
@@ -3956,14 +3948,6 @@
         "note-and-beat-semantics"
       ],
       "diagnostics": [
-        {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 1,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"2\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "2",
-          "locationsSha256": "f6610673e9f4692c3f96566bd3e446f60b89a071b2d95954d4836f92dd30aba0"
-        },
         {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
@@ -7348,14 +7332,6 @@
           "locationsSha256": "5d7d3e95f0f70ef7f882510296c167f40779e1c70fc1e3c18b9467f39f26c887"
         },
         {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"48\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "48",
-          "locationsSha256": "8da99ae522afb7d3f91a57bd6b995f6578a7cf1d91def3e8557e60ef0e8a75a9"
-        },
-        {
           "code": "GPIF.Beat.Wah",
           "kind": "unsupported-feature",
           "count": 2,
@@ -7648,14 +7624,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
-        },
-        {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 22,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"126\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "126",
-          "locationsSha256": "ccdbe920bd6ce333aae81a98c91b00c2c17da4d58a2a76a553412f1d0f112313"
         },
         {
           "code": "GPIF.Beat.Whammy.Quantized",
@@ -11189,14 +11157,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "967113ef2a4680278c100927313b5ef127f7933280c03b8c034c740cd0bcf198"
-        },
-        {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 5,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"97\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "97",
-          "locationsSha256": "0fe88ff76873604fa7560773347e3d8f6323de2998060b9cc9a2f24a424ebfc2"
         },
         {
           "code": "GPIF.Beat.Wah",
@@ -15933,14 +15893,6 @@
           "locationsSha256": "472898e310a8b420172f4edaa70a845a9fd5124699008316032bc655daf8fc6e"
         },
         {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 4,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"2\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "2",
-          "locationsSha256": "a51e908a54ee8f9289a37e59adbd84876de4968b38a0b0e6599bb549fc99d70f"
-        },
-        {
           "code": "GPIF.Beat.Whammy.Quantized",
           "kind": "lossy-projection",
           "count": 3,
@@ -16647,14 +16599,6 @@
           "locationsSha256": "d1d44f70929e89013e0229ef63b6d254c47455ee2c7ddbfcbe2ee9bc12517bb6"
         },
         {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 3,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"1\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "1",
-          "locationsSha256": "376d7461c8d81f2f9c2299d1cd0c9aa85ab914907e3cb6038217ccb4d8737729"
-        },
-        {
           "code": "GPIF.ChannelStrip.Automation.Unsupported",
           "kind": "unsupported-feature",
           "count": 1,
@@ -17170,14 +17114,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "ba4587c20f2e3ded7b6f584b40eca400cb0c9e1ff3999ddaf31a329078df35c4"
-        },
-        {
-          "code": "GPIF.Beat.Property.VibratoWTremBar",
-          "kind": "lossy-projection",
-          "count": 22,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"126\"]/Properties/Property[@name=\"VibratoWTremBar\"]",
-          "objectId": "126",
-          "locationsSha256": "ccdbe920bd6ce333aae81a98c91b00c2c17da4d58a2a76a553412f1d0f112313"
         },
         {
           "code": "GPIF.Beat.Whammy.Quantized",

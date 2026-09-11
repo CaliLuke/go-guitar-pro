@@ -53,7 +53,18 @@ type BeatEffects struct {
 	FadeIn         bool
 	Hairpin        Hairpin
 	SlapEffect     SlapEffect
-	Vibrato        bool
+	// VibratoStrength is the typed beat-wide vibrato view. For a programmatic
+	// score, a nonzero strength is authoritative and Vibrato=true is the legacy
+	// Slight fallback. On an imported beat, editing only one view makes that view
+	// authoritative; when both are edited incompatibly, the typed view wins and
+	// GP8 export reports the conflict. Export and validation do not mutate either
+	// view.
+	VibratoStrength BeatVibrato
+	Vibrato         bool
+
+	importedVibratoStrength BeatVibrato
+	importedVibrato         bool
+	hasImportedVibrato      bool
 }
 
 // Beat contains multiple notes.
@@ -294,7 +305,9 @@ func (s *Song) readBeatEffectsV3(c *cursor, noteEffect *NoteEffect) (BeatEffects
 	if err != nil {
 		return be, *noteEffect, err
 	}
-	be.Vibrato = flags&0x03 != 0
+	if flags&0x03 != 0 {
+		be.setImportedVibrato(BeatVibratoSlight)
+	}
 	be.FadeIn = (flags & 0x10) == 0x10
 	if (flags & 0x20) == 0x20 {
 		slapByte, err := c.readByte()
@@ -340,7 +353,9 @@ func (s *Song) readBeatEffectsV4(c *cursor) (BeatEffects, error) {
 	if err != nil {
 		return be, err
 	}
-	be.Vibrato = (flags1 & 0x02) == 0x02
+	if (flags1 & 0x02) == 0x02 {
+		be.setImportedVibrato(BeatVibratoSlight)
+	}
 	be.FadeIn = (flags1 & 0x10) == 0x10
 	if (flags1 & 0x20) == 0x20 {
 		slapByte, err := c.readSignedByte()

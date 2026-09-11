@@ -184,14 +184,14 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	run.Omitted("BeatEffects.HasRasgueado", beat.Effect.HasRasgueado, true)
 	run.ClaimPrimary(claimSite("pick-stroke", "model", "M10-BEAT-EFFECTS", "up and down pick strokes")).Field("BeatEffects.PickStroke", beat.Effect.PickStroke, BeatStrokeDirectionUp)
 	run.Field("BeatEffects.SlapEffect", beat.Effect.SlapEffect, SlapEffectPopping)
-	run.Omitted("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
+	run.Preserved("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.omit.beat-vibrato", "gp8.normalize.stroke-duration"} {
+	for _, code := range []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.normalize.stroke-duration"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.omit.beat-vibrato", "gp8.normalize.stroke-duration"})
+	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.omit.rasgueado", "gp8.omit.pick-stroke", "gp8.omit.slap-effect", "gp8.normalize.stroke-duration"})
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)
@@ -204,6 +204,7 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	run.ClaimPrimary(claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in")).Field("BeatEffects.FadeIn", got.FadeIn, true)
 	run.ClaimPrimary(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins")).Field("BeatEffects.Hairpin", got.Hairpin, HairpinCrescendo)
 	run.Field("BeatEffects.Stroke", got.Stroke, BeatStroke{Direction: BeatStrokeDirectionDown, Duration: NoteValue(DurationEighth)})
+	run.Preserved("BeatEffects.Vibrato", got.Vibrato, true)
 
 	var lossErr *ExportLossError
 	strict, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})

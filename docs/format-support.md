@@ -26,6 +26,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `brush` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) | Brush direction has a public destination, while the authored GPIF duration remains explicitly diagnosed as unknown syntax until issue 78 implements its separate timing contract. |
 | `beat-lyrics` | gp6, gp7, gp8 | supported | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) | Beat.Lyrics preserves GPIF beat-scoped lines as independent ordered occurrence data through public edits and GP8 export, without merging them into beat text or score and track lyrics. |
+| `beat-vibrato` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) | Beat vibrato strength survives GP3-8 import, deterministic compatibility reconciliation, GP8 export, and pinned AlphaTab consumption without sharing authority with note vibrato. |
 | `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
 
 ## Parse diagnostics
@@ -134,7 +135,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Property.Rasgueado` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Property.Slapped.MissingEnable` | `note-and-beat-semantics` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Beat.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Beat.Property.VibratoWTremBar` | `note-and-beat-semantics` | `lossy-projection` | Song retains a less precise value than this source construct. |
+| `GPIF.Beat.Property.VibratoWTremBar.InvalidStrength` | `beat-vibrato` | `unsupported-feature` | Only the GPIF Slight and Wide beat-vibrato strengths are defined. |
+| `GPIF.Beat.Property.VibratoWTremBar.MissingStrength` | `beat-vibrato` | `invalid-data` | A beat-vibrato property must contain its Strength payload. |
 | `GPIF.Beat.Property.WhammyBarExtend` | `note-and-beat-semantics` | `deliberate-ignore` | The GPIF extension marker has no documented playback or notation effect. |
 | `GPIF.Beat.Rhythm.Reference` | `rhythm` | `invalid-data` | The source reference must resolve to an object of the requested type. |
 | `GPIF.Beat.Tremolo.InvalidValue` | `tremolo-picking` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
@@ -261,7 +263,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Beat` | `note-and-beat-semantics` | 15 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, legato endpoints, and ordered lyric lines are independent authored marks. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
-| `BeatEffects` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
+| `BeatEffects` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
 | `BeatStroke` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The stroke contains authored direction and note-value duration. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
@@ -287,9 +289,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 226 |
+| `preserved` | 228 |
 | `normalized` | 35 |
-| `omitted` | 117 |
+| `omitted` | 116 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -298,7 +300,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 90 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 158 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 91 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 161 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -319,6 +321,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 7 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifApplyBeatEffects:p.Strength` | `note-and-beat-semantics` | 2 | `beat-vibrato-preservation` | `delegated-to-audit` | The importer preserves each audited GPIF beat-vibrato strength. |
 | `gpifApplyBeatEffects:p.String` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The importer maps the two audited GPIF BarreString values to typed public shapes. |
 | `gpifAuditBarrePair:property.Name` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The audit verifies that the two beat-level barre properties occur as a pair. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
@@ -409,6 +412,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
+| `beat-vibrato-preservation` | `beat-vibrato` | `TestConformanceBeatVibrato` | `TestAlphaTabPreservesBeatVibrato` | yes | Binary presence maps to Slight while GPIF Slight and Wide remain distinct through typed and legacy edits, exact GP8 Strength output, reimport, and pinned-consumer loading without conflating note vibrato. |
 | `beat-lyrics-preservation` | `beat-lyrics` | `TestConformanceBeatLyrics` | `TestAlphaTabPreservesBeatLyrics` | yes | Ordered beat-scoped lyric lines, including empty and Unicode values, survive as independently editable occurrences with exact absent-versus-empty GPIF representation and remain distinct from FreeText and score or track lyrics. |
 | `brush-direction-and-audit` | `brush` | `TestConformanceBeatEffects` | `TestAlphaTabInputConformance` | no | The represented stroke direction remains covered by the public model and pinned corpus comparison, while TestGPIFXPropertyAuditClosure keeps the separately tracked duration loss explicit until issue 78. |
 | `beaming-preservation` | `beaming` | `TestConformanceBeaming` | `TestAlphaTabPreservesBeaming` | yes | Authored master-bar groups, beam connection modes, inverted stems, and explicit up/down directions survive binary or GPIF import, public edits, exact GP8 wire output, and pinned-consumer loading. |
