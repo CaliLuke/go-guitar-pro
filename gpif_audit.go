@@ -1099,9 +1099,9 @@ func gpifAuditReferences(doc gpifDocument, context *parseContext) {
 }
 
 var gpifDiagramPropertySources = map[string]parseDiagnosticSource{
-	"ShowName":      diagnosticSource("GPIF.Chord.Diagram.Property.ShowName", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"ShowDiagram":   diagnosticSource("GPIF.Chord.Diagram.Property.ShowDiagram", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"ShowFingering": diagnosticSource("GPIF.Chord.Diagram.Property.ShowFingering", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
+	"ShowName":      diagnosticSource("GPIF.Chord.Diagram.Property.ShowName", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"ShowDiagram":   diagnosticSource("GPIF.Chord.Diagram.Property.ShowDiagram", "note-and-beat-semantics", ParseDiagnosticInvalidData),
+	"ShowFingering": diagnosticSource("GPIF.Chord.Diagram.Property.ShowFingering", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 }
 
 func gpifAuditChordIDs(context *parseContext, chords map[string]struct{}, properties []gpifStaffProperty, path string) {
@@ -1121,12 +1121,15 @@ func gpifAuditChordIDs(context *parseContext, chords map[string]struct{}, proper
 			for diagramPropertyIndex, diagramProperty := range item.Diagram.Properties {
 				propertyPath := fmt.Sprintf("%s/Diagram/Property[%d][@name=%q]", itemPath, diagramPropertyIndex, diagramProperty.Name)
 				source, known := gpifDiagramPropertySources[diagramProperty.Name]
+				if known && (diagramProperty.Value == "true" || diagramProperty.Value == "false") {
+					continue
+				}
 				if !known {
 					source = diagnosticSource("GPIF.Chord.Diagram.Property.Unknown", "note-and-beat-semantics", ParseDiagnosticUnknownSyntax)
 				}
 				context.add(source, ParseDiagnostic{
 					SourcePath: propertyPath, ObjectID: item.ID,
-					Reason: fmt.Sprintf("Chord does not preserve GPIF diagram property %q", diagramProperty.Name),
+					Reason: fmt.Sprintf("GPIF diagram property %q has unsupported value %q", diagramProperty.Name, diagramProperty.Value),
 				})
 			}
 		}

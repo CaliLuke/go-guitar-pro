@@ -47,6 +47,14 @@ func pitchClassFrom(just int8, accidental *int8, sharp *bool) PitchClass {
 
 // Chord represents a chord annotation for beats.
 type Chord struct {
+	// ShowName controls chord-name visibility. Nil uses the default true value.
+	ShowName *bool
+	// ShowDiagram controls diagram visibility independently from its contents.
+	// Nil uses the existing GP8 default true value.
+	ShowDiagram *bool
+	// ShowFingering controls fingering visibility independently from diagram visibility.
+	// Nil uses the existing GP8 default true value. Direct edits control export.
+	ShowFingering *bool
 	// FirstFret is the one-based display fret for the diagram. Nil means absent.
 	FirstFret *uint8
 	Ninth     *ChordAlteration

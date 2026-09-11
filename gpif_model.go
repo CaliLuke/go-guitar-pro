@@ -153,6 +153,9 @@ func (s gpifChordScope) resolve(staffIndex int, id string) (Chord, bool) {
 
 func cloneChordOccurrence(source Chord) Chord {
 	clone := source
+	clone.ShowName = cloneSemanticPointer(source.ShowName)
+	clone.ShowDiagram = cloneSemanticPointer(source.ShowDiagram)
+	clone.ShowFingering = cloneSemanticPointer(source.ShowFingering)
 	clone.FirstFret = cloneSemanticPointer(source.FirstFret)
 	clone.Ninth = cloneSemanticPointer(source.Ninth)
 	clone.Root = cloneSemanticPointer(source.Root)
@@ -205,6 +208,7 @@ func gpifReadChordProperties(properties []gpifStaffProperty, chords map[string]C
 				continue
 			}
 			chord := Chord{Name: item.Name}
+			gpifReadChordDisplay(&chord, item.Diagram)
 			if item.Diagram != nil {
 				if item.Diagram.StringCount < 0 || item.Diagram.StringCount > math.MaxUint8 {
 					return fmt.Errorf("diagram %q string count %d is outside 0..255", item.ID, item.Diagram.StringCount)
@@ -336,4 +340,17 @@ func gpifChordFinger(token string) (Fingering, error) {
 	default:
 		return FingeringUnknown, fmt.Errorf("finger %q is not defined", token)
 	}
+}
+
+func gpifReadChordDisplay(chord *Chord, diagram *gpifDiagram) {
+	showName, showDiagram, showFingering := true, diagram != nil, diagram != nil
+	if diagram != nil {
+		values := map[string]*bool{"ShowName": &showName, "ShowDiagram": &showDiagram, "ShowFingering": &showFingering}
+		for _, property := range diagram.Properties {
+			if value, known := values[property.Name]; known {
+				*value = property.Value == "true"
+			}
+		}
+	}
+	chord.ShowName, chord.ShowDiagram, chord.ShowFingering = &showName, &showDiagram, &showFingering
 }

@@ -57,6 +57,7 @@ var conformanceIndependentEvidenceExecutors = map[string]func(*testing.T){
 	"alphatab-tuning":                TestAlphaTabPreservesTuningLabels,
 	"alphatab-section-track-names":   TestAlphaTabSectionTrackNames,
 	"alphatab-note-ornaments":        TestAlphaTabNoteOrnaments,
+	"alphatab-chord-display":         TestAlphaTabChordDisplay,
 	"alphatab-string-number-display": TestAlphaTabStringNumberDisplay,
 }
 

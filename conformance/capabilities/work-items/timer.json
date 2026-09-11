@@ -5,8 +5,8 @@
   "title": "Preserve authored timer marks and visibility",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp6",
     "gp7",

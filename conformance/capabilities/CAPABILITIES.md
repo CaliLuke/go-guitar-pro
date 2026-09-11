@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 74 | 15 | 8 | 1 |
-| model | 73 | 16 | 8 | 1 |
-| export | 52 | 30 | 14 | 2 |
+| import | 75 | 15 | 7 | 1 |
+| model | 74 | 16 | 7 | 1 |
+| export | 53 | 30 | 13 | 2 |
 
-All three stages have a supported rating in 52 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 53 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -137,9 +137,9 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Chords. Priority 3. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF diagram display properties are audited but not retained as independent public flags.
+Independent Chord.ShowName, ShowDiagram and ShowFingering pointers retain all eight explicit true/false combinations across scoped and reused definitions. Direct edits preserve exact pinned-consumer display flags; nil retains the existing default true. Legacy Chord.Show and diagram contents remain separately scoped.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

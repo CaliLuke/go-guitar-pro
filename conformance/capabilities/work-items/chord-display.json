@@ -5,8 +5,8 @@
   "title": "Preserve independent chord display flags",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp6",
     "gp7",
@@ -79,13 +79,28 @@
       "kind": "probe",
       "reference": "testdata/gp7/notation-legend.gp:chord-display",
       "detail": "Reproduced at tracks[0].staves[0].bars[87].voices[0].beats[0].chord.showFingering. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabChordDisplay",
+      "detail": "All eight flag combinations on otherwise identical definitions in two staff scopes, plus isolated repeated-definition edits."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/chord-display.json",
+      "detail": "Hash-bound source and actual exported artifacts, strict report and raw final consumer facts."
     }
   ],
   "shared_files": [
     "gpif_audit.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented independent occurrence-owned ShowName, ShowDiagram and ShowFingering pointers. All eight explicit boolean combinations, staff scope overrides, repeated definitions, absent controls and direct edits retain exact final pinned-consumer flags. Legacy Chord.Show remains separate. Awaiting fresh different-agent review and integrated gates/probe.",
+  "verification": [
+    "Valid strict public source regression fails against the previous model reader (missing display values) and passes with this implementation.",
+    "Exact public fields, 48 serialized property name/type/value assertions and all raw source/edited consumer flags pass.",
+    "Source defaults and legacy empty-diagram string fallback are explicit in the receipt; no render appearance claim.",
+    "Full conformance, capability probe and prek remain assigned to root integration."
+  ],
   "issue": {
     "number": 104,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/104",

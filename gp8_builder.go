@@ -604,6 +604,15 @@ func gp8ChordItem(id string, chord *Chord, fallbackStringCount int) gpifItem {
 		baseFret = int(*chord.FirstFret) - 1
 	}
 	diagram := &gpifDiagram{StringCount: stringCount, FretCount: 5, BaseFret: baseFret}
+	for _, property := range []struct {
+		name  string
+		value *bool
+	}{{"ShowName", chord.ShowName}, {"ShowDiagram", chord.ShowDiagram}, {"ShowFingering", chord.ShowFingering}} {
+		if property.value != nil {
+			diagram.Properties = append(diagram.Properties, gpifDiagramProperty{Name: property.name, Type: "bool", Value: strconv.FormatBool(*property.value)})
+		}
+	}
+
 	for index, fret := range chord.Strings {
 		if fret >= 0 {
 			diagram.Frets = append(diagram.Frets, gpifDiagramFret{

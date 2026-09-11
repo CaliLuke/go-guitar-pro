@@ -752,6 +752,15 @@ descriptions remain separately reported losses. Imported chord occurrences own
 separate mutable slices and pointers. Staff-local definitions take precedence
 over track definitions with the same identifier.
 
+`Chord.ShowName`, `ShowDiagram`, and `ShowFingering` are independent display requests.
+Each imported chord occurrence owns its pointers. Direct edits control GP8 output.
+Nil pointers retain the existing target default true. A GPIF Diagram defaults all three flags to true.
+Without a Diagram, the name defaults to true and diagram/fingering display defaults to false.
+Explicit true and false properties override each default independently. Invalid property spellings produce a scoped invalid-data diagnostic.
+The legacy binary `Chord.Show` field remains a separate reported omission.
+Display flags do not discard string or finger data. The existing GP8 writer supplies a muted fallback diagram for an empty string slice.
+The independent display receipt records that fallback separately from the retained flags.
+
 GP8 emits the canonical `Ring` token for an annular chord finger. Pinned
 AlphaTab recognizes the legacy `Rank` spelling but ignores `Ring`. Export
 reports each lost annular barre with `gp8.omit.chord-annular-consumer-barre`.

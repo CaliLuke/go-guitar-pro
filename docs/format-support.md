@@ -72,9 +72,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Whammy.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public whammy curve uses a narrower integer scale. |
 | `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Note.Property.TransposedPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
-| `GPIF.Chord.Diagram.Property.ShowDiagram` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Staff.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Staff.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
@@ -233,6 +230,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.Property.Rasgueado` | `note-and-beat-semantics` | `unsupported-feature` | An unknown source pattern has no named semantic destination; no default gesture is substituted. |
 | `Binary.Beat.Wah.Unsupported` | `note-and-beat-semantics` | `unsupported-feature` | Legacy wah values below -1 have no supported pedal event; the raw value remains in MixTableChange.Wah. |
 | `GPIF.Beat.Wah` | `note-and-beat-semantics` | `unsupported-feature` | Only Open and Closed are supported GPIF beat wah events; unknown values are diagnosed without substituting a state. |
+| `GPIF.Chord.Diagram.Property.ShowDiagram` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
+| `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
+| `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 
 ## Public model inventory
 
@@ -289,19 +289,19 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `KeySignature` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The key signature contains authored tonality values. |
 | `ScoreTime` | `timing` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | The private reduced terms provide a checked derived timing value. |
 | `BarPosition` | `timing` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | The private reduced terms provide a checked authored bar position. |
-| `Chord` | `note-and-beat-semantics` | 19 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
 | `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
+| `Chord` | `note-and-beat-semantics` | 22 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 260 |
+| `preserved` | 263 |
 | `normalized` | 37 |
 | `omitted` | 103 |
 | `rejected` | 0 |
@@ -312,7 +312,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 128 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 129 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -466,3 +466,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `assigned-lyrics` | `score-core` | `TestConformanceAssignedLyrics` | `TestAlphaTabAssignedLyrics` | no | Ordered source index conversion, explicit track authority, exact wire and final consumer dispatch with separate beat ownership. |
 | `exact-whammy-offsets` | `note-and-beat-semantics` | `TestConformanceExactWhammyOffsets` | `TestAlphaTabExactWhammyOffsets` | no | Shared ExactOffset authority preserves fractional and bounded nonmonotonic whammy roles; raw pinned consumer controls retain distinct35 and35.5 percent middle offsets. |
 | `note-ornaments` | `note-and-beat-semantics` | `TestConformanceNoteOrnaments` | `TestAlphaTabNoteOrnaments` | no | Four authored variants and None remain independent per occurrence; unknown source strings and public enum values are diagnosed without changing string or fret. |
+| `chord-display` | `note-and-beat-semantics` | `TestConformanceChordDisplay` | `TestAlphaTabChordDisplay` | no | Each explicit true and false flag retains scoped and independently editable occurrences through raw final consumer loading. |

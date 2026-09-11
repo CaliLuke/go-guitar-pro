@@ -466,9 +466,9 @@ func runConformanceChordScopeAndIsolation(run *conformanceRun) {
 		{name: "missing reference", data: strings.Replace(conformanceChordScopedGPIF, "<Chord>track</Chord>", "<Chord>missing</Chord>", 1), code: "GPIF.Beat.Chord.Reference"},
 		{name: "empty id", data: strings.Replace(conformanceChordScopedGPIF, `id="track" name="Track"`, `id="" name="Track"`, 1), code: "GPIF.ChordDefinition.EmptyID"},
 		{name: "duplicate id", data: strings.Replace(conformanceChordScopedGPIF, `id="equal-a"`, `id="track"`, 1), code: "GPIF.ChordDefinition.DuplicateID"},
-		{name: "show name", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowName" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowName"},
-		{name: "show diagram", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowDiagram" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowDiagram"},
-		{name: "show fingering", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowFingering" type="bool" value="false"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowFingering"},
+		{name: "show name", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowName" type="bool" value="invalid"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowName"},
+		{name: "show diagram", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowDiagram" type="bool" value="invalid"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowDiagram"},
+		{name: "show fingering", data: strings.Replace(conformanceChordScopedGPIF, `</Diagram></Item>`, `<Property name="ShowFingering" type="bool" value="invalid"/></Diagram></Item>`, 1), code: "GPIF.Chord.Diagram.Property.ShowFingering"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			parsed, parseErr := ParseWithOptions(conformanceGPIFArchive(t, test.data), ParseOptions{})

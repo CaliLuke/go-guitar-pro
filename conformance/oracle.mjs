@@ -1374,6 +1374,7 @@ function main() {
     process.stdout.write(`${JSON.stringify(loadBarreFacts(args[1]), null, 2)}\n`);
     return;
   }
+  if (args[0] === '--chord-display' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadChordDisplayFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--chord-diagrams' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadChordDiagramFacts(args[1]), null, 2)}\n`);
     return;
@@ -1494,4 +1495,9 @@ export function loadSyncPointFacts(fixture) {
 export function loadPanFacts(fixture) {
   const score = loadScore(fixture);
   return score.tracks.flatMap(track => track.staves.flatMap(staff => staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.automations.filter(a => a.type === alphaTab.model.AutomationType.Balance).map(a => ({track:track.index,bar:bar.index,beat:beat.index,value:a.value,linear:a.isLinear})))))));
+}
+
+export function loadChordDisplayFacts(fixture) {
+ const score=loadScore(fixture);
+ return score.tracks.flatMap(track=>track.staves.flatMap(staff=>staff.bars.flatMap(bar=>bar.voices.flatMap(voice=>voice.beats.filter(beat=>beat.chord).map(beat=>({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,name:beat.chord.name,showName:beat.chord.showName,showDiagram:beat.chord.showDiagram,showFingering:beat.chord.showFingering,strings:Array.from(beat.chord.strings)}))))));
 }

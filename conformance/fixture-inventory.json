@@ -3330,6 +3330,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/chord-display.gp",
+      "sha256": "e050906d688aecc82a78157dc2e819ba9c202398829a93153e5344cb7f7f1822",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original scoped chord display regression with eight explicit flag combinations and default controls; other musical capabilities remain separately scoped.",
+      "features": [
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/directions.gp",
       "sha256": "a6f4b8e5bebb302f627e37f1429c72a2c76d3ce78ffed7ad1ce4c2c5b0708461",
       "format": "gp8",

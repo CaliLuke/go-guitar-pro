@@ -1985,14 +1985,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 8,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Properties/Property[1]/Items/Item[0]/Diagram/Property[0][@name=\"ShowFingering\"]",
-          "objectId": "5",
-          "locationsSha256": "ad7e0f8b7ed77e96432cd1c69af57ec6e13ff171a5cb96043d94f39ca8bceb9d"
-        },
-        {
           "code": "GPIF.Track.Property.Unknown",
           "kind": "unknown-syntax",
           "count": 2,
@@ -5605,30 +5597,6 @@
           "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
         },
         {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "b741669fc1d56f74db109130e9b0ac9d7333301186a0d410ccfa90b9e5edd20c"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "87d6d0c6f203a42f4aac582682139d1191379d7790d5234a5540f26f0ca63e53"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "47018642d96dfb73dc281ebe73f2daeb80fd85dff5ea66933ec013cd411aae69"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 5,
@@ -5715,30 +5683,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "288f10dd356448a33d576e31d21ccbbb3ebbc81a28ef5b3228fc71aee95103a1"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "5891fa530f964ec1be74ecb71dd8c38a15caa3fd6673e2a664284b3db3de1892"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "342c42d1f659e17a792ad7165accc6c31f6e58873698f0e267a52d9d1e5a8db7"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "f6878e3b75855a0f4a1bc0087562b7e00c8022c4fa77cdf81f68c23e52c63f2b"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -5899,30 +5843,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/XProperties/XProperty[0]/@id",
           "objectId": "0",
           "locationsSha256": "28e386e0d1bb9ee00c24c1795df3247d95f220bbc6b9897ad6a991cfbec16b9d"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "2",
-          "locationsSha256": "544a4240fed4229cf5db50199f74413fced302c485e4c19ad8f80ce924c7c5a9"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "2",
-          "locationsSha256": "0d84eab4bed84faeff72243f48dfe8e8dadec4fd34d11815d7a9aef7fefc3d5c"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "2",
-          "locationsSha256": "9e643dca13f6501a7dde9578af4f074b05a69841cf72d11a7775a61dc562a04a"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -7194,30 +7114,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "6f69e84588427e9c0544e6ac4e2b46845fade40b6f153ce9f6385edf15f75a45"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "0c93fce90794d69615de8de2db7ddf4eaac64dd53bb9d8f075354b581f84d6f2"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "c2c147bb907c2e1b6e49cb50176fc794ddf06a6ce85d3b77ed6b3f8d72c6644d"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -10180,30 +10076,6 @@
           "locationsSha256": "965bc20b00671c988dd9bc62f789471672808420887194700a2296689f004a2d"
         },
         {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "6f69e84588427e9c0544e6ac4e2b46845fade40b6f153ce9f6385edf15f75a45"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "0c93fce90794d69615de8de2db7ddf4eaac64dd53bb9d8f075354b581f84d6f2"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 7,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "c2c147bb907c2e1b6e49cb50176fc794ddf06a6ce85d3b77ed6b3f8d72c6644d"
-        },
-        {
           "code": "GPIF.Note.Property.BendNumber.Quantized",
           "kind": "lossy-projection",
           "count": 2,
@@ -10312,30 +10184,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "6ee5c92fa2722be5f10e0251ffcc34cb2dbeac7c4f7b12380a31690c2119134e"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "1",
-          "locationsSha256": "676645097ca211e19de3a8eb93c23559ee38ebf98580c7910652f76bd55ebf33"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "1",
-          "locationsSha256": "f426bb94f135f4c99aac2da52b67be81d67b287918f623a25c04f1a5a8ecacef"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "1",
-          "locationsSha256": "ed9613e791abcf730f21940bf9e777527d40e63eb5b53c36459571b804bd234d"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -11560,30 +11408,6 @@
           "locationsSha256": "f9b1aa7e238e14b69d6f16cc4368bd53ea39960702c0f966224ac5116d95d064"
         },
         {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "1f52bed4b55f5a16658320df4790028e1d820f0e2dcf8e97281adf9146db8ff7"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "069ef2c4f5da71b7acafb13a76e9f244e33979acd5da156de9140da69d99b6a1"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 1,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "e0fcd639001b359bfa399327c3e4a41df00af53f10ffcb7a398cb77925263673"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 5,
@@ -12114,30 +11938,6 @@
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
         },
         {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "5891fa530f964ec1be74ecb71dd8c38a15caa3fd6673e2a664284b3db3de1892"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "342c42d1f659e17a792ad7165accc6c31f6e58873698f0e267a52d9d1e5a8db7"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "f6878e3b75855a0f4a1bc0087562b7e00c8022c4fa77cdf81f68c23e52c63f2b"
-        },
-        {
           "code": "GPIF.Note.Property.ConcertPitch",
           "kind": "unsupported-feature",
           "count": 27,
@@ -12231,30 +12031,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "585b5d4cc8d38ebffd190ac0135262413a0c4a8855ded400be71402822e3fd1e"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "5891fa530f964ec1be74ecb71dd8c38a15caa3fd6673e2a664284b3db3de1892"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "342c42d1f659e17a792ad7165accc6c31f6e58873698f0e267a52d9d1e5a8db7"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 3,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "f6878e3b75855a0f4a1bc0087562b7e00c8022c4fa77cdf81f68c23e52c63f2b"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -12580,30 +12356,6 @@
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
           "objectId": "0",
           "locationsSha256": "7052037a2a21383d2393c145ad7e11b0d320b9348a9a701d6d978ec919da5576"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowDiagram",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[1][@name=\"ShowDiagram\"]",
-          "objectId": "0",
-          "locationsSha256": "7f6127cd9f7a3fc4a6649539f93efcc5857740fd52e5b35d096d5d27a0c4a9be"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowFingering",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[2][@name=\"ShowFingering\"]",
-          "objectId": "0",
-          "locationsSha256": "a43964e505adec4bcf2f4e2b3c93d5b7a09dcce40584621203bd8610b48967f1"
-        },
-        {
-          "code": "GPIF.Chord.Diagram.Property.ShowName",
-          "kind": "unsupported-feature",
-          "count": 2,
-          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[7]/Items/Item[0]/Diagram/Property[0][@name=\"ShowName\"]",
-          "objectId": "0",
-          "locationsSha256": "85e5859ad82336fb5e7a4328b5cd869d1ea96e39f7482bfbbd1db757442d4470"
         },
         {
           "code": "GPIF.Note.Property.ConcertPitch",
@@ -15554,6 +15306,14 @@
           "locationsSha256": "50de2078c9c0e52795e7f3c1beb81219b45b9ea7e4961c84e66fc70a05d31008"
         }
       ],
+      "differences": null
+    },
+    {
+      "path": "testdata/gp8/chord-display.gp",
+      "features": [
+        "note-and-beat-semantics"
+      ],
+      "diagnostics": [],
       "differences": null
     },
     {
