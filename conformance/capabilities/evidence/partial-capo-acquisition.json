@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "issue": 115,
+  "status": "external-inputs-still-missing",
+  "checked_at": "2026-09-11T20:47:46.246938+00:00",
+  "reviewed_commit": "fb789bf",
+  "application": {
+    "bundle_id": "com.arobas-music.guitarpro8",
+    "version": "8.1.5-31"
+  },
+  "attempt": {
+    "control": "testdata/gp8/protection-unprotected.gp",
+    "control_sha256": "64ce1d269c0c64a27674a1e3a1cb84d26bd4140a092704de2aed81c5a6223ccc",
+    "temporary_candidate_sha256": "64ce1d269c0c64a27674a1e3a1cb84d26bd4140a092704de2aed81c5a6223ccc",
+    "observed_saved_values": {
+      "CapoFret": 0,
+      "PartialCapoFret": 0,
+      "PartialCapoStringFlags": "000000",
+      "Tuning": [
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ]
+    },
+    "observed_ui": {
+      "partial_fret_stepper": 3,
+      "selected_strings": "No strings capoed",
+      "whole_capo": 0
+    },
+    "outcome": "Native tuning sheet opened. Accessibility click, coordinate click and keyboard activation of the selected-string control did not expose or change selected strings. Cancel returned to the score. No asymmetric variant or retained pitch receipt was acquired."
+  },
+  "required_inputs": [
+    {
+      "id": "partial-capo-fixtures",
+      "state": "missing",
+      "detail": "Authorized control, fret3 strings1/4, controlled single-string siblings, whole2/partial5 and partial-below-whole variants, each with identifiable open-string notes."
+    },
+    {
+      "id": "partial-capo-consumer-receipt",
+      "state": "missing",
+      "detail": "Reopened selected-string/fret state and per-string sounding pitches tied to fixture hashes in an independently retaining consumer."
+    }
+  ],
+  "decision": "Keep both external inputs missing and the item excluded from ready_work. No mapping/API implementation, fabricated fixture, or capability promotion. A failed control-file authoring attempt is not a partial-capo fixture."
+}
