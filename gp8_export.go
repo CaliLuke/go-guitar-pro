@@ -312,7 +312,7 @@ func validateGP8Song(song *Song) error {
 			if automation.Sound < 0 || automation.Sound >= len(track.Sounds) {
 				return fmt.Errorf("track %d sound automation %d uses sound index %d with %d sounds", trackIndex, automationIndex, automation.Sound, len(track.Sounds))
 			}
-			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || automation.Position < 0 || automation.Position > 1 {
+			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || !validSoundAutomationPosition(automation.Bar, automation.Position) {
 				return fmt.Errorf("track %d sound automation %d has invalid position bar=%d position=%v", trackIndex, automationIndex, automation.Bar, automation.Position)
 			}
 		}

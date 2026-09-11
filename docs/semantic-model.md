@@ -142,6 +142,17 @@ MIDI omission. It also reports each legacy master or track RSE record as one
 scoped omission. The RSE tests assert every descendant covered by those parent
 reports.
 
+`SoundAutomation.Position` supports finite values from 0 through 1 in every
+bar. Bar zero also supports opening preroll from -0.125 up to zero. This
+bounded contract follows the GP7 grace fixture; it does not define a universal
+GPIF limit. Validation and GP8 preflight reject earlier preroll, negative
+positions in later bars, and non-finite positions.
+
+Direct edits to the position and sound reference control GP8 output. Export
+retains each value and the slice order, including equal positions and preroll
+events after position-zero events. It does not move events to zero or modify
+the authored records.
+
 GPIF `AudioEngineState` maps `RSE` to `Track.UseRse` and `MIDI` to false. An
 unknown engine state produces an unknown-syntax diagnostic.
 

@@ -255,8 +255,8 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			if automation.Sound < 0 || automation.Sound >= len(track.Sounds) {
 				add("score.sound-automation.reference", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "sound automation %d references sound %d", automationIndex, automation.Sound)
 			}
-			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || math.IsNaN(automation.Position) || math.IsInf(automation.Position, 0) || automation.Position < 0 || automation.Position > 1 {
-				add("score.sound-automation.location", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound automation %d has bar %d position %v", automationIndex, automation.Bar, automation.Position)
+			if automation.Bar < 0 || automation.Bar >= len(song.MeasureHeaders) || !validSoundAutomationPosition(automation.Bar, automation.Position) {
+				add("score.sound-automation.location", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound automation %d has bar %d position %v; bar must reference a measure and position must be finite within 0..1, or -0.125..0 in bar 0", automationIndex, automation.Bar, automation.Position)
 			}
 		}
 		for soundIndex, sound := range track.Sounds {
@@ -632,4 +632,10 @@ func scoreTimeOrLegacy(exact ScoreTime, legacy int64) ScoreTime {
 		return ScoreTime{}
 	}
 	return value
+}
+
+// validSoundAutomationPosition applies the evidenced opening-preroll contract.
+// Ordered comparisons also reject NaN and both infinities.
+func validSoundAutomationPosition(bar int, position float64) bool {
+	return position <= 1 && (position >= 0 || bar == 0 && position >= -0.125)
 }

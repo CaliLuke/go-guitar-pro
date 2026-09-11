@@ -5,8 +5,8 @@
   "title": "Preserve authored opening sound-event preroll",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -68,6 +68,26 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "test",
+      "reference": "TestSoundAutomationOpeningPreroll",
+      "detail": "Public GP7 grace fixture, exact referenced sound, direct edits, and Go GP8 reimport."
+    },
+    {
+      "kind": "test",
+      "reference": "TestSoundAutomationPositionBounds",
+      "detail": "Nineteen accepted and rejected cases cover adjacent floating-point bounds, later bars, non-finite positions, invalid references, and matching validation/preflight/export diagnostics."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceSoundPreroll",
+      "detail": "M17-SOUND-PREROLL runtime preserved-field, exact wire-value, and strict-policy assertions."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabSoundPreroll",
+      "detail": "Pinned consumer source and exported position -0.125, plus exact unsorted and equal-position instrument/bank event sequence."
     }
   ],
   "shared_files": [
@@ -76,7 +96,7 @@
     "gp8_export.go",
     "gpif_automations.go"
   ],
-  "resolution": null,
+  "resolution": "The shared validation and GP8 range check now accept finite sound positions in [-0.125, 0) only at bar zero and retain [0, 1] in every bar. Export preserves exact position, sound reference, and authored slice order without clamping or mutation. Public boundary tests cover adjacent floats, non-finite values, and invalid references; pinned AlphaTab retains the GP7 grace fixture and distinct bank/program changes around zero and repeated preroll positions. This is a bounded library contract, not a universal GPIF limit. Implementation awaits independent review; the issue remains open.",
   "verification": [],
   "issue": {
     "number": 64,

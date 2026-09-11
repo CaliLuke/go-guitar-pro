@@ -183,6 +183,8 @@ type SoundAutomation struct {
 	// Bar is a zero-based measure-header index.
 	Bar int
 	// Position is a ratio from 0 at the bar start through 1 at the bar end.
+	// Bar 0 also supports opening preroll from -0.125 up to 0.
+	// Direct edits are authoritative; export preserves the value and slice order.
 	Position float64
 	// Sound is a zero-based index in Track.Sounds.
 	Sound int

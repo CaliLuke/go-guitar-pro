@@ -1918,7 +1918,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Ordered sound definitions and references are modeled. GPIF bank selections and legacy beat-local mix changes are not lossless.",
+      "finding": "Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "AutomationType.Instrument"
@@ -1938,6 +1938,21 @@
           "kind": "test",
           "reference": "TestConformanceAutomationSemantics",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSoundAutomationOpeningPreroll",
+          "detail": "Public GP7 grace source, direct edits, and exact GP8 reimport."
+        },
+        {
+          "kind": "test",
+          "reference": "TestSoundAutomationPositionBounds",
+          "detail": "Adjacent floating boundaries, non-finite positions, invalid references, and aligned validation/preflight/export rejection."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabSoundPreroll",
+          "detail": "Pinned consumer retains source and exported -0.125 and exact instrument/bank event order."
         }
       ]
     },

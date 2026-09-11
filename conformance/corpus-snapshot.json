@@ -8771,12 +8771,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/ShortName",
           "objectId": "0",
           "locationsSha256": "f9b570e1e9a0d8153f32c198b885add253a74f922773f001b98fe8c98a72d3cf"
-        },
-        {
-          "code": "score.sound-automation.location",
-          "kind": "invalid-data",
-          "count": 1,
-          "locationsSha256": "50de2078c9c0e52795e7f3c1beb81219b45b9ea7e4961c84e66fc70a05d31008"
         }
       ],
       "differences": null

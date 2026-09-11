@@ -887,7 +887,7 @@ Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Ordered sound definitions and references are modeled. GPIF bank selections and legacy beat-local mix changes are not lossless.
+Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
