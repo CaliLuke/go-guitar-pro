@@ -1874,7 +1874,7 @@
         "model": "supported",
         "export": "missing"
       },
-      "finding": "Song.VolumeAutomations preserves channel-strip volume events and linear flags. GP8 writer reports them as omitted.",
+      "finding": "Song.VolumeAutomations preserves channel-strip volume events and linear flags, and the GP8 writer reports them as omitted. Export remains blocked against pinned AlphaTab 1.8.4: its GPIF automation dispatcher has no volume case and its RSE channel-strip importer ignores Automations. The GP5 RSE fixture instead exercises a beat-local mix-table volume event, which is a different model domain.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "AutomationType.Volume"
@@ -1899,6 +1899,21 @@
           "kind": "source",
           "reference": "export_report.go",
           "detail": "Target omission reports."
+        },
+        {
+          "kind": "upstream-source",
+          "reference": "references/alphaTab/packages/alphatab/src/importer/GPIFParser.ts:513",
+          "detail": "Pinned revision 022a45c8e42370f9e12e68949d11eada370da83d dispatches Tempo, SyncPoint, Sound, and SustainPedal GPIF automations, but not volume."
+        },
+        {
+          "kind": "upstream-source",
+          "reference": "references/alphaTab/packages/alphatab/src/importer/GPIFParser.ts:1309",
+          "detail": "Pinned RSE/ChannelStrip parsing reads only Parameters and ignores an Automations child."
+        },
+        {
+          "kind": "upstream-source",
+          "reference": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1237",
+          "detail": "Pinned GP5 mix-table volume becomes a beat-local automation, not Song.VolumeAutomations."
         },
         {
           "kind": "probe",

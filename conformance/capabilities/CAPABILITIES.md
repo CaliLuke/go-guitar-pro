@@ -956,7 +956,7 @@ Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **missing**.
 
-Song.VolumeAutomations preserves channel-strip volume events and linear flags. GP8 writer reports them as omitted.
+Song.VolumeAutomations preserves channel-strip volume events and linear flags, and the GP8 writer reports them as omitted. Export remains blocked against pinned AlphaTab 1.8.4: its GPIF automation dispatcher has no volume case and its RSE channel-strip importer ignores Automations. The GP5 RSE fixture instead exercises a beat-local mix-table volume event, which is a different model domain.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

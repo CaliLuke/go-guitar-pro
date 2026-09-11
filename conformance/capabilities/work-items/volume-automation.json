@@ -5,8 +5,8 @@
   "title": "Export authored channel-strip volume automation",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -24,7 +24,10 @@
     "Assert track ownership, same-position event order and exact supported wire values.",
     "Remove only the resolved omission report; pinned AlphaTab reads equivalent values and strict export accepts the supported slice."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Do not emit speculative GPIF DSPParam_12 channel-strip automations while the required pinned AlphaTab consumer ignores RSE/ChannelStrip/Automations.",
+    "GP3 through GP5 beat-local mix-table volume changes belong to BeatEffects.MixTableChange; they are not evidence for the distinct Song.VolumeAutomations contract."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -52,6 +55,24 @@
       "symbol": "AutomationType.Volume"
     },
     {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GPIFParser.ts#L513-L572",
+      "symbol": "GpifParser._parseAutomation",
+      "detail": "The pinned GPIF automation dispatcher has cases only for Tempo, SyncPoint, Sound, and SustainPedal; it has no volume or DSPParam_12 case."
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GPIFParser.ts#L1309-L1337",
+      "symbol": "GpifParser._parseChannelStrip",
+      "detail": "The pinned RSE channel-strip importer reads only the static Parameters child and ignores an Automations child."
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1237-L1320",
+      "symbol": "Gp3To5Importer.readMixTableChange",
+      "detail": "The pinned GP5 importer converts a legacy mix-table volume byte into a beat-local AutomationType.Volume event, not a GPIF channel-strip Song.VolumeAutomations record."
+    },
+    {
       "kind": "source",
       "reference": "gpif_automations.go",
       "detail": "Reviewed implementation or documented contract."
@@ -77,12 +98,12 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": null,
+  "resolution": "Blocked against the required AlphaTab 1.8.4 oracle at revision 022a45c8e42370f9e12e68949d11eada370da83d. Its GPIF parser accepts track-level Automations but dispatches only Tempo, SyncPoint, Sound, and SustainPedal, while its RSE/ChannelStrip parser reads only static Parameters and ignores Automations. Therefore an otherwise valid DSPParam_12 channel-strip event cannot satisfy the acceptance requirement that pinned AlphaTab read equivalent volume values. The cited testdata/gp5/RSE.gp5 difference is a separate legacy domain: AlphaTab's GP3-to-GP5 importer creates a beat-local volume automation from MixTableChange, whereas Song.VolumeAutomations models GPIF channel-strip records. Keep GP8 export missing and gp8.omit.volume-automations active until acceptance names a consumer that observes the proposed wire contract or the pinned consumer gains support.",
   "verification": [],
   "issue": {
     "number": 59,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/59",
     "state": "OPEN",
-    "checked_at": "2026-09-10T19:00:04.762154+00:00"
+    "checked_at": "2026-09-11T03:59:55+00:00"
   }
 }
