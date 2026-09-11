@@ -4,6 +4,7 @@ package goguitarpro
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -417,7 +418,7 @@ func normalizeGoWhammy(bend *BendEffect) any {
 	}
 	points := make([]any, 0, len(bend.Points))
 	for _, point := range bend.Points {
-		points = append(points, map[string]any{"position": point.Position, "value": point.Value})
+		points = append(points, map[string]any{"position": math.Round(resolvedBendOffset(point)*12/100*1e9) / 1e9, "value": point.Value})
 	}
 	return points
 }

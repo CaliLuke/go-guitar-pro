@@ -853,10 +853,11 @@ func gpifAuditBendNumber(context *parseContext, raw string, offset bool, path st
 		})
 		return
 	}
-	projected := parsed / float64(GPBendSemitone)
+	// Exact offsets retain the source value; only heights require projection.
 	if offset {
-		projected = parsed * float64(BendEffectMaxPosition) / 100
+		return
 	}
+	projected := parsed / float64(GPBendSemitone)
 	if quantizedSource.code != "" && math.Abs(projected-math.Round(projected)) > 0.000001 {
 		context.add(quantizedSource, ParseDiagnostic{
 			SourcePath: path, ObjectID: objectID, Location: location,

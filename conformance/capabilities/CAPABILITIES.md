@@ -199,9 +199,9 @@ Expression. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Curve normalization and strict loss reports are tested. Target gesture interpretation can remove authored holds and rates.
+Exact authored whammy offsets preserve GPIF and binary precision with shared ExactOffset edit authority, bounded control-role order and raw pinned-consumer assertions. Standard consumer gestures can still remove holds and rates; style, summary and shape limits retain scoped reports.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Preserve exact fractional whammy offsets and role order through public import/edit/export with pinned retained consumer controls. Retain explicit reports for remaining interpretation and style limits.
 
 Bounded work: [Apply exact authored offset preservation to whammy curves](https://github.com/CaliLuke/go-guitar-pro/issues/72).
 

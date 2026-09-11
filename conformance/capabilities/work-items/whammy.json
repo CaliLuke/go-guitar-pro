@@ -5,8 +5,8 @@
   "title": "Apply exact authored offset preservation to whammy curves",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:whammy-spelling",
   "formats": [
     "gp3",
     "gp4",
@@ -92,6 +92,16 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8WhammyOffsetEdits",
+      "detail": "Public exact, legacy, simultaneous, cleared and programmatic authority; strict and selective allowances; no mutation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabExactWhammyOffsets",
+      "detail": "Pinned raw retained offsets for35/35.5, fractional endpoints, nonmonotonic roles and realGP6 source51%. Fresh different-author review remains pending."
     }
   ],
   "shared_files": [
@@ -101,7 +111,24 @@
     "gpif_effects.go"
   ],
   "resolution": null,
-  "verification": [],
+  "verification": [
+    {
+      "command": "go test -count=1 -run 'TestGP8.*Whammy' ./integration",
+      "result": "passed"
+    },
+    {
+      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'TestAlphaTabExactWhammyOffsets|TestAlphaTab.*Whammy|TestConformanceCurve|TestConformanceExactWhammyOffsets|TestConformance.*Bend|TestWhammyExactOffsetOccurrences' .",
+      "result": "passed"
+    },
+    {
+      "command": "go test -count=1 -run ^TestSemanticMatrixInventory$ .",
+      "result": "passed; one exact whammy case added"
+    },
+    {
+      "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
+      "result": "passed; zero lint issues, clone groups and unformatted files"
+    }
+  ],
   "issue": {
     "number": 72,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/72",

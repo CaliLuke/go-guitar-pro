@@ -23,7 +23,7 @@ const (
 type BendPoint struct {
 	// Position is the normalized curve position from 0 through 12.
 	Position uint8
-	// ExactOffset preserves a note bend's authored GPIF percentage from 0
+	// ExactOffset preserves a bend or whammy's authored GPIF percentage from 0
 	// through 100 when Position cannot represent it exactly. For a programmatic
 	// point, a non-nil ExactOffset is authoritative. For an imported point,
 	// ExactOffset remains authoritative while Position is unchanged; editing
@@ -147,10 +147,6 @@ func unpackVelocity(v int16) int16 {
 // readBendEffect reads the shared binary bend-point record without applying
 // note- or beat-specific gesture semantics.
 func (s *Song) readBendEffect(c *cursor) (*BendEffect, error) {
-	return s.readBendEffectWithExactOffsets(c, false)
-}
-
-func (s *Song) readBendEffectWithExactOffsets(c *cursor, preserveExactOffsets bool) (*BendEffect, error) {
 	kindByte, err := c.readSignedByte()
 	if err != nil {
 		return nil, err
@@ -181,11 +177,7 @@ func (s *Song) readBendEffectWithExactOffsets(c *cursor, preserveExactOffsets bo
 		if posRaw < 0 || posRaw > int32(GPBendPosition) {
 			return nil, fmt.Errorf("bend point %d position %d is outside 0..%d", i, posRaw, int32(GPBendPosition))
 		}
-		position := uint8(math.Round(float64(posRaw) * float64(BendEffectMaxPosition) / float64(GPBendPosition)))
-		bp := BendPoint{Position: position, Value: int8(math.Round(float64(int16(valRaw)) / float64(GPBendSemitone))), Vibrato: vibrato}
-		if preserveExactOffsets {
-			bp = importedBendPoint(float64(posRaw)*100/float64(GPBendPosition), bp.Value, vibrato)
-		}
+		bp := importedBendPoint(float64(posRaw)*100/float64(GPBendPosition), int8(math.Round(float64(int16(valRaw))/float64(GPBendSemitone))), vibrato)
 		be.Points = append(be.Points, bp)
 	}
 	if count > 0 {
@@ -195,7 +187,7 @@ func (s *Song) readBendEffectWithExactOffsets(c *cursor, preserveExactOffsets bo
 }
 
 func (s *Song) readNoteBendEffect(c *cursor) (*BendEffect, error) {
-	bend, err := s.readBendEffectWithExactOffsets(c, true)
+	bend, err := s.readBendEffect(c)
 	if err != nil || bend == nil {
 		return bend, err
 	}
@@ -250,7 +242,7 @@ func canonicalizeStandardWhammyPoints(points []BendPoint) []BendPoint {
 			return []BendPoint{origin, destination}
 		case (origin.Value > middle1.Value && middle1.Value < destination.Value) ||
 			(origin.Value < middle1.Value && middle1.Value > destination.Value):
-			if middle1.Position == middle2.Position {
+			if resolvedBendOffset(middle1) == resolvedBendOffset(middle2) {
 				return []BendPoint{origin, middle1, destination}
 			}
 		}

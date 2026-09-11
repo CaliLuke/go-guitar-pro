@@ -21,7 +21,7 @@ func gp8ConvertWhammy(bend *BendEffect) gp8WhammyConversion {
 	if bend == nil {
 		return gp8WhammyConversion{}
 	}
-	points := simplifyBendPoints(slices.Clone(bend.Points))
+	points := simplifyNoteBendPoints(slices.Clone(bend.Points))
 	if len(points) < 2 || len(points) > 4 {
 		return gp8WhammyConversion{omitted: len(points) != 0}
 	}
@@ -34,35 +34,38 @@ func gp8ConvertWhammy(bend *BendEffect) gp8WhammyConversion {
 	case 3:
 		middle1, middle2 = points[1], points[1]
 	case 2:
-		middle1 = BendPoint{
-			Position: uint8((uint16(origin.Position) + uint16(destination.Position)) / 2),
-			Value:    int8((int16(origin.Value) + int16(destination.Value)) / 2),
-		}
+		middle1 = bendPointWithOffset((resolvedBendOffset(origin)+resolvedBendOffset(destination))/2, int8((int16(origin.Value)+int16(destination.Value))/2))
 		middle2 = middle1
 	}
 	whammy := &gpifWhammy{
 		OriginValue:       gp8WhammyValue(origin.Value),
 		MiddleValue:       gp8WhammyValue(middle1.Value),
 		DestinationValue:  gp8WhammyValue(destination.Value),
-		OriginOffset:      gp8WhammyOffset(origin.Position),
-		MiddleOffset1:     gp8WhammyOffset(middle1.Position),
-		MiddleOffset2:     gp8WhammyOffset(middle2.Position),
-		DestinationOffset: gp8WhammyOffset(destination.Position),
+		OriginOffset:      gp8WhammyOffset(origin),
+		MiddleOffset1:     gp8WhammyOffset(middle1),
+		MiddleOffset2:     gp8WhammyOffset(middle2),
+		DestinationOffset: gp8WhammyOffset(destination),
 	}
-	encoded := []BendPoint{
-		{Position: origin.Position, Value: origin.Value},
-		{Position: middle1.Position, Value: middle1.Value},
-		{Position: middle2.Position, Value: middle1.Value},
-		{Position: destination.Position, Value: destination.Value},
+	encoded := []BendPoint{cloneBendPoint(origin), cloneBendPoint(middle1), cloneBendPoint(middle2), cloneBendPoint(destination)}
+	encoded[2].Value = middle1.Value
+	for index := range encoded {
+		encoded[index].Vibrato = false
 	}
+
 	return gp8WhammyConversion{
 		whammy:     whammy,
-		normalized: !slices.Equal(simplifyBendPoints(canonicalizeStandardWhammyPoints(simplifyBendPoints(encoded))), points),
+		normalized: !sameBendPoints(simplifyCurvePoints(canonicalizeStandardWhammyPoints(encoded), true), simplifyCurvePoints(points, true)),
 	}
 }
 
-func gp8WhammyOffset(position uint8) string {
-	return strconv.FormatFloat(float64(position)*100/float64(BendEffectMaxPosition), 'f', 6, 64)
+func gp8WhammyOffset(point BendPoint) string {
+	offset := resolvedBendOffset(point)
+	text := strconv.FormatFloat(offset, 'f', 6, 64)
+	value, _ := strconv.ParseFloat(text, 64)
+	if value != offset {
+		return strconv.FormatFloat(offset, 'f', -1, 64)
+	}
+	return text
 }
 
 func gp8WhammyValue(value int8) string {

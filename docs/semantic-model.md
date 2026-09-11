@@ -308,15 +308,15 @@ The existing integer timing fields remain compatibility projections.
 `ExactStart` and `ScoreTime` preserve fractional score ticks. The exporter
 quantizes values only at a target boundary.
 
-`BendPoint.ExactOffset` preserves a note bend's authored GPIF position as a
+`BendPoint.ExactOffset` preserves a bend or whammy's authored GPIF position as a
 percentage from 0 through 100 when the legacy 0-through-12 `Position` cannot
 represent it. A programmatic non-nil exact offset is authoritative; nil falls
 back to `Position`. On an imported point, the exact offset remains authoritative
 while `Position` is unchanged. Editing `Position` makes the legacy view
 authoritative, including when both views changed, and export reports that
-conflict. Binary note-bend offsets are checked on their native 0-through-60
+conflict. Binary bend and whammy offsets are checked on their native 0-through-60
 scale before conversion. Bend heights retain their existing whole-semitone
-projection. This exact-offset contract does not apply to beat whammy curves.
+projection. The same authority applies to beat whammy curves.
 
 `Beat.BarreFret` and `Beat.BarreShape` are the paired authority for an authored
 beat-level barre mark. A nil fret must use `BarreShapeNone`; a present checked
@@ -658,13 +658,16 @@ destination offset means the end of the note. A middle value without middle
 offsets means the midpoint. GP8 export reports an authored initial or final
 hold when this standard gesture encoding cannot keep the hold boundary.
 
-Four-point note bends also represent named GPIF roles: origin, middle1,
+Four-point note bends and whammy curves also represent named GPIF roles: origin, middle1,
 middle2, and destination. A bounded tuple can place the destination before
 middle2 when both middle values match, origin precedes both middles, and the
 destination does not precede origin. Import and export retain all four roles
 and exact offsets without sorting. Other unordered curves remain invalid.
 Finite offset bounds, point vibrato, and unsupported shapes retain their
-existing checks and loss reports. Beat whammy validation does not change.
+existing checks and loss reports. Whammy consumer interpretation still reports
+a removed hold or changed rate. Distinct middle offsets such as 35 and 35.5
+remain distinct despite sharing one legacy Position. GP6 named properties and
+the GP7/GP8 Whammy element use this same percentage authority.
 
 The GP7 and GP8 canon sources author note177 at offsets 0, 50, 50, 35.
 Go preserves those controls. Pinned AlphaTab keeps only the hold endpoints

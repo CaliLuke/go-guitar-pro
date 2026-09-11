@@ -394,9 +394,9 @@ func runConformanceCurveValidation(run *conformanceRun) {
 			}
 		})
 	}
-	t.Run("GPIF quantized whammy offset", func(t *testing.T) {
+	t.Run("GPIF quantized whammy height", func(t *testing.T) {
 		data := diagnosticGP8Fixture(t, func(gpif string) string {
-			return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", conformanceCurveWhammyXML("middleOffset1", "12.5"))
+			return insertFirstGPIFObjectChild(t, gpif, "<Beats>", "</Beat>", conformanceCurveWhammyXML("middleValue", "37.5"))
 		})
 		result, err := ParseWithOptions(data, ParseOptions{})
 		if err != nil {

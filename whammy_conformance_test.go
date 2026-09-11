@@ -108,7 +108,7 @@ func TestParseGPIFWhammyProperties(t *testing.T) {
 		{{Position: 0, Value: 0}, {Position: 6, Value: -4}, {Position: 12, Value: 0}},
 		{{Position: 0, Value: -4}, {Position: 12, Value: 0}},
 		{{Position: 0, Value: 0}, {Position: 6, Value: -4}, {Position: 12, Value: -4}},
-		{{Position: 0, Value: -4}, {Position: 3, Value: -12}, {Position: 6, Value: -12}, {Position: 9, Value: 0}},
+		{{Position: 0, Value: -4}, {Position: 3, Value: -12}, importedBendPoint(51, -12, false), {Position: 9, Value: 0}},
 	}
 	song := parseTestFixture(t, "testdata/gp6/tremolo.gpx")
 	for bar, expected := range want {

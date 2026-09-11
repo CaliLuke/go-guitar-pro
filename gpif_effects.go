@@ -39,13 +39,10 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 			if !positionValid || !valueValid {
 				continue
 			}
-			bend.Points = append(bend.Points, BendPoint{
-				Position: uint8(math.Round(position * float64(BendEffectMaxPosition) / 100)),
-				Value:    int8(math.Round(value / float64(GPBendSemitone))),
-			})
+			bend.Points = append(bend.Points, importedBendPoint(position, int8(math.Round(value/float64(GPBendSemitone))), false))
 		}
 		if len(bend.Points) > 0 {
-			bend.Points = canonicalizeStandardWhammyPoints(bend.Points)
+			bend.Points = canonicalizeImportedWhammyPoints(bend.Points)
 			beat.Effect.TremoloBar = bend
 		}
 	} else if bend := gpifBeatWhammyProperties(b.Properties.Properties); bend != nil {
@@ -158,10 +155,10 @@ func gpifGolpe(value string) GolpeType {
 // GP6. Later GPIF revisions use the Whammy element handled above instead.
 func gpifBeatWhammyProperties(properties []gpifProperty) *BendEffect {
 	enabled := false
-	origin := BendPoint{}
-	destination := BendPoint{Position: uint8(BendEffectMaxPosition)}
+	var originValue, destinationValue int8
+	originOffset, destinationOffset := 0.0, 100.0
 	var middleValue int8
-	var middleOffset1, middleOffset2 uint8
+	var middleOffset1, middleOffset2 float64
 	var middleValueSet, middleOffset1Set, middleOffset2Set bool
 
 	for _, property := range properties {
@@ -169,40 +166,38 @@ func gpifBeatWhammyProperties(properties []gpifProperty) *BendEffect {
 		case "WhammyBar":
 			enabled = true
 		case "WhammyBarOriginValue":
-			origin.Value = gpifBendValue(property.Float)
+			originValue = gpifBendValue(property.Float)
 		case "WhammyBarOriginOffset":
-			origin.Position = gpifBendPosition(property.Float)
+			originOffset, _ = gpifBendOffset(property.Float)
 		case "WhammyBarMiddleValue":
 			middleValue = gpifBendValue(property.Float)
 			middleValueSet = property.Float != nil
 		case "WhammyBarMiddleOffset1":
-			middleOffset1 = gpifBendPosition(property.Float)
-			middleOffset1Set = property.Float != nil
+			middleOffset1, middleOffset1Set = gpifBendOffset(property.Float)
 		case "WhammyBarMiddleOffset2":
-			middleOffset2 = gpifBendPosition(property.Float)
-			middleOffset2Set = property.Float != nil
+			middleOffset2, middleOffset2Set = gpifBendOffset(property.Float)
 		case "WhammyBarDestinationValue":
-			destination.Value = gpifBendValue(property.Float)
+			destinationValue = gpifBendValue(property.Float)
 		case "WhammyBarDestinationOffset":
-			destination.Position = gpifBendPosition(property.Float)
+			destinationOffset, _ = gpifBendOffset(property.Float)
 		}
 	}
 	if !enabled {
 		return nil
 	}
 
-	points := []BendPoint{origin}
+	points := []BendPoint{importedBendPoint(originOffset, originValue, false)}
 	if middleOffset1Set && middleValueSet {
-		points = append(points, BendPoint{Position: middleOffset1, Value: middleValue})
+		points = append(points, importedBendPoint(middleOffset1, middleValue, false))
 	}
 	if middleOffset2Set && middleValueSet {
-		points = append(points, BendPoint{Position: middleOffset2, Value: middleValue})
+		points = append(points, importedBendPoint(middleOffset2, middleValue, false))
 	}
 	if !middleOffset1Set && !middleOffset2Set && middleValueSet {
 		points = append(points, BendPoint{Position: uint8(BendEffectMaxPosition / 2), Value: middleValue})
 	}
-	points = append(points, destination)
-	return &BendEffect{Points: canonicalizeStandardWhammyPoints(points)}
+	points = append(points, importedBendPoint(destinationOffset, destinationValue, false))
+	return &BendEffect{Points: canonicalizeImportedWhammyPoints(points)}
 }
 
 func gpifApplyTremoloPicking(value string, beat *Beat) {
@@ -724,14 +719,6 @@ func curvePointOffset(point BendPoint, exact bool) float64 {
 	return float64(point.Position)
 }
 
-func gpifBendPosition(value *string) uint8 {
-	parsed, valid := gpifParseBendNumberPointer(value, true)
-	if !valid {
-		return 0
-	}
-	return uint8(math.Round(parsed * float64(BendEffectMaxPosition) / 100))
-}
-
 func gpifBendOffset(value *string) (float64, bool) {
 	return gpifParseBendNumberPointer(value, true)
 }
@@ -807,4 +794,11 @@ func gp8SimileMark(value SimileMark) string {
 	default:
 		return ""
 	}
+}
+
+func canonicalizeImportedWhammyPoints(points []BendPoint) []BendPoint {
+	if nonmonotonicBendControlRoles(points) {
+		return points
+	}
+	return canonicalizeStandardWhammyPoints(points)
 }

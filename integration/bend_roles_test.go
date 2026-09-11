@@ -79,11 +79,11 @@ func TestGP8BendRoleFixture(t *testing.T) {
 	}
 }
 
-func TestGP8BendRolesDoNotRelaxWhammyOrder(t *testing.T) {
+func TestGP8ControlRolesRejectArbitraryWhammyOrder(t *testing.T) {
 	song := dynamicPolicySong(t, 47, false)
-	song.Tracks[0].Measures[0].Voices[0].Beats[1].Effect.TremoloBar = &gp.BendEffect{Points: []gp.BendPoint{{}, {Position: 6, Value: 2}, {Position: 6, Value: 2}, {Position: 4}}}
+	song.Tracks[0].Measures[0].Voices[0].Beats[1].Effect.TremoloBar = &gp.BendEffect{Points: []gp.BendPoint{{}, {Position: 9, Value: 1}, {Position: 6, Value: 2}, {Position: 4}}}
 	data, _, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
-	if err == nil || len(data) != 0 || !strings.Contains(err.Error(), "offset 4 precedes offset 6") {
+	if err == nil || len(data) != 0 || !strings.Contains(err.Error(), "precedes offset") {
 		t.Fatalf("whammy order rejection changed: %v", err)
 	}
 }

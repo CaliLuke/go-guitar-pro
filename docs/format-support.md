@@ -309,7 +309,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 123 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 124 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -460,3 +460,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `string-number-display` | `note-and-beat-semantics` | `TestConformanceStringNumberDisplay` | `TestAlphaTabStringNumberDisplay` | yes | Exact display flags, independent note occurrence edits, GPIF Enable presence and raw final consumer string/fret/MIDI facts. |
 | `metadata-text` | `score-core` | `TestConformanceMetadataText` | `TestAlphaTabMetadataText` | no | Exact raw consumer text including notices and tabber; precise boundary and legacy omissions. |
 | `assigned-lyrics` | `score-core` | `TestConformanceAssignedLyrics` | `TestAlphaTabAssignedLyrics` | no | Ordered source index conversion, explicit track authority, exact wire and final consumer dispatch with separate beat ownership. |
+| `exact-whammy-offsets` | `note-and-beat-semantics` | `TestConformanceExactWhammyOffsets` | `TestAlphaTabExactWhammyOffsets` | no | Shared ExactOffset authority preserves fractional and bounded nonmonotonic whammy roles; raw pinned consumer controls retain distinct35 and35.5 percent middle offsets. |

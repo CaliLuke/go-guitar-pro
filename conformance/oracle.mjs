@@ -277,7 +277,7 @@ export function normalizeWhammy(points) {
     return null;
   }
   return points.map(point => ({
-    position: Math.round(point.offset * 12 / 60),
+    position: Math.round(point.offset * 12 / 60 * 1e9) / 1e9,
     value: point.value
   }));
 }
@@ -527,6 +527,17 @@ function loadScore(fixture) {
 }
 
 // Retained consumer controls, before the normalized comparison projection.
+// Retained native consumer offsets (0..60), without comparison rounding.
+export function loadWhammyControls(fixture) {
+  const facts = [];
+  for (const track of loadScore(fixture).tracks) for (const staff of track.staves)
+    for (const bar of staff.bars) for (const voice of bar.voices) for (const beat of voice.beats)
+      if (beat.whammyBarPoints?.length) facts.push({track: track.index, staff: staff.index,
+        bar: bar.index, voice: voice.index, beat: beat.index,
+        points: beat.whammyBarPoints.map(p => ({offset: p.offset, value: p.value}))});
+  return facts;
+}
+
 export function loadCurveGraceFacts(fixture) {
   const facts = [];
   for (const track of loadScore(fixture).tracks) {
@@ -1293,6 +1304,10 @@ function main() {
   }
   if (args[0] === '--section-track-names' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadSectionTrackNameFacts(args[1]))}\n`);
+    return;
+  }
+  if (args[0] === '--whammy-controls' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadWhammyControls(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--curve-grace' && args.length === 2) {

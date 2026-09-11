@@ -855,6 +855,12 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 		builder.addReport("gp8.omit.stroke-exact-duration", "brush", ExportDispositionOmitted, location, "GP8 stores brush timing as an integer within 0..2147483647 ticks")
 	}
 	if whammy := beat.Effect.TremoloBar; whammy != nil {
+		for _, point := range whammy.Points {
+			if bendPointOffsetAuthorityConflict(point) {
+				builder.addReport("gp8.normalize.whammy-offset-authority", "note-and-beat-semantics", ExportDispositionNormalized, location, "an edited imported Position takes precedence over its conflicting ExactOffset")
+				break
+			}
+		}
 		conversion := gp8ConvertWhammy(whammy)
 		builder.reportCurveConversion(whammy, conversion.omitted, conversion.normalized, location, curveReportSpec{
 			omittedCode: "gp8.omit.whammy-curve", normalizedCode: "gp8.normalize.whammy-curve",
