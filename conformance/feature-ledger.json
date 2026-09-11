@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "c2830c042fdaeb4ef9fd7702829dff41952d84c7ea152fe82ea4c7d5e3934e59",
+    "obligationDigest": "e472bcc3a1fe4cd21fa483fd1a38cb7502e8d7b6c3338113aab0dc49bc983d05",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -2386,7 +2386,7 @@
       "gpifAutomationValue.Text": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBars.Bars": ["M20-SOURCE-AUDIT"],
       "gpifBeat.ID": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
-      "gpifBeat.Ottavia": ["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
       "gpifBeat.Properties": ["M20-SOURCE-AUDIT"],
       "gpifBeat.Tremolo": ["M11-TREMOLO-PICKING","M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBeat.Wah": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT","M10-WAH"],
