@@ -314,6 +314,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Ottavia.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Ottavia, []string{"", "8va", "8vb", "15ma", "15mb"}, path+"/Ottavia", beat.ID, "note-and-beat-semantics")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Tremolo.InvalidValue", "tremolo-picking", ParseDiagnosticUnsupportedFeature), beat.Tremolo, []string{"", "1/2", "1/4", "1/8"}, path+"/Tremolo", beat.ID, "tremolo-picking")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Dynamic.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Dynamic, []string{"", "PPP", "PP", "P", "MP", "MF", "F", "FF", "FFF"}, path+"/Dynamic", beat.ID, "note-and-beat-semantics")
+		gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Golpe.InvalidValue", "golpe", ParseDiagnosticUnsupportedFeature), beat.Golpe, []string{"", "Thumb", "Finger"}, path+"/Golpe", beat.ID, "golpe")
 		if beat.Legato != nil {
 			gpifAuditLegato(context, beat.ID, path+"/Legato", beat.Legato)
 		}

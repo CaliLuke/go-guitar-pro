@@ -53,7 +53,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve dead-slapped beats without reducing them to rests](work-items/dead-slap.json) | implementation | 2 | in_progress | — | [#80](https://github.com/CaliLuke/go-guitar-pro/issues/80) |
 | [Preserve fade-out and volume-swell beat effects](work-items/fade-other.json) | implementation | 2 | in_progress | — | [#81](https://github.com/CaliLuke/go-guitar-pro/issues/81) |
 | [Export existing left and right hand fingerings](work-items/fingering.json) | implementation | 2 | in_progress | — | [#82](https://github.com/CaliLuke/go-guitar-pro/issues/82) |
-| [Preserve thumb and finger golpe marks](work-items/golpe.json) | implementation | 2 | todo | — | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) |
+| [Preserve thumb and finger golpe marks](work-items/golpe.json) | implementation | 2 | in_progress | — | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) |
 | [Preserve explicit hammer and pull-off destination markers](work-items/hammer.json) | implementation | 2 | todo | — | [#84](https://github.com/CaliLuke/go-guitar-pro/issues/84) |
 | [Export assigned legacy score lyrics as GPIF track lyrics](work-items/lyrics.json) | implementation | 2 | todo | — | [#98](https://github.com/CaliLuke/go-guitar-pro/issues/98) |
 | [Project supported legacy mix-table events into GP8 automation](work-items/mix-table.json) | implementation | 2 | blocked | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59), [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52), [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#85](https://github.com/CaliLuke/go-guitar-pro/issues/85) |

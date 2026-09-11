@@ -4324,21 +4324,31 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF Golpe is absent from wire and public beat types.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "BeatEffects.Golpe preserves GPIF Thumb and Finger variants as independent beat-level authored values and emits them exactly in GP8.",
+      "acceptance": "M10-GOLPE checks absence, Thumb, Finger, actual GP7 occurrences, simultaneous notes, another independent beat effect, reused-definition occurrence isolation, exact GP6-8 wire values, validation, strict policy, and pinned AlphaTab locations.",
       "upstream": [
         "Beat.golpe",
         "GolpeType.*"
       ],
       "evidence": [
         {
-          "kind": "source",
-          "reference": "gpif_types.go",
-          "detail": "Reviewed implementation or documented contract."
+          "kind": "field",
+          "reference": "BeatEffects.Golpe",
+          "detail": "Public authored authority for the exact beat-level golpe variant."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceGolpe",
+          "detail": "Public API, GPIF wire, validation, occurrence isolation, and strict-policy coverage."
+        },
+        {
+          "kind": "independent-test",
+          "reference": "TestAlphaTabPreservesGolpe",
+          "detail": "Pinned AlphaTab preserves all 24 authored values and locations, including a direct variant edit."
         },
         {
           "kind": "probe",

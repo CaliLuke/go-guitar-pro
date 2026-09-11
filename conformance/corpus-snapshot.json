@@ -8209,10 +8209,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 16,
+          "count": 8,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "373877f4826030f04bbc9ac0f6e3b96075377ba335e23f2927c949c19b8d15e2"
+          "locationsSha256": "2a25fd0edf3ffe9dbb44df3322de50fa68b63ef698ef813dc49564fddc7135e7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -8297,10 +8297,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 18,
+          "count": 9,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "11b7f5c985b8661aeb85f7db704c5b5c4cfc7bf71d03037ba0acb5c33bb2a7fd"
+          "locationsSha256": "0f922d59d9b4895a7ec58093f4175c8cc5e60ac24af50312cf38d7178da52e88"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

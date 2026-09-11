@@ -246,6 +246,7 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	if beat.DeadSlapped {
 		result.DeadSlapped = &struct{}{}
 	}
+	result.Golpe = gp8Golpe(beat.Effect.Golpe)
 	if beat.Lyrics != nil {
 		result.Lyrics = &gpifBeatLyrics{Lines: append([]string{}, beat.Lyrics...)}
 	}
@@ -337,6 +338,17 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	result.Notes = strings.Join(noteIDs, " ")
 	builder.doc.Beats.Beats = append(builder.doc.Beats.Beats, result)
 	return beatID, nil
+}
+
+func gp8Golpe(value GolpeType) string {
+	switch value {
+	case GolpeTypeThumb:
+		return "Thumb"
+	case GolpeTypeFinger:
+		return "Finger"
+	default:
+		return ""
+	}
 }
 
 func (builder *gp8Builder) addRhythm(duration Duration) (string, error) {

@@ -108,6 +108,16 @@ const (
 	BeatFadeVolumeSwell BeatFade = 3
 )
 
+// GolpeType identifies the authored golpe technique on a beat.
+type GolpeType uint8
+
+// Golpe values preserve GPIF's thumb and finger variants.
+const (
+	GolpeTypeNone   GolpeType = 0
+	GolpeTypeThumb  GolpeType = 1
+	GolpeTypeFinger GolpeType = 2
+)
+
 // BeatStrokeKind identifies whether a multi-string stroke is a brush or an arpeggio.
 type BeatStrokeKind uint8
 

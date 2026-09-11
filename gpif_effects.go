@@ -11,6 +11,7 @@ import (
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 	beat.DeadSlapped = b.DeadSlapped != nil
+	beat.Effect.Golpe = gpifGolpe(b.Golpe)
 	if b.Lyrics != nil {
 		beat.Lyrics = append([]string{}, b.Lyrics.Lines...)
 	}
@@ -139,6 +140,17 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 		gpifApplyBrushDuration(b, &beat.Effect.Stroke)
 		beat.Effect.Stroke.importedDuration = beat.Effect.Stroke.Duration
 		beat.Effect.Stroke.hasImported = true
+	}
+}
+
+func gpifGolpe(value string) GolpeType {
+	switch value {
+	case "Thumb":
+		return GolpeTypeThumb
+	case "Finger":
+		return GolpeTypeFinger
+	default:
+		return GolpeTypeNone
 	}
 }
 

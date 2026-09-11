@@ -28,6 +28,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `beat-lyrics` | gp6, gp7, gp8 | supported | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) | Beat.Lyrics preserves GPIF beat-scoped lines as independent ordered occurrence data through public edits and GP8 export, without merging them into beat text or score and track lyrics. |
 | `chord-diagram` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) | Representable chord diagram ranges and finger assignments survive binary or GPIF import, direct public edits, exact GP8 positions, Go reimport, and pinned AlphaTab consumption. Legacy chord description and interval-omission fields remain separate losses. |
 | `beat-vibrato` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) | Beat vibrato strength survives GP3-8 import, deterministic compatibility reconciliation, GP8 export, and pinned AlphaTab consumption without sharing authority with note vibrato. |
+| `golpe` | gp6, gp7, gp8 | supported | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) | BeatEffects.Golpe preserves GPIF Thumb and Finger values as independent authored beat marks through direct edits, exact GP8 output, and pinned AlphaTab consumption. |
 | `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
 
 ## Parse diagnostics
@@ -117,6 +118,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Beat.UserTransposedPitchStemOrientation.InvalidValue` | `beaming` | `invalid-data` | A user stem override must be Undefined, Upward, or Downward. |
 | `GPIF.Beat.EmptyID` | `note-and-beat-semantics` | `invalid-data` | The source object must have a non-empty ID. |
 | `GPIF.Beat.Fadding.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source fade value is not a defined GPIF Fadding token. |
+| `GPIF.Beat.Golpe.InvalidValue` | `golpe` | `unsupported-feature` | The source golpe value is not Thumb, Finger, or absent. |
 | `GPIF.Beat.GraceNotes.InvalidValue` | `grace-relationships` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Hairpin.InvalidValue` | `hairpins` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Beat.Legato.InvalidDestination` | `legato-slurs` | `invalid-data` | An authored beat-level legato destination attribute must contain the exact GPIF boolean true or false. |
@@ -268,7 +270,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Beat` | `note-and-beat-semantics` | 16 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
-| `BeatEffects` | `note-and-beat-semantics` | 12 authored, 1 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
+| `BeatEffects` | `note-and-beat-semantics` | 13 authored, 1 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
 | `BeatStroke` | `brush` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The stroke preserves authored kind and direction. ExactDuration is the exact tick-timing authority, and Duration is its note-value compatibility view. |
 | `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
@@ -294,7 +296,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 239 |
+| `preserved` | 240 |
 | `normalized` | 34 |
 | `omitted` | 110 |
 | `rejected` | 0 |
@@ -305,7 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 95 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 169 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 96 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -313,7 +315,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 259 |
+| `schema` | 260 |
 
 ## Source dispatch inventory
 
@@ -421,6 +423,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
 | `beat-vibrato-preservation` | `beat-vibrato` | `TestConformanceBeatVibrato` | `TestAlphaTabPreservesBeatVibrato` | yes | Binary presence maps to Slight while GPIF Slight and Wide remain distinct through typed and legacy edits, exact GP8 Strength output, reimport, and pinned-consumer loading without conflating note vibrato. |
 | `beat-fade-preservation` | `note-and-beat-semantics` | `TestConformanceBeatFade` | `TestAlphaTabPreservesBeatFade` | yes | Binary presence maps to FadeIn while every GPIF fade value remains distinct through typed and legacy edits, exact Fadding output, reimport, and pinned-consumer loading. |
+| `golpe-preservation` | `golpe` | `TestConformanceGolpe` | `TestAlphaTabPreservesGolpe` | yes | None, Thumb, and Finger remain distinct through occurrence-owned GPIF import, direct public edits, exact GP8 output, reimport, and pinned-consumer loading without changing notes or other beat techniques. |
 | `dead-slap-preservation` | `note-and-beat-semantics` | `TestConformanceDeadSlap` | `TestAlphaTabPreservesDeadSlap` | yes | A note-free dead slap remains a normal authored beat with no synthetic note, distinct from rests and empty beats, through GPIF import, public edits, exact marker output, Go reimport, and pinned-consumer loading. |
 | `brush-preservation` | `brush` | `TestConformanceBrush` | `TestAlphaTabPreservesBrush` | yes | Binary stroke codes and GPIF Brush or Arpeggio spellings retain exact authored timing, source absence, occurrence isolation, and deterministic compatibility edits through GP8 output and pinned-consumer loading. |
 | `beat-lyrics-preservation` | `beat-lyrics` | `TestConformanceBeatLyrics` | `TestAlphaTabPreservesBeatLyrics` | yes | Ordered beat-scoped lyric lines, including empty and Unicode values, survive as independently editable occurrences with exact absent-versus-empty GPIF representation and remain distinct from FreeText and score or track lyrics. |

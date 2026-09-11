@@ -14,15 +14,15 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 69 | 16 | 14 | 2 |
-| model | 68 | 17 | 15 | 1 |
-| export | 47 | 23 | 28 | 3 |
+| import | 70 | 16 | 13 | 2 |
+| model | 69 | 17 | 14 | 1 |
+| export | 48 | 23 | 27 | 3 |
 
-All three stages have a supported rating in 47 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 48 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `true`.
+The receipt contains 364 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -50,7 +50,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord name, diagram and fingering visibility | 3 | 354 | 3 | 0 | 7 |
 | Numbered staff notation | 3 | 354 | 3 | 0 | 7 |
 | Authored timer marks | 2 | 355 | 2 | 0 | 7 |
-| Golpe thumb and finger marks | 2 | 355 | 2 | 0 | 7 |
 | Explicit note string-number display | 1 | 356 | 1 | 0 | 7 |
 | Pan and balance automation events | 1 | 356 | 1 | 0 | 7 |
 | Rasgueado patterns | 1 | 356 | 1 | 0 | 7 |
@@ -66,6 +65,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Fade out and volume swell | 1 | 356 | 0 | 0 | 7 |
 | Fermata placement, kind and length | 4 | 353 | 0 | 0 | 7 |
 | Free-time bars | 1 | 356 | 0 | 0 | 7 |
+| Golpe thumb and finger marks | 2 | 355 | 0 | 0 | 7 |
 | Key signatures and key mode spelling | 44 | 315 | 0 | 0 | 7 |
 | Left-hand tapping identity | 1 | 356 | 0 | 0 | 7 |
 | Legato and authored slurs | 2 | 355 | 0 | 0 | 7 |
@@ -289,11 +289,11 @@ Bounded work: [Preserve fade-out and volume-swell beat effects](https://github.c
 
 Expression. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF Golpe is absent from wire and public beat types.
+BeatEffects.Golpe preserves GPIF Thumb and Finger variants as independent beat-level authored values and emits them exactly in GP8.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: M10-GOLPE checks absence, Thumb, Finger, actual GP7 occurrences, simultaneous notes, another independent beat effect, reused-definition occurrence isolation, exact GP6-8 wire values, validation, strict policy, and pinned AlphaTab locations.
 
 Bounded work: [Preserve thumb and finger golpe marks](https://github.com/CaliLuke/go-guitar-pro/issues/83).
 

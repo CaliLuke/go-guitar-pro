@@ -722,6 +722,16 @@ const mutations = [
     want: 'gpifBeat.Fadding'
   },
   {
+    id: 'golpe-finger-wire',
+    contract: 'golpe-preservation',
+    category: 'serialization',
+    file: 'gp8_notation.go',
+    before: '\tcase GolpeTypeFinger:\n\t\treturn "Finger"\n',
+    after: '\tcase GolpeTypeFinger:\n\t\treturn "Thumb"\n',
+    test: '^TestConformanceGolpe$',
+    want: 'gpifBeat.Golpe'
+  },
+  {
     id: 'note-fingering-middle-wire',
     contract: 'note-fingering-preservation',
     category: 'serialization',

@@ -68,8 +68,11 @@ type BeatEffects struct {
 	// On an imported beat, editing only one view makes that view authoritative;
 	// when both are edited incompatibly, Fade wins and GP8 export reports the
 	// conflict. Export and validation do not mutate either view.
-	Fade       BeatFade
-	FadeIn     bool
+	Fade   BeatFade
+	FadeIn bool
+	// Golpe is the authored beat-level golpe variant. It is independent from
+	// notes and other beat techniques, and direct edits control GP8 output.
+	Golpe      GolpeType
 	Hairpin    Hairpin
 	SlapEffect SlapEffect
 	// VibratoStrength is the typed beat-wide vibrato view. For a programmatic

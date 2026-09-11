@@ -474,6 +474,7 @@ type gpifBeat struct {
 	Legato                             *gpifLegato      `xml:"Legato,omitempty"`
 	Lyrics                             *gpifBeatLyrics  `xml:"Lyrics,omitempty"`
 	DeadSlapped                        *struct{}        `xml:"DeadSlapped,omitempty"`
+	Golpe                              string           `xml:"Golpe,omitempty"`
 	FreeText                           string           `xml:"FreeText,omitempty"`
 	Ottavia                            string           `xml:"Ottavia,omitempty"`
 	TransposedPitchStemOrientation     string           `xml:"TransposedPitchStemOrientation,omitempty"`

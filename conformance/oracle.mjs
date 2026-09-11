@@ -980,6 +980,36 @@ export function loadBeatFadeFacts(fixture) {
   return facts;
 }
 
+export function loadGolpeFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          let regularBeat = 0;
+          for (const beat of voice.beats) {
+            if (beat.graceType !== alphaTab.model.GraceType.None) continue;
+            if (beat.golpe !== alphaTab.model.GolpeType.None) {
+              facts.push({
+                track: track.index,
+                staff: staff.index,
+                bar: bar.index,
+                voice: voice.index,
+                beat: regularBeat,
+                golpe: enumName(alphaTab.model.GolpeType, beat.golpe),
+                noteCount: beat.notes.length
+              });
+            }
+            regularBeat++;
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadFingeringFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -1084,6 +1114,10 @@ function main() {
   }
   if (args[0] === '--beat-fade' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBeatFadeFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--golpe' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadGolpeFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--fingering' && args.length === 2) {

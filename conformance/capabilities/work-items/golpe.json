@@ -5,8 +5,8 @@
   "title": "Preserve thumb and finger golpe marks",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "/root/implement_ticket_83_golpe",
   "formats": [
     "gp6",
     "gp7",
@@ -77,8 +77,18 @@
     },
     {
       "kind": "source",
-      "reference": "gpif_types.go",
-      "detail": "Reviewed implementation or documented contract."
+      "reference": "BeatEffects.Golpe",
+      "detail": "Sole public authority for the authored beat-level golpe variant."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceGolpe",
+      "detail": "Covers all variants, GP6-8 import and exact export, simultaneous notes, an independent fade, occurrence isolation, validation, diagnostics, strict policy, and read-only behavior."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesGolpe",
+      "detail": "Pinned AlphaTab verifies all 24 values and locations in the GP7 fixture plus a Finger-to-Thumb direct edit."
     },
     {
       "kind": "probe",
@@ -87,9 +97,12 @@
     }
   ],
   "shared_files": [
-    "gpif_types.go"
+	"gpif_audit.go",
+	"gpif_effects.go",
+	"gpif_types.go",
+	"gp8_notation.go"
   ],
-  "resolution": null,
+  "resolution": "Added GolpeType None, Thumb, and Finger plus BeatEffects.Golpe as the sole authored authority. GP6 through GP8 import the direct GPIF Golpe element, GP8 emits the exact non-default token, and unknown tokens receive the scoped GPIF.Beat.Golpe.InvalidValue diagnostic. Validation rejects undefined public enum values before export. M10-GOLPE covers absence and both variants, all 24 real GP7 occurrences, GP6-8 parsing, exact wire output and Go reimport, a two-note beat with an independent FadeOut, reused-definition occurrence isolation, direct edits, nonmutation, validation, diagnostics, and strict policy. Pinned AlphaTab preserves all values and paths and observes a Finger-to-Thumb edit at the same beat. The 364-fixture probe changed only testdata/gp7/golpe.gp and testdata/gp7/golpe-tab.gp from 24/0 different to 24/24 equal-nondefault. Recognizing the source element removed 9 and 8 generic unknown-element diagnostics respectively. Reports, failures, target-blocked fixtures, and unrelated capability comparisons were unchanged. GP3 through GP5, tap/slap/pop, percussion, rasgueado, dead-slap, rendering, and playback remain outside this contract.",
   "verification": [],
   "issue": {
     "number": 83,

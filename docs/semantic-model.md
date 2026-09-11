@@ -61,6 +61,13 @@ do not rewrite `Beat.Status`, add notes, or change note kinds and tap/slap/pop
 effects. GP3 through GP5 do not supply this marker. Explicit empty beats retain
 their existing GP8 normalization to rests.
 
+`BeatEffects.Golpe` is the sole authority for an authored beat-level golpe.
+`GolpeTypeThumb` and `GolpeTypeFinger` preserve the two GPIF spellings, while
+`GolpeTypeNone` represents source absence. Direct edits control GP8 output and
+do not change the beat's notes or its other techniques. Each parsed occurrence
+owns its value even when several score positions reuse one GPIF beat definition.
+GP3 through GP5 have no golpe source record.
+
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
 are compatibility views of the first staff. A non-nil compatibility slice is
 the authority for staff 0. This rule applies to finalization, validation, and
