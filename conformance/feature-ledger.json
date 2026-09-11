@@ -2259,7 +2259,7 @@
       "gpifAutomationValue.Text": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBars.Bars": ["M20-SOURCE-AUDIT"],
       "gpifBeat.ID": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
-      "gpifBeat.Ottavia": ["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
+      "gpifBeat.Ottavia":["M07-CLEF-OCTAVE","M10-BEAT-EFFECTS","M20-SOURCE-AUDIT"],
       "gpifBeat.Properties": ["M20-SOURCE-AUDIT"],
       "gpifBeat.Tremolo": ["M11-TREMOLO-PICKING","M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT"],
       "gpifBeat.Wah": ["M20-BEHAVIOR-RECONCILIATION","M20-SOURCE-AUDIT","M10-WAH"],
@@ -5088,18 +5088,6 @@
           "HeaderFooter"
         ],
         "reason": "Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved."
-      },
-      {
-        "type": "noteAccidentalSource",
-        "feature": "note-and-beat-semantics",
-        "fields": [],
-        "reason": "Immutable private receipt preserves source notation coordinates while all relevant public context stays unchanged."
-      },
-      {
-        "type": "noteAccidentalPitch",
-        "feature": "note-and-beat-semantics",
-        "fields": [],
-        "reason": "Private source pitch payload; public edits are governed by Note.AccidentalMode and numeric pitch context."
       },
       {
         "type": "HeaderFooterSettings",

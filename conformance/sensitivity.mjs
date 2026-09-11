@@ -383,8 +383,8 @@ const mutations = [
     id: 'shared-authored-export-validation',
     category: 'validation',
     file: 'export_report.go',
-    before: '\tfor _, diagnostic := range authoredScoreDiagnostics(song) {\n',
-    after: '\tfor _, diagnostic := range []ScoreDiagnostic(nil) {\n',
+    before: '\tfor _, diagnostic := range authoredScoreDiagnostics(song) {\n\t\tfeature := "score-core"',
+    after: '\tfor _, diagnostic := range []ScoreDiagnostic(nil) {\n\t\tfeature := "score-core"',
     test: '^TestGP8ExportRejectsSharedAuthoredInvariants$',
     want: 'half_tuplet'
   },

@@ -302,6 +302,8 @@ func TestStrictParseAcceptsPitchedGP8Export(t *testing.T) {
 	song := syntheticGP8Song()
 	track := &song.Tracks[0]
 	track.PercussionTrack = false
+	song.Channels[0].Channel = 0
+	song.Channels[0].EffectChannel = 0
 	track.Strings = []GuitarString{{Number: 1, Value: 62}}
 	for measureIndex := range track.Measures {
 		track.Measures[measureIndex].Voices = []Voice{{Beats: []Beat{{
@@ -314,11 +316,19 @@ func TestStrictParseAcceptsPitchedGP8Export(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := ParseWithOptions(data, ParseOptions{Strict: true}); err != nil {
+	parsed, err := ParseWithOptions(data, ParseOptions{Strict: true})
+	if err != nil {
 		t.Fatalf("strict parse rejected library-authored pitched export: %v", err)
 	}
+	if parsed.Song.Tracks[0].PercussionTrack || parsed.Song.Tracks[0].Staves[0].PercussionTrack {
+		t.Fatal("pitched regression fixture exported as percussion")
+	}
 	contradictory := rewriteConformanceGPIF(t, data, func(gpif string) string {
-		return strings.Replace(gpif, "<Step>G</Step>", "<Step>A</Step>", 1)
+		changed := strings.Replace(gpif, "<Step>G</Step>", "<Step>A</Step>", 1)
+		if changed == gpif {
+			t.Fatal("pitched regression did not mutate an authored spelling")
+		}
+		return changed
 	})
 	if _, err := ParseWithOptions(contradictory, ParseOptions{Strict: true}); err == nil {
 		t.Fatal("strict parse accepted an authored pitch that contradicts the numeric value")
