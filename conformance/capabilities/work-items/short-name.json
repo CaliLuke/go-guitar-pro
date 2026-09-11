@@ -81,7 +81,7 @@
     "gpif_types.go",
     "track.go"
   ],
-  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and CDATA-terminator boundary-whitespace behavior have scoped export reports and strict-policy tests. Awaiting independent final-commit review and root combined gates.",
+  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and boundary-whitespace behavior with CDATA terminators or carriage returns have scoped export reports and strict-policy tests. Awaiting independent final-commit review and root combined gates.",
   "verification": [],
   "issue": {
     "number": 91,

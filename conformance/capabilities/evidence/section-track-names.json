@@ -221,7 +221,7 @@
             "Beat": 0,
             "Note": 0
           },
-          "Reason": "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator"
+          "Reason": "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator or carriage return"
         },
         {
           "Code": "gp8.omit.section-consumer-whitespace",
@@ -235,7 +235,7 @@
             "Beat": 0,
             "Note": 0
           },
-          "Reason": "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator"
+          "Reason": "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator or carriage return"
         }
       ],
       "scenario": "terminator-whitespace",
@@ -278,11 +278,169 @@
         ]
       },
       "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": null,
+      "scenario": "carriage-return",
+      "export_sha256": "b930724e1e849b4c60e1a9f77d78603e093958eef808980192e9b17505c8667c",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "carriage\rreturn",
+            "shortName": "carriage\rreturn"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "carriage\rreturn",
+            "text": "carriage\rreturn"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": null,
+      "scenario": "carriage-return-line-feed",
+      "export_sha256": "ce9228982c3c1f2e7e110d47af91cbd540b539af5e2e05fa94f738e1d4a9d258",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "pair\r\nend",
+            "shortName": "pair\r\nend"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "pair\r\nend",
+            "text": "pair\r\nend"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
+    },
+    {
+      "reports": [
+        {
+          "Code": "gp8.omit.short-name-consumer-whitespace",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator or carriage return"
+        },
+        {
+          "Code": "gp8.omit.section-consumer-whitespace",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator or carriage return"
+        }
+      ],
+      "scenario": "carriage-return-boundary",
+      "export_sha256": "8ce6588c21975b6688bacb64911bf7ff8a4f1c87447043e69fbfb834b18fa656",
+      "consumer": {
+        "tracks": [
+          {
+            "name": "Lead guitar",
+            "rawShortName": "boundary",
+            "shortName": "boundary"
+          },
+          {
+            "name": "Bass guitar",
+            "rawShortName": "Bass long label 日本語",
+            "shortName": "Bass long label 日本語"
+          }
+        ],
+        "sections": [
+          {
+            "letter": "boundary",
+            "text": "boundary"
+          },
+          {
+            "letter": "",
+            "text": "Text Ω <&> \" ]]>"
+          },
+          {
+            "letter": "B <&>",
+            "text": ""
+          },
+          {
+            "letter": "",
+            "text": ""
+          },
+          null,
+          {
+            "letter": "C",
+            "text": "Coda"
+          }
+        ]
+      },
+      "normalization": "Only source-version provenance and unrelated track display settings were cleared before the focused export."
     }
   ],
   "limits": [
     "An absent short name is distinct from an authored empty string. AlphaTab finalization derives a full-name abbreviation for empty short names; the raw value is recorded separately.",
-    "Single CDATA preserves XML-sensitive text and boundary whitespace. Text containing a CDATA terminator uses escaped ordinary XML with decimal whitespace references; AlphaTab then trims boundary whitespace. Both affected fields receive explicit scoped consumer-loss reports.",
+    "Single CDATA preserves XML-sensitive text and boundary whitespace. Text containing a CDATA terminator or carriage return uses escaped ordinary XML with decimal whitespace references; AlphaTab then trims boundary whitespace. Both affected fields receive explicit scoped consumer-loss reports.",
     "The broad capability probe and full conformance/prek gates remain assigned to root integration; these are focused current-source receipts."
   ],
   "tests": [
@@ -290,6 +448,8 @@
     "TestSectionTitlePublicEdits",
     "TestShortNamePublicPresenceAndPolicy",
     "TestConformanceSectionTrackNames",
-    "TestAlphaTabSectionTrackNames"
-  ]
+    "TestAlphaTabSectionTrackNames",
+    "TestSectionAndShortNameCarriageReturns"
+  ],
+  "review_followup": "CR and CRLF use decimal references to preserve exact Go and final consumer text. Boundary CR uses scoped whitespace reports. Independent review remains pending."
 }

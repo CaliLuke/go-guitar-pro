@@ -313,7 +313,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	}
 
 	if track.ShortName != nil && gpifTextConsumerTrims(*track.ShortName) {
-		builder.addReport("gp8.omit.short-name-consumer-whitespace", "score-core", ExportDispositionOmitted, location, "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator")
+		builder.addReport("gp8.omit.short-name-consumer-whitespace", "score-core", ExportDispositionOmitted, location, "the pinned consumer trims boundary whitespace in short names containing a CDATA terminator or carriage return")
 	}
 	if track.ShortName != nil && *track.ShortName == "" && track.Name != "" {
 		builder.addReport("gp8.omit.short-name-consumer-empty", "score-core", ExportDispositionOmitted, location, "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation")
@@ -672,7 +672,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 		if header.Marker != nil {
 			letter, text := header.Marker.sectionValues()
 			if gpifTextConsumerTrims(letter) || gpifTextConsumerTrims(text) {
-				builder.addReport("gp8.omit.section-consumer-whitespace", "score-core", ExportDispositionOmitted, headerLocation, "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator")
+				builder.addReport("gp8.omit.section-consumer-whitespace", "score-core", ExportDispositionOmitted, headerLocation, "the pinned consumer trims boundary whitespace in section fields containing a CDATA terminator or carriage return")
 			}
 		}
 		if header.Marker != nil && header.Marker.sectionTitleConflict() {

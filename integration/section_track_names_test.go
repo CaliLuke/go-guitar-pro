@@ -101,3 +101,56 @@ func TestShortNamePublicPresenceAndPolicy(t *testing.T) {
 		}
 	}
 }
+
+func TestSectionAndShortNameCarriageReturns(t *testing.T) {
+	for _, test := range []struct {
+		value string
+		trims bool
+	}{
+		{"carriage\rreturn", false}, {"pair\r\nend", false},
+		{"\rboundary\r\n", true}, {"\ufeffboundary\rtext\u2029", true},
+	} {
+		t.Run(test.value, func(t *testing.T) {
+			song, err := gp.ParseFile("../testdata/gp8/section-track-names.gp")
+			if err != nil {
+				t.Fatal(err)
+			}
+			song.Version = gp.Version{}
+			for i := range song.Tracks {
+				song.Tracks[i].Settings = gp.TrackSettings{Notation: true, Tablature: true}
+			}
+			song.Tracks[0].ShortName = &test.value
+			marker := song.MeasureHeaders[0].Marker
+			marker.Letter, marker.Text = test.value, test.value
+			data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			parsed, err := gp.Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if *parsed.Tracks[0].ShortName != test.value || parsed.MeasureHeaders[0].Marker.Letter != test.value || parsed.MeasureHeaders[0].Marker.Text != test.value {
+				t.Fatalf("carriage returns changed: short=%q section=%#v", *parsed.Tracks[0].ShortName, parsed.MeasureHeaders[0].Marker)
+			}
+			if *song.Tracks[0].ShortName != test.value || marker.Letter != test.value || marker.Text != test.value {
+				t.Fatal("export mutated source")
+			}
+			if test.trims {
+				if len(report.Entries) != 2 || report.Entries[0].Code != "gp8.omit.short-name-consumer-whitespace" || report.Entries[1].Code != "gp8.omit.section-consumer-whitespace" {
+					t.Fatalf("trim reports = %#v", report.Entries)
+				}
+			} else if len(report.Entries) != 0 {
+				t.Fatalf("unexpected reports = %#v", report.Entries)
+			}
+			strict, _, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
+			if test.trims {
+				if err == nil || len(strict) != 0 {
+					t.Fatal("strict export accepted boundary loss")
+				}
+			} else if err != nil || len(strict) == 0 {
+				t.Fatalf("strict preservation failed: %v", err)
+			}
+		})
+	}
+}

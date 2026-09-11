@@ -89,8 +89,9 @@ Pinned AlphaTab derives an empty short name from the full name during finalizati
 When that derived name differs, GP8 reports `gp8.omit.short-name-consumer-empty`
 and retains the authored empty text. Raw importer evidence does not establish final
 consumer preservation. Section fields and nonempty short names preserve Unicode,
-XML-sensitive characters, and CDATA terminators. When a CDATA terminator requires ordinary XML text, the pinned XML consumer
-trims boundary whitespace.
+XML-sensitive characters, CDATA terminators, and internal carriage returns.
+Carriage returns use decimal character references to prevent XML line-ending normalization.
+When a CDATA terminator or carriage return requires ordinary XML text, the pinned consumer trims boundary whitespace.
 The corresponding `gp8.omit.section-consumer-whitespace` or
 `gp8.omit.short-name-consumer-whitespace` report identifies that narrow loss.
 Strict preservation requires an explicit allowance for each applicable report.

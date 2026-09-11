@@ -85,6 +85,7 @@ func runConformanceSectionTrackNames(run *conformanceRun) {
 			t.Fatalf("section %d = %#v, want %#v", i, marker, want)
 		}
 	}
+	conformanceNamesCarriageReturns(run)
 	conformanceSectionTitleEdits(t)
 	conformanceShortNamePresence(t)
 	conformanceNamesConsumerPolicy(t, run)
@@ -94,6 +95,38 @@ func runConformanceSectionTrackNames(run *conformanceRun) {
 		probe.Tracks[0].Name = name
 		report := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
 		run.Dispatch("buildTrack:track.Name", hasExportCode(report, "gp8.omit.short-name-consumer-empty"), name != "")
+	}
+}
+
+func conformanceNamesCarriageReturns(run *conformanceRun) {
+	t := run.t
+	for _, value := range []string{"carriage\rreturn", "pair\r\nend"} {
+		song := conformanceNamesSong(t)
+		song.Tracks[0].ShortName = stringPointer(value)
+		song.MeasureHeaders[0].Marker.Letter, song.MeasureHeaders[0].Marker.Text = value, value
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Report(sectionNamesCase, reportCodes(report), []string{})
+		raw := conformanceBarreGPIF(t, data)
+		if !strings.Contains(string(raw), "&#13;") {
+			t.Fatal("missing decimal carriage-return reference")
+		}
+		var wire sectionTrackNameWire
+		if decodeErr := xml.Unmarshal(raw, &wire); decodeErr != nil {
+			t.Fatal(decodeErr)
+		}
+		run.Wire("gpifSection.Letter", wire.MasterBars[0].Section.Letter, value)
+		run.Wire("gpifSection.Text", wire.MasterBars[0].Section.Text, value)
+		run.Wire("gpifTrack.ShortName", wire.Tracks[0].ShortName, stringPointer(value))
+		parsed, err := Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		run.Preserved("Marker.Letter", parsed.MeasureHeaders[0].Marker.Letter, value)
+		run.Preserved("Marker.Text", parsed.MeasureHeaders[0].Marker.Text, value)
+		run.Preserved("Track.ShortName", parsed.Tracks[0].ShortName, stringPointer(value))
 	}
 }
 
@@ -209,6 +242,9 @@ func conformanceNamesConsumerPolicy(t *testing.T, run *conformanceRun) {
 		{"gp8.omit.short-name-consumer-empty", func(s *Song) { s.Tracks[0].ShortName = stringPointer("") }},
 		{"gp8.omit.short-name-consumer-whitespace", func(s *Song) { s.Tracks[0].ShortName = stringPointer("  x ]]>  ") }},
 		{"gp8.omit.section-consumer-whitespace", func(s *Song) { s.MeasureHeaders[0].Marker.Text = "  x ]]>  " }},
+		{"gp8.omit.short-name-consumer-whitespace", func(s *Song) { s.Tracks[0].ShortName = stringPointer("\rboundary\r\n") }},
+		{"gp8.omit.section-consumer-whitespace", func(s *Song) { s.MeasureHeaders[0].Marker.Letter = "\rboundary\r\n" }},
+		{"gp8.omit.section-consumer-whitespace", func(s *Song) { s.MeasureHeaders[0].Marker.Text = "\rboundary\r\n" }},
 	} {
 		song := conformanceNamesSong(t)
 		test.edit(song)
@@ -268,9 +304,10 @@ func TestAlphaTabSectionTrackNames(t *testing.T) {
 	}
 	conformanceIndependentClaim(t, "field:Marker.Letter", claimAllStages("sections", sectionNamesCase, sectionNamesValue)...)
 	conformanceIndependentClaim(t, "field:Track.ShortName", claimAllStages("short-name", sectionNamesCase, shortNamesValue)...)
-	for _, value := range []string{"", "  Unicode Ω <&>  ", "  x ]]>  ", "line\ntext ]]> Ω"} {
+	for _, value := range []string{"", "  Unicode Ω <&>  ", "  x ]]>  ", "line\ntext ]]> Ω", "carriage\rreturn", "pair\r\nend", "\rboundary\r\n", "\ufeffboundary\rtext\u2029"} {
 		song.Tracks[0].ShortName = stringPointer(value)
 		song.MeasureHeaders[0].Marker.Text = value
+		song.MeasureHeaders[0].Marker.Letter = value
 		readAlphaTabOracleFacts(t, "--section-track-names", writeConformanceFixture(t, mustExportNames(t, song)), &got)
 		if value == "" {
 			if got.Tracks[0].RawShortName != "" || got.Tracks[0].ShortName != "Lead guita" {
@@ -279,9 +316,9 @@ func TestAlphaTabSectionTrackNames(t *testing.T) {
 		} else {
 			expected := value
 			if gpifTextConsumerTrims(value) {
-				expected = strings.TrimSpace(value)
+				expected = strings.Trim(strings.TrimSpace(value), "\ufeff")
 			}
-			if got.Tracks[0].RawShortName != expected || got.Tracks[0].ShortName != expected || got.Sections[0].Text != expected {
+			if got.Tracks[0].RawShortName != expected || got.Tracks[0].ShortName != expected || got.Sections[0].Text != expected || got.Sections[0].Letter != expected {
 				t.Fatalf("consumer text %q = %#v", value, got)
 			}
 		}

@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "67c9ad70d3223e7dc91cd1eb431bc0f1d72a6951111ddfaeb749e1373649dfca",
+    "obligationDigest": "4fd22e2cd43da68140f1323351de470aaf7e881aa250dc13303eb0da23f1bd44",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -174,14 +174,14 @@
           "independent nonempty Unicode short names",
           "empty versus absent and independent fields",
           "legacy title edit, clear, and conflict",
-          "CDATA terminators and boundary whitespace",
+          "CDATA terminators, CR, CRLF and boundary whitespace",
           "mutable occurrence ownership"
         ],
         "oracle": "Pinned AlphaTab raw short-name import, final track names and section fields; independent exact GPIF extraction and public reimport.",
         "limitations": [
           "GP3 through GP5 have a legacy marker caption and no authored short-name field.",
           "AlphaTab derives an empty short name from the full name; export reports that consumer loss.",
-          "The pinned XML consumer trims boundary whitespace when text containing a CDATA terminator requires ordinary XML text; export reports that narrow loss."
+          "The pinned XML consumer trims boundary whitespace when text containing a CDATA terminator or carriage return requires ordinary XML text; export reports that narrow loss."
         ]
       }
     ],

@@ -13,9 +13,10 @@ import (
 type gpifCDATA string
 
 func (text gpifCDATA) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
-	if strings.Contains(string(text), "]]>") {
+	if gpifTextNeedsEscaping(string(text)) {
 		// The pinned consumer reads only the last CDATA chunk. Its numeric
 		// entity parser accepts decimal references but misreads hex references.
+		// Character references also prevent XML carriage-return normalization.
 		var escaped bytes.Buffer
 		if err := xml.EscapeText(&escaped, []byte(text)); err != nil {
 			return err
@@ -51,7 +52,11 @@ func (track gpifTrack) MarshalXML(encoder *xml.Encoder, start xml.StartElement) 
 }
 
 func gpifTextConsumerTrims(text string) bool {
-	return strings.Contains(text, "]]>") && strings.TrimFunc(text, func(r rune) bool {
+	return gpifTextNeedsEscaping(text) && strings.TrimFunc(text, func(r rune) bool {
 		return unicode.Is(unicode.Zs, r) || strings.ContainsRune("\t\n\v\f\r\ufeff\u2028\u2029", r)
 	}) != text
+}
+
+func gpifTextNeedsEscaping(text string) bool {
+	return strings.Contains(text, "]]>") || strings.ContainsRune(text, '\r')
 }

@@ -509,7 +509,7 @@ Metadata. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Track.ShortName is an independent optional string: nil means absent, and a pointer to an empty string means authored empty. Go import and GP8 retain exact values without truncation. Nonempty Unicode/XML-sensitive names survive the final pinned consumer. Explicit empty names replaced by AlphaTab full-name derivation, and boundary whitespace combined with a CDATA terminator, receive scoped loss reports; strict preservation requires those allowances.
+Track.ShortName is an independent optional string: nil means absent, and a pointer to an empty string means authored empty. Go import and GP8 retain exact values without truncation. Nonempty Unicode/XML-sensitive names survive the final pinned consumer. Explicit empty names replaced by AlphaTab full-name derivation, and boundary whitespace combined with a CDATA terminator or carriage return, receive scoped loss reports; strict preservation requires those allowances.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -1101,7 +1101,7 @@ Structure. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Marker.Letter and Marker.Text retain independent GPIF fields. Unchanged legacy Title leaves both authoritative; a changed parsed Title overrides Text and preserves Letter, with conflicting simultaneous edits reported. Legacy binary and programmatic title-only captions remain text. Empty sections remain distinct from absence. Literal Unicode/XML-sensitive values survive exact GP8 and final AlphaTab consumption; boundary whitespace together with a CDATA terminator has a scoped consumer-loss report.
+Marker.Letter and Marker.Text retain independent GPIF fields. Unchanged legacy Title leaves both authoritative; a changed parsed Title overrides Text and preserves Letter, with conflicting simultaneous edits reported. Legacy binary and programmatic title-only captions remain text. Empty sections remain distinct from absence. Literal Unicode/XML-sensitive values survive exact GP8 and final AlphaTab consumption; boundary whitespace together with a CDATA terminator or carriage return has a scoped consumer-loss report.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

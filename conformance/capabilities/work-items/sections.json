@@ -105,7 +105,7 @@
     "gp8_notation.go",
     "gpif_parser.go"
   ],
-  "resolution": "Implemented independent Marker.Letter/Marker.Text and legacy Title reconciliation. Parsed Title edits override text while preserving the letter; conflicting simultaneous edits receive gp8.normalize.section-title. Empty versus absent sections, Unicode/XML-sensitive text, programmatic captions, and exact final pinned-consumer values are covered. Narrow boundary-whitespace loss for CDATA terminators is reported explicitly. Awaiting independent final-commit review and root combined gates.",
+  "resolution": "Implemented independent Marker.Letter/Marker.Text and legacy Title reconciliation. Parsed Title edits override text while preserving the letter; conflicting simultaneous edits receive gp8.normalize.section-title. Empty versus absent sections, Unicode/XML-sensitive text, programmatic captions, and exact final pinned-consumer values are covered. Narrow boundary-whitespace loss for CDATA terminators or carriage returns is reported explicitly. Awaiting independent final-commit review and root combined gates.",
   "verification": [],
   "issue": {
     "number": 90,
