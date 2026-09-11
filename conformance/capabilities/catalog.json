@@ -4227,6 +4227,21 @@
           "kind": "test",
           "reference": "TestConformanceHarmonicVariants",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabHarmonicConsumerPolicy",
+          "detail": "Exact six-kind fractional-fret consumer evidence and selective harmonic spelling/fret-authority policy; no rating promotion."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceHarmonicConsumerPolicy",
+          "detail": "Exact six-kind fractional-fret consumer evidence and selective harmonic spelling/fret-authority policy; no rating promotion."
+        },
+        {
+          "kind": "test",
+          "reference": "TestHarmonicSpellingSelectivePolicy",
+          "detail": "Exact six-kind fractional-fret consumer evidence and selective harmonic spelling/fret-authority policy; no rating promotion."
         }
       ]
     },

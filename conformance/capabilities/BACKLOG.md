@@ -56,7 +56,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Export existing left and right hand fingerings](work-items/fingering.json) | implementation | 2 | done | — | [#82](https://github.com/CaliLuke/go-guitar-pro/issues/82) |
 | [Preserve thumb and finger golpe marks](work-items/golpe.json) | implementation | 2 | done | — | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) |
 | [Preserve explicit hammer and pull-off destination markers](work-items/hammer.json) | implementation | 2 | todo | — | [#84](https://github.com/CaliLuke/go-guitar-pro/issues/84) |
-| [Add independent harmonic-kind coverage and selective spelling-loss policy](work-items/harmonics.json) | implementation | 2 | todo | — | [#96](https://github.com/CaliLuke/go-guitar-pro/issues/96) |
+| [Add independent harmonic-kind coverage and selective spelling-loss policy](work-items/harmonics.json) | implementation | 2 | in_progress | — | [#96](https://github.com/CaliLuke/go-guitar-pro/issues/96) |
 | [Reject wrapped legacy fret counts and verify isolated instrument losses](work-items/legacy-instrument.json) | implementation | 2 | todo | — | [#97](https://github.com/CaliLuke/go-guitar-pro/issues/97) |
 | [Export assigned legacy score lyrics as GPIF track lyrics](work-items/lyrics.json) | implementation | 2 | todo | — | [#98](https://github.com/CaliLuke/go-guitar-pro/issues/98) |
 | [Preserve metadata text in AlphaTab and verify legacy metadata losses](work-items/metadata.json) | implementation | 2 | todo | — | [#99](https://github.com/CaliLuke/go-guitar-pro/issues/99) |

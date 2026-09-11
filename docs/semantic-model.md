@@ -720,3 +720,9 @@ unchanged. An absent voice has no authored beat and produces no such report.
 GP8 records four voice slots with `-1` for absence. Go preserves interior absent
 slots and trims trailing absent slots. Pinned AlphaTab creates an empty quarter-note
 placeholder in each absent slot. These placeholders are separate from timed rests.
+
+Harmonic kind and fractional fret are independent of legacy harmonic spelling.
+All six kinds retain fret `2.4` in GPIF, Go, and the pinned consumer.
+Authored harmonic pitch or octave produces one `gp8.omit.harmonic-pitch` report.
+A conflicting legacy fret produces a separate authority report. Strict export
+requires each applicable code; allowing spelling loss does not allow fret conflict.

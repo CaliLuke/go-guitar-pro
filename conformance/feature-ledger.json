@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "cdebb67ce227fa63f6c605440d5634ab09476c41b4376b3c4b052476e6937071",
+    "obligationDigest": "0cbae75ddd0df090ed081aca16df59c79151c2f7f76ca82b8bc502f183e2b093",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -217,6 +217,40 @@
         "oracle": "TestGP8TimedEmptyAndAbsentVoicePolicy checks public strict policy, exact timing and ownership. TestAlphaTabTimedEmptyVoice asserts raw voice indices, generated placeholders, beat statuses, rhythm, timing, text and note counts. Exact GPIF voice slot references are asserted independently.",
         "limitations": [
           "An authored timed empty beat becomes a rest. GP8 pads four voice slots; the pinned consumer adds one empty quarter-note placeholder to each absent slot. Go trims trailing absent slots but preserves the interior slot."
+        ]
+      },
+      {
+        "id": "M13-HARMONIC-CONSUMER-POLICY",
+        "family": "M13",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceHarmonicConsumerPolicy",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "export",
+          "import",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "six distinct harmonic kinds at fractional fret 2.4",
+          "natural and artificial pitch, octave and combined spelling",
+          "matching legacy fret 2 and conflicting fret 3",
+          "every selective spelling and fret-authority allowance"
+        ],
+        "oracle": "TestAlphaTabHarmonicConsumerPolicy asserts explicit raw consumer kind/fret for each kind and spelling combination. TestHarmonicSpellingSelectivePolicy verifies precise reports, all allowance subsets, owner identity and source nonmutation. Existing variants retain exact wire and parser boundary coverage.",
+        "limitations": [
+          "Legacy harmonic-specific pitch and octave have no retained GPIF destination. Export remains partial for spelling; harmonic kind and fractional fret remain supported."
         ]
       }
     ],
@@ -549,11 +583,11 @@
       "BendPoint.ExactOffset": ["M12-EXACT-BEND-OFFSETS"],
       "BendPoint.Value": ["M12-CURVE-PRESERVATION"],
       "BendPoint.Vibrato": ["M12-CURVE-PRESERVATION","M12-CURVE-LOSS-POLICY"],
-      "HarmonicEffect.Kind": ["M13-HARMONIC-VARIANTS","M22-EFFECTS-DYNAMICS"],
+      "HarmonicEffect.Kind": ["M13-HARMONIC-VARIANTS","M22-EFFECTS-DYNAMICS","M13-HARMONIC-CONSUMER-POLICY"],
       "HarmonicEffect.Fret": ["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS"],
-      "HarmonicEffect.FretFloat": ["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS"],
-      "HarmonicEffect.Pitch": ["M13-HARMONIC-VARIANTS"],
-      "HarmonicEffect.Octave": ["M13-HARMONIC-VARIANTS"],
+      "HarmonicEffect.FretFloat": ["M13-HARMONIC-VARIANTS","M13-GPIF-COMPATIBILITY","M13-HARMONIC-AUTHORITY","M22-EFFECTS-DYNAMICS","M13-HARMONIC-CONSUMER-POLICY"],
+      "HarmonicEffect.Pitch": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-CONSUMER-POLICY"],
+      "HarmonicEffect.Octave": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-CONSUMER-POLICY"],
       "GraceEffect.Duration": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS"],
       "GraceEffect.Fret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE"],
       "GraceEffect.ExactFret": ["M15-ORDERED-GRACE-EXPORT","M15-GRACE-AUTHORITY-LOSS","M15-BINARY-GRACE-SOURCE","M15-COMBINED-GRACE-EFFECTS","M16-NATIVE-FALLBACKS"],
@@ -789,9 +823,9 @@
       "gpifProperty.Name": ["M10-PICK-STROKE","M09-NOTE-REPRESENTATION","M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
       "gpifProperty.Enable": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
       "gpifProperty.Flags": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
-      "gpifProperty.HType": ["M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
+      "gpifProperty.HType": ["M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT","M13-HARMONIC-CONSUMER-POLICY"],
       "gpifProperty.Float": ["M12-CURVE-PRESERVATION","M12-EXACT-BEND-OFFSETS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
-      "gpifProperty.HFret": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-AUTHORITY","M20-SOURCE-AUDIT"],
+      "gpifProperty.HFret": ["M13-HARMONIC-VARIANTS","M13-HARMONIC-AUTHORITY","M20-SOURCE-AUDIT","M13-HARMONIC-CONSUMER-POLICY"],
       "gpifBeat.Whammy": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
       "gpifWhammy.OriginValue": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
       "gpifWhammy.MiddleValue": ["M12-CURVE-PRESERVATION","M20-SOURCE-AUDIT"],
@@ -1033,6 +1067,9 @@
       ],
       "M10-TIMED-EMPTY-VOICE": [
         "M10-TIMED-EMPTY-VOICE"
+      ],
+      "M13-HARMONIC-CONSUMER-POLICY": [
+        "M13-HARMONIC-CONSUMER-POLICY"
       ]
     },
     "capabilityClaims": [

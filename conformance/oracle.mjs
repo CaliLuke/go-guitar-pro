@@ -1170,8 +1170,13 @@ export function loadSectionTrackNameFacts(fixture) {
   };
 }
 
+export function loadHarmonicFacts(fixture) {
+  return loadScore(fixture).tracks.flatMap(track => track.staves.flatMap(staff => staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.notes.filter(note => note.harmonicType !== alphaTab.model.HarmonicType.None).map(note => ({kind: alphaTab.model.HarmonicType[note.harmonicType], fret: note.harmonicValue})))))));
+}
+
 function main() {
   const args = process.argv.slice(2);
+  if (args[0] === "--harmonics" && args.length === 2) { process.stdout.write(JSON.stringify(loadHarmonicFacts(args[1]))); return; }
   if (args.length === 0) {
     console.error('usage: node oracle.mjs FIXTURE | --batch FIXTURE...');
     process.exit(2);

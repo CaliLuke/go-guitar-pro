@@ -286,6 +286,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceCurveLossPolicy":                    runConformanceCurveLossPolicy,
 	"TestConformanceCurveValidation":                    runConformanceCurveValidation,
 	"TestConformanceExactBendOffsets":                   runConformanceExactBendOffsets,
+	"TestConformanceHarmonicConsumerPolicy":             runConformanceHarmonicConsumerPolicy,
 	"TestConformanceHarmonicVariants":                   runConformanceHarmonicVariants,
 	"TestConformanceGPIFCompatibilityAndDiagnostics":    runConformanceGPIFCompatibilityAndDiagnostics,
 	"TestConformanceHarmonicAuthorityAndValidation":     runConformanceHarmonicAuthorityAndValidation,

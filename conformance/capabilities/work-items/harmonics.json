@@ -5,8 +5,8 @@
   "title": "Add independent harmonic-kind coverage and selective spelling-loss policy",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "root",
   "formats": [
     "gp3",
     "gp4",
@@ -155,6 +155,16 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabHarmonicConsumerPolicy",
+      "detail": "Focused non-default acceptance regression."
+    },
+    {
+      "kind": "test",
+      "reference": "TestHarmonicSpellingSelectivePolicy",
+      "detail": "Focused non-default acceptance regression."
     }
   ],
   "shared_files": [
@@ -164,7 +174,7 @@
     "gp8_notation.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "All six harmonic kinds retain exact 2.4 fret in GPIF, Go and the pinned consumer. Natural/artificial Pitch, Octave and combined spelling receive exactly one scoped omission; every selective allowance is independent of conflicting legacy fret authority. Source values and owning note identity remain unchanged. No mapping to generic note pitch was added. Spelling export remains partial. Awaiting fresh review and integrated gates; issue remains open.",
   "verification": [],
   "issue": {
     "number": 96,
