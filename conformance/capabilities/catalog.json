@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "reviewed_at": "2026-09-11",
-  "reviewed_commit": "6151967aa813bb32351db6248956688f69834a2d",
+  "reviewed_commit": "3ec0e175f050082594a0321330ee597fd58fc603",
   "capabilities": [
     {
       "id": "repeat-count",
@@ -356,6 +356,13 @@
           "kind": "test",
           "reference": "TestAlphaTabFermataConsumerLimits",
           "detail": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions."
+        },
+        {
+          "kind": "implementation-audit",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5638609185",
+          "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+          "decision": "accepted",
+          "detail": "Exact authored rationals survive GPIF/Go reimport; pinned AlphaTab movement at fractional offsets and whole tick 123, both collision pairs, and ordinary retained positions are independently checked. Reports identify affected fermatas and target ticks. Strict export refuses unallowed movement/collisions with zero output, and allowing movement alone cannot hide a collision. Remaining pinned-consumer loss is explicit; export rating stays partial."
         }
       ]
     },
@@ -1953,6 +1960,13 @@
           "kind": "test",
           "reference": "TestAlphaTabVolumeConsumerLimits",
           "detail": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85."
+        },
+        {
+          "kind": "implementation-audit",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/59#issuecomment-5638610085",
+          "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+          "decision": "accepted",
+          "detail": "Reviewed against the user-approved revised acceptance: GPIF and Go preserve channel-strip events, including track ownership, non-default values/positions, equal-position order and linear flags. A dedicated AlphaTab event adapter proves the omission and detects a legacy volume event as a positive control. Each consumer loss is reported; strict export needs an explicit allowance. Cross-track interleaving and legacy beat-local volume remain outside this contract. Remaining pinned-consumer loss is explicit; export rating stays partial."
         }
       ]
     },
@@ -2524,6 +2538,13 @@
           "kind": "test",
           "reference": "TestAlphaTabChordConsumerLimits",
           "detail": "GPIF preserves explicit annular fingerings and synthesized third-barre endpoints with the canonical Ring token. Preflight reports annular barres ignored by pinned AlphaTab and strict export refuses unallowed loss. Independent regressions cover explicit Index/Annular/Thumb fingerings and synthesized three-barre diagrams."
+        },
+        {
+          "kind": "implementation-audit",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/79#issuecomment-5638610497",
+          "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+          "decision": "accepted",
+          "detail": "The original explicit Index/Annular/Thumb seven-string regression is covered through exact GPIF positions, Go reimport and independent consumer facts. Synthesized third/fifth-barre cases and same/different-fret annular positions are also checked. A scoped annular-barre report protects strict export without changing authored finger meaning; ordinary diagram behavior remains covered. Remaining pinned-consumer loss is explicit; export rating stays partial."
         }
       ]
     },
@@ -3868,6 +3889,13 @@
           "kind": "test",
           "reference": "TestAlphaTabLegatoConsumerLimits",
           "detail": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence."
+        },
+        {
+          "kind": "implementation-audit",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/50#issuecomment-5638609629",
+          "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+          "decision": "accepted",
+          "detail": "Authored flags and occurrence ownership remain exact. Excerpt boundaries, paired chains across bars, absent destinations, and post-parse origin/destination edits have independent consumer evidence. Scoped preflight reports identify every exercised mismatch, and strict policy refuses unallowed loss. Remaining pinned-consumer loss is explicit; export rating stays partial."
         }
       ]
     },

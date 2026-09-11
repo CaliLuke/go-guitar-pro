@@ -5,8 +5,8 @@
   "title": "Export authored channel-strip volume automation",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -117,8 +117,23 @@
     },
     {
       "kind": "acceptance-revision",
-      "reference": "User instruction in the 2026-09-11 task",
-      "detail": "Accept wire preservation with reported consumer loss. The consumer pin stays unchanged. The --volume-automations adapter reads actual AlphaTab beat events; the legacy GP5 RSE event is a positive control. The general score snapshot omits these events and is not a valid absence oracle."
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/59#issuecomment-5638610085",
+      "detail": "Accept wire preservation with reported consumer loss. The consumer pin stays unchanged. The --volume-automations adapter reads actual AlphaTab beat events; the legacy GP5 RSE event is a positive control. The general score snapshot omits these events and is not a valid absence oracle.",
+      "source_task_id": "01a0916a-5e2f-7290-b6e1-3a23a2152602",
+      "source_user_message_id": "01a0916b-6483-74c0-81be-251230c51e6b"
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+      "reviewed_at": "2026-09-11T17:57:03.164974+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/59#issuecomment-5638610085",
+      "detail": "Reviewed against the user-approved revised acceptance: GPIF and Go preserve channel-strip events, including track ownership, non-default values/positions, equal-position order and linear flags. A dedicated AlphaTab event adapter proves the omission and detects a legacy volume event as a positive control. Each consumer loss is reported; strict export needs an explicit allowance. Cross-track interleaving and legacy beat-local volume remain outside this contract. Pinned consumer limit remains explicitly reported; export rating stays partial.",
+      "commands": [
+        "prek run --all-files: PASS on 3ec0e175f050082594a0321330ee597fd58fc603",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^(TestGP8|TestAlphaTab)(Fermata|Legato|Chord|Volume)ConsumerLimits$' .: PASS",
+        "python3 conformance/capabilities/manage.py check: PASS; all stored probe input hashes match the reviewed source"
+      ]
     }
   ],
   "shared_files": [
@@ -126,12 +141,27 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85. Implemented and verified in the working tree. All required gates pass. Final commit verification remains separate from this working-tree receipt.",
-  "verification": [],
+  "resolution": "Reviewed against the user-approved revised acceptance: GPIF and Go preserve channel-strip events, including track ownership, non-default values/positions, equal-position order and linear flags. A dedicated AlphaTab event adapter proves the omission and detects a legacy volume event as a positive control. Each consumer loss is reported; strict export needs an explicit allowance. Cross-track interleaving and legacy beat-local volume remain outside this contract. Independently accepted on 3ec0e175f050082594a0321330ee597fd58fc603. The export rating remains partial for the documented pinned-consumer limit.",
+  "verification": [
+    {
+      "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+      "commands": [
+        "prek run --all-files: PASS on 3ec0e175f050082594a0321330ee597fd58fc603",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^(TestGP8|TestAlphaTab)(Fermata|Legato|Chord|Volume)ConsumerLimits$' .: PASS",
+        "python3 conformance/capabilities/manage.py check: PASS; all stored probe input hashes match the reviewed source"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/59#issuecomment-5638610085",
+        "TestGP8VolumeConsumerLimits",
+        "TestAlphaTabVolumeConsumerLimits",
+        "Reviewed against the user-approved revised acceptance: GPIF and Go preserve channel-strip events, including track ownership, non-default values/positions, equal-position order and linear flags. A dedicated AlphaTab event adapter proves the omission and detects a legacy volume event as a positive control. Each consumer loss is reported; strict export needs an explicit allowance. Cross-track interleaving and legacy beat-local volume remain outside this contract."
+      ]
+    }
+  ],
   "issue": {
     "number": 59,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/59",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T16:13:48.367029+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T17:57:03.164974+00:00"
   }
 }

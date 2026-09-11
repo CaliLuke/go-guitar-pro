@@ -5,8 +5,8 @@
   "title": "Preserve authored legato and slur endpoints",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -103,6 +103,19 @@
       "kind": "test",
       "reference": "TestAlphaTabLegatoConsumerLimits",
       "detail": "Pinned AlphaTab 1.8.4 confirms the reported consumer behavior."
+    },
+    {
+      "kind": "implementation-audit",
+      "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+      "reviewed_at": "2026-09-11T17:57:03.164974+00:00",
+      "decision": "accepted",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/50#issuecomment-5638609629",
+      "detail": "Authored flags and occurrence ownership remain exact. Excerpt boundaries, paired chains across bars, absent destinations, and post-parse origin/destination edits have independent consumer evidence. Scoped preflight reports identify every exercised mismatch, and strict policy refuses unallowed loss. Pinned consumer limit remains explicitly reported; export rating stays partial.",
+      "commands": [
+        "prek run --all-files: PASS on 3ec0e175f050082594a0321330ee597fd58fc603",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^(TestGP8|TestAlphaTab)(Fermata|Legato|Chord|Volume)ConsumerLimits$' .: PASS",
+        "python3 conformance/capabilities/manage.py check: PASS; all stored probe input hashes match the reviewed source"
+      ]
     }
   ],
   "shared_files": [
@@ -114,12 +127,27 @@
     "conformance_legato_test.go",
     "conformance/feature-ledger.json"
   ],
-  "resolution": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence. Implemented and verified in the working tree. All required gates pass. Final commit verification remains separate from this working-tree receipt.",
-  "verification": [],
+  "resolution": "Authored flags and occurrence ownership remain exact. Excerpt boundaries, paired chains across bars, absent destinations, and post-parse origin/destination edits have independent consumer evidence. Scoped preflight reports identify every exercised mismatch, and strict policy refuses unallowed loss. Independently accepted on 3ec0e175f050082594a0321330ee597fd58fc603. The export rating remains partial for the documented pinned-consumer limit.",
+  "verification": [
+    {
+      "commit": "3ec0e175f050082594a0321330ee597fd58fc603",
+      "commands": [
+        "prek run --all-files: PASS on 3ec0e175f050082594a0321330ee597fd58fc603",
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 -v -run '^(TestGP8|TestAlphaTab)(Fermata|Legato|Chord|Volume)ConsumerLimits$' .: PASS",
+        "python3 conformance/capabilities/manage.py check: PASS; all stored probe input hashes match the reviewed source"
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/50#issuecomment-5638609629",
+        "TestGP8LegatoConsumerLimits",
+        "TestAlphaTabLegatoConsumerLimits",
+        "Authored flags and occurrence ownership remain exact. Excerpt boundaries, paired chains across bars, absent destinations, and post-parse origin/destination edits have independent consumer evidence. Scoped preflight reports identify every exercised mismatch, and strict policy refuses unallowed loss."
+      ]
+    }
+  ],
   "issue": {
     "number": 50,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/50",
-    "state": "OPEN",
-    "checked_at": "2026-09-11T16:13:48.367029+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-11T17:57:03.164974+00:00"
   }
 }
