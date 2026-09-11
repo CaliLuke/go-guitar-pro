@@ -1648,7 +1648,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Legacy instrument flags and representable fret counts parse. Unchecked GP3-GP5 int32-to-uint8 conversion can wrap source fret count 280 to the unreported default 24. #97 requires a contextual representability error before conversion and independent flag-loss policy coverage. GP8 retains its fret-count, twelve-string and banjo omissions.",
+      "finding": "GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -1671,6 +1671,11 @@
           "kind": "actionability-review",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5638816861",
           "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
+        },
+        {
+          "kind": "runtime",
+          "reference": "conformance/capabilities/evidence/legacy-numeric-bounds.json",
+          "detail": "Actual full-source signed-boundary errors/results and isolated strict-loss export receipts, bound to fixture and export hashes. Focused tests pass; existing stage ratings and target limits remain unchanged."
         }
       ]
     },
@@ -2301,7 +2306,7 @@
         "model": "partial",
         "export": "missing"
       },
-      "finding": "Legacy RSE records and some GPIF engine/sound state parse. Four GP5.1 int32-to-int16 conversions can turn 65536 into zero without error; #101 requires checked decoding and isolated descendant loss-policy evidence. GP8 omits legacy master/track RSE records; proprietary synthesis is outside this implementation.",
+      "finding": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -2329,6 +2334,11 @@
           "kind": "actionability-review",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5638819239",
           "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
+        },
+        {
+          "kind": "runtime",
+          "reference": "conformance/capabilities/evidence/legacy-numeric-bounds.json",
+          "detail": "Actual full-source signed-boundary errors/results and isolated strict-loss export receipts, bound to fixture and export hashes. Focused tests pass; existing stage ratings and target limits remain unchanged."
         }
       ]
     },

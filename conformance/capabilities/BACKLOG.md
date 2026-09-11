@@ -57,7 +57,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve thumb and finger golpe marks](work-items/golpe.json) | implementation | 2 | done | — | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) |
 | [Preserve explicit hammer and pull-off destination markers](work-items/hammer.json) | implementation | 2 | todo | — | [#84](https://github.com/CaliLuke/go-guitar-pro/issues/84) |
 | [Add independent harmonic-kind coverage and selective spelling-loss policy](work-items/harmonics.json) | implementation | 2 | in_progress | — | [#96](https://github.com/CaliLuke/go-guitar-pro/issues/96) |
-| [Reject wrapped legacy fret counts and verify isolated instrument losses](work-items/legacy-instrument.json) | implementation | 2 | todo | — | [#97](https://github.com/CaliLuke/go-guitar-pro/issues/97) |
+| [Reject wrapped legacy fret counts and verify isolated instrument losses](work-items/legacy-instrument.json) | implementation | 2 | in_progress | — | [#97](https://github.com/CaliLuke/go-guitar-pro/issues/97) |
 | [Export assigned legacy score lyrics as GPIF track lyrics](work-items/lyrics.json) | implementation | 2 | todo | — | [#98](https://github.com/CaliLuke/go-guitar-pro/issues/98) |
 | [Preserve metadata text in AlphaTab and verify legacy metadata losses](work-items/metadata.json) | implementation | 2 | todo | — | [#99](https://github.com/CaliLuke/go-guitar-pro/issues/99) |
 | [Project supported legacy mix-table events into GP8 automation](work-items/mix-table.json) | implementation | 2 | blocked | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59), [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52), [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#85](https://github.com/CaliLuke/go-guitar-pro/issues/85) |
@@ -66,7 +66,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | done | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
 | [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | todo | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
 | [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | in_progress | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
-| [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | todo | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
+| [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | in_progress | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
 | [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | in_progress | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
 | [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | in_progress | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
 | [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |

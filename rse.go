@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "fmt"
+
 // RseEqualizer represents an equalizer.
 type RseEqualizer struct {
 	Knobs []float32
@@ -98,38 +100,46 @@ func (s *Song) readTrackRse(c *cursor, track *Track) error {
 
 func (s *Song) readRseInstrument(c *cursor) (RseInstrument, error) {
 	var instr RseInstrument
-	i, err := c.readInt()
-	if err != nil {
-		return instr, err
-	}
-	instr.Instrument = int16(i)
-	u, err := c.readInt()
-	if err != nil {
-		return instr, err
-	}
-	instr.Unknown = int16(u)
-	sb, err := c.readInt()
-	if err != nil {
-		return instr, err
-	}
-	instr.SoundBank = int16(sb)
-	if s.Version.Number == [3]byte{5, 0, 0} {
-		en, err := c.readShort()
+	for _, field := range []struct {
+		name   string
+		target *int16
+	}{
+		{"Instrument", &instr.Instrument}, {"Unknown", &instr.Unknown}, {"SoundBank", &instr.SoundBank},
+	} {
+		value, err := readRseInt16(c, field.name)
 		if err != nil {
 			return instr, err
 		}
-		instr.EffectNumber = en
+		*field.target = value
+	}
+	if s.Version.Number == [3]byte{5, 0, 0} {
+		value, err := c.readShort()
+		if err != nil {
+			return instr, fmt.Errorf("reading RSE EffectNumber: %w", err)
+		}
+		instr.EffectNumber = value
 		if err := c.skip(1); err != nil {
-			return instr, err
+			return instr, fmt.Errorf("reading RSE EffectNumber padding: %w", err)
 		}
 	} else {
-		en, err := c.readInt()
+		value, err := readRseInt16(c, "EffectNumber")
 		if err != nil {
 			return instr, err
 		}
-		instr.EffectNumber = int16(en)
+		instr.EffectNumber = value
 	}
 	return instr, nil
+}
+
+func readRseInt16(c *cursor, field string) (int16, error) {
+	value, err := c.readInt()
+	if err != nil {
+		return 0, fmt.Errorf("reading RSE %s: %w", field, err)
+	}
+	if value < -32768 || value > 32767 {
+		return 0, fmt.Errorf("reading RSE %s: value %d is outside public int16 range -32768..32767", field, value)
+	}
+	return int16(value), nil
 }
 
 func (s *Song) readRseInstrumentEffect(c *cursor, instr *RseInstrument) error {

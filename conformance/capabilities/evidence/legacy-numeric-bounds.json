@@ -1,0 +1,2184 @@
+{
+  "isolated_omissions": [
+    {
+      "allowed_code": "gp8.omit.track-fret-count",
+      "authored": 31,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "Track.FretCount",
+      "report": [
+        {
+          "Code": "gp8.omit.track-fret-count",
+          "Feature": "staff-ownership",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the authored fret count"
+        }
+      ],
+      "scenario": "fret count",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-twelve-stringed",
+      "authored": true,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "Track.TwelveStringedGuitarTrack",
+      "report": [
+        {
+          "Code": "gp8.omit.track-twelve-stringed",
+          "Feature": "staff-ownership",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy twelve-string track flag"
+        }
+      ],
+      "scenario": "twelve string",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-banjo",
+      "authored": true,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "Track.BanjoTrack",
+      "report": [
+        {
+          "Code": "gp8.omit.track-banjo",
+          "Feature": "staff-ownership",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy banjo track flag"
+        }
+      ],
+      "scenario": "banjo",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.master-rse",
+      "authored": [
+        0.25
+      ],
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Knobs",
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        }
+      ],
+      "scenario": "master knobs",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.master-rse",
+      "authored": [
+        0
+      ],
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Knobs",
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        }
+      ],
+      "scenario": "master zero knob",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.master-rse",
+      "authored": 0.5,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Gain",
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        }
+      ],
+      "scenario": "master gain",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.master-rse",
+      "authored": 0.75,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseMasterEffect.Volume",
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        }
+      ],
+      "scenario": "master volume",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.master-rse",
+      "authored": 0.5,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseMasterEffect.Reverb",
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        }
+      ],
+      "scenario": "master reverb",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": "Delay",
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.EffectCategory",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "effect category",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": "Echo",
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.Effect",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "effect",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": -1,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.Instrument",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "instrument",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": -32768,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.Unknown",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "unknown",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 32767,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.SoundBank",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "sound bank",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 17,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseInstrument.EffectNumber",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "effect number",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": [
+        -0.25
+      ],
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Knobs",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "track knobs",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": [
+        0
+      ],
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Knobs",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "track zero knob",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 0.5,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "RseEqualizer.Gain",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "track gain",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 3,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.Humanize",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "humanize",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-use-rse",
+      "authored": true,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "Track.UseRse",
+      "report": [
+        {
+          "Code": "gp8.omit.track-use-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy UseRse flag"
+        }
+      ],
+      "scenario": "use rse",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 1,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.AutoAccentuation",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "accent VerySoft",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 2,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.AutoAccentuation",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "accent Soft",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 3,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.AutoAccentuation",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "accent Medium",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 4,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.AutoAccentuation",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "accent Strong",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    },
+    {
+      "allowed_code": "gp8.omit.track-rse",
+      "authored": 5,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 12,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "export_sha256": "1935cc11e4fcd3c9384e499d46bcc76c1fa2bd84e9ddec901006fd072d4e15cb",
+      "field": "TrackRse.AutoAccentuation",
+      "report": [
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        }
+      ],
+      "scenario": "accent VeryStrong",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)"
+    }
+  ],
+  "issues": [
+    97,
+    101
+  ],
+  "limitations": [
+    "Source integers outside public uint8/int16 ranges are rejected for representability; no additional Guitar Pro syntax claim.",
+    "Pinned binary importer skips fret count and RSE banks. Its source-consumer output does not establish retention of these fields.",
+    "Pinned writer emits FretCount 24 and ordinary RSE channel-strip volume/balance. Non-default fret count, standalone legacy instrument flags and proprietary RSE GP8 semantics remain unsupported.",
+    "Focused receipt; independent final-commit review, full conformance, capability probe and prek remain assigned to root."
+  ],
+  "numeric_cases": [
+    {
+      "authored": 0,
+      "decoded": 0,
+      "field": "FretCount",
+      "modified_sha256": "c9a1cc336e877c9d045de8e4e0f52f542dbe25c3395561ea5d3473da664e6c32",
+      "offset": 949,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 31,
+      "decoded": 31,
+      "field": "FretCount",
+      "modified_sha256": "ad8b482ee90187358ba64d0c1da12954ebae1f00d4aa99dddae50103aade8434",
+      "offset": 949,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 255,
+      "decoded": 255,
+      "field": "FretCount",
+      "modified_sha256": "8eb3d24ba6da8d7f57947d014961c9624fffd935d48f31fae1bb8fa982e0b2fb",
+      "offset": 949,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": -1,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "cfecf178440367f2d3dbf4a22691f48bdd9e7792fd453e178036bc1ce689654b",
+      "offset": 949,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 256,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "c9c26a0cc35115a8c09b8a9ab00fa993b0870776d6106bdd32f224f5068b8851",
+      "offset": 949,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 280,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "16027406d500bb9f71a681def97903253e651cb4f41370650066549d65d883f2",
+      "offset": 949,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 2147483647,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "f7bb39520c1e05f2d3e9269315a2ca0bf2e0808cc66e34d6f4e39c2b376131af",
+      "offset": 949,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp3/notes.gp3"
+    },
+    {
+      "authored": 0,
+      "decoded": 0,
+      "field": "FretCount",
+      "modified_sha256": "191813d3abb85cecf3a0b147425961a2f75f4848f322a30b96cc55eb851a10da",
+      "offset": 996,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 31,
+      "decoded": 31,
+      "field": "FretCount",
+      "modified_sha256": "58bf4a70b6d98b71ec9e3c46a40077a8047c024fff139eb7094005ad0c02c4e5",
+      "offset": 996,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 255,
+      "decoded": 255,
+      "field": "FretCount",
+      "modified_sha256": "79583790cf307fd71a9ee46edc537d6a36f77b5c919845502eb03db77be4796a",
+      "offset": 996,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": -1,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "74a7808198b13e343f5b66e08cf48a4e544c596d6b41508945b07c41d8223ae9",
+      "offset": 996,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 256,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "35d669a4c1cfd643b56bb9f67642bf6d2b00c6b49a9f7a20c428bc93cb297b41",
+      "offset": 996,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 280,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "ac4b43b8ca1d0e3a45a2a98a5c9c4a53e4068bee00ea22de376a74fc12df3093",
+      "offset": 996,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 2147483647,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "2808658e386551972dd38fe92b78553e4c826fcb2fe053eec312c4969687753c",
+      "offset": 996,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp4/notes.gp4"
+    },
+    {
+      "authored": 0,
+      "decoded": 0,
+      "field": "FretCount",
+      "modified_sha256": "7b3993332823c017e20a10627983a620bedc44d155a89f5eb461db075cbf636f",
+      "offset": 1681,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 31,
+      "decoded": 31,
+      "field": "FretCount",
+      "modified_sha256": "254287ceac060cc852ee10be4d5bb4ee82a10b7993cfc9d583a8cdcc9e0200c4",
+      "offset": 1681,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 255,
+      "decoded": 255,
+      "field": "FretCount",
+      "modified_sha256": "547cbcd64c06180aceaad3b3fabf4313738f0e8ab3b6ca4ccfa305540601df06",
+      "offset": 1681,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -1,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "23b4a34759dadd833f3bdbc19a3b78411e8ffafb0bd7ca828363e3f51d4dde7c",
+      "offset": 1681,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 256,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "a0e9a265468b07a0fa3b51313a7f0bbcb6676d927ac5004e482d8d7f73ce0601",
+      "offset": 1681,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 280,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "d73cf1e45fbb4379cce3cc336e63e7df14889fcc20877bd29e57f4982baa1f19",
+      "offset": 1681,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 2147483647,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "c91da7b4b2a86d6dabfcbc182a6181fd314c66ca44a4271cd018e4352aa3a874",
+      "offset": 1681,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "Instrument",
+      "modified_sha256": "c3ae53ecf85ed19ffcb856f41378a2cbfccab80347629635cef33db626095c6a",
+      "offset": 1722,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "Instrument",
+      "modified_sha256": "e1a8c145c53deaf68414af36919448e2f5666c183d6d4f35f2e65fec8aaa324d",
+      "offset": 1722,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "Instrument",
+      "modified_sha256": "7697fdb5322408cca453ea3a0a6776d765e023c5660b50cabd28f2365d28c176",
+      "offset": 1722,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "2b25f1d722bd628ccb1eaa220c5244d019fc0f80969464a6c427d2fe8283e20a",
+      "offset": 1722,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "4c111eac680181192dd97fbae7c06d0468a8e1f5b52abab3f06e8805c59e9387",
+      "offset": 1722,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "93fe5f15c73b0e1dcb22a73fd710218296307834b2952c870bc9f5c2b9e9d080",
+      "offset": 1722,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "Unknown",
+      "modified_sha256": "efece906fa6b09762e0047f71d07df2727a0b583dcb9dd58245930bb42f7f734",
+      "offset": 1726,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "Unknown",
+      "modified_sha256": "c66b16f593bf8affef7d0e854f0039de91381a2a16250fd6bdf0ad80da595764",
+      "offset": 1726,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "Unknown",
+      "modified_sha256": "64f4ba799f814d5eceebf746633dee5c122ae99f84e6e3e34550ef84794be6db",
+      "offset": 1726,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "2366304853b1a1cf823ab3c08c247d9ed0a7b29321685a64eea09ae5e8849f47",
+      "offset": 1726,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "d311afb4833f4dfd1697edcb99b170e86503c647ea326f0ea7b50072e219acfa",
+      "offset": 1726,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "d6c3ea47edc53bd00e61115fd838fa0d26506d330c9617f50cd395ab70a1dcdb",
+      "offset": 1726,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "SoundBank",
+      "modified_sha256": "9b7407400b974023bc8de2d68237e538a7bde727e701d0af2cf8a46597ee584d",
+      "offset": 1730,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "SoundBank",
+      "modified_sha256": "2388c5ea5d71105f6e43a194a65b9a385085cc42557f23975d974826f113cb8f",
+      "offset": 1730,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "SoundBank",
+      "modified_sha256": "1753a38a00133e63f241cf0b4f447ab1680233843d0d3cde49771666e445e3ce",
+      "offset": 1730,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "8ed5bdfae5cb09703f89888ebfd5da4ccd3fd235cb275ec30cee3d6d3e47433f",
+      "offset": 1730,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "c268667669d00c1444dcc18a205a54682fe02105b4fd8060c428125ce00324aa",
+      "offset": 1730,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "c3d691ceec1bf96ade47463e218e0056bdd1184ee985686fbcf2dd594921e611",
+      "offset": 1730,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "EffectNumber",
+      "modified_sha256": "f602a6bdb49cdb5bd2a021d3a6ebb106bd173d585eae025cd31c6fff34bb9172",
+      "offset": 1734,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "EffectNumber",
+      "modified_sha256": "24616ba53f3dd194449ebbdfaa94cd15f3a78c77b2df1bf877c7da7f0d3bc8ac",
+      "offset": 1734,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "EffectNumber",
+      "modified_sha256": "202150520587e375c6c475d9ffba03d4bee8bf4b9ecda255a5f101ad57ec4ab1",
+      "offset": 1734,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/serenade.gp5"
+    },
+    {
+      "authored": 0,
+      "decoded": 0,
+      "field": "FretCount",
+      "modified_sha256": "badbf8087923d1c98b247f66ff4d8d545c340b47b0396403123a94e703079cc7",
+      "offset": 1345,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 31,
+      "decoded": 31,
+      "field": "FretCount",
+      "modified_sha256": "dec375a3ab7c102c2227fcfd2725e4aef1e5dcfb127880934375e0cac0a23ee6",
+      "offset": 1345,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 255,
+      "decoded": 255,
+      "field": "FretCount",
+      "modified_sha256": "efd101a7ff6316a340b021e99d47bc007a88ef05368ebc16114c4395f6071e3b",
+      "offset": 1345,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -1,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "0e2971e073cdffe1aff27c1ba2f127c81c76c2138b1ed7ec53e178e1fdbf30bf",
+      "offset": 1345,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value -1 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 256,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "acdf8d0d89440d2ec6755e5e663012a6810d809635941fa797089b8ba57bdce2",
+      "offset": 1345,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 256 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 280,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "f87c1656a4741263b52b99fbf29a5ead2394de99c72b44ee37dbbe5c2f08c01e",
+      "offset": 1345,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 280 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 2147483647,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "FretCount",
+      "modified_sha256": "b0cb5c5f0c0179b421f3bc16a6ff334b4b4f91f397ad25c6a7e02da62be2e141",
+      "offset": 1345,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading track 1 fret count: value 2147483647 is outside public uint8 range 0..255",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "Instrument",
+      "modified_sha256": "568cd7f05e013ad80a9b19829f83a2ba9a2965158814fecb2302671e9bac915f",
+      "offset": 1386,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "Instrument",
+      "modified_sha256": "e33eb6d25d950fefcc48d042846e8c02d5951f9aee745c680b4d7a36c0f2cb5d",
+      "offset": 1386,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "Instrument",
+      "modified_sha256": "3fcc80ba7f89e3d2bdda1962555f98ffd70275055e220b806635678c4110fac8",
+      "offset": 1386,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "3dce6547386a035670aebef7dcbda4717bd2ad50abe5b4ed7cee938f36f5c2df",
+      "offset": 1386,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "7957e0f11adb0606f5bf946caa59d7508e036895b77c43a20be88969bc7607c0",
+      "offset": 1386,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Instrument",
+      "modified_sha256": "2f0e443bb112bc6064e0b58490b68d2eccd77a10809b70f492c185a6bc5d2b03",
+      "offset": 1386,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Instrument: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "Unknown",
+      "modified_sha256": "33e46bb69bea8ef1543fb98a27a0280322fd7d1bb6354f1afcd11260bb05fc15",
+      "offset": 1390,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "Unknown",
+      "modified_sha256": "dc831570e827eb889e9c9c43859188d9cdc44d072251c1799af1726dd6f251a9",
+      "offset": 1390,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "Unknown",
+      "modified_sha256": "8d2bfbe1bae1e00642234eeb1fb324ebfb04ccb7e556cefad643f383b8d889cc",
+      "offset": 1390,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "120d9b0fa755494848f92acd8692095309c61168f05a1bf300ab9026dd89ddba",
+      "offset": 1390,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "352c3f86b8e434ffd3159d7bf67f54951d9eb5752b659d7b516285c40b780aa1",
+      "offset": 1390,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "Unknown",
+      "modified_sha256": "7f6f4576ac886de33830208e8ee26c6dd6565948b5244b74bd38fb91fd278afb",
+      "offset": 1390,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE Unknown: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "SoundBank",
+      "modified_sha256": "2526cee2dd29cd7b245f5964bad561a97e7617c75fa124214723e724e8a8ef39",
+      "offset": 1394,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "SoundBank",
+      "modified_sha256": "336011aaa546898718d73d7ef01d9a7a2cdd532c715dcef9bff6ac2f4a604562",
+      "offset": 1394,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "SoundBank",
+      "modified_sha256": "310a6b9f37addb093a963ef480446ea05456b9db7dec846f1488f1b31d3ff35f",
+      "offset": 1394,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "49d494454a19de9e201547965e5b03a64cf552dc805a98708c4b3788ceb7cb07",
+      "offset": 1394,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "7eb8fcb80989bf7f628ca91c3909593c83b1ac3264c895f1bd10e37d946cfcea",
+      "offset": 1394,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "SoundBank",
+      "modified_sha256": "0df906658907c62eed628e643bb9e3fe4dbb4795ee110baea87f8988ccef6bce",
+      "offset": 1394,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE SoundBank: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32768,
+      "decoded": -32768,
+      "field": "EffectNumber",
+      "modified_sha256": "cd005fde5401d1bddf683b90c15e1bfabb874eb230b0329d2ba871656aff80d1",
+      "offset": 1398,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -1,
+      "decoded": -1,
+      "field": "EffectNumber",
+      "modified_sha256": "8e9e712724de18f2f0d8235cb1aaade49c21eccc48a6cefa5858f45042738d31",
+      "offset": 1398,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32767,
+      "decoded": 32767,
+      "field": "EffectNumber",
+      "modified_sha256": "b4030d74d36e60866869e04c386f531da3bb629bcbb5dc883c1b25c8bcbe1d04",
+      "offset": 1398,
+      "parse_with_options_result_present": true,
+      "score_present": true,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": -32769,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value -32769 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "EffectNumber",
+      "modified_sha256": "b0e8f3d5253e695d0ab4df9bdcc93ecd449316f3cd22cbbd95e416a182b283b2",
+      "offset": 1398,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value -32769 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 32768,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value 32768 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "EffectNumber",
+      "modified_sha256": "65273bd1220d27e0fc48461a98bc7946d22bb020653984f8cf218657e558a1c2",
+      "offset": 1398,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value 32768 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    },
+    {
+      "authored": 65536,
+      "error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value 65536 is outside public int16 range -32768..32767",
+      "error_type": "*goguitarpro.ParseError",
+      "field": "EffectNumber",
+      "modified_sha256": "a1665c33e56a4d7159379165013279b6f0f4b0df27f8886db1987a812a89a0de",
+      "offset": 1398,
+      "parse_with_options_error": "unparseable Guitar Pro file: parsing binary GP: reading tracks: reading RSE EffectNumber: value 65536 is outside public int16 range -32768..32767",
+      "parse_with_options_result_present": false,
+      "score_present": false,
+      "source": "testdata/gp5/RSE.gp5"
+    }
+  ],
+  "offset_method": "Absolute cursor positions traced through the complete public ParseFile reader; fret follows primary/effect channel int32s and precedes capo; first track RSE follows humanize and six metadata int32s. Hash-bound originals are existing corpus files, mutations replace only one numeric field.",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "schema_version": 1,
+  "sources": [
+    {
+      "byte_count": 1165,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "effect_is_signed_short": false,
+      "fret_offset": 949,
+      "path": "testdata/gp3/notes.gp3",
+      "rse_offset": 0,
+      "sha256": "a9ae6bb06ed259016e7a138a1b17d850491e9e2e8510c235df28a9ec81a706f1"
+    },
+    {
+      "byte_count": 1208,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "effect_is_signed_short": false,
+      "fret_offset": 996,
+      "path": "testdata/gp4/notes.gp4",
+      "rse_offset": 0,
+      "sha256": "4f918d90aed2bdd12d229e612637b6f470a409771c805cc648c0682028f9125e"
+    },
+    {
+      "byte_count": 23849,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                62,
+                57,
+                53,
+                48,
+                43,
+                38
+              ],
+              "Capo": 0
+            }
+          ]
+        },
+        {
+          "Program": 25,
+          "Volume": 11,
+          "Balance": 8,
+          "PrimaryChannel": 4,
+          "SecondaryChannel": 3,
+          "Staves": [
+            {
+              "Tuning": [
+                62,
+                57,
+                53,
+                48,
+                43,
+                38
+              ],
+              "Capo": 0
+            }
+          ]
+        },
+        {
+          "Program": 32,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 8,
+          "SecondaryChannel": 5,
+          "Staves": [
+            {
+              "Tuning": [
+                41,
+                36,
+                31,
+                26
+              ],
+              "Capo": 0
+            }
+          ]
+        },
+        {
+          "Program": 10,
+          "Volume": 14,
+          "Balance": 8,
+          "PrimaryChannel": 12,
+          "SecondaryChannel": 7,
+          "Staves": [
+            {
+              "Tuning": [
+                62,
+                57,
+                53,
+                48,
+                43,
+                38
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "effect_is_signed_short": true,
+      "fret_offset": 1681,
+      "path": "testdata/gp5/serenade.gp5",
+      "rse_offset": 1722,
+      "sha256": "ce8090c55e47c68c06f68f9795dbea787aead29e3d0773df7255ef7752b635ef"
+    },
+    {
+      "byte_count": 1874,
+      "consumer": [
+        {
+          "Program": 25,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 0,
+          "SecondaryChannel": 1,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        },
+        {
+          "Program": 25,
+          "Volume": 13,
+          "Balance": 8,
+          "PrimaryChannel": 4,
+          "SecondaryChannel": 3,
+          "Staves": [
+            {
+              "Tuning": [
+                64,
+                59,
+                55,
+                50,
+                45,
+                40
+              ],
+              "Capo": 0
+            }
+          ]
+        }
+      ],
+      "effect_is_signed_short": false,
+      "fret_offset": 1345,
+      "path": "testdata/gp5/RSE.gp5",
+      "rse_offset": 1386,
+      "sha256": "8e9e712724de18f2f0d8235cb1aaade49c21eccc48a6cefa5858f45042738d31"
+    }
+  ],
+  "status": "implemented-awaiting-independent-review",
+  "tests": [
+    "TestLegacyFretCountPublicBounds",
+    "TestRSEPublicSignedBounds",
+    "TestRSEInstrumentReaderBounds",
+    "TestRSEInstrumentReaderTruncation",
+    "TestTrackFretCountReaderTruncation",
+    "TestConformanceLegacyInstrumentBounds",
+    "TestConformanceRSEBounds",
+    "TestAlphaTabLegacyOmissionBoundaries"
+  ]
+}

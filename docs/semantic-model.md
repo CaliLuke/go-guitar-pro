@@ -130,6 +130,23 @@ fret counts, connection ports, twelve-string flags, and banjo flags as
 omissions. It also reports a custom line count on a pitched staff. Percussion
 staff line counts remain supported.
 
+GP3 through GP5 fret counts must fit the public `uint8` range, 0 through 255.
+The readers reject unrepresentable source integers before conversion. This error
+identifies the public model limit; it does not define Guitar Pro syntax.
+Pinned AlphaTab skips the binary field and writes GPIF fret count 24.
+No retained target value or standalone twelve-string/banjo flag supports a broader claim.
+The three existing omission codes remain independent, including strict-policy allowances.
+
+GP5 RSE instrument integers must fit the public signed `int16` range, -32768 through 32767.
+The four GP5.1 integer fields and the first three GP5.0 fields receive checked conversion.
+GP5.0 keeps its signed-short effect number and one padding byte.
+Negative identifiers, including -1, remain opaque signed values.
+GP8 retains the existing master-RSE, track-RSE, and UseRse omission reports.
+Each nonzero leaf independently triggers its parent report; a present zero-valued EQ knob still has authored slice shape.
+Zero scalars and absent or empty knob slices do not create an RSE loss.
+Pinned AlphaTab skips binary RSE banks and projects GPIF channel strips to ordinary balance and volume.
+These limits do not change MIDI, TrackSound, or volume-automation contracts.
+
 `Staff.DisplayTranspositionPitch` is the staff-authoritative notation offset in
 semitones. For legacy GPIF `PartSounding`, `TranspositionPitch` initializes the
 display offset while `NominalKey` independently derives each staff's effective

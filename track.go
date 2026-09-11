@@ -2,6 +2,8 @@
 
 package goguitarpro
 
+import "fmt"
+
 // TrackSettings contains settings of the track.
 type TrackSettings struct {
 	Tablature       bool
@@ -281,11 +283,11 @@ func (s *Song) readTrack(c *cursor, number int) error {
 		return channelErr
 	}
 
-	fretCount, err := c.readInt()
+	fretCount, err := readTrackFretCount(c, number+1)
 	if err != nil {
 		return err
 	}
-	track.FretCount = uint8(fretCount)
+	track.FretCount = fretCount
 
 	offset, err := c.readInt()
 	if err != nil {
@@ -369,11 +371,11 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 		return channelErr
 	}
 
-	fretCount, err := c.readInt()
+	fretCount, err := readTrackFretCount(c, number+1)
 	if err != nil {
 		return err
 	}
-	track.FretCount = uint8(fretCount)
+	track.FretCount = fretCount
 
 	offset, err := c.readInt()
 	if err != nil {
@@ -423,4 +425,15 @@ func (s *Song) readTrackV5(c *cursor, number int) error {
 
 	s.Tracks = append(s.Tracks, track)
 	return nil
+}
+
+func readTrackFretCount(c *cursor, number int) (uint8, error) {
+	value, err := c.readInt()
+	if err != nil {
+		return 0, fmt.Errorf("reading track %d fret count: %w", number, err)
+	}
+	if value < 0 || value > 255 {
+		return 0, fmt.Errorf("reading track %d fret count: value %d is outside public uint8 range 0..255", number, value)
+	}
+	return uint8(value), nil
 }

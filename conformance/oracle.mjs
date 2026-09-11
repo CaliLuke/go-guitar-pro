@@ -864,6 +864,17 @@ export function loadLegatoFacts(fixture) {
 }
 
 // Preserve raw playback fields; the broad semantic projection omits these limits.
+export function loadLegacyInstrumentFacts(fixture) {
+  return loadScore(fixture).tracks.map(track => ({
+    program: track.playbackInfo.program,
+    volume: track.playbackInfo.volume,
+    balance: track.playbackInfo.balance,
+    primaryChannel: track.playbackInfo.primaryChannel,
+    secondaryChannel: track.playbackInfo.secondaryChannel,
+    staves: track.staves.map(staff => ({tuning: Array.from(staff.tuning), capo: staff.capo}))
+  }));
+}
+
 export function loadPlaybackRoutingFacts(fixture) {
   return loadScore(fixture).tracks.map(track => ({
     track: track.index,
@@ -1309,6 +1320,10 @@ function main() {
   }
   if (args[0] === '--legato' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadLegatoFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--legacy-instrument' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadLegacyInstrumentFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--playback-routing' && args.length === 2) {

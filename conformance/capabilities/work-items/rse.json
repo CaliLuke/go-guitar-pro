@@ -5,8 +5,8 @@
   "title": "Reject wrapped RSE identifiers and verify each legacy omission",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp5",
     "gp8"
@@ -124,6 +124,36 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/legacy-numeric-bounds.json",
+      "detail": "Hash-bound sources and exact public errors/decoded values; each loss leaf has its own report, strict refusal and exact allowance success. Pinned final consumer confirms unrelated playback and tuning remain unchanged."
+    },
+    {
+      "kind": "test",
+      "reference": "TestRSEPublicSignedBounds",
+      "detail": "Focused implementation regression; independent final-commit review remains pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestRSEInstrumentReaderBounds",
+      "detail": "Focused implementation regression; independent final-commit review remains pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestRSEInstrumentReaderTruncation",
+      "detail": "Focused implementation regression; independent final-commit review remains pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceRSEBounds",
+      "detail": "Focused implementation regression; independent final-commit review remains pending."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabLegacyOmissionBoundaries",
+      "detail": "Focused implementation regression; independent final-commit review remains pending."
     }
   ],
   "shared_files": [
@@ -131,8 +161,15 @@
     "gp8_builder.go",
     "rse.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open.",
+  "verification": [
+    "Public Parse and ParseWithOptions endpoint and range regressions pass.",
+    "Focused reader truncation/alignment and isolated omission tests pass.",
+    "Pinned AlphaTab final-consumer regression passes.",
+    "Semantic matrix inventory passes; existing public/wire/dispatch/enum totals unchanged.",
+    "GP3 through GP5 compatibility fixtures, go vet ./..., golangci-lint run, conformance verifier and capability database consistency checks pass.",
+    "Full conformance/check.sh, capability probe and prek are assigned to root integration."
+  ],
   "issue": {
     "number": 101,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/101",

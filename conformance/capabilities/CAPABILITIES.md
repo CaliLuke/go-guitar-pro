@@ -473,7 +473,7 @@ Instrument. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Legacy instrument flags and representable fret counts parse. Unchecked GP3-GP5 int32-to-uint8 conversion can wrap source fret count 280 to the unreported default 24. #97 requires a contextual representability error before conversion and independent flag-loss policy coverage. GP8 retains its fret-count, twelve-string and banjo omissions.
+GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -959,7 +959,7 @@ Playback data. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **partial**. Model: **partial**. GP8 export: **missing**.
 
-Legacy RSE records and some GPIF engine/sound state parse. Four GP5.1 int32-to-int16 conversions can turn 65536 into zero without error; #101 requires checked decoding and isolated descendant loss-policy evidence. GP8 omits legacy master/track RSE records; proprietary synthesis is outside this implementation.
+GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
