@@ -3,8 +3,9 @@
 package integration_test
 
 import (
-	gp "github.com/CaliLuke/go-guitar-pro"
 	"testing"
+
+	gp "github.com/CaliLuke/go-guitar-pro"
 )
 
 func notationPublicSong(t *testing.T) *gp.Song {
