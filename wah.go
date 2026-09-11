@@ -107,15 +107,3 @@ func (builder *gp8Builder) reportWah(beat *Beat, location ScoreLocation) {
 		builder.addReport("gp8.omit.wah-display", "wah", ExportDispositionOmitted, location, fmt.Sprintf("GPIF has no field for the legacy wah display flag %t", raw.Wah.Display))
 	}
 }
-
-func hasUnrepresentedMixTable(change *MixTableChange) bool {
-	if change == nil {
-		return false
-	}
-	if change.Wah == nil {
-		return true
-	}
-	other := *change
-	other.Wah = nil
-	return other != (MixTableChange{})
-}

@@ -1431,6 +1431,10 @@ function main() {
     process.stdout.write(`${JSON.stringify(loadAssignedLyricFacts(args[1]), null, 2)}\n`);
     return;
   }
+  if (args[0] === '--mix-table' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadMixTableFacts(args[1]), null, 2)}\n`);
+    return;
+  }
   if (args[0] === '--beat-techniques' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBeatTechniqueFacts(args[1]), null, 2)}\n`);
     return;
@@ -1567,4 +1571,16 @@ export function loadScoreStyleFacts(fixture) {
 export function loadMultiRestFacts(fixture) {
  const score=loadScore(fixture);
  return {global:score.stylesheet.multiTrackMultiBarRest,tracks:score.stylesheet.perTrackMultiBarRest===null?null:Array.from(score.stylesheet.perTrackMultiBarRest),measureCounts:score.tracks.map(t=>t.staves.map(s=>s.bars.length)),notation:loadStaffNotationFacts(fixture)};
+}
+
+export function loadMixTableFacts(fixture) {
+  const score = loadScore(fixture);
+  const programs = [];
+  const handler = new Proxy({}, { get: (_, name) => name === 'addProgramChange'
+    ? (track,tick,channel,program) => programs.push({track,tick,channel,program}) : () => {} });
+  new alphaTab.midi.MidiFileGenerator(score, new alphaTab.Settings(), handler).generate();
+  return { programs,
+    tempo: score.masterBars.flatMap(bar => bar.tempoAutomations.map(a => ({bar:bar.index,position:a.ratioPosition,value:a.value,linear:a.isLinear,visible:a.isVisible,text:a.text}))),
+    beats: score.tracks.flatMap(track => track.staves.flatMap(staff => staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.flatMap(beat => beat.automations.map(a => ({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,position:a.ratioPosition,type:alphaTab.model.AutomationType[a.type],value:a.value,linear:a.isLinear})))))))
+  };
 }

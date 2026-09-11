@@ -98,7 +98,7 @@ func runConformancePlaybackRouting(run *conformanceRun) {
 		})
 	}
 
-	wantCodes := []string{"gp8.omit.master-rse", "gp8.omit.track-rse", "gp8.omit.track-use-rse", "gp8.omit.midi-effects"}
+	wantCodes := []string{"gp8.normalize.sound-automation-consumer-position", "gp8.omit.master-rse", "gp8.omit.track-rse", "gp8.omit.track-use-rse", "gp8.omit.midi-effects"}
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	for _, code := range wantCodes {
 		if !slices.ContainsFunc(report.Entries, func(entry ExportReportEntry) bool { return entry.Code == code }) {

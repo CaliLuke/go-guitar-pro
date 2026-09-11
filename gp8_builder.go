@@ -838,9 +838,7 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 		builder.addReport("gp8.normalize.note-velocity", "note-and-beat-semantics", ExportDispositionNormalized, location, "GPIF stores one quantized dynamic for all notes in a beat")
 	}
 	builder.reportWah(beat, location)
-	if hasUnrepresentedMixTable(beat.Effect.MixTableChange) {
-		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit the remaining legacy mix-table fields; wah pedal events have a separate conversion contract")
-	}
+	builder.reportMixTable(beat.Effect.MixTableChange, location)
 	if chord := beat.Effect.Chord; chord != nil {
 		builder.reportChordConsumerLimit(chord, location)
 		if err := validateGP8ChordDiagram(chord); err != nil {

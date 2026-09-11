@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 78 | 17 | 2 | 1 |
 | model | 77 | 18 | 2 | 1 |
-| export | 55 | 36 | 6 | 1 |
+| export | 55 | 37 | 5 | 1 |
 
 All three stages have a supported rating in 55 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -887,7 +887,7 @@ Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table.
+Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table. Positive-position GPIF sound events retain their wire position but the pinned consumer attaches them to the first beat of the bar; each event reports gp8.normalize.sound-automation-consumer-position.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -945,9 +945,9 @@ Bounded work: [Export authored channel-strip volume automation](https://github.c
 
 Playback data. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Legacy instrument, tempo and controller changes are modeled. Beat-local mix tables are omitted by GP8 export.
+Raw legacy fields remain modeled. Import promotes tempo, program, volume and balance into authoritative collections; programmatic export projects missing events without mutating input. GPIF and Go retain event timing, values, order and ownership. Pinned AlphaTab preserves tempo timing, ignores gain/pan events and moves positive-position program events to the first beat; exact per-event reports expose these limits. Other controllers, transitions and RSE fields have individual omissions.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

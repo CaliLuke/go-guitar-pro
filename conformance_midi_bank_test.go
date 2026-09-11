@@ -46,7 +46,7 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	if err != nil || !hasExportCode(report, "gp8.normalize.sound-authority") {
 		t.Fatalf("explicit sound authority export = %v, %#v", err, report.Entries)
 	}
-	run.ClaimReport(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Report("M05-MIDI-BANK", reportCodes(report), []string{"gp8.normalize.source-version", "gp8.omit.track-display-settings", "gp8.normalize.sound-authority"})
+	run.ClaimReport(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Report("M05-MIDI-BANK", reportCodes(report), []string{"gp8.normalize.sound-automation-consumer-position", "gp8.normalize.sound-automation-consumer-position", "gp8.normalize.source-version", "gp8.omit.track-display-settings", "gp8.normalize.sound-authority"})
 	wire := conformanceSingleWireTrack(t, data)
 	run.Wire("gpifSound.LSB", conformanceMIDIBankLSBs(wire), []int{127, 77, 0})
 	run.ClaimSerialization(claimSite("midi-bank", "export", "M05-MIDI-BANK", "banks 0, 77, 256, and 16383")).Wire("gpifSound.MSB", conformanceMIDIBankMSBs(wire), []int{127, 0, 2})

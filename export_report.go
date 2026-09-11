@@ -91,6 +91,20 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 	if len(report.Entries) != 0 {
 		return report, nil
 	}
+	originalSong := song
+	var mixConflicts []legacyMixConflict
+	song, mixConflicts = projectMixTableAutomations(song)
+	if song != originalSong {
+		for _, diagnostic := range authoredScoreDiagnostics(song) {
+			add("gp8.reject."+diagnostic.Code, "mix-table", ExportDispositionRejected, diagnostic.Location, diagnostic.Reason)
+		}
+	}
+	if len(report.Entries) != 0 {
+		return report, nil
+	}
+	for _, conflict := range mixConflicts {
+		add("gp8.normalize.mix-table-"+conflict.controller+"-authority", "mix-table", ExportDispositionNormalized, conflict.location, fmt.Sprintf("the explicit %s automation collection (target track %d; -1 means score-wide) takes precedence over the conflicting legacy event at this source beat", conflict.controller, conflict.target))
+	}
 	if err := validateGP8Song(song); err != nil {
 		add("gp8.reject.score", "score-core", ExportDispositionRejected, ScoreLocation{}, err.Error())
 		return report, nil
@@ -149,7 +163,10 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		add("gp8.omit.volume-automation-consumer", "volume-automation", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, fmt.Sprintf("pinned AlphaTab ignores channel-strip volume automation[%d] at position %g with value %g and linear=%t; GPIF retains the event", index, automation.Position, automation.Value, automation.Linear))
 	}
 	for trackIndex := range song.Tracks {
-		for _, automation := range song.Tracks[trackIndex].SoundAutomations {
+		for index, automation := range song.Tracks[trackIndex].SoundAutomations {
+			if automation.Position > 0 {
+				add("gp8.normalize.sound-automation-consumer-position", "sound-automation", ExportDispositionNormalized, ScoreLocation{Track: trackIndex, Measure: automation.Bar}, fmt.Sprintf("pinned AlphaTab applies sound automation[%d] at position %g on the first beat of its bar; GPIF and Go retain the authored position", index, automation.Position))
+			}
 			if automation.Hidden {
 				add("gp8.omit.sound-automation-visibility", "automation-detail", ExportDispositionOmitted, ScoreLocation{Track: trackIndex, Measure: automation.Bar}, "the pinned GP8 consumer does not retain hidden visibility on an instrument-change automation")
 			}

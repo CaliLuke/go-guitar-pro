@@ -5,8 +5,8 @@
   "title": "Project supported legacy mix-table events into GP8 automation",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -61,14 +61,24 @@
       "kind": "test",
       "reference": "TestConformanceBinaryMixTable",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabMixTableProjection",
+      "detail": "Raw consumer/MIDI proves program73 tick960 -> tick0 despite exact GPIF/Go position0.25; fixture testdata/gp3/mix-table-events.gp3 derives from original other-effects.gp3 by inserting a complete GP3 mix-table record."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "mix_table.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented authored-value projection of legacy tempo/program/volume/balance events with explicit collection edit/clear authority, duplicate avoidance, order and ownership, plus individual controller/transition/RSE losses. A complete GP3 simultaneous event at beat1 position0.25 has exact GPIF/Go values. Residual acceptance blocker: pinned GPIF moves program73 from source MIDI tick960 to target tick0; gain and pan are ignored by that consumer under established per-event policies. The full consumer-timing criterion is not satisfied at the pin. Keep this ticket open/in_progress pending fresh exact-commit review and parent integrated full gates/probe; do not claim full preservation.",
+  "verification": [
+    "Public complete-GP3 regression fails on pre-change production through a Go overlay and passes with the implementation.",
+    "Focused public and matrix tests cover collision policy subsets, clearing, equal-position order, all-tracks expansion, fractional timing, bank retention, bounds and individual losses.",
+    "Independent pinned raw source/output beat facts and generated MIDI ticks prove exact retained and normalized distinctions.",
+    "Full conformance/check.sh, capability probe and prek belong to parent integration; independent exact-commit review pending."
+  ],
   "issue": {
     "number": 85,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/85",

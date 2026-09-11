@@ -146,9 +146,15 @@ func TestSoundSelectionIdentityAndEdits(t *testing.T) {
 func assertSoundSelectionRoundTrip(t *testing.T, song *guitarpro.Song) {
 	t.Helper()
 	before, _ := json.Marshal(song)
-	data, report, err := guitarpro.ExportWithReport(song, guitarpro.ExportFormatGP8, guitarpro.ExportOptions{LossPolicy: guitarpro.ExportLossPolicy{RequirePreservation: true}})
-	if err != nil || len(report.Entries) != 0 {
+	const positionLoss = "gp8.normalize.sound-automation-consumer-position"
+	data, report, err := guitarpro.ExportWithReport(song, guitarpro.ExportFormatGP8, guitarpro.ExportOptions{LossPolicy: guitarpro.ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{positionLoss}}})
+	if err != nil || len(report.Entries) != 3 {
 		t.Fatalf("sound export = %#v, %v", report, err)
+	}
+	for _, entry := range report.Entries {
+		if entry.Code != positionLoss {
+			t.Fatalf("unexpected sound loss: %#v", entry)
+		}
 	}
 	parsed, err := guitarpro.Parse(data)
 	if err != nil {

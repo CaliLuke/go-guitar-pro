@@ -4,8 +4,10 @@ package goguitarpro
 
 import "fmt"
 
-// MixTableItem describes a mix parameter change.
-// Value uses int32 because Guitar Pro stores tempo values as int32.
+// MixTableItem describes a legacy mix parameter change. Tempo values are positive
+// BPM, program values are 0..127, and volume/balance values are 0..16. Value uses
+// int32 because Guitar Pro stores tempo values as int32. Duration is a legacy
+// transition length in beats; GP8 reports its loss separately from the event.
 type MixTableItem struct {
 	Value     int32
 	Duration  uint8
@@ -18,7 +20,12 @@ type WahEffect struct {
 	Display bool
 }
 
-// MixTableChange describes a change in mix parameters.
+// MixTableChange describes a legacy change in mix parameters. Binary import
+// promotes tempo, program, volume and balance into the existing automation
+// collections; those collections own subsequent edits and clearing. Raw records
+// remain available for metadata and unsupported controllers. Programmatic raw
+// changes are projected during export without mutating the score. Explicit
+// collection events at the same position take precedence, with conflicts reported.
 type MixTableChange struct {
 	Tremolo    *MixTableItem
 	Volume     *MixTableItem

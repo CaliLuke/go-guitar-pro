@@ -2034,7 +2034,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table.",
+      "finding": "Ordered sound definitions, MIDI banks, and references are modeled. GP8 preserves finite opening-bar preroll in [-0.125, 0), regular positions in [0, 1], and equal-position event order without clamping. Earlier preroll and negative positions in later bars are rejected. This is bounded support, not a universal GPIF range. Hidden visibility has an explicit consumer-loss report; legacy beat-local mix changes remain in #85. Same-program definitions retain distinct path/name/role references through public edits and remapped definition order. The first definition owns the base program; explicit opening events own their ordered selections without rewriting that base. Pinned consumer assertions cover only retained instrument-event facts, not the unavailable named sound table. Positive-position GPIF sound events retain their wire position but the pinned consumer attaches them to the first beat of the bar; each event reports gp8.normalize.sound-automation-consumer-position.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "AutomationType.Instrument"
@@ -2099,6 +2099,11 @@
           "kind": "test",
           "reference": "TestSoundOpeningSelectionKeepsBaseProgram",
           "detail": "Public three-way channel/base/opening conflict asserts strict policy, exact Go result and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabMixTableProjection",
+          "detail": "Raw beat attachment and actual MIDI generation show the positive-position sound timing limitation independently of sound identity."
         }
       ]
     },
@@ -2160,7 +2165,7 @@
         {
           "kind": "upstream-source",
           "reference": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1237",
-          "detail": "Pinned GP5 mix-table volume becomes a beat-local automation, not Song.VolumeAutomations."
+          "detail": "Pinned GP5 mix-table volume becomes a beat-local consumer automation. Go promotes the legacy event to Song.VolumeAutomations; GPIF channel-strip playback remains limited."
         },
         {
           "kind": "probe",
@@ -2280,9 +2285,9 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy instrument, tempo and controller changes are modeled. Beat-local mix tables are omitted by GP8 export.",
+      "finding": "Raw legacy fields remain modeled. Import promotes tempo, program, volume and balance into authoritative collections; programmatic export projects missing events without mutating input. GPIF and Go retain event timing, values, order and ownership. Pinned AlphaTab preserves tempo timing, ignores gain/pan events and moves positive-position program events to the first beat; exact per-event reports expose these limits. Other controllers, transitions and RSE fields have individual omissions.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -2305,6 +2310,11 @@
           "kind": "test",
           "reference": "TestConformanceBinaryMixTable",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabMixTableProjection",
+          "detail": "Complete independently consumed GP3 simultaneous event at position0.25; exact source/output beat automation objects and generated MIDI ticks demonstrate program73 moving from tick960 to0. GPIF/Go and per-controller reports are checked separately."
         }
       ]
     },

@@ -13,7 +13,9 @@ type Song struct {
 	SystemLayout *SystemLayout
 
 	// Style owns score-wide stylesheet settings independently from per-bar notation.
-	Style          *ScoreStyle
+	Style                       *ScoreStyle
+	importedMixTableAutomations bool
+
 	Clipboard      *Clipboard
 	currentTrack   *int
 	Name           string
@@ -40,9 +42,11 @@ type Song struct {
 	BackingTrack *BackingTrack
 	// SyncPoints contains each score-to-backing-track anchor in a GPIF file.
 	SyncPoints []SyncPoint
-	// TempoAutomations contains each tempo change in a GPIF file.
+	// TempoAutomations owns tempo events, including promoted GP3-5 mix-table
+	// changes. Edits and clearing after import take precedence over raw records.
 	TempoAutomations []TempoAutomation
-	// VolumeAutomations contains each track gain point in a GPIF file.
+	// VolumeAutomations owns gain events, including promoted GP3-5 mix-table
+	// values divided by 16. Edits and clearing control export after import.
 	VolumeAutomations []VolumeAutomation
 	// PanAutomations owns track pan events independently from initial channel balance.
 	PanAutomations []PanAutomation

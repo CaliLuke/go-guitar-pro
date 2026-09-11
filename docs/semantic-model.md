@@ -251,7 +251,39 @@ Cross-track interleaving has no playback meaning and is not retained.
 Pinned AlphaTab ignores these channel-strip events. Export reports each event
 with `gp8.omit.volume-automation-consumer`; strict preservation requires an
 explicit allowance. This contract follows the accepted revision of issue #59.
-Legacy beat-local mix-table volume changes remain a separate capability.
+Legacy beat-local changes use the mix-table projection contract below.
+
+GP3–5 import promotes beat-local mix-table tempo, program, volume, and balance
+changes into `TempoAutomations`, `Track.SoundAutomations`, `VolumeAutomations`,
+and `PanAutomations`. These collections own later edits and clearing. Retained
+raw records do not replay cleared events. Program changes retain the selected
+MIDI bank and use explicit generated sound definitions. Volume and balance
+values use the legacy 0..16 scale and become normalized values divided by 16.
+All-tracks volume, balance, and program changes expand to each target track.
+Tempo changes are score-wide.
+
+For programmatic raw changes, GP8 projects events in an isolated copy. Positions
+come from authored durations, including tuplets, instead of cached beat starts.
+Explicit collection events at the same position take precedence. Equal values
+are not duplicated; conflicts report `gp8.normalize.mix-table-<controller>-authority`.
+Explicit tempo and sound slice order remains intact; raw events follow score
+traversal order. Gain and pan events stay chronological within each track, with
+stable order at equal positions. The exporter never changes the input score.
+
+GPIF retains event positions, values, and interpolation flags. The pinned
+consumer retains tempo timing, ignores channel-strip gain and pan events, and
+attaches positive-position sound events to the first beat of their bar.
+`gp8.normalize.sound-automation-consumer-position` reports that timing change
+for each affected sound event. The complete GP3 regression requests program 73
+at tick 960; pinned GP8 playback applies it at tick 0. This remains a consumer
+limitation, separate from the exact GPIF and Go position.
+
+Chorus, reverb, phaser, and tremolo each receive a named mix-table omission with
+the exact value, duration, and all-tracks flag. Nonzero transition durations for
+supported controllers receive separate per-controller transition omissions.
+RSE fields and engine switches also have separate reports. GP8 does not infer
+proprietary RSE processing or synthesize audio. Empty raw records and orphaned
+tempo labels have explicit omissions. These limits keep mix-table export partial.
 
 `Song.PanAutomations` owns authored pan events independently from static channel
 balance. `Value` uses 0 for left, 0.5 for center, and 1 for right. GPIF
@@ -267,7 +299,7 @@ export, without changing initial `MidiChannel.Balance`.
 Legacy import expands an all-tracks balance event to each track. Its raw
 mix-table record remains available with transition duration and ownership flags.
 That record does not override later edits to `PanAutomations`. The remaining
-mix-table export omission still covers its unrepresented metadata and controllers.
+per-controller mix-table reports cover unrepresented metadata and transitions.
 
 GP8 retains pan events in GPIF and Go reimport. Pinned AlphaTab ignores these
 channel-strip events. Each event receives `gp8.omit.pan-automation-consumer`;

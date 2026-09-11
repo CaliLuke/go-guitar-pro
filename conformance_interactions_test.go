@@ -306,12 +306,12 @@ func runConformanceLyricsPlaybackAutomation(run *conformanceRun) {
 	run.Field("Track.Solo", track.Solo, true)
 	run.Field("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 1, Position: 0.75, Value: 0.625, Linear: true}})
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer"} {
+	for _, code := range []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer", "gp8.normalize.sound-automation-consumer-position"} {
 		if !hasExportCode(report, code) {
 			t.Fatalf("playback combination report = %#v, want %s", report.Entries, code)
 		}
 	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer"}}})
+	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer", "gp8.normalize.sound-automation-consumer-position"}}})
 	if err != nil {
 		t.Fatal(err)
 	}

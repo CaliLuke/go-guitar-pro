@@ -407,6 +407,7 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.duration", Kind: ScoreDiagnosticTiming, Location: location, Reason: addErr.Error()})
 				}
 			}
+			validateMixTable(beat.Effect.MixTableChange, location, diagnostics)
 			validateBendEffect(beat.Effect.TremoloBar, "score.beat.whammy", location, diagnostics)
 			if beat.Effect.VibratoStrength > BeatVibratoWide {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.vibrato", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat vibrato %d is not defined", beat.Effect.VibratoStrength)})

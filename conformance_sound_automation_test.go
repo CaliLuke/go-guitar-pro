@@ -165,8 +165,8 @@ func runSoundSelectionIdentity(run *conformanceRun, oracle bool) {
 				song.Tracks[0].SoundAutomations[i].Sound = 1 - song.Tracks[0].SoundAutomations[i].Sound
 			}
 		}
-		data, report := assertConsumerLossPolicy(t, song, []string{})
-		run.Report("M17-SOUND-IDENTITY", reportCodes(report), []string{})
+		data, report := assertConsumerLossPolicy(t, song, []string{"gp8.normalize.sound-automation-consumer-position", "gp8.normalize.sound-automation-consumer-position", "gp8.normalize.sound-automation-consumer-position"})
+		run.Report("M17-SOUND-IDENTITY", reportCodes(report), []string{"gp8.normalize.sound-automation-consumer-position", "gp8.normalize.sound-automation-consumer-position", "gp8.normalize.sound-automation-consumer-position"})
 		wire := conformanceSingleWireTrack(t, data)
 		run.Wire("gpifTrack.Sounds", len(wire.Sounds.Sounds), 2)
 		for i, sound := range song.Tracks[0].Sounds {

@@ -53,8 +53,8 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	wah := &WahEffect{Value: -23, Display: true}
 	change := &MixTableChange{
 		Tremolo:    &MixTableItem{Value: 11, Duration: 1, AllTracks: true},
-		Volume:     &MixTableItem{Value: 22, Duration: 2, AllTracks: false},
-		Balance:    &MixTableItem{Value: 33, Duration: 3, AllTracks: true},
+		Volume:     &MixTableItem{Value: 12, Duration: 2, AllTracks: false},
+		Balance:    &MixTableItem{Value: 5, Duration: 3, AllTracks: true},
 		Chorus:     &MixTableItem{Value: 44, Duration: 4, AllTracks: false},
 		Reverb:     &MixTableItem{Value: 55, Duration: 5, AllTracks: true},
 		Instrument: &MixTableItem{Value: 66, Duration: 0, AllTracks: false},
@@ -96,7 +96,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	assertAutomationMixTableFields(run, track.Measures[0].Voices[0].Beats[0].Effect.MixTableChange, change)
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.volume-automation-consumer", "gp8.omit.beat-mix-table-change", "gp8.omit.sound-automation-visibility"} {
+	for _, code := range []string{"gp8.omit.volume-automation-consumer", "gp8.omit.mix-table-chorus", "gp8.omit.sound-automation-visibility"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}

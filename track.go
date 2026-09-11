@@ -194,7 +194,10 @@ type TrackSound struct {
 	Bank int32
 }
 
-// SoundAutomation selects a track sound at a score position.
+// SoundAutomation selects a track sound at a score position. GP3-5 mix-table
+// program changes are promoted into this collection on import. Direct edits and
+// clearing override those retained raw records. GP8 reports the pinned consumer's
+// first-beat relocation of positive-position sound events.
 type SoundAutomation struct {
 	// Bar is a zero-based measure-header index.
 	Bar int

@@ -85,8 +85,21 @@ func TestGP5HiddenOpeningTempo(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !song.HideTempo || song.Version.Number != [3]byte{5, 1, 0} || len(song.TempoAutomations) != 0 {
+	if !song.HideTempo || song.Version.Number != [3]byte{5, 1, 0} {
 		t.Fatal("fixture must retain its GP5.1 hidden opening tempo")
+	}
+	wantChanges := []guitarpro.TempoAutomation{
+		{Bar: 88, Position: 0.625, Tempo: 85, Linear: true, Hidden: true},
+		{Bar: 89, Tempo: 90, Linear: true, Hidden: true},
+		{Bar: 92, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 93, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 93, Position: 0.875, Tempo: 60, Linear: true, Hidden: true},
+		{Bar: 94, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 85, Tempo: 90, Linear: true},
+		{Bar: 93, Position: 0.75, Tempo: 70, Linear: true},
+	}
+	if !reflect.DeepEqual(song.TempoAutomations, wantChanges) {
+		t.Fatalf("legacy mix-table tempos = %#v", song.TempoAutomations)
 	}
 	// Replace the corpus fixture's non-UTF-8 label with valid authored text.
 	song.TempoName = "Legacy hidden"
@@ -98,7 +111,7 @@ func TestGP5HiddenOpeningTempo(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := []guitarpro.TempoAutomation{{Tempo: float64(song.InitialTempo.Value), Text: song.TempoName, Hidden: true}}
+	want := append([]guitarpro.TempoAutomation{{Tempo: float64(song.InitialTempo.Value), Text: song.TempoName, Hidden: true}}, wantChanges...)
 	if !reflect.DeepEqual(got.TempoAutomations, want) || !got.HideTempo {
 		t.Fatalf("legacy visibility export = %#v", got.TempoAutomations)
 	}
