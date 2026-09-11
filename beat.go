@@ -160,6 +160,9 @@ type Beat struct {
 	// that an empty Lyrics element was authored. The slice is independent from
 	// Beat.Text, Track.Lyrics, and Song.Lyrics, and direct edits are authoritative.
 	Lyrics []string
+	// Slashed preserves the authored beat mark independently from staff slash notation.
+	// Direct edits control GP8 output without changing notes or beat status.
+	Slashed bool
 	// DeadSlapped preserves an authored beat-level dead-slap mark. It is
 	// independent from beat status, note kind, and tap/slap/pop effects. Direct
 	// edits are authoritative for GP8 export; false means that no mark is written.

@@ -219,5 +219,14 @@ func parseGPXWithContext(data []byte, context *parseContext) (*Song, error) {
 	if !ok {
 		return nil, fmt.Errorf("no score.gpif found in GPX container")
 	}
-	return parseGPIFWithContext(gpifData, context)
+	song, err := parseGPIFWithContext(gpifData, context)
+	if err != nil {
+		return nil, err
+	}
+	if configuration, exists := files["PartConfiguration"]; exists {
+		if applyErr := applyPartConfiguration(song, configuration); applyErr != nil {
+			return nil, applyErr
+		}
+	}
+	return song, nil
 }

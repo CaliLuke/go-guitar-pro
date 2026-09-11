@@ -61,7 +61,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Export assigned legacy score lyrics as GPIF track lyrics](work-items/lyrics.json) | implementation | 2 | in_progress | — | [#98](https://github.com/CaliLuke/go-guitar-pro/issues/98) |
 | [Preserve metadata text in AlphaTab and verify legacy metadata losses](work-items/metadata.json) | implementation | 2 | in_progress | — | [#99](https://github.com/CaliLuke/go-guitar-pro/issues/99) |
 | [Project supported legacy mix-table events into GP8 automation](work-items/mix-table.json) | implementation | 2 | todo | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59), [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52), [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#85](https://github.com/CaliLuke/go-guitar-pro/issues/85) |
-| [Read and preserve per-staff part notation settings](work-items/notation-visibility.json) | implementation | 2 | todo | — | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) |
+| [Read and preserve per-staff part notation settings](work-items/notation-visibility.json) | implementation | 2 | in_progress | — | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) |
 | [Preserve turns and mordents through GPIF and GP8](work-items/ornaments.json) | implementation | 2 | in_progress | — | [#87](https://github.com/CaliLuke/go-guitar-pro/issues/87) |
 | [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | done | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
 | [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | in_progress | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
@@ -69,7 +69,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | done | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
 | [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | done | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
 | [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | done | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
-| [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |
+| [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | in_progress | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |
 | [Verify duration-percentage export losses against the pinned consumer](work-items/sound-duration.json) | implementation | 2 | done | — | [#102](https://github.com/CaliLuke/go-guitar-pro/issues/102) |
 | [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json) | implementation | 2 | in_progress | — | [#93](https://github.com/CaliLuke/go-guitar-pro/issues/93) |
 | [Verify fixed GP8 trill speed and selective normalization policy](work-items/trill.json) | implementation | 2 | done | — | [#103](https://github.com/CaliLuke/go-guitar-pro/issues/103) |
@@ -81,7 +81,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve authored system layouts and bar display scales](work-items/layout.json) | implementation | 3 | todo | — | [#112](https://github.com/CaliLuke/go-guitar-pro/issues/112) |
 | [Preserve score and track multirest preferences](work-items/multi-rest.json) | implementation | 3 | todo | — | [#105](https://github.com/CaliLuke/go-guitar-pro/issues/105) |
 | [Correct pitched note-display scope and protect percussion ownership](work-items/note-display.json) | implementation | 3 | done | — | [#113](https://github.com/CaliLuke/go-guitar-pro/issues/113) |
-| [Preserve numbered notation per staff](work-items/numbered.json) | implementation | 3 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#106](https://github.com/CaliLuke/go-guitar-pro/issues/106) |
+| [Preserve numbered notation per staff](work-items/numbered.json) | implementation | 3 | in_progress | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#106](https://github.com/CaliLuke/go-guitar-pro/issues/106) |
 | [Preserve supported header and footer templates and visibility](work-items/page-setup.json) | implementation | 3 | blocked | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#114](https://github.com/CaliLuke/go-guitar-pro/issues/114) |
 | [Preserve explicit string-number display requests](work-items/show-string.json) | implementation | 3 | done | — | [#107](https://github.com/CaliLuke/go-guitar-pro/issues/107) |
 | [Preserve supported score bracket, track-name and display policies](work-items/stylesheet.json) | implementation | 3 | blocked | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#117](https://github.com/CaliLuke/go-guitar-pro/issues/117) |

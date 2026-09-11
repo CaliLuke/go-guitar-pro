@@ -1170,6 +1170,21 @@ export function loadGolpeFacts(fixture) {
   return facts;
 }
 
+export function loadStaffNotationFacts(fixture) {
+  return loadScore(fixture).tracks.map(track => ({
+    visible: track.isVisibleOnMultiTrack,
+    staves: track.staves.map(staff => ({
+      standard: staff.showStandardNotation, tablature: staff.showTablature,
+      slash: staff.showSlash, numbered: staff.showNumbered,
+      tuning: Array.from(staff.tuning),
+      beats: staff.bars.flatMap(bar => bar.voices.flatMap(voice => voice.beats.map(beat => ({
+        slashed: beat.slashed,
+        notes: beat.notes.map(note => ({string: note.string, fret: note.fret, MIDI: note.realValue}))
+      }))))
+    }))
+  }));
+}
+
 export function loadStringNumberFacts(fixture) {
   const facts = [];
   for (const track of loadScore(fixture).tracks) {
@@ -1406,6 +1421,10 @@ function main() {
   }
   if (args[0] === '--golpe' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadGolpeFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--staff-notation' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadStaffNotationFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--string-number-display' && args.length === 2) {

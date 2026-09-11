@@ -4859,11 +4859,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
       },
-      "finding": "GPIF Slashed and per-staff slash notation lack lossless public destinations.",
+      "finding": "Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.slashed",
@@ -4884,6 +4884,11 @@
           "kind": "probe",
           "reference": "testdata/gp7/slash.gp:slash",
           "detail": "Reproduced at tracks[0].staves[0].showSlash. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabStaffNotation",
+          "detail": "All nonzero flag combinations retain raw final staff/beat/visibility/tuning/note facts on independent tracks. Four isolated same-track mismatches have exact scoped reports and retaining-consumer residuals."
         }
       ]
     },
@@ -4897,11 +4902,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "partial",
+        "model": "partial",
+        "export": "partial"
       },
-      "finding": "The public staff settings do not represent AlphaTab numbered notation.",
+      "finding": "Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Staff.showNumbered"
@@ -4911,6 +4916,11 @@
           "kind": "source",
           "reference": "track.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabStaffNotation",
+          "detail": "All nonzero flag combinations retain raw final staff/beat/visibility/tuning/note facts on independent tracks. Four isolated same-track mismatches have exact scoped reports and retaining-consumer residuals."
         }
       ]
     },
@@ -5192,9 +5202,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "unverified"
+        "export": "partial"
       },
-      "finding": "ZIP import reads LayoutConfiguration visibility but does not read PartConfiguration staff view flags. GP8 writes notation and tablature flags, but the capability ledger does not yet bind that binary artifact to a claim-scoped export receipt.",
+      "finding": "GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Track.isVisibleOnMultiTrack",
@@ -5221,6 +5231,11 @@
           "kind": "test",
           "reference": "TestConformanceDisplayExportPolicy",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabStaffNotation",
+          "detail": "All nonzero flag combinations retain raw final staff/beat/visibility/tuning/note facts on independent tracks. Four isolated same-track mismatches have exact scoped reports and retaining-consumer residuals."
         }
       ],
       "completion": "Add a claim-scoped PartConfiguration serialization assertion and pinned-consumer evidence or a validated consumer limit."

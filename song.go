@@ -277,6 +277,10 @@ func (s *Song) readBinary(c *cursor) error {
 	for trackIndex := range s.Tracks {
 		s.Tracks[trackIndex].populateSingleStaff()
 		s.Tracks[trackIndex].markCapoFretCompatibility()
+		track := &s.Tracks[trackIndex]
+		settings := StaffNotationSettings{Standard: track.Settings.Notation, Tablature: track.Settings.Tablature && !track.PercussionTrack}
+		track.Staves[0].NotationSettings = &settings
+		track.markNotationCompatibility()
 	}
 	if err := s.finalizeTiming(); err != nil {
 		return fmt.Errorf("finalizing timing: %w", err)

@@ -1,0 +1,1443 @@
+{
+  "schema_version": 1,
+  "issues": [
+    86,
+    92,
+    106
+  ],
+  "status": "bounded-implementation-with-residual-acceptance-awaiting-independent-review",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "source": {
+    "path": "testdata/gp8/staff-notation-settings.gp",
+    "sha256": "aa8483932d0605bc043f7fbbc6859f5f48172f80615888389dbd2ddc4e15580f",
+    "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+    "layout_configuration_hex": "000000040000ff00ffff",
+    "consumer": [
+      {
+        "visible": true,
+        "staves": [
+          {
+            "standard": true,
+            "tablature": false,
+            "slash": false,
+            "numbered": false,
+            "tuning": [
+              64,
+              59,
+              55,
+              50,
+              45,
+              40
+            ],
+            "beats": [
+              {
+                "slashed": true,
+                "notes": [
+                  {
+                    "string": 4,
+                    "fret": 3,
+                    "MIDI": 58
+                  }
+                ]
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              }
+            ]
+          },
+          {
+            "standard": true,
+            "tablature": false,
+            "slash": false,
+            "numbered": false,
+            "tuning": [
+              64,
+              59,
+              55,
+              50,
+              45,
+              40
+            ],
+            "beats": [
+              {
+                "slashed": false,
+                "notes": [
+                  {
+                    "string": 4,
+                    "fret": 3,
+                    "MIDI": 58
+                  }
+                ]
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "staves": [
+          {
+            "standard": false,
+            "tablature": true,
+            "slash": true,
+            "numbered": true,
+            "tuning": [
+              64,
+              59,
+              55,
+              50,
+              45,
+              40
+            ],
+            "beats": [
+              {
+                "slashed": false,
+                "notes": [
+                  {
+                    "string": 4,
+                    "fret": 3,
+                    "MIDI": 58
+                  }
+                ]
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              },
+              {
+                "slashed": false,
+                "notes": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_provenance": "Original minimal synthetic GPIF/PartConfiguration/LayoutConfiguration archive. Two staves share track 0; track 1 has an independently hidden staff with different flags. This source does not encode different flags within one track. Each staff has one whole-note beat and three empty secondary voices.",
+  "scenarios": [
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": true
+            },
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": false
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "source-export",
+      "report": {
+        "Target": 8,
+        "Entries": null
+      },
+      "strict": {
+        "bytes": 11613,
+        "error": "",
+        "error_type": "",
+        "report": {
+          "Target": 8,
+          "Entries": null
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/source-export.gp",
+        "sha256": "2f9f939f8e26d4425739c3bff6260e7f9e1f2d776e7e3f6a1a7f631194cf185a",
+        "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            },
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": true
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "coherent-edit",
+      "report": {
+        "Target": 8,
+        "Entries": null
+      },
+      "strict": {
+        "bytes": 11613,
+        "error": "",
+        "error_type": "",
+        "report": {
+          "Target": 8,
+          "Entries": null
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/coherent-edit.gp",
+        "sha256": "3d757bd769dc24bbde76d684988b7d18741e3e2972611b744d95f19211843c7f",
+        "part_configuration_hex": "0000000300000000020f0e00000000010f00000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": true
+            },
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": false
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "residual-standard",
+      "report": {
+        "Target": 8,
+        "Entries": [
+          {
+            "Code": "gp8.omit.staff-standard-notation",
+            "Feature": "score-core",
+            "Disposition": "omitted",
+            "Location": {
+              "Track": 0,
+              "Staff": 1,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+          }
+        ]
+      },
+      "strict": {
+        "bytes": 0,
+        "error": "export loss policy rejected 1 conversion(s)",
+        "error_type": "*goguitarpro.ExportLossError",
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.staff-standard-notation",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 1,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+            }
+          ]
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/residual-standard.gp",
+        "sha256": "2f9f939f8e26d4425739c3bff6260e7f9e1f2d776e7e3f6a1a7f631194cf185a",
+        "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": true
+            },
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": true,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": false
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "residual-tablature",
+      "report": {
+        "Target": 8,
+        "Entries": [
+          {
+            "Code": "gp8.omit.staff-tablature",
+            "Feature": "score-core",
+            "Disposition": "omitted",
+            "Location": {
+              "Track": 0,
+              "Staff": 1,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+          }
+        ]
+      },
+      "strict": {
+        "bytes": 0,
+        "error": "export loss policy rejected 1 conversion(s)",
+        "error_type": "*goguitarpro.ExportLossError",
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.staff-tablature",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 1,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+            }
+          ]
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/residual-tablature.gp",
+        "sha256": "2f9f939f8e26d4425739c3bff6260e7f9e1f2d776e7e3f6a1a7f631194cf185a",
+        "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": true
+            },
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": true,
+                "Numbered": false
+              },
+              "slashed": false
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "residual-slash",
+      "report": {
+        "Target": 8,
+        "Entries": [
+          {
+            "Code": "gp8.omit.staff-slash-notation",
+            "Feature": "score-core",
+            "Disposition": "omitted",
+            "Location": {
+              "Track": 0,
+              "Staff": 1,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+          }
+        ]
+      },
+      "strict": {
+        "bytes": 0,
+        "error": "export loss policy rejected 1 conversion(s)",
+        "error_type": "*goguitarpro.ExportLossError",
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.staff-slash-notation",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 1,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+            }
+          ]
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/residual-slash.gp",
+        "sha256": "2f9f939f8e26d4425739c3bff6260e7f9e1f2d776e7e3f6a1a7f631194cf185a",
+        "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "authored_go": [
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": false
+              },
+              "slashed": true
+            },
+            {
+              "settings": {
+                "Standard": true,
+                "Tablature": false,
+                "Slash": false,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": true
+        },
+        {
+          "staves": [
+            {
+              "settings": {
+                "Standard": false,
+                "Tablature": true,
+                "Slash": true,
+                "Numbered": true
+              },
+              "slashed": false
+            }
+          ],
+          "visible": false
+        }
+      ],
+      "name": "residual-numbered",
+      "report": {
+        "Target": 8,
+        "Entries": [
+          {
+            "Code": "gp8.omit.staff-numbered-notation",
+            "Feature": "score-core",
+            "Disposition": "omitted",
+            "Location": {
+              "Track": 0,
+              "Staff": 1,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+          }
+        ]
+      },
+      "strict": {
+        "bytes": 0,
+        "error": "export loss policy rejected 1 conversion(s)",
+        "error_type": "*goguitarpro.ExportLossError",
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.staff-numbered-notation",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 1,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 applies the first staff's notation configuration to every staff in this track"
+            }
+          ]
+        }
+      },
+      "export": {
+        "path": "conformance/capabilities/evidence/staff-notation/residual-numbered.gp",
+        "sha256": "2f9f939f8e26d4425739c3bff6260e7f9e1f2d776e7e3f6a1a7f631194cf185a",
+        "part_configuration_hex": "000000030000000002010e00000000010100000000010e00000001",
+        "layout_configuration_hex": "000000040000ff00ffff",
+        "consumer": [
+          {
+            "visible": true,
+            "staves": [
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": true,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              },
+              {
+                "standard": true,
+                "tablature": false,
+                "slash": false,
+                "numbered": false,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "visible": false,
+            "staves": [
+              {
+                "standard": false,
+                "tablature": true,
+                "slash": true,
+                "numbered": true,
+                "tuning": [
+                  64,
+                  59,
+                  55,
+                  50,
+                  45,
+                  40
+                ],
+                "beats": [
+                  {
+                    "slashed": false,
+                    "notes": [
+                      {
+                        "string": 4,
+                        "fret": 3,
+                        "MIDI": 58
+                      }
+                    ]
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  },
+                  {
+                    "slashed": false,
+                    "notes": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "upstream_evidence": [
+    {
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/PartConfiguration.ts#L61",
+      "sha256": "2a3f5c7d4665af9d0d0a3ca5ee68f6085184f39211ddf3905716107e4b31ad5c",
+      "finding": "apply loops every staff within each track group and assigns the same four flags; writeForScore takes track.staves[0] (lines 135-142). No separate same-track staff flag wire path is established."
+    }
+  ],
+  "acceptance": {
+    "86": [
+      "Different flags on separate tracks and independent hidden track: passed. Independently mutable same-track requests: passed. Literal same-track different standard/tab final consumer values: residual target limit, not passed.",
+      "Compatibility authority and field-by-field post-parse legacy overrides: passed.",
+      "Bounded import/export exact consumer and malformed configuration lengths: passed. Independent same-track final preservation: residual."
+    ],
+    "92": [
+      "Staff slash and beat Slashed are independent: passed.",
+      "Mixed flags across separate tracks: passed. Independent same-track slash retention: residual, depends on #86.",
+      "Beat edits preserve exact consumer flags and unchanged notes/tuning; differing same-track staff flags report exact omission."
+    ],
+    "106": [
+      "Independent public same-track numbered requests: passed. Different final consumer flags within one track: residual, depends on #86.",
+      "GP8 four-bit configuration and unchanged tuning/notes: passed for shared track settings.",
+      "Coherent edited numbered state with other flags independent: passed; divergent same-track numbered state is explicitly omitted."
+    ]
+  },
+  "limits": [
+    "Pinned PartConfiguration has one flag group per track. First-staff export applies to every staff in that track; each differing later-staff field emits its own location-bound omission report. Strict export returns zero bytes unless the exact loss code is allowed.",
+    "All-false track notation normalizes to standard notation. Percussion tablature is suppressed by the consumer and an authored request is reported.",
+    "Version provenance and unrelated Track.Settings fields were cleared only for focused export. Legacy Notation and Tablature values were retained.",
+    "GPX layout visibility, multi-rest settings and renderer appearance remain separately scoped. No unsupported GP8 feature is promoted."
+  ],
+  "tests": [
+    "TestStaffNotationPublicOwnership",
+    "TestStaffNotationLegacyEditAuthority",
+    "TestPartConfigurationPublicMalformedLengths",
+    "TestConformanceStaffNotation",
+    "TestConformanceSlashNotation",
+    "TestPartConfigurationReaderBounds",
+    "TestAlphaTabStaffNotation",
+    "TestAlphaTabLegacyPartConfiguration",
+    "TestStaffNotationTargetDefaults",
+    "TestSlashedElementPresence"
+  ]
+}

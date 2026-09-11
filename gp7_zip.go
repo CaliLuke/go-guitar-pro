@@ -52,6 +52,31 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	if song == nil {
 		return nil, fmt.Errorf("no score.gpif found in ZIP archive")
 	}
+	for _, file := range r.File {
+		if filepath.Base(file.Name) != "PartConfiguration" {
+			continue
+		}
+		if file.UncompressedSize64 > maxPartConfigurationSize {
+			return nil, fmt.Errorf("PartConfiguration size %d exceeds %d-byte limit", file.UncompressedSize64, maxPartConfigurationSize)
+		}
+		stream, openErr := file.Open()
+		if openErr != nil {
+			return nil, fmt.Errorf("opening PartConfiguration: %w", openErr)
+		}
+		configuration, readErr := io.ReadAll(io.LimitReader(stream, maxPartConfigurationSize+1))
+		closeErr := stream.Close()
+		if readErr != nil {
+			return nil, fmt.Errorf("reading PartConfiguration: %w", readErr)
+		}
+		if closeErr != nil {
+			return nil, fmt.Errorf("closing PartConfiguration: %w", closeErr)
+		}
+		if applyErr := applyPartConfiguration(song, configuration); applyErr != nil {
+			return nil, applyErr
+		}
+		break
+	}
+
 	for _, f := range r.File {
 		if filepath.Base(f.Name) != "LayoutConfiguration" || f.UncompressedSize64 > 1<<20 {
 			continue

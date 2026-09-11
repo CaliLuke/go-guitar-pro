@@ -4673,10 +4673,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 21,
+          "count": 13,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "4f892a4990d09d1dd41d7c318a571c222c5767913b25ec25c40528fc47db0fb1"
+          "locationsSha256": "559ea1cf09898793cb98acb874942a05f3c5fb121bb5320c43be1cee003d8d6c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10134,9 +10134,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 645,
+          "count": 640,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "ba3efedd194cc5e1674cb4bed96228c6cacb2febaf114410b35ef80a18a72409"
+          "locationsSha256": "834603be40163603a23670f43777f6cff6bc4676ccd20f6066979c78df27dd87"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -15995,6 +15995,15 @@
           "locationsSha256": "0f9e442266ad82a39d23cedad86e8db9ae4af7cd7dfe8575b3af789552efa7cb"
         }
       ],
+      "differences": null
+    },
+    {
+      "path": "testdata/gp8/staff-notation-settings.gp",
+      "features": [
+        "score-core",
+        "note-and-beat-semantics"
+      ],
+      "diagnostics": [],
       "differences": null
     },
     {

@@ -14,9 +14,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 75 | 16 | 6 | 1 |
-| model | 74 | 17 | 6 | 1 |
-| export | 53 | 31 | 12 | 2 |
+| import | 75 | 18 | 4 | 1 |
+| model | 74 | 19 | 4 | 1 |
+| export | 53 | 34 | 10 | 1 |
 
 All three stages have a supported rating in 53 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -541,9 +541,9 @@ Bounded work: [Preserve authored beam groups and stem overrides](https://github.
 
 Notation. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **unverified**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-ZIP import reads LayoutConfiguration visibility but does not read PartConfiguration staff view flags. GP8 writes notation and tablature flags, but the capability ledger does not yet bind that binary artifact to a claim-scoped export receipt.
+GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -553,9 +553,9 @@ Bounded work: [Read and preserve per-staff part notation settings](https://githu
 
 Notation. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-GPIF Slashed and per-staff slash notation lack lossless public destinations.
+Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -589,9 +589,9 @@ Bounded work: [Preserve score and track multirest preferences](https://github.co
 
 Notation. Priority 3. Formats: gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-The public staff settings do not represent AlphaTab numbered notation.
+Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

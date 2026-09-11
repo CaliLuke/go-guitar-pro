@@ -475,6 +475,7 @@ type gpifBeat struct {
 	Hairpin                            string           `xml:"Hairpin,omitempty"`
 	Legato                             *gpifLegato      `xml:"Legato,omitempty"`
 	Lyrics                             *gpifBeatLyrics  `xml:"Lyrics,omitempty"`
+	Slashed                            *struct{}        `xml:"Slashed,omitempty"`
 	DeadSlapped                        *struct{}        `xml:"DeadSlapped,omitempty"`
 	Golpe                              string           `xml:"Golpe,omitempty"`
 	FreeText                           string           `xml:"FreeText,omitempty"`

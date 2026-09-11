@@ -3528,6 +3528,18 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/staff-notation-settings.gp",
+      "sha256": "aa8483932d0605bc043f7fbbc6859f5f48172f80615888389dbd2ddc4e15580f",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Original focused source contains a two-staff track and an independently hidden second track, exact mixed notation groups and independent beat slash marks. Same-track divergent settings remain a consumer limit.",
+      "features": [
+        "score-core",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/string-number-display.gp",
       "sha256": "dadcb2812656e5fc95d9d90dddd6e011556c3aba857edea730373939bdf73cae",
       "format": "gp8",

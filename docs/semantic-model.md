@@ -392,8 +392,38 @@ GPIF requires an `Enable` child for true; its text is not a boolean value.
 An absent property or a property without `Enable` means false.
 Reused note definitions produce independent display flags on each occurrence.
 
-GP8 stores track visibility outside GPIF. It stores notation and tablature view
-flags in the part configuration. The writer reports other non-default track and
+`Staff.NotationSettings` owns standard, tablature, slash, and numbered-notation requests.
+Each parsed staff receives independent mutable settings when PartConfiguration supplies its track group.
+Without a group, nil uses the legacy `Track.Settings` standard/tab flags and false for slash/numbered.
+The implicit percussion fallback uses standard notation without tablature.
+GP5 staff settings initialize these values from the authored binary display flags.
+GP3 and GP4 retain their existing legacy defaults.
+
+For parsed settings, an unchanged `Track.Settings.Notation` or `Tablature` leaves that staff field authoritative.
+Changing either legacy flag overrides only that field on every staff during export.
+A simultaneous conflict uses the changed legacy flag. Slash and numbered requests remain independent.
+For programmatic settings, a non-nil staff value controls all four flags.
+Clearing a staff pointer restores the compatibility fallback. Export does not mutate either view.
+
+GP6 and ZIP import read the bounded PartConfiguration view/group records and reject truncated lengths.
+The first score view maps one group to each corresponding track; missing groups leave their tracks unchanged.
+The pinned consumer applies that group's flags to every staff in its track.
+Zero source flags select standard notation. Track visibility remains separate in LayoutConfiguration.
+
+GP8 writes the first staff's resolved configuration for its track.
+Distinct track configurations survive exact pinned consumption, including slash and numbered notation.
+The consumer cannot retain different configurations on two staves within one track.
+Each differing later-staff flag receives its own `gp8.omit.staff-*` report and exact staff location.
+An all-false first-staff configuration receives `gp8.normalize.track-view` because the consumer enables standard notation.
+Explicit percussion tablature receives `gp8.omit.percussion-tablature` because the consumer suppresses it.
+Strict preservation requires every applicable allowance. These limits remain open under #86, #92, and #106.
+
+`Beat.Slashed` is the independent authored beat-level slash mark.
+GPIF element presence means true, including a literal false text value.
+Direct edits preserve note count, notes, tuning, and beat status.
+The mark neither enables staff slash notation nor inherits that preference.
+
+GP8 stores track visibility outside GPIF. The writer reports other non-default track and
 beat display settings. It also reports page setup, marker color, voice direction,
 and line-break data that it cannot emit.
 

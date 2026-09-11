@@ -198,18 +198,9 @@ func buildGP8PartConfiguration(song *Song) []byte {
 }
 
 func gp8TrackViewFlags(track *Track) byte {
-	if track.PercussionTrack {
-		return 0x01
-	}
-	var flags byte
-	if track.Settings.Notation {
-		flags |= 0x01
-	}
-	if track.Settings.Tablature {
-		flags |= 0x02
-	}
+	flags := track.resolvedStaffNotation(0).flags()
 	if flags == 0 {
-		flags = 0x01
+		flags = 1
 	}
 	return flags
 }

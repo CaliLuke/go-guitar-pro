@@ -21,6 +21,10 @@ type TrackSettings struct {
 
 // Staff represents one notation staff owned by a track.
 type Staff struct {
+	// NotationSettings owns this staff's standard, tab, slash and numbered requests.
+	// Nil uses Track.Settings for standard/tab and false for slash/numbered.
+	// Changed parsed Track.Settings flags override only their corresponding staff flag.
+	NotationSettings *StaffNotationSettings
 	// Measures contains this staff's ordered measures.
 	Measures []Measure
 	// Strings contains this staff's tuning from highest string to lowest.
@@ -83,6 +87,8 @@ type Track struct {
 	PercussionTrack           bool
 	Visible                   bool
 	Solo                      bool
+	notationCompatibility     [2]bool
+	notationCompatibilitySet  bool
 	capoFretCompatibility     int32
 	capoFretCompatibilitySet  bool
 }

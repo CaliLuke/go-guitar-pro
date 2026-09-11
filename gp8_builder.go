@@ -306,9 +306,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	if unsupportedSettings != (TrackSettings{}) {
 		builder.addReport("gp8.omit.track-display-settings", "score-core", ExportDispositionOmitted, location, "GP8 writer emits notation and tablature selection but not the remaining track display settings")
 	}
-	if !track.PercussionTrack && !track.Settings.Tablature && !track.Settings.Notation {
-		builder.addReport("gp8.normalize.track-view", "score-core", ExportDispositionNormalized, location, "GP8 requires a pitched track view and defaults to standard notation")
-	}
+	builder.reportStaffNotation(trackIndex)
 	channel := defaultMidiChannel()
 	if track.ChannelIndex >= 0 && track.ChannelIndex < len(builder.song.Channels) {
 		channel = builder.song.Channels[track.ChannelIndex]
