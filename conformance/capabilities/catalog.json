@@ -2228,7 +2228,6 @@
       "finding": "Ordered score/track lyric text and offsets parse. GP8 preserves track lyrics but omits binary score lyrics. Syllable dispatch is not a rendering service here.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
-        "Beat.lyrics",
         "Lyrics.*"
       ],
       "evidence": [
@@ -2278,6 +2277,7 @@
       "finding": "GPIF Beat.Lyrics has no dedicated public destination. FreeText and track lyrics cannot preserve this source scope.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
+        "Beat.lyrics",
         "GpifParser._parseBeat:Lyrics"
       ],
       "evidence": [
@@ -4852,14 +4852,24 @@
         "model": "unverified",
         "export": "unverified"
       },
-      "finding": "Old inventory spans nine primary model files, omits related classes/enums and misattributes BeamingRules fields to MasterBar. Expanded lexical inventory leaves unmapped constructs unverified.",
-      "acceptance": "Review every unlinked upstream construct and new documentation row. Preserve explicit scope and independent stage evidence.",
+      "finding": "The canonical 384-symbol inventory now preserves declaring classes, including 28 reviewed filename-owner migrations. The expanded inventory keeps all prior constructs, adds explicit property assignments, and gives GP importer/configuration syntax exact applicability, disposition, and capability ownership. Applicability is conservative by reachable source file and format family; it does not claim exact branch execution for every format version.",
+      "acceptance": "Keep source path policies and exact construct/model reviews synchronized with the pinned importer. Reject incomplete applicability, missing authored owners, stale reviews, unexplained removals, and wildcard-only ownership.",
       "upstream": [],
       "evidence": [
         {
           "kind": "source",
           "reference": "conformance/sync-upstream-inventory.mjs",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/upstream-ownership.json",
+          "detail": "Exact reviewed applicability, dispositions, primary owners, secondary associations, and linked model declarations."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/test_manage.py",
+          "detail": "Focused enforcement and sensitivity-fixture tests for new syntax, missing owners, stale reviews, exclusions, and declaring classes."
         },
         {
           "kind": "issue",

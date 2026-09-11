@@ -22,10 +22,16 @@ ROOT = HERE.parent.parent
 DATABASE = HERE / "capabilities.sqlite"
 REFERENCE = ROOT / "references/alphaTab"
 STATUSES = ("supported", "partial", "missing", "unverified", "out-of-scope")
+UPSTREAM_DISPOSITIONS = ("authored", "derived", "excluded")
 
 
 def read_json(path):
     return json.loads(path.read_text())
+
+
+def read_upstream_ownership():
+    overlay = os.environ.get("UPSTREAM_OWNERSHIP_OVERLAY")
+    return read_json(Path(overlay) if overlay else HERE / "upstream-ownership.json")
 
 
 def packed(value):
@@ -42,6 +48,7 @@ def input_hashes():
     paths += [ROOT / "conformance" / name for name in (
         "oracle.json", "feature-ledger.json", "upstream-inventory.json",
         "fixture-inventory.json", "corpus-snapshot.json", "oracle.mjs")]
+    paths.append(HERE / "upstream-ownership.json")
     return {str(p.relative_to(ROOT)): sha(p) for p in paths if p.exists()}
 
 
@@ -84,10 +91,17 @@ def discover():
             if "/test/" in entry.name and not Path(entry.name).name.startswith("Gp"):
                 continue
             files[entry.name] = tar.extractfile(entry).read()
+    return discover_files(files, legacy)
+
+
+def discover_files(files, legacy=None):
+    """Discover declarations, dispatches, and explicit property assignments."""
+    legacy = legacy or {}
     constructs, sources = [], {}
     for relative, content in sorted(files.items()):
         sources[relative] = hashlib.sha256(content).hexdigest()
         owner, owner_kind, method = Path(relative).stem, "", ""
+        local_types = {}
         counts = collections.Counter()
         in_comment = False
         for number, original in enumerate(content.decode().splitlines(), 1):
@@ -112,6 +126,7 @@ def discover():
             if declaration:
                 owner_kind, owner = declaration.groups()
                 method = ""
+                local_types = {}
                 found.append((owner_kind, owner))
             member = re.match(r"^    public\s+(?:(?:static|readonly|override|abstract|async)\s+)*(?:(get|set)\s+)?([\w$]+)(.*)", line)
             if member:
@@ -127,16 +142,37 @@ def discover():
             func = re.match(r"^    (?:private|public|protected)\s+(?:(?:static|async|override)\s+)*(\w+)\s*[(<]", line)
             if func:
                 method = func[1]
+                local_types = {}
+            local = re.match(
+                r"^\s*(?:const|let|var)\s+([_$A-Za-z][_$A-Za-z0-9]*)"
+                r"(?:\s*:\s*([_$A-Za-z][_$A-Za-z0-9]*))?"
+                r"(?:\s*=\s*new\s+([_$A-Za-z][_$A-Za-z0-9]*))?",
+                line,
+            )
+            if local and (local[2] or local[3]):
+                local_types[local[1]] = local[2] or local[3]
             case = re.match(r"\s*case\s+(.+?):\s*(?://.*)?$", line)
             if case:
                 found.append(("dispatch", f"{owner}.{method}:{case[1].strip(chr(39) + chr(34))}"))
+            assignment = re.match(
+                r"^\s*((?:this\.)?[_$A-Za-z][_$A-Za-z0-9]*(?:\[[^\]]+\])?"
+                r"(?:\??\.[_$A-Za-z][_$A-Za-z0-9]*(?:\[[^\]]+\])?)+)"
+                r"\s*(?:\?\?=|\|\|=|&&=|[+\-*/]?=(?!=|>))",
+                line,
+            )
+            if assignment:
+                found.append(("assignment", f"{owner}.{method}:{assignment[1]}"))
             for kind, name in found:
                 key = f"{relative}::{kind}::{name}"
                 counts[key] += 1
-                constructs.append({"id": f"{key}::{counts[key]}", "path": relative,
-                                   "line": number, "kind": kind, "name": name,
-                                   "declaration": original.strip(),
-                                   "legacy_disposition": legacy.get(name)})
+                item = {"id": f"{key}::{counts[key]}", "path": relative,
+                        "line": number, "kind": kind, "name": name,
+                        "declaration": original.strip(),
+                        "legacy_disposition": legacy.get(name)}
+                if kind == "assignment":
+                    root = assignment[1].replace("?.", ".").split(".", 1)[0]
+                    item["assignment_root_type"] = local_types.get(root)
+                constructs.append(item)
     return sources, constructs
 
 
@@ -164,6 +200,265 @@ def validate_catalog(catalog, constructs):
                 raise ValueError(f"Missing public field: {item}")
 
 
+def match_source_policy(policies, path):
+    for policy in policies:
+        if fnmatch.fnmatchcase(path, policy["pattern"]):
+            return policy
+    raise ValueError(f"Upstream source has no scope policy: {path}")
+
+
+def unique_exact_catalog_owners(catalog):
+    """Return the sole capability naming each non-wildcard upstream declaration."""
+    owners = collections.defaultdict(set)
+    for capability in catalog["capabilities"]:
+        for selector in capability.get("upstream", []):
+            if not any(char in selector for char in "*?[]"):
+                owners[selector].add(capability["id"])
+    return {declaration: next(iter(capabilities))
+            for declaration, capabilities in owners.items() if len(capabilities) == 1}
+
+
+def infer_assignment_model_declaration(construct, declarations):
+    """Resolve simple model assignment paths without trusting review metadata.
+
+    The pinned importers use stable model-shaped variable names (``score``,
+    ``staff``, ``newBeat``) and public model fields. Following that path through
+    declared field types gives an independent completeness check for direct and
+    nested assignments such as ``score.stylesheet.barNumberDisplay``.
+    """
+    if construct["kind"] != "assignment":
+        return None
+    lhs = construct["name"].split(":", 1)[1].replace("?.", ".")
+    segments = [re.sub(r"\[.*", "", part) for part in lhs.split(".")]
+    if segments and segments[0] == "this":
+        segments = segments[1:]
+    if len(segments) < 2:
+        return None
+
+    classes = {name.split(".", 1)[0] for name in declarations}
+    classes_by_lower = collections.defaultdict(list)
+    for class_name in classes:
+        classes_by_lower[class_name.lower()].append(class_name)
+    root = segments.pop(0).lstrip("_")
+    root_candidates = [construct.get("assignment_root_type"), root]
+    if root.startswith("new") and len(root) > 3:
+        root_candidates.append(root[3:])
+    current_class = None
+    for candidate in root_candidates:
+        if not candidate:
+            continue
+        matches = classes_by_lower[candidate.lower()]
+        if len(matches) == 1:
+            current_class = matches[0]
+            break
+    if current_class is None:
+        return None
+
+    for index, member in enumerate(segments):
+        declaration_name = f"{current_class}.{member}"
+        declaration = declarations.get(declaration_name)
+        if declaration is None:
+            return None
+        if index == len(segments) - 1:
+            return declaration_name
+        field_type = re.search(
+            rf"\b{re.escape(member)}\??\s*:\s*(?:ReadonlyArray<|Array<)?([A-Z][_$A-Za-z0-9]*)",
+            declaration["declaration"],
+        )
+        if field_type is None:
+            return None
+        current_class = field_type.group(1)
+    return None
+
+
+def validate_upstream_ownership(ownership, sources, constructs, capability_ids, baseline_constructs=4365,
+                                exact_catalog_owners=None):
+    oracle = read_json(ROOT / "conformance/oracle.json")
+    if ownership.get("source_revision") != oracle["sourceRevision"]:
+        raise ValueError("Upstream ownership source revision does not match the pinned oracle")
+    policies = ownership.get("path_policies", [])
+    if not policies:
+        raise ValueError("Upstream ownership has no source path policies")
+    for policy in policies:
+        if not policy.get("pattern") or not policy.get("source_scope") or not policy.get("reason"):
+            raise ValueError(f"Incomplete upstream path policy: {policy}")
+        if not isinstance(policy.get("formats"), list) or not isinstance(policy.get("review_kinds"), list):
+            raise ValueError(f"Incomplete upstream applicability: {policy['pattern']}")
+        if (not any(fnmatch.fnmatchcase(path, policy["pattern"]) for path in sources)
+                and (policy["review_kinds"] or not policy["source_scope"].startswith("excluded-"))):
+            raise ValueError(f"Stale unmatched upstream path policy: {policy['pattern']}")
+
+    by_id = {construct["id"]: construct for construct in constructs}
+    reviews = ownership.get("construct_reviews", [])
+    review_by_id = {}
+    for review in reviews:
+        construct_id = review.get("construct_id")
+        if construct_id in review_by_id:
+            raise ValueError(f"Duplicate upstream construct review: {construct_id}")
+        construct = by_id.get(construct_id)
+        if construct is None:
+            raise ValueError(f"Stale unmatched upstream construct review: {construct_id}")
+        policy = match_source_policy(policies, construct["path"])
+        if review.get("source_scope") != policy["source_scope"] or review.get("formats") != policy["formats"]:
+            raise ValueError(f"Upstream review has incorrect source applicability: {construct_id}")
+        disposition = review.get("disposition")
+        if disposition not in UPSTREAM_DISPOSITIONS or not review.get("reason"):
+            raise ValueError(f"Upstream review has no disposition or reason: {construct_id}")
+        primary = review.get("primary_capability")
+        secondary = review.get("secondary_capabilities", [])
+        if disposition == "authored" and not primary:
+            raise ValueError(f"Authored upstream construct has no primary capability owner: {construct_id}")
+        if primary:
+            if any(char in primary for char in "*?[]"):
+                raise ValueError(f"Wildcard-only authored ownership is forbidden: {construct_id}")
+            if primary == "upstream-discovery":
+                raise ValueError(f"Audit capability cannot own authored Guitar Pro syntax: {construct_id}")
+            if primary not in capability_ids:
+                raise ValueError(f"Unknown primary capability owner {primary}: {construct_id}")
+        if not isinstance(secondary, list) or len(secondary) != len(set(secondary)) or primary in secondary:
+            raise ValueError(f"Invalid secondary capability associations: {construct_id}")
+        if any(owner not in capability_ids or any(char in owner for char in "*?[]") for owner in secondary):
+            raise ValueError(f"Unknown secondary capability association: {construct_id}")
+        model = review.get("model_declaration")
+        if model:
+            matches = [candidate for candidate in constructs
+                       if candidate["name"] == model and candidate["kind"] in ("field", "enum-member")
+                       and "/model/" in candidate["path"]]
+            if not matches:
+                raise ValueError(f"Upstream review links an unknown model declaration {model}: {construct_id}")
+        review_by_id[construct_id] = review
+
+    required = {construct["id"] for construct in constructs
+                if construct["kind"] in match_source_policy(policies, construct["path"])["review_kinds"]}
+    missing = sorted(required - review_by_id.keys())
+    if missing:
+        raise ValueError(f"In-scope upstream dispatch or assignment has no review: {missing[0]}")
+    extra = sorted(review_by_id.keys() - required)
+    if extra:
+        raise ValueError(f"Upstream review is outside its path policy: {extra[0]}")
+
+    declarations = {construct["name"]: construct for construct in constructs
+                    if construct["kind"] in ("field", "enum-member") and "/model/" in construct["path"]}
+    expected_model = set()
+    for construct_id, review in review_by_id.items():
+        if review["disposition"] != "authored":
+            continue
+        inferred = infer_assignment_model_declaration(by_id[construct_id], declarations)
+        if inferred:
+            expected_model.add(inferred)
+            linked = review.get("model_declaration")
+            if not linked:
+                raise ValueError(
+                    f"Independently inferred authored assignment has no model declaration link "
+                    f"{inferred}: {construct_id}")
+            if linked != inferred:
+                raise ValueError(
+                    f"Importer assignment links the wrong model declaration {linked}, want {inferred}: {construct_id}")
+        # The link is reviewed association metadata, not completeness evidence.
+        # Required declarations come only from independently resolved assignment
+        # paths and explicit Class.member references in the pinned source line.
+        for owner, member in re.findall(
+                r"\b([A-Z][_$A-Za-z0-9]*)\.([_$A-Za-z][_$A-Za-z0-9]*)\b",
+                by_id[construct_id]["declaration"]):
+            declaration = f"{owner}.{member}"
+            if declaration in declarations:
+                expected_model.add(declaration)
+    model_reviews = {}
+    for review in ownership.get("model_reviews", []):
+        declaration = review.get("declaration")
+        if declaration in model_reviews:
+            raise ValueError(f"Duplicate importer-populated model review: {declaration}")
+        if declaration not in declarations:
+            raise ValueError(f"Stale unmatched importer-populated model review: {declaration}")
+        if review.get("disposition") != "authored" or not review.get("reason"):
+            raise ValueError(f"Importer-populated public field or enum has no disposition: {declaration}")
+        primary = review.get("primary_capability")
+        secondary = review.get("secondary_capabilities", [])
+        if not primary:
+            raise ValueError(f"Importer-populated public field or enum has no owner: {declaration}")
+        if primary == "upstream-discovery" or primary not in capability_ids or any(char in primary for char in "*?[]"):
+            raise ValueError(f"Invalid importer-populated model owner {primary}: {declaration}")
+        if (not isinstance(secondary, list) or primary in secondary or len(secondary) != len(set(secondary))
+                or any(owner not in capability_ids or any(char in owner for char in "*?[]") for owner in secondary)):
+            raise ValueError(f"Invalid model secondary capability associations: {declaration}")
+        formats = review.get("formats")
+        if not isinstance(formats, list) or not formats or any(fmt not in ("gp3", "gp4", "gp5", "gp6", "gp7", "gp8") for fmt in formats):
+            raise ValueError(f"Importer-populated model declaration has no source applicability: {declaration}")
+        model_reviews[declaration] = review
+    missing_model = sorted(expected_model - model_reviews.keys())
+    if missing_model:
+        raise ValueError(f"Importer-populated public field or enum has no review: {missing_model[0]}")
+    stale_model = sorted(model_reviews.keys() - expected_model)
+    if stale_model:
+        raise ValueError(f"Model review is not linked from importer syntax: {stale_model[0]}")
+
+    if exact_catalog_owners is None:
+        exact_catalog_owners = unique_exact_catalog_owners(read_json(HERE / "catalog.json"))
+    ambiguity_by_declaration = {}
+    for ambiguity in ownership.get("catalog_owner_ambiguities", []):
+        declaration = ambiguity.get("declaration")
+        if declaration in ambiguity_by_declaration:
+            raise ValueError(f"Duplicate catalog owner ambiguity: {declaration}")
+        expected = exact_catalog_owners.get(declaration)
+        allowed = ambiguity.get("allowed_primary_capabilities", [])
+        if (declaration not in model_reviews or ambiguity.get("catalog_capability") != expected
+                or not ambiguity.get("reason") or len(allowed) < 2 or len(allowed) != len(set(allowed))
+                or expected not in allowed or any(owner not in capability_ids for owner in allowed)):
+            raise ValueError(f"Invalid catalog owner ambiguity: {declaration}")
+        model = model_reviews[declaration]
+        if model["primary_capability"] not in allowed or expected not in {
+                model["primary_capability"], *model.get("secondary_capabilities", [])}:
+            raise ValueError(f"Catalog owner ambiguity is not represented: {declaration}")
+        ambiguity_by_declaration[declaration] = ambiguity
+
+    for declaration, expected in exact_catalog_owners.items():
+        model = model_reviews.get(declaration)
+        if model is None:
+            continue
+        ambiguity = ambiguity_by_declaration.get(declaration)
+        if ambiguity:
+            allowed = set(ambiguity["allowed_primary_capabilities"])
+            linked = [review for review in review_by_id.values()
+                      if review["disposition"] == "authored"
+                      and review.get("model_declaration") == declaration]
+            if any(review["primary_capability"] not in allowed for review in linked):
+                raise ValueError(f"Linked construct is outside catalog owner ambiguity: {declaration}")
+            continue
+        if model["primary_capability"] != expected:
+            raise ValueError(
+                f"Unique exact catalog owner mismatch for {declaration}: "
+                f"{model['primary_capability']}, want {expected}")
+        linked = [review for review in review_by_id.values()
+                  if review["disposition"] == "authored"
+                  and review.get("model_declaration") == declaration]
+        mismatch = next((review for review in linked if review["primary_capability"] != expected), None)
+        if mismatch:
+            raise ValueError(
+                f"Linked construct disagrees with unique exact catalog owner {expected}: "
+                f"{mismatch['construct_id']}")
+    for construct_id, review in review_by_id.items():
+        declaration = review.get("model_declaration")
+        if review["disposition"] != "authored" or not declaration:
+            continue
+        owners = {review["primary_capability"], *review.get("secondary_capabilities", [])}
+        if model_reviews[declaration]["primary_capability"] not in owners:
+            raise ValueError(f"Importer assignment owner disagrees with linked model declaration: {construct_id}")
+
+    migration = ownership.get("migration", {})
+    previous = migration.get("previous_constructs")
+    retained = migration.get("retained_constructs")
+    added = migration.get("added_assignments")
+    if (previous != baseline_constructs or retained != previous or added != len(constructs) - previous
+            or migration.get("current_constructs") != len(constructs)
+            or migration.get("removed_constructs") != 0
+            or migration.get("unexplained_removals") != []
+            or migration.get("source_files") != len(sources)
+            or migration.get("reviewed_gp_constructs") != len(required)
+            or migration.get("reviewed_model_declarations") != len(model_reviews)):
+        raise ValueError("Upstream construct migration summary is incomplete or stale")
+    return review_by_id, model_reviews, {path: match_source_policy(policies, path) for path in sources}
+
+
 def validate_support_claims(catalog, ledger):
     supported = {(cap["id"], stage) for cap in catalog["capabilities"]
                  for stage, status in cap["stages"].items() if status == "supported"}
@@ -184,6 +479,10 @@ def build(path):
     catalog = read_json(HERE / "catalog.json")
     sources, constructs = discover()
     validate_catalog(catalog, constructs)
+    ownership = read_upstream_ownership()
+    reviews, model_reviews, source_policies = validate_upstream_ownership(
+        ownership, sources, constructs, {capability["id"] for capability in catalog["capabilities"]},
+        exact_catalog_owners=unique_exact_catalog_owners(catalog))
     ledger = read_json(ROOT / "conformance/feature-ledger.json")
     validate_support_claims(catalog, ledger)
     con = sqlite3.connect(path)
@@ -194,11 +493,14 @@ def build(path):
                 "input_hashes": packed(input_hashes()),
                 "scope": "GP3-GP8 import, public authored model, GP8 export; excluded capabilities listed separately",
                 "status_basis": "Source review and linked scoped tests. A supported row does not prove all variants.",
-                "discovery_limit": "Lexical pinned-source declarations and case labels; not a type checker or every semantic branch."}
+                "discovery_limit": "Lexical pinned-source declarations, case labels, and explicit property assignments; applicability is conservative at importer/configuration-file level, not an exact branch-by-version proof."}
     con.executemany("INSERT INTO metadata VALUES (?,?)", metadata.items())
     con.executemany("INSERT INTO source_file VALUES (?,?)", sources.items())
     for item in constructs:
-        con.execute("INSERT INTO upstream_construct(id,path,line,kind,name,declaration,legacy_disposition) VALUES (:id,:path,:line,:kind,:name,:declaration,:legacy_disposition)", item)
+        policy = source_policies[item["path"]]
+        con.execute("INSERT INTO upstream_construct(id,path,line,kind,name,declaration,legacy_disposition,source_scope,source_formats,scope_reason) VALUES (:id,:path,:line,:kind,:name,:declaration,:legacy_disposition,:source_scope,:source_formats,:scope_reason)", {
+            **item, "source_scope": policy["source_scope"], "source_formats": packed(policy["formats"]),
+            "scope_reason": policy["reason"]})
     for cap in catalog["capabilities"]:
         con.execute("INSERT INTO capability VALUES (?,?,?,?,?,?,?,?)", (
             cap["id"], cap["domain"], cap["title"], cap["scope"], cap["priority"],
@@ -210,6 +512,27 @@ def build(path):
                 con.execute("INSERT INTO construct_capability VALUES (?,?)", (c["id"], cap["id"]))
                 # Association gives a route to the review; it is not individual behavior evidence.
                 con.execute("UPDATE upstream_construct SET review_status='linked' WHERE id=?", (c["id"],))
+    for construct_id, review in reviews.items():
+        con.execute("INSERT INTO upstream_review VALUES (?,?,?,?,?,?,?)", (
+            construct_id, review["source_scope"], packed(review["formats"]), review["disposition"],
+            review["reason"], review.get("primary_capability"), review.get("model_declaration")))
+        con.execute("UPDATE upstream_construct SET review_status='reviewed' WHERE id=?", (construct_id,))
+        if review.get("primary_capability"):
+            con.execute("INSERT OR IGNORE INTO construct_capability VALUES (?,?)", (construct_id, review["primary_capability"]))
+        for capability in review.get("secondary_capabilities", []):
+            con.execute("INSERT INTO upstream_secondary_capability VALUES (?,?)", (construct_id, capability))
+            con.execute("INSERT OR IGNORE INTO construct_capability VALUES (?,?)", (construct_id, capability))
+    model_constructs = {construct["name"]: construct for construct in constructs
+                        if construct["kind"] in ("field", "enum-member") and "/model/" in construct["path"]}
+    for declaration, review in model_reviews.items():
+        construct_id = model_constructs[declaration]["id"]
+        con.execute("INSERT INTO upstream_model_review VALUES (?,?,?,?,?,?)", (
+            declaration, construct_id, packed(review["formats"]), review["disposition"],
+            review["reason"], review["primary_capability"]))
+        con.execute("UPDATE upstream_construct SET review_status='reviewed' WHERE id=?", (construct_id,))
+        con.execute("INSERT OR IGNORE INTO construct_capability VALUES (?,?)", (construct_id, review["primary_capability"]))
+        for capability in review.get("secondary_capabilities", []):
+            con.execute("INSERT OR IGNORE INTO construct_capability VALUES (?,?)", (construct_id, capability))
     for kind, dispositions, cases in (
         ("public-field", "fieldDispositions", "fieldCases"),
         ("wire-field", "wireFieldDispositions", "wireFieldCases")):
@@ -315,6 +638,7 @@ def report(path):
                  f"Review date: {meta['reviewed_at']}. AlphaTab: {oracle['version']} (`{oracle['sourceRevision']}`).", "",
                  f"The inventory contains {count('capability')} capability rows and {count('website_feature')} mapped format-documentation rows.",
                  f"The pinned source inventory contains {count('upstream_construct')} constructs from {count('source_file')} files.",
+                 f"Exact importer reviews classify {count('upstream_review')} assignments and dispatches and link {count('upstream_model_review')} importer-populated model declarations.",
                  f"There are {count('missing_upstream_fixtures')} upstream fixtures without a byte-identical local fixture.", "",
                  "Support ratings describe the scope in each finding. Partial and unverified rows receive no completion credit.",
                  "A linked source construct has a capability association, not individual behavior proof.", "",

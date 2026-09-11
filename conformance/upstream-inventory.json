@@ -387,13 +387,6 @@
   ],
   "modelSymbols": [
     {
-      "name": "Automation.barOccurence",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "tempo-automations",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Automation.buildInstrumentAutomation",
       "kind": "method",
       "disposition": "derived",
@@ -420,13 +413,6 @@
       "disposition": "out-of-scope",
       "feature": "tempo-automations",
       "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
-    },
-    {
-      "name": "Automation.millisecondOffset",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "tempo-automations",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Automation.ratioPosition",
@@ -464,18 +450,25 @@
       "reason": "Represented as normalized BPM in TempoAutomation.Tempo, including GPIF reference units."
     },
     {
+      "name": "SyncPointData.barOccurence",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "SyncPointData.millisecondOffset",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "tempo-automations",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
       "name": "Bar.addVoice",
       "kind": "method",
       "disposition": "derived",
       "feature": "staff-ownership",
       "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
-    },
-    {
-      "name": "Bar.bar",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Bar.barLineLeft",
@@ -632,39 +625,11 @@
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
     },
     {
-      "name": "Bar.nextPedalMarker",
-      "kind": "field",
-      "disposition": "derived",
-      "feature": "staff-ownership",
-      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Bar.pedalType",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Bar.previousBar",
       "kind": "field",
       "disposition": "derived",
       "feature": "staff-ownership",
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Bar.previousPedalMarker",
-      "kind": "field",
-      "disposition": "derived",
-      "feature": "staff-ownership",
-      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Bar.ratioPosition",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Bar.resetIds",
@@ -710,6 +675,41 @@
     },
     {
       "name": "Bar.voices",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "SustainPedalMarker.bar",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "SustainPedalMarker.nextPedalMarker",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "SustainPedalMarker.pedalType",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "SustainPedalMarker.previousPedalMarker",
+      "kind": "field",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
+    },
+    {
+      "name": "SustainPedalMarker.ratioPosition",
       "kind": "field",
       "disposition": "partial",
       "feature": "staff-ownership",
@@ -1437,6 +1437,34 @@
       "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
     },
     {
+      "name": "BeamingRules.createSimple",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "BeamingRules.findRule",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "staff-ownership",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "BeamingRules.groups",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "BeamingRules.uniqueId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "staff-ownership",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
       "name": "MasterBar.actualBeamingRules",
       "kind": "field",
       "disposition": "derived",
@@ -1486,13 +1514,6 @@
       "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
     },
     {
-      "name": "MasterBar.createSimple",
-      "kind": "method",
-      "disposition": "derived",
-      "feature": "staff-ownership",
-      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
-    },
-    {
       "name": "MasterBar.directions",
       "kind": "field",
       "disposition": "partial",
@@ -1521,13 +1542,6 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
-      "name": "MasterBar.findRule",
-      "kind": "method",
-      "disposition": "derived",
-      "feature": "staff-ownership",
-      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
-    },
-    {
       "name": "MasterBar.finish",
       "kind": "method",
       "disposition": "derived",
@@ -1540,13 +1554,6 @@
       "disposition": "derived",
       "feature": "staff-ownership",
       "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
-    },
-    {
-      "name": "MasterBar.groups",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "MasterBar.hasChanges",
@@ -1738,13 +1745,6 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
-      "name": "MasterBar.uniqueId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "staff-ownership",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.accentuated",
       "kind": "field",
       "disposition": "partial",
@@ -1913,25 +1913,11 @@
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
     },
     {
-      "name": "Note.hammerPullDestinationNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.hammerPullOrigin",
       "kind": "field",
       "disposition": "derived",
       "feature": "note-and-beat-semantics",
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Note.hammerPullOriginNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Note.harmonicPitch",
@@ -2179,20 +2165,6 @@
       "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
     },
     {
-      "name": "Note.noteHead",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
-      "name": "Note.noteHeadCenterOnStem",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.octave",
       "kind": "field",
       "disposition": "partial",
@@ -2277,13 +2249,6 @@
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
     },
     {
-      "name": "Note.slideOriginNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.slideOutType",
       "kind": "field",
       "disposition": "partial",
@@ -2298,13 +2263,6 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
-      "name": "Note.slideTargetNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.slurDestination",
       "kind": "field",
       "disposition": "derived",
@@ -2312,25 +2270,11 @@
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
     },
     {
-      "name": "Note.slurDestinationNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.slurOrigin",
       "kind": "field",
       "disposition": "derived",
       "feature": "note-and-beat-semantics",
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Note.slurOriginNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Note.string",
@@ -2361,25 +2305,11 @@
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
     },
     {
-      "name": "Note.tieDestinationNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Note.tieOrigin",
       "kind": "field",
       "disposition": "derived",
       "feature": "note-and-beat-semantics",
       "reason": "Derived identity, navigation, grouping, or playback state is separated from authored semantics."
-    },
-    {
-      "name": "Note.tieOriginNoteId",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "note-and-beat-semantics",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
       "name": "Note.toJson",
@@ -2431,6 +2361,111 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
+      "name": "NoteIdBag.hammerPullDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.hammerPullOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.slideOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.slideTargetNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.slurDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.slurOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.tieDestinationNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteIdBag.tieOriginNoteId",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteStyle.noteHead",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "NoteStyle.noteHeadCenterOnStem",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "note-and-beat-semantics",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "HeaderFooterStyle.buildText",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "HeaderFooterStyle.equals",
+      "kind": "method",
+      "disposition": "derived",
+      "feature": "score-core",
+      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
+    },
+    {
+      "name": "HeaderFooterStyle.isVisible",
+      "kind": "field",
+      "disposition": "out-of-scope",
+      "feature": "score-core",
+      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
+    },
+    {
+      "name": "HeaderFooterStyle.template",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "HeaderFooterStyle.textAlign",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
       "name": "Score.addMasterBar",
       "kind": "method",
       "disposition": "derived",
@@ -2473,21 +2508,7 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
-      "name": "Score.buildText",
-      "kind": "method",
-      "disposition": "derived",
-      "feature": "score-core",
-      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
-    },
-    {
       "name": "Score.copyright",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "score-core",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
-      "name": "Score.defaultHeaderAndFooter",
       "kind": "field",
       "disposition": "partial",
       "feature": "score-core",
@@ -2499,13 +2520,6 @@
       "disposition": "out-of-scope",
       "feature": "score-core",
       "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
-    },
-    {
-      "name": "Score.equals",
-      "kind": "method",
-      "disposition": "derived",
-      "feature": "score-core",
-      "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
     },
     {
       "name": "Score.exportFlatSyncPoints",
@@ -2522,25 +2536,11 @@
       "reason": "Callable model behavior is inventoried; semantic output fields are compared instead."
     },
     {
-      "name": "Score.headerAndFooter",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "score-core",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Score.instructions",
       "kind": "field",
       "disposition": "partial",
       "feature": "score-core",
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
-      "name": "Score.isVisible",
-      "kind": "field",
-      "disposition": "out-of-scope",
-      "feature": "score-core",
-      "reason": "Rendering, layout, lookup, or visibility state is outside authored semantic comparison."
     },
     {
       "name": "Score.masterBars",
@@ -2613,13 +2613,6 @@
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
     },
     {
-      "name": "Score.template",
-      "kind": "field",
-      "disposition": "partial",
-      "feature": "score-core",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
       "name": "Score.tempo",
       "kind": "get",
       "disposition": "partial",
@@ -2629,13 +2622,6 @@
     {
       "name": "Score.tempoLabel",
       "kind": "get",
-      "disposition": "partial",
-      "feature": "score-core",
-      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
-    },
-    {
-      "name": "Score.textAlign",
-      "kind": "field",
       "disposition": "partial",
       "feature": "score-core",
       "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
@@ -2656,6 +2642,20 @@
     },
     {
       "name": "Score.words",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "ScoreStyle.defaultHeaderAndFooter",
+      "kind": "field",
+      "disposition": "partial",
+      "feature": "score-core",
+      "reason": "Inventoried in the pinned model; complete semantic mapping is tracked by the feature ledger."
+    },
+    {
+      "name": "ScoreStyle.headerAndFooter",
       "kind": "field",
       "disposition": "partial",
       "feature": "score-core",
@@ -4730,5 +4730,156 @@
       "feature": "tempo-automations",
       "reason": "Upstream importer fixture guitarpro8/orphan-tempo-automation.gp is mapped to tempo-automations; Go coverage is recorded by the feature ledger."
     }
-  ]
+  ],
+  "modelSymbolMigration": {
+    "previous": 384,
+    "current": 384,
+    "unchanged": 356,
+    "renamed": 28,
+    "added": 0,
+    "removed": 0,
+    "unexplainedRemovals": [],
+    "renames": [
+      {
+        "from": "Automation.barOccurence",
+        "to": "SyncPointData.barOccurence",
+        "kind": "field"
+      },
+      {
+        "from": "Automation.millisecondOffset",
+        "to": "SyncPointData.millisecondOffset",
+        "kind": "field"
+      },
+      {
+        "from": "Bar.bar",
+        "to": "SustainPedalMarker.bar",
+        "kind": "field"
+      },
+      {
+        "from": "Bar.nextPedalMarker",
+        "to": "SustainPedalMarker.nextPedalMarker",
+        "kind": "field"
+      },
+      {
+        "from": "Bar.pedalType",
+        "to": "SustainPedalMarker.pedalType",
+        "kind": "field"
+      },
+      {
+        "from": "Bar.previousPedalMarker",
+        "to": "SustainPedalMarker.previousPedalMarker",
+        "kind": "field"
+      },
+      {
+        "from": "Bar.ratioPosition",
+        "to": "SustainPedalMarker.ratioPosition",
+        "kind": "field"
+      },
+      {
+        "from": "MasterBar.createSimple",
+        "to": "BeamingRules.createSimple",
+        "kind": "method"
+      },
+      {
+        "from": "MasterBar.findRule",
+        "to": "BeamingRules.findRule",
+        "kind": "method"
+      },
+      {
+        "from": "MasterBar.groups",
+        "to": "BeamingRules.groups",
+        "kind": "field"
+      },
+      {
+        "from": "MasterBar.uniqueId",
+        "to": "BeamingRules.uniqueId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.hammerPullDestinationNoteId",
+        "to": "NoteIdBag.hammerPullDestinationNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.hammerPullOriginNoteId",
+        "to": "NoteIdBag.hammerPullOriginNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.noteHead",
+        "to": "NoteStyle.noteHead",
+        "kind": "field"
+      },
+      {
+        "from": "Note.noteHeadCenterOnStem",
+        "to": "NoteStyle.noteHeadCenterOnStem",
+        "kind": "field"
+      },
+      {
+        "from": "Note.slideOriginNoteId",
+        "to": "NoteIdBag.slideOriginNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.slideTargetNoteId",
+        "to": "NoteIdBag.slideTargetNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.slurDestinationNoteId",
+        "to": "NoteIdBag.slurDestinationNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.slurOriginNoteId",
+        "to": "NoteIdBag.slurOriginNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.tieDestinationNoteId",
+        "to": "NoteIdBag.tieDestinationNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Note.tieOriginNoteId",
+        "to": "NoteIdBag.tieOriginNoteId",
+        "kind": "field"
+      },
+      {
+        "from": "Score.buildText",
+        "to": "HeaderFooterStyle.buildText",
+        "kind": "method"
+      },
+      {
+        "from": "Score.defaultHeaderAndFooter",
+        "to": "ScoreStyle.defaultHeaderAndFooter",
+        "kind": "field"
+      },
+      {
+        "from": "Score.equals",
+        "to": "HeaderFooterStyle.equals",
+        "kind": "method"
+      },
+      {
+        "from": "Score.headerAndFooter",
+        "to": "ScoreStyle.headerAndFooter",
+        "kind": "field"
+      },
+      {
+        "from": "Score.isVisible",
+        "to": "HeaderFooterStyle.isVisible",
+        "kind": "field"
+      },
+      {
+        "from": "Score.template",
+        "to": "HeaderFooterStyle.template",
+        "kind": "field"
+      },
+      {
+        "from": "Score.textAlign",
+        "to": "HeaderFooterStyle.textAlign",
+        "kind": "field"
+      }
+    ]
+  }
 }

@@ -20,9 +20,11 @@ Authored notation and playback data remain within scope, even when the library d
 
 The database maps all 405 feature rows from the four public Guitar Pro format tables.
 Those tables contain 157 distinct feature labels.
-The source inventory contains 4,365 constructs from 119 pinned source and test files.
-Of these, 1,507 constructs belong to model files.
-Every discovered public model field has a capability association.
+The source inventory contains 6,656 constructs from 119 pinned source and test files.
+It preserves all 4,365 earlier constructs and adds 2,291 explicit property assignments.
+Of these, 1,909 constructs belong to model files.
+Exact reviews classify 1,227 GP importer/configuration assignments and dispatches
+and link 312 importer-populated model fields or enum members to primary capability owners.
 Associations identify where to review a field. They do not prove its behavior.
 Other unclassified constructs remain queryable through `unreviewed_constructs`.
 
@@ -144,10 +146,13 @@ The [GP8 table](https://alphatab.net/docs/formats/guitar-pro-8) says audio files
 Pinned source and tests support backing-track data, and this library already imports it.
 Therefore website ratings cannot replace pinned source evidence.
 
-The old upstream scanner covers nine primary model files.
-It also attributes helper-class fields to the filename's main class.
-For example, `BeamingRules.groups` becomes `MasterBar.groups`, and `SyncPointData.barOccurence` becomes `Automation.barOccurence`.
-The new inventory keeps the declaring class and includes every discovered model enum member.
+The canonical upstream scanner still covers the same 384 symbols in nine primary
+model files. It now records declaring classes and migrates 28 unambiguous stale
+filename owners without removing a symbol or changing its reviewed disposition.
+Colliding helper declarations remain visible in the expanded scan. The expanded
+inventory keeps declaring classes, all discovered model enum members, and exact
+assignment/dispatch ownership. GP applicability is stated conservatively for
+the importer or configuration files that can be reached by each format family.
 
 Several broad feature-ledger rows still point to [issue 34](https://github.com/CaliLuke/go-guitar-pro/issues/34), which is closed.
 That ticket is not an open owner for the remaining gaps.

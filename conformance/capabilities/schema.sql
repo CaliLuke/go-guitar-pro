@@ -31,7 +31,10 @@ CREATE TABLE upstream_construct (
   name TEXT NOT NULL,
   declaration TEXT NOT NULL,
   legacy_disposition TEXT,
-  review_status TEXT NOT NULL DEFAULT 'unverified'
+  review_status TEXT NOT NULL DEFAULT 'unverified',
+  source_scope TEXT NOT NULL DEFAULT 'unclassified',
+  source_formats TEXT NOT NULL DEFAULT '[]',
+  scope_reason TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE construct_capability (
   construct_id TEXT NOT NULL REFERENCES upstream_construct(id),
@@ -39,6 +42,28 @@ CREATE TABLE construct_capability (
   PRIMARY KEY (construct_id, capability_id)
 );
 CREATE TABLE source_file (path TEXT PRIMARY KEY, sha256 TEXT NOT NULL);
+CREATE TABLE upstream_review (
+  construct_id TEXT PRIMARY KEY REFERENCES upstream_construct(id),
+  source_scope TEXT NOT NULL,
+  formats_json TEXT NOT NULL,
+  disposition TEXT NOT NULL CHECK (disposition IN ('authored','derived','excluded')),
+  reason TEXT NOT NULL,
+  primary_capability TEXT REFERENCES capability(id),
+  model_declaration TEXT
+);
+CREATE TABLE upstream_secondary_capability (
+  construct_id TEXT NOT NULL REFERENCES upstream_review(construct_id),
+  capability_id TEXT NOT NULL REFERENCES capability(id),
+  PRIMARY KEY (construct_id, capability_id)
+);
+CREATE TABLE upstream_model_review (
+  declaration TEXT PRIMARY KEY,
+  construct_id TEXT NOT NULL REFERENCES upstream_construct(id),
+  formats_json TEXT NOT NULL,
+  disposition TEXT NOT NULL CHECK (disposition='authored'),
+  reason TEXT NOT NULL,
+  primary_capability TEXT NOT NULL REFERENCES capability(id)
+);
 CREATE TABLE obligation (
   kind TEXT NOT NULL,
   name TEXT NOT NULL,
@@ -137,7 +162,12 @@ SELECT * FROM capability_status WHERE scope='guitar-pro'
 AND (import_status<>'supported' OR model_status<>'supported' OR export_status<>'supported');
 CREATE VIEW unreviewed_constructs AS
 SELECT u.* FROM upstream_construct u WHERE NOT EXISTS
-  (SELECT 1 FROM construct_capability m WHERE m.construct_id=u.id);
+  (SELECT 1 FROM construct_capability m WHERE m.construct_id=u.id)
+AND NOT EXISTS (SELECT 1 FROM upstream_review r WHERE r.construct_id=u.id);
+CREATE VIEW authored_upstream_constructs AS
+SELECT u.*,r.disposition,r.reason,r.primary_capability,r.model_declaration
+FROM upstream_construct u JOIN upstream_review r ON r.construct_id=u.id
+WHERE r.disposition='authored';
 CREATE VIEW observed_differences AS
 SELECT p.fixture_path,c.title,p.comparison_status,p.source_count,p.target_count,p.source_json,p.target_json
 FROM probe_comparison p JOIN capability c ON c.id=p.capability_id WHERE comparison_status='different';

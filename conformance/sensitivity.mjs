@@ -195,6 +195,100 @@ const mutations = [
     want: 'semanticMutationMovedHelper:value.Name'
   },
   {
+    id: 'upstream-new-authored-assignment-and-dispatch',
+    contract: 'unclassified-source-dispatch',
+    category: 'inventory',
+    file: 'conformance/capabilities/upstream_sensitivity.ts',
+    replacements: [
+      { before: '        beat.brush = true;\n', after: '        beat.brush = true;\n        beat.reviewProbe = true;\n' },
+      { before: "        case 'Brush':\n", after: "        case 'Brush':\n        case 'ReviewProbe':\n" }
+    ],
+    command: 'capability-test',
+    want: 'dispatch or assignment has no review'
+  },
+  {
+    id: 'upstream-authored-owner-removed',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/capabilities/upstream-ownership.json',
+    before: '      "construct_id": "packages/alphatab/src/importer/GpifParser.ts::dispatch::GpifParser._parseBeatProperties:Brush::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "brush",',
+    after: '      "construct_id": "packages/alphatab/src/importer/GpifParser.ts::dispatch::GpifParser._parseBeatProperties:Brush::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": null,',
+    command: 'capability-check',
+    want: 'Authored upstream construct has no primary capability owner'
+  },
+  {
+    id: 'upstream-unique-catalog-owner-regression',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/capabilities/upstream-ownership.json',
+    before: '      "declaration": "Beat.brushDuration",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5",\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "A reviewed Guitar Pro importer assignment or enum reference reaches this model declaration.",\n      "primary_capability": "brush",',
+    after: '      "declaration": "Beat.brushDuration",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5",\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "A reviewed Guitar Pro importer assignment or enum reference reaches this model declaration.",\n      "primary_capability": "duration",',
+    command: 'capability-check',
+    want: 'Unique exact catalog owner mismatch for Beat.brushDuration'
+  },
+  {
+    id: 'upstream-inferred-model-link-bypass',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/capabilities/upstream-ownership.json',
+    before: '      "construct_id": "packages/alphatab/src/importer/Gp3To5Importer.ts::assignment::Gp3To5Importer.readBeatEffects:beat.brushDuration::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "brush",\n      "secondary_capabilities": [],\n      "model_declaration": "Beat.brushDuration"',
+    after: '      "construct_id": "packages/alphatab/src/importer/Gp3To5Importer.ts::assignment::Gp3To5Importer.readBeatEffects:beat.brushDuration::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "duration",\n      "secondary_capabilities": [],\n      "model_declaration": null',
+    command: 'capability-check',
+    want: 'inferred authored assignment has no model declaration link Beat.brushDuration'
+  },
+  {
+    id: 'upstream-model-review-and-links-removed',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/capabilities/upstream-ownership.json',
+    replacements: [
+      {
+        before: '"construct_id": "packages/alphatab/src/importer/Gp3To5Importer.ts::assignment::Gp3To5Importer.readScoreInformation:this._score.title::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "metadata",\n      "secondary_capabilities": [],\n      "model_declaration": "Score.title"',
+        after: '"construct_id": "packages/alphatab/src/importer/Gp3To5Importer.ts::assignment::Gp3To5Importer.readScoreInformation:this._score.title::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "metadata",\n      "secondary_capabilities": [],\n      "model_declaration": null'
+      },
+      {
+        before: '"construct_id": "packages/alphatab/src/importer/GpifParser.ts::assignment::GpifParser._parseScoreNode:this.score.title::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "metadata",\n      "secondary_capabilities": [],\n      "model_declaration": "Score.title"',
+        after: '"construct_id": "packages/alphatab/src/importer/GpifParser.ts::assignment::GpifParser._parseScoreNode:this.score.title::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "metadata",\n      "secondary_capabilities": [],\n      "model_declaration": null'
+      },
+      {
+        before: '    {\n      "declaration": "Score.title",\n      "formats": [\n        "gp3",\n        "gp4",\n        "gp5",\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "A reviewed Guitar Pro importer assignment or enum reference reaches this model declaration.",\n      "primary_capability": "metadata",\n      "secondary_capabilities": []\n    },\n',
+        after: ''
+      },
+      { before: '"reviewed_model_declarations": 312', after: '"reviewed_model_declarations": 311' }
+    ],
+    command: 'capability-check',
+    want: 'inferred authored assignment has no model declaration link Score.title'
+  },
+  {
+    id: 'upstream-typed-alias-model-review-and-link-removed',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/capabilities/upstream-ownership.json',
+    replacements: [
+      {
+        before: '"construct_id": "packages/alphatab/src/importer/GpifParser.ts::assignment::GpifParser._parseAutomation:syncPointValue.barOccurence::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "automation-detail",\n      "secondary_capabilities": [\n        "sync-points"\n      ],\n      "model_declaration": "SyncPointData.barOccurence"',
+        after: '"construct_id": "packages/alphatab/src/importer/GpifParser.ts::assignment::GpifParser._parseAutomation:syncPointValue.barOccurence::1",\n      "source_scope": "guitar-pro-importer",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",\n      "primary_capability": "automation-detail",\n      "secondary_capabilities": [\n        "sync-points"\n      ],\n      "model_declaration": null'
+      },
+      {
+        before: '    {\n      "declaration": "SyncPointData.barOccurence",\n      "formats": [\n        "gp6",\n        "gp7",\n        "gp8"\n      ],\n      "disposition": "authored",\n      "reason": "A reviewed Guitar Pro importer assignment or enum reference reaches this model declaration.",\n      "primary_capability": "automation-detail",\n      "secondary_capabilities": [\n        "sync-points"\n      ]\n    },\n',
+        after: ''
+      },
+      { before: '"reviewed_model_declarations": 312', after: '"reviewed_model_declarations": 311' }
+    ],
+    command: 'capability-check',
+    want: 'inferred authored assignment has no model declaration link SyncPointData.barOccurence'
+  },
+  {
+    id: 'upstream-declaring-class-regression',
+    contract: 'unclassified-source-dispatch',
+    category: 'ownership',
+    file: 'conformance/upstream-inventory.json',
+    before: '      "name": "SyncPointData.barOccurence",\n      "kind": "field",',
+    after: '      "name": "Automation.barOccurence",\n      "kind": "field",',
+    command: 'upstream-check',
+    want: 'AlphaTab upstream inventory is stale'
+  },
+  {
     id: 'automation-dispatch-diagnostic',
     category: 'diagnostic',
     file: 'gpif_automations.go',
@@ -626,6 +720,18 @@ try {
       result = spawnSync('node', ['conformance/verify.mjs'], {
         cwd: root, encoding: 'utf8', env: { ...process.env, SEMANTIC_LEDGER_OVERLAY: mutated }
       });
+    } else if (mutation.command === 'capability-test') {
+      result = spawnSync('python3', ['-B', '-m', 'unittest', 'discover', '-s', 'conformance/capabilities', '-p', 'test_manage.py'], {
+        cwd: root, encoding: 'utf8', env: { ...process.env, UPSTREAM_SENSITIVITY_OVERLAY: mutated }
+      });
+    } else if (mutation.command === 'capability-check') {
+      result = spawnSync('python3', ['-B', 'conformance/capabilities/manage.py', 'check'], {
+        cwd: root, encoding: 'utf8', env: { ...process.env, UPSTREAM_OWNERSHIP_OVERLAY: mutated }
+      });
+    } else if (mutation.command === 'upstream-check') {
+      result = spawnSync('node', ['conformance/sync-upstream-inventory.mjs', '--check'], {
+        cwd: root, encoding: 'utf8', env: { ...process.env, UPSTREAM_INVENTORY_OVERLAY: mutated }
+      });
     } else if (mutation.command === 'oracle-test') {
       result = spawnSync('go', ['test', '-count=1', '-run', mutation.test, '.'], {
         cwd: root,
@@ -653,7 +759,7 @@ try {
     }
     const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
     if (result.status === 0) throw new Error(`${mutation.id} survived ${mutation.test ?? mutation.command}`);
-    const expectedFailure = mutation.command === 'verify' || output.includes('--- FAIL:');
+    const expectedFailure = ['verify', 'capability-test', 'capability-check', 'upstream-check'].includes(mutation.command) || output.includes('--- FAIL:');
     if (!expectedFailure || !output.includes(mutation.want)) {
       throw new Error(`${mutation.id} failed for an unexpected reason:\n${output}`);
     }

@@ -361,6 +361,20 @@ for (const group of ['testCases', 'importerCases', 'modelFields', 'modelSymbols'
     seen.add(identity);
   }
 }
+const modelMigration = upstream.modelSymbolMigration;
+if (!modelMigration || modelMigration.previous !== 384 || modelMigration.current !== 384 ||
+    modelMigration.renamed !== 28 || modelMigration.unchanged !== 356 ||
+    modelMigration.added !== 0 || modelMigration.removed !== 0 ||
+    modelMigration.unexplainedRemovals?.length !== 0 || modelMigration.renames?.length !== 28) {
+  fail('upstream model-symbol owner migration is incomplete or unexplained');
+}
+const currentModelSymbols = new Set(upstream.modelSymbols.map(item => `${item.name}:${item.kind}`));
+for (const migration of modelMigration.renames) {
+  if (!migration.from || !currentModelSymbols.has(`${migration.to}:${migration.kind}`) ||
+      currentModelSymbols.has(`${migration.from}:${migration.kind}`)) {
+    fail(`invalid upstream model-symbol owner migration ${migration.from} -> ${migration.to}`);
+  }
+}
 
 const snapshotCaseIDs = new Set();
 for (const file of fs.readdirSync(path.join(root, 'conformance/snapshots')).filter(file => file.endsWith('.json'))) {

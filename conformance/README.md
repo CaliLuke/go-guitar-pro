@@ -28,13 +28,19 @@ model symbols with:
 
 ```sh
 node conformance/sync-upstream-inventory.mjs
+python3 -B conformance/capabilities/sync_upstream_ownership.py
 ```
 
 New symbols are emitted as `unclassified`, which fails the gate until each one is
-given an explicit disposition, feature, and reason. The discovery set covers the
-score, master-bar, track, staff, bar, voice, beat, note, and automation models
-used by the canonical contract. There is no automatic classifier or acceptance
-mode for oracle upgrades.
+given an explicit disposition, feature, and reason. The class-aware canonical
+scan preserves its 384-symbol surface and records reviewed owner migrations.
+The expanded capability scan also records explicit importer assignments. Exact
+reviews in `capabilities/upstream-ownership.json` give reachable GP importer and
+configuration constructs their source formats, disposition, capability owner,
+and linked model declaration. Applicability is intentionally conservative at
+the source-file and format-family level; it does not claim that every branch is
+reachable in every listed version. There is no automatic acceptance mode for
+oracle upgrades.
 
 The semantic contract starts at the public `Song` type. The gate discovers each
 reachable public structure and field. It compares that set with the model

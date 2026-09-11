@@ -49,9 +49,13 @@ SELECT * FROM website_comparison WHERE format='gp8';
 SELECT * FROM observed_differences
 WHERE title='Navigation targets and jumps';
 
--- Find source fields that still need an explicit capability association.
+-- Find source constructs that still need an explicit capability association.
 SELECT name,path,line FROM unreviewed_constructs
 WHERE kind='field' AND path LIKE '%/model/%';
+
+-- Inspect authored GP syntax with its exact primary owner and model link.
+SELECT name,path,source_formats,primary_capability,model_declaration
+FROM authored_upstream_constructs ORDER BY path,line;
 
 -- Find missing fixtures by content, rather than filename.
 SELECT * FROM missing_upstream_fixtures;
@@ -101,7 +105,20 @@ A capability association alone does not prove an individual source construct.
 The expanded source scan reads the pinned Git revision directly.
 It also works with the conformance gate's checkout without working files.
 It covers model, importer, exporter, MIDI source, and Guitar Pro importer tests.
-The scan is lexical. It does not resolve TypeScript types or discover every semantic branch.
+The scan is class-aware and includes explicit property assignments and case
+dispatches. `upstream-ownership.json` is the canonical reviewed applicability
+and ownership input. Its ordered path policy keeps other importers, exporters,
+playback code, tests, and shared container infrastructure visible without
+turning them into Guitar Pro obligations. The scan is lexical. Its GP3-GP8
+applicability is conservative by reachable importer/configuration file, not an
+exact claim about each branch in each version.
+
+After an oracle-source update, run
+`python3 -B conformance/capabilities/sync_upstream_ownership.py`. The sync keeps
+matching reviews, retains stale identities so they cannot disappear silently,
+and emits new constructs and linked declarations as `unclassified`. It does not
+choose dispositions or owners. Review those rows, stale entries, and migration
+counts; the database check fails until the review is complete.
 
 ## Refresh runtime evidence
 
@@ -150,7 +167,7 @@ The original URL, retrieval time, and page hash remain available for review.
 | --- | --- |
 | `capability`, `assessment`, `evidence` | Reviewed capability scope and stage ratings |
 | `capability_status`, `progress`, `gaps` | Stage comparisons and remaining work |
-| `upstream_construct`, `construct_capability`, `unreviewed_constructs` | Expanded source inventory and unresolved associations |
+| `upstream_construct`, `upstream_review`, `upstream_model_review`, `construct_capability`, `unreviewed_constructs` | Expanded source inventory, exact authored ownership, importer-populated declarations, and unresolved associations |
 | `source_file`, `metadata` | Revision, hashes, scope, and receipt freshness |
 | `website_feature`, `website_capability`, `website_comparison` | Every captured format-documentation row |
 | `obligation`, `matrix_case`, `support_claim` | Executed obligations, matrix cases, and supported-stage closure claims |
