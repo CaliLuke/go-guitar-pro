@@ -306,12 +306,12 @@ func runConformanceLyricsPlaybackAutomation(run *conformanceRun) {
 	run.Field("Track.Solo", track.Solo, true)
 	run.Field("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 1, Position: 0.75, Value: 0.625, Linear: true}})
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.normalize.playback-state", "gp8.omit.volume-automations"} {
+	for _, code := range []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer"} {
 		if !hasExportCode(report, code) {
 			t.Fatalf("playback combination report = %#v, want %s", report.Entries, code)
 		}
 	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.playback-state", "gp8.omit.volume-automations"}}})
+	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.playback-state", "gp8.omit.volume-automation-consumer"}}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -323,9 +323,7 @@ func runConformanceLyricsPlaybackAutomation(run *conformanceRun) {
 	run.Wire("gpifTrack.Lyrics", got.Lyrics, track.Lyrics)
 	run.Wire("gpifTrack.Automations", got.SoundAutomations, track.SoundAutomations)
 	run.Wire("gpifTrack.PlaybackState", [2]bool{got.Mute, got.Solo}, [2]bool{true, false})
-	if len(gotSong.VolumeAutomations) != 0 {
-		t.Fatal("omitted volume automation appeared in GP8 output")
-	}
+	run.Preserved("Song.VolumeAutomations", gotSong.VolumeAutomations, song.VolumeAutomations)
 }
 
 func TestConformanceBackingSyncTempo(t *testing.T) {

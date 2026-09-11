@@ -530,6 +530,28 @@ export function loadNormalizedScore(fixture) {
   return normalizeScore(loadScore(fixture));
 }
 
+export function loadVolumeAutomationFacts(fixture) {
+  const facts = [];
+  const score = loadScore(fixture);
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            for (const automation of beat.automations) {
+              if (automation.type === alphaTab.model.AutomationType.Volume) {
+                facts.push({ track: track.index, staff: staff.index, voice: voice.index,
+                  beat: beat.index, ...normalizeAutomation(automation, bar.index) });
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadAutomationFacts(fixture) {
   const score = loadScore(fixture);
   const detail = (automation, bar) => ({
@@ -1086,6 +1108,10 @@ function main() {
       fixture,
       score: loadNormalizedScore(fixture)
     })))}\n`);
+    return;
+  }
+  if (args[0] === '--volume-automations' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadVolumeAutomationFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--automations' && args.length === 2) {

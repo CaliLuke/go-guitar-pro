@@ -14,8 +14,8 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `staff-ownership` | gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix compares public ownership paths, compatibility authority, and multi-staff export behavior; audited upstream-only model surface is recorded by issue 34. |
 | `transposition` | gp6, gp7, gp8 | partial | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | Display transposition survives import and first-staff GP8 export. PartSounding nominal keys independently derive effective keys, including Neutral as zero. GP8 lacks independent effective keys, sounding transposition, and per-staff display offsets, and consumers reset percussion display offsets; each limit is reported. |
 | `clef-octave` | gp6, gp7, gp8 | supported | none | Every GPIF bar-level clef octave survives import, post-parse editing, GP8 export, and pinned AlphaTab consumption independently from Beat.Octave. |
-| `legato-slurs` | gp6, gp7, gp8 | supported | none | The matrix preserves the complete authored beat-level Legato element. Separate note-level slur symbols remain outside this contract because no distinct authored source evidence was found. |
-| `fermata` | gp6, gp7, gp8 | supported | none | GPIF fermata offsets, types, and lengths survive import, post-parse editing, GP8 export, and pinned AlphaTab consumption. Beat association remains derived from the authoritative master-bar records. |
+| `legato-slurs` | gp6, gp7, gp8 | partial | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) | GPIF and Go preserve authored legato flags. Export reports destinations that differ from pinned AlphaTab derivation. Separate note-level slurs remain outside this contract. |
+| `fermata` | gp6, gp7, gp8 | partial | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) | GPIF and Go preserve exact fermata offsets, types, and lengths. Export reports pinned consumer offset movement and collisions; ordinary retained positions remain supported. |
 | `free-time` | gp6, gp7, gp8 | supported | none | The authored GPIF FreeTime marker survives exact master-bar import, post-parse editing, GP8 export, and pinned AlphaTab consumption without replacing numeric meter timing. |
 | `grace-relationships` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers authored grace order, ownership, source fret, transitions, orphan graces, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `note-and-beat-semantics` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix inventories and tests public note and beat fields, effects, strict export decisions, and independent consumption; audited upstream-only model surface is recorded by issue 34. |
@@ -26,7 +26,7 @@ AlphaTab oracle: `@coderline/alphatab@1.8.4`, source `022a45c8e42370f9e12e68949d
 | `percussion-articulations` | gp7, gp8 | partial | [#34](https://github.com/CaliLuke/go-guitar-pro/issues/34) | The matrix covers public articulation identity, every resolved staff, notation, playback, validation, and export policy; audited upstream-only model surface is recorded by issue 34. |
 | `brush` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) | M10-BRUSH preserves binary and GPIF kind, direction, exact authored timing, source absence, compatibility edits, and supported GP8 wire values with scoped diagnostics for malformed or inexpressible values. |
 | `beat-lyrics` | gp6, gp7, gp8 | supported | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) | Beat.Lyrics preserves GPIF beat-scoped lines as independent ordered occurrence data through public edits and GP8 export, without merging them into beat text or score and track lyrics. |
-| `chord-diagram` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) | Representable chord diagram ranges and finger assignments survive binary or GPIF import, direct public edits, exact GP8 positions, Go reimport, and pinned AlphaTab consumption. Legacy chord description and interval-omission fields remain separate losses. |
+| `chord-diagram` | gp3, gp4, gp5, gp6, gp7, gp8 | partial | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) | GPIF and Go preserve chord ranges and finger assignments. Export reports annular barres ignored by pinned AlphaTab. Legacy chord description and interval-omission fields remain separate losses. |
 | `beat-vibrato` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) | Beat vibrato strength survives GP3-8 import, deterministic compatibility reconciliation, GP8 export, and pinned AlphaTab consumption without sharing authority with note vibrato. |
 | `golpe` | gp6, gp7, gp8 | supported | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) | BeatEffects.Golpe preserves GPIF Thumb and Finger values as independent authored beat marks through direct edits, exact GP8 output, and pinned AlphaTab consumption. |
 | `beaming` | gp3, gp4, gp5, gp6, gp7, gp8 | supported | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) | Canonical custom groups and beat-level beam and stem overrides survive GP5 or GPIF import and GP8 export. Legacy Beat.Display raw fields retain individual explicit target omissions. |
@@ -296,9 +296,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 240 |
+| `preserved` | 241 |
 | `normalized` | 34 |
-| `omitted` | 110 |
+| `omitted` | 109 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -307,7 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 96 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 100 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -384,7 +384,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `midi-bank-preservation` | `midi-bank` | `TestConformanceMIDIBank` | `TestAlphaTabPreservesMIDIBanks` | no | Full-range bank definitions, initial channel mirrors, and duplicate-position sound changes survive checked GP5/GPIF import and GP8 export in source order. |
 | `reference-aware-midi-program-validation` | `score-core` | `TestConformanceMIDIProgramReferences` | `TestAlphaTabPreservesSelectedMIDIProgram` | no | Actual GP3 and GP4 unused -1 slots no longer invalidate GP8 export, while selected invalid values remain exact track-located rejections and a valid non-default program survives the pinned consumer. |
 | `clef-octave-preservation` | `clef-octave` | `TestConformanceClefOctave` | `TestAlphaTabPreservesClefOctaves` | no | Every supported bar-level clef octave survives at its exact staff and measure location independently from Beat.Octave. |
-| `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | Every supported fermata symbol, exact master-bar offset, and finite length survives as an independent authored value while beat association remains consumer-derived. |
+| `fermata-preservation` | `fermata` | `TestConformanceFermatas` | `TestAlphaTabPreservesFermatas` | no | GPIF preserves exact authored holds. The pinned consumer derives beat association and can move or overwrite holds; scoped reports protect strict export. |
 | `free-time-preservation` | `free-time` | `TestConformanceFreeTime` | `TestAlphaTabPreservesFreeTime` | no | Every authored free-time marker survives on its exact master bar without changing numeric meter timing. |
 | `direction-preservation` | `score-core` | `TestConformanceDirections` | `TestAlphaTabPreservesDirections` | no | Every navigation target and jump survives as one canonical set, including simultaneous markers and documented legacy pointer reconciliation. |
 | `unclassified-model-field` | `score-core` | `TestSemanticContractInventory` | none | yes | A new public field must receive a semantic role before the gate passes. |
@@ -419,7 +419,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `structural-export-resilience` | `staff-ownership` | `TestConformanceStructuralResilience` | none | yes | Valid generated public graphs keep their complete topology and note values through GP8 export and reimport. |
 | `audio-engine-state` | `score-core` | `TestConformanceSourceAudit` | none | no | MIDI and RSE map to distinct public playback states, and unknown states remain visible. |
 | `beat-dynamic-quantization` | `note-and-beat-semantics` | `TestConformanceDynamicQuantization` | `TestAlphaTabGP8ReadsNormalAndRestDynamic` | yes | Each authored dynamic either survives as its canonical marking or produces an exact normalization decision. |
-| `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
+| `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | GPIF retains occurrence-owned legato flags. Export reports each authored destination that differs from the pinned consumer destination. |
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
 | `beat-vibrato-preservation` | `beat-vibrato` | `TestConformanceBeatVibrato` | `TestAlphaTabPreservesBeatVibrato` | yes | Binary presence maps to Slight while GPIF Slight and Wide remain distinct through typed and legacy edits, exact GP8 Strength output, reimport, and pinned-consumer loading without conflating note vibrato. |
 | `beat-fade-preservation` | `note-and-beat-semantics` | `TestConformanceBeatFade` | `TestAlphaTabPreservesBeatFade` | yes | Binary presence maps to FadeIn while every GPIF fade value remains distinct through typed and legacy edits, exact Fadding output, reimport, and pinned-consumer loading. |

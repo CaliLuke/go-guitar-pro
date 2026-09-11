@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"math"
 	"slices"
 	"strings"
@@ -85,10 +86,10 @@ func runConformanceFermatas(run *conformanceRun) {
 		{Offset: mustScoreTime(t, 1920, 1), Type: FermataTypeLong, Length: 1.25},
 	}
 	// A sub-tick offset stays exact instead of being truncated during GPIF
-	// conversion. It is not used for AlphaTab's integer beat association.
+	// conversion. AlphaTab moves it to an integer tick, which requires an explicit allowance.
 	song.MeasureHeaders[1].Fermatas = []Fermata{{Offset: mustScoreTime(t, 1, 2), Type: FermataTypeMedium, Length: 0}}
-	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
-	if err != nil || len(report.Entries) != 0 {
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.fermata-consumer-offset"}}})
+	if err != nil || !slices.Equal(reportCodes(report), []string{"gp8.normalize.fermata-consumer-offset"}) {
 		t.Fatalf("fermata export = %v, %#v", err, report.Entries)
 	}
 	wire := conformanceFermataWire(t, data)
@@ -286,4 +287,85 @@ type conformanceAlphaTabDerivedFermata struct {
 	Offset float64 `json:"offset"`
 	Type   string  `json:"type"`
 	Length float64 `json:"length"`
+}
+
+func TestGP8FermataConsumerLimits(t *testing.T) {
+	runFermataConsumerLimits(newConformanceRun(t), false)
+}
+func TestAlphaTabFermataConsumerLimits(t *testing.T) {
+	requireAlphaTabConformance(t)
+	runFermataConsumerLimits(newConformanceRun(t), true)
+}
+
+func runFermataConsumerLimits(run *conformanceRun, oracle bool) {
+	t := run.t
+	for _, tc := range []struct {
+		name    string
+		offsets [][2]int64
+		want    []float64
+		codes   []string
+	}{
+		{"single fractional", [][2]int64{{1, 2}}, []float64{0}, []string{"gp8.normalize.fermata-consumer-offset"}},
+		{"single whole tick", [][2]int64{{123, 1}}, []float64{122}, []string{"gp8.normalize.fermata-consumer-offset"}},
+		{"fractional collision", [][2]int64{{1, 2}, {3, 4}}, []float64{0}, []string{"gp8.normalize.fermata-consumer-offset", "gp8.normalize.fermata-consumer-offset", "gp8.omit.fermata-consumer-collision"}},
+		{"whole tick collision", [][2]int64{{122, 1}, {123, 1}}, []float64{122}, []string{"gp8.normalize.fermata-consumer-offset", "gp8.omit.fermata-consumer-collision"}},
+		{"ordinary", [][2]int64{{0, 1}, {480, 1}, {1920, 1}}, []float64{0, 480, 1920}, []string{}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			song := consumerLimitSong(t)
+			for i, offset := range tc.offsets {
+				song.MeasureHeaders[0].Fermatas = append(song.MeasureHeaders[0].Fermatas, Fermata{Offset: mustScoreTime(t, offset[0], offset[1]), Type: []FermataType{FermataTypeShort, FermataTypeLong, FermataTypeMedium}[i], Length: []float64{0.25, 1.5, 0.875}[i]})
+			}
+			data, report := assertConsumerLossPolicy(t, song, tc.codes)
+			run.Report("M07-FERMATA-CONSUMER", reportCodes(report), tc.codes)
+			roundTrip, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			run.Preserved("MeasureHeader.Fermatas", conformanceFermataValues(roundTrip.MeasureHeaders[0].Fermatas), conformanceFermataValues(song.MeasureHeaders[0].Fermatas))
+			for _, entry := range report.Entries {
+				if entry.Location != (ScoreLocation{}) || entry.Feature != "fermata" || entry.Reason == "" {
+					t.Fatalf("unscoped report: %#v", entry)
+				}
+			}
+			wire := conformanceFermataWire(t, data)[0]
+			wantWire := map[string][]string{
+				"single fractional": {"1/1920"}, "single whole tick": {"41/320"},
+				"fractional collision": {"1/1920", "1/1280"}, "whole tick collision": {"61/480", "41/320"},
+				"ordinary": {"0/1", "1/2", "2/1"},
+			}[tc.name]
+			for i, f := range wire {
+				run.Wire("gpifFermata.Offset", f.Offset, wantWire[i])
+			}
+			if tc.name == "single whole tick" && report.Entries[0].Reason != "pinned AlphaTab moves fermata[0] offset 123/1 to tick 122; GPIF retains the exact offset" {
+				t.Fatalf("imprecise movement: %#v", report)
+			}
+			if len(tc.offsets) == 2 {
+				lastReport := report.Entries[len(report.Entries)-1]
+				wantReason := fmt.Sprintf("pinned AlphaTab overwrites fermata[0] with fermata[1] at consumer tick %g; GPIF retains both records", tc.want[0])
+				if lastReport.Disposition != ExportDispositionOmitted || lastReport.Reason != wantReason {
+					t.Fatalf("imprecise collision: %#v", lastReport)
+				}
+				refused, _, loss := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.fermata-consumer-offset"}}})
+				if len(refused) != 0 || loss == nil {
+					t.Fatalf("movement allowance hid a collision: %d bytes, %v", len(refused), loss)
+				}
+			}
+			if oracle {
+				var facts []conformanceAlphaTabFermataBar
+				readAlphaTabOracleFacts(t, "--fermatas", writeConformanceFixture(t, data), &facts)
+				got := make([]float64, len(facts[0].Authored))
+				for i, f := range facts[0].Authored {
+					got[i] = f.Offset
+				}
+				if !slices.Equal(got, tc.want) {
+					t.Fatalf("consumer offsets = %v, want %v", got, tc.want)
+				}
+				last := facts[0].Authored[len(facts[0].Authored)-1]
+				if last.Length != song.MeasureHeaders[0].Fermatas[len(tc.offsets)-1].Length || last.Type != []string{"short", "long", "medium"}[len(tc.offsets)-1] {
+					t.Fatalf("wrong collision winner: %#v", last)
+				}
+			}
+		})
+	}
 }

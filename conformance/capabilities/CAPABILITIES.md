@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 70 | 16 | 13 | 2 |
 | model | 69 | 17 | 14 | 1 |
-| export | 46 | 25 | 27 | 3 |
+| export | 46 | 26 | 26 | 3 |
 
 All three stages have a supported rating in 46 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -117,7 +117,7 @@ Chords. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-An authored annular-finger barre is silently dropped by pinned AlphaTab despite strict export reporting no loss. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch.
+GPIF preserves explicit annular fingerings and synthesized third-barre endpoints with the canonical Ring token. Preflight reports annular barres ignored by pinned AlphaTab and strict export refuses unallowed loss. Independent regressions cover explicit Index/Annular/Thumb fingerings and synthesized three-barre diagrams.
 
 Completion criterion: Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports. Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.
 
@@ -675,7 +675,7 @@ Notes. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-A destination-only excerpt endpoint disappears in pinned AlphaTab while strict GP8 export reports no loss. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain.
+Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence.
 
 Completion criterion: Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption. Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.
 
@@ -957,11 +957,11 @@ Bounded work: [Apply authored HideTempo to the opening GP8 tempo event](https://
 
 Playback data. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Song.VolumeAutomations preserves channel-strip volume events and linear flags, and the GP8 writer reports them as omitted. Export remains blocked against pinned AlphaTab 1.8.4: its GPIF automation dispatcher has no volume case and its RSE channel-strip importer ignores Automations. The GP5 RSE fixture instead exercises a beat-local mix-table volume event, which is a different model domain.
+The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Preserve exact channel-strip GPIF events and Go reimport in per-track order. Report the pinned AlphaTab omission for every event and refuse strict export without the explicit code allowance. This acceptance revision was authorized by the user on 2026-09-11.
 
 Bounded work: [Export authored channel-strip volume automation](https://github.com/CaliLuke/go-guitar-pro/issues/59).
 
@@ -1037,7 +1037,7 @@ Structure. Priority 1. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 retains the authored rational XML, but pinned AlphaTab can move offsets and collapse two distinct holds into one. Strict export currently reports no loss for these cases; #47 remains open for a precise consumer-limit policy.
+Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions.
 
 Completion criterion: Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport and malformed-value diagnostics covered. Add pinned-consumer movement/collision evidence and precise strict-export reporting for affected offsets before claiming full export support.
 

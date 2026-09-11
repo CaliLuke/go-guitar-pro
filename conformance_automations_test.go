@@ -8,6 +8,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"math"
 	"os"
 	"os/exec"
@@ -84,7 +85,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 		run.Field("SoundAutomation.Sound", automation.Sound, []int{0, 1, 1}[index])
 		assertAutomationDetailFields(run, "SoundAutomation", automation.Linear, automation.Text, automation.Hidden, index, []string{"", "step sound", "linear sound"})
 	}
-	run.ClaimPrimary(claimSite("volume-automation", "model", "M17-AUTOMATION-SEMANTICS", "ordered tempo, sound, and volume changes")).Omitted("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
+	run.ClaimPrimary(claimSite("volume-automation", "model", "M17-AUTOMATION-SEMANTICS", "ordered tempo, sound, and volume changes")).Preserved("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: 0, Value: 0.25}, {Track: 0, Bar: 1, Position: 1, Value: 0.875, Linear: true}})
 	for index, automation := range song.VolumeAutomations {
 		run.Preserved("VolumeAutomation.Track", automation.Track, 0)
 		run.Preserved("VolumeAutomation.Bar", automation.Bar, index)
@@ -95,7 +96,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	assertAutomationMixTableFields(run, track.Measures[0].Voices[0].Beats[0].Effect.MixTableChange, change)
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.volume-automations", "gp8.omit.beat-mix-table-change", "gp8.omit.sound-automation-visibility"} {
+	for _, code := range []string{"gp8.omit.volume-automation-consumer", "gp8.omit.beat-mix-table-change", "gp8.omit.sound-automation-visibility"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
@@ -578,4 +579,63 @@ func conformanceAutomationBools(items []conformanceAutomationWireAutomation, get
 		result[index] = get(item)
 	}
 	return result
+}
+
+func TestGP8VolumeConsumerLimits(t *testing.T) { runVolumeConsumerLimits(newConformanceRun(t), false) }
+func TestAlphaTabVolumeConsumerLimits(t *testing.T) {
+	requireAlphaTabConformance(t)
+	runVolumeConsumerLimits(newConformanceRun(t), true)
+}
+
+func runVolumeConsumerLimits(run *conformanceRun, oracle bool) {
+	t := run.t
+	song := consumerLimitSong(t)
+	song.Tracks = append(song.Tracks, song.Tracks[0])
+	song.Tracks[1].Number = 2
+	song.VolumeAutomations = []VolumeAutomation{{Track: 0, Bar: 0, Position: 0.25, Value: 0.25}, {Track: 0, Bar: 0, Position: 0.75, Value: 0.875, Linear: true}, {Track: 0, Bar: 0, Position: 0.75, Value: 0.375}, {Track: 1, Bar: 1, Position: 0.5, Value: 0.125, Linear: true}}
+	codes := []string{"gp8.omit.volume-automation-consumer", "gp8.omit.volume-automation-consumer", "gp8.omit.volume-automation-consumer", "gp8.omit.volume-automation-consumer"}
+	data, report := assertConsumerLossPolicy(t, song, codes)
+	run.Report("M17-VOLUME-CONSUMER", reportCodes(report), codes)
+	for i, entry := range report.Entries {
+		event := song.VolumeAutomations[i]
+		if entry.Location != (ScoreLocation{Track: event.Track, Measure: event.Bar}) || entry.Disposition != ExportDispositionOmitted || entry.Reason != fmt.Sprintf("pinned AlphaTab ignores channel-strip volume automation[%d] at position %g with value %g and linear=%t; GPIF retains the event", i, event.Position, event.Value, event.Linear) {
+			t.Fatalf("unscoped volume report: %#v", entry)
+		}
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run.Preserved("Song.VolumeAutomations", roundTrip.VolumeAutomations, song.VolumeAutomations)
+	archive, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc gpifDocument
+	if err := xml.Unmarshal(readZipMember(t, archive, "Content/score.gpif"), &doc); err != nil {
+		t.Fatal(err)
+	}
+	for ti, track := range doc.Tracks.Tracks {
+		var want []gpifAutomation
+		for _, a := range song.VolumeAutomations {
+			if a.Track == ti {
+				want = append(want, gpifAutomation{Type: "DSPParam_12", Bar: a.Bar, Position: a.Position, Linear: a.Linear, Value: gpifAutomationValue{Text: map[float64]string{0.25: "0.25", 0.875: "0.875", 0.375: "0.375", 0.125: "0.125"}[a.Value]}})
+			}
+		}
+		run.Wire("gpifChannelStrip.Automations", track.RSE.ChannelStrip.Automations.Automations, want)
+	}
+	if oracle {
+		var facts []map[string]any
+		readAlphaTabOracleFacts(t, "--volume-automations", writeConformanceFixture(t, data), &facts)
+		if len(facts) != 0 {
+			t.Fatalf("pinned consumer unexpectedly retains channel-strip volume: %#v", facts)
+		}
+		// A legacy mix-table event is a positive control for the same adapter.
+		// It is not evidence for the separate channel-strip contract.
+		readAlphaTabOracleFacts(t, "--volume-automations", "testdata/gp5/RSE.gp5", &facts)
+		if len(facts) == 0 {
+			t.Fatal("volume adapter missed the legacy positive control")
+		}
+
+	}
 }

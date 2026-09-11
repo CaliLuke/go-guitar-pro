@@ -3,8 +3,12 @@
 package goguitarpro
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
@@ -244,6 +248,10 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceKeyModes":                           runConformanceKeyModes,
 	"TestConformanceDirections":                         runConformanceDirections,
 	"TestConformanceClefOctave":                         runConformanceClefOctave,
+	"TestGP8FermataConsumerLimits":                      func(run *conformanceRun) { runFermataConsumerLimits(run, false) },
+	"TestGP8LegatoConsumerLimits":                       func(run *conformanceRun) { runLegatoConsumerLimits(run, false) },
+	"TestGP8ChordConsumerLimits":                        func(run *conformanceRun) { runChordConsumerLimits(run, false) },
+	"TestGP8VolumeConsumerLimits":                       func(run *conformanceRun) { runVolumeConsumerLimits(run, false) },
 	"TestConformanceFermatas":                           runConformanceFermatas,
 	"TestConformanceFreeTime":                           runConformanceFreeTime,
 	"TestConformanceAuthorityAndBoundaries":             runConformanceAuthorityAndBoundaries,
@@ -373,4 +381,54 @@ func semanticValidPitchedGP8Song(t *testing.T) *Song {
 		t.Fatalf("semantic matrix pitched baseline is invalid: %#v", diagnostics)
 	}
 	return song
+}
+
+func consumerLimitSong(t *testing.T) *Song {
+	t.Helper()
+	song := semanticValidPitchedGP8Song(t)
+	song.Tracks[0].Settings.Notation = true
+	staff := Staff{Measures: song.Tracks[0].Measures}
+	for _, beat := range conformanceStaffBeatsWithNotes(&staff) {
+		for ni := range beat.Notes {
+			beat.Notes[ni].Effect.Graces = nil
+		}
+	}
+	return song
+}
+
+func assertConsumerLossPolicy(t *testing.T, song *Song, codes []string) ([]byte, ExportReport) {
+	t.Helper()
+	modelBefore, err := json.Marshal(song)
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+	if !slices.Equal(reportCodes(report), codes) {
+		t.Fatalf("preflight = %#v, want codes %v", report.Entries, codes)
+	}
+	data, strictReport, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+	if len(codes) > 0 {
+		var loss *ExportLossError
+		if len(data) != 0 || !errors.As(err, &loss) {
+			t.Fatalf("strict export = %d bytes, %v", len(data), err)
+		}
+	} else if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(report, strictReport) {
+		t.Fatalf("strict report differs: %#v", strictReport)
+	}
+	data, allowed, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: codes}})
+	if err != nil || !reflect.DeepEqual(report, allowed) || !bytes.Equal(before, data) {
+		t.Fatalf("allowed export changed output or report: %v, %#v", err, allowed)
+	}
+	modelAfter, err := json.Marshal(song)
+	if err != nil || !bytes.Equal(modelBefore, modelAfter) {
+		t.Fatalf("export mutated the public model: %v", err)
+	}
+	return data, report
 }

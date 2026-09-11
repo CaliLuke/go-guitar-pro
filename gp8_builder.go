@@ -322,7 +322,8 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			Channel: &primaryChannel,
 		}}},
 		RSE: &gpifTrackRSE{ChannelStrip: gpifChannelStrip{
-			Parameters: gp8ChannelStripParameters(channel),
+			Parameters:  gp8ChannelStripParameters(channel),
+			Automations: buildGP8VolumeAutomations(builder.song, trackIndex),
 		}},
 		MidiConnection: gpifMidiConnection{
 			Port:             int(channel.Channel) / 16,
@@ -650,6 +651,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 	for measureIndex := range builder.song.MeasureHeaders {
 		header := &builder.song.MeasureHeaders[measureIndex]
 		headerLocation := ScoreLocation{Measure: measureIndex}
+		builder.reportFermataConsumerLimits(header, headerLocation)
 		if header.Marker != nil && header.Marker.Color != 0 {
 			builder.addReport("gp8.omit.marker-color", "score-core", ExportDispositionOmitted, headerLocation, "GP8 writer emits section text but not marker color")
 		}
@@ -704,6 +706,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 						if err != nil {
 							return fmt.Errorf("track %d staff %d measure %d voice %d beat %d grace notes: %w", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, err)
 						}
+						builder.reportLegatoConsumerLimit(staff, location, len(graceIDs) > 0)
 						beatIDs = append(beatIDs, graceIDs...)
 						beatID, err := builder.addBeat(trackIndex, staff.Strings, &voice.Beats[beatIndex])
 						if err != nil {
@@ -772,6 +775,7 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 		builder.addReport("gp8.omit.beat-mix-table-change", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit beat-local mix-table changes")
 	}
 	if chord := beat.Effect.Chord; chord != nil {
+		builder.reportChordConsumerLimit(chord, location)
 		if err := validateGP8ChordDiagram(chord); err != nil {
 			builder.addReport("gp8.omit.chord-diagram-conflict", "note-and-beat-semantics", ExportDispositionOmitted, location, err.Error())
 		}

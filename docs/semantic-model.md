@@ -157,6 +157,17 @@ pinned consumer does not retain hidden visibility on the instrument automation
 it derives from a sound record, so export reports that specific omission. The
 separate legacy `Song.HideTempo` contract remains a target limitation.
 
+`Song.VolumeAutomations` owns the channel-strip volume events. Direct edits
+control GP8 output. The writer retains track ownership, bar, position, value,
+linear flag, and event order within each track, including equal positions.
+GPIF groups events by track, so Go reimport groups the public slice by track.
+Cross-track interleaving has no playback meaning and is not retained.
+
+Pinned AlphaTab ignores these channel-strip events. Export reports each event
+with `gp8.omit.volume-automation-consumer`; strict preservation requires an
+explicit allowance. This contract follows the accepted revision of issue #59.
+Legacy beat-local mix-table volume changes remain a separate capability.
+
 `Measure.SustainPedals` is the ordered sustain-pedal sequence for that track's
 first staff and measure. GPIF reference 1 maps to `SustainPedalTypeDown`, and
 reference 3 maps to `SustainPedalTypeRelease`. If a down state continues into a
@@ -324,6 +335,14 @@ a beat at the same offset, but `Beat` does not contain a second mutable copy.
 GP3 through GP5 fermatas and playback-duration stretching are outside this
 contract.
 
+GPIF retains each exact fermata offset. Pinned AlphaTab converts the rational
+offset to a signed 32-bit tick through binary64 arithmetic. This conversion
+can move fractional offsets and some whole-tick offsets. Export reports each
+movement with `gp8.normalize.fermata-consumer-offset`. If two offsets collide,
+`gp8.omit.fermata-consumer-collision` identifies the overwritten and replacing
+fermata indices and the consumer tick. Strict preservation refuses these
+reports unless the caller allows their codes.
+
 GP8 export preserves master-bar key changes, meter values, section text,
 repeats, alternate endings, triplet feel, and double bars. It preserves treble,
 bass, alto, tenor, and percussion clefs, including 8va, 8vb, 15ma, and 15mb
@@ -379,10 +398,15 @@ flags. The pointer is absent when the source has no `Legato` element. Every
 parsed occurrence owns an independent record, including occurrences created
 from one reused GPIF beat definition. Origin-only and destination-only records
 are valid excerpt boundaries. The library does not derive missing endpoints or
-reuse hammer and slide fields for this relationship. GP8 writes both authored
+reuse hammer and slide fields for this relationship.
+
+GP8 writes both authored
 attributes. The pinned consumer retains origins and derives each destination
-from the preceding origin, so exact wire and Go reimport checks cover a
-destination that begins before an excerpt.
+from the preceding origin. Export reports each destination mismatch, including
+excerpt boundaries and edits, with `gp8.omit.legato-consumer-destination`.
+Strict preservation refuses that loss unless the caller allows the report code.
+The same rule applies across adjacent bars within one staff and voice.
+An exported grace beat precedes its owner and has no legato origin.
 
 GP8 preserves every beat fade, hairpin, octave, stroke kind and direction, and integral
 exact stroke timing from 0 through 2147483647 ticks. `BeatStroke.Duration` is a
@@ -509,6 +533,13 @@ trimmed to the actual chord string count. Interval omissions and legacy chord
 descriptions remain separately reported losses. Imported chord occurrences own
 separate mutable slices and pointers. Staff-local definitions take precedence
 over track definitions with the same identifier.
+
+GP8 emits the canonical `Ring` token for an annular chord finger. Pinned
+AlphaTab recognizes the legacy `Rank` spelling but ignores `Ring`. Export
+reports each lost annular barre with `gp8.omit.chord-annular-consumer-barre`.
+The report applies to explicit fingerings and synthesized third barres.
+The writer retains the finger meaning and exact GPIF positions. Strict
+preservation refuses the consumer loss unless the caller allows its code.
 
 Grace notes keep their order, exact fret, articulation identity, dead state,
 placement, transition, and supported duration. GP8 reports a raw source fret,

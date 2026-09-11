@@ -5,8 +5,8 @@
   "title": "Preserve fermata position, type and length",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -49,7 +49,7 @@
         "target_present": false
       }
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Run ALPHATAB_CONFORMANCE=1 go test -count=1 -run \"^(TestGP8|TestAlphaTab)FermataConsumerLimits$\" . The tests require exact wire/model preservation and scoped strict-policy reports for the independently observed consumer limits. Historical audit reproductions remain in evidence."
   },
   "evidence": [
     {
@@ -139,12 +139,31 @@
       ],
       "next_steps": "Keep the existing updated checklist: exact authored offsets, precise consumer movement/collision reports, strict refusal for unallowed loss, and pinned tests for both pairs plus retained ordinary positions. This is implementation-ready follow-up; the prior completion label is removed.",
       "source": "Existing runnable reproductions remain in the earlier audit comment and canonical fermata work-item evidence."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8FermataConsumerLimits",
+      "detail": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions.",
+      "commands": [
+        "go test ./...: PASS",
+        "go vet ./...: PASS",
+        "golangci-lint run: PASS (0 issues)",
+        "./conformance/check.sh: PASS (77 mutation checks and pinned AlphaTab suite)",
+        "prek run --all-files: PASS (build, vet, imports, tidy, lint, duplication, conformance, race tests and coverage)",
+        "node conformance/capabilities/probe.mjs: PASS (364 fixtures; consumer comparisons unchanged; expected report changes only)"
+      ],
+      "verification_scope": "Working tree, including the final duplication cleanup; no commit receipt is claimed."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabFermataConsumerLimits",
+      "detail": "Pinned AlphaTab 1.8.4 confirms the reported consumer behavior."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Reran both stored reproductions: offsets 1/2 and 3/4 collapse into one hold at 0; offsets 122 and 123 collapse into one hold at 122. Both strict exports return output with zero report entries. The ZIP change does not fix this semantic loss. Next: Keep the existing updated checklist: exact authored offsets, precise consumer movement/collision reports, strict refusal for unallowed loss, and pinned tests for both pairs plus retained ordinary positions. This is implementation-ready follow-up; the prior completion label is removed.",
+  "resolution": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions. Implemented and verified in the working tree. All required gates pass. Final commit verification remains separate from this working-tree receipt.",
   "verification": [],
   "issue": {
     "number": 47,

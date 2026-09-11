@@ -147,7 +147,7 @@ func runConformanceChordDefinitions(run *conformanceRun) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
+	run.ClaimReport(claimSite("chord-name", "export", "M14-CHORD-DEFINITIONS", "C#13/Eb name")).Report("M14-CHORD-DEFINITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.chord-annular-consumer-barre", "gp8.omit.chord-omissions", "gp8.omit.chord-legacy-details"})
 	strictData, _, strictErr := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError
 	if len(strictData) != 0 || !errors.As(strictErr, &lossErr) {
@@ -692,3 +692,94 @@ const conformanceChordScopedGPIF = `<?xml version="1.0" encoding="utf-8"?>
   <Beats><Beat id="0"><Rhythm ref="0"/><Chord>shared</Chord></Beat><Beat id="1"><Rhythm ref="0"/><Chord>track</Chord></Beat><Beat id="2"><Rhythm ref="0"/><Chord>shared</Chord></Beat><Beat id="3"><Rhythm ref="0"/><Chord>shared</Chord></Beat><Beat id="4"><Rhythm ref="0"/><Chord>track</Chord></Beat><Beat id="5"><Rhythm ref="0"/><Chord>equal-a</Chord></Beat><Beat id="6"><Rhythm ref="0"/><Chord>equal-b</Chord></Beat></Beats>
   <Notes/><Rhythms><Rhythm id="0"><NoteValue>Quarter</NoteValue></Rhythm></Rhythms>
 </GPIF>`
+
+func TestGP8ChordConsumerLimits(t *testing.T) { runChordConsumerLimits(newConformanceRun(t), false) }
+func TestAlphaTabChordConsumerLimits(t *testing.T) {
+	requireAlphaTabConformance(t)
+	runChordConsumerLimits(newConformanceRun(t), true)
+}
+
+func runChordConsumerLimits(run *conformanceRun, oracle bool) {
+	t := run.t
+	for _, count := range []int{0, 3, 5} {
+		authored := count == 0
+		t.Run(fmt.Sprintf("authored=%t barres=%d", authored, count), func(t *testing.T) {
+			song := consumerLimitSong(t)
+			first := uint8(3)
+			chord := &Chord{Name: "Annular", Length: 7, FirstFret: &first, Strings: []int8{3, 3, -1, 0, 5, 5, 7}, Barres: []Barre{{Fret: 3, Start: 1, End: 2}, {Fret: 5, Start: 5, End: 6}}, Fingerings: []Fingering{FingeringIndex, FingeringIndex, FingeringOpen, FingeringOpen, FingeringAnnular, FingeringAnnular, FingeringThumb}}
+			want := []int{3}
+			if !authored {
+				chord.Strings = []int8{3, 3, 5, 5, 7, 7, 0}
+				chord.Fingerings = nil
+				chord.Barres = []Barre{{Fret: 3, Start: 1, End: 2}, {Fret: 5, Start: 3, End: 4}, {Fret: 7, Start: 5, End: 6}}
+				want = []int{3, 5}
+				if count == 5 {
+					chord.Length = 10
+					chord.Strings = []int8{3, 3, 5, 5, 7, 7, 9, 9, 11, 11}
+					chord.Barres = append(chord.Barres, Barre{Fret: 9, Start: 7, End: 8}, Barre{Fret: 11, Start: 9, End: 10})
+					want = []int{3, 5, 9, 11}
+				}
+			}
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = chord
+			data, report := assertConsumerLossPolicy(t, song, []string{"gp8.omit.chord-annular-consumer-barre"})
+			run.Report("M14-CHORD-CONSUMER", reportCodes(report), []string{"gp8.omit.chord-annular-consumer-barre"})
+			expectedFret := 5
+			if !authored {
+				expectedFret = 7
+			}
+			if report.Entries[0].Location != (ScoreLocation{}) || report.Entries[0].Reason != fmt.Sprintf("pinned AlphaTab ignores the Ring finger token and loses the annular barre at fret %d; GPIF retains the authored finger meaning", expectedFret) {
+				t.Fatalf("imprecise chord report: %#v", report)
+			}
+			wire := extractChordWire(t, data)
+			ring := 0
+			for _, position := range wire.positions {
+				if position.Finger == "Ring" {
+					ring++
+				}
+			}
+			if ring != 2 {
+				t.Fatalf("Ring wire positions = %d", ring)
+			}
+			roundTrip, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+			run.Preserved("Chord.Barres", got.Barres, chord.Barres)
+			if authored {
+				run.Preserved("Chord.Fingerings", got.Fingerings, chord.Fingerings)
+			}
+			if oracle {
+				var facts []conformanceAlphaTabChordDiagramFact
+				readAlphaTabOracleFacts(t, "--chord-diagrams", writeConformanceFixture(t, data), &facts)
+				facts = slices.DeleteFunc(facts, func(f conformanceAlphaTabChordDiagramFact) bool { return f.Name != "Annular" })
+				if len(facts) != 1 || !slices.Equal(facts[0].BarreFrets, want) || facts[0].FirstFret != 3 || facts[0].Track != 0 || facts[0].Staff != 0 || facts[0].Bar != 0 || facts[0].Voice != 0 || facts[0].Beat != 0 {
+					t.Fatalf("consumer chord = %#v", facts)
+				}
+			}
+		})
+	}
+	for _, sameFret := range []bool{false, true} {
+		t.Run(fmt.Sprintf("annular positions share fret=%t", sameFret), func(t *testing.T) {
+			song := consumerLimitSong(t)
+			chord := &Chord{Name: "Annular positions", Length: 3, Strings: []int8{3, 5, 7}, Fingerings: []Fingering{FingeringAnnular, FingeringAnnular, FingeringAnnular}}
+			codes := []string{}
+			if sameFret {
+				chord.Strings = []int8{3, 3, 3}
+				chord.Barres = []Barre{{Fret: 3, Start: 1, End: 3}}
+				codes = []string{"gp8.omit.chord-annular-consumer-barre"}
+			}
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord = chord
+			data, report := assertConsumerLossPolicy(t, song, codes)
+			run.Report("M14-CHORD-CONSUMER", reportCodes(report), codes)
+			if oracle {
+				var facts []conformanceAlphaTabChordDiagramFact
+				readAlphaTabOracleFacts(t, "--chord-diagrams", writeConformanceFixture(t, data), &facts)
+				if len(facts) == 0 || facts[0].Name != chord.Name || len(facts[0].BarreFrets) != 0 {
+					t.Fatalf("annular positions: %#v", facts)
+				}
+			}
+		})
+	}
+
+}

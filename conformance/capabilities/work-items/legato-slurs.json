@@ -5,8 +5,8 @@
   "title": "Preserve authored legato and slur endpoints",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -32,7 +32,7 @@
       "conformance_legato_test.go",
       "gp8_notation.go"
     ],
-    "instructions": "Run the complete TestReviewLegatoExcerptConsumer reproduction embedded in the latest implementation-audit evidence and linked ticket comment with ALPHATAB_CONFORMANCE=1. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain."
+    "instructions": "Run ALPHATAB_CONFORMANCE=1 go test -count=1 -run \"^(TestGP8|TestAlphaTab)LegatoConsumerLimits$\" . The tests require exact wire/model preservation and scoped strict-policy reports for the independently observed consumer limits. Historical audit reproductions remain in evidence."
   },
   "evidence": [
     {
@@ -84,6 +84,25 @@
       "next_steps": "Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
       "source": "Pinned GpifParser.ts _parseBeat reads only the origin attribute (around line 1806); model/Beat.ts isLegatoDestination derives the destination (around line 294).",
       "reproduction_go": "package goguitarpro\nimport \"testing\"\n\nfunc TestReviewLegatoExcerptConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = &BeatLegato{Destination: true}\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatal(err) }\n var facts []conformanceLegatoFact\n readAlphaTabOracleFacts(t, \"--legato\", writeConformanceFixture(t,data), &facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n if len(facts)==0 || !facts[0].Destination { t.Fatal(\"authored destination-only endpoint disappeared in pinned consumer\") }\n}\n\n"
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8LegatoConsumerLimits",
+      "detail": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence.",
+      "commands": [
+        "go test ./...: PASS",
+        "go vet ./...: PASS",
+        "golangci-lint run: PASS (0 issues)",
+        "./conformance/check.sh: PASS (77 mutation checks and pinned AlphaTab suite)",
+        "prek run --all-files: PASS (build, vet, imports, tidy, lint, duplication, conformance, race tests and coverage)",
+        "node conformance/capabilities/probe.mjs: PASS (364 fixtures; consumer comparisons unchanged; expected report changes only)"
+      ],
+      "verification_scope": "Working tree, including the final duplication cleanup; no commit receipt is claimed."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabLegatoConsumerLimits",
+      "detail": "Pinned AlphaTab 1.8.4 confirms the reported consumer behavior."
     }
   ],
   "shared_files": [
@@ -95,7 +114,7 @@
     "conformance_legato_test.go",
     "conformance/feature-ledger.json"
   ],
-  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain. Next: Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
+  "resolution": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence. Implemented and verified in the working tree. All required gates pass. Final commit verification remains separate from this working-tree receipt.",
   "verification": [],
   "issue": {
     "number": 50,

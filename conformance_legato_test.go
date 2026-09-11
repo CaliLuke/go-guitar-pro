@@ -8,6 +8,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -73,11 +74,11 @@ func runConformanceLegato(run *conformanceRun) {
 	excerpt.Tracks[0].Settings.Notation = true
 	excerptBeat := &excerpt.Tracks[0].Measures[0].Voices[0].Beats[0]
 	excerptBeat.Legato = &BeatLegato{Destination: true}
-	excerptData, report, err := ExportWithReport(excerpt, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
-	if err != nil || len(report.Entries) != 0 {
+	excerptData, report, err := ExportWithReport(excerpt, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.legato-consumer-destination"}}})
+	if err != nil || !slices.Equal(reportCodes(report), []string{"gp8.omit.legato-consumer-destination"}) {
 		t.Fatalf("destination-only legato export = %v, %#v", err, report.Entries)
 	}
-	run.Report("M10-LEGATO", reportCodes(report), []string{})
+	run.Report("M10-LEGATO", reportCodes(report), []string{"gp8.omit.legato-consumer-destination"})
 	excerptWire := conformanceLegatoWire(t, excerptData, 0)
 	if !slices.Equal(excerptWire, []conformanceLegatoWireFact{{Origin: "false", Destination: "true"}}) {
 		t.Fatalf("destination-only legato wire = %#v, want exact false/true attributes", excerptWire)
@@ -273,4 +274,84 @@ func conformanceReusedLegatoGPIF() string {
   </Beats>
   <Notes/><Rhythms><Rhythm id="0"><NoteValue>Quarter</NoteValue></Rhythm></Rhythms>
 </GPIF>`
+}
+
+func TestGP8LegatoConsumerLimits(t *testing.T) { runLegatoConsumerLimits(newConformanceRun(t), false) }
+func TestAlphaTabLegatoConsumerLimits(t *testing.T) {
+	requireAlphaTabConformance(t)
+	runLegatoConsumerLimits(newConformanceRun(t), true)
+}
+
+func runLegatoConsumerLimits(run *conformanceRun, oracle bool) {
+	t := run.t
+	for _, tc := range []struct {
+		name          string
+		first, second *BeatLegato
+		want          []bool
+		lossBeat      int
+	}{
+		{"excerpt", &BeatLegato{Destination: true}, nil, []bool{false, false}, 0},
+		{"paired across bars", &BeatLegato{Origin: true}, &BeatLegato{Destination: true}, []bool{false, true}, -1},
+		{"edited destination false", &BeatLegato{Origin: true}, &BeatLegato{}, []bool{false, true}, 1},
+		{"absent destination", &BeatLegato{Origin: true}, nil, []bool{false, true}, 1},
+		{"edited origin false", &BeatLegato{}, &BeatLegato{Destination: true}, []bool{false, false}, 1},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			song := consumerLimitSong(t)
+			// Exactly one beat per bar makes the cross-bar chain observable.
+			for mi := range song.Tracks[0].Measures {
+				song.Tracks[0].Measures[mi].Voices = song.Tracks[0].Measures[mi].Voices[:1]
+				song.Tracks[0].Measures[mi].Voices[0].Beats = song.Tracks[0].Measures[mi].Voices[0].Beats[:1]
+			}
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = &BeatLegato{Origin: true}
+			song.Tracks[0].Measures[1].Voices[0].Beats[0].Legato = &BeatLegato{Destination: true}
+			paired, err := Export(song, ExportFormatGP8)
+			if err != nil {
+				t.Fatal(err)
+			}
+			song, err = Parse(paired)
+			if err != nil {
+				t.Fatal(err)
+			}
+			// Clear unrelated source provenance and imported display defaults.
+			song.Version = Version{}
+			song.Tracks[0].Settings = TrackSettings{Notation: true}
+			song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = tc.first
+			song.Tracks[0].Measures[1].Voices[0].Beats[0].Legato = tc.second
+			codes := []string{}
+			if tc.lossBeat >= 0 {
+				codes = []string{"gp8.omit.legato-consumer-destination"}
+			}
+			data, report := assertConsumerLossPolicy(t, song, codes)
+			run.Report("M10-LEGATO-CONSUMER", reportCodes(report), codes)
+			if tc.lossBeat >= 0 && report.Entries[0].Location != (ScoreLocation{Measure: tc.lossBeat}) {
+				t.Fatalf("wrong destination location: %#v", report)
+			}
+			roundTrip, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for mi, want := range []*BeatLegato{tc.first, tc.second} {
+				run.Preserved("Beat.Legato", roundTrip.Tracks[0].Measures[mi].Voices[0].Beats[0].Legato, want)
+				wantWire := []conformanceLegatoWireFact{}
+				if want != nil {
+					wantWire = append(wantWire, conformanceLegatoWireFact{Origin: strconv.FormatBool(want.Origin), Destination: strconv.FormatBool(want.Destination)})
+				}
+				run.Wire("gpifBeat.Legato", conformanceLegatoWire(t, data, mi), wantWire)
+			}
+			if oracle {
+				var facts []conformanceLegatoFact
+				readAlphaTabOracleFacts(t, "--legato", writeConformanceFixture(t, data), &facts)
+				got := []bool{false, false}
+				for _, f := range facts {
+					if f.Track == 0 && f.Staff == 0 && f.Voice == 0 {
+						got[f.Bar] = f.Destination
+					}
+				}
+				if !slices.Equal(got, tc.want) {
+					t.Fatalf("consumer destinations = %v, want %v", got, tc.want)
+				}
+			}
+		})
+	}
 }

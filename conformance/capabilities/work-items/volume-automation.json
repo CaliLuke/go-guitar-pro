@@ -18,14 +18,13 @@
   "stages": [
     "export"
   ],
-  "scope": "Emit the existing Song.VolumeAutomations records as supported GPIF channel-strip events.",
+  "scope": "Preserve Song.VolumeAutomations as GPIF channel-strip events with an explicit pinned-consumer loss report.",
   "acceptance": [
     "Preserve two non-default values at different positions and their linear flags.",
-    "Assert track ownership, same-position event order and exact supported wire values.",
-    "Remove only the resolved omission report; pinned AlphaTab reads equivalent values and strict export accepts the supported slice."
+    "Preserve track ownership, per-track event order including equal positions, and exact GPIF values through Go reimport.",
+    "Independently prove that pinned AlphaTab ignores these events. Report each omission and require an explicit allowance for strict export."
   ],
   "exclusions": [
-    "Do not emit speculative GPIF DSPParam_12 channel-strip automations while the required pinned AlphaTab consumer ignores RSE/ChannelStrip/Automations.",
     "GP3 through GP5 beat-local mix-table volume changes belong to BeatEffects.MixTableChange; they are not evidence for the distinct Song.VolumeAutomations contract."
   ],
   "depends_on": [],
@@ -36,7 +35,7 @@
       "gp8_builder.go",
       "conformance/oracle.mjs"
     ],
-    "instructions": "Run TestReviewVolumeConsumerPrerequisite from the embedded latest implementation-audit evidence and linked comment with ALPHATAB_CONFORMANCE=1. Go retains two DSPParam_12 channel-strip events; the required pinned consumer reads zero. GP5 RSE.gp5 is a separate beat-local mix-table domain tracked in #85."
+    "instructions": "Run ALPHATAB_CONFORMANCE=1 go test -count=1 -run \"^(TestGP8|TestAlphaTab)VolumeConsumerLimits$\" . The tests require exact wire/model preservation and scoped strict-policy reports for the independently observed consumer limits. Historical audit reproductions remain in evidence."
   },
   "evidence": [
     {
@@ -96,6 +95,30 @@
       "next_steps": "Keep export=missing and gp8.omit.volume-automations. Before implementation, name and test an independent consumer that actually retains this channel-strip contract, or propose an explicit acceptance revision/consumer-pin upgrade. Do not treat wire plus self-round-trip as equivalent to the current acceptance criterion. Keep GP5 beat-local projection in #85. This remains an evidence prerequisite, so it should not carry to be verified.",
       "source": "Pinned GpifParser.ts _parseChannelStrip at lines 1319-1327 reads only Parameters; _parseAutomation dispatches Tempo, SyncPoint, Sound and SustainPedal, not Volume/DSPParam_12.",
       "reproduction_go": "package goguitarpro\nimport(\"strings\";\"testing\")\nfunc TestReviewVolumeConsumerPrerequisite(t *testing.T){\n song:=semanticValidPitchedGP8Song(t)\n data,err:=Export(song,ExportFormatGP8);if err!=nil{t.Fatal(err)}\n source:=rewriteConformanceGPIF(t,data,func(s string)string{return strings.Replace(s,\"</ChannelStrip>\",`<Automations><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>0.25</Position><Linear>false</Linear><Value>0.25</Value></Automation><Automation><Type>DSPParam_12</Type><Bar>0</Bar><Position>0.75</Position><Linear>true</Linear><Value>0.875</Value></Automation></Automations></ChannelStrip>`,1)})\n parsed,err:=Parse(source);if err!=nil{t.Fatal(err)}\n if len(parsed.VolumeAutomations)!=2{t.Fatalf(\"Go source events=%#v\",parsed.VolumeAutomations)}\n facts:=readAlphaTabScore(t,writeConformanceFixture(t,source))\n count:=0\n var visit func(any)\n visit=func(v any){switch x:=v.(type){case map[string]any: if x[\"type\"]==\"volume\"{count++};for _,c:=range x{visit(c)};case []any:for _,c:=range x{visit(c)}}}\n visit(facts)\n t.Logf(\"Go events=%#v; pinned volume automation count=%d\",parsed.VolumeAutomations,count)\n if count!=2{t.Fatalf(\"required independent volume events=%d, want 2\",count)}\n}\n"
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8VolumeConsumerLimits",
+      "detail": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85.",
+      "commands": [
+        "go test ./...: PASS",
+        "go vet ./...: PASS",
+        "golangci-lint run: PASS (0 issues)",
+        "./conformance/check.sh: PASS (77 mutation checks and pinned AlphaTab suite)",
+        "prek run --all-files: PASS (build, vet, imports, tidy, lint, duplication, conformance, race tests and coverage)",
+        "node conformance/capabilities/probe.mjs: PASS (364 fixtures; consumer comparisons unchanged; expected report changes only)"
+      ],
+      "verification_scope": "Working tree, including the final duplication cleanup; no commit receipt is claimed."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabVolumeConsumerLimits",
+      "detail": "Pinned AlphaTab 1.8.4 confirms the reported consumer behavior."
+    },
+    {
+      "kind": "acceptance-revision",
+      "reference": "User instruction in the 2026-09-11 task",
+      "detail": "Accept wire preservation with reported consumer loss. The consumer pin stays unchanged. The --volume-automations adapter reads actual AlphaTab beat events; the legacy GP5 RSE event is a positive control. The general score snapshot omits these events and is not a valid absence oracle."
     }
   ],
   "shared_files": [
@@ -103,7 +126,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Further work required at 6151967aa813bb32351db6248956688f69834a2d: Injected two DSPParam_12 ChannelStrip events at positions 0.25/0.75 with values 0.25/0.875 and different Linear flags. The public Go parser retains both; pinned AlphaTab reads zero volume automation events from the identical valid source archive. The original GP5 RSE.gp5 difference belongs to beat-local MixTableChange, not Song.VolumeAutomations. Next: Keep export=missing and gp8.omit.volume-automations. Before implementation, name and test an independent consumer that actually retains this channel-strip contract, or propose an explicit acceptance revision/consumer-pin upgrade. Do not treat wire plus self-round-trip as equivalent to the current acceptance criterion. Keep GP5 beat-local projection in #85. This remains an evidence prerequisite, so it should not carry to be verified.",
+  "resolution": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85. Implemented and verified in the working tree. All required gates pass. Final commit verification remains separate from this working-tree receipt.",
   "verification": [],
   "issue": {
     "number": 59,

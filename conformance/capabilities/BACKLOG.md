@@ -21,10 +21,10 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve GPIF bend control roles with nonmonotonic offsets](work-items/export-curve-order.json) | implementation | 1 | todo | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60) | [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) |
 | [Exclude unused legacy MIDI program slots from export rejection](work-items/export-invalid-program.json) | implementation | 1 | done | — | [#63](https://github.com/CaliLuke/go-guitar-pro/issues/63) |
 | [Preserve authored opening sound-event preroll](work-items/export-negative-sound-position.json) | implementation | 1 | todo | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#64](https://github.com/CaliLuke/go-guitar-pro/issues/64) |
-| [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | todo | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
+| [Preserve fermata position, type and length](work-items/fermata.json) | implementation | 1 | in_progress | — | [#47](https://github.com/CaliLuke/go-guitar-pro/issues/47) |
 | [Preserve free-time bars without inventing a meter](work-items/free-time.json) | implementation | 1 | done | — | [#48](https://github.com/CaliLuke/go-guitar-pro/issues/48) |
 | [Preserve lowercase GPIF minor key modes](work-items/key.json) | implementation | 1 | done | — | [#49](https://github.com/CaliLuke/go-guitar-pro/issues/49) |
-| [Preserve authored legato and slur endpoints](work-items/legato-slurs.json) | implementation | 1 | todo | — | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) |
+| [Preserve authored legato and slur endpoints](work-items/legato-slurs.json) | implementation | 1 | in_progress | — | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) |
 | [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json) | implementation | 1 | done | — | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51) |
 | [Require executable evidence for supported capability claims](work-items/oracle-breadth.json) | implementation | 1 | done | — | [#67](https://github.com/CaliLuke/go-guitar-pro/issues/67) |
 | [Emit GP8 archives readable by the pinned AlphaTab inflater](work-items/oracle-inflater.json) | implementation | 1 | done | — | [#68](https://github.com/CaliLuke/go-guitar-pro/issues/68) |
@@ -49,7 +49,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | done | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |
 | [Preserve and export beat vibrato strength](work-items/beat-vibrato.json) | implementation | 2 | done | — | [#77](https://github.com/CaliLuke/go-guitar-pro/issues/77) |
 | [Preserve authored brush and arpeggio timing](work-items/brush.json) | implementation | 2 | done | — | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) |
-| [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json) | implementation | 2 | todo | — | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) |
+| [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json) | implementation | 2 | in_progress | — | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) |
 | [Preserve dead-slapped beats without reducing them to rests](work-items/dead-slap.json) | implementation | 2 | done | — | [#80](https://github.com/CaliLuke/go-guitar-pro/issues/80) |
 | [Preserve fade-out and volume-swell beat effects](work-items/fade-other.json) | implementation | 2 | done | — | [#81](https://github.com/CaliLuke/go-guitar-pro/issues/81) |
 | [Export existing left and right hand fingerings](work-items/fingering.json) | implementation | 2 | done | — | [#82](https://github.com/CaliLuke/go-guitar-pro/issues/82) |

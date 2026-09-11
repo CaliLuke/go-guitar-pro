@@ -104,7 +104,7 @@ func TestExportPreflightLocatesEachOmittedAutomation(t *testing.T) {
 			{Measure: 0},
 			{Measure: 1},
 		},
-		"gp8.omit.volume-automations": {
+		"gp8.omit.volume-automation-consumer": {
 			{Track: 0, Measure: 0},
 			{Track: 0, Measure: 1},
 		},

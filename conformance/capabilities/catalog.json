@@ -323,7 +323,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "MeasureHeader.Fermatas preserves exact GPIF offsets, all three symbol types and finite lengths. GP8 retains the authored rational XML, but pinned AlphaTab can move offsets and collapse two distinct holds into one. Strict export currently reports no loss for these cases; #47 remains open for a precise consumer-limit policy.",
+      "finding": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions.",
       "acceptance": "Keep exact-offset import, post-parse edits, GP8 wire values, Go reimport and malformed-value diagnostics covered. Add pinned-consumer movement/collision evidence and precise strict-export reporting for affected offsets before claiming full export support.",
       "upstream": [
         "MasterBar.fermata",
@@ -346,6 +346,16 @@
           "kind": "implementation-audit",
           "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/47#issuecomment-5626717898",
           "detail": "At 8835659, score-tick offsets 1/2 and 3/4 collapse to one hold at 0; offsets 122 and 123 collapse to one hold at 122. Both strict exports return no diagnostics. Runnable reproductions and remediation criteria are in the linked ticket comment and fermata work-item audit evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8FermataConsumerLimits",
+          "detail": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabFermataConsumerLimits",
+          "detail": "Exact GPIF offsets remain unchanged. Preflight reports pinned AlphaTab offset movement and collisions with the fermata indices and consumer tick. Strict export refuses unallowed loss without output. Fractional, whole-tick and ordinary retained offsets have independent consumer regressions."
         }
       ]
     },
@@ -1886,10 +1896,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Song.VolumeAutomations preserves channel-strip volume events and linear flags, and the GP8 writer reports them as omitted. Export remains blocked against pinned AlphaTab 1.8.4: its GPIF automation dispatcher has no volume case and its RSE channel-strip importer ignores Automations. The GP5 RSE fixture instead exercises a beat-local mix-table volume event, which is a different model domain.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85.",
+      "acceptance": "Preserve exact channel-strip GPIF events and Go reimport in per-track order. Report the pinned AlphaTab omission for every event and refuse strict export without the explicit code allowance. This acceptance revision was authorized by the user on 2026-09-11.",
       "upstream": [
         "AutomationType.Volume"
       ],
@@ -1933,6 +1943,16 @@
           "kind": "probe",
           "reference": "testdata/gp5/RSE.gp5:volume-automation",
           "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[0].automations[0]. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8VolumeConsumerLimits",
+          "detail": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabVolumeConsumerLimits",
+          "detail": "The user approved a revised acceptance contract on 2026-09-11: GPIF and Go preserve channel-strip volume events while the pinned AlphaTab omission is reported. Export retains track ownership, positions, values, linear flags and event order within each track. Strict export refuses unallowed consumer loss. Cross-track interleaving is outside the track-scoped contract. Beat-local mix-table changes remain in #85."
         }
       ]
     },
@@ -2442,7 +2462,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "An authored annular-finger barre is silently dropped by pinned AlphaTab despite strict export reporting no loss. The seven-string chord in the reproduction has barres at frets 3 and 5, explicit Index/Annular endpoints, muted/open strings, and a Thumb fingering. Strict export succeeds with zero report entries, while AlphaTab retains barreFrets=[3] instead of [3,5]. The Go writer emits Ring; the pinned reader recognizes Rank but ignores Ring. The current independent two-barre test omits authored fingerings, so synthetic Index/Middle assignments avoid the failing branch.",
+      "finding": "GPIF preserves explicit annular fingerings and synthesized third-barre endpoints with the canonical Ring token. Preflight reports annular barres ignored by pinned AlphaTab and strict export refuses unallowed loss. Independent regressions cover explicit Index/Annular/Thumb fingerings and synthesized three-barre diagrams.",
       "acceptance": "Keep checked string/fret mappings, track and staff definition precedence, occurrence isolation, exact GP8 positions, and pinned AlphaTab chord facts covered while retaining separate legacy-loss reports. Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
       "upstream": [
         "Chord.firstFret",
@@ -2494,6 +2514,16 @@
           "next_steps": "Add independent evidence using the explicit fingerings from the regression, not only synthesized fingers. Preserve the authored finger meaning; either prove a retaining wire representation or report the narrow Ring/annular consumer loss and refuse unallowed strict export. Cover synthesized third-and-later barres too, because the current fallback finger sequence also selects Annular. Keep exact wire/model preservation and consumer limitations separately classified.",
           "source": "Pinned GpifParser.ts _parseDiagramItemForChord handles Rank at line 1103 and derives barre frets from repeated recognized fingers; GpifWriter.ts emits Ring around line 1395. This is a pinned consumer mismatch, not permission to change the authored finger.",
           "reproduction_go": "package goguitarpro\nimport (\"reflect\"; \"testing\")\n\nfunc TestReviewChordAnnularConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n firstFret:=uint8(3)\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.Chord=&Chord{\n  Name:\"Audit chord\", FirstFret:&firstFret, Length:7,\n  Strings:[]int8{3,3,-1,0,5,5,7},\n  Barres:[]Barre{{Fret:3,Start:1,End:2},{Fret:5,Start:5,End:6}},\n  Fingerings:[]Fingering{FingeringIndex,FingeringIndex,FingeringOpen,FingeringOpen,FingeringAnnular,FingeringAnnular,FingeringThumb},\n }\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatalf(\"export failed: %v; %#v\",err,report.Entries) }\n var facts []conformanceAlphaTabChordDiagramFact\n readAlphaTabOracleFacts(t,\"--chord-diagrams\",writeConformanceFixture(t,data),&facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n for _,f:=range facts { if f.Name==\"Audit chord\" { if !reflect.DeepEqual(f.BarreFrets,[]int{3,5}) {t.Fatalf(\"barre frets=%v, want [3 5]\",f.BarreFrets)}; return } }\n t.Fatal(\"chord disappeared\")\n}\n"
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8ChordConsumerLimits",
+          "detail": "GPIF preserves explicit annular fingerings and synthesized third-barre endpoints with the canonical Ring token. Preflight reports annular barres ignored by pinned AlphaTab and strict export refuses unallowed loss. Independent regressions cover explicit Index/Annular/Thumb fingerings and synthesized three-barre diagrams."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabChordConsumerLimits",
+          "detail": "GPIF preserves explicit annular fingerings and synthesized third-barre endpoints with the canonical Ring token. Preflight reports annular barres ignored by pinned AlphaTab and strict export refuses unallowed loss. Independent regressions cover explicit Index/Annular/Thumb fingerings and synthesized three-barre diagrams."
         }
       ]
     },
@@ -3771,7 +3801,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "A destination-only excerpt endpoint disappears in pinned AlphaTab while strict GP8 export reports no loss. Set the first beat to Beat.Legato = &BeatLegato{Destination:true}. ExportWithReport with RequirePreservation:true succeeds with an empty report. The independent --legato adapter returns []: the authored endpoint is gone. The documentation correctly explains that AlphaTab derives destinations from preceding origins, but the excerpt test checks only XML/Go reimport; its consumer test exercises a different paired chain.",
+      "finding": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence.",
       "acceptance": "Keep each beat-level endpoint independent through GPIF import, public edits, GP8 output, reimport, and pinned AlphaTab origin and derived-destination consumption. Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
       "upstream": [
         "Beat.isLegatoOrigin",
@@ -3828,6 +3858,16 @@
           "next_steps": "Keep the exact authored flags and occurrence ownership. Add a scoped preflight disposition for destination state that the pinned consumer cannot retain, and refuse unallowed loss with no output under strict policy (or prove a retaining representation). Independently test destination-only excerpt boundaries, paired chains, and edits that make authored and consumer-derived destination states differ. Keep the positive paired-chain behavior covered.",
           "source": "Pinned GpifParser.ts _parseBeat reads only the origin attribute (around line 1806); model/Beat.ts isLegatoDestination derives the destination (around line 294).",
           "reproduction_go": "package goguitarpro\nimport \"testing\"\n\nfunc TestReviewLegatoExcerptConsumer(t *testing.T) {\n song := semanticValidPitchedGP8Song(t)\n song.Tracks[0].Settings.Notation = true\n song.Tracks[0].Measures[0].Voices[0].Beats[0].Legato = &BeatLegato{Destination: true}\n data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation:true}})\n if err != nil { t.Fatal(err) }\n var facts []conformanceLegatoFact\n readAlphaTabOracleFacts(t, \"--legato\", writeConformanceFixture(t,data), &facts)\n t.Logf(\"strict export reports=%#v; consumer facts=%#v\",report.Entries,facts)\n if len(facts)==0 || !facts[0].Destination { t.Fatal(\"authored destination-only endpoint disappeared in pinned consumer\") }\n}\n\n"
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8LegatoConsumerLimits",
+          "detail": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabLegatoConsumerLimits",
+          "detail": "Authored GPIF origin and destination flags remain unchanged. Preflight compares each destination with the preceding consumer beat, including adjacent-bar links and inserted grace beats. Strict export refuses each unallowed mismatch. Excerpt, paired-chain and public-edit regressions include pinned consumer evidence."
         }
       ]
     },

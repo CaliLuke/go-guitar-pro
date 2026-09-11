@@ -126,8 +126,8 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		}
 		add("gp8.omit.sync-points", "score-core", ExportDispositionOmitted, location, "GP8 writer does not emit this backing-track sync point")
 	}
-	for _, automation := range song.VolumeAutomations {
-		add("gp8.omit.volume-automations", "score-core", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, "GP8 writer does not emit this track volume automation")
+	for index, automation := range song.VolumeAutomations {
+		add("gp8.omit.volume-automation-consumer", "volume-automation", ExportDispositionOmitted, ScoreLocation{Track: automation.Track, Measure: automation.Bar}, fmt.Sprintf("pinned AlphaTab ignores channel-strip volume automation[%d] at position %g with value %g and linear=%t; GPIF retains the event", index, automation.Position, automation.Value, automation.Linear))
 	}
 	for trackIndex := range song.Tracks {
 		for _, automation := range song.Tracks[trackIndex].SoundAutomations {
