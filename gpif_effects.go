@@ -402,6 +402,8 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 				note.Value = int16(fret)
 				hasFret = true
 			}
+		case "ShowStringNumber":
+			note.ShowStringNumber = p.Enable != nil
 		case "String":
 			if p.String != nil {
 				sourceString := int(*p.String)

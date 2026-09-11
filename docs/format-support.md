@@ -272,7 +272,6 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 13 authored, 1 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
 | `BeatStroke` | `brush` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The stroke preserves authored kind and direction. ExactDuration is the exact tick-timing authority, and Duration is its note-value compatibility view. |
-| `Note` | `note-and-beat-semantics` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The bend point preserves authored curve data. Position is the legacy note-offset view when ExactOffset is present. |
@@ -293,12 +292,13 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
+| `Note` | `note-and-beat-semantics` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 253 |
+| `preserved` | 254 |
 | `normalized` | 34 |
 | `omitted` | 106 |
 | `rejected` | 0 |
@@ -309,7 +309,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 120 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 121 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -327,14 +327,12 @@ The gate compares these cases with the source switches. Each default has an expl
 | --- | --- | --- | --- | --- | --- |
 | `buildTrack:track.Name` | `score-core` | 1 | `section-track-names` | `unsupported-feature` | An authored empty short name remains empty in the final consumer only when the full name is also empty; a nonempty full name produces a scoped consumer-loss report. |
 | `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
-| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 7 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifApplyBeatEffects:p.Strength` | `note-and-beat-semantics` | 2 | `beat-vibrato-preservation` | `delegated-to-audit` | The importer preserves each audited GPIF beat-vibrato strength. |
 | `gpifApplyBeatEffects:p.String` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The importer maps the two audited GPIF BarreString values to typed public shapes. |
 | `gpifAuditBarrePair:property.Name` | `note-and-beat-semantics` | 2 | `beat-barre-preservation` | `delegated-to-audit` | The audit verifies that the two beat-level barre properties occur as a pair. |
-| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteToNote:n.Vibrato` | `note-and-beat-semantics` | 2 | `gpif-property-dispatch` | `delegated-to-audit` | The importer preserves each supported GPIF note-vibrato strength after the audit classifies unknown values. |
 | `gpifAuditMasterAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each master-track automation before import. |
 | `gpifAuditTrackAutomations:automation.Type` | `score-core` | 2 | `automation-dispatch-diagnostic` | `unknown-syntax` | The audit classifies each track automation, checks sound references, and validates sustain-pedal values, locations, and order before import. |
@@ -375,6 +373,8 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditDiagnostics:track.AudioEngineState` | `score-core` | 3 | `audio-engine-state` | `unknown-syntax` | The audit accepts the two known playback engines and reports any other token. |
 | `gpifReadPanAutomations:a.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The channel-strip pan event is retained independently from static channel balance. |
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | Volume and pan have authored destinations; other recognized channel-strip automation remains omitted. |
+| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
+| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 20 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 
 ## Behavioral contracts
 
@@ -457,3 +457,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `trill-speed-target-limit-16` | `note-and-beat-semantics` | `TestConformanceTrillSixteenth` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration16 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
 | `trill-speed-target-limit-32` | `note-and-beat-semantics` | `TestConformanceTrillThirtySecond` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration32 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
 | `trill-speed-target-limit-64` | `note-and-beat-semantics` | `TestConformanceTrillSixtyFourth` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration64 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
+| `string-number-display` | `note-and-beat-semantics` | `TestConformanceStringNumberDisplay` | `TestAlphaTabStringNumberDisplay` | yes | Exact display flags, independent note occurrence edits, GPIF Enable presence and raw final consumer string/fret/MIDI facts. |

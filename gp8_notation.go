@@ -392,6 +392,10 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		{Name: "Fret", Fret: &fret},
 		{Name: "Midi", Number: &midi},
 	}
+	if note.ShowStringNumber {
+		enable := ""
+		properties = append(properties, gpifProperty{Name: "ShowStringNumber", Enable: &enable})
+	}
 	if note.String > 0 {
 		stringValue := float64(int(note.String) - 1)
 		if !track.PercussionTrack && int(note.String) <= len(staffStrings) {

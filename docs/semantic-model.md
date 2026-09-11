@@ -386,6 +386,12 @@ bar has empty, shorter, or longer voice content. Only the existing opening
 flag is true. GPIF defines this as element presence, so even a source spelling
 such as `<FreeTime>false</FreeTime>` means true.
 
+`Note.ShowStringNumber` requests an explicit string-number display on its exact note.
+It is independent from string identity, fret, pitch, and tuning. Direct edits control GP8 output.
+GPIF requires an `Enable` child for true; its text is not a boolean value.
+An absent property or a property without `Enable` means false.
+Reused note definitions produce independent display flags on each occurrence.
+
 GP8 stores track visibility outside GPIF. It stores notation and tablature view
 flags in the part configuration. The writer reports other non-default track and
 beat display settings. It also reports page setup, marker color, voice direction,

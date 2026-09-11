@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 72 | 15 | 10 | 1 |
-| model | 71 | 16 | 10 | 1 |
-| export | 50 | 27 | 19 | 2 |
+| import | 73 | 15 | 9 | 1 |
+| model | 72 | 16 | 9 | 1 |
+| export | 51 | 27 | 18 | 2 |
 
-All three stages have a supported rating in 50 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 51 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -613,9 +613,9 @@ Bounded work: [Preserve supported header and footer templates and visibility](ht
 
 Notation. Priority 3. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-ShowStringNumber is recognized by the audit but omitted from the public note.
+Note.ShowStringNumber preserves exact GPIF Enable presence independently of string identity, fret, pitch and tuning. Public edits and reused note occurrences retain independent flags through strict GP8 export and final pinned AlphaTab consumption. GP3 through GP5 do not author this property.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

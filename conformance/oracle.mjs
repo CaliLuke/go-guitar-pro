@@ -1117,6 +1117,26 @@ export function loadGolpeFacts(fixture) {
   return facts;
 }
 
+export function loadStringNumberFacts(fixture) {
+  const facts = [];
+  for (const track of loadScore(fixture).tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (let beatIndex = 0; beatIndex < voice.beats.length; beatIndex++) {
+            const beat = voice.beats[beatIndex];
+            for (let noteIndex = 0; noteIndex < beat.notes.length; noteIndex++) {
+              const note = beat.notes[noteIndex];
+              facts.push({track: track.index, staff: staff.index, bar: bar.index, voice: voice.index, beat: beatIndex, note: noteIndex, string: note.string, fret: note.fret, MIDI: note.realValue, show: note.showStringNumber});
+            }
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadFingeringFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -1308,6 +1328,10 @@ function main() {
   }
   if (args[0] === '--golpe' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadGolpeFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--string-number-display' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadStringNumberFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--fingering' && args.length === 2) {

@@ -4671,11 +4671,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "ShowStringNumber is recognized by the audit but omitted from the public note.",
+      "finding": "Note.ShowStringNumber preserves exact GPIF Enable presence independently of string identity, fret, pitch and tuning. Public edits and reused note occurrences retain independent flags through strict GP8 export and final pinned AlphaTab consumption. GP3 through GP5 do not author this property.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Note.showStringNumber"
@@ -4690,6 +4690,11 @@
           "kind": "probe",
           "reference": "testdata/gp7/string-numbers.gp:show-string",
           "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].showStringNumber. Source and target values are stored in probe_comparison."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceStringNumberDisplay",
+          "detail": "Public, wire and final consumer assertions cover true, absent property, absent Enable and literal false Enable text with independent reused-note edits."
         }
       ]
     },

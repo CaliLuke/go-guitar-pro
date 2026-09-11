@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "issue": 107,
+  "status": "implemented-awaiting-independent-review",
+  "source": {
+    "path": "testdata/gp8/string-number-display.gp",
+    "sha256": "dadcb2812656e5fc95d9d90dddd6e011556c3aba857edea730373939bdf73cae",
+    "provenance": "Original minimal GPIF source authored for this regression. Four quarter-note beats reuse one note definition and distinguish Enable, no property and no Enable.",
+    "consumer": [
+      {
+        "track": 0,
+        "staff": 0,
+        "bar": 0,
+        "voice": 0,
+        "beat": 0,
+        "note": 0,
+        "string": 4,
+        "fret": 9,
+        "MIDI": 64,
+        "show": true
+      },
+      {
+        "track": 0,
+        "staff": 0,
+        "bar": 0,
+        "voice": 0,
+        "beat": 1,
+        "note": 0,
+        "string": 5,
+        "fret": 2,
+        "MIDI": 61,
+        "show": false
+      },
+      {
+        "track": 0,
+        "staff": 0,
+        "bar": 0,
+        "voice": 0,
+        "beat": 2,
+        "note": 0,
+        "string": 4,
+        "fret": 9,
+        "MIDI": 64,
+        "show": true
+      },
+      {
+        "track": 0,
+        "staff": 0,
+        "bar": 0,
+        "voice": 0,
+        "beat": 3,
+        "note": 0,
+        "string": 3,
+        "fret": 8,
+        "MIDI": 58,
+        "show": false
+      }
+    ]
+  },
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "scenarios": [
+    {
+      "edited": false,
+      "go_notes": [
+        {
+          "beat": 0,
+          "fret": 9,
+          "show": true,
+          "string": 3
+        },
+        {
+          "beat": 1,
+          "fret": 2,
+          "show": false,
+          "string": 2
+        },
+        {
+          "beat": 2,
+          "fret": 9,
+          "show": true,
+          "string": 3
+        },
+        {
+          "beat": 3,
+          "fret": 8,
+          "show": false,
+          "string": 4
+        }
+      ],
+      "report": null,
+      "export_sha256": "5004bc97b039f576ea40b4187f12c509141e05f40e11568b418747ecc84010df",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 4,
+          "fret": 9,
+          "MIDI": 64,
+          "show": true
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 2,
+          "MIDI": 61,
+          "show": false
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 9,
+          "MIDI": 64,
+          "show": true
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 8,
+          "MIDI": 58,
+          "show": false
+        }
+      ]
+    },
+    {
+      "edited": true,
+      "go_notes": [
+        {
+          "beat": 0,
+          "fret": 9,
+          "show": false,
+          "string": 3
+        },
+        {
+          "beat": 1,
+          "fret": 2,
+          "show": true,
+          "string": 2
+        },
+        {
+          "beat": 2,
+          "fret": 9,
+          "show": true,
+          "string": 3
+        },
+        {
+          "beat": 3,
+          "fret": 8,
+          "show": false,
+          "string": 4
+        }
+      ],
+      "report": null,
+      "export_sha256": "bf99629056c5fce05aa1389f7392a8167435df323f704da6bc8a1896c07d5f50",
+      "consumer": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 4,
+          "fret": 9,
+          "MIDI": 64,
+          "show": false
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 2,
+          "MIDI": 61,
+          "show": true
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 9,
+          "MIDI": 64,
+          "show": true
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 8,
+          "MIDI": 58,
+          "show": false
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Enable child presence is authoritative even if its text is false; no Enable and absent property both mean false.",
+    "GP3 through GP5 do not supply this property. No renderer appearance or pitch conversion is inferred from the display flag.",
+    "Version provenance and unrelated track display settings were cleared only for focused strict exports."
+  ],
+  "tests": [
+    "TestStringNumberDisplayPublicOwnership",
+    "TestConformanceStringNumberDisplay",
+    "TestAlphaTabStringNumberDisplay"
+  ]
+}

@@ -16230,6 +16230,14 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/string-number-display.gp",
+      "features": [
+        "note-and-beat-semantics"
+      ],
+      "diagnostics": [],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/timer.gp",
       "features": [
         "rhythm"

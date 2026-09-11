@@ -18,7 +18,10 @@ type Note struct {
 	HasPercussionArticulation bool
 	Velocity                  int16
 	String                    int8
-	SwapAccidentals           bool
+	// ShowStringNumber requests an explicit string-number display on this note.
+	// It is independent from String, pitch, and tuning; direct edits control GP8 output.
+	ShowStringNumber bool
+	SwapAccidentals  bool
 	// TieOrigin marks this note as the start of a tie in formats that model
 	// tie direction explicitly, such as GPIF.
 	TieOrigin        bool

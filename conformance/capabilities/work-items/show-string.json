@@ -5,8 +5,8 @@
   "title": "Preserve explicit string-number display requests",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp6",
     "gp7",
@@ -69,13 +69,23 @@
       "kind": "probe",
       "reference": "testdata/gp7/string-numbers.gp:show-string",
       "detail": "Reproduced at tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].showStringNumber. Source and target values are stored in probe_comparison."
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/string-number-display.json",
+      "detail": "Hash-bound original source, strict Go exports, exact public notes and raw pinned consumer source/edited facts."
     }
   ],
   "shared_files": [
     "gpif_audit.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented independent Note.ShowStringNumber with GPIF Enable-presence semantics. Strict public source parsing, non-default strings, absent controls, independent reused-note edits and exact final pinned-consumer flags pass. Tuning, fret and pitch remain unchanged. Awaiting different-agent final-commit review and root combined gates.",
+  "verification": [
+    "Focused public API and independent consumer tests pass.",
+    "Semantic inventory increases by one public field; no new wire field or dispatch is introduced.",
+    "Fixture inventory and whole-corpus accounting refreshed for the original minimal regression source.",
+    "Full conformance, capability probe and prek remain assigned to root integration."
+  ],
   "issue": {
     "number": 107,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/107",
