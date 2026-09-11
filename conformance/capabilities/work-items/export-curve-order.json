@@ -110,6 +110,11 @@
       "kind": "regression",
       "reference": "TestGP8BendControlRoles",
       "detail": "Before the fix on basecf139522378e4fed5ea487383e2bb5e13d29a45e, the valid four-role programmatic tuple failed score.note.bend.order. Original canon exports failed bend point3 offset25 precedes50. Focused public regression now validates monotonic and bounded nonmonotonic tuples; invalid shapes and numeric bounds still reject."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 62; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -117,7 +122,7 @@
     "gp8_effects.go",
     "gpif_effects.go"
   ],
-  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -134,12 +139,28 @@
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor.",
         "Combined gate found synthetic extra terminal-hold controls. Separate fix c49ccfae466765d29711aef95a685c0fe49b79bf was independently reviewed by root: existing writer regression, new public two/three/four-point cases, original role tests and raw consumer endpoint checks all passed; integrated as a12e56c."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 62 verdict PASS.",
+        "Reproduce the current export rejection for canon-audio-track.gp in GP7 and GP8: note 177 authors offsets 0, 50, 50, 35 in control-role order.: PASS",
+        "Preserve those roles and exact offsets in exported GPIF and Go reparse; pinned AlphaTab must consume the result with the same retained controls.: PASS",
+        "Do not sort controls or silently replace their positions. Keep malformed role counts, invalid numeric values and genuinely unrepresentable shapes diagnosable at their applicable boundary.: PASS",
+        "Add focused public-API validation/export tests, including a normal monotonic curve and a nonmonotonic but valid standard tuple, without weakening unrelated score invariants.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 62,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/62",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.378427+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

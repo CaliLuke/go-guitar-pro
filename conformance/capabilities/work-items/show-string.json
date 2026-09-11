@@ -74,12 +74,17 @@
       "kind": "runtime",
       "reference": "conformance/capabilities/evidence/string-number-display.json",
       "detail": "Hash-bound original source, strict Go exports, exact public notes and raw pinned consumer source/edited facts."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 107; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gpif_audit.go"
   ],
-  "resolution": "Implemented independent Note.ShowStringNumber with GPIF Enable-presence semantics. Strict public source parsing, non-default strings, absent controls, independent reused-note edits and exact final pinned-consumer flags pass. Tuning, fret and pitch remain unchanged. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "Implemented independent Note.ShowStringNumber with GPIF Enable-presence semantics. Strict public source parsing, non-default strings, absent controls, independent reused-note edits and exact final pinned-consumer flags pass. Tuning, fret and pitch remain unchanged. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -96,12 +101,27 @@
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor.",
         "Source-only stale SQLite input hash was corrected in integrated refresh; final source database consistency and full gate pass."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 107 verdict PASS.",
+        "Test true, false/absent and a non-default note string without changing pitch or tuning.: PASS",
+        "Keep the display request on the exact note across reused definitions.: PASS",
+        "Independent GP8 consumption retains the authored flag and strict parsing no longer reports this supported property as lost.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 107,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/107",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.412956+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

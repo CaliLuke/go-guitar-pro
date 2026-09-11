@@ -116,6 +116,11 @@
       "kind": "acquisition-attempt",
       "reference": "conformance/capabilities/evidence/partial-capo-acquisition.json",
       "detail": "Exact failed native authoring attempt and saved zero-value candidate facts; both external inputs remain missing."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 115; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -123,12 +128,30 @@
     "conformance/oracle.mjs",
     "track.go"
   ],
-  "resolution": "Native authoring access was available in Guitar Pro8.1.5-31, but the controlled asymmetric selected-string state could not be authored through the available UI controls. The saved candidate still has PartialCapoFret0 and all-zero string flags. Required fixture variants and retaining consumer pitch receipts remain missing; no source mapping or implementation is inferred. See the acquisition receipt.",
-  "verification": [],
+  "resolution": "Fresh independent review confirms both required external inputs are still missing: a native asymmetric partial-capo source and a retaining independent consumer pitch receipt. The saved authoring control has fret 0 and no selected strings; it is explicitly not the requested evidence. No fixture mapping was invented.",
+  "verification": [
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-final-blockers-fresh.json; issue 115 verdict BLOCKED.",
+        "Obtain an authorized GP7/GP8 fixture pair authored from the same minimal six-string score: no partial capo control and partial capo fret 3 on asymmetric named strings 1 and 4. Each string must have an identifiable open-string note. Record application version, string naming convention, file hashes and authored UI values.: BLOCKED",
+        "Add a combined-capo variant with whole capo 2 and partial capo 5, plus a partial-below-whole control. Reopen in the authoring application and record exact per-string state and output pitches; the verified documentation already states frets are absolute and a partial capo below the whole capo is ineffective.: BLOCKED",
+        "Extract and record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Change only one selected string in a controlled sibling file to establish bit/string order; do not infer order from tuning reversal.: BLOCKED",
+        "Run public Go ParseWithOptions and pinned AlphaTab on each fixture, recording retained facts and diagnostic paths. Record the independent Guitar Pro consumer facts separately because pinned AlphaTab has no retaining partial-capo field.: BLOCKED",
+        "Deliver fixtures and machine-readable receipts in the corpus/database with a narrow proposed mapping/API follow-up only if string ordering and a retaining consumer are proved. Otherwise record the exact missing input and keep the work excluded from ready_work; do not loop into another open-ended source review or promote support.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
+  ],
   "issue": {
     "number": 115,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/115",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:47:46.246938+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

@@ -100,6 +100,11 @@
       "kind": "test",
       "reference": "TestSoundOpeningSelectionKeepsBaseProgram",
       "detail": "Additional public ownership/authority or non-default raw consumer control."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 69; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -108,7 +113,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Same-program sound definitions now have focused identity, public-edit, definition-reorder, broken-reference, and exact-wire regression evidence. Separate authority cases distinguish the first-definition base program, channel fallback/conflicts, and explicit opening selections. Raw pinned consumer evidence asserts retained event order, count, positions, programs, annotations and interpolation without claiming named identities that its public model discards. Existing Hidden consumer-loss coverage and legacy mix-table limits remain unchanged. Fresh independent acceptance review and integrated full gates passed; the issue remains open with solved label for subsequent verification.",
+  "resolution": "Same-program sound definitions now have focused identity, public-edit, definition-reorder, broken-reference, and exact-wire regression evidence. Separate authority cases distinguish the first-definition base program, channel fallback/conflicts, and explicit opening selections. Raw pinned consumer evidence asserts retained event order, count, positions, programs, annotations and interpolation without claiming named identities that its public model discards. Existing Hidden consumer-loss coverage and legacy mix-table limits remain unchanged. Fresh independent acceptance review and integrated full gates passed; the issue remains open with solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
@@ -124,12 +129,28 @@
         "Distinct equal-program sound definitions, stable identities, authored opening/later event order and consumer program81 passed. Independent challenge retained three definitions and five out-of-order/duplicate-position events. Dependencies41/51 are closed.",
         "Pinned AlphaTab1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate covers build, vet, formatting, lint, duplication, conformance,77 mutation checks, race tests and91.8% statement coverage."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 69 verdict PASS.",
+        "Create two named sound definitions with the same program but distinct path/name/role; ordered and duplicate-position events must retain the selected identities through public edits and GP8 wire references.: PASS",
+        "Reorder definitions without changing event meaning and reject broken references. Use independent consumer assertions for the distinctions that consumer actually retains.: PASS",
+        "Document and test authority among the initial sound definition, explicit opening event and channel program, including conflicts; do not deduplicate definitions by program alone.: PASS",
+        "Keep Sound-event Hidden as an explicit pinned-consumer limit even though exact wire and Go reparse retain it. Reuse existing automation-detail coverage and update only residual missing evidence.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 69,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/69",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.583507+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

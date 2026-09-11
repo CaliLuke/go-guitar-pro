@@ -5,8 +5,8 @@
   "title": "Preserve global extended barlines and bar-number policy",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -70,6 +70,11 @@
       "kind": "runtime",
       "reference": "conformance/capabilities/evidence/score-barlines.json",
       "detail": "Hash-bound source and actual export artifacts with independently decoded key/type/payload records and final pinned consumer facts."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 109; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -78,17 +83,29 @@
     "gp8_export.go",
     "headers.go"
   ],
-  "resolution": "Implemented the two confirmed global stylesheet keys with public optional authorities, checked binary reader/writer, exact raw final consumer receipts, and preservation of other validated records. Awaiting different-agent final-commit acceptance review and root combined gates.",
+  "resolution": "Preserved global extended barlines and bar-number policy through the checked shared BinaryStylesheet codec, including exact types, boundaries, absence and unrelated records. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Focused public API and raw pinned consumer tests pass for all six flag/policy combinations and absence.",
-    "Semantic inventory adds three public fields, three tagged binary wire fields, one source dispatch and three enum members.",
-    "Four pinned fixture copies are registered and whole-corpus accounting refreshed.",
-    "Full conformance, capability probe and prek remain assigned to root integration."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-score-batch-fresh.json; issue 109 verdict PASS.",
+        "Import and export explicit extended-barline true/false and numbering AllBars, FirstOfSystem and Hide, including wire integer values 0, 1 and 2.: PASS",
+        "Use pinned extended-barlines.gp and barnumbers-all/first/hide.gp fixtures. Verify exact keys/types, Go public values and pinned AlphaTab stylesheet values after export.: PASS",
+        "Preserve absence/default semantics without inventing per-bar ownership. Validate undefined authored policy values and malformed/truncated stylesheet records.: PASS",
+        "Make the shared stylesheet read/write path preserve other supported settings and provide a documented public edit contract; do not emit an empty replacement stylesheet that erases these settings.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 109,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/109",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.540984+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

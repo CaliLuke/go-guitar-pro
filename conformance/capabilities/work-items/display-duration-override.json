@@ -99,6 +99,11 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 111; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -108,7 +113,7 @@
     "conformance/sync-upstream-inventory.mjs",
     "conformance/upstream-inventory.json"
   ],
-  "resolution": "Excluded other-format display-duration overrides from Guitar Pro gaps and model obligations. Duration, tuplets and timing retain their existing owners. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "resolution": "Excluded other-format display-duration overrides from Guitar Pro gaps and model obligations. Duration, tuplets and timing retain their existing owners. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
@@ -124,12 +129,28 @@
         "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
         "Excluded other-format display-duration overrides from Guitar Pro gaps and model obligations. Duration, tuplets and timing retain their existing owners."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 111 verdict PASS.",
+        "Update display-duration-override to outside-Guitar-Pro scope with out-of-scope import/model/export dispositions; retain its reference row and exact MusicXML evidence.: PASS",
+        "Correct Beat.overrideDisplayDuration in the canonical upstream model inventory from generic partial/rhythm to the reviewed GP exclusion. Ensure synchronization preserves that classification.: PASS",
+        "Add an executable inventory regression asserting the exact recorded outside-GP scope, out-of-scope model/stage dispositions and supporting MusicXML references resolving to the pin. Verify that gap summaries exclude this row while duration/dots/tuplets/exact-timing retain their GP scope. Use existing pin/source-hash drift checks rather than brittle assignment-output snapshots.: PASS",
+        "Do not add a public override field or derive it from authored rhythmic duration. Resolve after inventory and existing rhythm tests pass.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 111,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/111",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.556890+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

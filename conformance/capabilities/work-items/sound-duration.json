@@ -162,6 +162,11 @@
       "kind": "test",
       "reference": "TestAlphaTabNoteDurationPercentLoss",
       "detail": "Run the existing GP5 Effects.gp5 and other-effects.gp5 import regression, then the permanent duration-percentage policy and raw consumer tests. Authored export inputs are exactly0.5,0.75 and1.0; the raw legacy endian-defect subnormals are excluded. The export probe uses dotted eighth3:2 rhythm, tie origin/destination and let-ring controls."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 102; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -172,7 +177,7 @@
     "gp8_builder.go",
     "note.go"
   ],
-  "resolution": "Export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "Export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -188,12 +193,28 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 102 verdict PASS.",
+        "Reuse the existing GP5 Effects.gp5 and other-effects.gp5 import assertions for exact0.5/0.75 values. Record the pinned legacy float-endianness defect and the existing narrow oracle correction; do not cite raw malformed subnormal probe values as valid authored inputs.: PASS",
+        "For isolated valid public values0.5 and0.75, assert exact note location and ExportDispositionOmitted for gp8.omit.note-duration-percent. Strict export returns zero bytes; allowlisting only that loss succeeds.: PASS",
+        "Import both exported archives with the independent pinned GPIF consumer and assert note.durationPercent=1. Assert unchanged authored beat rhythm/dots/tuplets and relevant tie/let-ring flags; do not approximate percentage with rhythmic edits.: PASS",
+        "Keep the1.0 preservation control and invalid negative/nonfinite validation checks. Record GP8 percentage loss as a target limit and leave export rating partial.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 102,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/102",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.413875+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

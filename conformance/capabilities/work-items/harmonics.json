@@ -165,6 +165,11 @@
       "kind": "test",
       "reference": "TestHarmonicSpellingSelectivePolicy",
       "detail": "Focused non-default acceptance regression."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 96; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -174,7 +179,7 @@
     "gp8_notation.go",
     "gpif_effects.go"
   ],
-  "resolution": "All six harmonic kinds retain exact 2.4 fret in GPIF, Go and the pinned consumer. Natural/artificial Pitch, Octave and combined spelling receive exactly one scoped omission; every selective allowance is independent of conflicting legacy fret authority. Source values and owning note identity remain unchanged. No mapping to generic note pitch was added. Spelling export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "All six harmonic kinds retain exact 2.4 fret in GPIF, Go and the pinned consumer. Natural/artificial Pitch, Octave and combined spelling receive exactly one scoped omission; every selective allowance is independent of conflicting legacy fret authority. Source values and owning note identity remain unchanged. No mapping to generic note pitch was added. Spelling export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -190,12 +195,28 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 96 verdict PASS.",
+        "For Natural, Artificial, Pinch, Tapped, Semi, and Feedback separately at FretFloat=2.4, assert exact HType/HFret XML, Go kind and fractional fret, and pinned consumer kind and fret; no spelling-loss report without authored Pitch/Octave.: PASS",
+        "For natural and artificial harmonics, independently exercise non-default Pitch, Octave, and both together. Preserve the public source fields before export, emit exactly gp8.omit.harmonic-pitch for that authored pair, reject strict export until that code is allowed, and verify allowed output retains kind/fret while omitting only the unsupported spelling fields.: PASS",
+        "Keep spelling loss independent from Fret/FretFloat authority: a matching legacy integer view2 and exact2.4 does not itself need the spelling-loss code; a truly conflicting legacy fret gets its existing separate authority report and cannot be bypassed by allowing only harmonic-pitch.: PASS",
+        "Use explicit consumer expectations per kind and fractional fret; add the independent consumer evidence and precise allowed-loss assertions to the semantic ledger. Keep spelling/octave export partial and supported kind/fret slices unchanged.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 96,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/96",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.406018+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

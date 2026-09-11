@@ -117,6 +117,11 @@
       "kind": "runtime-verification",
       "reference": "isolated pan-sync implementation checks",
       "detail": "Focused public API and pinned consumer tests PASS; inventory 404/404 fields, 260/260 wire fields, 49/49 dispatches, 172/172 enum members PASS; node conformance/verify.mjs PASS; golangci-lint run PASS (0 issues); go vet ./... PASS; dupl -threshold 75 . PASS (0 groups). Full gates and broad probe are centralized in parent integration."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 52; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -124,7 +129,7 @@
     "gpif_automations.go",
     "mix_table.go"
   ],
-  "resolution": "Implemented canonical pan events, GPIF DSPParam_11 and legacy balance conversion with precise validation and per-event pinned-consumer loss. Pinned AlphaTab cannot retain exported channel-strip pan; complete consumer preservation is not satisfied at this pin. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "Implemented canonical pan events, GPIF DSPParam_11 and legacy balance conversion with precise validation and per-event pinned-consumer loss. Pinned AlphaTab cannot retain exported channel-strip pan; complete consumer preservation is not satisfied at this pin. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -140,12 +145,27 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 52 verdict PASS.",
+        "Retain two pan changes on one track without changing its initial balance.: PASS",
+        "Document exact public units and conversion from GPIF channel-strip and legacy mix-table values.: PASS",
+        "Validate endpoints, ordering and track ownership; independently assert exported events.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 52,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/52",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.391483+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

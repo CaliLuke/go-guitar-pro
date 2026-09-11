@@ -5,8 +5,8 @@
   "title": "Preserve authored system layouts and bar display scales",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "root",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -85,6 +85,11 @@
       "kind": "test",
       "reference": "TestAlphaTabSystemLayout",
       "detail": "Original multi-track-different, resized and GP6 compressed source plus edited exact raw consumer counts/scales."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 112; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -93,12 +98,29 @@
     "gpif_types.go",
     "measure.go"
   ],
-  "resolution": "Implemented independent score and track system counts, exact master/bar scales and checked public/source values. Original GP7 and GP6 raw consumer assertions pass, including bounded unreachable GP6 terminal remainder. Missing track layout inherits score counts with a scoped normalization and no input mutation. Legacy line breaks/displayWidth remain excluded. Awaiting fresh independent review and integrated gates/probe. Fresh review caught an explicit empty track scope disappearing across exports. The fix emits an empty array with an exact normalization report and retains scope across both raw consumer exports.",
-  "verification": [],
+  "resolution": "Preserved score and track system layouts and bar scales with explicit scope precedence, empty-array authority and checked bounds. Inheritance and empty-array normalization have exact strict policy evidence. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "verification": [
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-score-batch-fresh.json; issue 112 verdict PASS.",
+        "Retain score ScoreSystemsDefaultLayout/ScoreSystemsLayout and track SystemsDefautLayout/SystemsLayout, including the source spelling, differing explicit arrays and default values.: PASS",
+        "Keep score and track settings independently editable; explicit track layouts take precedence for that track, otherwise use score layout. Do not flatten or overwrite the retained authored arrays.: PASS",
+        "Preserve master scale XProperty 1124073984 and bar scale 1124139520, including the resized.gp values 0.5, 2 and 0.5 and a caller edit.: PASS",
+        "Use systems-layout/multi-track-different.gp and resized.gp for exact wire, public import/reparse and Go-export-to-AlphaTab assertions. Validate counts, finite positive scales and malformed arrays without narrowing silently.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
+  ],
   "issue": {
     "number": 112,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/112",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.569125+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

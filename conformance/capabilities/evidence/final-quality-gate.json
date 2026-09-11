@@ -1,0 +1,7 @@
+{
+  "source_commit": "7789ca791d8d322ed23332876cc47ec324992995",
+  "command": "prek run --all-files",
+  "exit_code": 0,
+  "output": "Go quality gates.........................................................Passed\n",
+  "scope": "Full prescribed gate. Only review evidence, refreshed probe receipts, generated documentation, and canonical capability bookkeeping changed afterward."
+}

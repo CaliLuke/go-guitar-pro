@@ -104,13 +104,18 @@
       "kind": "runtime-verification",
       "reference": "TestPickStrokeValidation",
       "detail": "Undefined -1, 3, and 127 directions produce score.beat.pick-stroke and aligned zero-output GP8 rejection. A baseline Go overlay demonstrates failure of both new public regressions before the implementation."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 88; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": "GP8 writes the authored PickStroke Direction as Up or Down and omits the property for None. Pick marks remain independent from brush kind, direction, and timing. Strict export preserves both directions without the old omission report. Undefined public directions receive scoped validation and export rejection. Public and pinned-consumer tests cover absence, opposite brushes, direct clearing, nonmutation, and both source marks in testdata/gp7/effects.gp. The implementation awaits independent review and the centralized full gate and capability probe. Fresh independent acceptance review and integrated full gates passed. The issue remains open with solved label for subsequent verification.",
+  "resolution": "GP8 writes the authored PickStroke Direction as Up or Down and omits the property for None. Pick marks remain independent from brush kind, direction, and timing. Strict export preserves both directions without the old omission report. Undefined public directions receive scoped validation and export rejection. Public and pinned-consumer tests cover absence, opposite brushes, direct clearing, nonmutation, and both source marks in testdata/gp7/effects.gp. The implementation awaits independent review and the centralized full gate and capability probe. Fresh independent acceptance review and integrated full gates passed. The issue remains open with solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
@@ -126,12 +131,27 @@
         "All nine pick/brush combinations and15 additional pick/brush/arpeggio consumer combinations passed. Undefined enums reject, clearing parsed marks works and fields remain independent.",
         "Pinned AlphaTab1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate covers build, vet, formatting, lint, duplication, conformance,77 mutation checks, race tests and91.8% statement coverage."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 88 verdict PASS.",
+        "Export separate up, down and absent cases without changing brush direction.: PASS",
+        "Pinned AlphaTab sees the exact pickStroke enum at each beat.: PASS",
+        "Remove the resolved omission report and add strict-preservation evidence for both directions.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 88,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/88",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.579596+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

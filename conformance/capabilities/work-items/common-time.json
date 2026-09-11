@@ -123,6 +123,11 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 110; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -132,7 +137,7 @@
     "conformance/upstream-inventory.json",
     "headers.go"
   ],
-  "resolution": "Excluded other-format common-time glyphs from Guitar Pro gaps and model obligations. Numeric 4/4 and 2/2 meter remains supported. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "resolution": "Excluded other-format common-time glyphs from Guitar Pro gaps and model obligations. Numeric 4/4 and 2/2 meter remains supported. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
@@ -148,12 +153,28 @@
         "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
         "Excluded other-format common-time glyphs from Guitar Pro gaps and model obligations. Numeric 4/4 and 2/2 meter remains supported."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 110 verdict PASS.",
+        "Update the common-time capability to an explicit outside-Guitar-Pro scope and out-of-scope stage dispositions. Retain the row and citations; do not relabel it supported or delete the comparison item.: PASS",
+        "Correct MasterBar.timeSignatureCommon in the canonical upstream model inventory, currently partial/staff-ownership, to a reviewed exclusion for GP3-GP8. Ensure inventory regeneration preserves the decision.: PASS",
+        "Add a focused inventory regression asserting the exact recorded GP scope, out-of-scope model/stage dispositions and supporting references resolving to the pin. Preserve the numeric meter owner. The existing pin/source-hash checks enforce upstream drift; do not substitute a grep-output snapshot for the reviewed importer/writer evidence.: PASS",
+        "Keep numeric4/4 and2/2 meter tests and documentation mappings attached to time-signatures; do not infer common/cut glyphs from those values. Resolve the implementation after inventory checks pass.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 110,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/110",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.554496+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

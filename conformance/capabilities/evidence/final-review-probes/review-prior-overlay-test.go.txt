@@ -1,0 +1,65 @@
+package goguitarpro
+import("testing";"reflect";"encoding/json";"slices";"strings";"os/exec")
+func TestFreshPriorLegacyAutomationEdits(t *testing.T){
+ s:=parseTestFixture(t,"testdata/gp3/mix-table-events.gp3")
+ s.PanAutomations=[]PanAutomation{{Position:.25,Value:.125,Linear:true},{Position:.25,Value:.875},{Position:.75,Value:.625}}
+ s.Tracks[0].Sounds=[]TrackSound{{Name:"One & α",Path:"review/one",Role:"main",Program:27},{Name:"Two",Path:"review/two",Role:"solo",Program:27}}
+ s.Tracks[0].SoundAutomations=[]SoundAutomation{{Position:0,Sound:1,Text:"one"},{Position:.25,Sound:0,Text:"two",Linear:true},{Position:.25,Sound:1,Text:"three"}}
+ for _,clear:=range []bool{false,true}{
+ if clear{s.PanAutomations=nil;s.Tracks[0].SoundAutomations=nil}
+ before,_:=json.Marshal(s); data,report,err:=ExportWithReport(s,ExportFormatGP8,ExportOptions{});if err!=nil{t.Fatal(err,report)}
+ out,err:=Parse(data);if err!=nil{t.Fatal(err)}
+ if !slices.Equal(out.PanAutomations,s.PanAutomations)||!slices.Equal(out.Tracks[0].Sounds,s.Tracks[0].Sounds)||!slices.Equal(out.Tracks[0].SoundAutomations,s.Tracks[0].SoundAutomations){t.Fatalf("clear=%t stale raw events resurrected",clear)}
+ after,_:=json.Marshal(s);if string(before)!=string(after){t.Fatal("source mutated")}
+ var facts struct{Sound []conformanceSoundEvent};readAlphaTabOracleFacts(t,"--automations",writeConformanceFixture(t,data),&facts)
+ if clear{if len(facts.Sound)!=1||facts.Sound[0].Value!=27||facts.Sound[0].Position!=0||facts.Sound[0].Text!=""{t.Fatal("clearing must leave only consumer default program",facts)};continue};if len(facts.Sound)!=len(s.Tracks[0].SoundAutomations){t.Fatal(facts)}
+ for i,a:=range facts.Sound{want:=s.Tracks[0].SoundAutomations[i];if a.Value!=27||a.Position!=want.Position||a.Text!=want.Text||a.Linear!=want.Linear{t.Fatal(a,want)}}
+ }
+}
+func TestFreshPriorExplicitMixIdentity(t *testing.T){
+ s:=consumerLimitSong(t);s.Channels[0].Instrument=27
+ s.Tracks[0].Sounds=[]TrackSound{{Name:"First",Path:"review/first",Role:"main",Program:27},{Name:"Second",Path:"review/second",Role:"solo",Program:27}}
+ s.Tracks[0].SoundAutomations=[]SoundAutomation{{Sound:1,Linear:true},{Sound:0,Linear:true}}
+ s.PanAutomations=[]PanAutomation{{Value:.3125,Linear:true},{Value:.625,Linear:true}}
+ s.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.MixTableChange=&MixTableChange{Instrument:&MixTableItem{Value:27},Balance:&MixTableItem{Value:5}}
+ for _,reverse:=range []bool{false,true}{if reverse{slices.Reverse(s.Tracks[0].Sounds);for i:=range s.Tracks[0].SoundAutomations{s.Tracks[0].SoundAutomations[i].Sound=1-s.Tracks[0].SoundAutomations[i].Sound}}
+ before,_:=json.Marshal(s);data,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:[]string{"gp8.omit.pan-automation-consumer"}}});if e!=nil{t.Fatal(e,r)}
+ if len(r.Entries)!=2{t.Fatal(r)};o,e:=Parse(data);if e!=nil{t.Fatal(e)}
+ if !slices.Equal(o.Tracks[0].Sounds,s.Tracks[0].Sounds)||!slices.Equal(o.Tracks[0].SoundAutomations,s.Tracks[0].SoundAutomations)||!slices.Equal(o.PanAutomations,s.PanAutomations){t.Fatal("raw projection deduplicated authored identities/order")}
+ after,_:=json.Marshal(s);if string(before)!=string(after){t.Fatal("mutation")}
+ var facts struct{Sound []conformanceSoundEvent};readAlphaTabOracleFacts(t,"--automations",writeConformanceFixture(t,data),&facts);if len(facts.Sound)!=2||facts.Sound[0].Value!=27||facts.Sound[1].Value!=27{t.Fatal(facts)}
+ }
+}
+func TestFreshPriorCombinedLossSubsets(t *testing.T){
+ s:=semanticExportProbeSong(t);b:=&s.Tracks[0].Measures[0].Voices[0].Beats[0];b.Dynamics=48;b.Notes[0].Velocity=47
+ b.Notes=append(b.Notes,Note{Value:5,String:2,Kind:NoteTypeNormal,Velocity:95,DurationPercent:1})
+ b.Notes[1].DurationPercent=.75;b.Notes[1].Effect.Trill=&TrillEffect{Fret:7,Duration:Duration{Value:64,TupletEnters:1,TupletTimes:1}}
+ exact:=2.4;fret:=int8(2);oct:=OctaveOttava;b.Notes[1].Effect.Harmonic=&HarmonicEffect{Kind:HarmonicTypeArtificial,Fret:&fret,FretFloat:&exact,Octave:&oct}
+ s.Channels[0].Channel=1;s.Channels[0].EffectChannel=18;s.Tracks[0].Mute=true;s.Tracks[0].Solo=true
+ codes:=[]string{"gp8.normalize.beat-dynamic","gp8.normalize.note-velocity","gp8.omit.note-duration-percent","gp8.normalize.trill-duration","gp8.omit.harmonic-pitch","gp8.normalize.effect-channel-port","gp8.normalize.playback-state"}
+ before,_:=json.Marshal(s);pre:=PreflightExport(s,ExportFormatGP8,ExportOptions{});got:=reportCodes(pre);slices.Sort(got);want:=slices.Clone(codes);slices.Sort(want);if !slices.Equal(got,want){t.Fatal(got,want)}
+ for mask:=0;mask<1<<len(codes);mask++{allowed:=[]string{};for i,c:=range codes{if mask&(1<<i)!=0{allowed=append(allowed,c)}}
+ data,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:allowed}})
+ if !reflect.DeepEqual(r,pre){t.Fatal("preflight/report differs")};if mask!=(1<<len(codes))-1{if e==nil||len(data)!=0{t.Fatalf("subset %d accepted",mask)};continue};if e!=nil{t.Fatal(e)}
+ var routing []conformancePlaybackRouting;readAlphaTabOracleFacts(t,"--playback-routing",writeConformanceFixture(t,data),&routing);if len(routing)!=1||routing[0]!=(conformancePlaybackRouting{PrimaryChannel:1,SecondaryChannel:2,IsMute:true}){t.Fatal(routing)}
+ var notes []noteDurationTrillFact;readAlphaTabOracleFacts(t,"--note-duration-trill",writeConformanceFixture(t,data),&notes);if len(notes)!=2||notes[1].Note!=1||notes[1].Percent!=1||notes[1].TrillFret!=7||notes[1].TrillDuration!=16{t.Fatal(notes)}
+ assertAlphaTabChordRestDynamics(t,data,false)
+ };after,_:=json.Marshal(s);if string(before)!=string(after){t.Fatal("source mutation")}
+ for _,r:=range pre.Entries{if strings.Contains(r.Code,"duration")||strings.Contains(r.Code,"harmonic"){if r.Location.Note!=1{t.Fatal("wrong note owner",r)}}}
+}
+func TestFreshPriorStringOccurrenceClear(t *testing.T){
+ s:=stringNumberSong(t);s.Tracks[0].ShortName=stringPointer("改 & < >\r\nα");beats:=s.Tracks[0].Measures[0].Voices[0].Beats
+ beats[0].Notes[0].ShowStringNumber=false;beats[2].Notes[0].ShowStringNumber=true;beats[3].Notes[0].ShowStringNumber=true
+ before,_:=json.Marshal(s);data,report,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil||len(report.Entries)!=0{t.Fatal(e,report)}
+ var got []stringNumberFact;readAlphaTabOracleFacts(t,"--string-number-display",writeConformanceFixture(t,data),&got)
+ want:=[]stringNumberFact{{0,0,0,0,0,0,4,9,64,false},{0,0,0,0,1,0,5,2,61,false},{0,0,0,0,2,0,4,9,64,true},{0,0,0,0,3,0,3,8,58,true}}
+ if !reflect.DeepEqual(got,want){t.Fatal(got)};out,e:=Parse(data);if e!=nil||out.Tracks[0].ShortName==nil||*out.Tracks[0].ShortName!=*s.Tracks[0].ShortName{t.Fatal(e)};after,_:=json.Marshal(s);if string(before)!=string(after){t.Fatal("mutation")}
+}
+
+func TestFreshPriorNumericMeterNoGlyph(t *testing.T){
+ for _,meter:=range []int8{4,2}{s:=semanticExportProbeSong(t);s.MeasureHeaders[0].TimeSignature.Numerator=meter;s.MeasureHeaders[0].TimeSignature.Denominator.Value=uint16(meter);s.Tracks[0].Measures[0].TimeSignature=s.MeasureHeaders[0].TimeSignature
+ data,e:=Export(s,ExportFormatGP8);if e!=nil{t.Fatal(e)};file:=writeConformanceFixture(t,data)
+ cmd:=exec.Command("node","-e",`const a=require('@coderline/alphatab'),fs=require('fs');const s=a.importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(fs.readFileSync(process.argv[1])),new a.Settings());process.stdout.write(JSON.stringify(s.masterBars.map(b=>[b.timeSignatureNumerator,b.timeSignatureDenominator,b.timeSignatureCommon])))`,file);cmd.Dir="conformance";raw,e:=cmd.CombinedOutput();if e!=nil{t.Fatal(e,string(raw))}
+ var facts [][]any;if e=json.Unmarshal(raw,&facts);e!=nil{t.Fatal(e,string(raw))};if len(facts)!=1||facts[0][0]!=float64(meter)||facts[0][1]!=float64(meter)||facts[0][2]!=false{t.Fatal(facts)}
+ }
+}

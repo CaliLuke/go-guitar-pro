@@ -5,8 +5,8 @@
   "title": "Preserve independent tap, slap and pop beat techniques",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -97,6 +97,11 @@
       "kind": "test",
       "reference": "TestAlphaTabBeatTechniques",
       "detail": "Raw original/output consumer values and exact technique locations, including note independence."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 93; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -104,15 +109,28 @@
     "gpif_audit.go",
     "gpif_effects.go"
   ],
-  "resolution": "Independent beat states and documented legacy reconciliation are implemented. All eight combinations and 32 beat/note combinations pass exact pinned consumer checks, including original GP3 and reordered combined GPIF sources. Explicit scoped reports cover required note flag additions, cleared beat conflicts and rest tap omission. Authored note flags remain unchanged. Awaiting fresh exact-commit review, integrated full gates and capability probe; issue remains open.",
+  "resolution": "Preserved independent tap, slap and pop requests with documented typed/legacy and note-tap authority. Exact combined requests and strict losses are verified. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Public legacy export regression failed before implementation and passes afterward.",
-    "Focused public, matrix, raw pinned-consumer and inventory checks pass; full gates and capability probe assigned to parent integration."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-musical-batch-fresh.json; issue 93 verdict PASS.",
+        "Use distinct slap, pop and tap examples plus a supported combination from an independently read source.: PASS",
+        "Keep the already supported Tapped and LeftHandTapped note flags independent from beat technique state.: PASS",
+        "Define legacy enum edit authority and independently assert exported technique locations.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 93,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/93",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.585544+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

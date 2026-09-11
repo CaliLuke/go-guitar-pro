@@ -1,0 +1,140 @@
+{
+  "purpose": "Historical independent review inputs. Review receipts specify the tested commit and expected result. Overlay paths refer to the original worktree and must be remapped before reuse. Go probe sources use .go.txt so they do not join the library test suite. Some original probes document pre-fix failures; use the final recheck from the associated receipt.",
+  "files": [
+    {
+      "original_path": "/tmp/review-blockers-overlay-test.go",
+      "file": "review-blockers-overlay-test.go.txt",
+      "sha256": "64acf863a25db29b58e13785046227eb62843c044bf0468b9f48d79812cbd5e2"
+    },
+    {
+      "original_path": "/tmp/review-blockers-overlay.json",
+      "file": "review-blockers-overlay.json",
+      "sha256": "fc0d5a3248c12a09386113cc4c2b21c7ea671de12ecb1ec9016d5ae86caafe53"
+    },
+    {
+      "original_path": "/tmp/review-final-blockers-issues.json",
+      "file": "review-final-blockers-issues.json",
+      "sha256": "e62d196928fd2cb5b51470fc39da9a2524c0c5510de8ad66344f9feeedef203d"
+    },
+    {
+      "original_path": "/tmp/review-final-blockers-prerequisites.json",
+      "file": "review-final-blockers-prerequisites.json",
+      "sha256": "b65c6826d7f7ec7d0c2db752e686785deb1890d6b9978ef32e7afbeaa0e5dcf7"
+    },
+    {
+      "original_path": "/tmp/review-header-overlay-test.go",
+      "file": "review-header-overlay-test.go.txt",
+      "sha256": "9a8f16a3b1b1b934483b1424ce3e2b43af5c084ed9cb26a20f97af84add9ab8e"
+    },
+    {
+      "original_path": "/tmp/review-header-overlay.json",
+      "file": "review-header-overlay.json",
+      "sha256": "cfac956a8dc094721515c19929c73071ab4327e1b8392e503764bd57ef4c8099"
+    },
+    {
+      "original_path": "/tmp/review-musical-issue-snapshots.json",
+      "file": "review-musical-issue-snapshots.json",
+      "sha256": "f5afae3cc5a7af3856c18915a75af56768deca9b7a86c3337fab63ee459934c3"
+    },
+    {
+      "original_path": "/tmp/review-musical-overlay-test.go",
+      "file": "review-musical-overlay-test.go.txt",
+      "sha256": "ef4a6a2a84f1b3c65370077ef00c52ca6e9649b127b59ea8b232071d81573b62"
+    },
+    {
+      "original_path": "/tmp/review-musical-overlay.json",
+      "file": "review-musical-overlay.json",
+      "sha256": "a47ade14e3431675bcc30eb4bebcc1a64c7cffdc57ab8ab5ebe58cf4330660b8"
+    },
+    {
+      "original_path": "/tmp/review-prior-overlay-test.go",
+      "file": "review-prior-overlay-test.go.txt",
+      "sha256": "8c958bdf56eeec1133433427ee12da038e67879c3a150f04f7da0b7e44ccf82b"
+    },
+    {
+      "original_path": "/tmp/review-prior-overlay.json",
+      "file": "review-prior-overlay.json",
+      "sha256": "d193f34276b565433ee14ed0afef8a05eb73a949de7771457ff509998a71183a"
+    },
+    {
+      "original_path": "/tmp/review-prior-prerequisites.json",
+      "file": "review-prior-prerequisites.json",
+      "sha256": "4e320ecbf6c2a0685fec96cc35662404b450855d32aa0db1eeb24832096e4ee1"
+    },
+    {
+      "original_path": "/tmp/review-prior-solved-issues.json",
+      "file": "review-prior-solved-issues.json",
+      "sha256": "6206335349f972b87f6509ea2972d789ecb724c366a049995d56eaf86c150e68"
+    },
+    {
+      "original_path": "/tmp/review-score-issue-snapshots.json",
+      "file": "review-score-issue-snapshots.json",
+      "sha256": "6cf8b1db3652fb9ba279b34e556392ce67fd6f3be84d909fa92e96046d2d1256"
+    },
+    {
+      "original_path": "/tmp/review-score-overlay-test.go",
+      "file": "review-score-overlay-test.go.txt",
+      "sha256": "7845d22e34f68de6ed4f207d6ba2ee76e7164137f77612a69c7b350878729b7d"
+    },
+    {
+      "original_path": "/tmp/review-score-overlay.json",
+      "file": "review-score-overlay.json",
+      "sha256": "d870bd4f2d683f941b5a4c2ed91862b4454fdd74484ff2525e909046c3ef919c"
+    },
+    {
+      "original_path": "/tmp/review-stylesheet-overlay-test.go",
+      "file": "review-stylesheet-overlay-test.go.txt",
+      "sha256": "8c931b433d4207371a375f7f8adee6379bfc23af7d1f44953b3333962668921c"
+    },
+    {
+      "original_path": "/tmp/review-stylesheet-overlay.json",
+      "file": "review-stylesheet-overlay.json",
+      "sha256": "b46b5a1ec1023c86bc3e8dab93da0172bdedfd8f67a2f9c78abc6fec888ebcb9"
+    },
+    {
+      "original_path": "/tmp/review-timer-empty-grace.gp",
+      "file": "review-timer-empty-grace.gp",
+      "sha256": "070d721fa163ec7141c4f02c9684ab3d566aa47700139cf98fb25d6cbde97efa"
+    },
+    {
+      "original_path": "/tmp/review-timer-final-independent-consumer.json",
+      "file": "review-timer-final-independent-consumer.json",
+      "sha256": "c3dabc2a8d3414d5d8d6f343a4b9dfedd623d2ec97970f8d1c0e8f8387fe36ad"
+    },
+    {
+      "original_path": "/tmp/review-timer-late-orphan.gp",
+      "file": "review-timer-late-orphan.gp",
+      "sha256": "2f2f1798ebecb2fd4fc13e3d334630b6662463e15584d96f0814bd58332cd96a"
+    },
+    {
+      "original_path": "/tmp/review-timer-mixed-onbeat.gp",
+      "file": "review-timer-mixed-onbeat.gp",
+      "sha256": "dc6ecbb0dc77e95aa6dacd7168b15890d06bddbc5732d0730a552bb24c300633"
+    },
+    {
+      "original_path": "/tmp/review-timer-sequence-256.gp",
+      "file": "review-timer-sequence-256.gp",
+      "sha256": "b4fd95c21e63abf8dd4e0cf7f54927d25bcfa8b20af98f0e824509e6dcfeb1b4"
+    },
+    {
+      "original_path": "/tmp/review-timer-sequence-257-equal.gp",
+      "file": "review-timer-sequence-257-equal.gp",
+      "sha256": "fa28f920903e846edb86cbfa562f73478de08d68880f0f56da977dcc2d8a5283"
+    },
+    {
+      "original_path": "/tmp/review-timer-sequence-257.gp",
+      "file": "review-timer-sequence-257.gp",
+      "sha256": "4794cb3757b85788ea28ea5005ea3cf97e64eb667b2a123876c780c4b208805e"
+    },
+    {
+      "original_path": "/tmp/review_pitch_bounds_recheck_test.go",
+      "file": "review_pitch_bounds_recheck_test.go.txt",
+      "sha256": "49923be04089a58b8401f3f3a55961f51530113d5fbf6f5f9e2b551e453c660a"
+    },
+    {
+      "original_path": "/tmp/review_pitch_fresh_test.go",
+      "file": "review_pitch_fresh_test.go.txt",
+      "sha256": "5ed1c7c4cbd70756a239cfbf943549b5a10515caca6910c843d5c671d26b17f2"
+    }
+  ]
+}

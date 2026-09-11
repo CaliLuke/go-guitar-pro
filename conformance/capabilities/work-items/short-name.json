@@ -75,13 +75,18 @@
       "kind": "focused-receipt",
       "reference": "conformance/capabilities/evidence/section-track-names.json",
       "detail": "Hash-bound synthetic source and exact exported source/edit/empty/whitespace consumer facts and reports."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 91; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gpif_types.go",
     "track.go"
   ],
-  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and boundary-whitespace behavior with CDATA terminators or carriage returns have scoped export reports and strict-policy tests. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and boundary-whitespace behavior with CDATA terminators or carriage returns have scoped export reports and strict-policy tests. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -97,12 +102,27 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 91 verdict PASS.",
+        "Use different full and short names on two tracks and verify exact identities through the public API.: PASS",
+        "Cover empty, Unicode and XML-sensitive short names without automatic truncation.: PASS",
+        "The pinned consumer sees the exact short name after a public edit and export.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 91,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/91",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.408745+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

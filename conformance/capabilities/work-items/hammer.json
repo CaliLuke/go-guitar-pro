@@ -5,8 +5,8 @@
   "title": "Preserve explicit hammer and pull-off destination markers",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "agent:hammer-destination",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -106,35 +106,40 @@
       "kind": "test",
       "reference": "TestAlphaTabHammerBothSidedTapPriority",
       "detail": "Regression from independent review: AlphaTab string coordinates prioritize public Go string 4 over string 2 around origin string 3; exact omitted destination report and consumer paths."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 84; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gpif_audit.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "Preserved independent authored hammer origin and destination markers. Complete chains and excerpts have pinned-consumer evidence; destination search follows consumer string coordinates and reports links the consumer cannot retain. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
-      "command": "go test -count=1 -run '^TestPublicHammer' ./integration",
-      "result": "passed"
-    },
-    {
-      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'Hammer|Technique|NoteEffect|ExportReport|ParseDiagnostics' .",
-      "result": "passed"
-    },
-    {
-      "command": "go test -count=1 -run 'TestSemanticContractInventory|TestSemanticMatrixInventory' .",
-      "result": "passed; one endpoint case added; 409 public fields, 261 wire fields, 50 dispatches and 172 enum members covered"
-    },
-    {
-      "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
-      "result": "passed; zero issues, clone groups and unformatted files"
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-pitch-hammer-fresh.json; issue 84 verdict PASS.",
+        "Origin-only, destination-only excerpt, complete origin/destination examples.: PASS",
+        "Public edits/finalization preserve markers without inventing endpoint.: PASS",
+        "GP8 and independent consumer retain supported markers; malformed references explicit diagnostics.: PASS",
+        "Document edit contract and independent evidence.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 84,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/84",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.567065+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

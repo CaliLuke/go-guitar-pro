@@ -5,8 +5,8 @@
   "title": "Project supported legacy mix-table events into GP8 automation",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "todo",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -66,23 +66,39 @@
       "kind": "test",
       "reference": "TestAlphaTabMixTableProjection",
       "detail": "Raw consumer/MIDI proves program73 tick960 -> tick0 despite exact GPIF/Go position0.25; fixture testdata/gp3/mix-table-events.gp3 derives from original other-effects.gp3 by inserting a complete GP3 mix-table record."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 85; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "mix_table.go"
   ],
-  "resolution": "Implemented authored-value projection of legacy tempo/program/volume/balance events with explicit collection edit/clear authority, duplicate avoidance, order and ownership, plus individual controller/transition/RSE losses. A complete GP3 simultaneous event at beat1 position0.25 has exact GPIF/Go values. Residual acceptance blocker: pinned GPIF moves program73 from source MIDI tick960 to target tick0; gain and pan are ignored by that consumer under established per-event policies. The full consumer-timing criterion is not satisfied at the pin. Keep this ticket open/in_progress pending fresh exact-commit review and parent integrated full gates/probe; do not claim full preservation.",
+  "resolution": "Fresh independent review reproduces the remaining timing failure: source program 73 at MIDI tick 960 becomes target tick 0 on both channels. Public/GPIF positions remain exact; per-event consumer normalization is reported. The timing acceptance criterion remains unsatisfied.",
   "verification": [
-    "Public complete-GP3 regression fails on pre-change production through a Go overlay and passes with the implementation.",
-    "Focused public and matrix tests cover collision policy subsets, clearing, equal-position order, all-tracks expansion, fractional timing, bank retention, bounds and individual losses.",
-    "Independent pinned raw source/output beat facts and generated MIDI ticks prove exact retained and normalized distinctions.",
-    "Full conformance/check.sh, capability probe and prek belong to parent integration; independent exact-commit review pending."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-final-blockers-fresh.json; issue 85 verdict PARTIAL.",
+        "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position.: PASS",
+        "Preserve timing and event order while avoiding duplicates with score/track automation collections.: PARTIAL",
+        "For chorus, reverb, phaser, tremolo and transitions, implement a verified wire mapping or retain an exact per-controller omission.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 85,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/85",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.573414+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

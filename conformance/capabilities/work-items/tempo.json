@@ -93,6 +93,11 @@
       "kind": "oracle",
       "reference": "TestAlphaTabPreservesOpeningTempoVisibility",
       "detail": "Exact GPIF Visible, Go reparse and pinned AlphaTab facts for synthesized 132.5 BPM visibility and imported GP5.1 hide-tempo."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 70; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -101,7 +106,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Preserved legacy opening tempo visibility and explicit automation authority, including hidden GP5 input, fractional tempo and ordered events. Conflicting compatibility visibility receives a precise normalization report. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "resolution": "Preserved legacy opening tempo visibility and explicit automation authority, including hidden GP5 input, fractional tempo and ordered events. Conflicting compatibility visibility receives a precise normalization report. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
@@ -116,12 +121,28 @@
         "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
         "Preserved legacy opening tempo visibility and explicit automation authority, including hidden GP5 input, fractional tempo and ordered events. Conflicting compatibility visibility receives a precise normalization report."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 70 verdict PASS.",
+        "When no explicit bar-0/position-0 tempo event exists, synthesize one whose Hidden state reflects Song.HideTempo. Cover both true and false with a non-default fractional BPM where applicable.: PASS",
+        "An explicit opening event is authoritative for visibility. Report a disagreement with Song.HideTempo as a precise compatibility conflict; strict policy must reject an unallowed loss.: PASS",
+        "Preserve tempo value, text/linearity and stable event order according to existing authority rules. Avoid duplicate opening events and do not change playback tempo to hide its mark.: PASS",
+        "Use a legacy GP5 hidden-tempo source plus exact Visible=false wire, Go reparse and pinned AlphaTab evidence. Remove only the resolved blanket tempo-visibility omission.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 70,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/70",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.585922+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

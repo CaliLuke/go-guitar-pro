@@ -188,6 +188,11 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 95; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -195,7 +200,7 @@
     "conformance_measures_test.go",
     "gp8_notation.go"
   ],
-  "resolution": "Added the terminal consumer-loss report with exact GPIF and Go preservation. Raw pinned-consumer regressions distinguish LightLight from LightHeavy. Awaiting independent review. Fresh independent acceptance review and integrated full gates passed. The issue remains open with solved label for subsequent verification.",
+  "resolution": "Added the terminal consumer-loss report with exact GPIF and Go preservation. Raw pinned-consumer regressions distinguish LightLight from LightHeavy. Awaiting independent review. Fresh independent acceptance review and integrated full gates passed. The issue remains open with solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
@@ -211,12 +216,29 @@
         "Original Slides.gp4, final/nonfinal and three-bar controls, exact XML/Go retention, raw final AlphaTab LightHeavy behavior, strict policy, two-track global report and measure authority challenges passed.",
         "Pinned AlphaTab1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate covers build, vet, formatting, lint, duplication, conformance,77 mutation checks, race tests and91.8% statement coverage."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 95 verdict PASS.",
+        "Public Parse of testdata/gp4/Slides.gp4 retains final MeasureHeader.DoubleBar=true. Assert the final DoubleBar XML and Go reparse true. The pinned original binary consumer reports isDoubleBar=true, barLineRight=LightLight, and getActualBarLineRight()=LightLight; its exported GP8 consumer reports false, Automatic, and LightHeavy. Record these as distinct authored and consumer results, not equivalent projection.: PASS",
+        "For an otherwise report-free score with consistent header/measure compatibility flags and final DoubleBar=true, preflight emits one stable scoped consumer-omission report at the final master-bar location. Its reason identifies the authored flag retained in GPIF and the pinned consumer clearing it. Do not substitute the unrelated measure-double-bar-authority report.: PASS",
+        "Strict export returns no bytes while this consumer loss is unallowed. Allowing an unrelated code does not bypass it; allowing exactly the new terminal-double-bar consumer code succeeds and retains DoubleBar in XML and Go reparse, while independent consumption confirms the known limit.: PASS",
+        "A nonfinal DoubleBar remains true in exact XML, Go reparse, and pinned consumer and receives no terminal-loss report; final DoubleBar=false receives no terminal-loss report. A multi-bar true/false/true case proves correct report location and that only the final consumer flag changes. Keep existing authority-conflict behavior independently covered.: PASS",
+        "Extend the independent oracle with a dedicated raw DoubleBar/bar-line projection or direct scoped facts; the ordinary normalized oracle omits isDoubleBar. Register source, wire, consumer, and policy assertions in the semantic ledger. Update documentation and inventory to replace the prior unsupported equivalence statement; export remains partial.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 95,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/95",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.558582+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

@@ -1,0 +1,4795 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/review_musical_batch_fresh",
+  "reviewed_commit": "7789ca791d8d322ed23332876cc47ec324992995",
+  "command": "node conformance/capabilities/probe.mjs",
+  "cwd": "/private/tmp/go-guitar-pro-final-probe-verified",
+  "command_result": "PASS",
+  "log": "/tmp/final-verified-probe.log",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "output": "/tmp/final-verified-probe-results.json",
+  "output_sha256": "08908f9c6407ecf6fc7a4ff8825a00538746992eb79be1b066be66a0f98368fd",
+  "comparison_baseline": {
+    "kind": "preceding committed receipt",
+    "source_commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+    "path": "/tmp/final-verified-probe-before.json",
+    "fixture_count": 370
+  },
+  "fixture_count": 377,
+  "added_fixtures": [
+    "testdata/gp3/mix-table-events.gp3",
+    "testdata/gp8/barnumbers-all.gp",
+    "testdata/gp8/barnumbers-first.gp",
+    "testdata/gp8/barnumbers-hide.gp",
+    "testdata/gp8/beat-timer.gp",
+    "testdata/gp8/chord-display.gp",
+    "testdata/gp8/extended-barlines.gp",
+    "testdata/gp8/grace-timer-sequence.gp",
+    "testdata/gp8/grace-timer.gp",
+    "testdata/gp8/multi-rest-preferences.gp",
+    "testdata/gp8/show-diagrams-in-score.gp",
+    "testdata/gp8/staff-notation-settings.gp"
+  ],
+  "removed_fixtures": [
+    "upstream/guitarpro8/barnumbers-all.gp",
+    "upstream/guitarpro8/barnumbers-first.gp",
+    "upstream/guitarpro8/barnumbers-hide.gp",
+    "upstream/guitarpro8/extended-barlines.gp",
+    "upstream/guitarpro8/show-diagrams-in-score.gp"
+  ],
+  "changed_fixture_bytes": [],
+  "failures": {
+    "parseError": {
+      "before_count": 4,
+      "after_count": 4,
+      "new_failures": [],
+      "resolved": [],
+      "changed_messages": []
+    },
+    "exportError": {
+      "before_count": 5,
+      "after_count": 5,
+      "new_failures": [],
+      "resolved": [],
+      "changed_messages": []
+    },
+    "sourceConsumerError": {
+      "before_count": 3,
+      "after_count": 3,
+      "new_failures": [],
+      "resolved": [],
+      "changed_messages": []
+    },
+    "targetConsumerError": {
+      "before_count": 0,
+      "after_count": 0,
+      "new_failures": [],
+      "resolved": [],
+      "changed_messages": []
+    }
+  },
+  "comparison_counts": {
+    "before": {
+      "different": 1116,
+      "default-only": 17141,
+      "equal-nondefault": 1598,
+      "target-blocked": 330,
+      "source-blocked": 165
+    },
+    "after": {
+      "default-only": 17602,
+      "different": 420,
+      "equal-nondefault": 2218,
+      "target-blocked": 330,
+      "source-blocked": 165
+    }
+  },
+  "comparison_status_changes": [
+    {
+      "fixture": "synthetic/key-mode-lowercase.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "synthetic/key-mode-lowercase.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp3/Chords.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/Duration.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/Effects.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/Effects.gp3",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp3/Effects.gp3",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp3/Harmonics.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/Measure Header.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/accentuations.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/bends.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/dead.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/grace.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/hammer.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/notes.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/other-effects.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/other-effects.gp3",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp3/other-effects.gp3",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp3/ranges.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/slides.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/strings.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/strokes.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/tuplets.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp3/vibrato.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Chords.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Effects.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Effects.gp4",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp4/Effects.gp4",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp4/Harmonics.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Measure Header.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Slides.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Strokes.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/Vibrato.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/accentuations.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/bends.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/dead.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/fingering.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/grace.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/hammer.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/notes.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/other-effects.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/other-effects.gp4",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp4/other-effects.gp4",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp4/ranges.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/strings.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/tremolo.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/trills.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp4/tuplets.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/001_Funky_Guy.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/001_Funky_Guy_fixed.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Chords.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Demo v5.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Demo v5.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/Demo v5.gp5",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/Demo v5.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/Effects.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Effects.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/Effects.gp5",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/Effects.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/Harmonics.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Measure Header.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/No Wah.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/RSE.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/Slides.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Strokes.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Unknown Chord Extension.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Unknown-m.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Unknown.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Voices.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Wah-m.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Wah-m.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/Wah.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/Wah.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/accentuations.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/alternate-endings-section-error.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/beaming-mode.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/beat-text-lyrics.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/bends.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/canon.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/canon.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/chord_without_notes.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/dead.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/fingering.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/full-song.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/grace.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/hammer.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/hide-diagrams.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/motherload-percussion-grace.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/nightwish.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/nightwish.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/notes.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/other-effects.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/other-effects.gp5",
+      "capability": "midi-bank",
+      "before": "default-only",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp5/other-effects.gp5",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/other-effects.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp5/ottavia.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/ranges.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/repeat-close-alternate-endings.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/repeat-close-multi.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/repeat-close-without-start-at-beginning.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/repeat-close.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/serenade.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/strings.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/tremolo.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/trills.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/tuplets.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/vibrato.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/wah-wah.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp5/wah-wah.gp5",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/accentuations.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/accentuations.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/accentuations.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/beaming-mode.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/beaming-mode.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/beaming-mode.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/bends.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/bends.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/bends.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/chords.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/chords.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/chords.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/colors.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/colors.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/dead.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/dead.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/dead.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/effects.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/effects.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/effects.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/effects.gpx",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/effects.gpx",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/file-system-compressed.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/file-system-compressed.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/fingering.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/fingering.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/fingering.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/grace.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/grace.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/grace.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/hammer.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/hammer.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/hammer.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/harmonics.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/harmonics.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/harmonics.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/key-signatures.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/key-signatures.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-1-3.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-1-3.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-1.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-1.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-2.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-2.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-all.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/layout-configuration-multi-track-all.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/lyrics-template.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/lyrics-template.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/lyrics-template.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/notes.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/notes.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/notes.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/other-effects.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/other-effects.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/other-effects.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/other-effects.gpx",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/other-effects.gpx",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/ranges.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/ranges.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/ranges.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-alternate-endings.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-alternate-endings.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-alternate-endings.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-multi.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-multi.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close-multi.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/repeat-close.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/score-info.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/score-info.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/serenade.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/serenade.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/serenade.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/slash.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/slash.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/slash.gpx",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/slash.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/slides.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/slides.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/slides.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/strings.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/strings.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/strings.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/strokes.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/strokes.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/strokes.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/template.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/template.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/template.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/time-signatures.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/time-signatures.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/tremolo.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/tremolo.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/tremolo.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/trills.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/trills.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/trills.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/tuplets.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/tuplets.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/tuplets.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/vibrato.gpx",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp6/vibrato.gpx",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp6/vibrato.gpx",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accentuations.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accentuations.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals-advanced.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals-advanced.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/accidentals.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/alternate-endings.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/alternate-endings.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/anacrusis.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/anacrusis.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/audio-generation.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/audio-generation.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/barre.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/barre.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bars-adjusted.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bars-adjusted.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beaming-mode.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beaming-mode.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beams-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beams-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-barre.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-barre.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-lyrics.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-lyrics.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-slash.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-slash.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-slash.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-tempo-change.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/beat-tempo-change.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bend-vibrato.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bend-vibrato.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bends-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bends-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bends.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/bends.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-none.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-none.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-none.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-similar.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-similar.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-similar.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-staves.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-staves.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brackets-braces-staves.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brush.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brush.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brushes-ukulele.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brushes-ukulele.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brushes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brushes.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/brushes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chord-no-diagram.gp",
+      "capability": "chord-display",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chord-no-diagram.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chord-no-diagram.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chords-duplicates.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chords-duplicates.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chords.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/chords.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/clefs.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/clefs.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/colors.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/colors.gp",
+      "capability": "numbered",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/colors.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/colors.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/compressed.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/compressed.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/cursor-snapping.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/cursor-snapping.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-notes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-notes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-slap.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-slap.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-slap.gp",
+      "capability": "numbered",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-slap.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead-slap.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dead.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions-simple.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions-simple.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions-symbols.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions-symbols.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/directions.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/drum-tabs.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/drum-tabs.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dynamics.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/dynamics.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/effects.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/effects.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/effects.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/effects.gp",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/effects.gp",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fade-in.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fade-in.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fade.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fade.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/faulty.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/faulty.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fermata.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fermata.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fingering-new.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fingering-new.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fingering.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/fingering.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/forced-accidentals.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/forced-accidentals.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/forced-accidentals.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/forced-accidentals.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/free-time.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/free-time.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ghost-notes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ghost-notes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/golpe-tab.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/golpe-tab.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/golpe-tab.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/golpe.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/golpe.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-beats.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/grace-beats.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-beats.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-advanced.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-alignment.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-alignment.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-alignment.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes-alignment.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace-notes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/grace.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grace.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grand-staff.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grand-staff.gp",
+      "capability": "multi-rest",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grand-staff.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/grand-staff.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hammer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hammer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/harmonics.gp",
+      "capability": "accidentals",
+      "before": "equal-nondefault",
+      "after": "different"
+    },
+    {
+      "fixture": "testdata/gp7/harmonics.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/harmonics.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/header-footer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/header-footer.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/header-footer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hide-diagrams.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hide-diagrams.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hide-tuning.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/hide-tuning.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/horizontal-layout-5to8.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/horizontal-layout-5to8.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/horizontal-layout.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/horizontal-layout.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c3.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c3.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c3.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c4.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c4.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-c4.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-f4.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-f4.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-f4.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-g2.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-g2.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-g2.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-mixed.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-mixed.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures-mixed.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/key-signatures.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-1-3.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-1-3.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-1.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-1.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-2.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-2.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-all.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/layout-configuration-multi-track-all.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/left-hand-tap.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/left-hand-tap.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/let-ring-empty-voice.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/let-ring-empty-voice.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/let-ring.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/let-ring.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/lyrics-null.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/lyrics-null.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/lyrics-template.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/lyrics-template.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/markers.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/markers.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-track-different.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-track-different.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-track.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-track.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-voice.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multi-voice.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multibar-rest.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multibar-rest.gp",
+      "capability": "multi-rest",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multibar-rest.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multiple-tunings.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multiple-tunings.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multivoice-rhythm.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multivoice-rhythm.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/multivoice-rhythm.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "chord-display",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notes-rests-beams.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notes-rests-beams.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/notes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/numbered.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/numbered.gp",
+      "capability": "numbered",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/numbered.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ornaments.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ornaments.gp",
+      "capability": "ornaments",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ornaments.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/other-effects.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/other-effects.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/other-effects.gp",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/other-effects.gp",
+      "capability": "wah",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ottavia.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ottavia.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout-5barsperrow.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout-5barsperrow.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout-5to8.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout-5to8.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/page-layout.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/palm-mute.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/palm-mute.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/percussion.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/percussion.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/pick-slide.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/pick-slide.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/pick-stroke.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/pick-stroke.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/program-change.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/program-change.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ranges.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/ranges.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rasgueado.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rasgueado.gp",
+      "capability": "rasgueado",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rasgueado.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close-alternate-endings.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close-alternate-endings.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close-multi.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close-multi.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeat-close.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeats.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/repeats.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/resized.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/resized.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rest-collisions.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rest-collisions.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm-with-beams.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm-with-beams.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm-with-beams.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/rhythm.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/score-info.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/score-info.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/serenade.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/serenade.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/serenade.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/simile-mark.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/simile-mark.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/slash.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/slash.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/slash.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/slides.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/slides.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/song-details.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/song-details.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/string-numbers.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/string-numbers.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/string-variations.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/string-variations.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/strings.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/strings.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/strokes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/strokes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/sustain.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/sustain.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/sustain.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/system-divider.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/system-divider.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tap.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tap.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tap.gp",
+      "capability": "tap-slap-pop",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tempo.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tempo.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/text.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/text.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-bend-hammer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-bend-hammer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-note-accidentals.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-note-accidentals.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-note-accidentals.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-notes.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tied-notes.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/time-signatures.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/time-signatures.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/timer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/timer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/timer.gp",
+      "capability": "timer",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-balance.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-balance.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-all-systems-multi.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-all-systems-multi.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-all-systems-multi.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-first-system.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-first-system.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-first-system.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-all.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-all.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-all.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-horizontal.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-horizontal.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-horizontal.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-short-name.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-short-name.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-full-name-short-name.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-hidden.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names-hidden.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-names.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-volume.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/track-volume.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-bar.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-bar.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-picking.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-picking.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-vibrato.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo-vibrato.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tremolo.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/trill.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/trill.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/trills.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/trills.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/triplet-feel.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/triplet-feel.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuning.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuning.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuplets-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuplets-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuplets.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/tuplets.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/vibrato.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/vibrato.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/whammy-advanced.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp7/whammy-advanced.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/beaming-mode.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/beaming-mode.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/beat-tempo-change.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/beat-tempo-change.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/directions.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/directions.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/faulty.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/faulty.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/header-footer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/header-footer.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/header-footer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/hide-diagrams.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/hide-diagrams.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/hide-tuning.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/hide-tuning.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-1-3.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-1-3.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-1.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-1.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-2.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-2.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-all.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/layout-configuration-multi-track-all.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/multibar-rest.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/multibar-rest.gp",
+      "capability": "multi-rest",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/multibar-rest.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/protection-unprotected.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/protection-unprotected.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/slash.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/slash.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/slash.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/string-number-display.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "testdata/gp8/timer.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/timer.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/timer.gp",
+      "capability": "timer",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/track-names-hidden.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/track-names-hidden.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/track-names.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "testdata/gp8/track-names.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro3/beat-harmonics.gp3",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "upstream/guitarpro4/harmonic-types.gp4",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "upstream/guitarpro5/chord-name-overflow.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "upstream/guitarpro5/harmonic-types.gp5",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "default-only"
+    },
+    {
+      "fixture": "upstream/guitarpro7/accentuations.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/accentuations.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/beaming-mode.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/beaming-mode.gp",
+      "capability": "multi-rest",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/beaming-mode.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/bends.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/bends.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/chords.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/chords.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/chords.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/colors.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/colors.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/fingering.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/fingering.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/key-signatures.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/key-signatures.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-1-3.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-1-3.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-1.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-1.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-2.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-2.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-all.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/layout-configuration-multi-track-all.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/slash.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/slash.gp",
+      "capability": "slash",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/slash.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/slides.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/slides.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/time-signatures.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/time-signatures.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/tuplets.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/tuplets.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/vibrato.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro7/vibrato.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/bank-change.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/bank-change.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/bank.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/bank.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/custom-beaming.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/custom-beaming.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/e.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/e.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/e.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/eb-ks.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/eb-ks.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/eb-ks.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/harmonics-lowercase.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/harmonics-lowercase.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-a.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-a.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-a.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-a.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-ab.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-ab.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-ab.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-ab.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-b.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-b.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-b.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-b.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-bb.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-bb.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-bb.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-bb.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-c.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-c.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-c.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-c.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-cb.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-cb.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-cb.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-cb.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-csharp.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-csharp.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-csharp.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-csharp.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-d.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-d.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-d.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-d.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-db.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-db.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-db.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-db.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-e.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-e.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-e.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-e.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-eb.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-eb.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-eb.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-eb.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-f.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-f.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-f.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-f.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-fsharp.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-fsharp.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-fsharp.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-fsharp.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-g.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-g.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-g.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-g.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-gb.gp",
+      "capability": "accidentals",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-gb.gp",
+      "capability": "layout",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-gb.gp",
+      "capability": "notation-visibility",
+      "before": "different",
+      "after": "equal-nondefault"
+    },
+    {
+      "fixture": "upstream/guitarpro8/transposition-tonality-gb.gp",
+      "capability": "stylesheet",
+      "before": "different",
+      "after": "equal-nondefault"
+    }
+  ],
+  "comparison_status_change_count": 726,
+  "comparison_changes_by_capability": {
+    "accidentals": {
+      "different -> default-only": 116,
+      "different -> equal-nondefault": 28,
+      "equal-nondefault -> different": 7
+    },
+    "chord-display": {
+      "different -> equal-nondefault": 2
+    },
+    "layout": {
+      "different -> equal-nondefault": 242
+    },
+    "midi-bank": {
+      "default-only -> different": 10
+    },
+    "multi-rest": {
+      "different -> equal-nondefault": 4
+    },
+    "notation-visibility": {
+      "different -> equal-nondefault": 37
+    },
+    "numbered": {
+      "different -> equal-nondefault": 3
+    },
+    "ornaments": {
+      "different -> equal-nondefault": 1
+    },
+    "rasgueado": {
+      "different -> equal-nondefault": 1
+    },
+    "slash": {
+      "different -> equal-nondefault": 8
+    },
+    "stylesheet": {
+      "different -> equal-nondefault": 242
+    },
+    "tap-slap-pop": {
+      "different -> equal-nondefault": 12
+    },
+    "timer": {
+      "different -> equal-nondefault": 2
+    },
+    "wah": {
+      "different -> equal-nondefault": 11
+    }
+  },
+  "changed_values_with_same_status": [
+    {
+      "fixture": "testdata/gp7/bends-advanced.gp",
+      "capability": "accidentals",
+      "status": "different",
+      "source_changed": false,
+      "target_changed": true
+    },
+    {
+      "fixture": "testdata/gp7/notation-legend.gp",
+      "capability": "accidentals",
+      "status": "different",
+      "source_changed": false,
+      "target_changed": true
+    },
+    {
+      "fixture": "testdata/gp7/numbered.gp",
+      "capability": "accidentals",
+      "status": "different",
+      "source_changed": false,
+      "target_changed": true
+    }
+  ],
+  "changed_values_with_same_status_count": 3,
+  "new_fixture_comparisons": {
+    "testdata/gp3/mix-table-events.gp3": {
+      "default-only": 45,
+      "different": 6,
+      "equal-nondefault": 4
+    },
+    "testdata/gp8/barnumbers-all.gp": {
+      "default-only": 50,
+      "equal-nondefault": 5
+    },
+    "testdata/gp8/barnumbers-first.gp": {
+      "default-only": 50,
+      "equal-nondefault": 5
+    },
+    "testdata/gp8/barnumbers-hide.gp": {
+      "default-only": 50,
+      "equal-nondefault": 5
+    },
+    "testdata/gp8/beat-timer.gp": {
+      "default-only": 53,
+      "equal-nondefault": 2
+    },
+    "testdata/gp8/chord-display.gp": {
+      "default-only": 52,
+      "different": 1,
+      "equal-nondefault": 2
+    },
+    "testdata/gp8/extended-barlines.gp": {
+      "default-only": 50,
+      "equal-nondefault": 5
+    },
+    "testdata/gp8/grace-timer-sequence.gp": {
+      "default-only": 53,
+      "equal-nondefault": 2
+    },
+    "testdata/gp8/grace-timer.gp": {
+      "default-only": 53,
+      "equal-nondefault": 2
+    },
+    "testdata/gp8/multi-rest-preferences.gp": {
+      "default-only": 49,
+      "equal-nondefault": 6
+    },
+    "testdata/gp8/show-diagrams-in-score.gp": {
+      "equal-nondefault": 9,
+      "default-only": 46
+    },
+    "testdata/gp8/staff-notation-settings.gp": {
+      "default-only": 50,
+      "equal-nondefault": 5
+    }
+  },
+  "new_failure_count": 0,
+  "root_checkout_touched": false,
+  "isolated_worktree_status": " M conformance/capabilities/probe-results.json\n",
+  "note": "Probe differences are candidates for scoped review, not automatically newly unsupported behavior. This summary retains status changes and separate source/target failures without broad normalization.",
+  "preintegration_comparison": {
+    "baseline": "/tmp/final-probe-preintegration-results.json",
+    "baseline_sha256": "b1d8e95de2e8ba3306bc6021f4a18dc34b14558494724e49b63ae4d26ac41321",
+    "baseline_commit": "1bf8c5724b0af0c7bdedf317ff8788f52cdd3355",
+    "baseline_fixture_count": 375,
+    "new_fixture_count": 377,
+    "added_fixtures": [
+      "testdata/gp8/grace-timer-sequence.gp",
+      "testdata/gp8/grace-timer.gp",
+      "testdata/gp8/show-diagrams-in-score.gp"
+    ],
+    "removed_fixtures": [
+      "upstream/guitarpro8/show-diagrams-in-score.gp"
+    ],
+    "path_promotions": [
+      {
+        "old_path": "upstream/guitarpro8/show-diagrams-in-score.gp",
+        "new_path": "testdata/gp8/show-diagrams-in-score.gp",
+        "sha256": "e4742423a80683217268bc14dd25531c0025c525bbe3c793d8eabd0ee60eb9e8",
+        "comparison_statuses_equal": true,
+        "full_raw_comparisons_equal": true
+      }
+    ],
+    "failures": {
+      "parseError": {
+        "before_count": 4,
+        "after_count": 4,
+        "new_failures": [],
+        "resolved": [],
+        "changed_messages": []
+      },
+      "exportError": {
+        "before_count": 5,
+        "after_count": 5,
+        "new_failures": [],
+        "resolved": [],
+        "changed_messages": []
+      },
+      "sourceConsumerError": {
+        "before_count": 3,
+        "after_count": 3,
+        "new_failures": [],
+        "resolved": [],
+        "changed_messages": []
+      },
+      "targetConsumerError": {
+        "before_count": 0,
+        "after_count": 0,
+        "new_failures": [],
+        "resolved": [],
+        "changed_messages": []
+      }
+    },
+    "status_changes": [],
+    "status_change_count": 0,
+    "status_changes_by_capability": {},
+    "changed_values_with_same_status": [],
+    "new_failure_count": 0,
+    "comparison_counts": {
+      "before": {
+        "default-only": 17496,
+        "different": 420,
+        "equal-nondefault": 2214,
+        "target-blocked": 330,
+        "source-blocked": 165
+      },
+      "after": {
+        "default-only": 17602,
+        "different": 420,
+        "equal-nondefault": 2218,
+        "target-blocked": 330,
+        "source-blocked": 165
+      }
+    }
+  },
+  "prior_status_assessment_reference": "/tmp/final-probe-status-changes.json",
+  "prior_status_assessment_sha256": "357e59b8c4cce22b60242df297db5dd8ec35fdef1eed31d68b339b3b6eb8cef3",
+  "preserved_prior_limit_assessment": "The previously observed midi-bank differences come from exported legacy Instrument->Sound events. Seven accidental equal->different cases were previously reviewed by root as explicitly diagnosed grace/harmonic context limits under #73. This comparison keeps their raw values and statuses unchanged; no normalization edits were made.",
+  "three_focused_fixture_results": [
+    {
+      "path": "testdata/gp8/grace-timer-sequence.gp",
+      "sha256": "4794cb3757b85788ea28ea5005ea3cf97e64eb667b2a123876c780c4b208805e",
+      "errors": {
+        "parseError": null,
+        "exportError": null,
+        "sourceConsumerError": null,
+        "targetConsumerError": null
+      },
+      "statuses": {
+        "default-only": 53,
+        "equal-nondefault": 2
+      },
+      "nondefault_comparisons": [
+        {
+          "capability": "short-name",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "timer",
+          "status": "equal-nondefault"
+        }
+      ]
+    },
+    {
+      "path": "testdata/gp8/grace-timer.gp",
+      "sha256": "e3f17b92481cacb9c81bf516c2be47fb38d868171022740d215f23caee605d6c",
+      "errors": {
+        "parseError": null,
+        "exportError": null,
+        "sourceConsumerError": null,
+        "targetConsumerError": null
+      },
+      "statuses": {
+        "default-only": 53,
+        "equal-nondefault": 2
+      },
+      "nondefault_comparisons": [
+        {
+          "capability": "short-name",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "timer",
+          "status": "equal-nondefault"
+        }
+      ]
+    },
+    {
+      "path": "testdata/gp8/show-diagrams-in-score.gp",
+      "sha256": "e4742423a80683217268bc14dd25531c0025c525bbe3c793d8eabd0ee60eb9e8",
+      "errors": {
+        "parseError": null,
+        "exportError": null,
+        "sourceConsumerError": null,
+        "targetConsumerError": null
+      },
+      "statuses": {
+        "equal-nondefault": 9,
+        "default-only": 46
+      },
+      "nondefault_comparisons": [
+        {
+          "capability": "accidentals",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "beaming",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "chord-diagram",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "chord-display",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "layout",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "short-name",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "stylesheet",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "transposition",
+          "status": "equal-nondefault"
+        },
+        {
+          "capability": "tuning",
+          "status": "equal-nondefault"
+        }
+      ]
+    }
+  ],
+  "prior_status_assessment_comparison": {
+    "prior_change_count": 729,
+    "current_change_count": 726,
+    "identical_change_set": false,
+    "added_changes": [],
+    "removed_changes": [
+      {
+        "after": "equal-nondefault",
+        "before": "different",
+        "capability": "chord-display",
+        "fixture": "upstream/guitarpro8/show-diagrams-in-score.gp"
+      },
+      {
+        "after": "equal-nondefault",
+        "before": "different",
+        "capability": "layout",
+        "fixture": "upstream/guitarpro8/show-diagrams-in-score.gp"
+      },
+      {
+        "after": "equal-nondefault",
+        "before": "different",
+        "capability": "stylesheet",
+        "fixture": "upstream/guitarpro8/show-diagrams-in-score.gp"
+      }
+    ],
+    "explanation": "The three removed path-keyed changes are chord-display/layout/stylesheet improvements for upstream/guitarpro8/show-diagrams-in-score.gp. That exact hash now has testdata/gp8/show-diagrams-in-score.gp as its logical path; all full raw comparisons equal the375 receipt. No actual comparison improvement regressed and no new difference appeared."
+  },
+  "verdict": "PASS",
+  "summary": "377 fixture receipts at7789ca7. No new parse/export/source-consumer/target-consumer failures versus either370 committed or375 preintegration receipts. On shared paths every full raw comparison equals375; the promoted show-diagrams source also has identical full comparisons. Both new grace timer fixtures have equal-nondefault timer rows and no failures."
+}

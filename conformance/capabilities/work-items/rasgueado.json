@@ -5,8 +5,8 @@
   "title": "Preserve named rasgueado finger patterns",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -95,6 +95,11 @@
       "kind": "test",
       "reference": "TestAlphaTabRasgueado",
       "detail": "All eighteen non-default patterns plus None and original GP7 source/export compare raw pinned consumer values and locations."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 89; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -102,16 +107,28 @@
     "gp8_builder.go",
     "gpif_audit.go"
   ],
-  "resolution": "All eighteen GPIF finger patterns have a typed public representation and exact GP8 encoding. Legacy boolean-only marks normalize explicitly to pinned Ii default; edit authority, clearing, conflicts, unknown source and invalid public values are tested. Original GP7 source and all named patterns pass raw AlphaTab checks. Independent final-commit review and combined full gates/probe are assigned to root; GitHub remains open.",
+  "resolution": "Preserved every named rasgueado pattern and defined legacy boolean reconciliation. Exact source tokens and consumer patterns are independently verified. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Public regression failed before implementation and now passes.",
-    "Focused public/GPIF/matrix and pinned AlphaTab tests pass; all 19 enum constants have separate behavior evidence.",
-    "Full conformance/check.sh, capability probe and prek are assigned to root integration; fresh review pending."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-musical-batch-fresh.json; issue 89 verdict PASS.",
+        "Inventory every named pattern in the pinned importer and give each a separate behavior assertion.: PASS",
+        "Use at least two distinct non-default patterns in a public import/edit/export case.: PASS",
+        "An unspecified legacy boolean has a documented target decision; unknown patterns are diagnosed without substituting a random gesture.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 89,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/89",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.580139+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

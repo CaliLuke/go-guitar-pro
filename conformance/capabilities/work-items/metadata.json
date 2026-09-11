@@ -5,8 +5,8 @@
   "title": "Preserve metadata text in AlphaTab and verify legacy metadata losses",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -197,6 +197,11 @@
       "kind": "runtime-review",
       "reference": "conformance/capabilities/evidence/metadata-lyrics.json",
       "detail": "Focused receipt from the normal pinned consumer and public exporter, with source hashes and scoped loss boundaries."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 99; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -208,16 +213,31 @@
     "gpif_types.go",
     "song.go"
   ],
-  "resolution": "Supported GP8 metadata text uses CDATA or decimal character references, preserving line breaks, tabs, Unicode and XML characters in pinned AlphaTab. Joined notices and distinct Music/Tabber are independently tested. Boundary whitespace in escaped terminator/CR text receives a precise consumer normalization while XML/Go retain the full text. Legacy Writer, Comments, Date, clipboard provenance and notice slice boundaries remain explicit losses; export stays partial. Fresh independent review and combined full gates/probe remain pending with root; GitHub stays open.",
+  "resolution": "Preserved metadata text and distinct credits through GP8 and the pinned consumer. Boundary trimming and legacy format losses remain scoped and tested. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Failing-before public API and raw pinned-consumer regressions reproduced, then pass after implementation.",
-    "Focused public API, pinned consumer, runtime semantic inventory and exact wire checks pass.",
-    "Full conformance/check.sh, capability probe and prek are assigned to root integration; independent exact-commit review pending."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-score-batch-fresh.json; issue 99 verdict PASS.",
+        "A valid score with Notice=[\"First notice\",\"Second notice\"] must export under strict preservation with no loss report and raw pinned AlphaTab notices equal \"First notice\\nSecond notice\". The current output yields a NUL separator and is a failing regression.: PASS",
+        "Preserve supported metadata text with embedded line breaks, tabs, XML metacharacters and Unicode. Independently cover boundary whitespace without a CDATA terminator and a literal CDATA terminator without boundary whitespace; retaining encodings are verified for both classes. Assert raw consumer Music, Tabber, Instructions and Notices independently; Author and Transcriber must not alias Writer or each other.: PASS",
+        "For boundary whitespace combined with the literal CDATA terminator, require a verified retaining encoding or a precise consumer-loss report and strict refusal with zero bytes. Test the exact string LF + TAB + A<&]]>B + TAB + LF. Preserve the full XML/Go text; do not accept the suffix-only result from split CDATA. An unrelated allowance must not bypass the new loss. Record the exact remaining consumer normalization when explicitly allowed.: PASS",
+        "For notices [\"\", \"embedded\\nline\", \"\"], permissive/allowlisted output must retain the joined target string \"\\nembedded\\nline\\n\" exactly in the raw consumer; Go import may split the embedded line and must retain the existing gp8.normalize.notice-lines report. Separately test one empty notice with gp8.omit.empty-notice and ordinary leading/trailing empty entries that are representable as separators.: PASS",
+        "Retain exact gp8.omit.writer/comments/date/clipboard-range reports for independent nondefault values. Strict export rejects unallowed losses and selective allowlisting cannot hide a remaining metadata loss.: PASS",
+        "Fix encoding without repurposing credits or adding undocumented target fields; keep capability export partial because binary-only fields and notice slice-boundary limits remain.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 99,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/99",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.571623+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

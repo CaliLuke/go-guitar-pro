@@ -177,6 +177,11 @@
       "kind": "test",
       "reference": "TestAlphaTabTrillSpeeds",
       "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 103; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -185,7 +190,7 @@
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": "Export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "Export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -201,12 +206,28 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 103 verdict PASS.",
+        "At the same target fret7, export plain sixteenth-, thirty-second-, and sixty-fourth-note TrillEffect.Duration values. All emit Trill=7 and the pinned consumer reports fret7 and duration16; assert beat rhythm, note fret, and unrelated effects remain unchanged.: PASS",
+        "Sixteenth input emits no trill-duration loss and strict export succeeds. Thirty-second and sixty-fourth emit exactly gp8.normalize.trill-duration at the authored note and strict refuses output.: PASS",
+        "An unrelated allowed loss cannot bypass the trill-duration loss; allowing exactly gp8.normalize.trill-duration succeeds and preserves the target fret while making the normalized duration16 explicit in Go reparse and the pinned consumer.: PASS",
+        "Register per-speed runtime assertions and independent consumer evidence in the semantic ledger. Keep arbitrary speed export partial, with the target-consumer limit recorded in the work item and catalog.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 103,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/103",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.401002+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

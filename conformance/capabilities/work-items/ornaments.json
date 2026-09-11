@@ -5,8 +5,8 @@
   "title": "Preserve turns and mordents through GPIF and GP8",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "root",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -89,17 +89,38 @@
       "kind": "test",
       "reference": "TestConformanceNoteOrnaments",
       "detail": "Five runtime enum cases and original GP7 reused-note regression."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 87; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "All four source variants and None now survive independent note occurrence edits, exact GPIF output, and the pinned consumer. Undefined source strings and enum values are diagnosed. Awaiting fresh agent review and integrated full gates.",
-  "verification": [],
+  "resolution": "Preserved all authored turns and mordents independently through GPIF and GP8, including reused definitions, edits and clearing; undefined values reject. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
+  "verification": [
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-musical-batch-fresh.json; issue 87 verdict PASS.",
+        "Cover Turn, InvertedTurn, UpperMordent and LowerMordent separately in the existing ornament fixture.: PASS",
+        "A caller can edit one ornament without modifying an adjacent or reused note occurrence.: PASS",
+        "Pinned AlphaTab retains each exact variant after export; undefined values are diagnosed.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
+  ],
   "issue": {
     "number": 87,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/87",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.576786+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

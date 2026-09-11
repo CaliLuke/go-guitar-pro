@@ -1,0 +1,21 @@
+package goguitarpro
+import("testing";"slices";"reflect")
+func TestReviewPitchBoundariesAfterFix(t *testing.T){
+ requireAlphaTabConformance(t)
+ for _,offset:=range []int32{-2147483640,-96,-84,-72,72,84,96,2147483640}{
+  s:=accidentalSong(t,NoteAccidentalNatural,60);s.Tracks[0].Staves[0].DisplayTranspositionPitch=offset
+  original:=s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+  valid:=offset == -72 || offset==72
+  ds:=ValidateSong(s)
+  if valid&&len(ds)!=0{t.Fatalf("offset%d boundary input rejected %+v",offset,ds)}
+  if !valid&&!slices.ContainsFunc(ds,func(d ScoreDiagnostic)bool{return d.Code=="score.note.accidental-pitch"}){t.Fatalf("offset%d octave not validated %+v",offset,ds)}
+  data,rep,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:[]string{"score.note.accidental-pitch"}}})
+  if !reflect.DeepEqual(original,s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0])||s.Tracks[0].Staves[0].DisplayTranspositionPitch!=offset{t.Fatal("validation/export mutated input")}
+  if !valid{if e==nil||len(data)!=0{t.Fatalf("offset%d invalid octave exported %+v",offset,rep)};continue}
+  if e!=nil{t.Fatalf("offset%d valid boundary export: %v %+v",offset,e,rep)}
+  p,e:=ParseWithOptions(data,ParseOptions{Strict:true,StrictKinds:[]ParseDiagnosticKind{ParseDiagnosticInvalidData}})
+  if e!=nil{t.Errorf("offset%d exporter emitted invalid GPIF: %v %+v",offset,e,p.Diagnostics)}
+  var f []accidentalFact;readAlphaTabOracleFacts(t,"--accidental-facts",writeConformanceFixture(t,data),&f)
+  if len(f)!=1||f[0].Mode!=2||f[0].MIDI!=60||f[0].Display!=60-int(offset){t.Fatalf("offset%d consumer changed %+v",offset,f)}
+ }
+}

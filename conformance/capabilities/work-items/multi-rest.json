@@ -5,8 +5,8 @@
   "title": "Preserve score and track multirest preferences",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp7",
     "gp8"
@@ -68,22 +68,38 @@
       "kind": "runtime",
       "reference": "conformance/capabilities/evidence/multi-rest.json",
       "detail": "Hash-bound source, actual strict exports, exact view bytes and final pinned consumer preferences with notation/measure facts."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 105; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "track.go"
   ],
-  "resolution": "Implemented independent optional global and single-track multi-rest preferences through their actual PartConfiguration mapping. False/true values preserve exact preferences; absent requests default to false and materialize explicit view bytes. Measures and notation remain unchanged. Awaiting different-agent final-commit acceptance review and root combined gates.",
+  "resolution": "Preserved independent score and single-track multi-rest preferences without deleting or reordering measures. Absence normalizes to explicit consumer defaults as documented. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Focused public tests, all 27 raw consumer combinations and pinned GP7 grand-staff source pass.",
-    "Four-measure source retains two rest measures and surrounding notes at every staff.",
-    "Semantic inventory adds two fields and two binary wire leaves; no enum or dispatch is introduced.",
-    "Corpus accounting refreshed. Full conformance, capability probe and prek remain assigned to root."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-score-batch-fresh.json; issue 105 verdict PASS.",
+        "Use a global preference and two conflicting track overrides without changing the actual measure sequence.: PASS",
+        "Cover explicit false, true and absence and document precedence.: PASS",
+        "Pinned AlphaTab retains the same preferences after GP8 export.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 105,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/105",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.573833+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

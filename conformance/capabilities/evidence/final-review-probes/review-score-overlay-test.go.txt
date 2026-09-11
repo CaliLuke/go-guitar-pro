@@ -1,0 +1,315 @@
+// SPDX-License-Identifier: MIT
+
+package goguitarpro
+
+import (
+	"encoding/xml"
+ "math"
+	"errors"
+	"reflect"
+	"slices"
+	"strings"
+	"testing"
+)
+
+const metadataTextCase = "M01-METADATA-TEXT"
+
+type metadataTextScenario struct {
+	value, consumer string
+	trim            bool
+}
+
+func metadataTextScenarios() []metadataTextScenario {
+	return []metadataTextScenario{
+		{"line\nnext\t<&> 日本語", "line\nnext\t<&> 日本語", false},
+		{" \n\tboundary\t\n ", " \n\tboundary\t\n ", false},
+		{"A<&]]>B", "A<&]]>B", false},
+		{"\n\tA<&]]>B\t\n", "A<&]]>B", true},
+		{"carriage\rreturn", "carriage\rreturn", false},
+		{"\rboundary\r\n", "boundary", true},
+	}
+}
+
+func metadataTextFields(song *Song) []struct{ public, wire, oracle, value string } {
+	return []struct{ public, wire, oracle, value string }{
+		{"Name", "Title", "title", song.Name}, {"Subtitle", "SubTitle", "subtitle", song.Subtitle},
+		{"Artist", "Artist", "artist", song.Artist}, {"Album", "Album", "album", song.Album},
+		{"Words", "Words", "words", song.Words}, {"Author", "Music", "music", song.Author},
+		{"Copyright", "Copyright", "copyright", song.Copyright}, {"Transcriber", "Tabber", "tabber", song.Transcriber},
+		{"Instructions", "Instructions", "instructions", song.Instructions},
+	}
+}
+
+func metadataTextSong(t *testing.T, value string) *Song {
+	song := consumerLimitSong(t)
+	for _, field := range metadataTextFields(song) {
+		reflect.ValueOf(song).Elem().FieldByName(field.public).SetString(value)
+	}
+	song.Notice = []string{value}
+	return song
+}
+
+func TestConformanceMetadataText(t *testing.T) { runConformanceMetadataText(newConformanceRun(t)) }
+func runConformanceMetadataText(run *conformanceRun) {
+	for _, scenario := range metadataTextScenarios() {
+		run.t.Run(scenario.value, func(t *testing.T) {
+			song := metadataTextSong(t, scenario.value)
+			codes := []string(nil)
+			if strings.Contains(scenario.value, "\n") {
+				codes = append(codes, "gp8.normalize.notice-lines")
+			}
+			if scenario.trim {
+				codes = append(codes, "gp8.normalize.metadata-text-consumer")
+			}
+			data, report := assertMetadataTextPolicy(t, song, codes)
+			run.Report(metadataTextCase, reportCodes(report), append([]string{}, codes...))
+			wire := extractGPIFLeafText(t, data)
+			for _, field := range metadataTextFields(song) {
+				run.Preserved("Song."+field.public, field.value, scenario.value)
+				run.Wire("gpifScore."+field.wire, wire["GPIF/Score/"+field.wire], scenario.value)
+			}
+			run.Normalized("Song.Notice", song.Notice, []string{scenario.value})
+			run.Wire("gpifScore.Notices", wire["GPIF/Score/Notices"], scenario.value)
+			parsed, err := Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, field := range metadataTextFields(parsed) {
+				if field.value != scenario.value {
+					t.Fatalf("%s=%q", field.public, field.value)
+				}
+			}
+		})
+	}
+	for _, test := range []struct {
+		notices []string
+		codes   []string
+	}{
+		{[]string{"First notice", "Second notice"}, nil},
+		{[]string{"", "embedded\nline", ""}, []string{"gp8.normalize.notice-lines"}},
+		{[]string{""}, []string{"gp8.omit.empty-notice"}},
+		{[]string{"", "middle", ""}, nil},
+		{[]string{"", ""}, nil},
+	} {
+		song := consumerLimitSong(run.t)
+		song.Notice = test.notices
+		data, report := assertMetadataTextPolicy(run.t, song, test.codes)
+		run.Report(metadataTextCase, reportCodes(report), append([]string{}, test.codes...))
+		var wire struct {
+			Notices string `xml:"Score>Notices"`
+		}
+		if err := xml.Unmarshal([]byte(conformanceBrushGPIF(run.t, data)), &wire); err != nil {
+			run.t.Fatal(err)
+		}
+		run.Wire("gpifScore.Notices", wire.Notices, strings.Join(test.notices, "\n"))
+	}
+	runConformanceLegacyMetadataLosses(run)
+}
+
+func assertMetadataTextPolicy(t *testing.T, song *Song, codes []string) ([]byte, ExportReport) {
+	t.Helper()
+	before := conformanceContractSnapshot(song, false)
+	for _, allowed := range [][]string{nil, {"unrelated"}, codes} {
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
+		if !slices.Equal(reportCodes(report), codes) {
+			t.Fatalf("codes=%v want%v", reportCodes(report), codes)
+		}
+		if len(codes) > 0 && !slices.Equal(allowed, codes) {
+			var loss *ExportLossError
+			if len(data) != 0 || !errors.As(err, &loss) {
+				t.Fatalf("strict bytes%d err%v", len(data), err)
+			}
+		} else if err != nil || len(data) == 0 {
+			t.Fatalf("allowed bytes%d err%v", len(data), err)
+		}
+		if after := conformanceContractSnapshot(song, false); !reflect.DeepEqual(after, before) {
+			t.Fatal("export mutated input")
+		}
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return data, report
+}
+
+func runConformanceLegacyMetadataLosses(run *conformanceRun) {
+	tests := []struct {
+		field, code string
+		value       any
+		edit        func(*Song)
+	}{
+		{"Song.Writer", "gp8.omit.writer", "legacy writer", func(s *Song) { s.Writer = "legacy writer" }},
+		{"Song.Comments", "gp8.omit.comments", "legacy comments", func(s *Song) { s.Comments = "legacy comments" }},
+		{"Song.Date", "gp8.omit.date", "2026-09-11", func(s *Song) { s.Date = "2026-09-11" }},
+		{"Song.Clipboard", "gp8.omit.clipboard-range", &Clipboard{StartMeasure: 1, StopMeasure: 3}, func(s *Song) { s.Clipboard = &Clipboard{StartMeasure: 1, StopMeasure: 3} }},
+	}
+	for _, test := range tests {
+		song := consumerLimitSong(run.t)
+		test.edit(song)
+		_, report := assertMetadataTextPolicy(run.t, song, []string{test.code})
+		if report.Entries[0].Location != (ScoreLocation{}) {
+			run.t.Fatal(report)
+		}
+		run.Omitted(test.field, reflect.ValueOf(song).Elem().FieldByName(strings.TrimPrefix(test.field, "Song.")).Interface(), test.value)
+		run.Report(metadataTextCase, reportCodes(report), []string{test.code})
+	}
+	song := consumerLimitSong(run.t)
+	song.Writer = "writer"
+	song.Comments = "comments"
+	song.Date = "date"
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.writer", "gp8.omit.comments"}}})
+	if err == nil || len(data) != 0 || !slices.Equal(reportCodes(report), []string{"gp8.omit.writer", "gp8.omit.comments", "gp8.omit.date"}) {
+		run.t.Fatal("partial legacy allowances escaped", report, err)
+	}
+}
+
+func TestAlphaTabMetadataText(t *testing.T) {
+	requireAlphaTabConformance(t)
+	for _, scenario := range metadataTextScenarios() {
+		t.Run(scenario.value, func(t *testing.T) {
+			song := metadataTextSong(t, scenario.value)
+			output, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			var got map[string]string
+			readAlphaTabOracleFacts(t, "--metadata-text", writeConformanceFixture(t, output), &got)
+			for _, field := range metadataTextFields(song) {
+				if got[field.oracle] != scenario.consumer {
+					t.Fatalf("%s got%q want%q", field.oracle, got[field.oracle], scenario.consumer)
+				}
+			}
+			if got["notices"] != scenario.consumer {
+				t.Fatalf("notices=%q want%q", got["notices"], scenario.consumer)
+			}
+		})
+	}
+	for _, notices := range [][]string{{"First notice", "Second notice"}, {"", "embedded\nline", ""}, {""}, {"", "middle", ""}, {"", ""}} {
+		song := consumerLimitSong(t)
+		song.Notice = notices
+		song.Author = "independent music"
+		song.Transcriber = "independent tabber"
+		song.Writer = "separate omitted writer"
+		data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		var got map[string]string
+		readAlphaTabOracleFacts(t, "--metadata-text", writeConformanceFixture(t, data), &got)
+		if got["notices"] != strings.Join(notices, "\n") || got["music"] != song.Author || got["tabber"] != song.Transcriber {
+			t.Fatalf("consumer=%#v", got)
+		}
+	}
+}
+
+
+func TestReviewScoreFreshMetadataLayout(t *testing.T) {
+ requireAlphaTabConformance(t)
+ song:=assignedLyricSong(t)
+ song.Author="\n music 日本語\t"; song.Transcriber="tabber<&]]>end"; song.Instructions="instructions\nnext\t"; song.Notice=[]string{"First notice","Second notice"}
+ song.SystemLayout=&SystemLayout{DefaultBarsPerSystem:2147483647,BarsPerSystem:[]int{3,2}}
+ for i:=range song.Tracks {song.Tracks[i].SystemLayout=&SystemLayout{DefaultBarsPerSystem:i+2,BarsPerSystem:[]int{i+1,3}}}
+ before:=conformanceContractSnapshot(song,false)
+ data,report,err:=ExportWithReport(song,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})
+ if err!=nil || len(report.Entries)!=0 {t.Fatal(err,report)}
+ if conformanceContractSnapshot(song,false)!=before {t.Fatal("mutated input")}
+ var metadata map[string]string
+ readAlphaTabOracleFacts(t,"--metadata-text",writeConformanceFixture(t,data),&metadata)
+ if metadata["music"]!=song.Author || metadata["tabber"]!=song.Transcriber || metadata["instructions"]!=song.Instructions || metadata["notices"]!="First notice\nSecond notice" {t.Fatal(metadata)}
+ var layout layoutConsumerFacts
+ readAlphaTabOracleFacts(t,"--system-layout",writeConformanceFixture(t,data),&layout)
+ if layout.Default!=2147483647 || !reflect.DeepEqual(layout.Systems,[]int{3,2}) || !reflect.DeepEqual(layout.Tracks[0].Systems,[]int{1,3}) || !reflect.DeepEqual(layout.Tracks[1].Systems,[]int{2,3}) {t.Fatal(layout)}
+ parsed,err:=Parse(data); if err!=nil {t.Fatal(err)}
+ parsed.Tracks[0].SystemLayout.BarsPerSystem[0]=8
+ if parsed.SystemLayout.BarsPerSystem[0]!=3 || parsed.Tracks[1].SystemLayout.BarsPerSystem[0]!=2 {t.Fatal("layout slice alias")}
+ var lyrics assignedLyricFacts
+ readAlphaTabOracleFacts(t,"--assigned-lyrics",writeConformanceFixture(t,data),&lyrics)
+ if !reflect.DeepEqual(lyrics.Lines,[]assignedLyricTrackFact{{Track:1,Lines:assignedLyricLines()}}) {t.Fatal(lyrics)}
+}
+
+func TestReviewScoreFreshCombinedLossSubsets(t *testing.T) {
+ requireAlphaTabConformance(t)
+ song:=assignedLyricSong(t)
+ song.Author="\n\tA<&]]>B\t\n"
+ song.Tracks[1].Lyrics=[]TrackLyricLine{{Text:"\n\tA<&]]>B\t\n",Offset:1}}
+ song.Tracks[0].Measures[0].Voices[0].Beats[0].Lyrics=[]string{"beat only"}
+ song.Writer="legacy distinct"; song.Date="2026-09-11"; song.Comments="distinct comment"
+ codes:=[]string{"gp8.omit.score-lyrics","gp8.normalize.metadata-text-consumer","gp8.normalize.track-lyrics-text-consumer","gp8.omit.track-lyrics-consumer-dispatch","gp8.omit.writer","gp8.omit.date","gp8.omit.comments"}
+ report:=PreflightExport(song,ExportFormatGP8,ExportOptions{})
+ if len(report.Entries)!=len(codes) {t.Fatal(report)}
+ for _,code:=range codes {if !hasExportCode(report,code) {t.Fatal(report)}}
+ for i:=range codes {
+  allowed:=append([]string{},codes[:i]...);allowed=append(allowed,codes[i+1:]...)
+  data,_,err:=ExportWithReport(song,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:allowed}})
+  if err==nil || len(data)!=0 {t.Fatal("missing allowance accepted",codes[i])}
+ }
+ data,_,err:=ExportWithReport(song,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:codes}})
+ if err!=nil {t.Fatal(err)}
+ parsed,err:=Parse(data); if err!=nil {t.Fatal(err)}
+ if parsed.Author!=song.Author || parsed.Tracks[1].Lyrics[0].Text!=song.Tracks[1].Lyrics[0].Text {t.Fatal("Go XML text truncated")}
+ var metadata map[string]string
+ readAlphaTabOracleFacts(t,"--metadata-text",writeConformanceFixture(t,data),&metadata)
+ if metadata["music"]!="A<&]]>B" {t.Fatal(metadata)}
+ var facts assignedLyricFacts
+ readAlphaTabOracleFacts(t,"--assigned-lyrics",writeConformanceFixture(t,data),&facts)
+ if len(facts.Lines)!=0 || len(facts.Beats)!=1 || facts.Beats[0].Track!=0 || !reflect.DeepEqual(facts.Beats[0].Lyrics,[]string{"beat only"}) {t.Fatal(facts)}
+}
+
+func TestReviewScoreFreshStyleMultiRest(t *testing.T) {
+ requireAlphaTabConformance(t)
+ song:=parseTestFixture(t,multiRestFixture); cleanNotationProvenance(song)
+ song.Style.ExtendedBarLines=ptrTo(true);song.Style.BarNumbers=ptrTo(BarNumberHide)
+ song.Style.MultiRest=ptrTo(true);song.Tracks[0].MultiRest=ptrTo(false);song.Tracks[1].MultiRest=ptrTo(true)
+ first,err:=Export(song,ExportFormatGP8);if err!=nil {t.Fatal(err)}
+ parsed,err:=Parse(first);if err!=nil {t.Fatal(err)}
+ if !*parsed.Style.ExtendedBarLines || *parsed.Style.BarNumbers!=BarNumberHide || !*parsed.Style.MultiRest || *parsed.Tracks[0].MultiRest || !*parsed.Tracks[1].MultiRest {t.Fatal("shared style read erased preference")}
+ *parsed.Style.ExtendedBarLines=false;*parsed.Style.BarNumbers=BarNumberFirstOfSystem
+ *parsed.Style.MultiRest=false;*parsed.Tracks[0].MultiRest=true;*parsed.Tracks[1].MultiRest=false
+ second,err:=Export(parsed,ExportFormatGP8);if err!=nil {t.Fatal(err)}
+ var style scoreStyleFacts
+ readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,second),&style)
+ if style.Extended || style.Numbers!="FirstOfSystem" {t.Fatal(style)}
+ var a,b multiRestFacts
+ readAlphaTabOracleFacts(t,"--multi-rest",writeConformanceFixture(t,first),&a)
+ readAlphaTabOracleFacts(t,"--multi-rest",writeConformanceFixture(t,second),&b)
+ if b.Global || !reflect.DeepEqual(b.Tracks,[]int{0}) || !reflect.DeepEqual(a.MeasureCounts,b.MeasureCounts) || !reflect.DeepEqual(a.Notation,b.Notation) {t.Fatal(a,b)}
+ parsed.Style.ExtendedBarLines=nil;parsed.Style.BarNumbers=nil
+ third,err:=Export(parsed,ExportFormatGP8);if err!=nil {t.Fatal(err)}
+ var c multiRestFacts
+ readAlphaTabOracleFacts(t,"--multi-rest",writeConformanceFixture(t,third),&c)
+ if !reflect.DeepEqual(b,c) {t.Fatal("clearing barline keys changed multi-rest",b,c)}
+}
+
+func TestReviewScoreFreshLayoutFloatBoundaries(t *testing.T) {
+ requireAlphaTabConformance(t)
+ for _,value:=range []float64{math.SmallestNonzeroFloat64,math.Nextafter(1,2),math.MaxFloat64} {
+  song:=semanticExportProbeSong(t)
+  song.MeasureHeaders[0].DisplayScale=ptrTo(value);song.Tracks[0].Measures[0].DisplayScale=ptrTo(value)
+  data,report,err:=ExportWithReport(song,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})
+  if err!=nil || len(report.Entries)!=0 {t.Fatal(err,report)}
+  parsed,err:=Parse(data);if err!=nil {t.Fatal(err)}
+  if *parsed.MeasureHeaders[0].DisplayScale!=value || *parsed.Tracks[0].Measures[0].DisplayScale!=value {t.Fatal("scale changed")}
+  var facts layoutConsumerFacts
+  readAlphaTabOracleFacts(t,"--system-layout",writeConformanceFixture(t,data),&facts)
+  if facts.Masters[0]!=value || facts.Tracks[0].Scales[0][0]!=value {t.Fatal(value,facts)}
+ }
+}
+
+func TestReviewScoreFreshChordClears(t *testing.T) {
+ requireAlphaTabConformance(t)
+ song:=chordDisplaySong(t)
+ before,err:=Export(song,ExportFormatGP8);if err!=nil {t.Fatal(err)}
+ var expected []chordDisplayFact
+ readAlphaTabOracleFacts(t,"--chord-display",writeConformanceFixture(t,before),&expected)
+ first:=song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+ first.ShowName=nil;first.ShowDiagram=ptrTo(false);first.ShowFingering=nil
+ data,err:=Export(song,ExportFormatGP8);if err!=nil {t.Fatal(err)}
+ var actual []chordDisplayFact
+ readAlphaTabOracleFacts(t,"--chord-display",writeConformanceFixture(t,data),&actual)
+ expected[0].ShowName=true;expected[0].ShowDiagram=false;expected[0].ShowFingering=true
+ if !reflect.DeepEqual(actual,expected) {t.Fatal(actual,expected)}
+ parsed,err:=Parse(data);if err!=nil {t.Fatal(err)}
+ edited:=parsed.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Effect.Chord
+ if !*edited.ShowName || *edited.ShowDiagram || !*edited.ShowFingering {t.Fatal("clear defaults changed")}
+}

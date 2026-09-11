@@ -5,8 +5,8 @@
   "title": "Preserve supported score bracket, track-name and display policies",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -88,6 +88,11 @@
       "kind": "runtime",
       "reference": "conformance/capabilities/evidence/score-display.json",
       "detail": "Nine pinned source hashes and the existing system-divider corpus variant hash and fourteen actual exported artifacts, exact public values/reports, independent binary record decoder and pinned final consumer facts. Page-specific name-mode consumer limit remains explicit."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 117; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -95,17 +100,29 @@
     "gp8_builder.go",
     "gp8_export.go"
   ],
-  "resolution": "Implemented all fourteen scoped optional keys with exact typed wire preservation, public authority, enum boundaries, independent mutable requests and key-order precedence. Nine byte-identical pinned sources and one existing system-divider corpus variant and authored scenarios retain exact final consumer policies and unrelated style settings. Authored first-system-of-each-page name mode remains exact in Go/wire but the pinned consumer coalesces it; a scoped strict normalization report records that target limit and export remains partial. Awaiting different-agent acceptance review and root combined gates.",
+  "resolution": "Preserved all fourteen scoped display keys with exact values, types, absence, precedence, edits and malformed-input validation. The pinned consumer coalesces first-system-of-each-page names; exact wire value1 remains and its normalization is explicitly reported. Fixture provenance distinguishes the existing system-divider variant from the independently verified pinned source. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Public non-default regression fails with the previous reader/writer and passes with this implementation.",
-    "Pinned raw consumer tests cover nine pinned originals and the existing system-divider corpus variant, eleven independent absent/false/true booleans, all bracket and name-mode enum members, 48 order/visibility/mode combinations and duplicate-key precedence.",
-    "Malformed known payload types and signed enum boundaries, authored 3/255 rejection, public nonmutation and parsed pointer independence pass.",
-    "Inventory: 446 public fields, 267 wire fields, 52 dispatches and 181 enum names covered; corpus, verifier and focused quality checks run locally. Full gates and broad probe remain assigned to root."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-stylesheet-final-fresh.json; issue 117 verdict PASS.",
+        "Cover System/bracketExtendMode enum variants and Global/useSystemSignSeparator independently with pinned brackets-braces and system-divider fixtures.: PASS",
+        "Cover single/multi track-name visibility policy, first/other-system full/short names, and horizontal/vertical names. Preserve source key precedence and independently assert the resulting consumer policies.: PASS",
+        "Cover StandardNotation/hideDynamics, Global/DisplayTuning, Global/DrawChords and System/drawChordInScore with true, false and absence cases and the pinned hide/show fixtures.: PASS",
+        "For all supported keys, retain exact types and values, validate authored enum boundaries and malformed input, support public edits, and preserve other supported stylesheet settings through the shared codec.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 117,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/117",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.584277+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

@@ -133,6 +133,11 @@
       "kind": "test",
       "reference": "TestAlphaTabLegacyOmissionBoundaries",
       "detail": "Focused implementation regression; independent final-commit review remains pending."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 97; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -140,7 +145,7 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": "GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -156,12 +161,29 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 97 verdict PASS.",
+        "For both GP3/4 readTrack and GP5 readTrackV5, preserve representable authored fret counts exactly and reject source integers outside the public uint8 range before conversion. Include -1, 256, 280 and a large int32 value; 280 must never become the unreported default 24. Do not silently clamp. Include exact valid 0 and 255 boundary controls. Rejection describes the public model representability limit; it does not establish that every out-of-range integer is invalid Guitar Pro syntax.: PASS",
+        "Add public Parse/ParseWithOptions regressions using otherwise-valid binary fixtures with a located fret-count field and at least one non-default representable value such as 31. Verify unaffected tuning, capo, channel and flags. Record structural/source oracle limits because AlphaTab skips this source field. The out-of-range regression must assert the contextual fret-count range error, not merely any error; a representable sibling must prove record alignment.: PASS",
+        "Exercise FretCount=31, TwelveStringedGuitarTrack=true and BanjoTrack=true separately, from an otherwise clean valid score: exact omission code and track location, strict refusal with no bytes, and success only with the relevant code allowed. Test absent/default controls and a two-flag combination so allowing one loss does not hide another.: PASS",
+        "Retain the original target decision with pinned evidence: GPIF writer hardcodes fret count 24; consumer has no corresponding retained fret-count or standalone twelve-string/banjo property. Do not change MIDI program, tuning or string count as a substitute.: PASS",
+        "Record targeted regressions and exact source/report evidence in the semantic ledger and work item. Run ./conformance/check.sh and prek run --all-files. Do not promote unsupported GP8 semantics from a checked-decoding or omission-policy fix.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 97,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/97",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.398154+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

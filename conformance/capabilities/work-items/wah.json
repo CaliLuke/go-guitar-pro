@@ -5,8 +5,8 @@
   "title": "Preserve wah pedal state through GPIF and GP8",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -102,6 +102,11 @@
       "kind": "test",
       "reference": "TestAlphaTabWah",
       "detail": "Exact source/output wah events at original beat locations and complete GP5 signed boundaries."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 94; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -109,15 +114,28 @@
     "gpif_audit.go",
     "mix_table.go"
   ],
-  "resolution": "Typed beat-local wah state, legacy numeric authority, GPIF import/export and scoped unsupported legacy diagnostics are implemented. Original GP5 eight alternating events and final -2 are checked against the pinned consumer; complete binary -128,-2,-1,0,1,99,100,101,127 cases retain the exact supported state. Authored None/Open/Closed locations, edits, selective policy subsets and invalid values are covered. Exact-commit fresh review, combined gates and capability probe remain assigned to root; issue stays open.",
+  "resolution": "Preserved wah pedal states and authored edits through supported binary and GPIF mappings. Invalid values and the pinned unsupported binary state remain explicitly diagnosed. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Public GP5 export regression failed before implementation and passes afterward.",
-    "Focused public, independent pinned consumer, matrix inventory and lint checks; full gates and capability probe deferred to parent integration."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-musical-batch-fresh.json; issue 94 verdict PASS.",
+        "Test None, Open and Closed at distinct beat locations.: PASS",
+        "Preserve imported source scope and ordering instead of confusing static sound configuration with a pedal event.: PASS",
+        "Export each supported state to the independent consumer and retain precise diagnostics for unsupported legacy states.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 94,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/94",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.589710+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

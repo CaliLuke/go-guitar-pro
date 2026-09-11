@@ -5,8 +5,8 @@
   "title": "Read and preserve per-staff part notation settings",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "todo",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -92,6 +92,11 @@
       "kind": "upstream-source",
       "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/PartConfiguration.ts#L61",
       "symbol": "PartConfiguration.apply and writeForScore"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 86; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -99,18 +104,28 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "Implemented bounded PartConfiguration import and export with independent mutable per-staff requests, documented Track.Settings authority, and exact consumer-tested shared track flags. Beat.Slashed remains independent. Same-track divergent staff flags cannot survive the pinned consumer: each differing field reports its own omission without source mutation; strict export rejects it unless exactly allowed. Literal same-track final preservation remains residual acceptance, including dependencies on #86 for slash and numbered. Awaiting different-agent review and root combined gates; no closure claim.",
+  "resolution": "Fresh independent review reproduces differing notation flags within one track being flattened to the first staff by the pinned PartConfiguration consumer. Exact per-staff loss reports remain. The independent-staff acceptance criterion remains unsatisfied.",
   "verification": [
-    "Focused public parser, independent occurrence/edit authority, malformed lengths and strict exact-code tests pass.",
-    "All nonzero four-bit combinations retain exact final pinned-consumer flags on separate tracks; zero flags use explicit standard-notation normalization.",
-    "Literal same-track independent consumer preservation remains a reproducible target limit and is not marked passed.",
-    "Semantic inventory adds six public fields and one GPIF wire field; fixture and corpus accounting updated.",
-    "Full conformance, capability probe and prek remain assigned to root integration."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-final-blockers-fresh.json; issue 86 verdict PARTIAL.",
+        "Use two staves with different standard/tab flags and an independently hidden track.: PARTIAL",
+        "Document authority with Track.Settings compatibility fields, including edits after parsing.: PASS",
+        "Import and GP8 export preserve each flag through the pinned consumer and diagnose malformed configuration lengths.: PARTIAL",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 86,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/86",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.574198+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

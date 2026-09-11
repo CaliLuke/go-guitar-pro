@@ -179,6 +179,11 @@
       "kind": "upstream-source",
       "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1510",
       "symbol": "Gp3To5Importer.readGrace"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 65; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -188,7 +193,7 @@
     "gp8_builder.go",
     "gpif_model.go"
   ],
-  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
@@ -204,12 +209,29 @@
         "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
         "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 65 verdict PASS.",
+        "Public Parse of testdata/gp4/fade-to-black.gp4 retains Transition=GraceEffectTransitionBend at zero-based track6/measure201/voice0/beat4/note0/grace0, Fret=22, RawFret=22, Duration=32, Velocity=95, before-beat placement. Record the source bytes and exact owning address, without inferring a bend curve.: PASS",
+        "Load the same fixture using pinned AlphaTab and align by voice/string/owning nongrace beat: its inserted grace is raw beat4 followed by owning raw beat5 in bar201, has no bend points, slide, or hammer. Record this as a source-importer limitation; do not use matching absence to claim grace-bend preservation.: PASS",
+        "Add an isolated valid programmatic grace with Transition=Bend, exact fret2, duration32, Forte velocity, no RawFret, and before/on-beat cases. The only conversion loss is gp8.omit.grace-bend-transition at the owning note. Strict rejects it with zero bytes, an unrelated allowed code cannot bypass it, and allowing exactly that omission succeeds.: PASS",
+        "On allowed export, assert exact ordered grace placement/owning string and note identity, no fabricated bend curve, and that Go reparse and pinned consumer lack the bend transition. Keep existing None/Slide/Hammer and ordered grace-chord controls passing.: PASS",
+        "Record the regression, importer limitation, and retained export-omission disposition in the ledger and inventory. This policy ticket can close without a retaining bend oracle; a future preservation ticket requires independently verified curve semantics and must not derive them merely from adjacent frets.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 65,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/65",
     "state": "OPEN",
-    "checked_at": "2026-09-11T20:29:10.390442+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

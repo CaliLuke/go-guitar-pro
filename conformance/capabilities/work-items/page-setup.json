@@ -5,8 +5,8 @@
   "title": "Preserve supported header and footer templates and visibility",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -96,6 +96,11 @@
       "kind": "runtime",
       "reference": "conformance/capabilities/evidence/header-footer.json",
       "detail": "Original source hashes, six actual strict exports with exact report allowances, independent raw record decoder and pinned consumer facts."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 114; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -104,17 +109,29 @@
     "gp8_export.go",
     "song.go"
   ],
-  "resolution": "Implemented all ten supported header/footer template and visibility entries, optional absence and empty text, field-specific legacy reconciliation and deterministic copyright splitting. Exact GP5/GP8 raw consumer facts preserve existing/default alignments and other stylesheet settings. Physical geometry and page-number limits remain explicit. Awaiting different-agent acceptance review, reviewed #109 dependency and root combined gates.",
+  "resolution": "Preserved all ten supported header/footer template and visibility pairs with explicit PageSetup reconciliation, copyright line boundaries and existing alignment records. Geometry and other excluded page fields retain separate losses. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Both pinned original header/footer fixtures pass public, exact typed-wire and raw consumer tests.",
-    "Public edits preserve Unicode/XML-sensitive text and CR/CRLF, absence, independent flags and nonmutation.",
-    "Inventory adds 13 public fields and reuses the three exact binary record wire obligations.",
-    "Focused bounds, strict physical leaf omissions, corpus accounting and generated reports are checked; full gates/probe remain assigned to root."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-final-blockers-fresh.json; issue 114 verdict PASS.",
+        "Preserve the supported Title, Subtitle, Artist, Album, Words, Music, WordsAndMusic, Tabber and both Copyright template/visibility fields where present, using exact Header/* and Footer/* keys.: PASS",
+        "Use pinned GP5 and GP8 header-footer fixtures with distinct non-default templates and visible/hidden fields. Verify public import/edit/export, exact stylesheet records and pinned consumer values.: PASS",
+        "Define authority between the existing PageSetup templates/bitmask and any richer score-style representation. Split the legacy copyright lines deterministically and report ambiguous or lossy projection instead of discarding text.: PASS",
+        "Retain explicit template absence/defaults; do not accidentally erase other supported stylesheet values. New alignment APIs are excluded; preserve the documented default alignment for projected legacy fields.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 114,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/114",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.577328+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

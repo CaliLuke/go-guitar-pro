@@ -5,8 +5,8 @@
   "title": "Export assigned legacy score lyrics as GPIF track lyrics",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -92,6 +92,11 @@
       "kind": "runtime-review",
       "reference": "conformance/capabilities/evidence/metadata-lyrics.json",
       "detail": "Focused receipt from the normal pinned consumer and public exporter, with source hashes and scoped loss boundaries."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 98; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -101,16 +106,29 @@
     "gpif_parser.go",
     "gpif_types.go"
   ],
-  "resolution": "Assigned Song.Lyrics lines project in order to the selected GPIF track, with exact offsets and empty/Unicode text. Existing equivalent track lyrics deduplicate; conflicting explicit track lyrics win with a scoped omission. Unassigned lyrics remain omitted and invalid references are rejected. GP8 import exposes projected lines as Track.Lyrics. Pinned dispatch retains supported syllables; any beat lyric element suppresses all track dispatch and receives a per-track consumer loss. Escaped lyric text with boundary whitespace receives a precise normalization. Export remains partial. Fresh independent review and combined full gates/probe remain pending with root; GitHub stays open.",
+  "resolution": "Projected assigned legacy score lyrics to the selected track with exact line order and offsets. Equivalent lists deduplicate; explicit conflicting track lyrics take precedence with a scoped strict loss report. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Failing-before public API and raw pinned-consumer regressions reproduced, then pass after implementation.",
-    "Focused public API, pinned consumer, runtime semantic inventory and exact wire checks pass.",
-    "Full conformance/check.sh, capability probe and prek are assigned to root integration; independent exact-commit review pending."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-score-batch-fresh.json; issue 98 verdict PASS.",
+        "For a valid TrackIndex and a track without lyrics, export the exact ordered legacy lines and starting-measure offsets; verify the index-base conversion with a real legacy fixture.: PASS",
+        "If existing Track.Lyrics are equivalent, emit one copy. If they conflict, keep explicit track lyrics authoritative and report the omitted conflicting score lyrics; strict policy must reject an unallowed conflict.: PASS",
+        "Retain empty/Unicode text and nonzero offsets with exact wire and Go reparse evidence; use pinned AlphaTab for supported lyric text/dispatch behavior.: PASS",
+        "Unassigned legacy lyrics remain an explicit loss and invalid track references remain diagnosed. Keep beat lyrics and Beat.Text independent; remove only the resolved blanket score-lyrics omission.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 98,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/98",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.571146+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

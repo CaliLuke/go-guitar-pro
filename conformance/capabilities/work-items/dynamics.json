@@ -174,6 +174,11 @@
       "reference": "TestAlphaTabChordAndRestDynamics",
       "detail": "Pinned AlphaTab 1.8.4 consumes P on the beat and both chord notes, or P on a note-free rest; permissive and strictly allowed exports match. M10-CHORD-REST-DYNAMICS records GPIF P, model values and exact report codes. Export remains partial.",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 61; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -183,7 +188,7 @@
     "gp8_effects.go",
     "gp8_notation.go"
   ],
-  "resolution": "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition.",
+  "resolution": "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit. Independently reviewed as solved. GitHub remains open for subsequent verification and disposition. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",
@@ -198,12 +203,29 @@
         "Pinned AlphaTab 1.8.4 source 022a45c8e42370f9e12e68949d11eada370da83d. The full gate includes conformance, 77 mutation checks, build, vet, formatting, lint, duplication, race tests and 91.8% statement coverage.",
         "Verified chord/rest dynamics, exact GPIF quantization, pinned consumer values, scoped losses and selective strict policy. Arbitrary independent note velocities remain a documented target limit."
       ]
+    },
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-prior-solved-fresh.json; issue 61 verdict PASS.",
+        "For one two-note chord with velocities 47 and 95 and no explicit beat marking, public values remain distinct before export; GPIF emits Dynamic=P, Go reparse yields 47 on both notes, and pinned AlphaTab reports P on the beat and both notes. Report exactly gp8.normalize.note-velocity at that beat.: PASS",
+        "Repeat with explicit Beat.Dynamics=48: P remains the target marking and both gp8.normalize.beat-dynamic and gp8.normalize.note-velocity appear. With canonical Beat.Dynamics=47 only note-velocity loss appears. Do not expect 47 itself to be quantized: it is canonical P.: PASS",
+        "A rest with explicit dynamics 47 retains P without a dynamic loss; a rest with 48 produces only gp8.normalize.beat-dynamic, while remaining a rest with no notes.: PASS",
+        "Strict export rejects each unallowed loss with zero output. Allowing just one code does not permit the other; allowing exactly the applicable codes succeeds and does not alter the report locations or consumer values.: PASS",
+        "Register focused runtime assertions and the pinned-consumer evidence in the semantic ledger. Keep arbitrary per-note velocities rated partial and record the target limitation rather than inventing a per-note GPIF destination.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 61,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/61",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.559538+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

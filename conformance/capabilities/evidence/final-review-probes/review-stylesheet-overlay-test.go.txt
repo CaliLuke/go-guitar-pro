@@ -1,0 +1,56 @@
+package goguitarpro
+import("testing";"reflect";"slices";"encoding/json";"encoding/binary")
+var freshDisplayKeys=[]string{"StandardNotation/hideDynamics","Global/useSystemSignSeparator","Global/DisplayTuning","Global/DrawChords","System/drawChordInScore","System/showTrackNameSingle","System/showTrackNameMulti","System/shortTrackNameOnFirstSystem","System/shortTrackNameOnOtherSystems","System/horizontalTrackNameOnFirstSystem","System/horizontalTrackNameOnOtherSystems"}
+var freshDisplayFields=[]string{"HideDynamics","SystemSeparators","DisplayTuning","ChordDiagramsOnTop","ChordDiagramsInScore","SingleTrackNamesVisible","MultiTrackNamesVisible","FirstSystemShortNames","OtherSystemsShortNames","FirstSystemHorizontalNames","OtherSystemsHorizontalNames"}
+func TestFreshDisplayAllKeysDuplicateSharedClear(t *testing.T){
+ s:=semanticExportProbeSong(t);s.Style=&ScoreStyle{ExtendedBarLines:ptrTo(true),BarNumbers:ptrTo(BarNumberHide),MultiRest:ptrTo(true),HeaderFooter:&HeaderFooterSettings{Title:&HeaderFooterStyle{Template:ptrTo("retained Ω <&>"),Visible:ptrTo(false)}}}
+ xml:=string(conformanceBarreGPIF(t,mustStringNumberExport(t,s)));records:=[]binaryStyleRecord{}
+ for _,k:=range freshDisplayKeys{records=append(records,binaryStyleRecord{key:k,kind:0,value:[]byte{0}})}
+ for _,k:=range []string{"System/bracketExtendMode","System/trackNameModeSingle","System/trackNameModeMulti"}{records=append(records,scoreDisplayInteger(k,0))}
+ records=append(records,binaryStyleRecord{key:"Review/opaqueColor",kind:7,value:[]byte{12,34,56,78}})
+ records=append(records,binaryStyleRecord{key:"System/ExtendedBarLines",kind:0,value:[]byte{1}},scoreDisplayInteger("System/barIndexDrawType",2))
+ records=append(records,headerFooterRecords(s)...)
+ for _,k:=range freshDisplayKeys{records=append(records,binaryStyleRecord{key:k,kind:0,value:[]byte{1}})}
+ for _,k:=range []string{"System/bracketExtendMode","System/trackNameModeSingle","System/trackNameModeMulti"}{records=append(records,scoreDisplayInteger(k,2))}
+ source:=conformanceBackingArchive(t,xml,map[string][]byte{"Content/BinaryStylesheet":encodeDisplayTestRecords(records)})
+ parsed,e:=Parse(source);if e!=nil{t.Fatal(e)}
+ for _,f:=range freshDisplayFields{p:=reflect.ValueOf(parsed.Style).Elem().FieldByName(f);if p.IsNil()||!p.Elem().Bool(){t.Fatal("last duplicate did not win",f)}}
+ if *parsed.Style.Brackets!=2||*parsed.Style.SingleTrackNameMode!=2||*parsed.Style.MultiTrackNameMode!=2{t.Fatal("integer duplicate lost")}
+ // PartConfiguration is a separate archive member; restore only the authored score rest preference for this fixture.
+ parsed.Style.MultiRest=ptrTo(true)
+ before,_:=json.Marshal(parsed);out,e:=Export(parsed,ExportFormatGP8);if e!=nil{t.Fatal(e)}
+ after,_:=json.Marshal(parsed);if string(before)!=string(after){t.Fatal("export mutation")}
+ var input,output scoreStyleFacts;readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,source),&input);readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,out),&output)
+ if !reflect.DeepEqual(input,output){t.Fatal("duplicate collapse changed raw consumer",input,output)}
+ all:=append(slices.Clone(freshDisplayKeys),"System/bracketExtendMode","System/trackNameModeSingle","System/trackNameModeMulti")
+ wire:=scoreStyleWire(t,out);for _,k:=range all{n:=0;for _,r:=range wire{if r.key==k{n++}};if n!=1{t.Fatal(k,n)}}
+ for _,f:=range freshDisplayFields{reflect.ValueOf(parsed.Style).Elem().FieldByName(f).Set(reflect.Zero(reflect.TypeOf((*bool)(nil))))};parsed.Style.Brackets=nil;parsed.Style.SingleTrackNameMode=nil;parsed.Style.MultiTrackNameMode=nil
+ out,e=Export(parsed,ExportFormatGP8);if e!=nil{t.Fatal(e)};wire=scoreStyleWire(t,out)
+ for _,r:=range wire{if slices.Contains(all,r.key){t.Fatal("cleared key replayed",r)}}
+ opaque:=findStyleRecord(t,wire,"Review/opaqueColor");if opaque.kind!=7||!slices.Equal(opaque.value,[]byte{12,34,56,78}){t.Fatal("unknown record changed")}
+ readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,out),&output)
+ if !reflect.DeepEqual(output.Headers,input.Headers)||!output.Extended||output.Numbers!="Hide"{t.Fatal("shared header/barlines changed",output)}
+ expected:=map[string]any{"hideDynamics":false,"useSystemSignSeparator":false,"globalDisplayTuning":true,"globalDisplayChordDiagramsOnTop":true,"globalDisplayChordDiagramsInScore":false,"singleTrackTrackNamePolicy":float64(1),"multiTrackTrackNamePolicy":float64(1),"firstSystemTrackNameMode":float64(1),"otherSystemsTrackNameMode":float64(1),"firstSystemTrackNameOrientation":float64(1),"otherSystemsTrackNameOrientation":float64(1),"bracketExtendMode":float64(1)}
+ for k,v:=range expected{if output.Other[k]!=v{t.Fatal(k,output.Other[k],v)}}
+ var rest multiRestFacts;readAlphaTabOracleFacts(t,"--multi-rest",writeConformanceFixture(t,out),&rest);if !rest.Global{t.Fatal("clearing display lost multi-rest")}
+}
+func TestFreshDisplayEveryMalformedBoolean(t *testing.T){
+ xml:=string(conformanceBarreGPIF(t,mustStringNumberExport(t,semanticExportProbeSong(t))))
+ for _,k:=range freshDisplayKeys{for _,b:=range []byte{2,127,255}{raw:=encodeDisplayTestRecords([]binaryStyleRecord{{key:k,kind:0,value:[]byte{b}}});a:=conformanceBackingArchive(t,xml,map[string][]byte{"Content/BinaryStylesheet":raw});s,e:=Parse(a);r,e2:=ParseWithOptions(a,ParseOptions{});if s!=nil||r!=nil||e==nil||e2==nil{t.Fatal("malformed boolean accepted",k,b)}}}
+}
+func TestFreshDisplayHiddenModesStrictSharedLoss(t *testing.T){
+ s:=semanticExportProbeSong(t);s.Style=&ScoreStyle{SingleTrackNamesVisible:ptrTo(false),MultiTrackNamesVisible:ptrTo(true),SingleTrackNameMode:ptrTo(TrackNamesFirstSystemEachPage),MultiTrackNameMode:ptrTo(TrackNamesFirstSystemEachPage),HeaderFooter:&HeaderFooterSettings{Title:&HeaderFooterStyle{Template:ptrTo("title")}}};s.PageSetup.PageWidth=100
+ codes:=[]string{"gp8.omit.page-setup","gp8.normalize.track-name-page-policy"};before,_:=json.Marshal(s)
+ for _,allowed:=range [][]string{nil,{codes[0]},{codes[1]},codes}{data,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true,AllowedCodes:allowed}})
+ if len(r.Entries)!=3||r.Entries[0].Code!=codes[0]||r.Entries[1].Code!=codes[1]||r.Entries[2].Code!=codes[1]{t.Fatal(r)}
+ if len(allowed)!=2{if e==nil||len(data)!=0{t.Fatal("incomplete allowance accepted")};continue};if e!=nil{t.Fatal(e)}
+ for _,k:=range []string{"System/trackNameModeSingle","System/trackNameModeMulti"}{r:=findStyleRecord(t,scoreStyleWire(t,data),k);if r.kind!=1||binary.BigEndian.Uint32(r.value)!=1{t.Fatal("mode rewritten",r)}}
+ var facts scoreStyleFacts;readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,data),&facts);if facts.Other["singleTrackTrackNamePolicy"]!=float64(0)||facts.Other["multiTrackTrackNamePolicy"]!=float64(1){t.Fatal(facts)}
+ };after,_:=json.Marshal(s);if string(before)!=string(after){t.Fatal("mutation")}
+}
+
+func TestFreshDisplayPinnedDivider(t *testing.T){
+ const path="references/alphaTab/packages/alphatab/test-data/visual-tests/layout/system-divider.gp"
+ song,e:=ParseFile(path);if e!=nil{t.Fatal(e)};if song.Style.SystemSeparators==nil||!*song.Style.SystemSeparators{t.Fatal("pinned separator not retained")}
+ data,e:=Export(song,ExportFormatGP8);if e!=nil{t.Fatal(e)};var a,b scoreStyleFacts;readAlphaTabOracleFacts(t,"--score-style",path,&a);readAlphaTabOracleFacts(t,"--score-style",writeConformanceFixture(t,data),&b);if !reflect.DeepEqual(a,b){t.Fatal("pinned actual fixture policy mismatch",a,b)}
+}

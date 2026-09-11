@@ -1,0 +1,24 @@
+package goguitarpro
+import("testing";"encoding/xml";"slices")
+func TestReviewPitchWrittenBoundary(t *testing.T){
+ for _,offset:=range []int32{-96,96}{
+  s:=accidentalSong(t,NoteAccidentalNatural,60);s.Tracks[0].Staves[0].DisplayTranspositionPitch=offset
+  if d:=ValidateSong(s);len(d)!=0{t.Fatalf("offset%d input rejected %v",offset,d)}
+  data,rep,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil{t.Fatalf("offset%d export: %v %+v",offset,e,rep)}
+  p,e:=ParseWithOptions(data,ParseOptions{Strict:true,StrictKinds:[]ParseDiagnosticKind{ParseDiagnosticInvalidData}})
+  if e!=nil{t.Errorf("offset%d exporter emitted invalid GPIF: %v %+v",offset,e,p.Diagnostics)}
+ }
+}
+func TestReviewPitchOccurrenceAndEdits(t *testing.T){
+ s:=accidentalSong(t,NoteAccidentalFlat,61);d,e:=Export(s,ExportFormatGP8);if e!=nil{t.Fatal(e)}
+ doc:=conformanceWireDocument(t,d);doc.Voices.Voices[0].Beats="0 0";raw,e:=xml.Marshal(doc);if e!=nil{t.Fatal(e)}
+ p,e:=Parse(conformanceGPIFArchive(t,string(raw)));if e!=nil{t.Fatal(e)}
+ b:=p.Tracks[0].Measures[0].Voices[0].Beats;b[0].Notes[0].AccidentalMode=NoteAccidentalNatural
+ if b[1].Notes[0].AccidentalMode!=NoteAccidentalFlat{t.Fatal("aliased occurrence")}
+ if !slices.ContainsFunc(ValidateSong(p),func(d ScoreDiagnostic)bool{return d.Code=="score.note.accidental-pitch"&&d.Location.Beat==0}){t.Fatal("edited contradiction accepted")}
+ b[0].Notes[0].Value=0
+ if ds:=ValidateSong(p);len(ds)>0{t.Fatal(ds)}
+ d,e=Export(p,ExportFormatGP8);if e!=nil{t.Fatal(e)}
+ var f []accidentalFact;readAlphaTabOracleFacts(t,"--accidental-facts",writeConformanceFixture(t,d),&f)
+ if len(f)!=2||f[0].MIDI!=60||f[0].Mode!=2||f[1].MIDI!=61||f[1].Mode!=5{t.Fatal("occurrence facts",f)}
+}

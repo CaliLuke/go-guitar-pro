@@ -5,8 +5,8 @@
   "title": "Preserve authored timer marks and visibility",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "agent:grace-timer",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -129,25 +129,39 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/grace-timer.json",
       "detail": "Original matched and partial-match source with two exported artifacts each, hashes and all raw consumer facts."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 108; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
     "gpif_types.go"
   ],
-  "resolution": "Beat.Timer and GraceEffect.Timer retain absent, derived and explicitly authored safe-integer milliseconds. Matched grace chords use independent per-note requests that must agree by value. Timed partially matched groups retain complete ordered source grace beats to avoid duplicate marks and changed chord membership. Public edits, clears, numeric invalids, chord conflicts and exact pinned consumer output are covered. Fresh independent review and serial integrated gates/probe remain pending; no issue state or solved label changed.",
+  "resolution": "Preserved absent, derived, zero and explicit timers on ordinary and grace beats, with independent copies, edit/clear authority and numeric validation. Timed partial matches and sequences beyond 256 remain intact; distinct or equal final timers preserve all source beat records across two exports. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
-    "Public valid source regression fails against the previous effect reader and passes with three distinct timer states.",
-    "Exact raw source/output facts retain all 14 beat addresses, notes, derived/null flags and explicit safe-integer boundary values; original GP7 timer fixture also passes.",
-    "Negative, fractional, nonnumeric and overflowing source values fail strict parsing; invalid public values hard reject even with an allowance.",
-    "Focused checks only; root owns full conformance, capability probe and prek.",
-    "New TestGraceTimerPublicSource failed before implementation with 4 grace-source unsupported diagnostics and passes after retention.",
-    "ALPHATAB_CONFORMANCE=1 go test ./... -run \"(Grace|BeatTimer|PitchSpelling|Hammer)\" -count=1: PASS.",
-    "Semantic matrix covers 452/452 public fields, including the new GraceEffect.Timer; existing two stale private model contracts from base are left for root integration."
+    {
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-grace-timer-fresh.json; issue 108 verdict PASS.",
+        "Distinguish no timer, requested derived timer and explicitly authored timer: PASS",
+        "Preserve zero and nonzero values at the exact beat: PASS",
+        "Public edits and independent GP8 consumption retain supported distinction; invalid values have defined diagnostics: PASS",
+        "Documented edit/reconciliation contract, public regression and pinned evidence: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
+    }
   ],
   "issue": {
     "number": 108,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/108",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.586439+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }

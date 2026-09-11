@@ -5,8 +5,8 @@
   "title": "Apply exact authored offset preservation to whammy curves",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:whammy-spelling",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -102,6 +102,11 @@
       "kind": "test",
       "reference": "TestAlphaTabExactWhammyOffsets",
       "detail": "Pinned raw retained offsets for35/35.5, fractional endpoints, nonmonotonic roles and realGP6 source51%. Fresh different-author review remains pending."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
+      "detail": "Independent agent acceptance review for issue 72; preserved current criteria, exact source commits, commands and scoped residual failures."
     }
   ],
   "shared_files": [
@@ -110,29 +115,29 @@
     "gp8_effects.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "Preserved exact authored whammy offsets and control order through import, public edits and GP8, including fractional and adjacent binary64 positions. ExactOffset and legacy Position reconciliation remains explicit. Fresh independent agent review passed the current bounded acceptance criteria. The issue remains OPEN with a solved label for later disposition.",
   "verification": [
     {
-      "command": "go test -count=1 -run 'TestGP8.*Whammy' ./integration",
-      "result": "passed"
-    },
-    {
-      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'TestAlphaTabExactWhammyOffsets|TestAlphaTab.*Whammy|TestConformanceCurve|TestConformanceExactWhammyOffsets|TestConformance.*Bend|TestWhammyExactOffsetOccurrences' .",
-      "result": "passed"
-    },
-    {
-      "command": "go test -count=1 -run ^TestSemanticMatrixInventory$ .",
-      "result": "passed; one exact whammy case added"
-    },
-    {
-      "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
-      "result": "passed; zero lint issues, clone groups and unformatted files"
+      "commit": "7789ca791d8d322ed23332876cc47ec324992995",
+      "commands": [
+        "prek run --all-files: PASS on integrated source commit 7789ca791d8d322ed23332876cc47ec324992995; includes build, go vet, goimports, module tidy drift, golangci-lint, duplication, conformance, 81 sensitivity mutations, race tests and the 80% coverage floor.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture receipts from 7789ca791d8d322ed23332876cc47ec324992995.",
+        "python3 conformance/capabilities/manage.py check: PASS after canonical receipt refresh."
+      ],
+      "evidence": [
+        "Fresh independent agent review: review-musical-batch-fresh.json; issue 72 verdict PASS.",
+        "Preserve a non-grid offset such as 35% and a fractional percentage such as 35.5 through public import/edit/export and retaining pinned-consumer assertions.: PASS",
+        "Exercise origin, two middle offsets sharing one value, and destination; preserve control order and the exact-offset/legacy Position authority established by #60.: PASS",
+        "Keep interior-hold and unequal-rate tests, with narrow loss reports for consumer gesture interpretation or unrepresentable shapes. Passing a rounded self-round-trip is insufficient.: PASS",
+        "Cover valid nonmonotonic standard tuples under #62 where applicable, and retain explicit reports for style/summary metadata, per-point vibrato, excess controls and incompatible middle heights.: PASS",
+        "Full independent review and reproducible scoped failures are preserved in conformance/capabilities/evidence/final-ticket-reviews.json. All GitHub issues remain OPEN for later disposition; no closure or comments were submitted."
+      ]
     }
   ],
   "issue": {
     "number": 72,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/72",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.590147+00:00"
+    "checked_at": "2026-09-11T21:37:12.436185+00:00"
   }
 }
