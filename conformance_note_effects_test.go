@@ -99,7 +99,7 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	run.ClaimReport(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("accent", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("tenuto", "export", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent"), claimSite("staccato", "export", "M11-TECHNIQUE-DISPOSITIONS", "staccato"), claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes"), claimSite("palm-let-ring", "export", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring"), claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags"), claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Report("M11-TECHNIQUE-DISPOSITIONS", reportCodes(report), []string{"gp8.normalize.track-view"})
+	run.ClaimReport(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("accent", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants"), claimSite("tenuto", "export", "M11-TECHNIQUE-DISPOSITIONS", "tenuto accent"), claimSite("staccato", "export", "M11-TECHNIQUE-DISPOSITIONS", "staccato"), claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes"), claimSite("palm-let-ring", "export", "M11-TECHNIQUE-DISPOSITIONS", "palm mute and let ring"), claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags"), claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Report("M11-TECHNIQUE-DISPOSITIONS", reportCodes(report), []string{"gp8.normalize.track-view", "gp8.omit.hammer-origin-consumer"})
 	values := extractGPIFLeafText(t, data)
 	wire := extractTechniqueWireNote(t, data)
 	run.Preserved("Note.Effect", note.Effect, wantEffect)
@@ -274,7 +274,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 	}{
 		{property: gpifProperty{Name: "Tapped", Enable: &empty}},
 		{property: gpifProperty{Name: "HopoOrigin", Enable: &empty}},
-		{property: gpifProperty{Name: "HopoDestination", Enable: &empty}, wantLoss: true},
+		{property: gpifProperty{Name: "HopoDestination", Enable: &empty}},
 		{property: gpifProperty{Name: "LeftHandTapped", Enable: &empty}},
 	} {
 		context := &parseContext{format: "GPIF"}

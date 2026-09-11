@@ -84,9 +84,9 @@ func conformanceResilienceAssertParseDiagnosticEnums(run *conformanceRun) {
 		},
 		{
 			member: "ParseDiagnosticLossyProjection", kind: ParseDiagnosticLossyProjection,
-			code: "GPIF.Note.Property.HopoDestination", defaultReject: true,
+			code: "GPIF.Track.Lyrics.Undispatched", defaultReject: true,
 			mutate: func(source string) string {
-				return insertFirstNoteProperty(t, source, `<Property name="HopoDestination"><Enable>true</Enable></Property>`)
+				return insertFirstGPIFObjectChild(t, source, "<Tracks>", "</Track>", `<Lyrics dispatched="false"><Line><Text>source</Text><Offset>0</Offset></Line></Lyrics>`)
 			},
 		},
 		{

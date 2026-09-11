@@ -178,7 +178,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.HarmonicFret.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicType.Unsupported` | `harmonics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Note.Property.HopoDestination` | `note-and-beat-semantics` | `lossy-projection` | Song derives hammer destinations and has no authored field for the GPIF HopoDestination marker. |
 | `GPIF.Note.Property.Midi.MissingPayload` | `percussion-articulations` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.Octave` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Slide.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
@@ -234,6 +233,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Pitch.Authority` | `note-and-beat-semantics` | `lossy-projection` | TransposedPitch takes precedence over a distinct ConcertPitch accidental mode. |
 | `GPIF.Note.Pitch.Context` | `note-and-beat-semantics` | `unsupported-feature` | The note spelling has a contextual distinction outside the compact accidental-mode representation. |
 | `GPIF.Note.Pitch.Invalid` | `note-and-beat-semantics` | `invalid-data` | Pitch syntax or authored step/accidental/octave contradicts its numeric note context. |
+| `GPIF.Note.HammerDestination.Grace` | `note-and-beat-semantics` | `unsupported-feature` | Matched source grace becomes an ordered GraceEffect with no independent authored destination marker. |
 
 ## Public model inventory
 
@@ -274,7 +274,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatStroke` | `brush` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The stroke preserves authored kind and direction. ExactDuration is the exact tick-timing authority, and Duration is its note-value compatibility view. |
-| `NoteEffect` | `note-and-beat-semantics` | 23 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
+| `NoteEffect` | `note-and-beat-semantics` | 24 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note effect record contains authored note techniques and explicit fingering presence. |
 | `BendEffect` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The bend effect contains authored bend data. |
 | `BendPoint` | `note-and-beat-semantics` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | The bend point preserves authored curve data. Position is the legacy note-offset view when ExactOffset is present. |
 | `GraceEffect` | `grace-relationships` | 10 authored, 1 compatibility, 0 derived, 0 out-of-scope | The grace effect contains authored occurrence data. Fret is a legacy view of ExactFret. |
@@ -308,7 +308,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 272 |
+| `preserved` | 273 |
 | `normalized` | 48 |
 | `omitted` | 103 |
 | `rejected` | 0 |
@@ -319,7 +319,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 139 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 140 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
 
 ## Wire inventory
 
@@ -381,13 +381,13 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditDiagnostics:track.AudioEngineState` | `score-core` | 3 | `audio-engine-state` | `unknown-syntax` | The audit accepts the two known playback engines and reports any other token. |
 | `gpifReadPanAutomations:a.Type` | `score-core` | 1 | `automation-dispatch-diagnostic` | `delegated-to-audit` | The channel-strip pan event is retained independently from static channel balance. |
 | `gpifAuditChannelStripAutomations:automation.Type` | `score-core` | 4 | `automation-dispatch-diagnostic` | `unknown-syntax` | Volume and pan have authored destinations; other recognized channel-strip automation remains omitted. |
-| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
-| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 20 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteOrnament:n.Ornament` | `note-and-beat-semantics` | 4 | `note-ornaments` | `unsupported-feature` | The four GPIF spellings retain exact variants. Absence maps to None; the source audit reports unknown strings before conversion. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifAuthoredAccidental:p.Name` | `note-and-beat-semantics` | 2 | `pitch-spelling-preservation` | `delegated-to-audit` | TransposedPitch takes precedence over ConcertPitch independent of property order. |
 | `gpifAuditNoteSpelling:property.Name` | `note-and-beat-semantics` | 3 | `pitch-spelling-preservation` | `delegated-to-audit` | Source pitch spelling is checked against the owning staff and beat context; TransposedPitch is the accidental-mode authority. |
 | `applyBinaryStylesheet:record.key` | `score-core` | 2 | `score-barlines` | `opaque-preserved` | Validated binary record key/type/payload triples remain unchanged unless an owned public field is edited or cleared. |
+| `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
+| `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 21 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 
 ## Behavioral contracts
 
@@ -485,3 +485,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `score-barlines` | `score-core` | `TestConformanceScoreBarlines` | `TestAlphaTabScoreBarlines` | no | Global flags and numbering values retain exact typed records, defaults and other consumer styles; malformed sources and undefined authored enums are rejected. |
 | `multi-rest` | `score-core` | `TestConformanceMultiRest` | `TestAlphaTabMultiRest` | no | Separate global and individual view preferences preserve false and true; absence defaults to false without changing measures or notation. |
 | `pitch-source-context-preservation` | `note-and-beat-semantics` | `TestConformancePitchSourceContext` | `TestAlphaTabPitchSpellingSourceContexts` | no | Retain original source coordinate records without changing numeric pitch; edits invalidate the private receipt and restore checked derivation. |
+| `hammer-endpoint-preservation` | `note-and-beat-semantics` | `TestConformanceHammerEndpoints` | `TestAlphaTabHammerEndpoints` | no | Exact endpoint booleans and wire properties survive with precise pinned-consumer limits for dangling or unlinked endpoints. |

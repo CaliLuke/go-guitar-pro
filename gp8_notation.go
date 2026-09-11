@@ -496,6 +496,10 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		value := ""
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "PalmMuted", Enable: &value})
 	}
+	if note.Effect.HammerDestination {
+		enable := ""
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HopoDestination", Enable: &enable})
+	}
 	if note.Effect.Hammer {
 		enable := ""
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "HopoOrigin", Enable: &enable})

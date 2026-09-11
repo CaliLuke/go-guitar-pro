@@ -558,6 +558,17 @@ export function loadSystemLayout(fixture) {
       scales: track.staves.map(staff => staff.bars.map(bar => bar.displayScale)) })) };
 }
 
+export function loadHammerFacts(fixture) {
+  const ref = n => n ? ({track:n.beat.voice.bar.staff.track.index,staff:n.beat.voice.bar.staff.index,
+    bar:n.beat.voice.bar.index,voice:n.beat.voice.index,beat:n.beat.index,note:n.index}) : null;
+  const result = [];
+  for (const track of loadScore(fixture).tracks) for (const staff of track.staves)
+    for (const bar of staff.bars) for (const voice of bar.voices) for (const beat of voice.beats)
+      for (const note of beat.notes) result.push({...ref(note),origin:note.isHammerPullOrigin,
+        destination:note.isHammerPullDestination,from:ref(note.hammerPullOrigin),to:ref(note.hammerPullDestination)});
+  return result;
+}
+
 export function loadCurveGraceFacts(fixture) {
   const facts = [];
   for (const track of loadScore(fixture).tracks) {
@@ -1372,6 +1383,10 @@ function main() {
   }
   if (args[0] === '--whammy-controls' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadWhammyControls(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--hammer-facts' && args.length === 2) {
+    process.stdout.write(JSON.stringify(loadHammerFacts(args[1])));
     return;
   }
   if (args[0] === '--curve-grace' && args.length === 2) {

@@ -5,8 +5,8 @@
   "title": "Preserve explicit hammer and pull-off destination markers",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:hammer-destination",
   "formats": [
     "gp3",
     "gp4",
@@ -66,6 +66,41 @@
       "kind": "test",
       "reference": "TestConformanceSourceDistinctions",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "field",
+      "reference": "NoteEffect.HammerDestination",
+      "detail": "Independent authored endpoint; finalization and edits never infer or overwrite a marker."
+    },
+    {
+      "kind": "test",
+      "reference": "TestPublicHammerDestinationPreservation",
+      "detail": "Origin-only, destination-only and complete public regressions; authored destination failed before implementation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestPublicHammerEndpointEditsAndPolicy",
+      "detail": "Independent edit/clear authority, exact per-note reports and all selective allowlist subsets."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabHammerEndpoints",
+      "detail": "Raw pinned consumer endpoint booleans and exact derived paths for complete, missing and tapped endpoints."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabHammerSearchBoundaries",
+      "detail": "Fresh-import same-voice reachability, next-bar boundary and intervening ordinary-note tap blocker."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_hammer.go",
+      "detail": "Read-only consumer-loss projection; generated grace origins participate; authored markers remain intact."
+    },
+    {
+      "kind": "source",
+      "reference": "docs/semantic-model.md",
+      "detail": "Authored endpoint authority and exact fresh-import consumer limits. Fresh independent review and integrated gates/probe remain pending."
     }
   ],
   "shared_files": [
@@ -73,7 +108,24 @@
     "gpif_effects.go"
   ],
   "resolution": null,
-  "verification": [],
+  "verification": [
+    {
+      "command": "go test -count=1 -run '^TestPublicHammer' ./integration",
+      "result": "passed"
+    },
+    {
+      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'Hammer|Technique|NoteEffect|ExportReport|ParseDiagnostics' .",
+      "result": "passed"
+    },
+    {
+      "command": "go test -count=1 -run 'TestSemanticContractInventory|TestSemanticMatrixInventory' .",
+      "result": "passed; one endpoint case added; 409 public fields, 261 wire fields, 50 dispatches and 172 enum members covered"
+    },
+    {
+      "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
+      "result": "passed; zero issues, clone groups and unformatted files"
+    }
+  ],
   "issue": {
     "number": 84,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/84",

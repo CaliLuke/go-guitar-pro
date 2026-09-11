@@ -612,7 +612,6 @@ var gpifNotePropertySources = map[string]parseDiagnosticSource{
 	"BendMiddleValue":       diagnosticSource("GPIF.Note.Property.BendMiddleValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BendDestinationOffset": diagnosticSource("GPIF.Note.Property.BendDestinationOffset.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BendDestinationValue":  diagnosticSource("GPIF.Note.Property.BendDestinationValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"HopoDestination":       diagnosticSource("GPIF.Note.Property.HopoDestination", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
 	"Element":               diagnosticSource("GPIF.Note.Property.Element", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
 	"Variation":             diagnosticSource("GPIF.Note.Property.Variation", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
 	"Tone":                  diagnosticSource("GPIF.Note.Property.Tone", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
@@ -724,11 +723,6 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
 	case "HopoDestination":
 		gpifAuditPropertyPayload(context, gpifTechniqueMissingPayloadSources[property.Name], property.Enable != nil, propertyPath, noteID, "note-and-beat-semantics", "Enable")
-		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
-			Kind: ParseDiagnosticLossyProjection, SourcePath: propertyPath, ObjectID: noteID,
-			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
-			Reason: "hammer/pull destinations are derived and have no authored destination field in Song",
-		})
 	case "HarmonicType":
 		if property.HType == nil {
 			gpifAuditPropertyPayload(context, diagnosticSource("GPIF.Note.Property.HarmonicType.MissingPayload", "harmonics", ParseDiagnosticInvalidData), false, propertyPath, noteID, "harmonics", "HType")

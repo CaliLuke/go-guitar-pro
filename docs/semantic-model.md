@@ -730,9 +730,8 @@ LeftHandTapped remains independent in every combination.
 
 `NoteEffect.Hammer`, `Tapped`, and `LeftHandTapped` retain the GPIF
 `HopoOrigin`, `Tapped`, and `LeftHandTapped` properties independently, including
-when more than one is set. GP8 export writes each property independently. GPIF
-`HopoDestination` remains a lossy derived destination because `Song` has no
-authored hammer-destination field.
+when more than one is set. GP8 export writes each property independently. `NoteEffect.HammerDestination` retains the independent authored destination
+marker. The consumer derives links separately, as described below.
 
 `NoteEffect.LeftHandFinger` and `RightHandFinger` preserve the independently
 authored note fingerings. Use `HasLeftHandFinger` or `HasRightHandFinger` to
@@ -1113,3 +1112,36 @@ false bytes. The pinned consumer retains the global boolean and a set of enabled
 single-track indices. It leaves that set null when no track is enabled. This
 absence/default normalization does not discard an authored true or false value.
 Changing these requests does not remove measures or change their order.
+`NoteEffect.Hammer` owns the authored hammer/pull origin marker.
+`NoteEffect.HammerDestination` owns the separate GPIF destination marker.
+Each boolean controls its own GP8 property. Changing or clearing one does not
+change the other. Finalization preserves both values and does not invent an
+endpoint or a chain. GP3 through GP5 provide the legacy origin flag only.
+
+A GPIF `HopoDestination` with an `Enable` child sets the destination marker.
+The child text does not control presence. A missing child produces an invalid
+data diagnostic. Broken note references retain their existing diagnostics.
+Repeated source definitions produce independent note occurrences.
+
+The pinned consumer ignores the authored destination property. It derives links
+from an origin to a later note on the same string. It also searches nearby
+strings for left-hand tapping. An intervening ordinary note blocks that search
+direction. The search prefers the same string, then lower string numbers, then
+higher string numbers. These derived links do not overwrite the public markers.
+
+On fresh GPIF import, the consumer searches the remaining beats in the current
+voice and the first beat of the next bar. Later beat links do not yet exist
+during note finalization. The source method's nominal three-bar bound does not
+extend this effective search range. Generated grace beats participate in the
+same search, so a grace transition can supply an incoming link.
+
+GP8 retains each authored property in the wire. If the consumer clears an
+unlinked origin, export reports `gp8.omit.hammer-origin-consumer`. If no derived
+incoming link retains a destination, export reports
+`gp8.omit.hammer-destination-consumer`. Strict preservation requires a separate
+allowance for each applicable code. An origin can create a consumer link without
+an authored destination marker. This derived state does not add a public marker.
+
+A matched source grace becomes an ordered `GraceEffect`, which has no independent
+destination marker. `GPIF.Note.HammerDestination.Grace` reports that loss with the
+source note ID. An orphan remains a `Note` and retains its authored marker.

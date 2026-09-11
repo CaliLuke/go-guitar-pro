@@ -22,6 +22,8 @@ type gp8Builder struct {
 	spellingStaff      *Staff
 	spellingMeasure    *Measure
 	spellingBeat       *Beat
+	hammerBeats        []gp8HammerBeat
+	hammerLast         map[[3]int]int
 	report             *ExportReport
 }
 
@@ -62,6 +64,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 		return gpifDocument{}, err
 	}
 	builder.reportLyricConsumerLimits()
+	builder.reportHammerConsumerLimits()
 	return builder.doc, nil
 }
 
@@ -766,6 +769,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 					for beatIndex := range voice.Beats {
 						location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex, Voice: voiceIndex, Beat: beatIndex}
 						builder.spellingStaff, builder.spellingMeasure, builder.spellingBeat = staff, measure, &voice.Beats[beatIndex]
+						builder.recordHammerBeats(staff, location, &voice.Beats[beatIndex])
 						builder.reportBeatConversion(&voice.Beats[beatIndex], location)
 						graceIDs, err := builder.addGraceBeats(trackIndex, staff.Strings, &voice.Beats[beatIndex])
 						if err != nil {

@@ -476,6 +476,8 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 			note.Effect.Tapped = true
 		case "HopoOrigin":
 			note.Effect.Hammer = true
+		case "HopoDestination":
+			note.Effect.HammerDestination = p.Enable != nil
 		case "LeftHandTapped":
 			note.Effect.LeftHandTapped = true
 		case "HarmonicType":

@@ -119,7 +119,12 @@ type NoteEffect struct {
 	HasRightHandFinger   bool
 	HeavyAccentuatedNote bool
 	Staccato             bool
-	Hammer               bool
+	// Hammer preserves the authored hammer/pull origin marker.
+	Hammer bool
+	// HammerDestination preserves the authored GPIF destination marker independently
+	// from Hammer and consumer-derived links. Direct edits control GP8 emission.
+	// Finalization does not add, remove, or infer either endpoint.
+	HammerDestination bool
 	// Tapped preserves the GPIF Tapped note property independently from a
 	// hammer/pull origin.
 	Tapped bool

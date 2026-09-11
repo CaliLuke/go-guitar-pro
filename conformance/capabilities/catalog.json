@@ -4172,7 +4172,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Hammer origin is modeled, but explicit destination distinction and full connection identity are projected.",
+      "finding": "Independent authored origin and destination booleans survive GPIF and GP8. The pinned consumer ignores destination properties and clears unreachable origins; precise export reports cover each unretained true marker. Matched ordered grace destinations remain a source limitation.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Note.isHammerPullOrigin",
@@ -4194,6 +4194,36 @@
           "kind": "test",
           "reference": "TestConformanceSourceDistinctions",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "field",
+          "reference": "NoteEffect.HammerDestination",
+          "detail": "Independent authored endpoint; finalization and edits never infer or overwrite a marker."
+        },
+        {
+          "kind": "test",
+          "reference": "TestPublicHammerDestinationPreservation",
+          "detail": "Origin-only, destination-only and complete public regressions; authored destination failed before implementation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestPublicHammerEndpointEditsAndPolicy",
+          "detail": "Independent edit/clear authority, exact per-note reports and all selective allowlist subsets."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabHammerEndpoints",
+          "detail": "Raw pinned consumer endpoint booleans and exact derived paths for complete, missing and tapped endpoints."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabHammerSearchBoundaries",
+          "detail": "Fresh-import same-voice reachability, next-bar boundary and intervening ordinary-note tap blocker."
+        },
+        {
+          "kind": "source",
+          "reference": "gp8_hammer.go",
+          "detail": "Read-only consumer-loss projection; generated grace origins participate; authored markers remain intact."
         }
       ]
     },

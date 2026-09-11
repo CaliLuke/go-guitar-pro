@@ -717,7 +717,7 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Hammer origin is modeled, but explicit destination distinction and full connection identity are projected.
+Independent authored origin and destination booleans survive GPIF and GP8. The pinned consumer ignores destination properties and clears unreachable origins; precise export reports cover each unretained true marker. Matched ordered grace destinations remain a source limitation.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

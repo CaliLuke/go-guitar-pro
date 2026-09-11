@@ -28,12 +28,15 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat, pendingIndex)
 			targetIndex := gpifGraceTarget(target, &graceNote, percussion)
 			if targetIndex >= 0 {
+				noteID := ""
+				if noteIndex < len(pendingBeat.noteIDs) {
+					noteID = pendingBeat.noteIDs[noteIndex]
+				}
 				if graceNote.AccidentalMode != NoteAccidentalDefault {
-					noteID := ""
-					if noteIndex < len(pendingBeat.noteIDs) {
-						noteID = pendingBeat.noteIDs[noteIndex]
-					}
 					context.add(gpifPitchContextSource, ParseDiagnostic{SourcePath: gpifObjectPath("Notes/Note", noteID) + "/Properties", ObjectID: noteID, Location: ParseLocation{NoteID: noteID}, Reason: "ordered GraceEffect has no independent authored accidental mode"})
+				}
+				if graceNote.Effect.HammerDestination {
+					context.add(diagnosticSource("GPIF.Note.HammerDestination.Grace", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), ParseDiagnostic{SourcePath: gpifObjectPath("Notes/Note", noteID) + "/Properties/Property[@name=\"HopoDestination\"]", ObjectID: noteID, Location: ParseLocation{NoteID: noteID}, Reason: "ordered GraceEffect has no independent authored hammer/pull destination marker"})
 				}
 				target.Notes[targetIndex].Effect.Graces = append(target.Notes[targetIndex].Effect.Graces, effect)
 				continue

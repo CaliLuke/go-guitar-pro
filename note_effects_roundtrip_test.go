@@ -96,7 +96,11 @@ func TestGP8HammerAndTapOriginsRoundTrip(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			data := noteEffectsStrictEffectExport(t, test.effect)
+			codes := []string{}
+			if test.effect.Hammer {
+				codes = []string{"gp8.omit.hammer-origin-consumer"}
+			}
+			data, _ := assertConsumerLossPolicy(t, noteEffectsEffectSong(t, test.effect), codes)
 			wire := extractTechniqueWireNote(t, data)
 			if !wire.allEnabled(test.properties...) {
 				t.Fatalf("enabled properties = %v, want %v", wire.propertyNames(), test.properties)

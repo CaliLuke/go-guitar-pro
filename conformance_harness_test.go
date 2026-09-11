@@ -301,6 +301,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceTrillSixteenth":                     runConformanceTrillSixteenth,
 	"TestConformanceTrillThirtySecond":                  runConformanceTrillThirtySecond,
 	"TestConformanceTrillSixtyFourth":                   runConformanceTrillSixtyFourth,
+	"TestConformanceHammerEndpoints":                    runConformanceHammerEndpoints,
 	"TestConformanceTechniqueDispositions":              runConformanceTechniqueDispositions,
 	"TestConformanceFingering":                          runConformanceFingering,
 	"TestConformanceTremoloPicking":                     runConformanceTremoloPicking,
