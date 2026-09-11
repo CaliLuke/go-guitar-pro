@@ -750,6 +750,23 @@ export function loadTranspositionFacts(fixture) {
   return facts;
 }
 
+export function loadTuningFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      facts.push({
+        track: track.index,
+        staff: staff.index,
+        name: staff.tuningName ?? '',
+        tuning: normalizeTuning(staff.tuning),
+        capo: finite(staff.capo)
+      });
+    }
+  }
+  return facts;
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -802,6 +819,10 @@ function main() {
   }
   if (args[0] === '--transposition' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadTranspositionFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--tuning-labels' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadTuningFacts(args[1]), null, 2)}\n`);
     return;
   }
   process.stdout.write(`${JSON.stringify(loadNormalizedScore(args[0]), null, 2)}\n`);

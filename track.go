@@ -23,6 +23,10 @@ type Staff struct {
 	Measures []Measure
 	// Strings contains this staff's tuning from highest string to lowest.
 	Strings []GuitarString
+	// TuningName contains the authored label for this staff's tuning.
+	// It is independent from Strings, CapoFret, and string order. Changing the
+	// label does not recalculate or otherwise change those values.
+	TuningName string
 	// PercussionTrack reports whether this staff uses percussion articulations.
 	PercussionTrack bool
 	// StandardNotationLineCount is the number of rendered lines in standard notation.

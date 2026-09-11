@@ -224,6 +224,45 @@ func TestAlphaTabPreservesIndependentStaffCapos(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesTuningLabels(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformanceTuningLabelExportSong(t)
+	data, report, err := ExportWithReport(source, ExportFormatGP8, ExportOptions{
+		LossPolicy: ExportLossPolicy{RequirePreservation: true},
+	})
+	if err != nil || len(report.Entries) != 0 {
+		t.Fatalf("tuning label export = %v, %#v", err, report.Entries)
+	}
+	path := writeConformanceFixture(t, data)
+	command := exec.Command("node", alphaTabOracleScript(), "--tuning-labels", path)
+	output, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatalf("AlphaTab tuning oracle: %v\n%s", err, output)
+	}
+	var staves []struct {
+		Track  int       `json:"track"`
+		Staff  int       `json:"staff"`
+		Name   string    `json:"name"`
+		Tuning []float64 `json:"tuning"`
+		Capo   float64   `json:"capo"`
+	}
+	if err := json.Unmarshal(output, &staves); err != nil || len(staves) < 2 {
+		t.Fatalf("AlphaTab tuning facts = %#v, %v", staves, err)
+	}
+	for staffIndex, wantLabel := range []string{"Author's tuning", ""} {
+		staff := staves[staffIndex]
+		if staff.Track != 0 || staff.Staff != staffIndex || staff.Name != wantLabel {
+			t.Fatalf("AlphaTab staff %d label facts = %#v, want %q", staffIndex, staff, wantLabel)
+		}
+		if !slices.Equal(staff.Tuning, []float64{65, 60, 56, 51, 46, 41}) {
+			t.Fatalf("AlphaTab staff %d tuning = %#v", staffIndex, staff.Tuning)
+		}
+		if staff.Capo != 0 {
+			t.Fatalf("AlphaTab staff %d capo = %#v, want 0", staffIndex, staff.Capo)
+		}
+	}
+}
+
 func TestAlphaTabPreservesClefOctaves(t *testing.T) {
 	requireAlphaTabConformance(t)
 	source := conformanceClefOctaveSong(t)

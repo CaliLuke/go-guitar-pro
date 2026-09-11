@@ -106,6 +106,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceCompatibilityAuthority":             runConformanceCompatibilityAuthority,
 	"TestConformanceBarCardinalityDiagnostics":          runConformanceBarCardinalityDiagnostics,
 	"TestConformanceInstrumentContext":                  runConformanceInstrumentContext,
+	"TestConformanceTuningLabels":                       runConformanceTuningLabels,
 	"TestConformanceStaffCapo":                          runConformanceStaffCapo,
 	"TestConformancePlaybackRouting":                    runConformancePlaybackRouting,
 	"TestConformanceMIDIBank":                           runConformanceMIDIBank,

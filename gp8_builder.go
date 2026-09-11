@@ -435,7 +435,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			}
 			result.Staves.Staff[staffIndex].Properties = append(
 				result.Staves.Staff[staffIndex].Properties,
-				gpifStaffProperty{Name: "Tuning", Pitches: strings.Join(pitches, " ")},
+				gpifStaffProperty{Name: "Tuning", Pitches: strings.Join(pitches, " "), Label: &staff.TuningName},
 			)
 		}
 	}

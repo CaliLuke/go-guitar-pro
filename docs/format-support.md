@@ -70,12 +70,10 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Chord.Diagram.Property.ShowFingering` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Chord.Diagram.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Staff.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Staff.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Staff.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
 | `GPIF.Staff.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
 | `GPIF.Staff.Property.Unknown` | `staff-ownership` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Track.Property.Tuning.Label` | `staff-ownership` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Track.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Track.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
 | `GPIF.Track.Property.Tuning.MissingPitches` | `staff-ownership` | `invalid-data` | The recognized source construct is missing its required payload. |
@@ -226,7 +224,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Marker` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker is authored score data. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
 | `Track` | `staff-ownership` | 21 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
-| `Staff` | `staff-ownership` | 6 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, and tuning. PercussionTrack mirrors its track. |
+| `Staff` | `staff-ownership` | 7 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
 | `TrackSound` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition owns its authored program and combined MIDI bank. The first sound is authoritative; MidiChannel mirrors it on import and supplies the fallback only when no explicit sounds exist. |
@@ -268,7 +266,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 215 |
+| `preserved` | 216 |
 | `normalized` | 35 |
 | `omitted` | 117 |
 | `rejected` | 0 |
@@ -279,7 +277,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 84 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 85 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 151 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -295,7 +293,7 @@ The gate compares these cases with the source switches. Each default has an expl
 
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
-| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `capo-precedence` | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
@@ -320,6 +318,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `readHarmonic:kind` | `harmonics` | 7 | `harmonic-conversion` | `unsupported-feature` | The GP3/4 reader maps every supported harmonic discriminator. |
 | `readHarmonicV5ForNote:kind` | `harmonics` | 5 | `harmonic-conversion` | `unsupported-feature` | The GP5 reader maps every supported harmonic discriminator. |
 | `gpifReadStaffStrings:property.Name` | `staff-ownership` | 1 | `staff-ownership` | `delegated-to-audit` | The importer maps the classified tuning property. |
+| `gpifReadTuningName:property.Name` | `staff-ownership` | 1 | `tuning-label-preservation` | `delegated-to-audit` | The importer maps the classified tuning label independently from pitch values. |
 | `gpifAuditChordIDs:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The audit checks IDs in both supported chord collection spellings. |
 | `gpifReadChordProperties:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The importer maps both supported chord collection spellings. |
 | `gpifAuditDiagnostics:property.Name` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The audit uses valid MIDI properties when it checks percussion fallbacks. |
@@ -365,6 +364,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `grace-order-preservation` | `grace-relationships` | `TestExportGP8PreservesOrderedMultipleGraceNotes` | `TestAlphaTabExportConformance` | no | Grace order and attachment survive GP8 conversion. |
 | `timing-finalization` | `timing` | `TestFinalizeSongIsIdempotentAndAcceptsSpecialStructures` | `TestAlphaTabGPIFTiming` | no | Finalization is stable and exact timing agrees with the independent consumer. |
 | `staff-ownership` | `staff-ownership` | `TestParseGPIFPreservesGrandStaff` | `TestAlphaTabMultiStaffTrackOrdering` | no | Grand-staff ownership and ordering survive public parsing. |
+| `tuning-label-preservation` | `staff-ownership` | `TestConformanceTuningLabels` | `TestAlphaTabPreservesTuningLabels` | no | Named and explicitly empty staff-local tuning labels remain independent from identical pitch arrays, string order, and capo through import, public editing, GP8 export, and pinned consumer import. |
 | `tremolo-import` | `tremolo-picking` | `TestConformanceTremoloPicking` | `TestAlphaTabPreservesTremoloPicking` | no | Binary and GPIF marks 1 through 3 retain their exact rate on the beat and through the independent GP8 consumer. |
 | `harmonic-conversion` | `harmonics` | `TestExportGP8PreservesHarmonicsAndWhammyCurves` | `TestAlphaTabExportConformance` | no | Represented harmonic values survive GP8 conversion. |
 | `percussion-identity` | `percussion-articulations` | `TestGPIFPercussionPreservesArticulations` | `TestAlphaTabInputConformance` | no | Percussion identity and notation metadata agree with the independent consumer. |

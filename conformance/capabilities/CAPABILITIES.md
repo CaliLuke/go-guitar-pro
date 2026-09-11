@@ -13,11 +13,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 60 | 21 | 18 | 2 |
-| model | 59 | 22 | 19 | 1 |
+| import | 61 | 20 | 18 | 2 |
+| model | 60 | 21 | 19 | 1 |
 | export | 39 | 25 | 35 | 2 |
 
-All three stages have a supported rating in 37 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 38 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -455,11 +455,11 @@ Bounded work: [Preserve sounding and display transposition separately](https://g
 
 Instrument. Priority 1. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **supported**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-MIDI tuning values survive. AlphaTab stringTuning also stores authored labels that the public string slice cannot retain.
+Staff.Strings preserves absolute MIDI pitches in tablature order, while Staff.TuningName independently preserves the authored label. Named and explicitly empty labels survive GPIF import and GP8 export without changing pitches, order, or capo.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Two staves with identical MIDI strings and different labels remain distinct. Label-only edits do not change sounding pitches, string order, or capo. Named and empty labels have exact GPIF and pinned AlphaTab evidence.
 
 Bounded work: [Preserve tuning labels independently from pitches](https://github.com/CaliLuke/go-guitar-pro/issues/58).
 

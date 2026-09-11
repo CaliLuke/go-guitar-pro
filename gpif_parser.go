@@ -174,16 +174,22 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				if parsed := gpifReadStaffStrings(gpifStaff{Properties: t.Properties}); parsed != nil {
 					trackStrings = parsed
 				}
+				trackTuningName, _ := gpifReadTuningName(gpifStaff{Properties: t.Properties})
 				track.Staves = make([]Staff, staffCount)
 				for staffIndex := range track.Staves {
 					strings := append([]GuitarString(nil), trackStrings...)
+					tuningName := trackTuningName
 					if staffIndex < len(t.Staves.Staff) {
 						if parsed := gpifReadStaffStrings(t.Staves.Staff[staffIndex]); parsed != nil {
 							strings = parsed
 						}
+						if parsed, found := gpifReadTuningName(t.Staves.Staff[staffIndex]); found {
+							tuningName = parsed
+						}
 					}
 					track.Staves[staffIndex] = Staff{
 						Strings:                   strings,
+						TuningName:                tuningName,
 						PercussionTrack:           track.PercussionTrack,
 						StandardNotationLineCount: lineCount,
 						CapoFret:                  capos[staffIndex],

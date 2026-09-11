@@ -157,7 +157,8 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	run.Dispatch("gpifAuditBeatProperty:property.Name", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Property.Unknown") != nil, true)
 
 	element := "Element"
-	staff := gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 45", Label: "Drop D"}}}
+	label := "Drop D"
+	staff := gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 45", Label: &label}}}
 	track := gpifTrack{
 		ID: "track-id", AudioEngineState: "FutureEngine",
 		Instrument: &gpifInstrument{Ref: "drmkt"},
@@ -179,7 +180,6 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	run.Wire("gpifBeat.Tremolo", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Tremolo.InvalidValue") != nil, true)
 	run.Wire("gpifBeat.Wah", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Wah") != nil, true)
 	run.Wire("gpifInstrument.Ref", doc.Tracks.Tracks[0].isPercussionTrack(), true)
-	run.Wire("gpifStaffProperty.Label", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Staff.Property.Tuning.Label") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:beat.Fadding", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Fadding.Lossy") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:property.Name", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Note.Property.Element") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:track.AudioEngineState", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Track.AudioEngineState.InvalidValue") != nil, true)

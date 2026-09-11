@@ -54,7 +54,14 @@ at export; if both views changed, the legacy track edit wins. For a
 programmatic score, any nonzero staff capo makes the staff values authoritative.
 When every staff capo is zero, a nonzero legacy scalar applies to every staff.
 Export computes this reconciliation without mutating the authored score. Tuning
-values are absolute MIDI note numbers for open strings.
+values are absolute MIDI note numbers for open strings. `Staff.TuningName` is
+the independently authored tuning label. `Staff.Strings` remains the sole
+authority for pitches and string order, and `Staff.CapoFret` remains the capo
+authority. Editing a label never recalculates or changes those values. GPIF
+track-level tuning labels initialize every staff. A staff-local `Label` element,
+including an explicitly empty element, overrides that inherited label; a
+staff-local tuning property without `Label` keeps the inherited name. GP3
+through GP5 do not author a tuning label, so their imported value is empty.
 
 GPIF master-bar references list bars by track, then by staff. An interior `-1`
 voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole

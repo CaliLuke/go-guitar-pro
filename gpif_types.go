@@ -195,7 +195,7 @@ type gpifStaff struct {
 type gpifStaffProperty struct {
 	Name    string     `xml:"name,attr"`
 	Pitches string     `xml:"Pitches,omitempty"`
-	Label   string     `xml:"Label,omitempty"`
+	Label   *string    `xml:"Label,omitempty"`
 	Fret    *int       `xml:"Fret,omitempty"`
 	Items   *gpifItems `xml:"Items,omitempty"`
 }

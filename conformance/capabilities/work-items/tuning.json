@@ -5,8 +5,8 @@
   "title": "Preserve tuning labels independently from pitches",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -25,7 +25,9 @@
     "Label-only edits do not change sounding pitches, string order or capo.",
     "Assert empty and named tunings through GPIF import and independent GP8 consumption."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "GP3 through GP5 do not author tuning labels; their imported Staff.TuningName remains empty."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
@@ -75,13 +77,33 @@
       "kind": "test",
       "reference": "TestConformanceInstrumentContext",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTuningLabels",
+      "detail": "Covers staff-local named and empty GPIF labels, identical pitches, label-only edits, exact GP8 wire fields, and Go reimport."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesTuningLabels",
+      "detail": "Pinned AlphaTab independently consumes named and explicit empty labels without changing tuning pitches or capo."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts",
+      "detail": "Pinned GPIF importer assigns Label to Staff.stringTuning.name independently from Pitches."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts",
+      "detail": "Pinned GPIF writer emits the staff tuning label alongside the independently ordered pitch array."
     }
   ],
   "shared_files": [
     "gpif_parser.go",
     "track.go"
   ],
-  "resolution": null,
+  "resolution": "Added Staff.TuningName as the authored staff-local label, imported track-level fallback and staff-level overrides including explicit empty labels, removed the obsolete label-loss diagnostic, and emitted every pitched staff's label independently from pitches, string order, and capo in GP8.",
   "verification": [],
   "issue": {
     "number": 58,

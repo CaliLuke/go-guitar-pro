@@ -123,6 +123,19 @@ func gpifReadStaffStrings(staff gpifStaff) []GuitarString {
 	return nil
 }
 
+func gpifReadTuningName(staff gpifStaff) (string, bool) {
+	for _, property := range staff.Properties {
+		if property.Name != "Tuning" {
+			continue
+		}
+		if property.Label == nil {
+			return "", false
+		}
+		return *property.Label, true
+	}
+	return "", false
+}
+
 type gpifChordScope struct {
 	track  map[string]Chord
 	staves []map[string]Chord

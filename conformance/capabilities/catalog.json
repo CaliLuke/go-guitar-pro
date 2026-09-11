@@ -1155,12 +1155,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
+        "import": "supported",
+        "model": "supported",
         "export": "supported"
       },
-      "finding": "MIDI tuning values survive. AlphaTab stringTuning also stores authored labels that the public string slice cannot retain.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Staff.Strings preserves absolute MIDI pitches in tablature order, while Staff.TuningName independently preserves the authored label. Named and explicitly empty labels survive GPIF import and GP8 export without changing pitches, order, or capo.",
+      "acceptance": "Two staves with identical MIDI strings and different labels remain distinct. Label-only edits do not change sounding pitches, string order, or capo. Named and empty labels have exact GPIF and pinned AlphaTab evidence.",
       "upstream": [
         "Staff.stringTuning",
         "Tuning.*",
@@ -1180,13 +1180,18 @@
         },
         {
           "kind": "field",
-          "reference": "Track.Strings",
-          "detail": "Public contract; linked matrix cases are in obligation."
+          "reference": "Staff.TuningName",
+          "detail": "Public authored label independent from Staff.Strings and Staff.CapoFret."
         },
         {
           "kind": "test",
-          "reference": "TestConformanceInstrumentContext",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceTuningLabels",
+          "detail": "Exact GPIF import, label-only edit, named and empty export, and Go reimport evidence."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesTuningLabels",
+          "detail": "Pinned AlphaTab independently consumes named and explicitly empty tuning labels without pitch or capo changes."
         }
       ]
     },

@@ -36,7 +36,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Apply authored HideTempo to the opening GP8 tempo event](work-items/tempo.json) | implementation | 1 | blocked | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#70](https://github.com/CaliLuke/go-guitar-pro/issues/70) |
 | [Preserve sounding and display transposition separately](work-items/transposition.json) | implementation | 1 | in_progress | — | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) |
 | [Export tremolo picking and preserve supported stroke variants](work-items/tremolo.json) | implementation | 1 | in_progress | — | [#57](https://github.com/CaliLuke/go-guitar-pro/issues/57) |
-| [Preserve tuning labels independently from pitches](work-items/tuning.json) | implementation | 1 | todo | — | [#58](https://github.com/CaliLuke/go-guitar-pro/issues/58) |
+| [Preserve tuning labels independently from pitches](work-items/tuning.json) | implementation | 1 | in_progress | — | [#58](https://github.com/CaliLuke/go-guitar-pro/issues/58) |
 | [Classify authored GP constructs with importer-backed ownership](work-items/upstream-discovery.json) | implementation | 1 | todo | — | [#71](https://github.com/CaliLuke/go-guitar-pro/issues/71) |
 | [Export authored channel-strip volume automation](work-items/volume-automation.json) | implementation | 1 | todo | — | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59) |
 | [Apply exact authored offset preservation to whammy curves](work-items/whammy.json) | implementation | 1 | blocked | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60), [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) | [#72](https://github.com/CaliLuke/go-guitar-pro/issues/72) |

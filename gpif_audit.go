@@ -485,7 +485,6 @@ func gpifAuditTrackProperty(context *parseContext, trackID, path string, propert
 	gpifAuditOwnedStaffProperty(
 		context, trackID, path, property, "track",
 		diagnosticSource("GPIF.Track.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
-		diagnosticSource("GPIF.Track.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
 		diagnosticSource("GPIF.Track.Property.CapoFret.MissingFret", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Track.Property.CapoFret.Negative", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Track.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
@@ -496,7 +495,6 @@ func gpifAuditStaffProperty(context *parseContext, trackID, path string, propert
 	gpifAuditOwnedStaffProperty(
 		context, trackID, path, property, "staff",
 		diagnosticSource("GPIF.Staff.Property.Tuning.MissingPitches", "staff-ownership", ParseDiagnosticInvalidData),
-		diagnosticSource("GPIF.Staff.Property.Tuning.Label", "staff-ownership", ParseDiagnosticUnsupportedFeature),
 		diagnosticSource("GPIF.Staff.Property.CapoFret.MissingFret", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Staff.Property.CapoFret.Negative", "staff-ownership", ParseDiagnosticInvalidData),
 		diagnosticSource("GPIF.Staff.Property.Unknown", "staff-ownership", ParseDiagnosticUnknownSyntax),
@@ -508,7 +506,7 @@ func gpifAuditOwnedStaffProperty(
 	trackID, path string,
 	property gpifStaffProperty,
 	owner string,
-	tuningMissingSource, tuningLabelSource, capoMissingSource, capoNegativeSource, unknownSource parseDiagnosticSource,
+	tuningMissingSource, capoMissingSource, capoNegativeSource, unknownSource parseDiagnosticSource,
 ) {
 	propertyPath := fmt.Sprintf("%s[@name=%q]", path, property.Name)
 	switch property.Name {
@@ -517,12 +515,6 @@ func gpifAuditOwnedStaffProperty(
 			context.add(tuningMissingSource, ParseDiagnostic{
 				SourcePath: propertyPath, ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
 				Reason: owner + " tuning property has no pitches",
-			})
-		}
-		if property.Label != "" {
-			context.add(tuningLabelSource, ParseDiagnostic{
-				SourcePath: propertyPath + "/Label", ObjectID: trackID, Location: ParseLocation{TrackID: trackID},
-				Reason: "Song has no tuning label destination",
 			})
 		}
 	case "DiagramCollection", "ChordCollection":
