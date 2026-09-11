@@ -552,6 +552,8 @@ type gpifNote struct {
 	ID                     string         `xml:"id,attr"`
 	InstrumentArticulation *int           `xml:"InstrumentArticulation,omitempty"`
 	Vibrato                string         `xml:"Vibrato,omitempty"`
+	LeftFingering          *string        `xml:"LeftFingering,omitempty"`
+	RightFingering         *string        `xml:"RightFingering,omitempty"`
 	AntiAccent             string         `xml:"AntiAccent,omitempty"`
 	Properties             gpifProperties `xml:"Properties"`
 	Accent                 int            `xml:"Accent,omitempty"`

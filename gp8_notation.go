@@ -476,6 +476,12 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Slide", Flags: &value})
 	}
 	result.Vibrato = gp8ResolveNoteVibrato(note.Effect)
+	if value, present := gp8NoteFingering(note.Effect.LeftHandFinger, note.Effect.HasLeftHandFinger); present {
+		result.LeftFingering = &value
+	}
+	if value, present := gp8NoteFingering(note.Effect.RightHandFinger, note.Effect.HasRightHandFinger); present {
+		result.RightFingering = &value
+	}
 	if note.Effect.Trill != nil {
 		result.Trill = &gpifTrill{Fret: int(note.Effect.Trill.Fret)}
 	}
@@ -486,6 +492,26 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 	result.Accent |= accentFlags
 	builder.doc.Notes.Notes = append(builder.doc.Notes.Notes, result)
 	return noteID, nil
+}
+
+func gp8NoteFingering(value Fingering, explicit bool) (string, bool) {
+	if !explicit && (value == FingeringOpen || value == FingeringThumb) {
+		return "", false
+	}
+	switch value {
+	case FingeringThumb:
+		return "P", true
+	case FingeringIndex:
+		return "I", true
+	case FingeringMiddle:
+		return "M", true
+	case FingeringAnnular:
+		return "A", true
+	case FingeringLittle:
+		return "C", true
+	default:
+		return "", false
+	}
 }
 
 func gp8BarClef(song *Song, trackIndex int, measure *Measure) string {

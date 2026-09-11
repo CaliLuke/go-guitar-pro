@@ -834,11 +834,11 @@ func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocati
 	if _, conflict := gp8ResolveNoteAccent(note.Effect); conflict {
 		builder.addReport("gp8.normalize.note-accent-authority", "note-and-beat-semantics", ExportDispositionNormalized, location, "the typed note accent takes precedence over conflicting legacy accent booleans")
 	}
-	if note.Effect.HasLeftHandFinger || (note.Effect.LeftHandFinger != FingeringOpen && note.Effect.LeftHandFinger != FingeringThumb) {
-		builder.addReport("gp8.omit.left-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit left-hand fingering")
+	if note.Effect.HasLeftHandFinger && note.Effect.LeftHandFinger == FingeringOpen {
+		builder.addReport("gp8.omit.left-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GPIF has no note-fingering spelling for an authored open/no-finger value")
 	}
-	if note.Effect.HasRightHandFinger || (note.Effect.RightHandFinger != FingeringOpen && note.Effect.RightHandFinger != FingeringThumb) {
-		builder.addReport("gp8.omit.right-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit right-hand fingering")
+	if note.Effect.HasRightHandFinger && note.Effect.RightHandFinger == FingeringOpen {
+		builder.addReport("gp8.omit.right-hand-fingering", "note-and-beat-semantics", ExportDispositionOmitted, location, "GPIF has no note-fingering spelling for an authored open/no-finger value")
 	}
 	if bend := note.Effect.Bend; bend != nil {
 		conversion := gp8ConvertBend(bend)

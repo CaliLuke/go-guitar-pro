@@ -144,10 +144,12 @@ func TestGP8StrictExportReportsUnsupportedBeatAndNoteEffects(t *testing.T) {
 			note.Effect.TremoloPicking = &TremoloPickingEffect{Duration: defaultDuration()}
 		}},
 		{name: "left fingering", code: "gp8.omit.left-hand-fingering", set: func(_ *Beat, note *Note) {
-			note.Effect.LeftHandFinger = FingeringIndex
+			note.Effect.LeftHandFinger = FingeringOpen
+			note.Effect.HasLeftHandFinger = true
 		}},
 		{name: "right fingering", code: "gp8.omit.right-hand-fingering", set: func(_ *Beat, note *Note) {
-			note.Effect.RightHandFinger = FingeringMiddle
+			note.Effect.RightHandFinger = FingeringOpen
+			note.Effect.HasRightHandFinger = true
 		}},
 		{name: "bend summary", code: "gp8.omit.bend-summary", set: func(_ *Beat, note *Note) {
 			note.Effect.Bend = &BendEffect{Kind: BendTypeBend, Value: 2, Points: []BendPoint{{}, {Position: 12, Value: 2}}}

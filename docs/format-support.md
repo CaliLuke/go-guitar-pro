@@ -192,6 +192,8 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.TransposedPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Note.Property.Variation` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Note.LeftFingering.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source left-hand fingering token is not one of P, I, M, A, or C. |
+| `GPIF.Note.RightFingering.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source right-hand fingering token is not one of P, I, M, A, or C. |
 | `GPIF.Note.Vibrato.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source note vibrato token is not one of None, Slight, or Wide. |
 | `GPIF.Rhythm.DuplicateID` | `rhythm` | `invalid-data` | The source object ID must be unique within its collection. |
 | `GPIF.Rhythm.EmptyID` | `rhythm` | `invalid-data` | The source object must have a non-empty ID. |
@@ -292,9 +294,9 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 235 |
+| `preserved` | 239 |
 | `normalized` | 34 |
-| `omitted` | 114 |
+| `omitted` | 110 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -303,7 +305,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 94 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 169 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 95 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 169 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -311,7 +313,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 257 |
+| `schema` | 259 |
 
 ## Source dispatch inventory
 
@@ -407,6 +409,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `inspected-track-capo` | `staff-ownership` | `TestGP8StrictExportCoversInspectedSemanticFields` | `TestAlphaTabPreservesInspectedCapo` | no | A nonzero capo survives GP8 conversion and independent consumption. |
 | `inspected-note-duration-percent` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | yes | Strict export reports a non-default duration percentage before it emits bytes. |
 | `chord-diagram-preservation` | `chord-diagram` | `TestConformanceChordDefinitions` | `TestAlphaTabPreservesChordDiagrams` | yes | Representable ranges and explicit or synthesized finger positions preserve string orientation, first fret, scope, occurrence ownership, and checked target mappings. |
+| `note-fingering-preservation` | `note-and-beat-semantics` | `TestConformanceFingering` | `TestAlphaTabPreservesFingering` | yes | Distinct left and right Thumb through Little values retain explicit presence, exact P/I/M/A/C wire spellings, and pinned-consumer identity; authored Open remains a narrow target omission. |
 | `inspected-bend-points` | `note-and-beat-semantics` | `TestGP8StrictExportCoversInspectedSemanticFields` | none | no | The conversion reports point-count loss and curves that GPIF shared middle values would normalize. |
 | `field-disposition-evidence` | `note-and-beat-semantics` | `TestSemanticContractInventory` | none | yes | A field claim must match the disposition proved by its focused evidence. |
 | `capo-precedence` | `staff-ownership` | `TestGPIFCapoUsesStaffFallbackAndRejectsNarrowing` | `TestAlphaTabGPIFCapoPrecedence` | no | Import and diagnostics use the effective staff capo values that the independent consumer uses. |

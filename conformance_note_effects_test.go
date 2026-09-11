@@ -63,10 +63,10 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 		effect.RightHandFinger = fingering
 		effect.HasLeftHandFinger = true
 		effect.HasRightHandFinger = true
-		run.ClaimPrimary(claimSite("fingering", "import", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open"), claimSite("fingering", "model", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open")).Omitted("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
-		run.Omitted("NoteEffect.RightHandFinger", effect.RightHandFinger, fingering)
-		run.Omitted("NoteEffect.HasLeftHandFinger", effect.HasLeftHandFinger, true)
-		run.Omitted("NoteEffect.HasRightHandFinger", effect.HasRightHandFinger, true)
+		run.ClaimPrimary(claimSite("fingering", "import", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open"), claimSite("fingering", "model", "M11-TECHNIQUE-DISPOSITIONS", "all named fingerings including thumb and open")).Preserved("NoteEffect.LeftHandFinger", effect.LeftHandFinger, fingering)
+		run.Preserved("NoteEffect.RightHandFinger", effect.RightHandFinger, fingering)
+		run.Preserved("NoteEffect.HasLeftHandFinger", effect.HasLeftHandFinger, true)
+		run.Preserved("NoteEffect.HasRightHandFinger", effect.HasRightHandFinger, true)
 
 		song := conformanceTechniqueSong(t)
 		note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
@@ -75,10 +75,11 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 		note.Effect.HasLeftHandFinger = true
 		note.Effect.HasRightHandFinger = true
 		report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-		run.Enum([]string{"Fingering.FingeringOpen", "Fingering.FingeringThumb", "Fingering.FingeringIndex", "Fingering.FingeringMiddle", "Fingering.FingeringAnnular", "Fingering.FingeringLittle"}[index], hasExportCode(report, "gp8.omit.left-hand-fingering") && hasExportCode(report, "gp8.omit.right-hand-fingering"), true)
+		wantOmission := fingering == FingeringOpen
+		run.Enum([]string{"Fingering.FingeringOpen", "Fingering.FingeringThumb", "Fingering.FingeringIndex", "Fingering.FingeringMiddle", "Fingering.FingeringAnnular", "Fingering.FingeringLittle"}[index], hasExportCode(report, "gp8.omit.left-hand-fingering") && hasExportCode(report, "gp8.omit.right-hand-fingering"), wantOmission)
 		for _, code := range []string{"gp8.omit.left-hand-fingering", "gp8.omit.right-hand-fingering"} {
-			if !hasExportCode(report, code) {
-				t.Errorf("fingering %d report = %#v, want %s", fingering, report.Entries, code)
+			if hasExportCode(report, code) != wantOmission {
+				t.Errorf("fingering %d report = %#v, %s presence want %t", fingering, report.Entries, code, wantOmission)
 			}
 		}
 	}
@@ -298,7 +299,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 
 	song := conformanceTechniqueSong(t)
 	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
-	note.Effect.LeftHandFinger = FingeringThumb
+	note.Effect.LeftHandFinger = FingeringOpen
 	note.Effect.HasLeftHandFinger = true
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
 	var lossErr *ExportLossError

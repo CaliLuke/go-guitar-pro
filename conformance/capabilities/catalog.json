@@ -3953,10 +3953,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "supported"
       },
-      "finding": "Presence markers distinguish authored thumb/open from absence. GP8 omits both fingerings.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "GP8 preserves independently authored left and right Thumb through Little values as P/I/M/A/C. Presence markers distinguish authored Thumb/Open from absence; GPIF has no note-level Open spelling, so that value remains a narrow omission.",
+      "acceptance": "Keep public API, exact GPIF wire, strict policy, source diagnostics, and pinned AlphaTab evidence for distinct left/right fingerings. Continue to report only an explicitly authored Open value as omitted.",
       "upstream": [
         "Note.leftHandFinger",
         "Note.rightHandFinger",
@@ -3975,8 +3975,13 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceTechniqueDispositions",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceFingering",
+          "detail": "Distinct left/right values, presence compatibility, exact wire tokens, strict policy, source diagnostics, and the Open target limit."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesFingering",
+          "detail": "Pinned AlphaTab preserves the complete fingering fact set from the GP7 effects fixture through Go GP8 export."
         },
         {
           "kind": "probe",

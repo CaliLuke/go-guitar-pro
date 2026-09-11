@@ -2235,10 +2235,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 2,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "1bd7dce730b36f7ae0f90072722aea8ae4e6b5c983bd3c6181804a64f196d0df"
+          "locationsSha256": "5d35974865b2d461a08c009b881241fa438bff60543737700dd944de176f0a83"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -2339,10 +2339,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 11,
+          "count": 1,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Bank",
           "objectId": "0",
-          "locationsSha256": "523c60b05d7bb22b0807f611af453f7a15bdc30af3363dea37c663357ca2383e"
+          "locationsSha256": "3c61b9154e467a699844d69d9d123fab2ceee3d104369b3c2db12311a0564b07"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7303,9 +7303,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 126,
+          "count": 116,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "85817056cea81a23c0a22c7a5162e8fc9b691b9e32d26af81c656b58891578b2"
+          "locationsSha256": "f9a44b21f1dec042206f9649ee56a1ad9ffa7d6fc5b68e425886e0f00acb9c91"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7740,10 +7740,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 12,
+          "count": 4,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "bbbfe75f7732daaedf053d165447ece3d99405dac993292bcf940813389f811b"
+          "locationsSha256": "7f8e3fa8376610256a4bf85cb38a73c0270b2d903e9047517f2ff43d33f7ce51"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -7860,9 +7860,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 147,
+          "count": 93,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "70ae8df15fef7121e04554b2cf4e59494d5675e56622ecc966f283c28d53cfaa"
+          "locationsSha256": "424f0f639ae08996f70215bed7010ed871b38040e91659ee2df1498654fe665a"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -10115,9 +10115,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 42,
+          "count": 30,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "15dd76db9405446416a1baee910a13990ef7fa780d0939be7ec94e7e699ba4d2"
+          "locationsSha256": "bcd43aae45183063141275c74dee95f44e9b7a4e820fec2472bb392f6bed6e9c"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -11162,9 +11162,9 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 699,
+          "count": 645,
           "sourcePath": "/GPIF/AudioTracks",
-          "locationsSha256": "52f09d8041075922542b97e8fa11b7cc232e0d7e845d85292dc80ab7f76d0d0f"
+          "locationsSha256": "ba3efedd194cc5e1674cb4bed96228c6cacb2febaf114410b35ef80a18a72409"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -13962,10 +13962,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 5,
+          "count": 3,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "17a4ebddb913b827d8bb812c79ea45a54c1fd85df5505638aa2104d3b42a7c40"
+          "locationsSha256": "be7acab3eb6a2b87704b0979f63ba15f6d8a2bcdc3614f1547f27fd66914a30e"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

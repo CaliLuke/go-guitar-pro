@@ -31,6 +31,7 @@ var conformanceIndependentEvidenceExecutors = map[string]func(*testing.T){
 	"alphatab-directions":    TestAlphaTabPreservesDirections,
 	"alphatab-dynamics":      TestAlphaTabGP8ReadsNormalAndRestDynamic,
 	"alphatab-fermata":       TestAlphaTabPreservesFermatas,
+	"alphatab-fingering":     TestAlphaTabPreservesFingering,
 	"alphatab-free-time":     TestAlphaTabPreservesFreeTime,
 	"alphatab-key":           TestAlphaTabPreservesKeyModes,
 	"alphatab-legato":        TestAlphaTabPreservesLegato,

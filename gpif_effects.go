@@ -551,6 +551,14 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 		note.Effect.VibratoStrength = NoteVibratoWide
 		note.Effect.Vibrato = true
 	}
+	if fingering, ok := gpifNoteFingering(n.LeftFingering); ok {
+		note.Effect.LeftHandFinger = fingering
+		note.Effect.HasLeftHandFinger = true
+	}
+	if fingering, ok := gpifNoteFingering(n.RightFingering); ok {
+		note.Effect.RightHandFinger = fingering
+		note.Effect.HasRightHandFinger = true
+	}
 
 	// Trill
 	if n.Trill != nil {
@@ -565,6 +573,26 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	note.Velocity = DefaultVelocity
 
 	return note, nil
+}
+
+func gpifNoteFingering(raw *string) (Fingering, bool) {
+	if raw == nil {
+		return FingeringOpen, false
+	}
+	switch *raw {
+	case "P":
+		return FingeringThumb, true
+	case "I":
+		return FingeringIndex, true
+	case "M":
+		return FingeringMiddle, true
+	case "A":
+		return FingeringAnnular, true
+	case "C":
+		return FingeringLittle, true
+	default:
+		return FingeringOpen, false
+	}
 }
 
 func gpifHarmonicFret(raw *string) (*float64, bool) {

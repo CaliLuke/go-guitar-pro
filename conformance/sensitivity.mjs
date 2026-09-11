@@ -722,6 +722,16 @@ const mutations = [
     want: 'gpifBeat.Fadding'
   },
   {
+    id: 'note-fingering-middle-wire',
+    contract: 'note-fingering-preservation',
+    category: 'serialization',
+    file: 'gp8_notation.go',
+    before: '\tcase FingeringMiddle:\n\t\treturn "M", true\n',
+    after: '\tcase FingeringMiddle:\n\t\treturn "C", true\n',
+    test: '^TestConformanceFingering$',
+    want: 'gpifNote.LeftFingering'
+  },
+  {
     id: 'dead-slap-import-drop',
     contract: 'dead-slap-preservation',
     category: 'import',

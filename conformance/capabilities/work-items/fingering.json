@@ -5,8 +5,8 @@
   "title": "Export existing left and right hand fingerings",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_82_fingering",
   "formats": [
     "gp3",
     "gp4",
@@ -78,18 +78,23 @@
     },
     {
       "kind": "source",
-      "reference": "note.go",
-      "detail": "Reviewed implementation or documented contract."
+      "reference": "gpif_effects.go",
+      "detail": "Imports exact P/I/M/A/C tokens into independent left and right public fields with authored-presence markers."
     },
     {
       "kind": "source",
-      "reference": "gp8_builder.go",
-      "detail": "Reviewed implementation or documented contract."
+      "reference": "gp8_notation.go",
+      "detail": "Exports Thumb through Little as exact P/I/M/A/C tokens while preserving the legacy nonzero-value fallback."
     },
     {
       "kind": "test",
-      "reference": "TestConformanceTechniqueDispositions",
-      "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+      "reference": "TestConformanceFingering",
+      "detail": "Covers distinct hands, every representable value, presence compatibility, absence, Open omission, exact wire output, reimport, strict policy, and invalid source values."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesFingering",
+      "detail": "Pinned AlphaTab verifies all fingering facts in the GP7 effects fixture before and after Go GP8 export."
     },
     {
       "kind": "probe",
@@ -99,9 +104,12 @@
   ],
   "shared_files": [
     "gp8_builder.go",
-    "note.go"
+    "gp8_notation.go",
+    "gpif_audit.go",
+    "gpif_effects.go",
+    "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "GPIF note import and GP8 export now preserve independent left- and right-hand Thumb, Index, Middle, Annular, and Little fingerings as P, I, M, A, and C. Existing HasLeftHandFinger and HasRightHandFinger markers distinguish an authored zero-valued Thumb or Open value from absence, while nonzero values retain their compatibility fallback without a marker. Explicit Open remains a narrow target omission because GPIF has no note-level Open/NoOrDead spelling; strict export succeeds without a fingering report for every representable value and rejects only that explicit omission. Unknown GPIF tokens receive side-specific diagnostics. M11-FINGERING covers exact wire values, reimport, absence, the Open target limit, strict policy, and source diagnostics, with a serialization mutant. Pinned AlphaTab preserves the full GP7 effects fingering fact set. The 364-fixture probe moves the eight exact GP6/GP7 fingering fixtures to equal-nondefault, preserves representable values in GP4/GP5 while leaving their authored Open values different, and leaves one authored Open in notation-legend as the only GP7 difference. The left/right omission reports drop from ten occurrences per binary fixture to five per side, matching only Open values. Generic unknown-element diagnostics drop only for newly recognized LeftFingering and RightFingering elements. No unrelated capability comparison changes. Chord diagram fingerings, hammer effects, rendering, and playback remain outside this change.",
   "verification": [],
   "issue": {
     "number": 82,

@@ -262,6 +262,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceBeaming":                            runConformanceBeaming,
 	"TestConformanceDynamicQuantization":                runConformanceDynamicQuantization,
 	"TestConformanceTechniqueDispositions":              runConformanceTechniqueDispositions,
+	"TestConformanceFingering":                          runConformanceFingering,
 	"TestConformanceTremoloPicking":                     runConformanceTremoloPicking,
 	"TestConformanceSourceDistinctions":                 runConformanceSourceDistinctions,
 	"TestConformanceValidation":                         runConformanceValidation,

@@ -16,9 +16,9 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 69 | 16 | 14 | 2 |
 | model | 68 | 17 | 15 | 1 |
-| export | 46 | 23 | 29 | 3 |
+| export | 47 | 23 | 28 | 3 |
 
-All three stages have a supported rating in 46 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 47 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -34,7 +34,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Concert and display transposition | 347 | 16 | 111 | 0 | 7 |
 | Track visibility and standard/tab flags | 77 | 232 | 108 | 0 | 7 |
 | Separate section marker and text | 31 | 328 | 18 | 0 | 7 |
-| Left and right hand fingering | 13 | 344 | 13 | 0 | 7 |
 | Double bar lines | 32 | 326 | 12 | 0 | 7 |
 | Extended barline and bar-number controls | 32 | 326 | 12 | 0 | 7 |
 | Tap, slap and pop distinctions | 13 | 344 | 12 | 0 | 7 |
@@ -46,6 +45,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord diagrams, barres and fingering | 33 | 323 | 7 | 0 | 7 |
 | Volume automation events | 8 | 350 | 7 | 0 | 7 |
 | Authored note duration percentage | 6 | 351 | 6 | 0 | 7 |
+| Left and right hand fingering | 13 | 344 | 5 | 0 | 7 |
 | Multiple-bar rest preferences | 4 | 353 | 4 | 0 | 7 |
 | Chord name, diagram and fingering visibility | 3 | 354 | 3 | 0 | 7 |
 | Numbered staff notation | 3 | 354 | 3 | 0 | 7 |
@@ -727,11 +727,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Presence markers distinguish authored thumb/open from absence. GP8 omits both fingerings.
+GP8 preserves independently authored left and right Thumb through Little values as P/I/M/A/C. Presence markers distinguish authored Thumb/Open from absence; GPIF has no note-level Open spelling, so that value remains a narrow omission.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep public API, exact GPIF wire, strict policy, source diagnostics, and pinned AlphaTab evidence for distinct left/right fingerings. Continue to report only an explicitly authored Open value as omitted.
 
 Bounded work: [Export existing left and right hand fingerings](https://github.com/CaliLuke/go-guitar-pro/issues/82).
 

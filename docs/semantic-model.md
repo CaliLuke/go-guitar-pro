@@ -443,10 +443,13 @@ when more than one is set. GP8 export writes each property independently. GPIF
 `HopoDestination` remains a lossy derived destination because `Song` has no
 authored hammer-destination field.
 
-The writer reports fingerings because GP8 export does not emit them. This rule
-includes an authored thumb value.
-Use `HasLeftHandFinger` or `HasRightHandFinger` to mark an authored `Thumb` or
-`Open` value. Nonzero named fingers remain compatible without these markers.
+`NoteEffect.LeftHandFinger` and `RightHandFinger` preserve the independently
+authored note fingerings. Use `HasLeftHandFinger` or `HasRightHandFinger` to
+distinguish an authored `Thumb` or `Open` value from absence. Nonzero named
+fingers remain compatible without these markers. GPIF preserves Thumb, Index,
+Middle, Annular, and Little as `P`, `I`, `M`, `A`, and `C`. It has no note-level
+spelling for Open, so GP8 export reports only an explicitly authored Open value
+as omitted. Export computes this presence rule without modifying the score.
 
 Validation rejects unknown fingering, accent, vibrato-strength, and slide enum
 values. Parse diagnostics reject a missing technique payload and classify

@@ -980,6 +980,38 @@ export function loadBeatFadeFacts(fixture) {
   return facts;
 }
 
+export function loadFingeringFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          let regularBeat = 0;
+          for (const beat of voice.beats) {
+            if (beat.graceType !== alphaTab.model.GraceType.None) continue;
+            for (const note of beat.notes) {
+              if (note.leftHandFinger === alphaTab.model.Fingers.Unknown && note.rightHandFinger === alphaTab.model.Fingers.Unknown) continue;
+              facts.push({
+                track: track.index,
+                staff: staff.index,
+                bar: bar.index,
+                voice: voice.index,
+                beat: regularBeat,
+                note: note.index,
+                left: enumName(alphaTab.model.Fingers, note.leftHandFinger),
+                right: enumName(alphaTab.model.Fingers, note.rightHandFinger)
+              });
+            }
+            regularBeat++;
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadBrushFacts(fixture) {
   const score = loadScore(fixture);
   const facts = [];
@@ -1052,6 +1084,10 @@ function main() {
   }
   if (args[0] === '--beat-fade' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBeatFadeFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--fingering' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadFingeringFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--dead-slap' && args.length === 2) {

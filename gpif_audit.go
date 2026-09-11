@@ -291,6 +291,12 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 			gpifAuditNoteProperty(context, note.ID, path, property, mappedMIDI)
 		}
 		gpifAuditEnum(context, diagnosticSource("GPIF.Note.Vibrato.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), note.Vibrato, []string{"", "None", "Slight", "Wide"}, path+"/Vibrato", note.ID, "note-and-beat-semantics")
+		if note.LeftFingering != nil {
+			gpifAuditEnum(context, diagnosticSource("GPIF.Note.LeftFingering.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), *note.LeftFingering, []string{"P", "I", "M", "A", "C"}, path+"/LeftFingering", note.ID, "note-and-beat-semantics")
+		}
+		if note.RightFingering != nil {
+			gpifAuditEnum(context, diagnosticSource("GPIF.Note.RightFingering.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), *note.RightFingering, []string{"P", "I", "M", "A", "C"}, path+"/RightFingering", note.ID, "note-and-beat-semantics")
+		}
 	}
 
 	for _, beat := range doc.Beats.Beats {
