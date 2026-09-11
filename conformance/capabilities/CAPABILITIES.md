@@ -22,66 +22,66 @@ All three stages have a supported rating in 48 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `false`.
+The receipt contains 368 input files. Probe freshness against the current source: `true`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Stylesheet, brackets and track-name policies | 364 | 0 | 358 | 0 | 6 |
-| System layout and forced line breaks | 250 | 112 | 246 | 0 | 6 |
-| Track short names | 364 | 0 | 195 | 0 | 6 |
-| Authored pitch spelling and accidentals | 157 | 89 | 156 | 0 | 6 |
-| Concert and display transposition | 347 | 16 | 111 | 0 | 6 |
-| Track visibility and standard/tab flags | 77 | 233 | 108 | 0 | 6 |
-| Separate section marker and text | 31 | 329 | 18 | 0 | 6 |
-| Double bar lines | 32 | 327 | 12 | 0 | 6 |
-| Extended barline and bar-number controls | 32 | 327 | 12 | 0 | 6 |
-| Tap, slap and pop distinctions | 13 | 345 | 12 | 0 | 6 |
-| Bend curves and styles | 27 | 334 | 11 | 0 | 6 |
-| Pick stroke direction | 11 | 347 | 11 | 0 | 6 |
-| Wah pedal state | 11 | 347 | 11 | 0 | 6 |
-| Beam grouping, direction and stem overrides | 200 | 162 | 9 | 0 | 6 |
-| Slashed beats and slash staff notation | 8 | 350 | 8 | 0 | 6 |
-| Chord diagrams, barres and fingering | 33 | 324 | 7 | 0 | 6 |
-| Volume automation events | 8 | 351 | 7 | 0 | 6 |
-| Authored note duration percentage | 6 | 352 | 6 | 0 | 6 |
-| Left and right hand fingering | 13 | 345 | 5 | 0 | 6 |
-| Multiple-bar rest preferences | 4 | 354 | 4 | 0 | 6 |
-| Chord name, diagram and fingering visibility | 3 | 355 | 3 | 0 | 6 |
-| Numbered staff notation | 3 | 355 | 3 | 0 | 6 |
-| Authored timer marks | 2 | 356 | 2 | 0 | 6 |
-| Explicit note string-number display | 1 | 357 | 1 | 0 | 6 |
-| Pan and balance automation events | 1 | 357 | 1 | 0 | 6 |
-| Rasgueado patterns | 1 | 357 | 1 | 0 | 6 |
-| Turns and mordents | 1 | 357 | 1 | 0 | 6 |
-| Alternate endings | 16 | 342 | 0 | 0 | 6 |
-| Beat barre fret and shape | 2 | 356 | 0 | 0 | 6 |
-| Beat octave shifts | 10 | 349 | 0 | 0 | 6 |
-| Brush and arpeggio timing | 21 | 338 | 0 | 0 | 6 |
-| Common and per-staff capo | 1 | 357 | 0 | 0 | 6 |
-| Common-time and cut-time notation | 0 | 358 | 0 | 0 | 6 |
-| Dead-slapped beats | 2 | 356 | 0 | 0 | 6 |
-| Fade in | 17 | 344 | 0 | 0 | 6 |
-| Fade out and volume swell | 1 | 357 | 0 | 0 | 6 |
-| Fermata placement, kind and length | 4 | 354 | 0 | 0 | 6 |
-| Free-time bars | 1 | 357 | 0 | 0 | 6 |
-| Golpe thumb and finger marks | 2 | 356 | 0 | 0 | 6 |
-| Key signatures and key mode spelling | 44 | 316 | 0 | 0 | 6 |
-| Left-hand tapping identity | 1 | 357 | 0 | 0 | 6 |
-| Legato and authored slurs | 2 | 356 | 0 | 0 | 6 |
-| Lyrics authored directly on a beat | 3 | 355 | 0 | 0 | 6 |
-| MIDI bank selection and bank changes | 8 | 352 | 0 | 0 | 6 |
-| Navigation targets and jumps | 8 | 350 | 0 | 0 | 6 |
-| Note vibrato strength | 21 | 341 | 0 | 0 | 6 |
-| Note visibility and notehead overrides | 0 | 358 | 0 | 0 | 6 |
-| Octave shifts attached to clefs | 2 | 356 | 0 | 0 | 6 |
-| One-bar and two-bar simile marks | 4 | 354 | 0 | 0 | 6 |
-| Repeat starts and displayed pass counts | 28 | 330 | 0 | 0 | 6 |
-| String tuning and tuning labels | 360 | 3 | 0 | 0 | 6 |
-| Sustain pedal markers | 1 | 357 | 0 | 0 | 6 |
-| Tenuto accent | 1 | 357 | 0 | 0 | 6 |
-| Tremolo picking and stroke styles | 14 | 345 | 0 | 0 | 6 |
-| Whammy-bar vibrato strength | 17 | 341 | 0 | 0 | 6 |
+| Stylesheet, brackets and track-name policies | 365 | 0 | 359 | 3 | 6 |
+| System layout and forced line breaks | 251 | 112 | 247 | 3 | 6 |
+| Track short names | 365 | 0 | 196 | 3 | 6 |
+| Authored pitch spelling and accidentals | 158 | 89 | 156 | 3 | 6 |
+| Concert and display transposition | 348 | 16 | 111 | 3 | 6 |
+| Track visibility and standard/tab flags | 77 | 234 | 108 | 3 | 6 |
+| Separate section marker and text | 31 | 330 | 18 | 3 | 6 |
+| Double bar lines | 32 | 328 | 12 | 3 | 6 |
+| Extended barline and bar-number controls | 32 | 328 | 12 | 3 | 6 |
+| Tap, slap and pop distinctions | 13 | 346 | 12 | 3 | 6 |
+| Bend curves and styles | 27 | 335 | 11 | 3 | 6 |
+| Wah pedal state | 11 | 348 | 11 | 3 | 6 |
+| Beam grouping, direction and stem overrides | 201 | 162 | 9 | 3 | 6 |
+| Slashed beats and slash staff notation | 8 | 351 | 8 | 3 | 6 |
+| Chord diagrams, barres and fingering | 33 | 325 | 7 | 3 | 6 |
+| Volume automation events | 8 | 352 | 7 | 3 | 6 |
+| Authored note duration percentage | 6 | 353 | 6 | 3 | 6 |
+| Left and right hand fingering | 13 | 346 | 5 | 3 | 6 |
+| Multiple-bar rest preferences | 4 | 355 | 4 | 3 | 6 |
+| Chord name, diagram and fingering visibility | 3 | 356 | 3 | 3 | 6 |
+| Numbered staff notation | 3 | 356 | 3 | 3 | 6 |
+| Authored timer marks | 2 | 357 | 2 | 3 | 6 |
+| Explicit note string-number display | 1 | 358 | 1 | 3 | 6 |
+| Pan and balance automation events | 1 | 358 | 1 | 3 | 6 |
+| Pick stroke direction | 11 | 348 | 1 | 3 | 6 |
+| Rasgueado patterns | 1 | 358 | 1 | 3 | 6 |
+| Turns and mordents | 1 | 358 | 1 | 3 | 6 |
+| Alternate endings | 16 | 343 | 0 | 3 | 6 |
+| Beat barre fret and shape | 2 | 357 | 0 | 3 | 6 |
+| Beat octave shifts | 10 | 350 | 0 | 3 | 6 |
+| Brush and arpeggio timing | 21 | 339 | 0 | 3 | 6 |
+| Common and per-staff capo | 1 | 358 | 0 | 3 | 6 |
+| Common-time and cut-time notation | 0 | 359 | 0 | 3 | 6 |
+| Dead-slapped beats | 2 | 357 | 0 | 3 | 6 |
+| Fade in | 17 | 345 | 0 | 3 | 6 |
+| Fade out and volume swell | 1 | 358 | 0 | 3 | 6 |
+| Fermata placement, kind and length | 4 | 355 | 0 | 3 | 6 |
+| Free-time bars | 1 | 358 | 0 | 3 | 6 |
+| Golpe thumb and finger marks | 2 | 357 | 0 | 3 | 6 |
+| Key signatures and key mode spelling | 44 | 317 | 0 | 3 | 6 |
+| Left-hand tapping identity | 1 | 358 | 0 | 3 | 6 |
+| Legato and authored slurs | 2 | 357 | 0 | 3 | 6 |
+| Lyrics authored directly on a beat | 3 | 356 | 0 | 3 | 6 |
+| MIDI bank selection and bank changes | 8 | 353 | 0 | 3 | 6 |
+| Navigation targets and jumps | 8 | 351 | 0 | 3 | 6 |
+| Note vibrato strength | 21 | 342 | 0 | 3 | 6 |
+| Note visibility and notehead overrides | 0 | 359 | 0 | 3 | 6 |
+| Octave shifts attached to clefs | 2 | 357 | 0 | 3 | 6 |
+| One-bar and two-bar simile marks | 4 | 355 | 0 | 3 | 6 |
+| Repeat starts and displayed pass counts | 28 | 331 | 0 | 3 | 6 |
+| String tuning and tuning labels | 361 | 3 | 0 | 3 | 6 |
+| Sustain pedal markers | 1 | 358 | 0 | 3 | 6 |
+| Tenuto accent | 1 | 358 | 0 | 3 | 6 |
+| Tremolo picking and stroke styles | 14 | 346 | 0 | 3 | 6 |
+| Whammy-bar vibrato strength | 17 | 342 | 0 | 3 | 6 |
 
 ## Reviewed capabilities
 
