@@ -5,8 +5,8 @@
   "title": "Preserve authored system layouts and bar display scales",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "root",
   "formats": [
     "gp3",
     "gp4",
@@ -80,6 +80,11 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabSystemLayout",
+      "detail": "Original multi-track-different, resized and GP6 compressed source plus edited exact raw consumer counts/scales."
     }
   ],
   "shared_files": [
@@ -88,7 +93,7 @@
     "gpif_types.go",
     "measure.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented independent score and track system counts, exact master/bar scales and checked public/source values. Original GP7 and GP6 raw consumer assertions pass, including bounded unreachable GP6 terminal remainder. Missing track layout inherits score counts with a scoped normalization and no input mutation. Legacy line breaks/displayWidth remain excluded. Awaiting fresh independent review and integrated gates/probe.",
   "verification": [],
   "issue": {
     "number": 112,

@@ -43,6 +43,8 @@ func gpifAuditBeamingMasterBar(context *parseContext, index int, properties *gpi
 	for propertyIndex, property := range properties.Properties {
 		path := fmt.Sprintf("%s/XProperty[%d]", basePath, propertyIndex)
 		switch {
+		case property.ID == gpifMasterScaleID:
+			// The layout reader validates and retains this independent scale.
 		case property.ID == gpifMasterBarBeamingDurationID:
 			durationCount++
 			value, ok := gpifXPropertyInt(property)

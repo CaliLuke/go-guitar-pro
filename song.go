@@ -9,6 +9,8 @@ const GPIFBackingTrackSampleRate = 44100
 
 // Song is the root data structure for a parsed Guitar Pro file.
 type Song struct {
+	// SystemLayout preserves authored system counts. Nil leaves this scope unspecified.
+	SystemLayout   *SystemLayout
 	Clipboard      *Clipboard
 	currentTrack   *int
 	Name           string

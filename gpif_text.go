@@ -63,6 +63,8 @@ func gpifTextNeedsEscaping(text string) bool {
 
 func (score gpifScore) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
 	return encoder.EncodeElement(struct {
+		SystemDefault *string   `xml:"ScoreSystemsDefaultLayout,omitempty"`
+		SystemLayout  *string   `xml:"ScoreSystemsLayout,omitempty"`
 		Title         gpifCDATA `xml:"Title"`
 		SubTitle      gpifCDATA `xml:"SubTitle"`
 		Artist        gpifCDATA `xml:"Artist"`
@@ -75,6 +77,7 @@ func (score gpifScore) MarshalXML(encoder *xml.Encoder, start xml.StartElement) 
 		Instructions  gpifCDATA `xml:"Instructions"`
 		Notices       gpifCDATA `xml:"Notices"`
 	}{
+		score.SystemDefault, score.SystemLayout,
 		gpifCDATA(score.Title), gpifCDATA(score.SubTitle), gpifCDATA(score.Artist),
 		gpifCDATA(score.Album), gpifCDATA(score.Words), gpifCDATA(score.Music),
 		gpifCDATA(score.WordsAndMusic), gpifCDATA(score.Copyright), gpifCDATA(score.Tabber),

@@ -44,6 +44,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 	song.Version = gpifVersion(version)
 	song.Anacrusis = doc.MasterTrack.Anacrusis != nil
 
+	var layoutErr error
+	song.SystemLayout, layoutErr = readGPIFSystemLayout(doc.Score.SystemDefault, doc.Score.SystemLayout, len(doc.MasterBars.MasterBars))
+	if layoutErr != nil {
+		return nil, fmt.Errorf("score system layout: %w", layoutErr)
+	}
+
 	// Score info
 	song.Name = doc.Score.Title
 	song.Subtitle = doc.Score.SubTitle
@@ -118,6 +124,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		for _, t := range doc.Tracks.Tracks {
 			if t.ID == trackID {
 				gpifAuditTrackAutomations(t, len(doc.MasterBars.MasterBars), context)
+				track.SystemLayout, layoutErr = readGPIFSystemLayout(t.SystemDefault, t.SystemLayout, len(doc.MasterBars.MasterBars))
+				if layoutErr != nil {
+					return nil, fmt.Errorf("track %s system layout: %w", trackID, layoutErr)
+				}
 				track.Name = t.Name
 				if t.ShortName != nil {
 					name := *t.ShortName
@@ -337,6 +347,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		mh.DoubleBar = mb.DoubleBar != nil
 		mh.FreeTime = mb.FreeTime != nil
 		mh.BeamingRules = gpifParseBeamingRules(mb.XProperties)
+		mh.DisplayScale, layoutErr = readGPIFDisplayScale(mb.XProperties, gpifMasterScaleID, false)
+		if layoutErr != nil {
+			return nil, fmt.Errorf("master bar %d scale: %w", mbIdx, layoutErr)
+		}
 
 		if mb.Directions != nil {
 			for _, target := range mb.Directions.Targets {
@@ -410,6 +424,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 				m := newMeasure(trackIdx, staffIdx)
 
 				if bar, ok := barMap[barID]; ok {
+					m.DisplayScale, layoutErr = readGPIFDisplayScale(bar.XProperties, gpifBarScaleID, true)
+					if layoutErr != nil {
+						return nil, fmt.Errorf("bar %s scale: %w", barID, layoutErr)
+					}
 					m.Clef = gpifMeasureClef(bar.Clef)
 					switch bar.Ottavia {
 					case "8va":

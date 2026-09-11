@@ -5285,11 +5285,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
       },
-      "finding": "Legacy line breaks parse. GPIF system layouts and bar/master-bar scale lack public equivalents. Export omits line-break preferences.",
+      "finding": "Score and track system counts and master/bar scales retain exact source and caller values. Export makes missing track layout inherit score counts with a precise normalization. Legacy line-break projection and displayWidth remain excluded.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Score.defaultSystemsLayout",
@@ -5312,6 +5312,16 @@
           "kind": "source",
           "reference": "gp8_builder.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "source",
+          "reference": "layout.go",
+          "detail": "Checked counts, scales, independent scope authority and explicit target inheritance."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceSystemLayout",
+          "detail": "Exact original fixtures, wire payloads, boundary checks and raw pinned consumer."
         }
       ]
     },

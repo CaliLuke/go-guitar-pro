@@ -35,7 +35,9 @@ type BeamingRules struct {
 
 // MeasureHeader contains metadata for measures over multiple tracks.
 type MeasureHeader struct {
-	Marker *Marker
+	// DisplayScale is the authored positive layout scale. Nil uses the target default of one.
+	DisplayScale *float64
+	Marker       *Marker
 	// FreeTime reports whether this master bar has the authored GPIF free-time
 	// marker. The numeric time signature remains authoritative for timing.
 	FreeTime bool

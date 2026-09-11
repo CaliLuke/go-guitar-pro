@@ -11,7 +11,9 @@ const maxVoices = 2
 
 // Measure represents a measure within a track.
 type Measure struct {
-	Voices []Voice
+	// DisplayScale is the authored positive layout scale. Nil uses the target default of one.
+	DisplayScale *float64
+	Voices       []Voice
 	// Number is the one-based ordinal of the measure in its staff.
 	Number int
 	// Start matches the owning MeasureHeader display-time start in ticks.

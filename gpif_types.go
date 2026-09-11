@@ -51,17 +51,19 @@ type gpifEncoding struct {
 }
 
 type gpifScore struct {
-	Title         string `xml:"Title"`
-	SubTitle      string `xml:"SubTitle"`
-	Artist        string `xml:"Artist"`
-	Album         string `xml:"Album"`
-	Words         string `xml:"Words"`
-	Music         string `xml:"Music"`
-	WordsAndMusic string `xml:"WordsAndMusic"`
-	Copyright     string `xml:"Copyright"`
-	Tabber        string `xml:"Tabber"`
-	Instructions  string `xml:"Instructions"`
-	Notices       string `xml:"Notices"`
+	SystemDefault *string `xml:"ScoreSystemsDefaultLayout,omitempty"`
+	SystemLayout  *string `xml:"ScoreSystemsLayout,omitempty"`
+	Title         string  `xml:"Title"`
+	SubTitle      string  `xml:"SubTitle"`
+	Artist        string  `xml:"Artist"`
+	Album         string  `xml:"Album"`
+	Words         string  `xml:"Words"`
+	Music         string  `xml:"Music"`
+	WordsAndMusic string  `xml:"WordsAndMusic"`
+	Copyright     string  `xml:"Copyright"`
+	Tabber        string  `xml:"Tabber"`
+	Instructions  string  `xml:"Instructions"`
+	Notices       string  `xml:"Notices"`
 }
 
 type gpifMasterTrack struct {
@@ -128,6 +130,8 @@ type gpifTracks struct {
 }
 
 type gpifTrack struct {
+	SystemDefault    *string             `xml:"SystemsDefautLayout,omitempty"`
+	SystemLayout     *string             `xml:"SystemsLayout,omitempty"`
 	ID               string              `xml:"id,attr"`
 	Name             string              `xml:"Name"`
 	ShortName        *string             `xml:"ShortName,omitempty"`
@@ -441,11 +445,12 @@ type gpifBars struct {
 }
 
 type gpifBar struct {
-	ID         string `xml:"id,attr"`
-	Voices     string `xml:"Voices"`
-	Clef       string `xml:"Clef"`
-	Ottavia    string `xml:"Ottavia,omitempty"`
-	SimileMark string `xml:"SimileMark,omitempty"`
+	XProperties *gpifXProperties `xml:"XProperties,omitempty"`
+	ID          string           `xml:"id,attr"`
+	Voices      string           `xml:"Voices"`
+	Clef        string           `xml:"Clef"`
+	Ottavia     string           `xml:"Ottavia,omitempty"`
+	SimileMark  string           `xml:"SimileMark,omitempty"`
 }
 
 type gpifVoices struct {
@@ -497,8 +502,10 @@ type gpifXProperties struct {
 }
 
 type gpifXProperty struct {
-	ID  string  `xml:"id,attr"`
-	Int *string `xml:"Int,omitempty"`
+	Double *string `xml:"Double,omitempty"`
+	Float  *string `xml:"Float,omitempty"`
+	ID     string  `xml:"id,attr"`
+	Int    *string `xml:"Int,omitempty"`
 }
 
 type gpifLegato struct {

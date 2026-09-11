@@ -1021,3 +1021,17 @@ numeric representation and clears the accidental mode. A matched grace becomes
 an ordered `GraceEffect`, which has no independent accidental field. Its source
 note ID identifies that loss. An orphan grace remains a `Note` and retains its
 mode. Generated grace notes do not inherit their owner's accidental choice.
+
+`Song.SystemLayout` and `Track.SystemLayout` retain independent authored system counts.
+A non-nil track layout controls that track. Export copies score counts to an unspecified track and reports `gp8.normalize.track-layout-inheritance`.
+The pinned consumer uses track counts for one displayed track and score counts for multiple displayed tracks. It does not inherit missing track counts.
+Export never overwrites the authored arrays. Reimport exposes inherited counts as explicit track values.
+Within a layout, a zero default count means the source element is absent. A nil array is absent; an empty array remains explicit.
+Positive counts must fit a signed 32-bit integer. The consumer default for an absent count is three.
+`MeasureHeader.DisplayScale` and `Measure.DisplayScale` retain independent positive finite scales. Nil means absent and resolves to one.
+GPIF uses master XProperty 1124073984 and bar XProperty 1124139520. Both export as Double; bar import also accepts Float, with Double taking precedence.
+Each parsed bar occurrence owns its scale. Legacy line-break and display-width policies remain separate.
+
+Six original GP6 fixtures contain the unreachable final remainder [4, -3] for a one-bar score.
+A negative final entry is retained only when the sum of all counts equals the score length and the preceding counts exceed it.
+All reachable system counts remain positive. Other zero or negative counts are rejected.

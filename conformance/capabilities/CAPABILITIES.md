@@ -14,9 +14,9 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 75 | 18 | 4 | 1 |
-| model | 74 | 19 | 4 | 1 |
-| export | 53 | 35 | 9 | 1 |
+| import | 76 | 17 | 4 | 1 |
+| model | 75 | 18 | 4 | 1 |
+| export | 53 | 36 | 8 | 1 |
 
 All three stages have a supported rating in 53 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -565,9 +565,9 @@ Bounded work: [Preserve slashed beats and slash staff notation separately](https
 
 Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Legacy line breaks parse. GPIF system layouts and bar/master-bar scale lack public equivalents. Export omits line-break preferences.
+Score and track system counts and master/bar scales retain exact source and caller values. Export makes missing track layout inherit score counts with a precise normalization. Legacy line-break projection and displayWidth remain excluded.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

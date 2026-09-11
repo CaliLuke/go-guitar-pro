@@ -135,7 +135,9 @@ func (builder *gp8Builder) buildScore() gpifScore {
 		}
 		break
 	}
+	defaultLayout, systemsLayout := gp8SystemLayout(builder.song.SystemLayout)
 	score := gpifScore{
+		SystemDefault: defaultLayout, SystemLayout: systemsLayout,
 		Title:        song.Name,
 		SubTitle:     song.Subtitle,
 		Artist:       song.Artist,
@@ -341,7 +343,14 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	green := (uint32(track.Color) >> 8) & 0xff
 	blue := uint32(track.Color) & 0xff
 	primaryChannel := int(channel.Channel % 16)
+	layout := track.SystemLayout
+	if layout == nil && builder.song.SystemLayout != nil {
+		layout = builder.song.SystemLayout
+		builder.addReport("gp8.normalize.track-layout-inheritance", "score-core", ExportDispositionNormalized, location, "an unspecified track layout uses the score layout; GPIF stores the inherited counts explicitly because the pinned consumer does not inherit them")
+	}
+	defaultLayout, systemsLayout := gp8SystemLayout(layout)
 	result := gpifTrack{
+		SystemDefault: defaultLayout, SystemLayout: systemsLayout,
 		ID:        strconv.Itoa(trackIndex),
 		Name:      track.Name,
 		ShortName: track.ShortName,
@@ -774,7 +783,8 @@ func (builder *gp8Builder) buildScoreGraph() error {
 					voiceIDs = append(voiceIDs, "-1")
 				}
 				builder.doc.Bars.Bars = append(builder.doc.Bars.Bars, gpifBar{
-					ID: barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure), Ottavia: gp8Octave(measure.ClefOctave), SimileMark: gp8SimileMark(measure.SimileMark),
+					XProperties: gp8DisplayScale(nil, gpifBarScaleID, measure.DisplayScale),
+					ID:          barID, Voices: strings.Join(voiceIDs, " "), Clef: gp8BarClef(builder.song, trackIndex, measure), Ottavia: gp8Octave(measure.ClefOctave), SimileMark: gp8SimileMark(measure.SimileMark),
 				})
 			}
 		}

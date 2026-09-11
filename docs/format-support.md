@@ -252,12 +252,12 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PageSetup` | `score-core` | 17 authored, 0 compatibility, 0 derived, 0 out-of-scope | The page setup is authored display data. |
 | `RseMasterEffect` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The master RSE effect is authored playback data. |
 | `MidiChannel` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | The MIDI channel contains authored playback values. |
-| `MeasureHeader` | `rhythm` | 14 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. BeamingRules is the optional exact-bar custom grouping and never derives from TimeSignature. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
+| `MeasureHeader` | `rhythm` | 15 authored, 1 compatibility, 2 derived, 0 out-of-scope | The header contains authored bar data and derived absolute starts. BeamingRules is the optional exact-bar custom grouping and never derives from TimeSignature. Directions is the complete navigation-marker set; Direction is its legacy single-value compatibility view. Fermatas is the authoritative master-bar hold collection. FreeTime is an independent authored presence marker and does not replace numeric meter timing. |
 | `BeamingRules` | `beaming` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | A custom master-bar rule owns its note-value slice duration and an independent ordered group-size array. |
 | `Fermata` | `fermata` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The fermata preserves one authored master-bar offset, symbol type, and finite length. |
 | `Marker` | `score-core` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | Letter and Text are independent authored section fields. Title is the legacy caption; a post-parse title edit overrides text and preserves the letter. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
-| `Track` | `staff-ownership` | 22 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
+| `Track` | `staff-ownership` | 23 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
 | `Staff` | `staff-ownership` | 8 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
@@ -268,7 +268,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `RseEqualizer` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The equalizer contains authored playback values. |
 | `RseInstrument` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The RSE instrument contains authored playback values. |
 | `GuitarString` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The string contains authored tuning data. |
-| `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
+| `Measure` | `timing` | 12 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
@@ -292,20 +292,21 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
-| `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
+| `Song` | `score-core` | 33 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
 | `Chord` | `note-and-beat-semantics` | 22 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
 | `Beat` | `note-and-beat-semantics` | 18 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
 | `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
+| `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 267 |
-| `normalized` | 42 |
+| `preserved` | 272 |
+| `normalized` | 43 |
 | `omitted` | 103 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -315,7 +316,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 134 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 205 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 135 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 205 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -323,7 +324,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 264 |
+| `schema` | 271 |
 
 ## Source dispatch inventory
 
@@ -476,3 +477,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `staff-notation` | `score-core` | `TestConformanceStaffNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
 | `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |
+| `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. |

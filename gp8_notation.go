@@ -20,7 +20,7 @@ func gp8MasterBar(header *MeasureHeader, bars string) gpifMasterBar {
 		Time: fmt.Sprintf("%d/%d", header.TimeSignature.Numerator, header.TimeSignature.Denominator.Value),
 		Bars: bars,
 	}
-	result.XProperties = gp8BeamingRules(header.BeamingRules)
+	result.XProperties = gp8DisplayScale(gp8BeamingRules(header.BeamingRules), gpifMasterScaleID, header.DisplayScale)
 	if header.FreeTime {
 		result.FreeTime = &struct{}{}
 	}

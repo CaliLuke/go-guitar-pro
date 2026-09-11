@@ -550,6 +550,14 @@ export function loadWhammyControls(fixture) {
   return facts;
 }
 
+export function loadSystemLayout(fixture) {
+  const score = loadScore(fixture);
+  return { default: score.defaultSystemsLayout, systems: Array.from(score.systemsLayout),
+    masters: score.masterBars.map(bar => bar.displayScale),
+    tracks: score.tracks.map(track => ({ default: track.defaultSystemsLayout, systems: Array.from(track.systemsLayout),
+      scales: track.staves.map(staff => staff.bars.map(bar => bar.displayScale)) })) };
+}
+
 export function loadCurveGraceFacts(fixture) {
   const facts = [];
   for (const track of loadScore(fixture).tracks) {
@@ -1339,6 +1347,10 @@ function main() {
   if (args.length === 0) {
     console.error('usage: node oracle.mjs FIXTURE | --batch FIXTURE...');
     process.exit(2);
+  }
+  if (args[0] === '--system-layout' && args.length === 2) {
+    process.stdout.write(JSON.stringify(loadSystemLayout(args[1])));
+    return;
   }
   if (args[0] === '--batch-receipts') {
     process.stdout.write(`${JSON.stringify(args.slice(1).map(fixture => {

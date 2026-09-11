@@ -56,6 +56,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	add := func(code string, kind ScoreDiagnosticKind, location ScoreLocation, format string, args ...any) {
 		diagnostics = append(diagnostics, ScoreDiagnostic{Code: code, Kind: kind, Location: location, Reason: fmt.Sprintf(format, args...)})
 	}
+	validateSystemLayout(song.SystemLayout, "score.system-layout", ScoreLocation{}, len(song.MeasureHeaders), &diagnostics)
 	validTempoAuthority := song.Tempo > 0
 	tempoDiagnostic := false
 	if song.Tempo < 0 {
@@ -96,6 +97,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	for measureIndex := range song.MeasureHeaders {
 		header := &song.MeasureHeaders[measureIndex]
 		location := ScoreLocation{Measure: measureIndex}
+		validateDisplayScale(header.DisplayScale, "score.master-bar.display-scale", location, &diagnostics)
 		if header.TimeSignature.Numerator <= 0 {
 			add("score.measure.time-signature", ScoreDiagnosticValue, location, "time-signature numerator %d must be positive", header.TimeSignature.Numerator)
 		}
@@ -145,6 +147,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	}
 	for trackIndex := range song.Tracks {
 		track := &song.Tracks[trackIndex]
+		validateSystemLayout(track.SystemLayout, "score.track.system-layout", ScoreLocation{Track: trackIndex}, len(song.MeasureHeaders), &diagnostics)
 		if track.CapoFret < 0 {
 			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.CapoFret)
 		}
@@ -184,6 +187,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			for measureIndex := range staves[staffIndex].Measures {
 				measure := &staves[staffIndex].Measures[measureIndex]
 				location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex}
+				validateDisplayScale(measure.DisplayScale, "score.bar.display-scale", location, &diagnostics)
 				if measure.HeaderIndex < 0 || measure.HeaderIndex >= len(song.MeasureHeaders) {
 					add("score.measure.header-reference", ScoreDiagnosticStructural, location, "header index %d is outside 0..%d", measure.HeaderIndex, len(song.MeasureHeaders)-1)
 				} else {
