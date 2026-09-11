@@ -3453,9 +3453,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Slap and pop share one SlapEffect value and cannot coexist. Separate note Tapped flags survive. GP8 omits the beat SlapEffect.",
+      "finding": "Independent beat Tap, Slap and Pop preserve all eight combinations. Legacy enum edits reconcile explicitly. GPIF tap uses retained note Tapped flags or a reported first-note flag normalization; a rest has an explicit tap omission. Authored Tapped and LeftHandTapped remain independent and unchanged by export.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.tap",
@@ -3482,6 +3482,11 @@
           "kind": "test",
           "reference": "TestConformanceSourceDistinctions",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabBeatTechniques",
+          "detail": "Original GP3 technique locations, literal combined GPIF source in both orders, and 32 beat/note flag combinations verified against raw pinned consumer facts."
         }
       ]
     },

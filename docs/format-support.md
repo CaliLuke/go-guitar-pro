@@ -294,15 +294,15 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
-| `BeatEffects` | `note-and-beat-semantics` | 13 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. |
+| `BeatEffects` | `note-and-beat-semantics` | 16 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 256 |
-| `normalized` | 36 |
-| `omitted` | 104 |
+| `preserved` | 259 |
+| `normalized` | 37 |
+| `omitted` | 103 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -311,7 +311,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 126 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 196 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 127 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 196 discovered public enum members.
 
 ## GPIF wire inventory
 

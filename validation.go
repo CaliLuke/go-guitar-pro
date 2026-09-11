@@ -406,6 +406,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.Effect.VibratoStrength > BeatVibratoWide {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.vibrato", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat vibrato %d is not defined", beat.Effect.VibratoStrength)})
 			}
+			if beat.Effect.SlapEffect > SlapEffectPopping {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.slap-effect", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("slap effect %d is not defined", beat.Effect.SlapEffect)})
+			}
 			if beat.Effect.RasgueadoPattern > RasgueadoPeami {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.rasgueado", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("rasgueado pattern %d is not defined", beat.Effect.RasgueadoPattern)})
 			}

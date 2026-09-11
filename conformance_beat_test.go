@@ -91,9 +91,17 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	for index, value := range []SlapEffect{SlapEffectNone, SlapEffectTapping, SlapEffectSlapping, SlapEffectPopping} {
 		probe := semanticValidPitchedGP8Song(t)
 		probe.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.SlapEffect = value
-		probeReport := PreflightExport(probe, ExportFormatGP8, ExportOptions{})
-		run.Enum([]string{"SlapEffect.SlapEffectNone", "SlapEffect.SlapEffectTapping", "SlapEffect.SlapEffectSlapping", "SlapEffect.SlapEffectPopping"}[index], hasExportCode(probeReport, "gp8.omit.slap-effect"), value != SlapEffectNone)
-		run.Omitted("BeatEffects.SlapEffect", BeatEffects{SlapEffect: value}.SlapEffect, value)
+		data, err := Export(probe, ExportFormatGP8)
+		if err != nil {
+			t.Fatal(err)
+		}
+		parsed, err := Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := parsed.Tracks[0].Measures[0].Voices[0].Beats[0].Effect.SlapEffect
+		run.Enum([]string{"SlapEffect.SlapEffectNone", "SlapEffect.SlapEffectTapping", "SlapEffect.SlapEffectSlapping", "SlapEffect.SlapEffectPopping"}[index], got, value)
+		run.Normalized("BeatEffects.SlapEffect", got, value)
 	}
 	for _, value := range []BeatStrokeDirection{BeatStrokeDirectionNone, BeatStrokeDirectionUp, BeatStrokeDirectionDown} {
 		run.ClaimPrimary(claimSite("pick-stroke", "import", "M10-BEAT-EFFECTS", "up and down pick strokes")).Preserved("BeatEffects.PickStroke", BeatEffects{PickStroke: value}.PickStroke, value)
@@ -143,7 +151,8 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	for _, source := range []struct{ name, want string }{{"BarreFret", "barre-fret"}, {"BarreString", "barre-half"}, {"Brush", "stroke-down"}, {"PickStroke", "pick-down"}, {"Slapped", "slap"}, {"Popped", "pop"}, {"VibratoWTremBar", "vibrato"}} {
 		direction, strength := "Down", "Wide"
 		fret, barreString := 3, float64(1)
-		property := gpifProperty{Name: source.name, Direction: &direction, Strength: &strength, Fret: &fret, String: &barreString}
+		enable := ""
+		property := gpifProperty{Enable: &enable, Name: source.name, Direction: &direction, Strength: &strength, Fret: &fret, String: &barreString}
 		beat := Beat{}
 		gpifApplyBeatEffects(&gpifBeat{Properties: gpifProperties{Properties: []gpifProperty{property}}}, &beat)
 		got := ""
@@ -156,9 +165,9 @@ func runConformanceBeatEffects(run *conformanceRun) {
 			got = "stroke-down"
 		case beat.Effect.PickStroke == BeatStrokeDirectionDown:
 			got = "pick-down"
-		case beat.Effect.SlapEffect == SlapEffectSlapping:
+		case beat.Effect.Slap:
 			got = "slap"
-		case beat.Effect.SlapEffect == SlapEffectPopping:
+		case beat.Effect.Pop:
 			got = "pop"
 		case beat.Effect.Vibrato:
 			got = "vibrato"
@@ -186,12 +195,12 @@ func runConformanceBeatEffects(run *conformanceRun) {
 	run.Field("BeatEffects.SlapEffect", beat.Effect.SlapEffect, SlapEffectPopping)
 	run.Preserved("BeatEffects.Vibrato", beat.Effect.Vibrato, true)
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.normalize.rasgueado-unspecified", "gp8.omit.slap-effect"} {
+	for _, code := range []string{"gp8.normalize.rasgueado-unspecified"} {
 		if !hasExportCode(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
 	}
-	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.normalize.rasgueado-unspecified", "gp8.omit.slap-effect"})
+	run.ClaimReport(claimSite("hairpins", "export", "M10-BEAT-EFFECTS", "all hairpins"), claimSite("fade-in", "export", "M10-BEAT-EFFECTS", "authored fade-in"), claimSite("beat-octave", "export", "M10-BEAT-EFFECTS", "all octave shifts")).Report("M10-BEAT-EFFECTS", reportCodes(report), []string{"gp8.normalize.rasgueado-unspecified"})
 	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: reportCodes(report)}})
 	if err != nil {
 		t.Fatal(err)

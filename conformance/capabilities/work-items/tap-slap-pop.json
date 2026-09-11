@@ -92,6 +92,11 @@
       "kind": "test",
       "reference": "TestConformanceSourceDistinctions",
       "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabBeatTechniques",
+      "detail": "Raw original/output consumer values and exact technique locations, including note independence."
     }
   ],
   "shared_files": [
@@ -99,8 +104,11 @@
     "gpif_audit.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Independent beat states and documented legacy reconciliation are implemented. All eight combinations and 32 beat/note combinations pass exact pinned consumer checks, including original GP3 and reordered combined GPIF sources. Explicit scoped reports cover required note flag additions, cleared beat conflicts and rest tap omission. Authored note flags remain unchanged. Awaiting fresh exact-commit review, integrated full gates and capability probe; issue remains open.",
+  "verification": [
+    "Public legacy export regression failed before implementation and passes afterward.",
+    "Focused public, matrix, raw pinned-consumer and inventory checks pass; full gates and capability probe assigned to parent integration."
+  ],
   "issue": {
     "number": 93,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/93",

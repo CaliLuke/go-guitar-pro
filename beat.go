@@ -79,8 +79,16 @@ type BeatEffects struct {
 	FadeIn bool
 	// Golpe is the authored beat-level golpe variant. It is independent from
 	// notes and other beat techniques, and direct edits control GP8 output.
-	Golpe      GolpeType
-	Hairpin    Hairpin
+	Golpe   GolpeType
+	Hairpin Hairpin
+	// Tap, Slap, and Pop are independent beat techniques. On imported beats,
+	// edits to these states take precedence over incompatible SlapEffect edits.
+	// An edit only to SlapEffect replaces all three states. Programmatic nonzero
+	// states take precedence; otherwise SlapEffect is the fallback. GPIF imports
+	// derive Tap from note Tapped properties without changing either note flag.
+	Tap, Slap, Pop bool
+	// SlapEffect is the legacy single-technique view. Imported combinations use
+	// Pop, then Slap, then Tap priority, independent of source property order.
 	SlapEffect SlapEffect
 	// VibratoStrength is the typed beat-wide vibrato view. For a programmatic
 	// score, a nonzero strength is authoritative and Vibrato=true is the legacy
@@ -91,6 +99,9 @@ type BeatEffects struct {
 	VibratoStrength BeatVibrato
 	Vibrato         bool
 
+	importedTechniques      beatTechniques
+	importedSlapEffect      SlapEffect
+	hasImportedTechniques   bool
 	importedRasgueado       RasgueadoPattern
 	importedHasRasgueado    bool
 	hasImportedRasgueado    bool
@@ -258,6 +269,7 @@ func (s *Song) readBeat(c *cursor, voice *Voice, start int64, trackIndex int) (i
 	}
 	beat.promoteLegacyTremoloPicking()
 	beat.Effect.rememberRasgueado()
+	beat.importLegacyTechniques()
 	if dbg {
 		fmt.Printf("    after notes pos=%d noteCount=%d\n", c.pos, len(beat.Notes))
 	}

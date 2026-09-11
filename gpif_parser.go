@@ -484,6 +484,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 											beat.Notes = append(beat.Notes, note)
 										}
 									}
+									beat.importGPIFTechniques()
 									gpifApplyTremoloPicking(b.Tremolo, &beat)
 									if len(beat.Notes) == 0 && !beat.DeadSlapped {
 										beat.Status = BeatStatusRest

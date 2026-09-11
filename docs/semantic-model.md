@@ -630,6 +630,25 @@ authoritative when nonzero and preserves `Slight` and `Wide` exactly. A true
 legacy `Vibrato` value falls back to `Slight` when the typed strength is absent.
 Beat-level vibrato uses the separate `BeatEffects.VibratoStrength` contract.
 
+`BeatEffects.Tap`, `Slap`, and `Pop` preserve independent beat techniques.
+GP3–5 imports map the legacy enum to one state. GPIF imports combine enabled
+Slapped/Popped properties and derive Tap from actual note Tapped properties.
+The legacy `SlapEffect` projection uses Pop, then Slap, then Tap priority.
+On imported beats, edits only to the legacy enum replace all three states;
+edits to the independent states control those states, including clearing.
+Incompatible edits to both views favor the independent states and report
+`gp8.normalize.beat-technique-authority`. Programmatic nonzero states take
+precedence; otherwise the legacy enum supplies the states.
+
+GPIF retains slap and pop as independent beat properties. Its pinned consumer
+requires a note Tapped property for beat tap. When needed, export adds that
+property to the first output note and reports `gp8.normalize.beat-tap-note-flag`.
+Export does not change the authored note. Tap on a rest reports
+`gp8.omit.beat-tap`; export does not add a note. Authored note Tapped flags remain
+independent and retained. If these flags conflict with a cleared beat Tap,
+`gp8.normalize.beat-tap-note-authority` reports the consumer's enabled beat Tap.
+LeftHandTapped remains independent in every combination.
+
 `NoteEffect.Hammer`, `Tapped`, and `LeftHandTapped` retain the GPIF
 `HopoOrigin`, `Tapped`, and `LeftHandTapped` properties independently, including
 when more than one is set. GP8 export writes each property independently. GPIF

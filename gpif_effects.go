@@ -124,9 +124,13 @@ func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
 				beat.Effect.HasRasgueado = beat.Effect.RasgueadoPattern != RasgueadoNone
 			}
 		case "Slapped":
-			beat.Effect.SlapEffect = SlapEffectSlapping
+			if p.Enable != nil {
+				beat.Effect.Slap = true
+			}
 		case "Popped":
-			beat.Effect.SlapEffect = SlapEffectPopping
+			if p.Enable != nil {
+				beat.Effect.Pop = true
+			}
 		case "VibratoWTremBar":
 			if p.Strength != nil {
 				switch *p.Strength {

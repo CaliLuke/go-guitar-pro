@@ -248,6 +248,14 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 		result.DeadSlapped = &struct{}{}
 	}
 	result.Golpe = gp8Golpe(beat.Effect.Golpe)
+	techniques, _ := beat.Effect.resolvedTechniques()
+	enableTechnique := ""
+	if techniques.slap {
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Slapped", Enable: &enableTechnique})
+	}
+	if techniques.pop {
+		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Popped", Enable: &enableTechnique})
+	}
 	pattern, _, _ := beat.Effect.resolvedRasgueado()
 	if token := gp8Rasgueado(pattern); token != "" {
 		result.Properties.Properties = append(result.Properties.Properties, gpifProperty{Name: "Rasgueado", Rasgueado: &token})
@@ -341,7 +349,11 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 
 	noteIDs := make([]string, 0, len(beat.Notes))
 	for noteIndex := range beat.Notes {
-		noteID, err := builder.addNote(trackIndex, staffStrings, &beat.Notes[noteIndex])
+		note := beat.Notes[noteIndex]
+		if noteIndex == 0 && techniques.tap && !beat.hasTappedNote() {
+			note.Effect.Tapped = true
+		}
+		noteID, err := builder.addNote(trackIndex, staffStrings, &note)
 		if err != nil {
 			return "", err
 		}

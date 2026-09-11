@@ -840,9 +840,7 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	} else if unspecified {
 		builder.addReport("gp8.normalize.rasgueado-unspecified", "rasgueado", ExportDispositionNormalized, location, "the unspecified legacy rasgueado boolean uses the pinned binary consumer default Ii finger pattern")
 	}
-	if beat.Effect.SlapEffect != SlapEffectNone {
-		builder.addReport("gp8.omit.slap-effect", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit slap, pop, or tap effects")
-	}
+	builder.reportBeatTechniques(beat, location)
 	if _, conflict := beat.Effect.resolvedVibrato(); conflict {
 		builder.addReport("gp8.normalize.beat-vibrato-authority", "beat-vibrato", ExportDispositionNormalized, location, "the typed beat vibrato takes precedence after incompatible edits to both typed and legacy views")
 	}

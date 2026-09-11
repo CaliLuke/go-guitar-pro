@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 74 | 15 | 8 | 1 |
 | model | 73 | 16 | 8 | 1 |
-| export | 52 | 28 | 16 | 2 |
+| export | 52 | 29 | 15 | 2 |
 
 All three stages have a supported rating in 52 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -345,9 +345,9 @@ Bounded work: [Preserve named rasgueado finger patterns](https://github.com/Cali
 
 Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Slap and pop share one SlapEffect value and cannot coexist. Separate note Tapped flags survive. GP8 omits the beat SlapEffect.
+Independent beat Tap, Slap and Pop preserve all eight combinations. Legacy enum edits reconcile explicitly. GPIF tap uses retained note Tapped flags or a reported first-note flag normalization; a rest has an explicit tap omission. Authored Tapped and LeftHandTapped remain independent and unchanged by export.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
