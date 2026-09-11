@@ -5,8 +5,8 @@
   "title": "Preserve metadata text in AlphaTab and verify legacy metadata losses",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -192,6 +192,11 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "runtime-review",
+      "reference": "conformance/capabilities/evidence/metadata-lyrics.json",
+      "detail": "Focused receipt from the normal pinned consumer and public exporter, with source hashes and scoped loss boundaries."
     }
   ],
   "shared_files": [
@@ -203,8 +208,12 @@
     "gpif_types.go",
     "song.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Supported GP8 metadata text uses CDATA or decimal character references, preserving line breaks, tabs, Unicode and XML characters in pinned AlphaTab. Joined notices and distinct Music/Tabber are independently tested. Boundary whitespace in escaped terminator/CR text receives a precise consumer normalization while XML/Go retain the full text. Legacy Writer, Comments, Date, clipboard provenance and notice slice boundaries remain explicit losses; export stays partial. Fresh independent review and combined full gates/probe remain pending with root; GitHub stays open.",
+  "verification": [
+    "Failing-before public API and raw pinned-consumer regressions reproduced, then pass after implementation.",
+    "Focused public API, pinned consumer, runtime semantic inventory and exact wire checks pass.",
+    "Full conformance/check.sh, capability probe and prek are assigned to root integration; independent exact-commit review pending."
+  ],
   "issue": {
     "number": 99,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/99",

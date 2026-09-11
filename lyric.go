@@ -4,7 +4,9 @@ package goguitarpro
 
 import "fmt"
 
-// Lyrics holds lyrics data.
+// Lyrics holds ordered score lyrics. GP8 projects assigned lines onto their
+// selected track when its explicit Track.Lyrics list is empty. Conflicting
+// explicit track lyrics take precedence and produce an export loss report.
 type Lyrics struct {
 	Lines []LyricLine
 	// TrackIndex is the zero-based track that receives these score-level lyrics.

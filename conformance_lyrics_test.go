@@ -40,7 +40,7 @@ func runConformanceLyricScopes(run *conformanceRun) {
 	rest.Text = "rest-only text"
 	song.Tracks[0].Staves[0].Measures = song.Tracks[0].Measures
 
-	run.Omitted("Song.Lyrics", song.Lyrics, Lyrics{TrackIndex: 0, Lines: []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}}})
+	run.Normalized("Song.Lyrics", song.Lyrics, Lyrics{TrackIndex: 0, Lines: []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}}})
 	run.Preserved("Lyrics.TrackIndex", song.Lyrics.TrackIndex, 0)
 	run.ClaimPrimary(claimSite("lyrics", "model", "M18-LYRIC-SCOPES", "distinct score, track, and rest text")).Preserved("Lyrics.Lines", song.Lyrics.Lines, []LyricLine{{StartMeasureIndex: 0, Text: "score-only one"}, {StartMeasureIndex: 0, Text: "score punctuation: [a], don't!"}, {StartMeasureIndex: 0, Text: "score 日本語"}})
 	for index, line := range song.Lyrics.Lines {

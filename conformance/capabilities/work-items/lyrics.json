@@ -5,8 +5,8 @@
   "title": "Export assigned legacy score lyrics as GPIF track lyrics",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex implement_preroll",
   "formats": [
     "gp3",
     "gp4",
@@ -87,6 +87,11 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "runtime-review",
+      "reference": "conformance/capabilities/evidence/metadata-lyrics.json",
+      "detail": "Focused receipt from the normal pinned consumer and public exporter, with source hashes and scoped loss boundaries."
     }
   ],
   "shared_files": [
@@ -96,8 +101,12 @@
     "gpif_parser.go",
     "gpif_types.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Assigned Song.Lyrics lines project in order to the selected GPIF track, with exact offsets and empty/Unicode text. Existing equivalent track lyrics deduplicate; conflicting explicit track lyrics win with a scoped omission. Unassigned lyrics remain omitted and invalid references are rejected. GP8 import exposes projected lines as Track.Lyrics. Pinned dispatch retains supported syllables; any beat lyric element suppresses all track dispatch and receives a per-track consumer loss. Escaped lyric text with boundary whitespace receives a precise normalization. Export remains partial. Fresh independent review and combined full gates/probe remain pending with root; GitHub stays open.",
+  "verification": [
+    "Failing-before public API and raw pinned-consumer regressions reproduced, then pass after implementation.",
+    "Focused public API, pinned consumer, runtime semantic inventory and exact wire checks pass.",
+    "Full conformance/check.sh, capability probe and prek are assigned to root integration; independent exact-commit review pending."
+  ],
   "issue": {
     "number": 98,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/98",

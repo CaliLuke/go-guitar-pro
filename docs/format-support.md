@@ -299,8 +299,8 @@ Every field also has one target conversion disposition. The gate compares this p
 | Target disposition | Fields |
 | --- | --- |
 | `preserved` | 254 |
-| `normalized` | 34 |
-| `omitted` | 106 |
+| `normalized` | 35 |
+| `omitted` | 105 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -309,7 +309,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 121 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 123 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -458,3 +458,5 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `trill-speed-target-limit-32` | `note-and-beat-semantics` | `TestConformanceTrillThirtySecond` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration32 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
 | `trill-speed-target-limit-64` | `note-and-beat-semantics` | `TestConformanceTrillSixtyFourth` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration64 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
 | `string-number-display` | `note-and-beat-semantics` | `TestConformanceStringNumberDisplay` | `TestAlphaTabStringNumberDisplay` | yes | Exact display flags, independent note occurrence edits, GPIF Enable presence and raw final consumer string/fret/MIDI facts. |
+| `metadata-text` | `score-core` | `TestConformanceMetadataText` | `TestAlphaTabMetadataText` | no | Exact raw consumer text including notices and tabber; precise boundary and legacy omissions. |
+| `assigned-lyrics` | `score-core` | `TestConformanceAssignedLyrics` | `TestAlphaTabAssignedLyrics` | no | Ordered source index conversion, explicit track authority, exact wire and final consumer dispatch with separate beat ownership. |

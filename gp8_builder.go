@@ -58,6 +58,7 @@ func buildGP8DocumentWithReport(song *Song, options GP8ExportOptions, report *Ex
 	if err := builder.buildScoreGraph(); err != nil {
 		return gpifDocument{}, err
 	}
+	builder.reportLyricConsumerLimits()
 	return builder.doc, nil
 }
 
@@ -131,7 +132,7 @@ func (builder *gp8Builder) buildScore() gpifScore {
 		}
 		break
 	}
-	return gpifScore{
+	score := gpifScore{
 		Title:        song.Name,
 		SubTitle:     song.Subtitle,
 		Artist:       song.Artist,
@@ -143,6 +144,21 @@ func (builder *gp8Builder) buildScore() gpifScore {
 		Instructions: song.Instructions,
 		Notices:      strings.Join(song.Notice, "\n"),
 	}
+	var trimmed []string
+	for _, field := range []struct{ name, value string }{
+		{"Title", score.Title}, {"SubTitle", score.SubTitle}, {"Artist", score.Artist},
+		{"Album", score.Album}, {"Words", score.Words}, {"Music", score.Music},
+		{"Copyright", score.Copyright}, {"Tabber", score.Tabber},
+		{"Instructions", score.Instructions}, {"Notices", score.Notices},
+	} {
+		if gpifTextConsumerTrims(field.value) {
+			trimmed = append(trimmed, field.name)
+		}
+	}
+	if len(trimmed) > 0 {
+		builder.addReport("gp8.normalize.metadata-text-consumer", "score-core", ExportDispositionNormalized, ScoreLocation{}, "pinned AlphaTab trims boundary whitespace from escaped metadata text in "+strings.Join(trimmed, ", ")+"; GPIF retains the full text")
+	}
+	return score
 }
 
 func buildGP8TempoAutomations(song *Song) gpifAutomations {
@@ -399,9 +415,9 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 			}
 		}
 	}
-	if len(track.Lyrics) > 0 {
-		result.Lyrics = &gpifLyrics{Dispatched: true, Lines: make([]gpifLyricLine, 0, len(track.Lyrics))}
-		for _, line := range track.Lyrics {
+	if lines := gp8ResolvedTrackLyrics(builder.song, trackIndex); len(lines) > 0 {
+		result.Lyrics = &gpifLyrics{Dispatched: true, Lines: make([]gpifLyricLine, 0, len(lines))}
+		for _, line := range lines {
 			result.Lyrics.Lines = append(result.Lyrics.Lines, gpifLyricLine(line))
 		}
 	}

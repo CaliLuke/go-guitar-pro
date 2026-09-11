@@ -321,7 +321,7 @@ func TestGP8ExportReconcilesSemanticAndLegacyTempo(t *testing.T) {
 
 func TestGP8StrictExportReportsScoreLyricsOmission(t *testing.T) {
 	song := syntheticGP8Song()
-	song.Lyrics = Lyrics{TrackIndex: 0, Lines: []LyricLine{{Text: "authored words"}}}
+	song.Lyrics = Lyrics{TrackIndex: -1, Lines: []LyricLine{{Text: "authored words"}}}
 	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{
 		LossPolicy: ExportLossPolicy{RequirePreservation: true},
 	})

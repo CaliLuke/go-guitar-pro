@@ -700,8 +700,36 @@ export function loadChordDiagramFacts(fixture) {
   return facts;
 }
 
-export function loadBeatLyricFacts(fixture) {
+export function loadMetadataTextFacts(fixture) {
   const score = loadScore(fixture);
+  return {
+    title: score.title, subtitle: score.subTitle, artist: score.artist,
+    album: score.album, words: score.words, music: score.music,
+    copyright: score.copyright, tabber: score.tab,
+    instructions: score.instructions, notices: score.notices
+  };
+}
+
+// Observe the raw lines delivered to the pinned consumer's normal dispatcher.
+// Call the original method so the final beat facts remain independent evidence.
+export function loadAssignedLyricFacts(fixture) {
+  const lines = [];
+  const apply = alphaTab.model.Track.prototype.applyLyrics;
+  let score;
+  alphaTab.model.Track.prototype.applyLyrics = function (lyrics) {
+    lines.push({track: this.index, lines: lyrics.map(line => ({text: line.text, offset: line.startBar}))});
+    return apply.call(this, lyrics);
+  };
+  try { score = loadScore(fixture); }
+  finally { alphaTab.model.Track.prototype.applyLyrics = apply; }
+  return {lines, beats: beatLyricFacts(score)};
+}
+
+export function loadBeatLyricFacts(fixture) {
+  return beatLyricFacts(loadScore(fixture));
+}
+
+function beatLyricFacts(score) {
   const facts = [];
   for (const track of score.tracks) {
     for (const staff of track.staves) {
@@ -1312,6 +1340,14 @@ function main() {
   }
   if (args[0] === '--chord-diagrams' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadChordDiagramFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--metadata-text' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadMetadataTextFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--assigned-lyrics' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadAssignedLyricFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--beat-lyrics' && args.length === 2) {

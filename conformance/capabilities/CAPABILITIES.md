@@ -22,7 +22,7 @@ All three stages have a supported rating in 51 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 370 input files. Probe freshness against the current source: `true`.
+The receipt contains 370 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -497,7 +497,7 @@ Metadata. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Most score metadata survives, but Go-emitted hexadecimal newline entities become NUL characters in pinned AlphaTab notices, even under strict export with no reports. #99 specifies retaining text encoding and raw consumer checks. Binary Writer, Comments, Date and clipboard provenance still lack equivalent GP8 output; Author and Writer remain distinct.
+Supported GP8 metadata text uses CDATA or decimal character references, preserving line breaks, tabs, Unicode and XML characters in pinned AlphaTab. Joined notices and distinct Music/Tabber are independently tested. Boundary whitespace in escaped terminator/CR text receives a precise consumer normalization while XML/Go retain the full text. Legacy Writer, Comments, Date, clipboard provenance and notice slice boundaries remain explicit losses; export stays partial.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -1137,7 +1137,7 @@ Text. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Ordered score/track lyric text and offsets parse. GP8 preserves track lyrics but omits binary score lyrics. Syllable dispatch is not a rendering service here.
+Assigned Song.Lyrics lines project in order to the selected GPIF track, with exact offsets and empty/Unicode text. Existing equivalent track lyrics deduplicate; conflicting explicit track lyrics win with a scoped omission. Unassigned lyrics remain omitted and invalid references are rejected. GP8 import exposes projected lines as Track.Lyrics. Pinned dispatch retains supported syllables; any beat lyric element suppresses all track dispatch and receives a per-track consumer loss. Escaped lyric text with boundary whitespace receives a precise normalization. Export remains partial.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

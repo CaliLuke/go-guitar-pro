@@ -1,0 +1,2383 @@
+{
+  "base_commit": "beba92344d2687d0d78296a874a5175df1000f6f",
+  "cases": [
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "artist": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "copyright": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "instructions": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "music": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "notices": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "subtitle": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "tabber": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "title": "line\nnext\t\u003c\u0026\u003e 日本語",
+        "words": "line\nnext\t\u003c\u0026\u003e 日本語"
+      },
+      "export_sha256": "3bf2f3f7cc6c3811adef59017195fb09f52b31eb462e8c96d5b04befdcd43103",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "line\nnext\t\u003c\u0026\u003e 日本語"
+      ],
+      "report": [
+        {
+          "Code": "gp8.normalize.notice-lines",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item"
+        }
+      ],
+      "scenario": "metadata line\nnext\t\u003c\u0026\u003e 日本語",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "SubTitle": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Artist": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Album": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Words": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Music": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "WordsAndMusic": "",
+          "Copyright": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Tabber": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Instructions": "line\nnext\t\u003c\u0026\u003e 日本語",
+          "Notices": "line\nnext\t\u003c\u0026\u003e 日本語"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": " \n\tboundary\t\n ",
+        "artist": " \n\tboundary\t\n ",
+        "copyright": " \n\tboundary\t\n ",
+        "instructions": " \n\tboundary\t\n ",
+        "music": " \n\tboundary\t\n ",
+        "notices": " \n\tboundary\t\n ",
+        "subtitle": " \n\tboundary\t\n ",
+        "tabber": " \n\tboundary\t\n ",
+        "title": " \n\tboundary\t\n ",
+        "words": " \n\tboundary\t\n "
+      },
+      "export_sha256": "e4fc2a0eaa0283980a499edbf35d5261be5d6726c37d8ce63b38d226a81278e3",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        " \n\tboundary\t\n "
+      ],
+      "report": [
+        {
+          "Code": "gp8.normalize.notice-lines",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item"
+        }
+      ],
+      "scenario": "metadata  \n\tboundary\t\n ",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": " \n\tboundary\t\n ",
+          "SubTitle": " \n\tboundary\t\n ",
+          "Artist": " \n\tboundary\t\n ",
+          "Album": " \n\tboundary\t\n ",
+          "Words": " \n\tboundary\t\n ",
+          "Music": " \n\tboundary\t\n ",
+          "WordsAndMusic": "",
+          "Copyright": " \n\tboundary\t\n ",
+          "Tabber": " \n\tboundary\t\n ",
+          "Instructions": " \n\tboundary\t\n ",
+          "Notices": " \n\tboundary\t\n "
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "A\u003c\u0026]]\u003eB",
+        "artist": "A\u003c\u0026]]\u003eB",
+        "copyright": "A\u003c\u0026]]\u003eB",
+        "instructions": "A\u003c\u0026]]\u003eB",
+        "music": "A\u003c\u0026]]\u003eB",
+        "notices": "A\u003c\u0026]]\u003eB",
+        "subtitle": "A\u003c\u0026]]\u003eB",
+        "tabber": "A\u003c\u0026]]\u003eB",
+        "title": "A\u003c\u0026]]\u003eB",
+        "words": "A\u003c\u0026]]\u003eB"
+      },
+      "export_sha256": "a8a30d03cee24c732835e76869b555aa567fad547834dd86572ab84a1a055744",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "A\u003c\u0026]]\u003eB"
+      ],
+      "report": null,
+      "scenario": "metadata A\u003c\u0026]]\u003eB",
+      "strict_bytes": 10592,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "A\u003c\u0026]]\u003eB",
+          "SubTitle": "A\u003c\u0026]]\u003eB",
+          "Artist": "A\u003c\u0026]]\u003eB",
+          "Album": "A\u003c\u0026]]\u003eB",
+          "Words": "A\u003c\u0026]]\u003eB",
+          "Music": "A\u003c\u0026]]\u003eB",
+          "WordsAndMusic": "",
+          "Copyright": "A\u003c\u0026]]\u003eB",
+          "Tabber": "A\u003c\u0026]]\u003eB",
+          "Instructions": "A\u003c\u0026]]\u003eB",
+          "Notices": "A\u003c\u0026]]\u003eB"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "A\u003c\u0026]]\u003eB",
+        "artist": "A\u003c\u0026]]\u003eB",
+        "copyright": "A\u003c\u0026]]\u003eB",
+        "instructions": "A\u003c\u0026]]\u003eB",
+        "music": "A\u003c\u0026]]\u003eB",
+        "notices": "A\u003c\u0026]]\u003eB",
+        "subtitle": "A\u003c\u0026]]\u003eB",
+        "tabber": "A\u003c\u0026]]\u003eB",
+        "title": "A\u003c\u0026]]\u003eB",
+        "words": "A\u003c\u0026]]\u003eB"
+      },
+      "export_sha256": "7d97be466cc043b642e7fb1de1e383dfbe49a397d657d1226deef48265c1c681",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "\n\tA\u003c\u0026]]\u003eB\t\n"
+      ],
+      "report": [
+        {
+          "Code": "gp8.normalize.notice-lines",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item"
+        },
+        {
+          "Code": "gp8.normalize.metadata-text-consumer",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "pinned AlphaTab trims boundary whitespace from escaped metadata text in Title, SubTitle, Artist, Album, Words, Music, Copyright, Tabber, Instructions, Notices; GPIF retains the full text"
+        }
+      ],
+      "scenario": "metadata \n\tA\u003c\u0026]]\u003eB\t\n",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 2 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "SubTitle": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Artist": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Album": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Words": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Music": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "WordsAndMusic": "",
+          "Copyright": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Tabber": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Instructions": "\n\tA\u003c\u0026]]\u003eB\t\n",
+          "Notices": "\n\tA\u003c\u0026]]\u003eB\t\n"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "carriage\rreturn",
+        "artist": "carriage\rreturn",
+        "copyright": "carriage\rreturn",
+        "instructions": "carriage\rreturn",
+        "music": "carriage\rreturn",
+        "notices": "carriage\rreturn",
+        "subtitle": "carriage\rreturn",
+        "tabber": "carriage\rreturn",
+        "title": "carriage\rreturn",
+        "words": "carriage\rreturn"
+      },
+      "export_sha256": "a66658fcf1a8bcf5f405b431e93f268a95daed3ec9cb2d9c1cb950048755dd56",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "carriage\rreturn"
+      ],
+      "report": null,
+      "scenario": "metadata carriage\rreturn",
+      "strict_bytes": 10612,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "carriage\rreturn",
+          "SubTitle": "carriage\rreturn",
+          "Artist": "carriage\rreturn",
+          "Album": "carriage\rreturn",
+          "Words": "carriage\rreturn",
+          "Music": "carriage\rreturn",
+          "WordsAndMusic": "",
+          "Copyright": "carriage\rreturn",
+          "Tabber": "carriage\rreturn",
+          "Instructions": "carriage\rreturn",
+          "Notices": "carriage\rreturn"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "boundary",
+        "artist": "boundary",
+        "copyright": "boundary",
+        "instructions": "boundary",
+        "music": "boundary",
+        "notices": "boundary",
+        "subtitle": "boundary",
+        "tabber": "boundary",
+        "title": "boundary",
+        "words": "boundary"
+      },
+      "export_sha256": "73ea7ccbffd86a3f65da005ab59a8eee599924597a862bbcee37d253b1b890e4",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "\rboundary\r\n"
+      ],
+      "report": [
+        {
+          "Code": "gp8.normalize.notice-lines",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item"
+        },
+        {
+          "Code": "gp8.normalize.metadata-text-consumer",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "pinned AlphaTab trims boundary whitespace from escaped metadata text in Title, SubTitle, Artist, Album, Words, Music, Copyright, Tabber, Instructions, Notices; GPIF retains the full text"
+        }
+      ],
+      "scenario": "metadata \rboundary\r\n",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 2 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "\rboundary\r\n",
+          "SubTitle": "\rboundary\r\n",
+          "Artist": "\rboundary\r\n",
+          "Album": "\rboundary\r\n",
+          "Words": "\rboundary\r\n",
+          "Music": "\rboundary\r\n",
+          "WordsAndMusic": "",
+          "Copyright": "\rboundary\r\n",
+          "Tabber": "\rboundary\r\n",
+          "Instructions": "\rboundary\r\n",
+          "Notices": "\rboundary\r\n"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "First notice\nSecond notice",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "81e8eac12c4cfe95d2a90902d270b8117ea328a407e73f6b38e6a32732c21552",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "First notice",
+        "Second notice"
+      ],
+      "report": null,
+      "scenario": "notices [First notice Second notice]",
+      "strict_bytes": 10513,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "First notice\nSecond notice"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "\nembedded\nline\n",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "0f9aaa3c6a3d9d9040b97653cc10f558106c15605bd318caf43ef4ed3e540ecb",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "",
+        "embedded\nline",
+        ""
+      ],
+      "report": [
+        {
+          "Code": "gp8.normalize.notice-lines",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 stores notices as newline-separated text and cannot retain an embedded line as one slice item"
+        }
+      ],
+      "scenario": "notices [ embedded\nline ]",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "\nembedded\nline\n"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "6e3f3bd7d70433d0e64454faaa9a395f836c3f9a81caf308779dd1293a380535",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        ""
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.empty-notice",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 cannot distinguish one empty notice from no notices"
+        }
+      ],
+      "scenario": "notices []",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "\nmiddle\n",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "03eb7da7cb2b1c2cede422e2076c4fa009130e64829e206f878612169bd0d71b",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "",
+        "middle",
+        ""
+      ],
+      "report": null,
+      "scenario": "notices [ middle ]",
+      "strict_bytes": 10495,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "\nmiddle\n"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "\n",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "87f8d9102fcc53c65bec2b61915b3667ee3e24061da5926815b80422b60e7d74",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "",
+        ""
+      ],
+      "report": null,
+      "scenario": "notices [ ]",
+      "strict_bytes": 10488,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "\n"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "First notice\nSecond notice",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "81e8eac12c4cfe95d2a90902d270b8117ea328a407e73f6b38e6a32732c21552",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "First notice",
+        "Second notice"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.writer",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 has no separate destination for the legacy writer field"
+        }
+      ],
+      "scenario": "legacy Writer",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "First notice\nSecond notice"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "First notice\nSecond notice",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "81e8eac12c4cfe95d2a90902d270b8117ea328a407e73f6b38e6a32732c21552",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "First notice",
+        "Second notice"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.comments",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit score comments"
+        }
+      ],
+      "scenario": "legacy Comments",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "First notice\nSecond notice"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "First notice\nSecond notice",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "81e8eac12c4cfe95d2a90902d270b8117ea328a407e73f6b38e6a32732c21552",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "First notice",
+        "Second notice"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.date",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the score date"
+        }
+      ],
+      "scenario": "legacy Date",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "First notice\nSecond notice"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "go-guitar-pro",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "First notice\nSecond notice",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Exporter fixture",
+        "words": ""
+      },
+      "export_sha256": "81e8eac12c4cfe95d2a90902d270b8117ea328a407e73f6b38e6a32732c21552",
+      "input_lyrics": {
+        "Lines": null,
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "First notice",
+        "Second notice"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.clipboard-range",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 output is a score and does not emit a clipboard range"
+        }
+      ],
+      "scenario": "legacy Clipboard",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Exporter fixture",
+          "SubTitle": "",
+          "Artist": "go-guitar-pro",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": "First notice\nSecond notice"
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [
+          {
+            "track": 1,
+            "lines": [
+              {
+                "Text": "第一 second",
+                "Offset": 1
+              },
+              {
+                "Text": "",
+                "Offset": 3
+              },
+              {
+                "Text": "troisième",
+                "Offset": 2
+              }
+            ]
+          }
+        ],
+        "beats": [
+          {
+            "track": 1,
+            "staff": 0,
+            "bar": 1,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "第一",
+              "",
+              ""
+            ],
+            "text": ""
+          },
+          {
+            "track": 1,
+            "staff": 0,
+            "bar": 2,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "second",
+              "",
+              "troisième"
+            ],
+            "text": ""
+          }
+        ]
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Original section and track-name regression",
+        "words": ""
+      },
+      "export_sha256": "a0e4438375b67bf1e145357b7fd9a72bfe11ab9a8c0b1fb64ebe8c09a36dcb96",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "第一 second",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "troisième",
+            "StartMeasureIndex": 2
+          }
+        ],
+        "TrackIndex": 1
+      },
+      "input_notices": null,
+      "report": null,
+      "scenario": "assigned ordered Unicode and empty",
+      "strict_bytes": 30256,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "Original section and track-name regression",
+          "SubTitle": "",
+          "Artist": "",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          },
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "第一 second",
+                  "Offset": 1
+                },
+                {
+                  "Text": "",
+                  "Offset": 3
+                },
+                {
+                  "Text": "troisième",
+                  "Offset": 2
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [
+          {
+            "track": 1,
+            "lines": [
+              {
+                "Text": "第一 second",
+                "Offset": 1
+              },
+              {
+                "Text": "",
+                "Offset": 3
+              },
+              {
+                "Text": "troisième",
+                "Offset": 2
+              }
+            ]
+          }
+        ],
+        "beats": [
+          {
+            "track": 1,
+            "staff": 0,
+            "bar": 1,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "第一",
+              "",
+              ""
+            ],
+            "text": ""
+          },
+          {
+            "track": 1,
+            "staff": 0,
+            "bar": 2,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "second",
+              "",
+              "troisième"
+            ],
+            "text": ""
+          }
+        ]
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Original section and track-name regression",
+        "words": ""
+      },
+      "export_sha256": "a0e4438375b67bf1e145357b7fd9a72bfe11ab9a8c0b1fb64ebe8c09a36dcb96",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "第一 second",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "troisième",
+            "StartMeasureIndex": 2
+          }
+        ],
+        "TrackIndex": 1
+      },
+      "input_notices": null,
+      "report": null,
+      "scenario": "equivalent deduplicated",
+      "strict_bytes": 30256,
+      "strict_error": "\u003cnil\u003e",
+      "wire": {
+        "Score": {
+          "Title": "Original section and track-name regression",
+          "SubTitle": "",
+          "Artist": "",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          },
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "第一 second",
+                  "Offset": 1
+                },
+                {
+                  "Text": "",
+                  "Offset": 3
+                },
+                {
+                  "Text": "troisième",
+                  "Offset": 2
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [
+          {
+            "track": 1,
+            "lines": [
+              {
+                "Text": "explicit",
+                "Offset": 0
+              }
+            ]
+          }
+        ],
+        "beats": [
+          {
+            "track": 1,
+            "staff": 0,
+            "bar": 0,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "explicit"
+            ],
+            "text": "independent text"
+          }
+        ]
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Original section and track-name regression",
+        "words": ""
+      },
+      "export_sha256": "5ca1aea4bcdfd63181efb00804f70bcb3bc69e58084c6a073af567090d6aeabb",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "第一 second",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "troisième",
+            "StartMeasureIndex": 2
+          }
+        ],
+        "TrackIndex": 1
+      },
+      "input_notices": null,
+      "report": [
+        {
+          "Code": "gp8.omit.score-lyrics",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "explicit track lyrics take precedence over conflicting score lyrics"
+        }
+      ],
+      "scenario": "explicit conflict",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Original section and track-name regression",
+          "SubTitle": "",
+          "Artist": "",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          },
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "explicit",
+                  "Offset": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Original section and track-name regression",
+        "words": ""
+      },
+      "export_sha256": "c80a44c8057ea7dc9f96b0889dc16cb692a2467d42d256da754451404b3834af",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "第一 second",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "troisième",
+            "StartMeasureIndex": 2
+          }
+        ],
+        "TrackIndex": -1
+      },
+      "input_notices": null,
+      "report": [
+        {
+          "Code": "gp8.omit.score-lyrics",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 cannot assign score lyrics without a valid selected track"
+        }
+      ],
+      "scenario": "unassigned",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Original section and track-name regression",
+          "SubTitle": "",
+          "Artist": "",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          },
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [],
+        "beats": [
+          {
+            "track": 0,
+            "staff": 0,
+            "bar": 0,
+            "voice": 0,
+            "beat": 0,
+            "lyrics": [
+              "independent beat",
+              "日本語"
+            ],
+            "text": ""
+          }
+        ]
+      },
+      "consumer_metadata": {
+        "album": "",
+        "artist": "",
+        "copyright": "",
+        "instructions": "",
+        "music": "",
+        "notices": "",
+        "subtitle": "",
+        "tabber": "",
+        "title": "Original section and track-name regression",
+        "words": ""
+      },
+      "export_sha256": "a70e30bf6906f29e4b8392477b1fa309831051708cc0ed3092b43a5253e6e248",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "第一 second",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "troisième",
+            "StartMeasureIndex": 2
+          }
+        ],
+        "TrackIndex": 1
+      },
+      "input_notices": null,
+      "report": [
+        {
+          "Code": "gp8.omit.track-lyrics-consumer-dispatch",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "pinned AlphaTab skips all track lyric dispatch when any beat lyric element is present; GPIF retains the independent track and beat lyrics"
+        }
+      ],
+      "scenario": "global beat suppression",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 1 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Original section and track-name regression",
+          "SubTitle": "",
+          "Artist": "",
+          "Album": "",
+          "Words": "",
+          "Music": "",
+          "WordsAndMusic": "",
+          "Copyright": "",
+          "Tabber": "",
+          "Instructions": "",
+          "Notices": ""
+        },
+        "Tracks": [
+          {
+            "Lyrics": null
+          },
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "第一 second",
+                  "Offset": 1
+                },
+                {
+                  "Text": "",
+                  "Offset": 3
+                },
+                {
+                  "Text": "troisième",
+                  "Offset": 2
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [
+          {
+            "track": 0,
+            "lines": [
+              {
+                "Text": "Line1",
+                "Offset": 0
+              },
+              {
+                "Text": "Line2",
+                "Offset": 1
+              },
+              {
+                "Text": "Line3",
+                "Offset": 2
+              },
+              {
+                "Text": "Line4",
+                "Offset": 3
+              },
+              {
+                "Text": "Line5",
+                "Offset": 4
+              }
+            ]
+          }
+        ],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "Album",
+        "artist": "Artist",
+        "copyright": "Copyright",
+        "instructions": "Instructions",
+        "music": "Music",
+        "notices": "Notice1\nNotice2",
+        "subtitle": "Subtitle",
+        "tabber": "",
+        "title": "Title",
+        "words": "Music"
+      },
+      "export_sha256": "ded0659dfb5ec245d89c77a71ff20fca271bb284d5a2e4414e03b86ed95be0c5",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "Line1",
+            "StartMeasureIndex": 0
+          },
+          {
+            "Text": "Line2",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "Line3",
+            "StartMeasureIndex": 2
+          },
+          {
+            "Text": "Line4",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "Line5",
+            "StartMeasureIndex": 4
+          }
+        ],
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "Notice1",
+        "Notice2"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.writer",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 has no separate destination for the legacy writer field"
+        },
+        {
+          "Code": "gp8.normalize.source-version",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 output uses the writer version instead of source-format provenance"
+        },
+        {
+          "Code": "gp8.omit.track-display-settings",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 1,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 2,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 3,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 4,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        }
+      ],
+      "scenario": "source testdata/gp4/score-info.gp4",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 8 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Title",
+          "SubTitle": "Subtitle",
+          "Artist": "Artist",
+          "Album": "Album",
+          "Words": "Music",
+          "Music": "Music",
+          "WordsAndMusic": "",
+          "Copyright": "Copyright",
+          "Tabber": "",
+          "Instructions": "Instructions",
+          "Notices": "Notice1\nNotice2"
+        },
+        "Tracks": [
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "Line1",
+                  "Offset": 0
+                },
+                {
+                  "Text": "Line2",
+                  "Offset": 1
+                },
+                {
+                  "Text": "Line3",
+                  "Offset": 2
+                },
+                {
+                  "Text": "Line4",
+                  "Offset": 3
+                },
+                {
+                  "Text": "Line5",
+                  "Offset": 4
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "consumer_lyrics": {
+        "lines": [
+          {
+            "track": 0,
+            "lines": [
+              {
+                "Text": "Line1",
+                "Offset": 0
+              },
+              {
+                "Text": "Line2",
+                "Offset": 1
+              },
+              {
+                "Text": "Line3",
+                "Offset": 2
+              },
+              {
+                "Text": "Line4",
+                "Offset": 3
+              },
+              {
+                "Text": "Line5",
+                "Offset": 4
+              }
+            ]
+          }
+        ],
+        "beats": []
+      },
+      "consumer_metadata": {
+        "album": "Album",
+        "artist": "Artist",
+        "copyright": "Copyright",
+        "instructions": "Instructions",
+        "music": "Music",
+        "notices": "Notice1\nNotice2",
+        "subtitle": "Subtitle",
+        "tabber": "",
+        "title": "Title",
+        "words": "Words"
+      },
+      "export_sha256": "179bd7311a6411f219bb6d64d80bb5996f293a9009bfac346ba8cf13dcc9c211",
+      "input_lyrics": {
+        "Lines": [
+          {
+            "Text": "Line1",
+            "StartMeasureIndex": 0
+          },
+          {
+            "Text": "Line2",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "Line3",
+            "StartMeasureIndex": 2
+          },
+          {
+            "Text": "Line4",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "Line5",
+            "StartMeasureIndex": 4
+          }
+        ],
+        "TrackIndex": 0
+      },
+      "input_notices": [
+        "Notice1",
+        "Notice2"
+      ],
+      "report": [
+        {
+          "Code": "gp8.omit.master-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy master RSE effect"
+        },
+        {
+          "Code": "gp8.omit.page-setup",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit page dimensions, margins, header selections, or text templates"
+        },
+        {
+          "Code": "gp8.omit.writer",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 has no separate destination for the legacy writer field"
+        },
+        {
+          "Code": "gp8.normalize.source-version",
+          "Feature": "score-core",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 output uses the writer version instead of source-format provenance"
+        },
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        },
+        {
+          "Code": "gp8.omit.track-display-settings",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+        },
+        {
+          "Code": "gp8.omit.track-rse",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer does not emit the legacy track RSE record"
+        },
+        {
+          "Code": "gp8.omit.track-display-settings",
+          "Feature": "score-core",
+          "Disposition": "omitted",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 0,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 1,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 1,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 1,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 1,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 2,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 2,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 2,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 2,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 3,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 3,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 3,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 3,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 4,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 0,
+            "Staff": 0,
+            "Measure": 4,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 4,
+            "Voice": 0,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        },
+        {
+          "Code": "gp8.normalize.empty-beat",
+          "Feature": "note-and-beat-semantics",
+          "Disposition": "normalized",
+          "Location": {
+            "Track": 1,
+            "Staff": 0,
+            "Measure": 4,
+            "Voice": 1,
+            "Beat": 0,
+            "Note": 0
+          },
+          "Reason": "GP8 writer emits an explicit empty beat as a rest"
+        }
+      ],
+      "scenario": "source testdata/gp5/score-info.gp5",
+      "strict_bytes": 0,
+      "strict_error": "export loss policy rejected 28 conversion(s)",
+      "wire": {
+        "Score": {
+          "Title": "Title",
+          "SubTitle": "Subtitle",
+          "Artist": "Artist",
+          "Album": "Album",
+          "Words": "Words",
+          "Music": "Music",
+          "WordsAndMusic": "",
+          "Copyright": "Copyright",
+          "Tabber": "",
+          "Instructions": "Instructions",
+          "Notices": "Notice1\nNotice2"
+        },
+        "Tracks": [
+          {
+            "Lyrics": {
+              "Dispatched": true,
+              "Lines": [
+                {
+                  "Text": "Line1",
+                  "Offset": 0
+                },
+                {
+                  "Text": "Line2",
+                  "Offset": 1
+                },
+                {
+                  "Text": "Line3",
+                  "Offset": 2
+                },
+                {
+                  "Text": "Line4",
+                  "Offset": 3
+                },
+                {
+                  "Text": "Line5",
+                  "Offset": 4
+                }
+              ]
+            }
+          },
+          {
+            "Lyrics": null
+          }
+        ]
+      }
+    }
+  ],
+  "issues": [
+    99,
+    98
+  ],
+  "oracle": {
+    "importerSettings": {
+      "beatTextAsLyrics": false,
+      "encoding": "utf-8",
+      "maxDecodingBufferSize": 128000000,
+      "mergePartGroupsInMusicXml": false
+    },
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "package": "@coderline/alphatab",
+    "schemaVersion": 1,
+    "sourceRef": "v1.8.4",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "version": "1.8.4"
+  },
+  "schema_version": 1,
+  "sources": [
+    {
+      "consumer": {
+        "lines": [
+          {
+            "track": 0,
+            "lines": [
+              {
+                "Text": "Line1",
+                "Offset": 0
+              },
+              {
+                "Text": "Line2",
+                "Offset": 1
+              },
+              {
+                "Text": "Line3",
+                "Offset": 2
+              },
+              {
+                "Text": "Line4",
+                "Offset": 3
+              },
+              {
+                "Text": "Line5",
+                "Offset": 4
+              }
+            ]
+          }
+        ],
+        "beats": []
+      },
+      "path": "testdata/gp4/score-info.gp4",
+      "public": {
+        "Lines": [
+          {
+            "Text": "Line1",
+            "StartMeasureIndex": 0
+          },
+          {
+            "Text": "Line2",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "Line3",
+            "StartMeasureIndex": 2
+          },
+          {
+            "Text": "Line4",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "Line5",
+            "StartMeasureIndex": 4
+          }
+        ],
+        "TrackIndex": 0
+      },
+      "sha256": "ba4bd24ca5f5408c18fc318eba2569ba46fb55d7e83ba8f85bc0d2e90d0f3116"
+    },
+    {
+      "consumer": {
+        "lines": [
+          {
+            "track": 0,
+            "lines": [
+              {
+                "Text": "Line1",
+                "Offset": 0
+              },
+              {
+                "Text": "Line2",
+                "Offset": 1
+              },
+              {
+                "Text": "Line3",
+                "Offset": 2
+              },
+              {
+                "Text": "Line4",
+                "Offset": 3
+              },
+              {
+                "Text": "Line5",
+                "Offset": 4
+              }
+            ]
+          }
+        ],
+        "beats": []
+      },
+      "path": "testdata/gp5/score-info.gp5",
+      "public": {
+        "Lines": [
+          {
+            "Text": "Line1",
+            "StartMeasureIndex": 0
+          },
+          {
+            "Text": "Line2",
+            "StartMeasureIndex": 1
+          },
+          {
+            "Text": "Line3",
+            "StartMeasureIndex": 2
+          },
+          {
+            "Text": "Line4",
+            "StartMeasureIndex": 3
+          },
+          {
+            "Text": "Line5",
+            "StartMeasureIndex": 4
+          }
+        ],
+        "TrackIndex": 0
+      },
+      "sha256": "c36e489d5d0aaeb135d7ef6798a1974b1b2e1c9f6411ac4e89393b51aeced70f"
+    }
+  ],
+  "status": "implemented-awaiting-independent-review"
+}

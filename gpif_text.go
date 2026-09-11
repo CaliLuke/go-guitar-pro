@@ -9,7 +9,7 @@ import (
 	"unicode"
 )
 
-// CDATA keeps literal section and name text intact in the pinned consumer.
+// CDATA keeps authored text intact in the pinned consumer when possible.
 type gpifCDATA string
 
 func (text gpifCDATA) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
@@ -59,4 +59,32 @@ func gpifTextConsumerTrims(text string) bool {
 
 func gpifTextNeedsEscaping(text string) bool {
 	return strings.Contains(text, "]]>") || strings.ContainsRune(text, '\r')
+}
+
+func (score gpifScore) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
+	return encoder.EncodeElement(struct {
+		Title         gpifCDATA `xml:"Title"`
+		SubTitle      gpifCDATA `xml:"SubTitle"`
+		Artist        gpifCDATA `xml:"Artist"`
+		Album         gpifCDATA `xml:"Album"`
+		Words         gpifCDATA `xml:"Words"`
+		Music         gpifCDATA `xml:"Music"`
+		WordsAndMusic gpifCDATA `xml:"WordsAndMusic"`
+		Copyright     gpifCDATA `xml:"Copyright"`
+		Tabber        gpifCDATA `xml:"Tabber"`
+		Instructions  gpifCDATA `xml:"Instructions"`
+		Notices       gpifCDATA `xml:"Notices"`
+	}{
+		gpifCDATA(score.Title), gpifCDATA(score.SubTitle), gpifCDATA(score.Artist),
+		gpifCDATA(score.Album), gpifCDATA(score.Words), gpifCDATA(score.Music),
+		gpifCDATA(score.WordsAndMusic), gpifCDATA(score.Copyright), gpifCDATA(score.Tabber),
+		gpifCDATA(score.Instructions), gpifCDATA(score.Notices),
+	}, start)
+}
+
+func (line gpifLyricLine) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
+	return encoder.EncodeElement(struct {
+		Text   gpifCDATA `xml:"Text"`
+		Offset int       `xml:"Offset"`
+	}{gpifCDATA(line.Text), line.Offset}, start)
 }

@@ -113,9 +113,14 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 	if song.BackingTrack != nil && !gp8EmbedsBackingTrack(song.BackingTrack) {
 		add("gp8.omit.backing-track", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit backing-track assets")
 	}
-	if len(song.Lyrics.Lines) != 0 {
-		add("gp8.omit.score-lyrics", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit binary score lyrics")
+	if reason := gp8ScoreLyricsLoss(song); reason != "" {
+		location := ScoreLocation{}
+		if song.Lyrics.TrackIndex >= 0 {
+			location.Track = song.Lyrics.TrackIndex
+		}
+		add("gp8.omit.score-lyrics", "score-core", ExportDispositionOmitted, location, reason)
 	}
+
 	for _, point := range song.SyncPoints {
 		location := ScoreLocation{Measure: point.Bar}
 		if point.AudioFrame != AudioFrame(point.FrameOffset) {

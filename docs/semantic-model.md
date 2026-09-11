@@ -749,14 +749,40 @@ sound references, unknown automation types, and unsupported channel-strip
 types. They also report linear tempo or sound interpolation because the public
 records do not contain an interpolation field.
 
-Score lyrics and track lyrics have separate scopes. Binary score lyrics expose
+Score lyrics and track lyrics have separate public scopes. Binary score lyrics expose
 `Lyrics.TrackIndex` and `LyricLine.StartMeasureIndex` as zero-based references;
 `-1` means that the source stored its unassigned zero value. Line order is the
-slice order and is not duplicated in a second public number field. GP8
-preserves ordered track lyrics and their offsets, but it does not emit binary
-score lyrics. Export reports the score-level omission. Beat text remains
-separate and is preserved on rests. An undispatched GPIF lyric source produces
+slice order. GP8 projects assigned score lyrics onto the selected track when
+its explicit `Track.Lyrics` list is empty. Equivalent lists produce one copy.
+If the lists conflict, explicit track lyrics win and `gp8.omit.score-lyrics`
+reports the omitted score representation. Unassigned score lyrics keep that loss.
+Invalid track references are rejected. Export does not modify either list.
+Clear explicit track lyrics to restore the score fallback; clear both to remove it.
+GP8 import exposes projected lines as `Track.Lyrics`, including empty text and exact offsets.
+
+Beat lyrics and `Beat.Text` remain separate from these ordered track lines.
+Pinned AlphaTab suppresses every track lyric dispatch when any beat lyric element exists.
+Export reports `gp8.omit.track-lyrics-consumer-dispatch` for each affected track.
+Both scopes remain intact in GPIF and Go. Without beat lyrics, the consumer
+assigns track syllables to first-staff beats, starting at each line's measure offset.
+It skips rests and empty beats, interprets lyric punctuation, and drops unplaced syllables.
+It does not expose the raw line table after dispatch. Empty lines retain wire
+shape but contribute no syllables. An undispatched GPIF lyric source still produces
 a loss diagnostic because the public model does not retain that source state.
+
+Metadata and track lyric text use the shared GPIF text encoder. CDATA preserves
+line breaks, tabs, Unicode, XML characters, and boundary whitespace.
+Text containing a CDATA terminator or carriage return uses decimal character references.
+This retains the full XML and Go value. Pinned AlphaTab trims its boundary whitespace.
+`gp8.normalize.metadata-text-consumer` identifies affected metadata fields;
+`gp8.normalize.track-lyrics-text-consumer` identifies affected track lyric lines.
+Strict preservation refuses these normalizations without the exact allowance.
+
+Notices join with literal line separators. Leading and trailing empty entries remain
+representable, but an embedded newline loses the original slice boundary.
+That case retains `gp8.normalize.notice-lines`. One empty notice retains
+`gp8.omit.empty-notice`. Writer, Comments, Date, and clipboard ranges keep their
+independent omissions; they do not replace Music, Tabber, or other supported credits.
 
 An enabled local backing track must refer to an archive entry with audio data.
 Its frame padding must fit in a signed 64-bit frame count. Sync points preserve
