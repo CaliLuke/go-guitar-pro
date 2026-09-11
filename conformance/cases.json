@@ -51,8 +51,8 @@
     {
       "id": "gp7-double-dotted-timing",
       "fixture": "testdata/gp7/colors.gp",
-      "features": ["rhythm", "timing"],
-      "issues": [19, 20]
+      "features": ["note-and-beat-semantics", "rhythm", "timing"],
+      "issues": [19, 20, 80]
     },
     {
       "id": "gp7-tenor-clef",

@@ -5,8 +5,8 @@
   "title": "Preserve dead-slapped beats without reducing them to rests",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_80_dead_slap",
   "formats": [
     "gp7",
     "gp8"
@@ -22,7 +22,15 @@
     "Compare an ordinary rest, empty beat and dead slap without the existing broad dead-slap normalization hiding the mark.",
     "The exact target annotation survives independently and no note is fabricated to simulate it."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "dead notes and NoteTypeDead",
+    "tap, slap, and pop techniques",
+    "general rest or empty-beat redesign",
+    "new beat status values",
+    "synthetic notes",
+    "GP3 through GP5 source support",
+    "rendering, MIDI, and playback"
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -48,24 +56,29 @@
     {
       "kind": "source",
       "reference": "gpif_types.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Presence-sensitive DeadSlapped decoding accepts any present element spelling."
     },
     {
       "kind": "source",
       "reference": "conformance/oracle.mjs",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Pinned facts retain deadSlapped, isEmpty, isRest, and note counts without broad rest normalization."
     },
     {
-      "kind": "probe",
-      "reference": "testdata/gp7/colors.gp:dead-slap",
-      "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[1].deadSlapped. Source and target values are stored in probe_comparison."
+      "kind": "test",
+      "reference": "TestConformanceDeadSlap",
+      "detail": "Covers actual fixtures, rest/empty/dead structure, presence spelling, direct edits, wire shape, Go reimport, nonmutation, and strict policy."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesDeadSlap",
+      "detail": "Pinned AlphaTab checks the colors occurrence and all nine dead-slap fixture occurrences before and after export."
     }
   ],
   "shared_files": [
     "conformance/oracle.mjs",
     "gpif_types.go"
   ],
-  "resolution": null,
+  "resolution": "Added Beat.DeadSlapped as an independent authored beat marker. GPIF element presence maps to true even when element text says false. Note-free marked beats import as BeatStatusNormal; ordinary note-free beats remain rests. GP8 writes DeadSlapped iff the field is true, writes no synthetic Notes element, and does not mutate status, notes, note kinds, or tap/slap/pop effects. M10-DEAD-SLAP covers actual GP7 colors and dead-slap fixtures, the ordinary-rest/explicit-empty/dead-slap distinction, marker absence and text-bearing presence, direct toggles, exact wire output, Go reimport, nonmutation, strict parsing, binary-source exclusion, and pinned AlphaTab deadSlapped/isEmpty/isRest/note-count facts. The 364-fixture structural probe retained the exact fixture set and changed only the two dead-slap comparisons: colors.gp moved from 1/0 different to 1/1 equal-nondefault and dead-slap.gp moved from 9/0 different to 9/9 equal-nondefault. Recognizing the marker removed exactly one and five corresponding generic unknown-element diagnostics; no report or unrelated capability comparison changed. GP3 through GP5 and rendering/playback remain outside this contract.",
   "verification": [],
   "issue": {
     "number": 80,

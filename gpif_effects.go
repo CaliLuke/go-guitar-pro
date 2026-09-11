@@ -10,6 +10,7 @@ import (
 )
 
 func gpifApplyBeatEffects(b *gpifBeat, beat *Beat) {
+	beat.DeadSlapped = b.DeadSlapped != nil
 	if b.Lyrics != nil {
 		beat.Lyrics = append([]string{}, b.Lyrics.Lines...)
 	}

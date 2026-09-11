@@ -113,10 +113,14 @@ type Beat struct {
 	// means that the GPIF Lyrics element was absent. A non-nil empty slice means
 	// that an empty Lyrics element was authored. The slice is independent from
 	// Beat.Text, Track.Lyrics, and Song.Lyrics, and direct edits are authoritative.
-	Lyrics   []string
-	Text     string
-	Notes    []Note
-	Duration Duration
+	Lyrics []string
+	// DeadSlapped preserves an authored beat-level dead-slap mark. It is
+	// independent from beat status, note kind, and tap/slap/pop effects. Direct
+	// edits are authoritative for GP8 export; false means that no mark is written.
+	DeadSlapped bool
+	Text        string
+	Notes       []Note
+	Duration    Duration
 	// Dynamics is the beat-wide MIDI velocity authored by Guitar Pro. Zero means
 	// absent and lets export use the first note velocity. A nonzero value must be
 	// within 1..127. GP3-5 stores the value on notes, but the last explicit value

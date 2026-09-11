@@ -53,6 +53,14 @@ authored empty element. Direct public edits are authoritative for GP8 export.
 Each parsed occurrence owns independent lyric storage, even when multiple
 voices reference one GPIF beat definition.
 
+`Beat.DeadSlapped` is the independent authored beat-level dead-slap marker.
+GPIF presence is authoritative regardless of element text. A note-free marked
+beat imports with `BeatStatusNormal`; an ordinary note-free unmarked beat
+imports as `BeatStatusRest`. Direct edits to the marker control GP8 output and
+do not rewrite `Beat.Status`, add notes, or change note kinds and tap/slap/pop
+effects. GP3 through GP5 do not supply this marker. Explicit empty beats retain
+their existing GP8 normalization to rests.
+
 `Track.Staves` preserves all staff data. `Track.Measures` and `Track.Strings`
 are compatibility views of the first staff. A non-nil compatibility slice is
 the authority for staff 0. This rule applies to finalization, validation, and

@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 67 | 16 | 16 | 2 |
-| model | 66 | 17 | 17 | 1 |
-| export | 44 | 23 | 31 | 3 |
+| import | 68 | 16 | 15 | 2 |
+| model | 67 | 17 | 16 | 1 |
+| export | 45 | 23 | 30 | 3 |
 
-All three stages have a supported rating in 44 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 45 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -50,7 +50,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Chord name, diagram and fingering visibility | 3 | 354 | 3 | 0 | 7 |
 | Numbered staff notation | 3 | 354 | 3 | 0 | 7 |
 | Authored timer marks | 2 | 355 | 2 | 0 | 7 |
-| Dead-slapped beats | 2 | 355 | 2 | 0 | 7 |
 | Golpe thumb and finger marks | 2 | 355 | 2 | 0 | 7 |
 | Explicit note string-number display | 1 | 356 | 1 | 0 | 7 |
 | Fade out and volume swell | 1 | 356 | 1 | 0 | 7 |
@@ -63,6 +62,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Brush and arpeggio timing | 21 | 337 | 0 | 0 | 7 |
 | Common and per-staff capo | 1 | 356 | 0 | 0 | 7 |
 | Common-time and cut-time notation | 0 | 357 | 0 | 0 | 7 |
+| Dead-slapped beats | 2 | 355 | 0 | 0 | 7 |
 | Fade in | 17 | 343 | 0 | 0 | 7 |
 | Fermata placement, kind and length | 4 | 353 | 0 | 0 | 7 |
 | Free-time bars | 1 | 356 | 0 | 0 | 7 |
@@ -255,11 +255,11 @@ Bounded work: [Preserve authored brush and arpeggio timing](https://github.com/C
 
 Expression. Priority 2. Formats: gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-GPIF DeadSlapped is absent. Existing oracle normalization treats an empty dead slap as a rest, which does not preserve the mark.
+Beat.DeadSlapped preserves GPIF marker presence independently from status, notes, dead-note kinds, and tap/slap/pop effects. Note-free marked beats import as normal and GP8 writes the marker without synthetic notes.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: M10-DEAD-SLAP checks actual GP7 fixtures, rest/empty/dead distinctions, marker spellings, direct edits, exact GP8 wire shape, Go reimport, nonmutation, strict policy, and pinned AlphaTab facts.
 
 Bounded work: [Preserve dead-slapped beats without reducing them to rests](https://github.com/CaliLuke/go-guitar-pro/issues/80).
 

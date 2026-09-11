@@ -125,7 +125,7 @@ assert.equal(normalizeBeatStatus({ isEmpty: true, isRest: false }), 'empty');
 assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: true }), 'rest');
 assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: false }), 'normal');
 assert.equal(normalizeBeatStatus({ isEmpty: true, isRest: true }), 'unknown:empty+rest');
-assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: false, deadSlapped: true, notes: [] }), 'rest');
+assert.equal(normalizeBeatStatus({ isEmpty: false, isRest: false, deadSlapped: true, notes: [] }), 'normal');
 assert.equal(normalizeNoteKind({ isDead: true, isTieDestination: false }), 'dead');
 assert.equal(normalizeNoteKind({ isDead: false, isTieDestination: true }), 'tie');
 assert.equal(normalizeNoteKind({ isDead: false, isTieDestination: false }), 'normal');

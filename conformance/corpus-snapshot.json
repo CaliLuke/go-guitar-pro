@@ -6341,6 +6341,7 @@
     {
       "path": "testdata/gp7/colors.gp",
       "features": [
+        "note-and-beat-semantics",
         "rhythm",
         "timing"
       ],
@@ -6452,10 +6453,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 39,
+          "count": 38,
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"2\"]/Chord/KeyNote",
           "objectId": "2",
-          "locationsSha256": "50921f2e24212fe34799eab83d376662aac9d40bfa9df14238f1d2a9b0fc9a19"
+          "locationsSha256": "bb2b6031de930e2c8b49e6dfa516478186ddc6913900ff202153f2302c2d3f41"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",
@@ -6753,10 +6754,10 @@
         {
           "code": "GPIF.UnknownElement.NoteAndBeat",
           "kind": "unknown-syntax",
-          "count": 13,
+          "count": 8,
           "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/ConcertPitchStemOrientation",
           "objectId": "0",
-          "locationsSha256": "6fec12456c39cd93d75b55c515cc7c5921bc6806acaf6da5d09973a14fcc3c93"
+          "locationsSha256": "2a25fd0edf3ffe9dbb44df3322de50fa68b63ef698ef813dc49564fddc7135e7"
         },
         {
           "code": "GPIF.UnknownElement.ScoreCore",

@@ -264,7 +264,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Measure` | `timing` | 11 authored, 0 compatibility, 4 derived, 0 out-of-scope | The measure contains authored notation, first-staff sustain markers, and finalized ownership and timing. |
 | `SustainPedalMarker` | `sustain-pedal` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The marker preserves one ordered measure-relative sustain-pedal action. |
 | `Voice` | `note-and-beat-semantics` | 2 authored, 0 compatibility, 1 derived, 0 out-of-scope | The voice owns authored beats. MeasureIndex is finalized ownership data. |
-| `Beat` | `note-and-beat-semantics` | 15 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, legato endpoints, and ordered lyric lines are independent authored marks. |
+| `Beat` | `note-and-beat-semantics` | 16 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
 | `BeatLegato` | `legato-slurs` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | The occurrence-owned legato record preserves independent authored phrase endpoints, including excerpt boundaries. |
 | `BeatDisplay` | `note-and-beat-semantics` | 7 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat display record is authored notation data. |
 | `BeatEffects` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The beat effect record contains authored notation and playback effects. |
@@ -293,7 +293,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 233 |
+| `preserved` | 234 |
 | `normalized` | 34 |
 | `omitted` | 114 |
 | `rejected` | 0 |
@@ -304,7 +304,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 92 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 165 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 93 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 165 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -312,7 +312,7 @@ The schema inventory records every decoded GPIF field. This inventory detects sc
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 256 |
+| `schema` | 257 |
 
 ## Source dispatch inventory
 
@@ -418,6 +418,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `legato-preservation` | `legato-slurs` | `TestConformanceLegato` | `TestAlphaTabPreservesLegato` | no | Authored beat-level legato origin and destination endpoints survive as occurrence-owned records through GPIF import, public edits, GP8 export, and independent consumer origin and derived-destination checks. |
 | `beat-barre-preservation` | `note-and-beat-semantics` | `TestConformanceBarre` | `TestAlphaTabPreservesBeatBarres` | no | Paired checked fret and full/half shape values survive as occurrence-owned beat-level marks through GPIF import, public edits, GP8 export, and independent consumer checks without merging with chord diagram barres. |
 | `beat-vibrato-preservation` | `beat-vibrato` | `TestConformanceBeatVibrato` | `TestAlphaTabPreservesBeatVibrato` | yes | Binary presence maps to Slight while GPIF Slight and Wide remain distinct through typed and legacy edits, exact GP8 Strength output, reimport, and pinned-consumer loading without conflating note vibrato. |
+| `dead-slap-preservation` | `note-and-beat-semantics` | `TestConformanceDeadSlap` | `TestAlphaTabPreservesDeadSlap` | yes | A note-free dead slap remains a normal authored beat with no synthetic note, distinct from rests and empty beats, through GPIF import, public edits, exact marker output, Go reimport, and pinned-consumer loading. |
 | `brush-preservation` | `brush` | `TestConformanceBrush` | `TestAlphaTabPreservesBrush` | yes | Binary stroke codes and GPIF Brush or Arpeggio spellings retain exact authored timing, source absence, occurrence isolation, and deterministic compatibility edits through GP8 output and pinned-consumer loading. |
 | `beat-lyrics-preservation` | `beat-lyrics` | `TestConformanceBeatLyrics` | `TestAlphaTabPreservesBeatLyrics` | yes | Ordered beat-scoped lyric lines, including empty and Unicode values, survive as independently editable occurrences with exact absent-versus-empty GPIF representation and remain distinct from FreeText and score or track lyrics. |
 | `beaming-preservation` | `beaming` | `TestConformanceBeaming` | `TestAlphaTabPreservesBeaming` | yes | Authored master-bar groups, beam connection modes, inverted stems, and explicit up/down directions survive binary or GPIF import, public edits, exact GP8 wire output, and pinned-consumer loading. |

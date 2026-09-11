@@ -1916,8 +1916,9 @@
       "sha256": "7846a39a10be76244b3fbf44a5c0c6ce86557fbb5cd4e287a052ca11b1da4767",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Double-dotted timing agrees with AlphaTab; the remaining rest-status difference is retained in the narrow semantic snapshot.",
+      "reason": "Double-dotted timing and dead-slap status agree with AlphaTab; the narrow semantic snapshot guards both paths.",
       "features": [
+        "note-and-beat-semantics",
         "rhythm",
         "timing"
       ],
@@ -1961,7 +1962,7 @@
       "sha256": "826ffd9c0ff7299b5437ad41d8ec5e81d847360b7595ff7559a3d31d144ee75d",
       "format": "gp7",
       "disposition": "partial",
-      "reason": "Whole-corpus receipt covers note-and-beat-semantics and records 9 exact issue-linked differences.",
+      "reason": "Whole-corpus receipt covers note-and-beat-semantics; all nine dead-slap occurrences now agree with AlphaTab.",
       "features": [
         "note-and-beat-semantics"
       ],

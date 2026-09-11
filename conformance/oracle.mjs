@@ -235,11 +235,6 @@ export function normalizeDirection(value) {
 }
 
 export function normalizeBeatStatus(beat) {
-  // Dead-slap changes AlphaTab's playback/display rest predicate, but it does
-  // not turn the source beat into an authored note-bearing beat.
-  if (beat.deadSlapped && beat.notes.length === 0) {
-    return 'rest';
-  }
   if (beat.isEmpty && beat.isRest) {
     return 'unknown:empty+rest';
   }
@@ -647,6 +642,34 @@ export function loadBeatLyricFacts(fixture) {
   return facts;
 }
 
+export function loadDeadSlapFacts(fixture) {
+  const score = loadScore(fixture);
+  const facts = [];
+  for (const track of score.tracks) {
+    for (const staff of track.staves) {
+      for (const bar of staff.bars) {
+        for (const voice of bar.voices) {
+          for (const beat of voice.beats) {
+            if (!beat.deadSlapped) continue;
+            facts.push({
+              track: track.index,
+              staff: staff.index,
+              bar: bar.index,
+              voice: voice.index,
+              beat: beat.index,
+              deadSlapped: Boolean(beat.deadSlapped),
+              isEmpty: Boolean(beat.isEmpty),
+              isRest: Boolean(beat.isRest),
+              noteCount: beat.notes.length
+            });
+          }
+        }
+      }
+    }
+  }
+  return facts;
+}
+
 export function loadBeamingFacts(fixture) {
   const score = loadScore(fixture);
   const masterBars = [];
@@ -996,6 +1019,10 @@ function main() {
   }
   if (args[0] === '--beat-vibrato' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBeatVibratoFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--dead-slap' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadDeadSlapFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--brush' && args.length === 2) {

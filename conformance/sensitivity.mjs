@@ -121,7 +121,7 @@ const mutations = [
     category: 'classification',
     file: 'conformance/feature-ledger.json',
     replacements: [
-      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.HideTempo"' },
+      { before: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.Album"', after: '"preserved":["BeatEffects.Stroke","BeamingRules.Duration","BeamingRules.Groups","Beat.BeamingMode","Beat.InvertBeamDirection","Beat.PreferredBeamDirection","MeasureHeader.BeamingRules","Beat.BarreFret","Beat.BarreShape","Beat.DeadSlapped","Beat.Lyrics","BeatStroke.ExactDuration","BeatStroke.Kind","Chord.Barres","Chord.Fingerings","Song.HideTempo"' },
       { before: '"TimeSignature.Beams","Song.HideTempo","SoundAutomation.Hidden","MidiChannel.Tremolo"', after: '"TimeSignature.Beams","Song.Album","SoundAutomation.Hidden","MidiChannel.Tremolo"' }
     ],
     command: 'ledger-test',
@@ -710,6 +710,16 @@ const mutations = [
     after: '\tcase BeatVibratoWide:\n\t\treturn "Slight"\n',
     test: '^TestConformanceBeatVibrato$',
     want: 'gpifProperty.Strength'
+  },
+  {
+    id: 'dead-slap-import-drop',
+    contract: 'dead-slap-preservation',
+    category: 'import',
+    file: 'gpif_effects.go',
+    before: '\tbeat.DeadSlapped = b.DeadSlapped != nil\n',
+    after: '\tbeat.DeadSlapped = false\n',
+    test: '^TestConformanceDeadSlap$',
+    want: 'field:Beat.DeadSlapped'
   },
   {
     id: 'brush-duration-wire',

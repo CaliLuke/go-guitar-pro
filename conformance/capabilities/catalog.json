@@ -4343,12 +4343,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "GPIF DeadSlapped is absent. Existing oracle normalization treats an empty dead slap as a rest, which does not preserve the mark.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Beat.DeadSlapped preserves GPIF marker presence independently from status, notes, dead-note kinds, and tap/slap/pop effects. Note-free marked beats import as normal and GP8 writes the marker without synthetic notes.",
+      "acceptance": "M10-DEAD-SLAP checks actual GP7 fixtures, rest/empty/dead distinctions, marker spellings, direct edits, exact GP8 wire shape, Go reimport, nonmutation, strict policy, and pinned AlphaTab facts.",
       "upstream": [
         "Beat.deadSlapped"
       ],
@@ -4356,17 +4356,22 @@
         {
           "kind": "source",
           "reference": "gpif_types.go",
-          "detail": "Reviewed implementation or documented contract."
+          "detail": "Presence-sensitive DeadSlapped decoding preserves even text-bearing marker elements."
         },
         {
           "kind": "source",
           "reference": "conformance/oracle.mjs",
-          "detail": "Reviewed implementation or documented contract."
+          "detail": "The pinned adapter exposes deadSlapped, isEmpty, isRest, and note counts without reducing dead slap to rest."
         },
         {
-          "kind": "probe",
-          "reference": "testdata/gp7/colors.gp:dead-slap",
-          "detail": "Reproduced at tracks[0].staves[0].bars[1].voices[0].beats[1].deadSlapped. Source and target values are stored in probe_comparison."
+          "kind": "test",
+          "reference": "TestConformanceDeadSlap",
+          "detail": "Public import/export contract for note-free dead slap, ordinary rest, explicit empty, source spelling, direct edits, exact wire, reimport, strict policy, and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPreservesDeadSlap",
+          "detail": "Pinned AlphaTab verifies colors.gp and all nine dead-slap.gp occurrences before and after Go GP8 export."
         }
       ]
     },
