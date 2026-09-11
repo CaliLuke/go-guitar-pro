@@ -5,8 +5,8 @@
   "title": "Verify legacy grace-bend preservation and explicit export omission",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:bend-grace",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -188,12 +188,28 @@
     "gp8_builder.go",
     "gpif_model.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer implement_preroll passed the latest acceptance criteria at source commit 8f291169beefedd808244c2322d7fc2291ec4b9f.",
+        "Latest five criteria pass. Exact four source bytes at70913, owning GP4 address and source hash, pinned inserted grace/owner alignment, isolated before/on-beat bend omission, selective allowance and final kind/fret/ownership pass. Additional two-grace order challenge passes. Consumer absence is documented as limitation, not preserved bend evidence.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 65,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/65",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.566343+00:00"
+    "checked_at": "2026-09-11T20:29:10.390442+00:00"
   }
 }

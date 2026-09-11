@@ -5,8 +5,8 @@
   "title": "Reject wrapped legacy fret counts and verify isolated instrument losses",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -17,7 +17,7 @@
     "import",
     "export"
   ],
-  "scope": "Prevent GP3–GP5 source fret counts from wrapping into unrelated public values, and prove that each retained legacy instrument flag produces its own GP8 preservation report. GPIF preservation of non-default fret count, twelve-string simulation and an independent banjo flag remains a documented target limit.",
+  "scope": "Prevent GP3\u2013GP5 source fret counts from wrapping into unrelated public values, and prove that each retained legacy instrument flag produces its own GP8 preservation report. GPIF preservation of non-default fret count, twelve-string simulation and an independent banjo flag remains a documented target limit.",
   "acceptance": [
     "For both GP3/4 readTrack and GP5 readTrackV5, preserve representable authored fret counts exactly and reject source integers outside the public uint8 range before conversion. Include -1, 256, 280 and a large int32 value; 280 must never become the unreported default 24. Do not silently clamp. Include exact valid 0 and 255 boundary controls. Rejection describes the public model representability limit; it does not establish that every out-of-range integer is invalid Guitar Pro syntax.",
     "Add public Parse/ParseWithOptions regressions using otherwise-valid binary fixtures with a located fret-count field and at least one non-default representable value such as 31. Verify unaffected tuning, capo, channel and flags. Record structural/source oracle limits because AlphaTab skips this source field. The out-of-range regression must assert the contextual fret-count range error, not merely any error; a representable sibling must prove record alignment.",
@@ -73,7 +73,7 @@
     {
       "kind": "source",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/track.go#L278",
-      "detail": "GP3/4 int32 fret count narrows without a range check at line 282; GP5 repeats this at lines 366–370."
+      "detail": "GP3/4 int32 fret count narrows without a range check at line 282; GP5 repeats this at lines 366\u2013370."
     },
     {
       "kind": "source",
@@ -140,19 +140,28 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open.",
+  "resolution": "GP3 through GP5 fret counts receive checked uint8 decoding. Complete located fixtures prove exact 0, 31 and 255 values and contextual rejection of -1, 256, 280 and large int32 values. Independent isolated fret-count, twelve-string and banjo omission policies preserve the target limit; pinned AlphaTab skips source fret count and writes fixed 24. Independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
   "verification": [
-    "Public Parse and ParseWithOptions endpoint and range regressions pass.",
-    "Focused reader truncation/alignment and isolated omission tests pass.",
-    "Pinned AlphaTab final-consumer regression passes.",
-    "Semantic matrix inventory passes; existing public/wire/dispatch/enum totals unchanged.",
-    "GP3 through GP5 compatibility fixtures, go vet ./..., golangci-lint run, conformance verifier and capability database consistency checks pass.",
-    "Full conformance/check.sh, capability probe and prek are assigned to root integration."
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer implement_preroll passed the latest acceptance criteria at source commit 5219cc4b813cd8d58e31f5c82c8d779f786c7b81.",
+        "Latest criteria and no-prerequisite state checked. Complete public Parse/ParseWithOptions fixtures, exact signed boundaries and record alignment,73 numeric receipts,24 isolated omissions, raw pinned consumer and matrix inventory passed. Independent adversarial MinInt32/MaxInt32 at all seven RSE sites, simultaneous signed fields/GP5.0 padding sentinel,19 second-track loss locations and combined master/track/UseRse selective policies passed. No scoped blockers; support ratings unchanged.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
   ],
   "issue": {
     "number": 97,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/97",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.569817+00:00"
+    "checked_at": "2026-09-11T20:29:10.398154+00:00"
   }
 }

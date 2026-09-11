@@ -5,8 +5,8 @@
   "title": "Reject wrapped RSE identifiers and verify each legacy omission",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp5",
     "gp8"
@@ -161,19 +161,28 @@
     "gp8_builder.go",
     "rse.go"
   ],
-  "resolution": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open.",
+  "resolution": "GP5 RSE int32 identifiers receive checked signed int16 decoding at each site, including negative values and endpoints. GP5.0 retains its signed-short effect and padding alignment. Each legacy master/track leaf and UseRse independently triggers its scoped GP8 omission; zero controls and authored zero knob shape are distinguished. Proprietary effects remain unsupported in GP8; independent final-commit review remains pending. Full combined conformance, capability probe and prek are assigned to root integration. GitHub remains open. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
   "verification": [
-    "Public Parse and ParseWithOptions endpoint and range regressions pass.",
-    "Focused reader truncation/alignment and isolated omission tests pass.",
-    "Pinned AlphaTab final-consumer regression passes.",
-    "Semantic matrix inventory passes; existing public/wire/dispatch/enum totals unchanged.",
-    "GP3 through GP5 compatibility fixtures, go vet ./..., golangci-lint run, conformance verifier and capability database consistency checks pass.",
-    "Full conformance/check.sh, capability probe and prek are assigned to root integration."
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer implement_preroll passed the latest acceptance criteria at source commit 5219cc4b813cd8d58e31f5c82c8d779f786c7b81.",
+        "Latest criteria and no-prerequisite state checked. Complete public Parse/ParseWithOptions fixtures, exact signed boundaries and record alignment,73 numeric receipts,24 isolated omissions, raw pinned consumer and matrix inventory passed. Independent adversarial MinInt32/MaxInt32 at all seven RSE sites, simultaneous signed fields/GP5.0 padding sentinel,19 second-track loss locations and combined master/track/UseRse selective policies passed. No scoped blockers; support ratings unchanged.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
   ],
   "issue": {
     "number": 101,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/101",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.581401+00:00"
+    "checked_at": "2026-09-11T20:29:10.410271+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Preserve GPIF bend control roles with nonmonotonic offsets",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:bend-grace",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -117,12 +117,29 @@
     "gp8_effects.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": " Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer implement_preroll passed the latest acceptance criteria at source commit 8f291169beefedd808244c2322d7fc2291ec4b9f.",
+        "Latest four criteria and dependency60 checked. Root and fresh agent independently reviewed original note177 source/output controls, full-source sound rejection, exact four role offsets, normal and bounded nonmonotonic tuples, invalid shapes/numerics/whammy controls. Extra16 valid and16 invalid boundary probes pass; retained consumer source/output control equivalence explicit.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor.",
+        "Combined gate found synthetic extra terminal-hold controls. Separate fix c49ccfae466765d29711aef95a685c0fe49b79bf was independently reviewed by root: existing writer regression, new public two/three/four-point cases, original role tests and raw consumer endpoint checks all passed; integrated as a12e56c."
+      ]
+    }
+  ],
   "issue": {
     "number": 62,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/62",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.560132+00:00"
+    "checked_at": "2026-09-11T20:29:10.378427+00:00"
   }
 }

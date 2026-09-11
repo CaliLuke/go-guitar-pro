@@ -5,8 +5,8 @@
   "title": "Add independent GP8 regressions for empty beats and absent voice slots",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "codex/root",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -151,12 +151,28 @@
     "conformance_regression_test.go",
     "gp8_builder.go"
   ],
-  "resolution": "Added exact voice-slot, timed empty/rest, raw consumer and selective strict-policy regressions. Awaiting fresh independent review. Explicit-empty status remains a reported target limit.",
-  "verification": [],
+  "resolution": "Added exact voice-slot, timed empty/rest, raw consumer and selective strict-policy regressions. Explicit-empty status remains a reported target limit. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_first_fixes_fresh passed the latest acceptance criteria at source commit 998f74c826ca5dff3bece9bd50efb1018573d300.",
+        "All four latest criteria met. Public/wire/pinned tests plus independent leading/interior absent voice slots1/3, dotted64th5:4 at72ticks, Unicode/XML text, strict allowance and nonmutation passed. Inventory/verifier/DB/lint/goimports/dupl passed.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 100,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/100",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.580897+00:00"
+    "checked_at": "2026-09-11T20:29:10.387772+00:00"
   }
 }

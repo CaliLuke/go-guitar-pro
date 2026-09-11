@@ -5,8 +5,8 @@
   "title": "Add independent harmonic-kind coverage and selective spelling-loss policy",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "root",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -174,12 +174,28 @@
     "gp8_notation.go",
     "gpif_effects.go"
   ],
-  "resolution": "All six harmonic kinds retain exact 2.4 fret in GPIF, Go and the pinned consumer. Natural/artificial Pitch, Octave and combined spelling receive exactly one scoped omission; every selective allowance is independent of conflicting legacy fret authority. Source values and owning note identity remain unchanged. No mapping to generic note pitch was added. Spelling export remains partial. Awaiting fresh review and integrated gates; issue remains open.",
-  "verification": [],
+  "resolution": "All six harmonic kinds retain exact 2.4 fret in GPIF, Go and the pinned consumer. Natural/artificial Pitch, Octave and combined spelling receive exactly one scoped omission; every selective allowance is independent of conflicting legacy fret authority. Source values and owning note identity remain unchanged. No mapping to generic note pitch was added. Spelling export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer review_first_fixes_fresh passed the latest acceptance criteria at source commit 88b7fc2524f17848509e19b19bafac42a29eebe8.",
+        "All four latest criteria pass with no prerequisites. Six explicit kind2.4 wire/Go/pinned expectations and natural/artificial pitch/octave/both omission subsets; separate Fret3 authority cannot be bypassed. Independent F# and OttavaBassa public probe produces archive bytes identical to kind/fret control for each allowed spelling/authority combination. Direct AlphaTab confirms six kinds2.4 and note fret5/string1. Focused existing/new tests, inventory, verifier, DBcheck, lint, goimports,dupl pass.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 96,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/96",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.567743+00:00"
+    "checked_at": "2026-09-11T20:29:10.406018+00:00"
   }
 }

@@ -5,8 +5,8 @@
   "title": "Preserve explicit string-number display requests",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -79,17 +79,29 @@
   "shared_files": [
     "gpif_audit.go"
   ],
-  "resolution": "Implemented independent Note.ShowStringNumber with GPIF Enable-presence semantics. Strict public source parsing, non-default strings, absent controls, independent reused-note edits and exact final pinned-consumer flags pass. Tuning, fret and pitch remain unchanged. Awaiting different-agent final-commit review and root combined gates.",
+  "resolution": "Implemented independent Note.ShowStringNumber with GPIF Enable-presence semantics. Strict public source parsing, non-default strings, absent controls, independent reused-note edits and exact final pinned-consumer flags pass. Tuning, fret and pitch remain unchanged. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
   "verification": [
-    "Focused public API and independent consumer tests pass.",
-    "Semantic inventory increases by one public field; no new wire field or dispatch is introduced.",
-    "Fixture inventory and whole-corpus accounting refreshed for the original minimal regression source.",
-    "Full conformance, capability probe and prek remain assigned to root integration."
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer root passed the latest acceptance criteria at source commit 6dcc539c034f34b08332ddffaf542f8584ac8caf.",
+        "Latest three criteria and pinned ShowStringNumber Enable-presence source checked. Public strict source/export and raw consumer all true/absent/no-Enable/literal-false semantics, reused definitions and edits pass. Independent8-note/two-voice oppositeflags preserve per-note pitch/string/ownership without mutation. Focused tests/inventory pass. Snapshot DB differs only in integration/string_number_display_test.go hash after formatting; integrated refresh required before full gate.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor.",
+        "Source-only stale SQLite input hash was corrected in integrated refresh; final source database consistency and full gate pass."
+      ]
+    }
   ],
   "issue": {
     "number": 107,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/107",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.582786+00:00"
+    "checked_at": "2026-09-11T20:29:10.412956+00:00"
   }
 }

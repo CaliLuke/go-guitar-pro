@@ -5,8 +5,8 @@
   "title": "Preserve authored track short names",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "Codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -81,12 +81,28 @@
     "gpif_types.go",
     "track.go"
   ],
-  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and boundary-whitespace behavior with CDATA terminators or carriage returns have scoped export reports and strict-policy tests. Awaiting independent final-commit review and root combined gates.",
-  "verification": [],
+  "resolution": "Implemented optional Track.ShortName with independent occurrence-owned storage: nil means absent and non-nil empty preserves authored empty. Public edits and exact GP8 text never truncate or replace the full name. Final AlphaTab preserves nonempty Unicode/XML-sensitive values; its empty-name derivation and boundary-whitespace behavior with CDATA terminators or carriage returns have scoped export reports and strict-policy tests. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer root passed the latest acceptance criteria at source commit beba92344d2687d0d78296a874a5175df1000f6f.",
+        "Absent versus explicit empty short names, independent mutable ownership, full name separation, Unicode/XML/CR/CRLF preservation, derived consumer empty-name limitation and boundary trim reports passed. Independent six-variant raw consumer challenge passed after follow-up.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 91,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/91",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.582420+00:00"
+    "checked_at": "2026-09-11T20:29:10.408745+00:00"
   }
 }

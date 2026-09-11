@@ -22,7 +22,7 @@ All three stages have a supported rating in 51 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 370 input files. Probe freshness against the current source: `false`.
+The receipt contains 370 input files. Probe freshness against the current source: `true`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |

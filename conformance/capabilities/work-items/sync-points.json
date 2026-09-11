@@ -5,8 +5,8 @@
   "title": "Export authored backing-track synchronization points",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "codex/implement-preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp8"
   ],
@@ -99,12 +99,28 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Implemented exact authored sync-point serialization using existing checked field authority. Independent consumer retains occurrence, position, media timing, interpolation and visibility. Persisted tempo metadata remains a reported consumer limit; integer precision and missing backing padding are reported and unrepresentable exact positions rejected. Awaiting fresh review and integrated gates.",
-  "verification": [],
+  "resolution": "Implemented exact authored sync-point serialization using existing checked field authority. Independent consumer retains occurrence, position, media timing, interpolation and visibility. Persisted tempo metadata remains a reported consumer limit; integer precision and missing backing padding are reported and unrepresentable exact positions rejected. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer root passed the latest acceptance criteria at source commit 2798c1beb3f82540fe912c2b10cb16fd1ac2dc16.",
+        "Latest three criteria checked, dependency42 closed. Distinct occurrences/fractional positions/frame offsets/tempos/visibility, checked authority, exact decimal frame strings, selective strict policy and pinned final timing pass. Independent occurrence9007199254740993 retains exact Go/XML and explicitly reports pinned rounding to9007199254740992. Consumer metadata/padding/precision limitations remain scoped.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 55,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/55",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.585207+00:00"
+    "checked_at": "2026-09-11T20:29:10.386121+00:00"
   }
 }

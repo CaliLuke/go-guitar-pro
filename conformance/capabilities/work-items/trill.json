@@ -5,8 +5,8 @@
   "title": "Verify fixed GP8 trill speed and selective normalization policy",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "agent:duration-trill",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -185,12 +185,28 @@
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": "Implemented the bounded target-limit regression contract; awaiting fresh independent acceptance review and centralized gates. Export remains partial.",
-  "verification": [],
+  "resolution": "Export remains partial. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. The issue remains open with the solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "node conformance/capabilities/probe.mjs: PASS,370 fixture receipts regenerated from 3a376f07bd2ae6e4b512755692b7f53ee1c4150c",
+        "python3 conformance/capabilities/manage.py check: PASS after receipt refresh",
+        "TestSemanticMatrixInventory: PASS;408 public fields,261 wire fields,50 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer root passed the latest acceptance criteria at source commit 15c1c2bfe55e82d1cf9ffc10202a1a6518081ef9.",
+        "Latest criteria checked; no hard prerequisite. Focused public/pinned and existing GP5 wire-import correction controls plus separately registered16/32/64 speed cases and inventory passed. Independent9 combined duration/trill scores and36 selective allowance combinations retain dotted16th5:4 rhythm at288ticks, target fret7, note fret5,palm-mute/staccato, source nonmutation. Raw consumer confirms percentage1 and trill speed16. Spelling rhythm not repurposed; precise target limits remain partial.",
+        "Acceptance criteria checked again against all current open issues before labeling; no criteria changed. All applicable prerequisites were reviewed.",
+        "Pinned AlphaTab 1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate includes build, vet, goimports, tidy, lint, duplication, conformance,79 sensitivity mutations and race tests with the80% coverage floor."
+      ]
+    }
+  ],
   "issue": {
     "number": 103,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/103",
     "state": "OPEN",
-    "checked_at": "2026-09-11T18:59:29.587850+00:00"
+    "checked_at": "2026-09-11T20:29:10.401002+00:00"
   }
 }
