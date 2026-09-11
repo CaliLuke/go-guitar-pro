@@ -112,6 +112,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp3/mix-table-events.gp3",
+      "sha256": "fe29f1c57bc8f5737f0f7a9afbd80ba34ab8a32f33782ca099997f69b92206b6",
+      "format": "gp3",
+      "disposition": "partial",
+      "reason": "Complete legacy record exercises simultaneous nonzero-position tempo, program, volume and pan; consumer program timing and gain/pan limits remain tracked in issue 85.",
+      "features": [
+        "tempo-automations"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp3/notes.gp3",
       "sha256": "a9ae6bb06ed259016e7a138a1b17d850491e9e2e8510c235df28a9ec81a706f1",
       "format": "gp3",

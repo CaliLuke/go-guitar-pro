@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"math"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 	"testing"
@@ -120,8 +121,21 @@ func TestAlphaTabPreservesOpeningTempoVisibility(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !legacy.HideTempo || legacy.Version.Number != [3]byte{5, 1, 0} || len(legacy.TempoAutomations) != 0 {
+	if !legacy.HideTempo || legacy.Version.Number != [3]byte{5, 1, 0} {
 		t.Fatalf("GP5 hidden source = %#v, hidden %v, automations %#v", legacy.Version, legacy.HideTempo, legacy.TempoAutomations)
+	}
+	wantChanges := []TempoAutomation{
+		{Bar: 88, Position: 0.625, Tempo: 85, Linear: true, Hidden: true},
+		{Bar: 89, Tempo: 90, Linear: true, Hidden: true},
+		{Bar: 92, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 93, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 93, Position: 0.875, Tempo: 60, Linear: true, Hidden: true},
+		{Bar: 94, Tempo: 80, Linear: true, Hidden: true},
+		{Bar: 85, Tempo: 90, Linear: true},
+		{Bar: 93, Position: 0.75, Tempo: 70, Linear: true},
+	}
+	if !reflect.DeepEqual(legacy.TempoAutomations, wantChanges) {
+		t.Fatalf("legacy tempo events = %#v, want %#v", legacy.TempoAutomations, wantChanges)
 	}
 	// This corpus label contains non-UTF-8 bytes. Author a valid label while
 	// retaining the imported GP5 tempo and visibility.
@@ -139,19 +153,26 @@ func assertOpeningTempoConsumer(t *testing.T, song *Song, bpm float64, text stri
 		t.Fatalf("unexpected visibility report %#v", report.Entries)
 	}
 	wire := extractAutomationWireDocument(t, data)
-	if len(wire.masterAutomations) != 1 || wire.masterAutomations[0].Visible != strconv.FormatBool(!hidden) {
+	if len(wire.masterAutomations) != 1+len(song.TempoAutomations) || wire.masterAutomations[0].Visible != strconv.FormatBool(!hidden) {
 		t.Fatalf("opening visibility wire %#v", wire.masterAutomations)
 	}
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := []TempoAutomation{{Tempo: bpm, Text: text, Hidden: hidden}}
+	want := append([]TempoAutomation{{Tempo: bpm, Text: text, Hidden: hidden}}, song.TempoAutomations...)
 	if !reflect.DeepEqual(roundTrip.TempoAutomations, want) || roundTrip.HideTempo != hidden {
 		t.Fatalf("round trip = %#v hidden %v", roundTrip.TempoAutomations, roundTrip.HideTempo)
 	}
 	facts := readAlphaTabAutomationFacts(t, writeConformanceFixture(t, data)).(map[string]any)
 	expected := []any{map[string]any{"bar": float64(0), "position": float64(0), "type": "tempo", "value": bpm, "linear": false, "text": text, "visible": !hidden}}
+	for _, automation := range song.TempoAutomations {
+		expected = append(expected, map[string]any{"bar": float64(automation.Bar), "position": automation.Position, "type": "tempo", "value": automation.Tempo, "linear": automation.Linear, "text": automation.Text, "visible": !automation.Hidden})
+	}
+	// The consumer enumerates master bars, retaining event order within each bar.
+	sort.SliceStable(expected, func(i, j int) bool {
+		return expected[i].(map[string]any)["bar"].(float64) < expected[j].(map[string]any)["bar"].(float64)
+	})
 	if differences := semanticDifferences(facts["tempo"], expected); len(differences) != 0 {
 		t.Fatalf("consumer tempo differs %#v", differences)
 	}

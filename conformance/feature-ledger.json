@@ -4369,7 +4369,7 @@
       "upstreamModel":["Automation","AutomationType.Tempo","MasterBar.tempoAutomations"],
       "upstreamTests":["checkOtherEffects"],
       "goDestination":["Song.Tempo","Song.TempoAutomations","MixTableChange.Tempo"],
-      "fixtures":["testdata/gp7/beat-tempo-change.gp"],
+      "fixtures":["testdata/gp7/beat-tempo-change.gp","testdata/gp3/mix-table-events.gp3"],
       "semanticAssertions":["bar","ratio position","normalized BPM","linear interpolation","text","visibility"],
       "status": "partial",
       "reason": "The public automation record and GP8 writer preserve ordered tempo values, interpolation, text, and per-event visibility; the remaining partial occurrence contract is tracked separately.",
