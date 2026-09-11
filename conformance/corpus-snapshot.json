@@ -13579,6 +13579,14 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/grace-timer-sequence.gp",
+      "features": [
+        "rhythm"
+      ],
+      "diagnostics": [],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/grace-timer.gp",
       "features": [
         "rhythm"

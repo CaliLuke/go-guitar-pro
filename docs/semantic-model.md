@@ -1014,7 +1014,7 @@ Unequal requests produce `score.grace.timer-conflict` at the conflicting owner n
 Invalid grace milliseconds produce `score.grace.timer` at the owner note and cannot pass through an export allowance.
 Groups in separate beats, voices, or staves remain independent.
 
-If a timed pending group contains an unmatched note, the importer retains the complete ordered group as standalone grace beats.
+If a timed pending group contains an unmatched note or more than 256 beats, the importer retains the complete ordered group as standalone grace beats.
 This representation preserves each source chord and its single timer without splitting or reordering notes.
 These beats retain their timer in `Beat.Timer` and have zero ordinary duration during finalization.
 Groups without timers keep the existing attachment behavior.

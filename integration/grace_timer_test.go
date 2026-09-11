@@ -128,3 +128,55 @@ func publicGraceTimerSong(t *testing.T) *gp.Song {
 	r.Song.Tracks[0].Settings = gp.TrackSettings{Notation: true}
 	return r.Song
 }
+
+func TestGraceTimerLongSequence(t *testing.T) {
+	for _, equalTail := range []bool{false, true} {
+		result, err := gp.ParseWithOptions(mustReadFixture(t, "../testdata/gp8/grace-timer-sequence.gp"), gp.ParseOptions{Strict: true})
+		if err != nil {
+			t.Fatal(err)
+		}
+		song := result.Song
+		for generation := 0; generation < 3; generation++ {
+			for _, measure := range song.Tracks[0].Measures {
+				beats := measure.Voices[0].Beats
+				if len(beats) != 258 {
+					t.Fatalf("generation %d retained %d beats, want 258", generation, len(beats))
+				}
+				for index, beat := range beats {
+					want := int64(index)
+					if index == 257 {
+						want = 25
+					}
+					if equalTail && index == 256 {
+						want = 255
+						if generation == 0 {
+							*beat.Timer.Milliseconds = want
+						}
+					}
+					if len(beat.Notes) != 2 || beat.Timer == nil || beat.Timer.Milliseconds == nil || *beat.Timer.Milliseconds != want {
+						t.Fatalf("generation %d beat %d lost timer or chord membership: %+v", generation, index, beat)
+					}
+				}
+			}
+			if generation == 2 {
+				break
+			}
+			song.Version = gp.Version{}
+			song.Tracks[0].Settings = gp.TrackSettings{Notation: true}
+			before, _ := json.Marshal(song)
+			data, report, exportErr := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
+			if exportErr != nil || len(report.Entries) != 0 {
+				t.Fatal(exportErr, report)
+			}
+			after, _ := json.Marshal(song)
+			if string(before) != string(after) {
+				t.Fatal("export mutated long grace sequence")
+			}
+			result, err = gp.ParseWithOptions(data, gp.ParseOptions{Strict: true})
+			if err != nil {
+				t.Fatal(err)
+			}
+			song = result.Song
+		}
+	}
+}

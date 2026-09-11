@@ -61,19 +61,20 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 }
 
 // Keep a timed source group intact when attachment would split a chord or
-// move an orphan ahead of earlier attached graces. A timer belongs to its beat.
+// move an orphan ahead of earlier attached graces, or exceed the sequence range.
+// A timer belongs to its source beat.
 func gpifRetainTimedGraceGroup(target *Beat, pending []gpifPendingGrace, percussion bool) bool {
-	hasTimer, hasOrphan := false, false
+	hasTimer, needsStandalone := false, len(pending) > math.MaxUint8+1
 	for _, grace := range pending {
 		hasTimer = hasTimer || grace.beat.Timer != nil
-		hasOrphan = hasOrphan || len(grace.beat.Notes) == 0
+		needsStandalone = needsStandalone || len(grace.beat.Notes) == 0
 		for i := range grace.beat.Notes {
 			if gpifGraceTarget(target, &grace.beat.Notes[i], percussion) < 0 {
-				hasOrphan = true
+				needsStandalone = true
 			}
 		}
 	}
-	return hasTimer && hasOrphan
+	return hasTimer && needsStandalone
 }
 
 func gpifGraceTarget(target *Beat, grace *Note, percussion bool) int {

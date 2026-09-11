@@ -1526,7 +1526,8 @@
           "timed partial-match groups retain complete ordered source beats without duplicate timers",
           "owned repeated definitions and chord members, public edits and clearing",
           "same-group timer conflicts and independent voice scopes",
-          "invalid source integers and hard public bounds"
+          "invalid source integers and hard public bounds",
+          "257 timed grace beats retain exact source order and multiplicity with distinct or equal final timers"
         ],
         "oracle": "Pinned original and two successive GP8 exports retain exact track/staff/bar/voice/beat timer states and note tuples; edits retain every unaffected address.",
         "limitations": [

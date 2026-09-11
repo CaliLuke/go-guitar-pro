@@ -3429,6 +3429,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/grace-timer-sequence.gp",
+      "sha256": "4794cb3757b85788ea28ea5005ea3cf97e64eb667b2a123876c780c4b208805e",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Focused sequence boundary source retains 257 timed grace chords in each reused bar without clamping or merging; raw consumer checks preserve all 522 beat records across two exports.",
+      "features": [
+        "rhythm"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/grace-timer.gp",
       "sha256": "e3f17b92481cacb9c81bf516c2be47fb38d868171022740d215f23caee605d6c",
       "format": "gp8",

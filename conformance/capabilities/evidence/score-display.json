@@ -705,7 +705,13 @@
           "hex": "01",
           "value": true
         }
-      ]
+      ],
+      "origin_note": "Existing corpus variant; not byte-identical to the pinned visual-tests/layout/system-divider.gp. Fresh review independently verified the actual pinned fixture as well.",
+      "pinned_reference": {
+        "path": "references/alphaTab/packages/alphatab/test-data/visual-tests/layout/system-divider.gp",
+        "sha256": "5406120fbcda61c8f0112ad2646b7338a0ab8e95fed89682c9018ab7eefbc2cb",
+        "review": "review-stylesheet-final-fresh.json: TestFreshDisplayPinnedDivider verifies separator=true and exact source/export consumer facts."
+      }
     },
     {
       "path": "testdata/gp8/directions.gp",

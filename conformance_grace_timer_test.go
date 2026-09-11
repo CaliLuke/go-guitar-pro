@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -22,6 +23,7 @@ func graceTimerSong(t *testing.T) *Song {
 
 func TestConformanceGraceTimers(t *testing.T) { runConformanceGraceTimers(newConformanceRun(t)) }
 func runConformanceGraceTimers(run *conformanceRun) {
+	assertLongGraceTimerSequence(run)
 	t := run.t
 	s := graceTimerSong(t)
 	want := []*BeatTimer{nil, {}, {Milliseconds: ptrTo(int64(0))}, {Milliseconds: ptrTo(int64(99))}, {Milliseconds: ptrTo(maxBeatTimerMilliseconds)}}
@@ -279,5 +281,56 @@ func TestGraceTimerIndependentStaffScopes(t *testing.T) {
 	}
 	if ds := ValidateSong(p); len(ds) != 0 {
 		t.Fatal("independent staff requests conflict", ds)
+	}
+}
+
+func assertLongGraceTimerSequence(run *conformanceRun) {
+	for _, equalTail := range []bool{false, true} {
+		source, err := os.ReadFile("testdata/gp8/grace-timer-sequence.gp")
+		if err != nil {
+			run.t.Fatal(err)
+		}
+		tail := int64(256)
+		if equalTail {
+			tail = 255
+			source = conformanceGPIFArchive(run.t, strings.ReplaceAll(string(readCurveGPIF(run.t, source)), "<Timer>256</Timer>", "<Timer>255</Timer>"))
+		}
+		parsed, err := ParseWithOptions(source, ParseOptions{Strict: true})
+		if err != nil {
+			run.t.Fatal(err)
+		}
+		var want []beatTimerFact
+		if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+			readAlphaTabOracleFacts(run.t, "--beat-timer", writeConformanceFixture(run.t, source), &want)
+			if len(want) != 522 {
+				run.t.Fatalf("source facts=%d, want522", len(want))
+			}
+		}
+		for generation := 0; generation < 2; generation++ {
+			song := parsed.Song
+			song.Version = Version{}
+			song.Tracks[0].Settings = TrackSettings{Notation: true}
+			for _, measure := range song.Tracks[0].Measures {
+				beats := measure.Voices[0].Beats
+				if len(beats) != 258 {
+					run.t.Fatalf("source sequence collapsed to %d beats", len(beats))
+				}
+				run.Field("BeatTimer.Milliseconds", beats[256].Timer.Milliseconds, &tail)
+			}
+			data, _ := assertConsumerLossPolicy(run.t, song, []string{})
+			wire := conformanceWireDocument(run.t, data)
+			run.Wire("gpifBeat.Timer", wire.Beats.Beats[256].Timer, ptrTo(strconv.FormatInt(tail, 10)))
+			if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+				var got []beatTimerFact
+				readAlphaTabOracleFacts(run.t, "--beat-timer", writeConformanceFixture(run.t, data), &got)
+				if !reflect.DeepEqual(got, want) {
+					run.t.Fatalf("generation%d changed source grace sequence", generation)
+				}
+			}
+			parsed, err = ParseWithOptions(data, ParseOptions{Strict: true})
+			if err != nil {
+				run.t.Fatal(err)
+			}
+		}
 	}
 }

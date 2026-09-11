@@ -5473,7 +5473,7 @@
         {
           "kind": "test",
           "reference": "TestAlphaTabScoreDisplay",
-          "detail": "Original pinned fixtures and each independent public flag edit preserve exact final consumer policies and other stylesheet settings."
+          "detail": "Original fixtures (including the existing system-divider corpus variant) and each independent public flag edit preserve exact final consumer policies and other stylesheet settings."
         },
         {
           "kind": "test",
