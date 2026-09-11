@@ -7,16 +7,16 @@ Review date: 2026-09-11. AlphaTab: 1.8.4 (`022a45c8e42370f9e12e68949d11eada370da
 The inventory contains 107 capability rows and 405 mapped format-documentation rows.
 The pinned source inventory contains 6656 constructs from 119 files.
 Exact importer reviews classify 1227 assignments and dispatches and link 312 importer-populated model declarations.
-There are 46 upstream fixtures without a byte-identical local fixture.
+There are 45 upstream fixtures without a byte-identical local fixture.
 
 Support ratings describe the scope in each finding. Partial and unverified rows receive no completion credit.
 A linked source construct has a capability association, not individual behavior proof.
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 79 | 16 | 2 | 1 |
-| model | 78 | 17 | 2 | 1 |
-| export | 56 | 37 | 4 | 1 |
+| import | 80 | 15 | 2 | 1 |
+| model | 79 | 16 | 2 | 1 |
+| export | 56 | 38 | 3 | 1 |
 
 All three stages have a supported rating in 56 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -625,9 +625,9 @@ Bounded work: [Preserve explicit string-number display requests](https://github.
 
 Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Legacy page and track settings partially parse. BinaryStylesheet authored policies, hide-empty staves, brackets and track-name modes lack full round-trip support.
+Fourteen optional score-style keys preserve bracket modes, separators, global dynamics/tuning/chord flags and independent name visibility/text/orientation/mode requests. Exact wire values and source precedence survive public edits. The pinned consumer coalesces authored first-system-on-each-page mode 1 to FirstSystem, so strict export reports that scoped normalization; excluded unmapped settings remain outside scope.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

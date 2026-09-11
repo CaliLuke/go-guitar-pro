@@ -97,6 +97,7 @@ func (builder *gp8Builder) buildScore() gpifScore {
 		builder.addReport("gp8.omit.master-rse", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit the legacy master RSE effect")
 	}
 	builder.reportPageSetup()
+	builder.reportScoreDisplay()
 	if song.Writer != "" {
 		builder.addReport("gp8.omit.writer", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 has no separate destination for the legacy writer field")
 	}

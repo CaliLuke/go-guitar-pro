@@ -54,6 +54,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 	}
 	diagnostics := make([]ScoreDiagnostic, 0)
 	validateScoreStyle(song.Style, &diagnostics)
+	validateScoreDisplay(song.Style, &diagnostics)
 	validateHeaderFooter(song, &diagnostics)
 	add := func(code string, kind ScoreDiagnosticKind, location ScoreLocation, format string, args ...any) {
 		diagnostics = append(diagnostics, ScoreDiagnostic{Code: code, Kind: kind, Location: location, Reason: fmt.Sprintf(format, args...)})

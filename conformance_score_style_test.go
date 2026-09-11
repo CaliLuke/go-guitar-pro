@@ -27,7 +27,7 @@ func runConformanceScoreBarlines(run *conformanceRun) {
 		run.ClaimPrimary(claimAllStages("barlines", scoreBarlineCase, scoreBarlineValue)...).Preserved("ScoreStyle.ExtendedBarLines", song.Style.ExtendedBarLines, ptrTo(test.extend))
 		run.Preserved("ScoreStyle.BarNumbers", song.Style.BarNumbers, ptrTo(test.policy))
 		run.Enum("BarNumberPolicy."+test.member, *song.Style.BarNumbers, test.policy)
-		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.track-name-page-policy"}}})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -53,7 +53,7 @@ func runConformanceScoreBarlines(run *conformanceRun) {
 			run.Wire("binaryStyleRecord.value", bytes.Count(raw, encoded), 1)
 		}
 		run.Preserved("ScoreStyle.BarNumbers", binary.BigEndian.Uint32(number.value), uint32(test.policy))
-		run.ClaimReport(claimSite("barlines", "export", scoreBarlineCase, scoreBarlineValue)).Report(scoreBarlineCase, reportCodes(report), []string{})
+		run.ClaimReport(claimSite("barlines", "export", scoreBarlineCase, scoreBarlineValue)).Report(scoreBarlineCase, reportCodes(report), []string{"gp8.normalize.track-name-page-policy"})
 		if !reflect.DeepEqual(otherStyleRecords(records), otherStyleRecords(song.Style.records)) {
 			t.Fatal("barline export replaced other typed stylesheet records")
 		}

@@ -1181,3 +1181,35 @@ legacy templates omit alignment overrides and use the pinned defaults: centered
 Title, Subtitle, Artist, Album and Copyright; left Words; right Music,
 WordsAndMusic and Tabber. Clearing template and visibility leaves an imported
 alignment record intact, so the consumer can still create its default element.
+
+ScoreStyle also owns fourteen optional BinaryStylesheet display keys. `Brackets`
+selects none, groups staves, or groups similar instruments. `SystemSeparators`
+is independent. `HideDynamics`, `DisplayTuning`, `ChordDiagramsOnTop` and
+`ChordDiagramsInScore` control global display requests; they do not change notes,
+tuning pitches, chord definitions or legacy per-track display fields.
+
+The single-track and multi-track name visibility fields remain independent from
+their name-system modes. False visibility takes precedence over the mode in the
+pinned consumer, regardless of record order. True visibility leaves the mode
+active. Duplicate source keys use their last value. The first-system and
+other-system short/full and horizontal/vertical requests are independent.
+Direct public edits own each matching record; nil removes that record.
+
+Absent records use these pinned defaults: grouped staves; no system separators;
+visible dynamics; tuning and chord diagrams on top enabled; in-score chord
+diagrams disabled; names on the first system, short and vertical. The Go model
+keeps absent fields nil and does not replace them with these consumer defaults.
+
+Name modes retain exact authored wire values 0 (first system), 1 (first system
+of each page) and 2 (all systems). The pinned consumer has no separate policy for
+mode 1. When names are visible, it resolves mode 1 to FirstSystem. Hidden names
+remain Hidden. Export reports `gp8.normalize.track-name-page-policy` for each
+mode-1 request, including a currently hidden view. Strict export requires an
+explicit allowance; the wire and Go reimport still preserve value 1. This limit
+is recorded in the stylesheet capability's partial export rating. Undefined
+public enum values and malformed known record types are errors.
+
+Empty-staff hiding and single-staff bracket overrides have no pinned GP mapping
+and remain outside this contract. Header/footer fields, barlines and multi-rest
+preferences keep their existing authorities and other validated records remain
+unchanged.

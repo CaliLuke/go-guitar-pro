@@ -34,8 +34,8 @@ func TestHeaderFooterPublicValuesAndEdits(t *testing.T) {
 	styles.Copyright2.Template = &value
 	song.PageSetup.Subtitle = "Legacy subtitle edit"
 	before, _ := json.Marshal(song)
-	data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
-	if err != nil || len(report.Entries) != 0 {
+	data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.track-name-page-policy"}}})
+	if err != nil || len(report.Entries) != 1 || report.Entries[0].Code != "gp8.normalize.track-name-page-policy" {
 		t.Fatalf("strict header export=%v %#v", err, report)
 	}
 	after, _ := json.Marshal(song)

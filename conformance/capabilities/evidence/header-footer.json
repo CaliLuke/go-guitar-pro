@@ -19,7 +19,7 @@
   },
   "scope": "Supported template and visibility keys only. Physical geometry, page scale and page-number text remain reported omissions. No alignment API is added; source GP8 alignment records retain bytes and consumer values, while projected GP5 fields use exact pinned per-element defaults.",
   "authority": "After parsing, a changed PageSetup template or visibility bit overrides only its matching HeaderFooter field. Unchanged legacy fields leave rich edits authoritative. Programmatic non-nil HeaderFooter owns the values; otherwise PageSetup supplies legacy templates. Copyright edits split on the first LF, retain the remainder in field two, and report multiple-separator ambiguity. Original GP5 field boundaries remain separate before the compatibility strings are joined.",
-  "export_policy": "These complete-source artifacts use strict export with explicit allowances for pre-existing unrelated source-version, lyrics, RSE, writer, track-display and empty-beat reports, plus physical page limits and the tested ambiguous copyright split. Exact returned entries are recorded for each artifact. Focused GP8 tests clear only unrelated provenance and require an empty report.",
+  "export_policy": "These complete-source artifacts use strict export with explicit allowances for pre-existing unrelated source-version, lyrics, RSE, writer, track-display and empty-beat reports, plus physical page limits and the tested ambiguous copyright split. Exact returned entries are recorded for each artifact. Focused GP8 tests clear only unrelated provenance and require only the exact track-name page-policy normalization.",
   "sources": [
     {
       "path": "testdata/gp5/header-footer.gp5",
@@ -1251,6 +1251,20 @@
           "Target": 8,
           "Entries": [
             {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
               "Code": "gp8.normalize.source-version",
               "Feature": "score-core",
               "Disposition": "normalized",
@@ -1681,6 +1695,20 @@
         "report": {
           "Target": 8,
           "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
             {
               "Code": "gp8.normalize.source-version",
               "Feature": "score-core",
@@ -2138,6 +2166,20 @@
               "Reason": "the legacy copyright string has multiple line separators; the first separates footer fields and remaining text stays in the second field"
             },
             {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
               "Code": "gp8.normalize.source-version",
               "Feature": "score-core",
               "Disposition": "normalized",
@@ -2574,6 +2616,20 @@
           "Target": 8,
           "Entries": [
             {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
               "Code": "gp8.normalize.source-version",
               "Feature": "score-core",
               "Disposition": "normalized",
@@ -2954,5 +3010,6 @@
     "Absent versus empty template and visibility, maximum 32767-byte UTF-8 text, invalid UTF-8/length rejection and malformed known record types.",
     "Legacy per-field edits, strict physical limits, copyright ambiguity and source nonmutation.",
     "Previous binary reader overlay fails the public regression."
-  ]
+  ],
+  "policy_update": "Score display support (#117) now recognizes original track-name mode 1. These byte-identical artifacts require gp8.normalize.track-name-page-policy in addition to their existing explicit allowances; updated exact reports are recorded. The authored mode remains exact on wire, while the pinned consumer has no separate page-specific policy."
 }

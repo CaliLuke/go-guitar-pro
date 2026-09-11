@@ -300,9 +300,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
 | `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
-| `ScoreStyle` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
-| `noteAccidentalSource` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Immutable private receipt preserves source notation coordinates while all relevant public context stays unchanged. |
-| `noteAccidentalPitch` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Private source pitch payload; public edits are governed by Note.AccidentalMode and numeric pitch context. |
+| `ScoreStyle` | `score-core` | 18 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
 | `HeaderFooterSettings` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent template/visibility entries preserve all ten supported GP header/footer elements. Empty entries normalize to absence. |
 | `HeaderFooterStyle` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Literal optional template text and optional visibility are independent authored values; nil leaves retain absent records. |
 
@@ -310,7 +308,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 275 |
+| `preserved` | 289 |
 | `normalized` | 69 |
 | `omitted` | 93 |
 | `rejected` | 0 |
@@ -321,7 +319,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 141 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 142 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -390,6 +388,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `applyBinaryStylesheet:record.key` | `score-core` | 2 | `score-barlines` | `opaque-preserved` | Validated binary record key/type/payload triples remain unchanged unless an owned public field is edited or cleared. |
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 21 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
+| `applyScoreDisplayRecord:record.key` | `score-core` | 3 | `score-display` | `opaque-preserved` | Recognized enum payloads are checked before narrowing; other validated records are retained by the shared codec. |
 
 ## Behavioral contracts
 
@@ -489,3 +488,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `pitch-source-context-preservation` | `note-and-beat-semantics` | `TestConformancePitchSourceContext` | `TestAlphaTabPitchSpellingSourceContexts` | no | Retain original source coordinate records without changing numeric pitch; edits invalidate the private receipt and restore checked derivation. |
 | `hammer-endpoint-preservation` | `note-and-beat-semantics` | `TestConformanceHammerEndpoints` | `TestAlphaTabHammerEndpoints` | no | Exact endpoint booleans and wire properties survive with precise pinned-consumer limits for dangling or unlinked endpoints. |
 | `header-footer` | `score-core` | `TestConformanceHeaderFooter` | `TestAlphaTabHeaderFooter` | no | Exact raw typed records retain templates, visibility, existing source alignment and independent legacy edit reconciliation; physical geometry remains an explicit limit. |
+| `score-display` | `score-core` | `TestConformanceScoreDisplay` | `TestAlphaTabScoreDisplay` | no | Optional authored keys retain exact values, types and precedence. The page-specific name mode has an explicit final-consumer normalization report. |

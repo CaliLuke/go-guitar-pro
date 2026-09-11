@@ -279,26 +279,5 @@ func (builder *gp8Builder) reportPageSetup() {
 
 // Existing owned records keep their source position; unrelated records are untouched.
 func mergeHeaderFooterRecords(song *Song, source []binaryStyleRecord) []binaryStyleRecord {
-	authored := headerFooterRecords(song)
-	byKey := make(map[string]binaryStyleRecord, len(authored))
-	for _, record := range authored {
-		byKey[record.key] = record
-	}
-	var output []binaryStyleRecord
-	for _, record := range source {
-		if _, _, owned := headerFooterOwnedKey(record.key); !owned {
-			output = append(output, record)
-			continue
-		}
-		if value, exists := byKey[record.key]; exists {
-			output = append(output, value)
-			delete(byKey, record.key)
-		}
-	}
-	for _, record := range authored {
-		if _, exists := byKey[record.key]; exists {
-			output = append(output, record)
-		}
-	}
-	return output
+	return mergeOwnedStyleRecords(source, headerFooterRecords(song), func(key string) bool { _, _, owned := headerFooterOwnedKey(key); return owned })
 }

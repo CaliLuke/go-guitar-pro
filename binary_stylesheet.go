@@ -113,6 +113,9 @@ func applyBinaryStylesheet(song *Song, data []byte) error {
 	}
 	style := &ScoreStyle{records: records}
 	for _, record := range records {
+		if err := applyScoreDisplayRecord(style, record); err != nil {
+			return err
+		}
 		if err := applyHeaderFooterRecord(style, record); err != nil {
 			return err
 		}
@@ -161,7 +164,7 @@ func scoreStyleRecords(style *ScoreStyle) []binaryStyleRecord {
 		binary.BigEndian.PutUint32(value, uint32(*style.BarNumbers))
 		records = append(records, binaryStyleRecord{key: "System/barIndexDrawType", kind: 1, value: value})
 	}
-	return records
+	return mergeOwnedStyleRecords(records, scoreDisplayRecords(style), scoreDisplayOwnedKey)
 }
 func buildGP8BinaryStylesheet(song *Song) []byte {
 	records := mergeHeaderFooterRecords(song, scoreStyleRecords(song.Style))
@@ -182,4 +185,28 @@ func validateScoreStyle(style *ScoreStyle, diagnostics *[]ScoreDiagnostic) {
 	if style.BarNumbers != nil && *style.BarNumbers > BarNumberHide {
 		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.style.bar-number-policy", Kind: ScoreDiagnosticValue, Reason: fmt.Sprintf("bar-number policy %d is undefined", *style.BarNumbers)})
 	}
+}
+
+func mergeOwnedStyleRecords(source, authored []binaryStyleRecord, owned func(string) bool) []binaryStyleRecord {
+	byKey := make(map[string]binaryStyleRecord, len(authored))
+	for _, record := range authored {
+		byKey[record.key] = record
+	}
+	var output []binaryStyleRecord
+	for _, record := range source {
+		if !owned(record.key) {
+			output = append(output, record)
+			continue
+		}
+		if value, exists := byKey[record.key]; exists {
+			output = append(output, value)
+			delete(byKey, record.key)
+		}
+	}
+	for _, record := range authored {
+		if _, exists := byKey[record.key]; exists {
+			output = append(output, record)
+		}
+	}
+	return output
 }

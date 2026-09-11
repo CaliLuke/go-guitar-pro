@@ -5430,11 +5430,11 @@
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "partial"
       },
-      "finding": "Legacy page and track settings partially parse. BinaryStylesheet authored policies, hide-empty staves, brackets and track-name modes lack full round-trip support.",
+      "finding": "Fourteen optional score-style keys preserve bracket modes, separators, global dynamics/tuning/chord flags and independent name visibility/text/orientation/mode requests. Exact wire values and source precedence survive public edits. The pinned consumer coalesces authored first-system-on-each-page mode 1 to FirstSystem, so strict export reports that scoped normalization; excluded unmapped settings remain outside scope.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "RenderStylesheet.*",
@@ -5459,6 +5459,21 @@
           "kind": "test",
           "reference": "TestConformanceDisplayExportPolicy",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceScoreDisplay",
+          "detail": "Every optional field, enum member and exact wire type/value has runtime evidence, including absence and malformed inputs."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabScoreDisplay",
+          "detail": "Original pinned fixtures and each independent public flag edit preserve exact final consumer policies and other stylesheet settings."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabTrackNamePolicyPrecedence",
+          "detail": "Single/multi name visibility and modes in both key orders, duplicate-key last-value precedence and exact mode-1 normalization."
         }
       ]
     },

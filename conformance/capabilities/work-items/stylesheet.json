@@ -83,6 +83,11 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/score-display.json",
+      "detail": "Ten pinned source hashes and fourteen actual exported artifacts, exact public values/reports, independent binary record decoder and pinned final consumer facts. Page-specific name-mode consumer limit remains explicit."
     }
   ],
   "shared_files": [
@@ -90,8 +95,13 @@
     "gp8_builder.go",
     "gp8_export.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented all fourteen scoped optional keys with exact typed wire preservation, public authority, enum boundaries, independent mutable requests and key-order precedence. Ten pinned sources and authored scenarios retain exact final consumer policies and unrelated style settings. Authored first-system-of-each-page name mode remains exact in Go/wire but the pinned consumer coalesces it; a scoped strict normalization report records that target limit and export remains partial. Awaiting different-agent acceptance review and root combined gates.",
+  "verification": [
+    "Public non-default regression fails with the previous reader/writer and passes with this implementation.",
+    "Pinned raw consumer tests cover ten original fixtures, eleven independent absent/false/true booleans, all bracket and name-mode enum members, 48 order/visibility/mode combinations and duplicate-key precedence.",
+    "Malformed known payload types and signed enum boundaries, authored 3/255 rejection, public nonmutation and parsed pointer independence pass.",
+    "Inventory: 446 public fields, 267 wire fields, 52 dispatches and 181 enum names covered; corpus, verifier and focused quality checks run locally. Full gates and broad probe remain assigned to root."
+  ],
   "issue": {
     "number": 117,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/117",

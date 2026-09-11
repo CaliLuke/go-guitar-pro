@@ -14036,6 +14036,78 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/show-diagrams-in-score.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Beat.Property.PrimaryPickupTone",
+          "kind": "deliberate-ignore",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupTone\"]",
+          "objectId": "0",
+          "locationsSha256": "99c867badfbb758e8c487e9600158bff3a68a6f74311f77bb86a75f60837f95d"
+        },
+        {
+          "code": "GPIF.Beat.Property.PrimaryPickupVolume",
+          "kind": "deliberate-ignore",
+          "count": 2,
+          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Properties/Property[@name=\"PrimaryPickupVolume\"]",
+          "objectId": "0",
+          "locationsSha256": "3ec06b22bd20afc9c3a55f4bddcaacc7dd368d3419d21a33e7305213104fe644"
+        },
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 6,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.NoteAndBeat",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"1\"]/Diagram/@barsStates",
+          "objectId": "1",
+          "locationsSha256": "5515bb48ded47f27795330ed87a4664d6efcb4daba2c5703ad09d8d361017b07"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "11f17de3b0a4978fa3c4cb8ded698f9abd2c6644d123c2f1a0c1d27ac2d10eba"
+        },
+        {
+          "code": "GPIF.UnknownElement.NoteAndBeat",
+          "kind": "unknown-syntax",
+          "count": 10,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff/Properties/Property[@name=\"DiagramCollection\"]/Items/Item[@id=\"1\"]/Chord/KeyNote",
+          "objectId": "1",
+          "locationsSha256": "6f4b4b63bbbd4ddb7f5c14724d0cf09fb86f804e1f2a1f83fc284a8851a8f7b7"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 9,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "731bbd6f5467ce770ff79d378ab90eb6f7b0f2b837bf294c1a68c905db7f10c4"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 17,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
+          "objectId": "0",
+          "locationsSha256": "4d64066b7c3523181c772e95020718703af723737de4a17b5dd5171e51dee55d"
+        }
+      ],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/slash.gp",
       "features": [
         "score-core"

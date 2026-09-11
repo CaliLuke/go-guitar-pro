@@ -61,6 +61,7 @@ var conformanceIndependentEvidenceExecutors = map[string]func(*testing.T){
 
 	"alphatab-system-layout": TestAlphaTabSystemLayout,
 
+	"alphatab-score-display":         TestAlphaTabScoreDisplay,
 	"alphatab-header-footer":         TestAlphaTabHeaderFooter,
 	"alphatab-multi-rest":            TestAlphaTabMultiRest,
 	"alphatab-score-barlines":        TestAlphaTabScoreBarlines,

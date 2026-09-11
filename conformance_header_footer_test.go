@@ -24,7 +24,7 @@ func runConformanceHeaderFooter(run *conformanceRun) {
 			expected[6] = "Words & Music: %WORDSMUSIC%"
 			visible[9] = true
 		}
-		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.page-setup", "gp8.normalize.empty-beat"}}})
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.page-setup", "gp8.normalize.empty-beat", "gp8.normalize.track-name-page-policy"}}})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -54,7 +54,7 @@ func runConformanceHeaderFooter(run *conformanceRun) {
 			run.Wire("binaryStyleRecord.value", int(binary.BigEndian.Uint16(template.value)), len(expected[index]))
 			run.Wire("binaryStyleRecord.value", visibility.value[0] == 1, visible[index])
 		}
-		want := []string{}
+		want := []string{"gp8.normalize.track-name-page-policy"}
 		if format == "gp5" {
 			want = []string{"gp8.omit.page-setup", "gp8.normalize.empty-beat", "gp8.normalize.empty-beat"}
 		}
@@ -201,7 +201,7 @@ func TestHeaderFooterLegacyAuthority(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !reflect.DeepEqual(reportCodes(report), []string{"gp8.normalize.page-copyright-lines"}) {
+	if !reflect.DeepEqual(reportCodes(report), []string{"gp8.normalize.page-copyright-lines", "gp8.normalize.track-name-page-policy"}) {
 		t.Fatalf("copyright ambiguity=%#v", report)
 	}
 	if conformanceContractSnapshot(song, false) != source || *song.Style.HeaderFooter.Title.Template != before {
@@ -260,8 +260,8 @@ func TestHeaderFooterPhysicalPageLimits(t *testing.T) {
 		song := headerFooterSong(t, "gp8")
 		edit(&song.PageSetup)
 		before := conformanceContractSnapshot(song, false)
-		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
-		if err == nil || len(data) != 0 || !reflect.DeepEqual(reportCodes(report), []string{"gp8.omit.page-setup"}) {
+		data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.track-name-page-policy"}}})
+		if err == nil || len(data) != 0 || !reflect.DeepEqual(reportCodes(report), []string{"gp8.omit.page-setup", "gp8.normalize.track-name-page-policy"}) {
 			t.Fatalf("page limit missing: %v %#v", err, report)
 		}
 		if conformanceContractSnapshot(song, false) != before {

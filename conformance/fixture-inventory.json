@@ -3583,6 +3583,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/show-diagrams-in-score.gp",
+      "sha256": "e4742423a80683217268bc14dd25531c0025c525bbe3c793d8eabd0ee60eb9e8",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Pinned original global in-score chord-diagram display regression. Exact global display values are checked separately by the raw stylesheet consumer test.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/slash.gp",
       "sha256": "905caaf7c94f8606801525491717c4cbefd68bd0e6c95cf22641a50192e09588",
       "format": "gp8",

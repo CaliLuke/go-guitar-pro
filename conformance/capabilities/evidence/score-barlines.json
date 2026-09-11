@@ -372,9 +372,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": false,
           "BarNumbers": 2
         }
@@ -479,9 +551,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": false,
           "BarNumbers": 2
         }
@@ -586,9 +730,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -693,9 +909,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -800,9 +1088,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -907,9 +1267,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -1014,9 +1446,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -1121,9 +1625,81 @@
       "go": {
         "report": {
           "Target": 8,
-          "Entries": null
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            }
+          ]
         },
         "style": {
+          "Brackets": 0,
+          "SystemSeparators": false,
+          "HideDynamics": true,
+          "DisplayTuning": true,
+          "ChordDiagramsOnTop": true,
+          "ChordDiagramsInScore": false,
+          "SingleTrackNamesVisible": true,
+          "MultiTrackNamesVisible": true,
+          "SingleTrackNameMode": 0,
+          "MultiTrackNameMode": 1,
+          "FirstSystemShortNames": true,
+          "OtherSystemsShortNames": true,
+          "FirstSystemHorizontalNames": false,
+          "OtherSystemsHorizontalNames": false,
+          "HeaderFooter": {
+            "Title": {
+              "Template": "%TITLE%",
+              "Visible": true
+            },
+            "Subtitle": {
+              "Template": "%SUBTITLE%",
+              "Visible": true
+            },
+            "Artist": {
+              "Template": "%ARTIST%",
+              "Visible": true
+            },
+            "Album": {
+              "Template": "%ALBUM%",
+              "Visible": true
+            },
+            "Words": {
+              "Template": "Words by %WORDS%",
+              "Visible": true
+            },
+            "Music": {
+              "Template": "Music by %MUSIC%",
+              "Visible": true
+            },
+            "WordsAndMusic": {
+              "Template": "Words & Music by %MUSIC%",
+              "Visible": true
+            },
+            "Tabber": {
+              "Template": "Tabbed by %TABBER%",
+              "Visible": false
+            },
+            "Copyright": {
+              "Template": "%COPYRIGHT%",
+              "Visible": true
+            },
+            "Copyright2": {
+              "Template": "All Rights Reserved - International Copyright Secured",
+              "Visible": true
+            }
+          },
+          "MultiRest": false,
           "ExtendedBarLines": true,
           "BarNumbers": 2
         }
@@ -1229,5 +1805,6 @@
     "Other raw typed records and all observed supported consumer stylesheet/header fields unchanged",
     "All eight record types, duplicate last-value precedence, malformed/truncated records and input byte ownership",
     "Former ZIP reader overlay fails the public regression before style decoding"
-  ]
+  ],
+  "policy_update": "Score display support (#117) now recognizes original track-name mode 1. These byte-identical artifacts require gp8.normalize.track-name-page-policy in addition to their existing explicit allowances; updated exact reports are recorded. The authored mode remains exact on wire, while the pinned consumer has no separate page-specific policy."
 }

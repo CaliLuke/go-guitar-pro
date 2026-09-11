@@ -33,8 +33,8 @@ func TestScoreStyleBarlinePublicValues(t *testing.T) {
 			*song.Style.ExtendedBarLines = !test.extend
 			*song.Style.BarNumbers = gp.BarNumberHide
 			before, _ := json.Marshal(song)
-			data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
-			if err != nil || len(report.Entries) != 0 {
+			data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.normalize.track-name-page-policy"}}})
+			if err != nil || len(report.Entries) != 1 || report.Entries[0].Code != "gp8.normalize.track-name-page-policy" {
 				t.Fatalf("strict style export=%v %#v", err, report)
 			}
 			after, _ := json.Marshal(song)
