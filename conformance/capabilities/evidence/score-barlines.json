@@ -1,0 +1,1233 @@
+{
+  "schema_version": 1,
+  "issue": 109,
+  "status": "implemented-awaiting-independent-review",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "scope": "Only the two GP-authored global barline stylesheet keys; individual bar policies and terminal DoubleBar behavior are separate.",
+  "source_cleanup": "Strict export scenarios clear version provenance, pan/volume automations, UseRse and unrelated legacy track display fields. Score style entries and ordinary score content are retained.",
+  "sources": [
+    {
+      "path": "testdata/gp8/extended-barlines.gp",
+      "sha256": "a8483935772a19574549cf5247b4db9c868b440ed7f4e01ac2d647702e826a55",
+      "upstream_path": "packages/alphatab/test-data/guitarpro8/extended-barlines.gp",
+      "consumer": {
+        "extended": true,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "other_records_sha256": "63677bea1fac5c3bc5d3d2a09a066c7f3c4e78227061b6e6be3a3995267eb258"
+    },
+    {
+      "path": "testdata/gp8/barnumbers-all.gp",
+      "sha256": "cd964c8dd69650b8a7844a47be7e3d94a3e212fbbf1bbb7fdea9cd0669e3724a",
+      "upstream_path": "packages/alphatab/test-data/guitarpro8/barnumbers-all.gp",
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "other_records_sha256": "96d60d0b0ea826efa0a4c509d55b031af078ebb14d9e2a89715fcbc08222a14a"
+    },
+    {
+      "path": "testdata/gp8/barnumbers-first.gp",
+      "sha256": "313cae219e569f9d6539153e076e22e61dc26856debc441043d4b47b2994a99a",
+      "upstream_path": "packages/alphatab/test-data/guitarpro8/barnumbers-first.gp",
+      "consumer": {
+        "extended": false,
+        "numbers": "FirstOfSystem",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    },
+    {
+      "path": "testdata/gp8/barnumbers-hide.gp",
+      "sha256": "89cdc0bd9f605f70c7f0bbe55c65246a70fb105ff2fd5387a5cd85d01cb7c7ee",
+      "upstream_path": "packages/alphatab/test-data/guitarpro8/barnumbers-hide.gp",
+      "consumer": {
+        "extended": false,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    }
+  ],
+  "scenarios": [
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/extended-barlines-edited.gp",
+      "sha256": "5763edfc1fd82d91c5599949afe5fdaf32c491d2f5f43bd8c3b4d3800c8b513e",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": false,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000002"
+        }
+      ],
+      "other_records_sha256": "63677bea1fac5c3bc5d3d2a09a066c7f3c4e78227061b6e6be3a3995267eb258"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/extended-barlines-source-export.gp",
+      "sha256": "6bcbfa4e457221b4b649093c9609989a263564b8860735c06297f8e37cbbb220",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": false,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": true,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000000"
+        }
+      ],
+      "other_records_sha256": "63677bea1fac5c3bc5d3d2a09a066c7f3c4e78227061b6e6be3a3995267eb258"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-all-edited.gp",
+      "sha256": "d0e139812982a07363e2871f0592335ef8e72ad5f0ab02d9cbac4187b192edcb",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": true,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000002"
+        }
+      ],
+      "other_records_sha256": "96d60d0b0ea826efa0a4c509d55b031af078ebb14d9e2a89715fcbc08222a14a"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-all-source-export.gp",
+      "sha256": "a967737a6b088330cb0e2b8735c456df3f171f149915d99f380395cb0208ea47",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000000"
+        }
+      ],
+      "other_records_sha256": "96d60d0b0ea826efa0a4c509d55b031af078ebb14d9e2a89715fcbc08222a14a"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-first-edited.gp",
+      "sha256": "815143bfaa9b69a90ef55beba4802f7db41f531b343c56f7279ea539b90cf118",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": true,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000002"
+        }
+      ],
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-first-source-export.gp",
+      "sha256": "90290a525bf2c7960e2b7cd0623f9529bed73391bc1e71b7fd1a2f7129eee927",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "FirstOfSystem",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000001"
+        }
+      ],
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-hide-edited.gp",
+      "sha256": "815143bfaa9b69a90ef55beba4802f7db41f531b343c56f7279ea539b90cf118",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": true,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000002"
+        }
+      ],
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    },
+    {
+      "path": "conformance/capabilities/evidence/score-barlines/barnumbers-hide-source-export.gp",
+      "sha256": "4e8fab60d5484b6cc6cfb48fc24e4e81df7e411e2320c9bfb7681ec6fb925126",
+      "go": {
+        "report": {
+          "Target": 8,
+          "Entries": null
+        },
+        "style": {
+          "ExtendedBarLines": true,
+          "BarNumbers": 2
+        }
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "Hide",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Music",
+            "template": "Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "%ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "%ARTIST%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "All Rights Reserved - International Copyright Secured",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "%SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words by %WORDS%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Copyright",
+            "template": "%COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music by %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Tabbed by %TABBER%",
+            "visible": false,
+            "align": 2
+          }
+        ]
+      },
+      "owned_records": [
+        {
+          "key": "System/ExtendedBarLines",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "System/barIndexDrawType",
+          "type": 1,
+          "hex": "00000002"
+        }
+      ],
+      "other_records_sha256": "1a998b83343ace4f922a5d962b2c925d62e1c9d857973bfde7630aa2ce0c04bb"
+    }
+  ],
+  "checks": [
+    "Public Parse/ParseWithOptions exact fields, public edits, nil fields and undefined authored policy rejection",
+    "All six false/true x 0/1/2 combinations for each of four pinned files match raw final consumer values",
+    "Other raw typed records and all observed supported consumer stylesheet/header fields unchanged",
+    "All eight record types, duplicate last-value precedence, malformed/truncated records and input byte ownership",
+    "Former ZIP reader overlay fails the public regression before style decoding"
+  ]
+}

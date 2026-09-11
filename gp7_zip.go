@@ -52,29 +52,17 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	if song == nil {
 		return nil, fmt.Errorf("no score.gpif found in ZIP archive")
 	}
-	for _, file := range r.File {
-		if filepath.Base(file.Name) != "PartConfiguration" {
-			continue
-		}
-		if file.UncompressedSize64 > maxPartConfigurationSize {
-			return nil, fmt.Errorf("PartConfiguration size %d exceeds %d-byte limit", file.UncompressedSize64, maxPartConfigurationSize)
-		}
-		stream, openErr := file.Open()
-		if openErr != nil {
-			return nil, fmt.Errorf("opening PartConfiguration: %w", openErr)
-		}
-		configuration, readErr := io.ReadAll(io.LimitReader(stream, maxPartConfigurationSize+1))
-		closeErr := stream.Close()
-		if readErr != nil {
-			return nil, fmt.Errorf("reading PartConfiguration: %w", readErr)
-		}
-		if closeErr != nil {
-			return nil, fmt.Errorf("closing PartConfiguration: %w", closeErr)
-		}
-		if applyErr := applyPartConfiguration(song, configuration); applyErr != nil {
+	for _, configuration := range []struct {
+		name  string
+		limit int
+		apply func(*Song, []byte) error
+	}{
+		{"BinaryStylesheet", maxBinaryStylesheetSize, applyBinaryStylesheet},
+		{"PartConfiguration", maxPartConfigurationSize, applyPartConfiguration},
+	} {
+		if applyErr := applyGP7Configuration(r, song, configuration.name, configuration.limit, configuration.apply); applyErr != nil {
 			return nil, applyErr
 		}
-		break
 	}
 
 	for _, f := range r.File {
@@ -153,4 +141,30 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 		})
 	}
 	return song, nil
+}
+
+// applyGP7Configuration reads one bounded binary metadata member.
+func applyGP7Configuration(archive *zip.Reader, song *Song, name string, limit int, apply func(*Song, []byte) error) error {
+	for _, file := range archive.File {
+		if filepath.Base(file.Name) != name {
+			continue
+		}
+		if file.UncompressedSize64 > uint64(limit) {
+			return fmt.Errorf("%s size %d exceeds %d-byte limit", name, file.UncompressedSize64, limit)
+		}
+		stream, err := file.Open()
+		if err != nil {
+			return fmt.Errorf("opening %s: %w", name, err)
+		}
+		data, readErr := io.ReadAll(io.LimitReader(stream, int64(limit)+1))
+		closeErr := stream.Close()
+		if readErr != nil {
+			return fmt.Errorf("reading %s: %w", name, readErr)
+		}
+		if closeErr != nil {
+			return fmt.Errorf("closing %s: %w", name, closeErr)
+		}
+		return apply(song, data)
+	}
+	return nil
 }

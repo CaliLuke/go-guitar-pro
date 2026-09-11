@@ -200,11 +200,11 @@ func TestSemanticContractInventory(t *testing.T) {
 	var classifiedWireFields []string
 	for disposition, fields := range ledger.SemanticContracts.WireFieldDispositions {
 		if !slices.Contains(allowedWireDispositions, disposition) {
-			t.Errorf("unknown GPIF wire field disposition %q", disposition)
+			t.Errorf("unknown wire field disposition %q", disposition)
 		}
 		classifiedWireFields = append(classifiedWireFields, fields...)
 	}
-	assertExactSemanticSet(t, "GPIF wire field dispositions", inventory.wireFields, classifiedWireFields)
+	assertExactSemanticSet(t, "wire field dispositions", inventory.wireFields, classifiedWireFields)
 
 	dispatchContracts := make(map[string]semanticDispatchContract, len(ledger.SemanticContracts.SourceDispatches))
 	for _, contract := range ledger.SemanticContracts.SourceDispatches {
@@ -320,7 +320,7 @@ func TestSemanticMatrixInventory(t *testing.T) {
 		}
 	}
 	missingFields := assertSemanticCaseAssignments(t, "semantic matrix public fields", modelFields, ledger.SemanticMatrix.FieldCases, cases)
-	missingWireFields := assertSemanticCaseAssignments(t, "semantic matrix GPIF wire fields", inventory.wireFields, ledger.SemanticMatrix.WireFieldCases, cases)
+	missingWireFields := assertSemanticCaseAssignments(t, "semantic matrix wire fields", inventory.wireFields, ledger.SemanticMatrix.WireFieldCases, cases)
 	var dispatches []string
 	for key := range inventory.dispatches {
 		dispatches = append(dispatches, key)
@@ -333,25 +333,25 @@ func TestSemanticMatrixInventory(t *testing.T) {
 	missingEnumBehavior := missingSemanticBehaviorAssignments(inventory.enumMembers, ledger.SemanticMatrix.EnumCases, cases, nil)
 	for field, reason := range ledger.SemanticMatrix.StructuralWireFields {
 		if !slices.Contains(inventory.wireFields, field) {
-			t.Errorf("structural GPIF wire field %s is not discovered", field)
+			t.Errorf("structural wire field %s is not discovered", field)
 		}
 		if strings.TrimSpace(reason) == "" {
-			t.Errorf("structural GPIF wire field %s has no reason", field)
+			t.Errorf("structural wire field %s has no reason", field)
 		}
 		if !slices.Contains(inventory.structuralWireCandidates, field) {
-			t.Errorf("structural GPIF wire field %s is a scalar semantic leaf", field)
+			t.Errorf("structural wire field %s is a scalar semantic leaf", field)
 		}
 	}
 	assertSemanticMatrixEvidence(t, ledger, cases)
 	assertSupportedCapabilityClaims(t, ledger, cases)
 	if ledger.SemanticMatrix.Complete && (len(missingFields) != 0 || len(missingWireFields) != 0 || len(missingDispatches) != 0 || len(missingEnumMembers) != 0 || len(missingFieldBehavior) != 0 || len(missingWireBehavior) != 0 || len(missingDispatchBehavior) != 0 || len(missingEnumBehavior) != 0) {
-		t.Errorf("complete semantic matrix has %d public fields, %d GPIF wire fields, %d source dispatches, and %d enum members without cases", len(missingFields), len(missingWireFields), len(missingDispatches), len(missingEnumMembers))
-		t.Logf("missing behavioral obligations: %d public fields, %d GPIF wire fields, %d source dispatches, %d enum members", len(missingFieldBehavior), len(missingWireBehavior), len(missingDispatchBehavior), len(missingEnumBehavior))
+		t.Errorf("complete semantic matrix has %d public fields, %d wire fields, %d source dispatches, and %d enum members without cases", len(missingFields), len(missingWireFields), len(missingDispatches), len(missingEnumMembers))
+		t.Logf("missing behavioral obligations: %d public fields, %d wire fields, %d source dispatches, %d enum members", len(missingFieldBehavior), len(missingWireBehavior), len(missingDispatchBehavior), len(missingEnumBehavior))
 		if len(missingFields) != 0 {
 			t.Logf("missing public fields: %s", strings.Join(missingFields, ", "))
 		}
 		if len(missingWireFields) != 0 {
-			t.Logf("missing GPIF wire fields: %s", strings.Join(missingWireFields, ", "))
+			t.Logf("missing wire fields: %s", strings.Join(missingWireFields, ", "))
 		}
 		if len(missingDispatches) != 0 {
 			t.Logf("missing source dispatches: %s", strings.Join(missingDispatches, ", "))
@@ -360,7 +360,7 @@ func TestSemanticMatrixInventory(t *testing.T) {
 			t.Logf("missing enum members: %s", strings.Join(missingEnumMembers, ", "))
 		}
 	}
-	t.Logf("semantic matrix coverage: %d/%d public fields, %d/%d GPIF wire fields, %d/%d source dispatches, and %d/%d enum members assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches), len(inventory.enumMembers)-len(missingEnumMembers), len(inventory.enumMembers))
+	t.Logf("semantic matrix coverage: %d/%d public fields, %d/%d wire fields, %d/%d source dispatches, and %d/%d enum members assigned", len(modelFields)-len(missingFields), len(modelFields), len(inventory.wireFields)-len(missingWireFields), len(inventory.wireFields), len(dispatches)-len(missingDispatches), len(dispatches), len(inventory.enumMembers)-len(missingEnumMembers), len(inventory.enumMembers))
 }
 
 func assertSupportedCapabilityClaims(t *testing.T, ledger semanticContractLedger, cases map[string]semanticMatrixCaseContract) {
@@ -673,9 +673,6 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 	modelTypes := make(map[string][]string)
 	var wireFields []string
 	for typeName, expression := range typeExpressions {
-		if !strings.HasPrefix(typeName, "gpif") {
-			continue
-		}
 		structure, ok := expression.(*ast.StructType)
 		if !ok {
 			continue
@@ -684,8 +681,9 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 			if field.Tag == nil {
 				continue
 			}
+			binaryWire := strings.Contains(field.Tag.Value, `wire:"`)
 			for _, name := range field.Names {
-				if name.IsExported() {
+				if binaryWire || (strings.HasPrefix(typeName, "gpif") && name.IsExported()) {
 					wireFields = append(wireFields, typeName+"."+name.Name)
 				}
 			}
@@ -711,10 +709,15 @@ func discoverSemanticGoInventory(t *testing.T) semanticGoInventory {
 		}
 		var fields []string
 		for _, field := range structure.Fields.List {
+			exported := len(field.Names) == 0 // Embedded fields remain traversable.
 			for _, name := range field.Names {
 				if name.IsExported() {
+					exported = true
 					fields = append(fields, name.Name)
 				}
+			}
+			if !exported {
+				continue
 			}
 			ast.Inspect(field.Type, func(node ast.Node) bool {
 				identifier, ok := node.(*ast.Ident)

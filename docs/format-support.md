@@ -292,7 +292,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `PitchClass` | `note-and-beat-semantics` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | The pitch class contains authored spelling data. |
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
-| `Song` | `score-core` | 33 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
+| `Song` | `score-core` | 34 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
 | `Note` | `note-and-beat-semantics` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
 | `Chord` | `note-and-beat-semantics` | 22 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
@@ -300,13 +300,14 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
 | `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
+| `ScoreStyle` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 270 |
-| `normalized` | 45 |
+| `preserved` | 272 |
+| `normalized` | 46 |
 | `omitted` | 103 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -316,15 +317,15 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 135 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 205 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 136 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
 
-## GPIF wire inventory
+## Wire inventory
 
-The schema inventory records every decoded GPIF field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.
+The schema inventory records every decoded GPIF field and each explicitly tagged binary wire field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 271 |
+| `schema` | 275 |
 
 ## Source dispatch inventory
 
@@ -384,6 +385,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
 | `gpifAuthoredAccidental:p.Name` | `note-and-beat-semantics` | 2 | `pitch-spelling-preservation` | `delegated-to-audit` | TransposedPitch takes precedence over ConcertPitch independent of property order. |
 | `gpifAuditNoteSpelling:property.Name` | `note-and-beat-semantics` | 3 | `pitch-spelling-preservation` | `delegated-to-audit` | Source pitch spelling is checked against the owning staff and beat context; TransposedPitch is the accidental-mode authority. |
+| `applyBinaryStylesheet:record.key` | `score-core` | 2 | `score-barlines` | `opaque-preserved` | Validated binary record key/type/payload triples remain unchanged unless an owned public field is edited or cleared. |
 
 ## Behavioral contracts
 
@@ -478,3 +480,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
 | `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |
 | `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. An explicit empty scope emits an empty array with a precise normalization; two raw consumer exports retain track precedence. |
+| `score-barlines` | `score-core` | `TestConformanceScoreBarlines` | `TestAlphaTabScoreBarlines` | no | Global flags and numbering values retain exact typed records, defaults and other consumer styles; malformed sources and undefined authored enums are rejected. |

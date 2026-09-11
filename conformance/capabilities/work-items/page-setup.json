@@ -5,8 +5,8 @@
   "title": "Preserve supported header and footer templates and visibility",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp3",
     "gp4",

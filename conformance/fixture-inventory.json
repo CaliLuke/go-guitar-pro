@@ -3295,6 +3295,39 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/barnumbers-all.gp",
+      "sha256": "cd964c8dd69650b8a7844a47be7e3d94a3e212fbbf1bbb7fdea9cd0669e3724a",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Pinned original GP8 global stylesheet regression; exact global flags and numbering are covered separately by the focused raw consumer test.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/barnumbers-first.gp",
+      "sha256": "313cae219e569f9d6539153e076e22e61dc26856debc441043d4b47b2994a99a",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Pinned original GP8 global stylesheet regression; exact global flags and numbering are covered separately by the focused raw consumer test.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/barnumbers-hide.gp",
+      "sha256": "89cdc0bd9f605f70c7f0bbe55c65246a70fb105ff2fd5387a5cd85d01cb7c7ee",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Pinned original GP8 global stylesheet regression; exact global flags and numbering are covered separately by the focused raw consumer test.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/beaming-mode.gp",
       "sha256": "ef942e5885f56e8a280e92adc446f2f4805c859c3416f249389c8d1282ba0cbc",
       "format": "gp8",
@@ -3357,6 +3390,17 @@
       "format": "gp8",
       "disposition": "partial",
       "reason": "Whole-corpus receipt covers score-core; the declared slices have no current AlphaTab difference.",
+      "features": [
+        "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/extended-barlines.gp",
+      "sha256": "a8483935772a19574549cf5247b4db9c868b440ed7f4e01ac2d647702e826a55",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Pinned original GP8 global stylesheet regression; exact global flags and numbering are covered separately by the focused raw consumer test.",
       "features": [
         "score-core"
       ],

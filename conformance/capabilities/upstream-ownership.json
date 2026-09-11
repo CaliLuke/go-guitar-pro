@@ -337,9 +337,11 @@
         "gp8"
       ],
       "disposition": "authored",
-      "reason": "The containing Guitar Pro importer or configuration reader can reach this authored syntax or model assignment.",
-      "primary_capability": "stylesheet",
-      "secondary_capabilities": [],
+      "reason": "The confirmed global ExtendedBarLines key belongs to #109; the shared stylesheet codec is owned by #117.",
+      "primary_capability": "barlines",
+      "secondary_capabilities": [
+        "stylesheet"
+      ],
       "model_declaration": "RenderStylesheet.extendBarLines"
     },
     {
@@ -20676,9 +20678,11 @@
         "gp8"
       ],
       "disposition": "authored",
-      "reason": "A reviewed Guitar Pro importer assignment or enum reference reaches this model declaration.",
-      "primary_capability": "stylesheet",
-      "secondary_capabilities": []
+      "reason": "The confirmed global ExtendedBarLines key belongs to #109; the shared stylesheet codec is owned by #117.",
+      "primary_capability": "barlines",
+      "secondary_capabilities": [
+        "stylesheet"
+      ]
     },
     {
       "declaration": "RenderStylesheet.firstSystemTrackNameMode",

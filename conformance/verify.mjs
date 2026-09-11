@@ -122,7 +122,7 @@ for (const source of receiptBySource.keys()) {
   if (!declaredSources.has(source)) fail(`${source} receipt has no source declaration`);
 }
 
-const allowedDispatchDefaults = new Set(['unknown-syntax', 'unsupported-feature', 'invalid-data', 'delegated-to-audit']);
+const allowedDispatchDefaults = new Set(['unknown-syntax', 'unsupported-feature', 'invalid-data', 'delegated-to-audit', 'opaque-preserved']);
 const allowedSourceCaseDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected']);
 const modelTypeContracts = new Map();
 const inventoriedModelFields = new Set();
@@ -167,10 +167,10 @@ for (const field of inventoriedModelFields) {
 const allowedWireFieldDispositions = new Set(['preserved', 'normalized', 'omitted', 'rejected', 'schema']);
 const classifiedWireFields = new Set();
 for (const [disposition, fields] of Object.entries(ledger.semanticContracts.wireFieldDispositions)) {
-  if (!allowedWireFieldDispositions.has(disposition)) fail(`invalid GPIF wire field disposition ${disposition}`);
-  if (!Array.isArray(fields)) fail(`GPIF wire field disposition ${disposition} is not an array`);
+  if (!allowedWireFieldDispositions.has(disposition)) fail(`invalid wire field disposition ${disposition}`);
+  if (!Array.isArray(fields)) fail(`wire field disposition ${disposition} is not an array`);
   for (const field of fields) {
-    if (classifiedWireFields.has(field)) fail(`${field} has more than one GPIF wire field disposition`);
+    if (classifiedWireFields.has(field)) fail(`${field} has more than one wire field disposition`);
     classifiedWireFields.add(field);
   }
 }
@@ -459,7 +459,7 @@ function supportDocument() {
     `| Target disposition | Fields |\n| --- | --- |\n${fieldDispositionRows.join('\n')}\n\n` +
     `Each public field has disposition-bearing runtime evidence in the semantic matrix.\n\n` +
     `## Semantic matrix obligations\n\nThe matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has ${matrixBehaviorCount} behavior cases, ${matrixStructuralCount} structural cases, ${Object.keys(ledger.semanticMatrix.structuralWireFields).length} justified structural wire wrappers, and ${Object.keys(ledger.semanticMatrix.enumCases).length} discovered public enum members.\n\n` +
-    `## GPIF wire inventory\n\nThe schema inventory records every decoded GPIF field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.\n\n` +
+    `## Wire inventory\n\nThe schema inventory records every decoded GPIF field and each explicitly tagged binary wire field. This inventory detects schema changes only. The source dispatch and public model inventories define semantic handling.\n\n` +
     `| Wire role | Fields |\n| --- | --- |\n${wireFieldRows.join('\n')}\n\n` +
     `## Source dispatch inventory\n\nThe gate compares these cases with the source switches. Each default has an explicit disposition.\n\n` +
     `| Dispatch | Feature | Cases | Evidence | Default | Reason |\n| --- | --- | --- | --- | --- | --- |\n${dispatchRows.join('\n')}\n\n` +

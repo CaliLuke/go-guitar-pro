@@ -5,8 +5,8 @@
   "title": "Preserve global extended barlines and bar-number policy",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp6",
     "gp7",
@@ -65,6 +65,11 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/score-barlines.json",
+      "detail": "Hash-bound source and actual export artifacts with independently decoded key/type/payload records and final pinned consumer facts."
     }
   ],
   "shared_files": [
@@ -73,8 +78,13 @@
     "gp8_export.go",
     "headers.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented the two confirmed global stylesheet keys with public optional authorities, checked binary reader/writer, exact raw final consumer receipts, and preservation of other validated records. Awaiting different-agent final-commit acceptance review and root combined gates.",
+  "verification": [
+    "Focused public API and raw pinned consumer tests pass for all six flag/policy combinations and absence.",
+    "Semantic inventory adds three public fields, three tagged binary wire fields, one source dispatch and three enum members.",
+    "Four pinned fixture copies are registered and whole-corpus accounting refreshed.",
+    "Full conformance, capability probe and prek remain assigned to root integration."
+  ],
   "issue": {
     "number": 109,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/109",

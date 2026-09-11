@@ -727,30 +727,36 @@
       "scope": "guitar-pro",
       "priority": 3,
       "formats": [
-        "gp3",
-        "gp4",
-        "gp5",
         "gp6",
         "gp7",
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Only double bars have a dedicated public contract. Dashed/heavy/tick/custom bar lines and per-bar number display are absent. Some upstream values originate in other formats.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "ScoreStyle preserves optional global extended barlines and all three numbering policies through exact typed BinaryStylesheet records and pinned final consumption. Public edits own these two keys; other validated records remain unchanged. Absence uses consumer defaults. Per-bar policies have no GP mapping and terminal DoubleBar normalization remains separate.",
+      "acceptance": "Preserve the two confirmed global stylesheet settings, exact keys/types, absence and edits with checked binary records.",
       "upstream": [
-        "Bar.barLineLeft",
-        "Bar.barLineRight",
-        "Bar.barNumberDisplay"
+        "RenderStylesheet.extendBarLines",
+        "RenderStylesheet.barNumberDisplay"
       ],
       "evidence": [
         {
           "kind": "source",
           "reference": "headers.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceScoreBarlines",
+          "detail": "Four pinned sources, all enum members, binary keys/types/payloads, absence and other record retention."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabScoreBarlines",
+          "detail": "Raw final consumer checks all six public combinations and absent defaults without changing other supported consumer styles."
         }
       ]
     },

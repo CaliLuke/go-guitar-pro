@@ -98,7 +98,7 @@ func ExportWithReport(song *Song, target ExportFormat, options ExportOptions) ([
 		{name: "VERSION", method: zip.Store, data: []byte(gp8ContainerVersion)},
 		{name: "meta.json", method: zip.Store, data: []byte("{\n}\n")},
 		{name: "Content/", method: zip.Store},
-		{name: "Content/BinaryStylesheet", method: zip.Store, data: buildGP8BinaryStylesheet()},
+		{name: "Content/BinaryStylesheet", method: zip.Store, data: buildGP8BinaryStylesheet(song)},
 		{name: "Content/PartConfiguration", method: zip.Store, data: buildGP8PartConfiguration(song)},
 		{name: "Content/LayoutConfiguration", method: zip.Store, data: buildGP8LayoutConfiguration(song)},
 		{name: "Content/score.gpif", method: zip.Store, data: gpif},
@@ -170,11 +170,6 @@ func writeGP8Archive(entries []gp8ArchiveEntry) ([]byte, error) {
 		return nil, fmt.Errorf("closing Guitar Pro archive: %w", err)
 	}
 	return output.Bytes(), nil
-}
-
-func buildGP8BinaryStylesheet() []byte {
-	// A zero-entry stylesheet is valid and lets Guitar Pro apply its defaults.
-	return make([]byte, 4)
 }
 
 func buildGP8PartConfiguration(song *Song) []byte {

@@ -1455,6 +1455,7 @@ function main() {
     process.stdout.write(`${JSON.stringify(loadStaffNotationFacts(args[1]), null, 2)}\n`);
     return;
   }
+  if (args[0] === '--score-style' && args.length === 2) { process.stdout.write(`${JSON.stringify(loadScoreStyleFacts(args[1]), null, 2)}\n`); return; }
   if (args[0] === '--string-number-display' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadStringNumberFacts(args[1]), null, 2)}\n`);
     return;
@@ -1553,4 +1554,11 @@ export function loadChordDisplayFacts(fixture) {
 export function loadBeatTimerFacts(fixture) {
  const score=loadScore(fixture);
  return score.tracks.flatMap(track=>track.staves.flatMap(staff=>staff.bars.flatMap(bar=>bar.voices.flatMap(voice=>voice.beats.map(beat=>({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,show:beat.showTimer,milliseconds:beat.timer,notes:beat.notes.map(note=>({string:note.string,fret:note.fret,midi:note.realValue}))}))))));
+}
+
+export function loadScoreStyleFacts(fixture) {
+ const score=loadScore(fixture),s=score.stylesheet;
+ const other={};for(const key of ['hideDynamics','bracketExtendMode','useSystemSignSeparator','globalDisplayTuning','globalDisplayChordDiagramsOnTop','globalDisplayChordDiagramsInScore','singleTrackTrackNamePolicy','multiTrackTrackNamePolicy','firstSystemTrackNameMode','otherSystemsTrackNameMode','firstSystemTrackNameOrientation','otherSystemsTrackNameOrientation'])other[key]=s[key];
+ const headers=Array.from(score.style?.headerAndFooter??[]).map(([key,value])=>({element:alphaTab.model.ScoreSubElement[key],template:value.template,visible:value.isVisible,align:value.textAlign}));
+ return {extended:s.extendBarLines,numbers:alphaTab.model.BarNumberDisplay[s.barNumberDisplay],other,headers};
 }

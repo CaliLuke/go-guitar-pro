@@ -223,6 +223,11 @@ func parseGPXWithContext(data []byte, context *parseContext) (*Song, error) {
 	if err != nil {
 		return nil, err
 	}
+	if stylesheet, exists := files["BinaryStylesheet"]; exists {
+		if applyErr := applyBinaryStylesheet(song, stylesheet); applyErr != nil {
+			return nil, applyErr
+		}
+	}
 	if configuration, exists := files["PartConfiguration"]; exists {
 		if applyErr := applyPartConfiguration(song, configuration); applyErr != nil {
 			return nil, applyErr

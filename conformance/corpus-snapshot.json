@@ -15045,6 +15045,126 @@
       "differences": null
     },
     {
+      "path": "testdata/gp8/barnumbers-all.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 6,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "11f17de3b0a4978fa3c4cb8ded698f9abd2c6644d123c2f1a0c1d27ac2d10eba"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 11,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 24,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "objectId": "0",
+          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+        }
+      ],
+      "differences": null
+    },
+    {
+      "path": "testdata/gp8/barnumbers-first.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 6,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "11f17de3b0a4978fa3c4cb8ded698f9abd2c6644d123c2f1a0c1d27ac2d10eba"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 11,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 24,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "objectId": "0",
+          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+        }
+      ],
+      "differences": null
+    },
+    {
+      "path": "testdata/gp8/barnumbers-hide.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 6,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "70e4b407779d73b17739d15d31465002e62c436775ac7a25453a3b29b0cebde9"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 1,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "11f17de3b0a4978fa3c4cb8ded698f9abd2c6644d123c2f1a0c1d27ac2d10eba"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 11,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 24,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "objectId": "0",
+          "locationsSha256": "6486fb7a1b2551302d1d057bcd91b5b30b0f87b6c2579fbfb263de45fcc6da73"
+        }
+      ],
+      "differences": null
+    },
+    {
       "path": "testdata/gp8/beaming-mode.gp",
       "features": [
         "score-core",
@@ -15360,6 +15480,46 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/AutoBrush",
           "objectId": "0",
           "locationsSha256": "2e2efe4125e4dbf462d6c4a622fd24e3967e18e6f07a5520b8d4456045666759"
+        }
+      ],
+      "differences": null
+    },
+    {
+      "path": "testdata/gp8/extended-barlines.gp",
+      "features": [
+        "score-core"
+      ],
+      "diagnostics": [
+        {
+          "code": "GPIF.Staff.Property.Unknown",
+          "kind": "unknown-syntax",
+          "count": 12,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Staves/Staff[0]/Properties/Property[1][@name=\"FretCount\"]",
+          "objectId": "0",
+          "locationsSha256": "47a703181fdf3e9f0cd754c2eef7989a23bf8e32f7e5527bb24f38d617444cac"
+        },
+        {
+          "code": "GPIF.UnknownAttribute.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 2,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/RSE/ChannelStrip/@version",
+          "objectId": "0",
+          "locationsSha256": "612da42f573c88651b7d934b647e7ab5efed457b8074eb606fdbe7458e6cfaae"
+        },
+        {
+          "code": "GPIF.UnknownElement.ScoreCore",
+          "kind": "unknown-syntax",
+          "count": 11,
+          "sourcePath": "/GPIF/Score/FirstPageHeader",
+          "locationsSha256": "293917d05128477994aeeb2075d881adf6a5e1493303e0abc4be710ae7de983d"
+        },
+        {
+          "code": "GPIF.UnknownElement.StaffOwnership",
+          "kind": "unknown-syntax",
+          "count": 46,
+          "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/SystemsDefautLayout",
+          "objectId": "0",
+          "locationsSha256": "39d4d8bef372492784bb470d9b9b16f79981ad0a0da897dfec932d320b1b41b0"
         }
       ],
       "differences": null

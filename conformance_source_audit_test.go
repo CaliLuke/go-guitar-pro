@@ -28,6 +28,9 @@ func runConformanceSourceAudit(run *conformanceRun) {
 
 	decoded := conformanceSourceAuditRoundTripWireDocument(t)
 	for _, field := range inventory.wireFields {
+		if !strings.HasPrefix(field, "gpif") {
+			continue // Binary wire fields have their own codec and behavior executors.
+		}
 		run.Wire(field, slices.Contains(decoded, field), true)
 	}
 	for _, contract := range ledger.SemanticContracts.SourceDispatches {

@@ -127,3 +127,8 @@ Go's `GraceEffect.RawFret`. AlphaTab's fixed display duration and derived
 playback pitch are not treated as authored GP3–5 grace values. Tick origins are
 normalized to zero. Derived layout, rendering, and playback links are
 inventoried but excluded from authored comparisons.
+
+Binary wire structures can mark decoded fields with a `wire` struct tag. These
+fields join the exact wire inventory and require a focused codec assertion.
+The GPIF XML round-trip executor covers only GPIF fields. Public model discovery
+follows exported fields; private transport storage does not expand the public API.

@@ -5,8 +5,8 @@
   "title": "Preserve score and track multirest preferences",
   "kind": "implementation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "Codex",
   "formats": [
     "gp7",
     "gp8"

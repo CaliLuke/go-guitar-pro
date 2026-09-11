@@ -1037,3 +1037,19 @@ Each parsed bar occurrence owns its scale. Legacy line-break and display-width p
 Six original GP6 fixtures contain the unreachable final remainder [4, -3] for a one-bar score.
 A negative final entry is retained only when the sum of all counts equals the score length and the preceding counts exceed it.
 All reachable system counts remain positive. Other zero or negative counts are rejected.
+
+`Song.Style` owns the optional global `ExtendedBarLines` and `BarNumbers`
+settings from GP6 through GP8 BinaryStylesheet records. Their values apply to the
+whole score, independently of measure barline fields. Direct public edits control
+export. A nil leaf removes that key and lets the consumer use its default:
+false for extended barlines and AllBars for numbering. A nil `Song.Style` exports
+an empty stylesheet; reimport creates an empty style container.
+
+The checked binary codec retains other validated records, including their keys,
+types, payload bytes and order. This transport does not establish public semantic
+support for those settings. Editing either owned field preserves all other
+records. Setting `Song.Style` to nil discards the imported stylesheet. Duplicate
+owned keys use the last source value and export as one record. The codec checks
+all eight value types, UTF-8 strings, lengths, boolean bytes and supported policy
+values. It rejects a stylesheet larger than one MiB. Authored undefined numbering
+policies are validation errors and cannot be allowed as export losses.
