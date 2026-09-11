@@ -5,8 +5,8 @@
   "title": "Prove sound identity independently of MIDI program",
   "kind": "implementation",
   "priority": 1,
-  "status": "in_progress",
-  "owner": "agent:implement_preroll",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -108,8 +108,24 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Same-program sound definitions now have focused identity, public-edit, definition-reorder, broken-reference, and exact-wire regression evidence. Separate authority cases distinguish the first-definition base program, channel fallback/conflicts, and explicit opening selections. Raw pinned consumer evidence asserts retained event order, count, positions, programs, annotations and interpolation without claiming named identities that its public model discards. Existing Hidden consumer-loss coverage and legacy mix-table limits remain unchanged. Awaiting fresh review and integrated full-gate verification; the issue remains open.",
-  "verification": [],
+  "resolution": "Same-program sound definitions now have focused identity, public-edit, definition-reorder, broken-reference, and exact-wire regression evidence. Separate authority cases distinguish the first-definition base program, channel fallback/conflicts, and explicit opening selections. Raw pinned consumer evidence asserts retained event order, count, positions, programs, annotations and interpolation without claiming named identities that its public model discards. Existing Hidden consumer-loss coverage and legacy mix-table limits remain unchanged. Fresh independent acceptance review and integrated full gates passed; the issue remains open with solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 949672ba089e93be4371c8fe5ef55a0dc277cb8b",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "Combined capability probe over368 fixtures: PASS; receipt recorded at064db0e",
+        "Fresh focused public API, exact wire and pinned consumer acceptance tests: PASS",
+        "TestSemanticMatrixInventory: PASS;398 public fields,260 wire fields,48 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer root passed every latest acceptance criterion at source commit 6f400f217bbdddd7165af9409cc564129a6eeedc. No scoped acceptance blockers remain.",
+        "Distinct equal-program sound definitions, stable identities, authored opening/later event order and consumer program81 passed. Independent challenge retained three definitions and five out-of-order/duplicate-position events. Dependencies41/51 are closed.",
+        "Pinned AlphaTab1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate covers build, vet, formatting, lint, duplication, conformance,77 mutation checks, race tests and91.8% statement coverage."
+      ]
+    }
+  ],
   "issue": {
     "number": 69,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/69",

@@ -5,8 +5,8 @@
   "title": "Export existing pick stroke directions",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "agent:pick-stroke",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -110,8 +110,24 @@
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": "GP8 writes the authored PickStroke Direction as Up or Down and omits the property for None. Pick marks remain independent from brush kind, direction, and timing. Strict export preserves both directions without the old omission report. Undefined public directions receive scoped validation and export rejection. Public and pinned-consumer tests cover absence, opposite brushes, direct clearing, nonmutation, and both source marks in testdata/gp7/effects.gp. The implementation awaits independent review and the centralized full gate and capability probe.",
-  "verification": [],
+  "resolution": "GP8 writes the authored PickStroke Direction as Up or Down and omits the property for None. Pick marks remain independent from brush kind, direction, and timing. Strict export preserves both directions without the old omission report. Undefined public directions receive scoped validation and export rejection. Public and pinned-consumer tests cover absence, opposite brushes, direct clearing, nonmutation, and both source marks in testdata/gp7/effects.gp. The implementation awaits independent review and the centralized full gate and capability probe. Fresh independent acceptance review and integrated full gates passed. The issue remains open with solved label for subsequent verification.",
+  "verification": [
+    {
+      "commit": "949672ba089e93be4371c8fe5ef55a0dc277cb8b",
+      "commands": [
+        "prek run --all-files: PASS on clean integrated commit 949672ba089e93be4371c8fe5ef55a0dc277cb8b",
+        "python3 conformance/capabilities/manage.py check: PASS",
+        "Combined capability probe over368 fixtures: PASS; receipt recorded at064db0e",
+        "Fresh focused public API, exact wire and pinned consumer acceptance tests: PASS",
+        "TestSemanticMatrixInventory: PASS;398 public fields,260 wire fields,48 dispatches,172 enum members fully assigned"
+      ],
+      "evidence": [
+        "Fresh independent reviewer implement_preroll passed every latest acceptance criterion at source commit d47cbfa3dcec902e6309b43a19d15b1504c19683. No scoped acceptance blockers remain.",
+        "All nine pick/brush combinations and15 additional pick/brush/arpeggio consumer combinations passed. Undefined enums reject, clearing parsed marks works and fields remain independent.",
+        "Pinned AlphaTab1.8.4 revision022a45c8e42370f9e12e68949d11eada370da83d. Full gate covers build, vet, formatting, lint, duplication, conformance,77 mutation checks, race tests and91.8% statement coverage."
+      ]
+    }
+  ],
   "issue": {
     "number": 88,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/88",

@@ -28,12 +28,12 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve lowercase GPIF minor key modes](work-items/key.json) | implementation | 1 | done | — | [#49](https://github.com/CaliLuke/go-guitar-pro/issues/49) |
 | [Preserve authored legato and slur endpoints](work-items/legato-slurs.json) | implementation | 1 | done | — | [#50](https://github.com/CaliLuke/go-guitar-pro/issues/50) |
 | [Preserve MIDI bank selection and bank changes](work-items/midi-bank.json) | implementation | 1 | done | — | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51) |
-| [Add independent regression coverage for conflicting MIDI routes and playback states](work-items/midi-routing.json) | implementation | 1 | in_progress | — | [#66](https://github.com/CaliLuke/go-guitar-pro/issues/66) |
+| [Add independent regression coverage for conflicting MIDI routes and playback states](work-items/midi-routing.json) | implementation | 1 | done | — | [#66](https://github.com/CaliLuke/go-guitar-pro/issues/66) |
 | [Require executable evidence for supported capability claims](work-items/oracle-breadth.json) | implementation | 1 | done | — | [#67](https://github.com/CaliLuke/go-guitar-pro/issues/67) |
 | [Emit GP8 archives readable by the pinned AlphaTab inflater](work-items/oracle-inflater.json) | implementation | 1 | done | — | [#68](https://github.com/CaliLuke/go-guitar-pro/issues/68) |
 | [Preserve pan automation independently from static balance](work-items/pan-automation.json) | implementation | 1 | todo | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52) |
 | [Export valid percussion notes currently rejected by GP8](work-items/percussion.json) | implementation | 1 | done | — | [#53](https://github.com/CaliLuke/go-guitar-pro/issues/53) |
-| [Prove sound identity independently of MIDI program](work-items/sound-automation.json) | implementation | 1 | in_progress | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#69](https://github.com/CaliLuke/go-guitar-pro/issues/69) |
+| [Prove sound identity independently of MIDI program](work-items/sound-automation.json) | implementation | 1 | done | [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#69](https://github.com/CaliLuke/go-guitar-pro/issues/69) |
 | [Preserve sustain pedal down, hold and release markers](work-items/sustain-pedal.json) | implementation | 1 | done | — | [#54](https://github.com/CaliLuke/go-guitar-pro/issues/54) |
 | [Export authored backing-track synchronization points](work-items/sync-points.json) | implementation | 1 | todo | [#42](https://github.com/CaliLuke/go-guitar-pro/issues/42) | [#55](https://github.com/CaliLuke/go-guitar-pro/issues/55) |
 | [Apply authored HideTempo to the opening GP8 tempo event](work-items/tempo.json) | implementation | 1 | done | [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#70](https://github.com/CaliLuke/go-guitar-pro/issues/70) |
@@ -51,7 +51,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve authored brush and arpeggio timing](work-items/brush.json) | implementation | 2 | done | — | [#78](https://github.com/CaliLuke/go-guitar-pro/issues/78) |
 | [Preserve representable chord diagram barres and fingerings](work-items/chord-diagram.json) | implementation | 2 | done | — | [#79](https://github.com/CaliLuke/go-guitar-pro/issues/79) |
 | [Preserve dead-slapped beats without reducing them to rests](work-items/dead-slap.json) | implementation | 2 | done | — | [#80](https://github.com/CaliLuke/go-guitar-pro/issues/80) |
-| [Report terminal double-bar consumer loss without stripping authored XML](work-items/double-bar.json) | implementation | 2 | in_progress | — | [#95](https://github.com/CaliLuke/go-guitar-pro/issues/95) |
+| [Report terminal double-bar consumer loss without stripping authored XML](work-items/double-bar.json) | implementation | 2 | done | — | [#95](https://github.com/CaliLuke/go-guitar-pro/issues/95) |
 | [Preserve fade-out and volume-swell beat effects](work-items/fade-other.json) | implementation | 2 | done | — | [#81](https://github.com/CaliLuke/go-guitar-pro/issues/81) |
 | [Export existing left and right hand fingerings](work-items/fingering.json) | implementation | 2 | done | — | [#82](https://github.com/CaliLuke/go-guitar-pro/issues/82) |
 | [Preserve thumb and finger golpe marks](work-items/golpe.json) | implementation | 2 | done | — | [#83](https://github.com/CaliLuke/go-guitar-pro/issues/83) |
@@ -63,7 +63,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Project supported legacy mix-table events into GP8 automation](work-items/mix-table.json) | implementation | 2 | blocked | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59), [#52](https://github.com/CaliLuke/go-guitar-pro/issues/52), [#51](https://github.com/CaliLuke/go-guitar-pro/issues/51), [#41](https://github.com/CaliLuke/go-guitar-pro/issues/41) | [#85](https://github.com/CaliLuke/go-guitar-pro/issues/85) |
 | [Read and preserve per-staff part notation settings](work-items/notation-visibility.json) | implementation | 2 | todo | — | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) |
 | [Preserve turns and mordents through GPIF and GP8](work-items/ornaments.json) | implementation | 2 | todo | — | [#87](https://github.com/CaliLuke/go-guitar-pro/issues/87) |
-| [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | in_progress | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
+| [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | done | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
 | [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | todo | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
 | [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | todo | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
 | [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | todo | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
@@ -87,4 +87,4 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve supported score bracket, track-name and display policies](work-items/stylesheet.json) | implementation | 3 | blocked | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#117](https://github.com/CaliLuke/go-guitar-pro/issues/117) |
 | [Preserve authored timer marks and visibility](work-items/timer.json) | implementation | 3 | todo | — | [#108](https://github.com/CaliLuke/go-guitar-pro/issues/108) |
 | [Acquire partial-capo fixtures with verified string ordering](work-items/partial-capo.json) | investigation | 3 | needs-input | [#43](https://github.com/CaliLuke/go-guitar-pro/issues/43) | [#115](https://github.com/CaliLuke/go-guitar-pro/issues/115) |
-| [Acquire owned GP8 protection-mode fixtures and error receipts](work-items/password.json) | investigation | 3 | in_progress | — | [#116](https://github.com/CaliLuke/go-guitar-pro/issues/116) |
+| [Acquire owned GP8 protection-mode fixtures and error receipts](work-items/password.json) | investigation | 3 | done | — | [#116](https://github.com/CaliLuke/go-guitar-pro/issues/116) |
