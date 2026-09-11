@@ -70,9 +70,9 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | in_progress | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
 | [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | in_progress | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
 | [Preserve slashed beats and slash staff notation separately](work-items/slash.json) | implementation | 2 | blocked | [#86](https://github.com/CaliLuke/go-guitar-pro/issues/86) | [#92](https://github.com/CaliLuke/go-guitar-pro/issues/92) |
-| [Verify duration-percentage export losses against the pinned consumer](work-items/sound-duration.json) | implementation | 2 | todo | — | [#102](https://github.com/CaliLuke/go-guitar-pro/issues/102) |
+| [Verify duration-percentage export losses against the pinned consumer](work-items/sound-duration.json) | implementation | 2 | in_progress | — | [#102](https://github.com/CaliLuke/go-guitar-pro/issues/102) |
 | [Preserve independent tap, slap and pop beat techniques](work-items/tap-slap-pop.json) | implementation | 2 | todo | — | [#93](https://github.com/CaliLuke/go-guitar-pro/issues/93) |
-| [Verify fixed GP8 trill speed and selective normalization policy](work-items/trill.json) | implementation | 2 | todo | — | [#103](https://github.com/CaliLuke/go-guitar-pro/issues/103) |
+| [Verify fixed GP8 trill speed and selective normalization policy](work-items/trill.json) | implementation | 2 | in_progress | — | [#103](https://github.com/CaliLuke/go-guitar-pro/issues/103) |
 | [Preserve wah pedal state through GPIF and GP8](work-items/wah.json) | implementation | 2 | todo | — | [#94](https://github.com/CaliLuke/go-guitar-pro/issues/94) |
 | [Preserve global extended barlines and bar-number policy](work-items/barlines.json) | implementation | 3 | todo | — | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) |
 | [Preserve independent chord display flags](work-items/chord-display.json) | implementation | 3 | todo | — | [#104](https://github.com/CaliLuke/go-guitar-pro/issues/104) |

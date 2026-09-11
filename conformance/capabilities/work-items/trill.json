@@ -5,8 +5,8 @@
   "title": "Verify fixed GP8 trill speed and selective normalization policy",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:duration-trill",
   "formats": [
     "gp3",
     "gp4",
@@ -37,7 +37,7 @@
       "gp8_builder.go",
       "conformance/oracle.mjs"
     ],
-    "instructions": "Start with semanticExportProbeSong; create defaultDuration then set Value16/32/64 and assign TrillEffect{Fret:7,Duration:duration}. ExportWithReport, decode Trill text, public Parse, and inspect pinned effects.trill. Use an otherwise report-free song so selective strict decisions are attributable to this one value.",
+    "instructions": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects.",
     "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
@@ -152,6 +152,31 @@
       "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
       "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
       "reviewed_at": "2026-09-11"
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8TrillSpeedPolicy",
+      "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTrillSixteenth",
+      "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTrillThirtySecond",
+      "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceTrillSixtyFourth",
+      "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabTrillSpeeds",
+      "detail": "Run the three permanent speed cases16/32/64 at target fret7. They assert exact Trill wire text, raw consumer16, scoped selective loss policy, unchanged dotted eighth3:2 beat rhythm, note fret3 and let-ring/palm-mute/staccato effects."
     }
   ],
   "shared_files": [
@@ -160,7 +185,7 @@
     "gp8_builder.go",
     "gpif_effects.go"
   ],
-  "resolution": null,
+  "resolution": "Implemented the bounded target-limit regression contract; awaiting fresh independent acceptance review and centralized gates. Export remains partial.",
   "verification": [],
   "issue": {
     "number": 103,

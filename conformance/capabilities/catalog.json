@@ -4339,8 +4339,8 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Fret and duration parse. GP8 preserves fret but reports non-target trill durations.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Target fret7 survives GP8 for authored speeds16,32 and64. Pinned GPIF consumption fixes speed to16. Sixteenth is loss-free;32 and64 require the exact trill-duration normalization allowance. Beat rhythm, note fret, let-ring, palm-mute and staccato remain unchanged.",
+      "acceptance": "Keep per-speed16/32/64 runtime and consumer regressions. Arbitrary speed remains partial unless a dedicated independently retained target field is demonstrated.",
       "upstream": [
         "Note.trillValue",
         "Note.trillSpeed"
@@ -4365,6 +4365,31 @@
           "kind": "test",
           "reference": "TestConformanceTechniqueDispositions",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8TrillSpeedPolicy",
+          "detail": "Per-speed target fret7, raw consumer16, exact policy and unrelated semantic controls."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTrillSixteenth",
+          "detail": "Per-speed target fret7, raw consumer16, exact policy and unrelated semantic controls."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTrillThirtySecond",
+          "detail": "Per-speed target fret7, raw consumer16, exact policy and unrelated semantic controls."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTrillSixtyFourth",
+          "detail": "Per-speed target fret7, raw consumer16, exact policy and unrelated semantic controls."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabTrillSpeeds",
+          "detail": "Per-speed target fret7, raw consumer16, exact policy and unrelated semantic controls."
         }
       ]
     },
@@ -4544,10 +4569,10 @@
       "stages": {
         "import": "supported",
         "model": "supported",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Legacy DurationPercent parses and validates, but GP8 emits no independent duration percentage.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Exact legacy duration percentages0.5 and0.75 remain authored values. GP8 omits nondefault percentages with a scoped report and strict refusal; the raw GPIF consumer returns1 while rhythm, ties and let-ring remain unchanged. The1.0 control is loss-free. Pinned legacy endian defects retain their existing narrow oracle correction.",
+      "acceptance": "Retain exact legacy import evidence, invalid-value rejection and isolated0.5/0.75 omission policy. New preservation needs an independently retained GPIF field, never a rhythmic approximation.",
       "upstream": [
         "Note.durationPercent"
       ],
@@ -4571,6 +4596,31 @@
           "kind": "test",
           "reference": "TestConformanceNoteValidation",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabGP5DurationPercentWireValues",
+          "detail": "Existing little-endian0.5/0.75 source byte counts and public import comparison; pinned legacy endian correction remains narrow."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8NoteDurationPercentagePolicy",
+          "detail": "Isolated fractions and1.0 control, exact note-level omission, selective strict policy and read-only export."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8RejectsInvalidDurationPercentages",
+          "detail": "Negative, NaN and both infinities reject before output."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceNoteDurationPercentLoss",
+          "detail": "Runtime field/report/rhythm assertions with tied let-ring notes."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabNoteDurationPercentLoss",
+          "detail": "Raw GPIF consumer returns1 without changing dotted3:2 rhythm, ties or let-ring."
         }
       ]
     },

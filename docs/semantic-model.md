@@ -506,6 +506,15 @@ GP8 preserves note pitch, string, dead-note state, and complete tie markers. It
 does not preserve `SwapAccidentals` or `DurationPercent`, so export reports
 these fields when they are non-default.
 
+Legacy GP5 duration fractions 0.5 and 0.75 remain distinct from beat rhythm.
+GP8 reports each nondefault fraction with `gp8.omit.note-duration-percent`.
+The pinned GPIF consumer returns 1.0 without changing rhythm, ties or let-ring.
+Strict export requires that exact omission; 1.0 remains a preservation control.
+Negative and nonfinite fractions are invalid. Pinned AlphaTab reads legacy
+GP5 fraction bytes with the wrong endianness. The existing oracle correction
+reinterprets only affected subnormals; those defective readings are not authored
+export inputs.
+
 `Beat.Dynamics` is the authored beat-wide value. GP8 uses it when it is set,
 including on a rest. If it is zero, GP8 uses the first note velocity. GPIF has
 one quantized dynamic for the complete beat, so export reports note velocities
@@ -590,6 +599,12 @@ has no tremolo-picking source record.
 
 GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
 hammer origin, tapping flags, slide flags, harmonic kind, and trill fret.
+
+GPIF carries a trill target fret but no trill speed. Pinned AlphaTab sets
+that speed to a sixteenth note. Authored sixteenth speed preserves without loss.
+Thirty-second and sixty-fourth speeds require `gp8.normalize.trill-duration`.
+Allowed export keeps the target fret and makes duration 16 explicit in Go and
+the pinned consumer. Beat rhythm and other effects do not substitute for speed.
 `NoteEffect.Accent` is authoritative when it is nonzero and emits the exact
 normal, heavy, or tenuto GPIF flag; tenuto uses `0x10`. When `Accent` is
 `NoteAccentNone`, `AccentuatedNote` and `HeavyAccentuatedNote` are compatibility

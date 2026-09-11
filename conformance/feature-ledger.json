@@ -3,7 +3,7 @@
   "oracle": "@coderline/alphatab@1.8.4",
   "semanticMatrix": {
     "complete": true,
-    "obligationDigest": "fa56763682602d06c21c041254087352a4ef406f764abdf7248895492bf76dda",
+    "obligationDigest": "4f0824af702b8757413e8d32af5778d3d90c2a97b2fb27ffa188cfc19bca4c8e",
     "families": [
       {"id":"M01","title":"Score identity, metadata, version and clipboard","reason":"Metadata fields need distinct sentinels and explicit GP8 conversion decisions."},
       {"id":"M02","title":"Page, track and beat display metadata","reason":"Display data needs true, false, enum, and target-loss checks."},
@@ -483,6 +483,150 @@
           "Fret-count rejection describes the public uint8 limit, not a Guitar Pro syntax restriction.",
           "Pinned binary importer skips fret count; its GPIF writer emits fixed 24. No retaining non-default target or standalone twelve-string/banjo semantics."
         ]
+      },
+      {
+        "id": "M09-DURATION-PERCENT-LOSS",
+        "family": "M09",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceNoteDurationPercentLoss",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "isolated duration percentages 0.5 and 0.75",
+          "1.0 preservation control",
+          "dotted eighth 3:2 rhythm with tie origin/destination and let ring",
+          "negative and nonfinite public rejection"
+        ],
+        "oracle": "TestGP8NoteDurationPercentagePolicy and TestAlphaTabNoteDurationPercentLoss verify exact owning omission and raw consumer percentage1 without rhythmic or tie substitutions. Existing TestAlphaTabGP5DurationPercentWireValues retains the exact GP5 source import evidence.",
+        "limitations": [
+          "GP8 has no independently retained note-duration percentage; nondefault values remain explicit omissions.",
+          "Pinned GP5 readFloat64BE misreads little-endian source fractions; normalizeLegacyDurationPercent corrects only subnormals. Raw defective values are not authored test inputs."
+        ]
+      },
+      {
+        "id": "M11-TRILL-SPEED-16",
+        "family": "M11",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceTrillSixteenth",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "plain trill duration16 at target fret7",
+          "unchanged note fret3 and dotted eighth 3:2 beat rhythm",
+          "unchanged let-ring, palm-mute and staccato effects",
+          "exact selective trill-duration allowance"
+        ],
+        "oracle": "Exact GPIF Trill=7, public policy and Go reparse, and TestAlphaTabTrillSpeeds raw target fret7/duration16.",
+        "limitations": [
+          "GPIF carries only the trill target fret; pinned AlphaTab fixes trillSpeed to16.",
+          "Non-sixteenth speeds require gp8.normalize.trill-duration; beat rhythm and other techniques cannot substitute for speed."
+        ]
+      },
+      {
+        "id": "M11-TRILL-SPEED-32",
+        "family": "M11",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceTrillThirtySecond",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "plain trill duration32 at target fret7",
+          "unchanged note fret3 and dotted eighth 3:2 beat rhythm",
+          "unchanged let-ring, palm-mute and staccato effects",
+          "exact selective trill-duration allowance"
+        ],
+        "oracle": "Exact GPIF Trill=7, public policy and Go reparse, and TestAlphaTabTrillSpeeds raw target fret7/duration16.",
+        "limitations": [
+          "GPIF carries only the trill target fret; pinned AlphaTab fixes trillSpeed to16.",
+          "Non-sixteenth speeds require gp8.normalize.trill-duration; beat rhythm and other techniques cannot substitute for speed."
+        ]
+      },
+      {
+        "id": "M11-TRILL-SPEED-64",
+        "family": "M11",
+        "evidenceRole": "behavior",
+        "evidenceSources": [
+          "public-api",
+          "independent-consumer",
+          "independent-wire",
+          "diagnostic-policy"
+        ],
+        "test": "TestConformanceTrillSixtyFourth",
+        "formats": [
+          "GP8",
+          "programmatic"
+        ],
+        "stages": [
+          "programmatic",
+          "validation",
+          "preflight",
+          "export",
+          "policy",
+          "oracle",
+          "read-only"
+        ],
+        "values": [
+          "plain trill duration64 at target fret7",
+          "unchanged note fret3 and dotted eighth 3:2 beat rhythm",
+          "unchanged let-ring, palm-mute and staccato effects",
+          "exact selective trill-duration allowance"
+        ],
+        "oracle": "Exact GPIF Trill=7, public policy and Go reparse, and TestAlphaTabTrillSpeeds raw target fret7/duration16.",
+        "limitations": [
+          "GPIF carries only the trill target fret; pinned AlphaTab fixes trillSpeed to16.",
+          "Non-sixteenth speeds require gp8.normalize.trill-duration; beat rhythm and other techniques cannot substitute for speed."
+        ]
       }
     ],
     "enumCases": {"BeatFade.BeatFadeNone":["M10-FADE"],"BeatFade.BeatFadeIn":["M10-FADE"],"BeatFade.BeatFadeOut":["M10-FADE"],"BeatFade.BeatFadeVolumeSwell":["M10-FADE"],"GolpeType.GolpeTypeNone":["M10-GOLPE"],"GolpeType.GolpeTypeThumb":["M10-GOLPE"],"GolpeType.GolpeTypeFinger":["M10-GOLPE"],"BeatStrokeKind.BeatStrokeKindNone":["M10-BRUSH"],"BeatStrokeKind.BeatStrokeKindBrush":["M10-BRUSH"],"BeatStrokeKind.BeatStrokeKindArpeggio":["M10-BRUSH"],"BeatVibrato.BeatVibratoNone":["M10-BEAT-VIBRATO"],"BeatVibrato.BeatVibratoSlight":["M10-BEAT-VIBRATO"],"BeatVibrato.BeatVibratoWide":["M10-BEAT-VIBRATO"],"BeatBeamingMode.BeatBeamingAuto":["M10-BEAMING"],"BeatBeamingMode.BeatBeamingForceSplit":["M10-BEAMING"],"BeatBeamingMode.BeatBeamingForceMerge":["M10-BEAMING"],"BeatBeamingMode.BeatBeamingForceSplitSecondary":["M10-BEAMING"],"BarreShape.BarreShapeNone":["M10-BARRE"],"BarreShape.BarreShapeFull":["M10-BARRE"],"BarreShape.BarreShapeHalf":["M10-BARRE"],"TremoloPickingStyle.TremoloPickingStyleDefault":["M11-TREMOLO-PICKING"],"TremoloPickingStyle.TremoloPickingStyleBuzzRoll":["M11-TREMOLO-PICKING"],"SustainPedalType.SustainPedalTypeDown":["M17-SUSTAIN-PEDALS"],"SustainPedalType.SustainPedalTypeHold":["M17-SUSTAIN-PEDALS"],"SustainPedalType.SustainPedalTypeRelease":["M17-SUSTAIN-PEDALS"],"FermataType.FermataTypeShort":["M07-FERMATAS"],"FermataType.FermataTypeMedium":["M07-FERMATAS"],"FermataType.FermataTypeLong":["M07-FERMATAS"],"SimileMark.SimileMarkNone":["M07-MASTER-BARS"],"SimileMark.SimileMarkSimple":["M07-MASTER-BARS"],"SimileMark.SimileMarkFirstOfDouble":["M07-MASTER-BARS"],"SimileMark.SimileMarkSecondOfDouble":["M07-MASTER-BARS"],"ExportDisposition.ExportDispositionNormalized":["M25-PUBLIC-API-ENUMS"],"ExportDisposition.ExportDispositionOmitted":["M25-PUBLIC-API-ENUMS"],"ExportDisposition.ExportDispositionRejected":["M25-PUBLIC-API-ENUMS"],"ExportFormat.ExportFormatGP8":["M25-PUBLIC-API-ENUMS"],"GP8PercussionNotehead.GP8PercussionNoteheadDefault":["M16-NOTEHEAD-OPTIONS"],"GP8PercussionNotehead.GP8PercussionNoteheadFilled":["M16-NOTEHEAD-OPTIONS"],"GP8PercussionNotehead.GP8PercussionNoteheadX":["M16-NOTEHEAD-OPTIONS"],"GP8PercussionNotehead.GP8PercussionNoteheadCircleX":["M16-NOTEHEAD-OPTIONS"],"GP8PercussionNotehead.GP8PercussionNoteheadHeavyX":["M16-NOTEHEAD-OPTIONS"],"ParseDiagnosticKind.ParseDiagnosticInvalidData":["M25-PUBLIC-API-ENUMS"],"ParseDiagnosticKind.ParseDiagnosticUnknownSyntax":["M25-PUBLIC-API-ENUMS"],"ParseDiagnosticKind.ParseDiagnosticUnsupportedFeature":["M25-PUBLIC-API-ENUMS"],"ParseDiagnosticKind.ParseDiagnosticLossyProjection":["M25-PUBLIC-API-ENUMS"],"ParseDiagnosticKind.ParseDiagnosticDeliberateDefault":["M25-PUBLIC-API-ENUMS"],"ParseDiagnosticKind.ParseDiagnosticDeliberateIgnore":["M25-PUBLIC-API-ENUMS"],"ScoreDiagnosticKind.ScoreDiagnosticStructural":["M25-PUBLIC-API-ENUMS"],"ScoreDiagnosticKind.ScoreDiagnosticTiming":["M25-PUBLIC-API-ENUMS"],"ScoreDiagnosticKind.ScoreDiagnosticValue":["M25-PUBLIC-API-ENUMS"],"Accentuation.AccentuationMedium":["M05-PLAYBACK-ROUTING"],"Accentuation.AccentuationNone":["M05-PLAYBACK-ROUTING"],"Accentuation.AccentuationSoft":["M05-PLAYBACK-ROUTING"],"Accentuation.AccentuationStrong":["M05-PLAYBACK-ROUTING"],"Accentuation.AccentuationVerySoft":["M05-PLAYBACK-ROUTING"],"Accentuation.AccentuationVeryStrong":["M05-PLAYBACK-ROUTING"],"BeatStatus.BeatStatusEmpty":["M10-BEAT-SEMANTICS"],"BeatStatus.BeatStatusNormal":["M10-BEAT-SEMANTICS"],"BeatStatus.BeatStatusRest":["M10-BEAT-SEMANTICS"],"BeatStrokeDirection.BeatStrokeDirectionDown":["M10-BEAT-EFFECTS"],"BeatStrokeDirection.BeatStrokeDirectionNone":["M10-BEAT-EFFECTS"],"BeatStrokeDirection.BeatStrokeDirectionUp":["M10-BEAT-EFFECTS"],"BendType.BendTypeBend":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeBendRelease":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeBendReleaseBend":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeDip":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeDive":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeInvertedDip":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeNone":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypePrebend":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypePrebendRelease":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeReleaseDown":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeReleaseUp":["M12-CURVE-LOSS-POLICY"],"BendType.BendTypeReturn":["M12-CURVE-LOSS-POLICY"],"ChordAlteration.ChordAlterationAugmented":["M14-CHORD-DEFINITIONS"],"ChordAlteration.ChordAlterationDiminished":["M14-CHORD-DEFINITIONS"],"ChordAlteration.ChordAlterationPerfect":["M14-CHORD-DEFINITIONS"],"ChordExtension.ChordExtensionEleventh":["M14-CHORD-DEFINITIONS"],"ChordExtension.ChordExtensionNinth":["M14-CHORD-DEFINITIONS"],"ChordExtension.ChordExtensionNone":["M14-CHORD-DEFINITIONS"],"ChordExtension.ChordExtensionThirteenth":["M14-CHORD-DEFINITIONS"],"DirectionSign.DirectionSignCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaCapo":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaCapoAlCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaCapoAlDoubleCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaCapoAlFine":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaDoubleCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegno":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoAlCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoAlDoubleCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoAlFine":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoSegno":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoSegnoAlCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoSegnoAlDoubleCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDaSegnoSegnoAlFine":["M07-MASTER-BARS"],"DirectionSign.DirectionSignDoubleCoda":["M07-MASTER-BARS"],"DirectionSign.DirectionSignFine":["M07-MASTER-BARS"],"DirectionSign.DirectionSignSegno":["M07-MASTER-BARS"],"DirectionSign.DirectionSignSegnoSegno":["M07-MASTER-BARS"],"Fingering.FingeringAnnular":["M11-TECHNIQUE-DISPOSITIONS"],"Fingering.FingeringUnknown":["M14-CHORD-DEFINITIONS"],"Fingering.FingeringIndex":["M11-TECHNIQUE-DISPOSITIONS"],"Fingering.FingeringLittle":["M11-TECHNIQUE-DISPOSITIONS"],"Fingering.FingeringMiddle":["M11-TECHNIQUE-DISPOSITIONS"],"Fingering.FingeringOpen":["M11-TECHNIQUE-DISPOSITIONS"],"Fingering.FingeringThumb":["M11-TECHNIQUE-DISPOSITIONS"],"GraceEffectTransition.GraceEffectTransitionBend":["M15-GRACE-AUTHORITY-LOSS"],"GraceEffectTransition.GraceEffectTransitionHammer":["M15-ORDERED-GRACE-EXPORT"],"GraceEffectTransition.GraceEffectTransitionNone":["M15-ORDERED-GRACE-EXPORT"],"GraceEffectTransition.GraceEffectTransitionSlide":["M15-ORDERED-GRACE-EXPORT"],"Hairpin.HairpinCrescendo":["M10-BEAT-EFFECTS"],"Hairpin.HairpinDiminuendo":["M10-BEAT-EFFECTS"],"Hairpin.HairpinNone":["M10-BEAT-EFFECTS"],"HarmonicType.HarmonicTypeArtificial":["M13-HARMONIC-VARIANTS"],"HarmonicType.HarmonicTypeFeedback":["M13-HARMONIC-VARIANTS"],"HarmonicType.HarmonicTypeNatural":["M13-HARMONIC-VARIANTS"],"HarmonicType.HarmonicTypePinch":["M13-HARMONIC-VARIANTS"],"HarmonicType.HarmonicTypeSemi":["M13-HARMONIC-VARIANTS"],"HarmonicType.HarmonicTypeTapped":["M13-HARMONIC-VARIANTS"],"LineBreak.LineBreakBreak":["M02-DISPLAY-EXPORT"],"LineBreak.LineBreakNone":["M02-DISPLAY-EXPORT"],"LineBreak.LineBreakProtect":["M02-DISPLAY-EXPORT"],"MeasureClef.MeasureClefAlto":["M07-MASTER-BARS"],"MeasureClef.MeasureClefBass":["M07-MASTER-BARS"],"MeasureClef.MeasureClefTenor":["M07-MASTER-BARS"],"MeasureClef.MeasureClefTreble":["M07-MASTER-BARS"],"NoteAccent.NoteAccentHeavy":["M11-TECHNIQUE-DISPOSITIONS"],"NoteAccent.NoteAccentNone":["M11-TECHNIQUE-DISPOSITIONS"],"NoteAccent.NoteAccentNormal":["M11-TECHNIQUE-DISPOSITIONS"],"NoteAccent.NoteAccentTenuto":["M11-TECHNIQUE-DISPOSITIONS"],"NoteType.NoteTypeDead":["M09-NOTE-REPRESENTATION"],"NoteType.NoteTypeNormal":["M09-NOTE-REPRESENTATION"],"NoteType.NoteTypeRest":["M09-NOTE-VALIDATION"],"NoteType.NoteTypeTie":["M09-NOTE-REPRESENTATION"],"NoteVibrato.NoteVibratoNone":["M11-TECHNIQUE-DISPOSITIONS"],"NoteVibrato.NoteVibratoSlight":["M11-TECHNIQUE-DISPOSITIONS"],"NoteVibrato.NoteVibratoWide":["M11-TECHNIQUE-DISPOSITIONS"],"Octave.OctaveNone":["M10-BEAT-EFFECTS"],"Octave.OctaveOttava":["M10-BEAT-EFFECTS"],"Octave.OctaveOttavaBassa":["M10-BEAT-EFFECTS"],"Octave.OctaveQuindicesima":["M10-BEAT-EFFECTS"],"Octave.OctaveQuindicesimaBassa":["M10-BEAT-EFFECTS"],"SlapEffect.SlapEffectNone":["M10-BEAT-EFFECTS"],"SlapEffect.SlapEffectPopping":["M10-BEAT-EFFECTS"],"SlapEffect.SlapEffectSlapping":["M10-BEAT-EFFECTS"],"SlapEffect.SlapEffectTapping":["M10-BEAT-EFFECTS"],"SlideType.SlideIntoFromAbove":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideIntoFromBelow":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideLegatoSlideTo":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideNone":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideOutDownwards":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideOutUpwards":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlideShiftSlideTo":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlidePickSlideDown":["M11-SOURCE-DISTINCTIONS"],"SlideType.SlidePickSlideUp":["M11-SOURCE-DISTINCTIONS"],"SourceValueState.SourceValueKnown":["M06-TEMPO-AUTHORITY"],"SourceValueState.SourceValueMissing":["M06-TEMPO-AUTHORITY"],"SourceValueState.SourceValueUnknown":["M06-TEMPO-AUTHORITY"],"TripletFeel.TripletFeelDottedEighth":["M07-MASTER-BARS"],"TripletFeel.TripletFeelDottedSixteenth":["M07-MASTER-BARS"],"TripletFeel.TripletFeelEighth":["M07-MASTER-BARS"],"TripletFeel.TripletFeelNone":["M07-MASTER-BARS"],"TripletFeel.TripletFeelScottishEighth":["M07-MASTER-BARS"],"TripletFeel.TripletFeelScottishSixteenth":["M07-MASTER-BARS"],"TripletFeel.TripletFeelSixteenth":["M07-MASTER-BARS"],"TupletBracket.TupletBracketEnd":["M02-DISPLAY-EXPORT"],"TupletBracket.TupletBracketNone":["M02-DISPLAY-EXPORT"],"TupletBracket.TupletBracketStart":["M02-DISPLAY-EXPORT"],"VoiceDirection.VoiceDirectionDown":["M02-DISPLAY-EXPORT"],"VoiceDirection.VoiceDirectionNone":["M02-DISPLAY-EXPORT"],"VoiceDirection.VoiceDirectionUp":["M02-DISPLAY-EXPORT"]},
@@ -730,20 +874,20 @@
       "Duration.DoubleDotted": ["M08-DURATIONS"],
       "Duration.TupletEnters": ["M08-DURATIONS","M22-PICKUP-TUPLET-TEMPO"],
       "Duration.TupletTimes": ["M08-DURATIONS","M22-PICKUP-TUPLET-TEMPO"],
-      "Beat.Duration": ["M08-DURATIONS","M10-TIMED-EMPTY-VOICE"],
+      "Beat.Duration": ["M08-DURATIONS","M10-TIMED-EMPTY-VOICE","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "Song.Anacrusis": ["M08-EXACT-TIMING","M21-FINALIZATION","M22-PICKUP-TUPLET-TEMPO"],
       "MeasureHeader.Start": ["M07-FREE-TIME","M08-EXACT-TIMING","M21-FINALIZATION"],
       "MeasureHeader.ExactStart": ["M07-FREE-TIME","M08-EXACT-TIMING","M21-FINALIZATION","M22-PICKUP-TUPLET-TEMPO"],
       "Measure.Start": ["M08-EXACT-TIMING","M21-FINALIZATION"],
       "Measure.ExactStart": ["M08-EXACT-TIMING","M21-FINALIZATION"],
       "Beat.Start": ["M08-EXACT-TIMING","M21-FINALIZATION"],
-      "Beat.ExactStart": ["M08-EXACT-TIMING","M22-PICKUP-TUPLET-TEMPO","M21-FINALIZATION","M10-TIMED-EMPTY-VOICE"],
-      "Note.Value": ["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY","M16-NATIVE-FALLBACKS"],
+      "Beat.ExactStart": ["M08-EXACT-TIMING","M22-PICKUP-TUPLET-TEMPO","M21-FINALIZATION","M10-TIMED-EMPTY-VOICE","M09-DURATION-PERCENT-LOSS"],
+      "Note.Value": ["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY","M16-NATIVE-FALLBACKS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "Note.String": ["M09-NOTE-REPRESENTATION"],
-      "Note.Kind": ["M09-NOTE-REPRESENTATION"],
-      "Note.TieOrigin": ["M09-NOTE-REPRESENTATION","M22-GRACE-COMBINATIONS"],
+      "Note.Kind": ["M09-NOTE-REPRESENTATION","M09-DURATION-PERCENT-LOSS"],
+      "Note.TieOrigin": ["M09-NOTE-REPRESENTATION","M22-GRACE-COMBINATIONS","M09-DURATION-PERCENT-LOSS"],
       "Note.SwapAccidentals": ["M09-NOTE-REPRESENTATION"],
-      "Note.DurationPercent": ["M09-NOTE-REPRESENTATION","M22-SELECTIVE-ALLOWLIST"],
+      "Note.DurationPercent": ["M09-NOTE-REPRESENTATION","M22-SELECTIVE-ALLOWLIST","M09-DURATION-PERCENT-LOSS"],
       "Note.HasPercussionArticulation": ["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
       "Note.PercussionArticulation": ["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY"],
       "Note.Velocity": ["M09-NOTE-REPRESENTATION","M10-CHORD-REST-DYNAMICS"],
@@ -783,10 +927,10 @@
       "NoteEffect.Accent": ["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.HeavyAccentuatedNote": ["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.GhostNote": ["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.Staccato": ["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.PalmMute": ["M11-TECHNIQUE-DISPOSITIONS"],
+      "NoteEffect.Staccato": ["M11-TECHNIQUE-DISPOSITIONS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
+      "NoteEffect.PalmMute": ["M11-TECHNIQUE-DISPOSITIONS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "NoteEffect.DeadNote": ["M11-TECHNIQUE-DISPOSITIONS"],
-      "NoteEffect.LetRing": ["M11-TECHNIQUE-DISPOSITIONS"],
+      "NoteEffect.LetRing": ["M11-TECHNIQUE-DISPOSITIONS","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "NoteEffect.Vibrato": ["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.VibratoStrength": ["M11-TECHNIQUE-DISPOSITIONS"],
       "NoteEffect.Hammer": ["M11-TECHNIQUE-DISPOSITIONS","M22-EFFECTS-DYNAMICS"],
@@ -803,8 +947,8 @@
       "NoteEffect.Tapped": ["M11-TECHNIQUE-DISPOSITIONS"],
       "TremoloPickingEffect.Duration": ["M11-TREMOLO-PICKING"],
       "TremoloPickingEffect.Style": ["M11-TREMOLO-PICKING"],
-      "TrillEffect.Fret": ["M11-TECHNIQUE-DISPOSITIONS"],
-      "TrillEffect.Duration": ["M11-TECHNIQUE-DISPOSITIONS"],
+      "TrillEffect.Fret": ["M11-TECHNIQUE-DISPOSITIONS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
+      "TrillEffect.Duration": ["M11-TECHNIQUE-DISPOSITIONS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "BeatEffects.TremoloBar": ["M12-CURVE-PRESERVATION","M12-WHAMMY-TARGET-INTERPRETATION"],
       "NoteEffect.Bend": ["M12-CURVE-PRESERVATION","M22-GRACE-COMBINATIONS","M22-EFFECTS-DYNAMICS"],
       "BendEffect.Points": ["M12-CURVE-PRESERVATION","M22-EFFECTS-DYNAMICS","M12-BEND-CONTROL-ROLES"],
@@ -1025,12 +1169,12 @@
       "gpifBar.Clef": ["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
       "gpifBar.Ottavia": ["M07-CLEF-OCTAVE","M20-SOURCE-AUDIT"],
       "gpifBar.SimileMark": ["M07-MASTER-BARS","M20-SOURCE-AUDIT"],
-      "gpifRhythm.NoteValue": ["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M15-GRACE-BEND-POLICY"],
+      "gpifRhythm.NoteValue": ["M08-DURATIONS","M15-ORDERED-GRACE-EXPORT","M20-SOURCE-AUDIT","M15-GRACE-BEND-POLICY","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "gpifRhythm.AugmentationDot": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
-      "gpifAugDot.Count": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifAugDot.Count": ["M08-DURATIONS","M20-SOURCE-AUDIT","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "gpifRhythm.PrimaryTuplet": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
-      "gpifTuplet.Num": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
-      "gpifTuplet.Den": ["M08-DURATIONS","M20-SOURCE-AUDIT"],
+      "gpifTuplet.Num": ["M08-DURATIONS","M20-SOURCE-AUDIT","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
+      "gpifTuplet.Den": ["M08-DURATIONS","M20-SOURCE-AUDIT","M09-DURATION-PERCENT-LOSS","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "gpifNotes.Notes": ["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
       "gpifNote.ID": ["M09-NOTE-REPRESENTATION","M20-SOURCE-AUDIT"],
       "gpifNote.Properties": ["M09-NOTE-REPRESENTATION","M16-PERCUSSION-IDENTITY","M16-NATIVE-FALLBACKS","M20-SOURCE-AUDIT"],
@@ -1067,8 +1211,8 @@
       "gpifNote.Vibrato": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
       "gpifNote.LeftFingering": ["M11-FINGERING","M20-SOURCE-AUDIT"],
       "gpifNote.RightFingering": ["M11-FINGERING","M20-SOURCE-AUDIT"],
-      "gpifNote.Trill": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
-      "gpifTrill.Fret": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
+      "gpifNote.Trill": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
+      "gpifTrill.Fret": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT","M11-TRILL-SPEED-16","M11-TRILL-SPEED-32","M11-TRILL-SPEED-64"],
       "gpifProperty.Name": ["M10-PICK-STROKE","M09-NOTE-REPRESENTATION","M11-TECHNIQUE-DISPOSITIONS","M13-HARMONIC-VARIANTS","M20-SOURCE-AUDIT"],
       "gpifProperty.Enable": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
       "gpifProperty.Flags": ["M11-TECHNIQUE-DISPOSITIONS","M20-SOURCE-AUDIT"],
@@ -1341,6 +1485,18 @@
       ],
       "M05-RSE-BOUNDS": [
         "M05-RSE-BOUNDS"
+      ],
+      "M09-DURATION-PERCENT-LOSS": [
+        "M09-DURATION-PERCENT-LOSS"
+      ],
+      "M11-TRILL-SPEED-16": [
+        "M11-TRILL-SPEED-16"
+      ],
+      "M11-TRILL-SPEED-32": [
+        "M11-TRILL-SPEED-32"
+      ],
+      "M11-TRILL-SPEED-64": [
+        "M11-TRILL-SPEED-64"
       ]
     },
     "capabilityClaims": [
@@ -3175,6 +3331,38 @@
         "test": "TestConformanceGraceBendPolicy",
         "independentTest": "TestAlphaTabGraceBendPolicy",
         "reason": "Real binary transition2 survives Parse; strict export requires the exact reported omission and never invents a bend curve. The independent consumer limitation is explicit."
+      },
+      {
+        "id": "duration-percent-target-loss",
+        "feature": "note-and-beat-semantics",
+        "construct": "Note.DurationPercent GP8 omission",
+        "test": "TestConformanceNoteDurationPercentLoss",
+        "independentTest": "TestAlphaTabNoteDurationPercentLoss",
+        "reason": "Exact authored0.5/0.75 omit with selective strict refusal; consumer1 leaves rhythm, ties and let-ring intact."
+      },
+      {
+        "id": "trill-speed-target-limit-16",
+        "feature": "note-and-beat-semantics",
+        "construct": "TrillEffect.Duration GP8 fixed sixteenth speed for authored duration16",
+        "test": "TestConformanceTrillSixteenth",
+        "independentTest": "TestAlphaTabTrillSpeeds",
+        "reason": "Authored trill duration16 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary."
+      },
+      {
+        "id": "trill-speed-target-limit-32",
+        "feature": "note-and-beat-semantics",
+        "construct": "TrillEffect.Duration GP8 fixed sixteenth speed for authored duration32",
+        "test": "TestConformanceTrillThirtySecond",
+        "independentTest": "TestAlphaTabTrillSpeeds",
+        "reason": "Authored trill duration32 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary."
+      },
+      {
+        "id": "trill-speed-target-limit-64",
+        "feature": "note-and-beat-semantics",
+        "construct": "TrillEffect.Duration GP8 fixed sixteenth speed for authored duration64",
+        "test": "TestConformanceTrillSixtyFourth",
+        "independentTest": "TestAlphaTabTrillSpeeds",
+        "reason": "Authored trill duration64 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary."
       }
     ],
     "modelTypes": [

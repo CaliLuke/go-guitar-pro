@@ -551,6 +551,22 @@ export function loadCurveGraceFacts(fixture) {
   return facts;
 }
 
+// Raw GPIF consumer facts: durationPercent bypasses the legacy endian correction.
+export function loadNoteDurationTrillFacts(fixture) {
+  const facts = [];
+  for (const track of loadScore(fixture).tracks) for (const staff of track.staves)
+    for (const bar of staff.bars) for (const voice of bar.voices) for (const beat of voice.beats)
+      for (const note of beat.notes) facts.push({track: track.index, staff: staff.index,
+        bar: bar.index, voice: voice.index, beat: beat.index, note: note.index,
+        duration: beat.duration, dots: beat.dots, numerator: beat.tupletNumerator,
+        denominator: beat.tupletDenominator, start: beat.playbackStart, length: beat.playbackDuration,
+        fret: note.fret, string: note.string, percent: note.durationPercent,
+        tieOrigin: note.isTieOrigin, tieDestination: note.isTieDestination,
+        letRing: note.isLetRing, palmMute: note.isPalmMute, staccato: note.isStaccato,
+        trillFret: note.trillValue, trillDuration: note.trillSpeed});
+  return facts;
+}
+
 export function loadNormalizedScore(fixture) {
   return normalizeScore(loadScore(fixture));
 }
@@ -1233,6 +1249,10 @@ function main() {
   }
   if (args[0] === '--curve-grace' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadCurveGraceFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--note-duration-trill' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadNoteDurationTrillFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--batch') {

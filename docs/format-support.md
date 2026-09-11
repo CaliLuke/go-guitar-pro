@@ -309,7 +309,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 116 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 120 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -453,3 +453,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `section-track-names` | `score-core` | `TestConformanceSectionTrackNames` | `TestAlphaTabSectionTrackNames` | yes | Distinct authored values, empty and absent records, post-parse authority, exact XML and final consumer results, with scoped empty-name and boundary-whitespace reports. |
 | `bend-control-roles` | `note-and-beat-semantics` | `TestConformanceBendControlRoles` | `TestAlphaTabBendControlRoles` | no | Named roles retain exact offsets; pinned consumer retains the same standard-gesture controls from source and output. |
 | `grace-bend-omission` | `note-and-beat-semantics` | `TestConformanceGraceBendPolicy` | `TestAlphaTabGraceBendPolicy` | no | Real binary transition2 survives Parse; strict export requires the exact reported omission and never invents a bend curve. The independent consumer limitation is explicit. |
+| `duration-percent-target-loss` | `note-and-beat-semantics` | `TestConformanceNoteDurationPercentLoss` | `TestAlphaTabNoteDurationPercentLoss` | no | Exact authored0.5/0.75 omit with selective strict refusal; consumer1 leaves rhythm, ties and let-ring intact. |
+| `trill-speed-target-limit-16` | `note-and-beat-semantics` | `TestConformanceTrillSixteenth` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration16 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
+| `trill-speed-target-limit-32` | `note-and-beat-semantics` | `TestConformanceTrillThirtySecond` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration32 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |
+| `trill-speed-target-limit-64` | `note-and-beat-semantics` | `TestConformanceTrillSixtyFourth` | `TestAlphaTabTrillSpeeds` | no | Authored trill duration64 retains target fret7 and unrelated rhythm/effects; pinned consumer speed is16 and the exact policy reflects this boundary. |

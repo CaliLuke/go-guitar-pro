@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 72 | 15 | 10 | 1 |
 | model | 71 | 16 | 10 | 1 |
-| export | 50 | 26 | 20 | 2 |
+| export | 50 | 27 | 19 | 2 |
 
 All three stages have a supported rating in 50 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -771,11 +771,11 @@ Completion criterion: Add non-default public API assertions for the remaining va
 
 Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **supported**. Model: **supported**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Legacy DurationPercent parses and validates, but GP8 emits no independent duration percentage.
+Exact legacy duration percentages0.5 and0.75 remain authored values. GP8 omits nondefault percentages with a scoped report and strict refusal; the raw GPIF consumer returns1 while rhythm, ties and let-ring remain unchanged. The1.0 control is loss-free. Pinned legacy endian defects retain their existing narrow oracle correction.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Retain exact legacy import evidence, invalid-value rejection and isolated0.5/0.75 omission policy. New preservation needs an independently retained GPIF field, never a rhythmic approximation.
 
 Bounded work: [Verify duration-percentage export losses against the pinned consumer](https://github.com/CaliLuke/go-guitar-pro/issues/102).
 
@@ -815,9 +815,9 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Fret and duration parse. GP8 preserves fret but reports non-target trill durations.
+Target fret7 survives GP8 for authored speeds16,32 and64. Pinned GPIF consumption fixes speed to16. Sixteenth is loss-free;32 and64 require the exact trill-duration normalization allowance. Beat rhythm, note fret, let-ring, palm-mute and staccato remain unchanged.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep per-speed16/32/64 runtime and consumer regressions. Arbitrary speed remains partial unless a dedicated independently retained target field is demonstrated.
 
 Bounded work: [Verify fixed GP8 trill speed and selective normalization policy](https://github.com/CaliLuke/go-guitar-pro/issues/103).
 
