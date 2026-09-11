@@ -5469,19 +5469,17 @@
       "scope": "guitar-pro",
       "priority": 3,
       "formats": [
-        "gp3",
-        "gp4",
         "gp5",
         "gp6",
         "gp7",
         "gp8"
       ],
       "stages": {
-        "import": "partial",
-        "model": "partial",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Legacy PageSetup is modeled and omitted on GP8 export. Pinned AlphaTab also exposes structured score header/footer templates not mapped here.",
+      "finding": "HeaderFooterSettings preserves supported templates and independent visibility through exact typed BinaryStylesheet records. Legacy PageSetup edits reconcile per field; copyright source boundaries remain independent and ambiguous edited strings are reported. Existing alignment records remain unchanged; projected legacy styles use pinned per-element defaults. Physical geometry and page-number templates remain explicit target limits.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "ScoreStyle.*",
@@ -5508,6 +5506,16 @@
           "kind": "test",
           "reference": "TestConformancePageSetupImport",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceHeaderFooter",
+          "detail": "Pinned GP5/GP8 source templates, visibility, wire keys/types and targeted policy reports."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabHeaderFooter",
+          "detail": "Exact final consumer source/edited text, Unicode/CR/CRLF and unchanged alignment/other policies."
         }
       ]
     },

@@ -1147,3 +1147,37 @@ an authored destination marker. This derived state does not add a public marker.
 A matched source grace becomes an ordered `GraceEffect`, which has no independent
 destination marker. `GPIF.Note.HammerDestination.Grace` reports that loss with the
 source note ID. An orphan remains a `Note` and retains its authored marker.
+
+`ScoreStyle.HeaderFooter` owns optional template and visibility fields for Title,
+Subtitle, Artist, Album, Words, Music, WordsAndMusic, Tabber and two Copyright
+entries. Nil leaves omit their record and use the consumer default. An empty
+string is an explicit empty template. An element with both leaves nil becomes
+absent after export. Templates remain literal, including whitespace, Unicode,
+CR and LF. Valid UTF-8 templates can contain at most 32767 bytes.
+
+GP5 imports its two copyright strings into separate entries before joining them
+for `PageSetup.Copyright`. GP6 through GP8 import the supported BinaryStylesheet
+records and populate the legacy PageSetup view. The legacy copyright visibility
+bit reflects the first footer entry; the second entry retains its independent
+visibility in HeaderFooter. Geometry and page-number values have no retaining
+consumer mapping and still produce `gp8.omit.page-setup`.
+
+After parsing, each changed PageSetup template overrides only its matching rich
+template. A changed visibility bit overrides only the matching visibility field;
+the copyright bit applies to both footer entries. Unchanged compatibility fields
+leave rich edits, including absence, authoritative. For a new programmatic score,
+a non-nil HeaderFooter container owns these values; PageSetup supplies legacy
+values when that container is absent. Reconciliation never mutates either view.
+
+An edited legacy copyright string splits at its first LF. Remaining text stays
+in the second footer. Multiple separators produce
+`gp8.normalize.page-copyright-lines`, which strict export rejects unless allowed.
+An unchanged parsed GP5 source retains the original two string boundaries even
+when either string contains LF.
+
+No alignment API is introduced. Imported GP8 alignment records retain their exact
+bytes and final consumer values, including non-default alignments. Projected
+legacy templates omit alignment overrides and use the pinned defaults: centered
+Title, Subtitle, Artist, Album and Copyright; left Words; right Music,
+WordsAndMusic and Tabber. Clearing template and visibility leaves an imported
+alignment record intact, so the consumer can still create its default element.

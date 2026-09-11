@@ -18,6 +18,9 @@ const (
 // no authored setting. Direct edits control output; clearing a field removes its
 // corresponding configuration record. Other imported records remain unchanged.
 type ScoreStyle struct {
+	// HeaderFooter owns template and visibility requests. Changed parsed PageSetup
+	// leaves override only their matching template or visibility bit on export.
+	HeaderFooter *HeaderFooterSettings
 	// MultiRest requests combined rests in the multi-track score view. Nil uses
 	// false. This preference does not control any single-track view.
 	MultiRest *bool

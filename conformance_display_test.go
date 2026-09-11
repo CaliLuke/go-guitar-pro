@@ -16,16 +16,16 @@ func TestConformancePageSetupImport(t *testing.T) {
 func runConformancePageSetupImport(run *conformanceRun) {
 	song := parseTestFixture(run.t, "testdata/gp5/score-info.gp5")
 	page := song.PageSetup
-	run.Omitted("Song.PageSetup", song.PageSetup, page)
-	run.Omitted("PageSetup.Words", page.Words, "Words by %WORDS%")
-	run.Omitted("PageSetup.Music", page.Music, "Music by %MUSIC%")
+	run.Normalized("Song.PageSetup", song.PageSetup, page)
+	run.Normalized("PageSetup.Words", page.Words, "Words by %WORDS%")
+	run.Normalized("PageSetup.Music", page.Music, "Music by %MUSIC%")
 	run.Omitted("PageSetup.PageNumber", page.PageNumber, "Page %N%/%P%")
-	run.Omitted("PageSetup.Copyright", page.Copyright, "Copyright %COPYRIGHT%\nAll Rights Reserved - International Copyright Secured")
-	run.Omitted("PageSetup.WordAndMusic", page.WordAndMusic, "Words & Music by %WORDSMUSIC%")
-	run.Omitted("PageSetup.Artist", page.Artist, "%ARTIST%")
-	run.Omitted("PageSetup.Album", page.Album, "%ALBUM%")
-	run.Omitted("PageSetup.Title", page.Title, "%TITLE%")
-	run.Omitted("PageSetup.Subtitle", page.Subtitle, "%SUBTITLE%")
+	run.Normalized("PageSetup.Copyright", page.Copyright, "Copyright %COPYRIGHT%\nAll Rights Reserved - International Copyright Secured")
+	run.Normalized("PageSetup.WordAndMusic", page.WordAndMusic, "Words & Music by %WORDSMUSIC%")
+	run.Normalized("PageSetup.Artist", page.Artist, "%ARTIST%")
+	run.Normalized("PageSetup.Album", page.Album, "%ALBUM%")
+	run.Normalized("PageSetup.Title", page.Title, "%TITLE%")
+	run.Normalized("PageSetup.Subtitle", page.Subtitle, "%SUBTITLE%")
 	run.Omitted("PageSetup.PageHeight", page.PageHeight, int32(297))
 	run.Omitted("PageSetup.ScoreSizeProportion", page.ScoreSizeProportion, float32(1))
 	run.Omitted("PageSetup.PageWidth", page.PageWidth, int32(210))
@@ -33,7 +33,7 @@ func runConformancePageSetupImport(run *conformanceRun) {
 	run.Omitted("PageSetup.MarginTop", page.MarginTop, int32(15))
 	run.Omitted("PageSetup.MarginRight", page.MarginRight, int32(10))
 	run.Omitted("PageSetup.MarginLeft", page.MarginLeft, int32(10))
-	run.Omitted("PageSetup.HeaderAndFooter", page.HeaderAndFooter, uint16(0x1ff))
+	run.Normalized("PageSetup.HeaderAndFooter", page.HeaderAndFooter, uint16(0x1ff))
 }
 
 func TestConformanceDisplayExportPolicy(t *testing.T) {

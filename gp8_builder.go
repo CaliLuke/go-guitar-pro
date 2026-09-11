@@ -96,9 +96,7 @@ func (builder *gp8Builder) buildScore() gpifScore {
 	if song.MasterEffect.Volume != 0 || song.MasterEffect.Reverb != 0 || song.MasterEffect.Equalizer.Gain != 0 || len(song.MasterEffect.Equalizer.Knobs) != 0 {
 		builder.addReport("gp8.omit.master-rse", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit the legacy master RSE effect")
 	}
-	if song.PageSetup != (PageSetup{}) {
-		builder.addReport("gp8.omit.page-setup", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 writer does not emit page dimensions, margins, header selections, or text templates")
-	}
+	builder.reportPageSetup()
 	if song.Writer != "" {
 		builder.addReport("gp8.omit.writer", "score-core", ExportDispositionOmitted, ScoreLocation{}, "GP8 has no separate destination for the legacy writer field")
 	}

@@ -91,6 +91,11 @@
       "decision": "implementation-ready",
       "reviewed_commit": "f5a5ee962d086c369d2e523ba2de98ca1ddd481b",
       "reviewed_at": "2026-09-10T21:05:35.814214+00:00"
+    },
+    {
+      "kind": "runtime",
+      "reference": "conformance/capabilities/evidence/header-footer.json",
+      "detail": "Original source hashes, six actual strict exports with exact report allowances, independent raw record decoder and pinned consumer facts."
     }
   ],
   "shared_files": [
@@ -99,8 +104,13 @@
     "gp8_export.go",
     "song.go"
   ],
-  "resolution": null,
-  "verification": [],
+  "resolution": "Implemented all ten supported header/footer template and visibility entries, optional absence and empty text, field-specific legacy reconciliation and deterministic copyright splitting. Exact GP5/GP8 raw consumer facts preserve existing/default alignments and other stylesheet settings. Physical geometry and page-number limits remain explicit. Awaiting different-agent acceptance review, reviewed #109 dependency and root combined gates.",
+  "verification": [
+    "Both pinned original header/footer fixtures pass public, exact typed-wire and raw consumer tests.",
+    "Public edits preserve Unicode/XML-sensitive text and CR/CRLF, absence, independent flags and nonmutation.",
+    "Inventory adds 13 public fields and reuses the three exact binary record wire obligations.",
+    "Focused bounds, strict physical leaf omissions, corpus accounting and generated reports are checked; full gates/probe remain assigned to root."
+  ],
   "issue": {
     "number": 114,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/114",

@@ -1,0 +1,2958 @@
+{
+  "schema_version": 1,
+  "issue": 114,
+  "status": "implemented-awaiting-independent-review",
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "scope": "Supported template and visibility keys only. Physical geometry, page scale and page-number text remain reported omissions. No alignment API is added; source GP8 alignment records retain bytes and consumer values, while projected GP5 fields use exact pinned per-element defaults.",
+  "authority": "After parsing, a changed PageSetup template or visibility bit overrides only its matching HeaderFooter field. Unchanged legacy fields leave rich edits authoritative. Programmatic non-nil HeaderFooter owns the values; otherwise PageSetup supplies legacy templates. Copyright edits split on the first LF, retain the remainder in field two, and report multiple-separator ambiguity. Original GP5 field boundaries remain separate before the compatibility strings are joined.",
+  "export_policy": "These complete-source artifacts use strict export with explicit allowances for pre-existing unrelated source-version, lyrics, RSE, writer, track-display and empty-beat reports, plus physical page limits and the tested ambiguous copyright split. Exact returned entries are recorded for each artifact. Focused GP8 tests clear only unrelated provenance and require an empty report.",
+  "sources": [
+    {
+      "path": "testdata/gp5/header-footer.gp5",
+      "sha256": "beb6abe660aea39345e6b188ef28e460f3c88b72e7e7b219b17883963353c921",
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": false,
+          "bracketExtendMode": 1,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Title",
+            "template": "Title: %TITLE%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "Subtitle: %SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "Artist: %ARTIST%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "Album: %ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words: %WORDS%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Music",
+            "template": "Music: %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music: %WORDSMUSIC%",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Copyright",
+            "template": "Copyright: %COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "Copyright2",
+            "visible": true,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": null
+    },
+    {
+      "path": "testdata/gp8/header-footer.gp",
+      "sha256": "86a24c8025295267a713511e4fbd348ee71ae00addaf097d9955bb90cc4bf812",
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Copyright",
+            "template": "Copyright: %COPYRIGHT%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "Copyright2",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Music",
+            "template": "Music: %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Transcriber: %TABBER%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "Artist: %ARTIST%",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "Album: %ALBUM%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Title",
+            "template": "Title: %TITLE%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Words",
+            "template": "Words: %WORDS%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music: %MUSIC%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "SubTitle",
+            "template": "Subtitle: %SUBTITLE%",
+            "visible": true,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "0016436f707972696768743a2025434f5059524947485425"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "000a436f7079726967687432"
+        },
+        {
+          "key": "Footer/drawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/MusicAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/TabberAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/CopyrightAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/AlbumAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "000e5469746c653a20255449544c4525"
+        },
+        {
+          "key": "Header/WordsAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "0016576f7264732026204d757369633a20254d5553494325"
+        },
+        {
+          "key": "Header/drawTitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusicAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Footer/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00104172746973743a202541525449535425"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "000e576f7264733a2025574f52445325"
+        },
+        {
+          "key": "Header/drawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00145375627469746c653a20255355425449544c4525"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "000e416c62756d3a2025414c42554d25"
+        },
+        {
+          "key": "Header/SubtitleAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Footer/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "000e4d757369633a20254d5553494325"
+        },
+        {
+          "key": "Header/ArtistAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Tabber",
+          "type": 3,
+          "hex": "00155472616e736372696265723a202554414242455225"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/TitleAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright1",
+          "type": 3,
+          "hex": "000c25434f505952494748543125"
+        },
+        {
+          "key": "Header/DrawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright2",
+          "type": 3,
+          "hex": "000c25434f505952494748543225"
+        },
+        {
+          "key": "Header/Copyright1Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawCopyright2",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/DrawCopyright1",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/DrawTitle",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp5-edited.gp",
+      "sha256": "12bb6ea86edbfcccd8a49f7ef2780c34ab8e7293605adafdc970bcdbe255c887",
+      "go": {
+        "headers": {
+          "Title": {
+            "Template": "A é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Subtitle": {
+            "Template": "B é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Artist": {
+            "Template": "C é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Album": {
+            "Template": "D é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Words": {
+            "Template": "E é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Music": {
+            "Template": "F é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "WordsAndMusic": {
+            "Template": "G é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Tabber": null,
+          "Copyright": {
+            "Template": "I é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "J é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          }
+        },
+        "page": {
+          "Words": "E é名 <&>\r\n%TITLE%  ",
+          "Music": "F é名 <&>\r\n%TITLE%  ",
+          "PageNumber": "",
+          "Copyright": "I é名 <&>\r\n%TITLE%  \nJ é名 <&>\r\n%TITLE%  ",
+          "WordAndMusic": "G é名 <&>\r\n%TITLE%  ",
+          "Artist": "C é名 <&>\r\n%TITLE%  ",
+          "Album": "D é名 <&>\r\n%TITLE%  ",
+          "Title": "A é名 <&>\r\n%TITLE%  ",
+          "Subtitle": "B é名 <&>\r\n%TITLE%  ",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 213
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.score-lyrics",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit binary score lyrics"
+            },
+            {
+              "Code": "gp8.omit.master-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy master RSE effect"
+            },
+            {
+              "Code": "gp8.omit.page-setup",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 does not retain physical page dimensions, margins, score scale, page-number templates or their selection bits"
+            },
+            {
+              "Code": "gp8.omit.writer",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 has no separate destination for the legacy writer field"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy track RSE record"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            },
+            {
+              "Code": "gp8.normalize.empty-beat",
+              "Feature": "note-and-beat-semantics",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits an explicit empty beat as a rest"
+            },
+            {
+              "Code": "gp8.normalize.empty-beat",
+              "Feature": "note-and-beat-semantics",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 1,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits an explicit empty beat as a rest"
+            }
+          ]
+        },
+        "source": "testdata/gp5/header-footer.gp5"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": false,
+          "bracketExtendMode": 1,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Title",
+            "template": "A é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "B é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "C é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "D é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "E é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Music",
+            "template": "F é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "G é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Copyright",
+            "template": "I é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "J é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "00164120c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawTitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00164220c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00164320c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "00164420c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "00164520c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "00164620c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "00164720c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "00164920c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "00164a20c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp5-source-export.gp",
+      "sha256": "ce6c4d1d464170242bca57f428e7585ae91fd47a67b2de21b2ad91188f9bfc11",
+      "go": {
+        "headers": {
+          "Title": {
+            "Template": "Title: %TITLE%",
+            "Visible": false
+          },
+          "Subtitle": {
+            "Template": "Subtitle: %SUBTITLE%",
+            "Visible": true
+          },
+          "Artist": {
+            "Template": "Artist: %ARTIST%",
+            "Visible": false
+          },
+          "Album": {
+            "Template": "Album: %ALBUM%",
+            "Visible": true
+          },
+          "Words": {
+            "Template": "Words: %WORDS%",
+            "Visible": false
+          },
+          "Music": {
+            "Template": "Music: %MUSIC%",
+            "Visible": true
+          },
+          "WordsAndMusic": {
+            "Template": "Words & Music: %WORDSMUSIC%",
+            "Visible": false
+          },
+          "Tabber": null,
+          "Copyright": {
+            "Template": "Copyright: %COPYRIGHT%",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "Copyright2",
+            "Visible": true
+          }
+        },
+        "page": {
+          "Words": "Words: %WORDS%",
+          "Music": "Music: %MUSIC%",
+          "PageNumber": "",
+          "Copyright": "Copyright: %COPYRIGHT%\nCopyright2",
+          "WordAndMusic": "Words & Music: %WORDSMUSIC%",
+          "Artist": "Artist: %ARTIST%",
+          "Album": "Album: %ALBUM%",
+          "Title": "Title: %TITLE%",
+          "Subtitle": "Subtitle: %SUBTITLE%",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 170
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.omit.score-lyrics",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit binary score lyrics"
+            },
+            {
+              "Code": "gp8.omit.master-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy master RSE effect"
+            },
+            {
+              "Code": "gp8.omit.page-setup",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 does not retain physical page dimensions, margins, score scale, page-number templates or their selection bits"
+            },
+            {
+              "Code": "gp8.omit.writer",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 has no separate destination for the legacy writer field"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy track RSE record"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            },
+            {
+              "Code": "gp8.normalize.empty-beat",
+              "Feature": "note-and-beat-semantics",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits an explicit empty beat as a rest"
+            },
+            {
+              "Code": "gp8.normalize.empty-beat",
+              "Feature": "note-and-beat-semantics",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 1,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits an explicit empty beat as a rest"
+            }
+          ]
+        },
+        "source": "testdata/gp5/header-footer.gp5"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": false,
+          "bracketExtendMode": 1,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Title",
+            "template": "Title: %TITLE%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "SubTitle",
+            "template": "Subtitle: %SUBTITLE%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "Artist: %ARTIST%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Album",
+            "template": "Album: %ALBUM%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Words",
+            "template": "Words: %WORDS%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Music",
+            "template": "Music: %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music: %WORDSMUSIC%",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Copyright",
+            "template": "Copyright: %COPYRIGHT%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "Copyright2",
+            "visible": true,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "000e5469746c653a20255449544c4525"
+        },
+        {
+          "key": "Header/drawTitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00145375627469746c653a20255355425449544c4525"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00104172746973743a202541525449535425"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "000e416c62756d3a2025414c42554d25"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "000e576f7264733a2025574f52445325"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "000e4d757369633a20254d5553494325"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "001b576f7264732026204d757369633a2025574f5244534d5553494325"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "0016436f707972696768743a2025434f5059524947485425"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "000a436f7079726967687432"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp8-absent.gp",
+      "sha256": "f01f1e4418b2127bac01e6086eb34d53f2fd08f4fcbe6d3c100331a3f083967b",
+      "go": {
+        "headers": {
+          "Title": null,
+          "Subtitle": {
+            "Template": "B é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Artist": {
+            "Template": "C é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Album": {
+            "Template": "D é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Words": {
+            "Template": "E é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Music": {
+            "Template": "F é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "WordsAndMusic": {
+            "Template": "G é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Tabber": {
+            "Template": "H é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Copyright": {
+            "Template": "I é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "J é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          }
+        },
+        "page": {
+          "Words": "E é名 <&>\r\n%TITLE%  ",
+          "Music": "F é名 <&>\r\n%TITLE%  ",
+          "PageNumber": "",
+          "Copyright": "I é名 <&>\r\n%TITLE%  \nJ é名 <&>\r\n%TITLE%  ",
+          "WordAndMusic": "G é名 <&>\r\n%TITLE%  ",
+          "Artist": "C é名 <&>\r\n%TITLE%  ",
+          "Album": "D é名 <&>\r\n%TITLE%  ",
+          "Title": "",
+          "Subtitle": "B é名 <&>\r\n%TITLE%  ",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 212
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            }
+          ]
+        },
+        "source": "testdata/gp8/header-footer.gp"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Copyright",
+            "template": "I é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "J é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Music",
+            "template": "F é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "H é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "C é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "D é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Words",
+            "template": "E é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "G é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "SubTitle",
+            "template": "B é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Title",
+            "template": "%TITLE%",
+            "align": 0
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "00164920c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "00164a20c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/MusicAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/TabberAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Footer/CopyrightAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/AlbumAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/WordsAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "00164720c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/WordsAndMusicAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Footer/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00164320c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "00164520c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawTabber",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00164220c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "00164420c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/SubtitleAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Footer/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "00164620c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/ArtistAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Tabber",
+          "type": 3,
+          "hex": "00164820c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/TitleAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright1",
+          "type": 3,
+          "hex": "000c25434f505952494748543125"
+        },
+        {
+          "key": "Header/DrawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright2",
+          "type": 3,
+          "hex": "000c25434f505952494748543225"
+        },
+        {
+          "key": "Header/Copyright1Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawCopyright2",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/DrawCopyright1",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/DrawTitle",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp8-edited.gp",
+      "sha256": "922cdfd122253707ccc798eaa43cfa22c8b389c708b6e3a13ce5589ff91288b4",
+      "go": {
+        "headers": {
+          "Title": {
+            "Template": "A é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Subtitle": {
+            "Template": "B é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Artist": {
+            "Template": "C é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Album": {
+            "Template": "D é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Words": {
+            "Template": "E é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Music": {
+            "Template": "F é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "WordsAndMusic": {
+            "Template": "G é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Tabber": {
+            "Template": "H é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Copyright": {
+            "Template": "I é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "J é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          }
+        },
+        "page": {
+          "Words": "E é名 <&>\r\n%TITLE%  ",
+          "Music": "F é名 <&>\r\n%TITLE%  ",
+          "PageNumber": "",
+          "Copyright": "I é名 <&>\r\n%TITLE%  \nJ é名 <&>\r\n%TITLE%  ",
+          "WordAndMusic": "G é名 <&>\r\n%TITLE%  ",
+          "Artist": "C é名 <&>\r\n%TITLE%  ",
+          "Album": "D é名 <&>\r\n%TITLE%  ",
+          "Title": "A é名 <&>\r\n%TITLE%  ",
+          "Subtitle": "B é名 <&>\r\n%TITLE%  ",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 213
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            }
+          ]
+        },
+        "source": "testdata/gp8/header-footer.gp"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Copyright",
+            "template": "I é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "J é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Music",
+            "template": "F é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "H é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "C é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "D é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Title",
+            "template": "A é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Words",
+            "template": "E é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "G é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "SubTitle",
+            "template": "B é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "00164920c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "00164a20c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/MusicAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/TabberAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Footer/CopyrightAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/AlbumAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "00164120c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/WordsAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "00164720c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawTitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/WordsAndMusicAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Footer/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00164320c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "00164520c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawTabber",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00164220c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "00164420c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/SubtitleAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Footer/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "00164620c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/ArtistAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Tabber",
+          "type": 3,
+          "hex": "00164820c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/TitleAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright1",
+          "type": 3,
+          "hex": "000c25434f505952494748543125"
+        },
+        {
+          "key": "Header/DrawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright2",
+          "type": 3,
+          "hex": "000c25434f505952494748543225"
+        },
+        {
+          "key": "Header/Copyright1Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawCopyright2",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/DrawCopyright1",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/DrawTitle",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp8-legacy.gp",
+      "sha256": "ed2ad0e1d5efa1fb38751998acacdf36304e8120f0d27713fa09d5f625100d23",
+      "go": {
+        "headers": {
+          "Title": {
+            "Template": "Legacy title é",
+            "Visible": null
+          },
+          "Subtitle": {
+            "Template": "B é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Artist": {
+            "Template": "C é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Album": {
+            "Template": "D é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Words": {
+            "Template": "E é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Music": {
+            "Template": "F é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "WordsAndMusic": {
+            "Template": "G é名 <&>\r\n%TITLE%  ",
+            "Visible": true
+          },
+          "Tabber": {
+            "Template": "H é名 <&>\r\n%TITLE%  ",
+            "Visible": false
+          },
+          "Copyright": {
+            "Template": "first",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "second\nthird",
+            "Visible": false
+          }
+        },
+        "page": {
+          "Words": "E é名 <&>\r\n%TITLE%  ",
+          "Music": "F é名 <&>\r\n%TITLE%  ",
+          "PageNumber": "",
+          "Copyright": "first\nsecond\nthird",
+          "WordAndMusic": "G é名 <&>\r\n%TITLE%  ",
+          "Artist": "C é名 <&>\r\n%TITLE%  ",
+          "Album": "D é名 <&>\r\n%TITLE%  ",
+          "Title": "Legacy title é",
+          "Subtitle": "B é名 <&>\r\n%TITLE%  ",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 212
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.page-copyright-lines",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the legacy copyright string has multiple line separators; the first separates footer fields and remaining text stays in the second field"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            }
+          ]
+        },
+        "source": "testdata/gp8/header-footer.gp"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Copyright",
+            "template": "first",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "second\nthird",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Music",
+            "template": "F é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "H é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "C é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "D é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Title",
+            "template": "Legacy title é",
+            "align": 0
+          },
+          {
+            "element": "Words",
+            "template": "E é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "G é名 <&>\r\n%TITLE%  ",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "SubTitle",
+            "template": "B é名 <&>\r\n%TITLE%  ",
+            "visible": false,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "00056669727374"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "000c7365636f6e640a7468697264"
+        },
+        {
+          "key": "Footer/drawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/MusicAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/TabberAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Footer/CopyrightAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/AlbumAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "000f4c6567616379207469746c6520c3a9"
+        },
+        {
+          "key": "Header/WordsAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "00164720c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/WordsAndMusicAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Footer/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00164320c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "00164520c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/drawTabber",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00164220c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "00164420c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/SubtitleAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Footer/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "00164620c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Header/ArtistAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Tabber",
+          "type": 3,
+          "hex": "00164820c3a9e5908d203c263e0d0a255449544c45252020"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/TitleAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright1",
+          "type": 3,
+          "hex": "000c25434f505952494748543125"
+        },
+        {
+          "key": "Header/DrawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright2",
+          "type": 3,
+          "hex": "000c25434f505952494748543225"
+        },
+        {
+          "key": "Header/Copyright1Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawCopyright2",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/DrawCopyright1",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/DrawTitle",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    },
+    {
+      "path": "conformance/capabilities/evidence/header-footer/gp8-source-export.gp",
+      "sha256": "00be028187a35d4ae33d1c7e54a1b91946f7549ed9e6a9a7d31b92b0a20db3d1",
+      "go": {
+        "headers": {
+          "Title": {
+            "Template": "Title: %TITLE%",
+            "Visible": false
+          },
+          "Subtitle": {
+            "Template": "Subtitle: %SUBTITLE%",
+            "Visible": true
+          },
+          "Artist": {
+            "Template": "Artist: %ARTIST%",
+            "Visible": false
+          },
+          "Album": {
+            "Template": "Album: %ALBUM%",
+            "Visible": true
+          },
+          "Words": {
+            "Template": "Words: %WORDS%",
+            "Visible": false
+          },
+          "Music": {
+            "Template": "Music: %MUSIC%",
+            "Visible": true
+          },
+          "WordsAndMusic": {
+            "Template": "Words & Music: %MUSIC%",
+            "Visible": false
+          },
+          "Tabber": {
+            "Template": "Transcriber: %TABBER%",
+            "Visible": true
+          },
+          "Copyright": {
+            "Template": "Copyright: %COPYRIGHT%",
+            "Visible": true
+          },
+          "Copyright2": {
+            "Template": "Copyright2",
+            "Visible": false
+          }
+        },
+        "page": {
+          "Words": "Words: %WORDS%",
+          "Music": "Music: %MUSIC%",
+          "PageNumber": "",
+          "Copyright": "Copyright: %COPYRIGHT%\nCopyright2",
+          "WordAndMusic": "Words & Music: %MUSIC%",
+          "Artist": "Artist: %ARTIST%",
+          "Album": "Album: %ALBUM%",
+          "Title": "Title: %TITLE%",
+          "Subtitle": "Subtitle: %SUBTITLE%",
+          "PageHeight": 0,
+          "ScoreSizeProportion": 0,
+          "PageWidth": 0,
+          "MarginBottom": 0,
+          "MarginTop": 0,
+          "MarginRight": 0,
+          "MarginLeft": 0,
+          "HeaderAndFooter": 170
+        },
+        "report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-use-rse",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer does not emit the legacy UseRse flag"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            }
+          ]
+        },
+        "source": "testdata/gp8/header-footer.gp"
+      },
+      "consumer": {
+        "extended": false,
+        "numbers": "AllBars",
+        "other": {
+          "hideDynamics": true,
+          "bracketExtendMode": 0,
+          "useSystemSignSeparator": false,
+          "globalDisplayTuning": true,
+          "globalDisplayChordDiagramsOnTop": true,
+          "globalDisplayChordDiagramsInScore": false,
+          "singleTrackTrackNamePolicy": 1,
+          "multiTrackTrackNamePolicy": 1,
+          "firstSystemTrackNameMode": 1,
+          "otherSystemsTrackNameMode": 1,
+          "firstSystemTrackNameOrientation": 1,
+          "otherSystemsTrackNameOrientation": 1
+        },
+        "headers": [
+          {
+            "element": "Copyright",
+            "template": "Copyright: %COPYRIGHT%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "CopyrightSecondLine",
+            "template": "Copyright2",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Music",
+            "template": "Music: %MUSIC%",
+            "visible": true,
+            "align": 2
+          },
+          {
+            "element": "Transcriber",
+            "template": "Transcriber: %TABBER%",
+            "visible": true,
+            "align": 1
+          },
+          {
+            "element": "Artist",
+            "template": "Artist: %ARTIST%",
+            "visible": false,
+            "align": 2
+          },
+          {
+            "element": "Album",
+            "template": "Album: %ALBUM%",
+            "visible": true,
+            "align": 0
+          },
+          {
+            "element": "Title",
+            "template": "Title: %TITLE%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "Words",
+            "template": "Words: %WORDS%",
+            "visible": false,
+            "align": 1
+          },
+          {
+            "element": "WordsAndMusic",
+            "template": "Words & Music: %MUSIC%",
+            "visible": false,
+            "align": 0
+          },
+          {
+            "element": "SubTitle",
+            "template": "Subtitle: %SUBTITLE%",
+            "visible": true,
+            "align": 1
+          }
+        ]
+      },
+      "header_records": [
+        {
+          "key": "Footer/Copyright",
+          "type": 3,
+          "hex": "0016436f707972696768743a2025434f5059524947485425"
+        },
+        {
+          "key": "Footer/Copyright2",
+          "type": 3,
+          "hex": "000a436f7079726967687432"
+        },
+        {
+          "key": "Footer/drawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/drawCopyright",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/MusicAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/TabberAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawArtist",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/CopyrightAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/AlbumAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Title",
+          "type": 3,
+          "hex": "000e5469746c653a20255449544c4525"
+        },
+        {
+          "key": "Header/WordsAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/drawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/WordsAndMusic",
+          "type": 3,
+          "hex": "0016576f7264732026204d757369633a20254d5553494325"
+        },
+        {
+          "key": "Header/drawTitle",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/WordsAndMusicAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Footer/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/Artist",
+          "type": 3,
+          "hex": "00104172746973743a202541525449535425"
+        },
+        {
+          "key": "Header/Words",
+          "type": 3,
+          "hex": "000e576f7264733a2025574f52445325"
+        },
+        {
+          "key": "Header/drawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/drawWords",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/drawWordsAndMusic",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/Subtitle",
+          "type": 3,
+          "hex": "00145375627469746c653a20255355425449544c4525"
+        },
+        {
+          "key": "Header/Album",
+          "type": 3,
+          "hex": "000e416c62756d3a2025414c42554d25"
+        },
+        {
+          "key": "Header/SubtitleAlignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Footer/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/Music",
+          "type": 3,
+          "hex": "000e4d757369633a20254d5553494325"
+        },
+        {
+          "key": "Header/ArtistAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/drawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Tabber",
+          "type": 3,
+          "hex": "00155472616e736372696265723a202554414242455225"
+        },
+        {
+          "key": "Footer/drawCopyright2",
+          "type": 0,
+          "hex": "00"
+        },
+        {
+          "key": "Header/TitleAlignment",
+          "type": 1,
+          "hex": "00000000"
+        },
+        {
+          "key": "Header/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawMusic",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawPageNumber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright1",
+          "type": 3,
+          "hex": "000c25434f505952494748543125"
+        },
+        {
+          "key": "Header/DrawTabber",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawWords",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawAlbum",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawSubtitle",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/Copyright2",
+          "type": 3,
+          "hex": "000c25434f505952494748543225"
+        },
+        {
+          "key": "Header/Copyright1Alignment",
+          "type": 1,
+          "hex": "00000001"
+        },
+        {
+          "key": "Header/DrawCopyright2",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/DrawArtist",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Header/PageNumberAlignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/PageNumber",
+          "type": 3,
+          "hex": "000e2550414745252f25504147455325"
+        },
+        {
+          "key": "Header/DrawCopyright1",
+          "type": 0,
+          "hex": "01"
+        },
+        {
+          "key": "Footer/Copyright2Alignment",
+          "type": 1,
+          "hex": "00000002"
+        },
+        {
+          "key": "Header/DrawTitle",
+          "type": 0,
+          "hex": "01"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "Both original pinned fixtures preserve exact final templates, independent visibility and all source/default alignments.",
+    "Every present element has a distinct Unicode/XML-sensitive/CR/CRLF edit with exact final consumer text.",
+    "Absent versus empty template and visibility, maximum 32767-byte UTF-8 text, invalid UTF-8/length rejection and malformed known record types.",
+    "Legacy per-field edits, strict physical limits, copyright ambiguity and source nonmutation.",
+    "Previous binary reader overlay fails the public regression."
+  ]
+}

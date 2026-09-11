@@ -49,10 +49,12 @@ type Song struct {
 	// values divided by 16. Edits and clearing control export after import.
 	VolumeAutomations []VolumeAutomation
 	// PanAutomations owns track pan events independently from initial channel balance.
-	PanAutomations []PanAutomation
-	Lyrics         Lyrics
-	MasterEffect   RseMasterEffect
-	PageSetup      PageSetup
+	PanAutomations       []PanAutomation
+	Lyrics               Lyrics
+	MasterEffect         RseMasterEffect
+	PageSetup            PageSetup
+	pageCompatibility    PageSetup
+	pageCompatibilitySet bool
 	// InitialTempo preserves the authored opening BPM, including fractions. Tempo
 	// remains the rounded legacy compatibility projection.
 	InitialTempo SourceValue[BPM]

@@ -113,6 +113,9 @@ func applyBinaryStylesheet(song *Song, data []byte) error {
 	}
 	style := &ScoreStyle{records: records}
 	for _, record := range records {
+		if err := applyHeaderFooterRecord(style, record); err != nil {
+			return err
+		}
 		switch record.key {
 		case "System/ExtendedBarLines":
 			if record.kind != 0 {
@@ -133,6 +136,7 @@ func applyBinaryStylesheet(song *Song, data []byte) error {
 		}
 	}
 	song.Style = style
+	song.projectHeaderFooterCompatibility()
 	return nil
 }
 func scoreStyleRecords(style *ScoreStyle) []binaryStyleRecord {
@@ -160,7 +164,7 @@ func scoreStyleRecords(style *ScoreStyle) []binaryStyleRecord {
 	return records
 }
 func buildGP8BinaryStylesheet(song *Song) []byte {
-	records := scoreStyleRecords(song.Style)
+	records := mergeHeaderFooterRecords(song, scoreStyleRecords(song.Style))
 	output := make([]byte, 4)
 	binary.BigEndian.PutUint32(output, uint32(len(records)))
 	for _, record := range records {
@@ -177,12 +181,5 @@ func validateScoreStyle(style *ScoreStyle, diagnostics *[]ScoreDiagnostic) {
 	}
 	if style.BarNumbers != nil && *style.BarNumbers > BarNumberHide {
 		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.style.bar-number-policy", Kind: ScoreDiagnosticValue, Reason: fmt.Sprintf("bar-number policy %d is undefined", *style.BarNumbers)})
-	}
-	size := 4
-	for _, record := range scoreStyleRecords(style) {
-		size += len(record.key) + len(record.value) + 2
-	}
-	if size > maxBinaryStylesheetSize {
-		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.style.size", Kind: ScoreDiagnosticValue, Reason: fmt.Sprintf("stylesheet size %d exceeds %d-byte limit", size, maxBinaryStylesheetSize)})
 	}
 }

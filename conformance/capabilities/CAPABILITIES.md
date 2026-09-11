@@ -14,11 +14,11 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 78 | 17 | 2 | 1 |
-| model | 77 | 18 | 2 | 1 |
-| export | 55 | 37 | 5 | 1 |
+| import | 79 | 16 | 2 | 1 |
+| model | 78 | 17 | 2 | 1 |
+| export | 56 | 37 | 4 | 1 |
 
-All three stages have a supported rating in 55 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 56 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
@@ -599,11 +599,11 @@ Bounded work: [Preserve numbered notation per staff](https://github.com/CaliLuke
 
 ### page-setup: Page setup, headers and footer templates
 
-Notation. Priority 3. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
+Notation. Priority 3. Formats: gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Legacy PageSetup is modeled and omitted on GP8 export. Pinned AlphaTab also exposes structured score header/footer templates not mapped here.
+HeaderFooterSettings preserves supported templates and independent visibility through exact typed BinaryStylesheet records. Legacy PageSetup edits reconcile per field; copyright source boundaries remain independent and ambiguous edited strings are reported. Existing alignment records remain unchanged; projected legacy styles use pinned per-element defaults. Physical geometry and page-number templates remain explicit target limits.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

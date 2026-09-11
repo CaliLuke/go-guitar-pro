@@ -300,17 +300,19 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `BeatTimer` | `note-and-beat-semantics` | 1 authored, 0 compatibility, 0 derived, 0 out-of-scope | An occurrence-owned timer request distinguishes derived time from an explicit integer millisecond value including zero. |
 | `StaffNotationSettings` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Each staff owns independent requested notation flags; the GP8 track-wide configuration reports differing later-staff values. |
 | `SystemLayout` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent authored system counts; zero default means absent and nil array remains absent. |
-| `ScoreStyle` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
+| `ScoreStyle` | `score-core` | 4 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
 | `noteAccidentalSource` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Immutable private receipt preserves source notation coordinates while all relevant public context stays unchanged. |
 | `noteAccidentalPitch` | `note-and-beat-semantics` | 0 authored, 0 compatibility, 0 derived, 0 out-of-scope | Private source pitch payload; public edits are governed by Note.AccidentalMode and numeric pitch context. |
+| `HeaderFooterSettings` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent template/visibility entries preserve all ten supported GP header/footer elements. Empty entries normalize to absence. |
+| `HeaderFooterStyle` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Literal optional template text and optional visibility are independent authored values; nil leaves retain absent records. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 273 |
-| `normalized` | 48 |
-| `omitted` | 103 |
+| `preserved` | 275 |
+| `normalized` | 69 |
+| `omitted` | 93 |
 | `rejected` | 0 |
 | `derived` | 14 |
 | `out-of-scope` | 0 |
@@ -319,7 +321,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 140 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 141 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 208 discovered public enum members.
 
 ## Wire inventory
 
@@ -486,3 +488,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `multi-rest` | `score-core` | `TestConformanceMultiRest` | `TestAlphaTabMultiRest` | no | Separate global and individual view preferences preserve false and true; absence defaults to false without changing measures or notation. |
 | `pitch-source-context-preservation` | `note-and-beat-semantics` | `TestConformancePitchSourceContext` | `TestAlphaTabPitchSpellingSourceContexts` | no | Retain original source coordinate records without changing numeric pitch; edits invalidate the private receipt and restore checked derivation. |
 | `hammer-endpoint-preservation` | `note-and-beat-semantics` | `TestConformanceHammerEndpoints` | `TestAlphaTabHammerEndpoints` | no | Exact endpoint booleans and wire properties survive with precise pinned-consumer limits for dangling or unlinked endpoints. |
+| `header-footer` | `score-core` | `TestConformanceHeaderFooter` | `TestAlphaTabHeaderFooter` | no | Exact raw typed records retain templates, visibility, existing source alignment and independent legacy edit reconciliation; physical geometry remains an explicit limit. |

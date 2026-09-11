@@ -98,5 +98,8 @@ func (s *Song) readPageSetup(c *cursor) error {
 	}
 	s.PageSetup.Copyright = copy1 + "\n" + copy2
 	s.PageSetup.PageNumber, err = c.readIntByteSizeString()
+	if err == nil {
+		s.importLegacyHeaderFooter(copy1, copy2)
+	}
 	return err
 }
