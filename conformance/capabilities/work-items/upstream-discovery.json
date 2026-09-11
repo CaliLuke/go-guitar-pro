@@ -51,7 +51,7 @@
     {
       "kind": "source",
       "reference": "conformance/capabilities/upstream-ownership.json",
-      "detail": "Canonical exact review retains all 4,365 prior constructs, adds 2,291 assignments for 6,656 total constructs across 119 files, classifies 1,227 in-scope GP constructs, and links 312 importer-populated model declarations."
+      "detail": "Canonical exact review retains all 4,365 prior constructs, adds 2,291 assignments for 6,656 total constructs across 119 files, classifies 1,227 in-scope GP constructs, and links 312 importer-populated model declarations. All 22 GpifParser.parseNoteHead dispatches are owned by percussion because their only use populates InstrumentArticulation note-head fields."
     },
     {
       "kind": "source",
@@ -93,7 +93,7 @@
     "conformance/sync-upstream-inventory.mjs",
     "conformance/upstream-inventory.json"
   ],
-  "resolution": "Implemented class-aware canonical discovery and importer-backed ownership without changing the production Go API or semantic model. The canonical model inventory remains 384 symbols: 356 identities are unchanged and exactly 28 stale filename owners migrate to declaring classes, with zero additions, removals, or unexplained removals. The expanded audit retains all 4,365 prior constructs and adds 2,291 assignments for 6,656 total constructs across 119 files; 1,227 GP importer/configuration constructs are reviewed as 1,157 authored, 29 derived, and 41 excluded, and all 312 importer-populated public model declarations are independently derived and owned. Applicability is intentionally conservative at reachable GP importer/configuration file and format-family scope, not an exact branch-by-version claim. Other-product importers, exporters, playback, renderer, and container infrastructure remain visible but excluded by explicit path policy. Focused checks and mutation sensitivity pass; prior bounded reviews found gaps that are now addressed, and the exact final tree still requires a fresh bounded review plus independent final verification before closure.",
+  "resolution": "Implemented class-aware canonical discovery and importer-backed ownership without changing the production Go API or semantic model. The canonical model inventory remains 384 symbols: 356 identities are unchanged and exactly 28 stale filename owners migrate to declaring classes, with zero additions, removals, or unexplained removals. The expanded audit retains all 4,365 prior constructs and adds 2,291 assignments for 6,656 total constructs across 119 files; 1,227 GP importer/configuration constructs are reviewed as 1,157 authored, 29 derived, and 41 excluded, and all 312 importer-populated public model declarations are independently derived and owned. The 22 GpifParser.parseNoteHead dispatches use the percussion owner because parseNoteHead only populates InstrumentArticulation.noteHeadDefault, noteHeadHalf, and noteHeadWhole. Applicability is intentionally conservative at reachable GP importer/configuration file and format-family scope, not an exact branch-by-version claim. Other-product importers, exporters, playback, renderer, and container infrastructure remain visible but excluded by explicit path policy. Focused checks and mutation sensitivity pass; prior bounded reviews found gaps that are now addressed, and the exact final tree still requires a fresh bounded review plus independent final verification before closure.",
   "verification": [],
   "issue": {
     "number": 71,

@@ -251,6 +251,26 @@ export class MusicXmlImporter {
                          "barlines")
         self.assertEqual(model_reviews["Tuning.name"]["primary_capability"], "tuning")
 
+    def test_percussion_notehead_dispatches_have_semantic_owner(self):
+        ownership = manage.read_upstream_ownership()
+        prefix = (
+            "packages/alphatab/src/importer/GpifParser.ts::dispatch::"
+            "GpifParser.parseNoteHead:"
+        )
+        reviews = [review for review in ownership["construct_reviews"]
+                   if review["construct_id"].startswith(prefix)]
+        self.assertEqual(len(reviews), 22)
+        for review in reviews:
+            self.assertEqual(review["primary_capability"], "percussion")
+            self.assertEqual(review["secondary_capabilities"], [])
+
+        model_reviews = {review["declaration"]: review for review in ownership["model_reviews"]}
+        for declaration in (
+                "InstrumentArticulation.noteHeadDefault",
+                "InstrumentArticulation.noteHeadHalf",
+                "InstrumentArticulation.noteHeadWhole"):
+            self.assertEqual(model_reviews[declaration]["primary_capability"], "percussion")
+
     def test_shared_automation_assignments_use_specific_semantic_owners(self):
         ownership = manage.read_upstream_ownership()
         reviews = {review["construct_id"]: review for review in ownership["construct_reviews"]}
