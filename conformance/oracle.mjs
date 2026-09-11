@@ -530,6 +530,16 @@ export function loadNormalizedScore(fixture) {
   return normalizeScore(loadScore(fixture));
 }
 
+export function loadVoiceRestFacts(fixture) {
+  const score = loadScore(fixture);
+  return score.tracks.map(track => track.staves.map(staff => staff.bars.map(bar =>
+    bar.voices.map(voice => ({index: voice.index, empty: voice.isEmpty, beats: voice.beats.map(beat => ({
+      empty: beat.isEmpty, rest: beat.isRest, duration: beat.duration, dots: beat.dots,
+      numerator: beat.tupletNumerator, denominator: beat.tupletDenominator,
+      start: beat.playbackStart, length: beat.playbackDuration, text: beat.text, notes: beat.notes.length
+    }))})))));
+}
+
 export function loadDoubleBarFacts(fixture) {
   const score = loadScore(fixture);
   return {
@@ -1198,6 +1208,10 @@ function main() {
   }
   if (args[0] === '--backing-track' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadBackingTrackFacts(args[1]), null, 2)}\n`);
+    return;
+  }
+  if (args[0] === '--voice-rests' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadVoiceRestFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--double-bars' && args.length === 2) {

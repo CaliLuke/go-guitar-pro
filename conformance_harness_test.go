@@ -261,6 +261,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceExactTiming":                        runConformanceExactTiming,
 	"TestConformanceNoteRepresentation":                 runConformanceNoteRepresentation,
 	"TestConformanceNoteValidation":                     runConformanceNoteValidation,
+	"TestConformanceTimedEmptyVoice":                    runConformanceTimedEmptyVoice,
 	"TestConformanceBeatSemantics":                      runConformanceBeatSemantics,
 	"TestConformanceBeatEffects":                        runConformanceBeatEffects,
 	"TestConformanceBeatVibrato":                        runConformanceBeatVibrato,

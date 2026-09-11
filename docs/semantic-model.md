@@ -713,3 +713,10 @@ checks do not replace stage-specific and value-specific behavior evidence.
 This policy supports gradual migration. New code can use `Score`, exact value
 types, staves, diagnostics, and preflight reports. Existing `Song` code remains
 source compatible.
+
+Timed `BeatStatusEmpty` occurrences export as rests, with
+`gp8.normalize.empty-beat` at the authored beat. Their rhythm and text remain
+unchanged. An absent voice has no authored beat and produces no such report.
+GP8 records four voice slots with `-1` for absence. Go preserves interior absent
+slots and trims trailing absent slots. Pinned AlphaTab creates an empty quarter-note
+placeholder in each absent slot. These placeholders are separate from timed rests.

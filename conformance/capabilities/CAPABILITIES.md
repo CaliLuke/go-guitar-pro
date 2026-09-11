@@ -1189,7 +1189,7 @@ Timing. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Rests survive. An explicit empty beat becomes a rest on GP8 export with a normalization report.
+Ordinary rests and interior absent voices preserve distinct identities. Timed explicit-empty beats normalize to rests with gp8.normalize.empty-beat. Exact GPIF slots and raw pinned consumer timing, text, rhythm and generated placeholders have focused regressions. Export remains partial for explicit-empty status.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

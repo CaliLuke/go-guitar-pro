@@ -5,8 +5,8 @@
   "title": "Add independent GP8 regressions for empty beats and absent voice slots",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex/root",
   "formats": [
     "gp3",
     "gp4",
@@ -151,7 +151,7 @@
     "conformance_regression_test.go",
     "gp8_builder.go"
   ],
-  "resolution": null,
+  "resolution": "Added exact voice-slot, timed empty/rest, raw consumer and selective strict-policy regressions. Awaiting fresh independent review. Explicit-empty status remains a reported target limit.",
   "verification": [],
   "issue": {
     "number": 100,

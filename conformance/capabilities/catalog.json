@@ -985,7 +985,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Rests survive. An explicit empty beat becomes a rest on GP8 export with a normalization report.",
+      "finding": "Ordinary rests and interior absent voices preserve distinct identities. Timed explicit-empty beats normalize to rests with gp8.normalize.empty-beat. Exact GPIF slots and raw pinned consumer timing, text, rhythm and generated placeholders have focused regressions. Export remains partial for explicit-empty status.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.isEmpty",
@@ -1007,6 +1007,21 @@
           "kind": "test",
           "reference": "TestConformanceBeatSemantics",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8TimedEmptyAndAbsentVoicePolicy",
+          "detail": "Scoped empty-beat normalization, ordered timing/text and exact interior absent-voice preservation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceTimedEmptyVoice",
+          "detail": "Scoped empty-beat normalization, ordered timing/text and exact interior absent-voice preservation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabTimedEmptyVoice",
+          "detail": "Scoped empty-beat normalization, ordered timing/text and exact interior absent-voice preservation."
         }
       ]
     },

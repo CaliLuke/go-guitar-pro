@@ -65,7 +65,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve turns and mordents through GPIF and GP8](work-items/ornaments.json) | implementation | 2 | todo | — | [#87](https://github.com/CaliLuke/go-guitar-pro/issues/87) |
 | [Export existing pick stroke directions](work-items/pick-stroke.json) | implementation | 2 | done | — | [#88](https://github.com/CaliLuke/go-guitar-pro/issues/88) |
 | [Preserve named rasgueado finger patterns](work-items/rasgueado.json) | implementation | 2 | todo | — | [#89](https://github.com/CaliLuke/go-guitar-pro/issues/89) |
-| [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | todo | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
+| [Add independent GP8 regressions for empty beats and absent voice slots](work-items/rests.json) | implementation | 2 | in_progress | — | [#100](https://github.com/CaliLuke/go-guitar-pro/issues/100) |
 | [Reject wrapped RSE identifiers and verify each legacy omission](work-items/rse.json) | implementation | 2 | todo | — | [#101](https://github.com/CaliLuke/go-guitar-pro/issues/101) |
 | [Keep section letters separate from section text](work-items/sections.json) | implementation | 2 | in_progress | — | [#90](https://github.com/CaliLuke/go-guitar-pro/issues/90) |
 | [Preserve authored track short names](work-items/short-name.json) | implementation | 2 | in_progress | — | [#91](https://github.com/CaliLuke/go-guitar-pro/issues/91) |
