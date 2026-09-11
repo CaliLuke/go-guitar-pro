@@ -307,7 +307,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 100 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 101 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 172 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -378,6 +378,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `chord-rest-dynamic-policy` | `note-and-beat-semantics` | `TestConformanceChordAndRestDynamics` | `TestAlphaTabChordAndRestDynamics` | no | Two-note velocities 47/95 and explicit beat/rest dynamics 47/48 preserve authored values, emit P, and report exact target losses; strict export requires each applicable code. |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |
 | `key-mode-preservation` | `score-core` | `TestConformanceKeyModes` | `TestAlphaTabPreservesKeyModes` | no | Exact supported major and minor spellings retain independent nonzero accidental counts across adjacent master bars and canonical GP8 export; unknown spellings remain explicit. |
 | `transposition-preservation` | `transposition` | `TestConformanceTransposition` | `TestAlphaTabPreservesTransposition` | no | Display offsets and independently derived effective keys survive GPIF import and pinned AlphaTab consumption; GP8 target limits for independent keys, sounding offsets, and differing later-staff values receive scoped reports. |

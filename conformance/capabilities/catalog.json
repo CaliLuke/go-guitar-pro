@@ -2695,6 +2695,21 @@
           "kind": "test",
           "reference": "TestConformanceDynamicQuantization",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8ChordAndRestDynamicPolicy",
+          "detail": "Public 47/95 chord and 47/48 rest matrix checks immutable authored values, exact beat locations, and selective strict losses."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceChordAndRestDynamics",
+          "detail": "M10-CHORD-REST-DYNAMICS records exact GPIF P, Go reimport, report codes and locations, and pinned beat/note consumption."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabChordAndRestDynamics",
+          "detail": "Pinned AlphaTab consumes P on chord beat and both notes, and note-free P rests, for permissive and strictly allowed GP8 output."
         }
       ]
     },

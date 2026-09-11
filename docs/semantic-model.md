@@ -401,7 +401,15 @@ these fields when they are non-default.
 `Beat.Dynamics` is the authored beat-wide value. GP8 uses it when it is set,
 including on a rest. If it is zero, GP8 uses the first note velocity. GPIF has
 one quantized dynamic for the complete beat, so export reports note velocities
-that differ from the selected target dynamic. Text remains valid on rests.
+that differ from the selected target dynamic. Direct edits to either field remain
+authoritative. Export does not change their authored values.
+
+Canonical velocity 47 is P, while 48 quantizes to P. Export reports a
+noncanonical explicit beat value with `gp8.normalize.beat-dynamic`. It separately reports differing note
+velocities with `gp8.normalize.note-velocity`, once per beat. Strict export
+requires an allowance for each applicable code and returns no output otherwise.
+
+GPIF has no independent per-note velocity destination. Text remains valid on rests.
 GP8 changes an explicit empty beat to a rest and reports that normalization.
 
 `Beat.Legato` preserves the authored GPIF beat-level origin and destination
