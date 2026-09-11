@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "grace",
   "capability": "grace",
-  "title": "Bound remaining grace chord and transition semantics",
-  "kind": "investigation",
+  "title": "Verify legacy grace-bend preservation and explicit export omission",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -20,23 +20,29 @@
     "model",
     "export"
   ],
-  "scope": "Audit complete grace-beat structure and target limits beyond the existing ordered note-level grace model.",
+  "scope": "Turn the known GP4 transition-2 source into a permanent regression and verify the narrow bend-transition omission independently of the already supported ordered grace/chord structure.",
   "acceptance": [
-    "Use a two-note grace chord, multiple ordered graces and both on-beat/before-beat placement.",
-    "Trace source timing, note identities, transitions and public projections separately; distinguish authored values from derived playback durations.",
-    "Produce a scoped implementation plan with independent fixtures and classify genuinely unrepresentable target transitions."
+    "Public Parse of testdata/gp4/fade-to-black.gp4 retains Transition=GraceEffectTransitionBend at zero-based track6/measure201/voice0/beat4/note0/grace0, Fret=22, RawFret=22, Duration=32, Velocity=95, before-beat placement. Record the source bytes and exact owning address, without inferring a bend curve.",
+    "Load the same fixture using pinned AlphaTab and align by voice/string/owning nongrace beat: its inserted grace is raw beat4 followed by owning raw beat5 in bar201, has no bend points, slide, or hammer. Record this as a source-importer limitation; do not use matching absence to claim grace-bend preservation.",
+    "Add an isolated valid programmatic grace with Transition=Bend, exact fret2, duration32, Forte velocity, no RawFret, and before/on-beat cases. The only conversion loss is gp8.omit.grace-bend-transition at the owning note. Strict rejects it with zero bytes, an unrelated allowed code cannot bypass it, and allowing exactly that omission succeeds.",
+    "On allowed export, assert exact ordered grace placement/owning string and note identity, no fabricated bend curve, and that Go reparse and pinned consumer lack the bend transition. Keep existing None/Slide/Hammer and ordered grace-chord controls passing.",
+    "Record the regression, importer limitation, and retained export-omission disposition in the ledger and inventory. This policy ticket can close without a retaining bend oracle; a future preservation ticket requires independently verified curve semantics and must not derive them merely from adjacent frets."
   ],
   "exclusions": [
-    "Do not treat changed grace grouping as a loss without checking address alignment."
+    "No grace/chord model redesign or invented transition-to-curve mapping. RawFret provenance and authored-versus-derived grace timing stay separate. No claim that pinned importer proves the original transition semantics."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gpif_model.go",
-      "gp8_builder.go"
+      "testdata/gp4/fade-to-black.gp4",
+      "effects.go",
+      "conformance_grace_notes_test.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Use a two-note grace chord, multiple ordered graces and both on-beat/before-beat placement."
+    "instructions": "Read the existing GP4 fixture through Parse and inspect Tracks[6].Measures[201].Voices[0].Beats[4].Notes[0].Effect.Graces[0]. The 4-byte grace record at offset70913 is 16 06 02 02 (hex), with transition byte02 at70915. Then use conformanceGrace(2,DurationThirtySecond,Forte,false,0,GraceEffectTransitionBend,false) in semanticExportProbeSong for isolated policy assertions. AlphaTab original-fixture raw bar201 beat4 is the grace; raw beat5 is the owner.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -91,9 +97,79 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/65#issuecomment-5625487547",
       "detail": "Narrow the remaining question to GraceEffectTransitionBend. Ordered grace beats, grace chords and placement already have conformance coverage; do not redesign them. Obtain a concrete binary grace-transition-2 example and establish its authored bend semantics with a retaining independent consumer. Pinned Gp3To5Importer.readGrace explicitly ignores case 2, so comparison against that importer cannot prove the transition. If a faithful GPIF grace-note bend mapping is demonstrated, specify its endpoints, timing and chord/string ownership in a bounded implementation follow-up. Otherwise record the exact oracle/target limitation and retain gp8.omit.grace-bend-transition; do not invent a curve from adjacent frets."
+    },
+    {
+      "kind": "verification",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestConformance(BeatSemantics|OrderedGraceExport|GraceAuthorityAndLoss|HarmonicVariants|HarmonicAuthorityAndValidation|TechniqueDispositions|MasterBars)$' .",
+      "detail": "PASS on baseline in isolated clone (0.230s). Additional temporary TestNotation probes PASS; results below are observations, not committed regression coverage.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "testdata/gp4/fade-to-black.gp4:offset70913",
+      "detail": "Actual public parse found transition2 at Go6/201/0/4/0/0. SHA256 51712a4e61b017da00b4cb37d6c6382cf6ef97ff0ed9f477de61756c20cb05f6 matches pinned guitarpro4/fade-to-black.gp4 exactly. Record16060202 established using temporary reader tracing.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "effects.go:271",
+      "detail": "Both binary readers retain the transition byte directly; no decoded curve is carried by this grace record.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "effects.go:297",
+      "detail": "Both binary readers retain the transition byte directly; no decoded curve is carried by this grace record.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1510",
+      "detail": "Pinned readGrace ignores case2. Actual original-fixture consumer raw grace beat4 in bar201: fret22, string6, bendPoints=null, slideOutType=0, isHammerPullOrigin=false. Finalized duration is8, demonstrating why playback/finalization timing must remain distinct from the Go authored duration32.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1510",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1510"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_grace_notes_test.go:148",
+      "detail": "Existing grace loss test combines five losses; report-table test checks rejection/code/location but does not prove selective allowance or a genuine binary bend-transition source.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "export_report_test.go:167",
+      "detail": "Existing grace loss test combines five losses; report-table test checks rejection/code/location but does not prove selective allowance or a genuine binary bend-transition source.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationGrace (temporary public API + pinned-consumer probe)",
+      "detail": "Isolated source produced exactly gp8.omit.grace-bend-transition. Strict and unrelated-code allowance rejected; exact allowance succeeded. Consumer grace fret2, beforeBeat, dynamicF, transitionNone.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/65#issuecomment-5638813444",
+      "detail": "The faithful binary example is already available; replace the open-ended fixture hunt with this source regression and explicit omission contract. A retaining bend-curve oracle remains prerequisite only for future preservation work, not for completing honest loss reporting.",
+      "decision": "convert-to-implementation",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_grace_notes_test.go",
+    "effects.go",
     "gp8_builder.go",
     "gpif_model.go"
   ],
@@ -103,6 +179,6 @@
     "number": 65,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/65",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:05.093291+00:00"
   }
 }

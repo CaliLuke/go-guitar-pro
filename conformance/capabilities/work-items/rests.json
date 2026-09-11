@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "rests",
   "capability": "rests",
-  "title": "Establish whether GP8 can preserve explicit empty beats",
-  "kind": "investigation",
+  "title": "Add independent GP8 regressions for empty beats and absent voice slots",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,20 +18,28 @@
   "stages": [
     "export"
   ],
-  "scope": "Determine whether an authored empty beat can remain distinct from a rest in GP8 and in the pinned consumer.",
+  "scope": "Complete wire and independent consumer regression coverage distinguishing an absent voice slot from an authored timed empty beat and an ordinary rest; retain the documented empty-beat normalization.",
   "acceptance": [
-    "Compare an empty voice slot, an explicit empty beat and a note-free rest using independent wire inspection.",
-    "Identify any supported target encoding that preserves the public BeatStatus distinction.",
-    "Preserve the distinction if possible; otherwise retain its narrow normalization and strict-policy evidence as an accepted target limit."
+    "Use one bar containing a populated voice with normal, explicit-empty and ordinary-rest beats plus an interior absent voice and another populated voice. Assert exact bar-to-voice slot references, including the interior -1, rather than concatenated leaf text or beat totals.",
+    "Assert separate timed empty/rest beat records retain their rhythm, order, text and no notes. The consumer must see both as rests with isEmpty=false; the absent voice must remain in its original slot and contain only the consumer-generated empty placeholder.",
+    "Assert exactly gp8.normalize.empty-beat for the authored timed empty beat. Strict policy rejects with zero output; explicitly allowing that code preserves ordered timing and text. The absence of a whole voice must not add this beat-level report.",
+    "Keep ordinary rest and absent-voice preservation controls passing, register executable matrix evidence, and resolve only the explicit-empty target-limit contract."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "Do not add fake notes or delete/reorder authored timed beats.",
+    "Encoding an absent whole voice as -1 is already implemented and does not solve an empty beat inside a populated voice."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gp8_builder.go"
+      "conformance_beat_test.go",
+      "conformance_regression_test.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Compare an empty voice slot, an explicit empty beat and a note-free rest using independent wire inspection."
+    "instructions": "Current TestConformanceBeatSemantics asserts Go reimport normalization and text; TestReviewedOwnershipExportPreservesInteriorVoiceSlot asserts Go voice positions. Neither inspects raw consumer empty placeholders or exact mixed-bar voice references. Extend them with a raw consumer projection that does not discard empty voices or grace beats. For the embedded temporary Go harness, first run mkdir -p /tmp/investigation-conversion; use t.TempDir when converting it to permanent tests. The raw consumer command below runs from the repository root after conformance dependencies are installed; replace /absolute/path/to/output.gp with the exported archive.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -76,9 +84,71 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/100#issuecomment-5625490534",
       "detail": "Compare an absent whole voice, an explicit empty timed beat inside a populated voice, and an ordinary rest. Assert exact voice references and beat wire forms rather than relying only on finalized consumer objects. Verify the explicit-empty-to-rest normalization and strict rejection without losing timing or annotations. Do not use a fake note or remove a timed beat. Resolve the mixed-voice distinction as a target limit once tested. Encoding an entirely empty voice as -1 is separate scope and must not be reported as solving an empty beat inside a populated voice."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_beat_test.go:18",
+      "detail": "Existing mixed beat fixture preserves timing/text through Go but has no independent consumer check.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_regression_test.go:42",
+      "detail": "Interior absent voice coverage currently checks only Go roundtrip.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:764",
+      "detail": "Explicit BeatStatusEmpty is reported as normalized to a rest.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2800",
+      "detail": "Invalid voice reference synthesizes an empty quarter beat; populated note-free beats have no independent empty status.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2800",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L2800"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:1831",
+      "detail": "Absent voice is encoded as -1 in bar voice references.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:1831",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1831"
+    },
+    {
+      "kind": "experiment",
+      "detail": "Isolated mixed-voice experiment PASS: only gp8.normalize.empty-beat; strict0bytes/error. Raw AlphaTab voice index1 is empty with synthetic quarter rest; voice0 authored empty/rest have isEmpty=false,isRest=true,text empty/rest. Normalized adapter omits empty voice index1, so raw projection is necessary."
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "go",
+      "detail": "Temporary investigation harness executed in an isolated clone at the reviewed commit; helper functions are existing same-package test helpers. Raw AlphaTab observations are separately detailed above.",
+      "code": "package goguitarpro\nimport(\"testing\";\"encoding/json\";\"slices\";\"os\")\nfunc TestInvestigationModelReceipts(t *testing.T) {\nfor _, name:=range []string{\"routing\",\"metadata\",\"rests\",\"duration-half\",\"duration-threequarters\"}{t.Run(name,func(t *testing.T){\ns:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true\nswitch name{\ncase \"routing\":s.Channels[0].Channel=1;s.Channels[0].EffectChannel=18;s.Tracks[0].Mute=true;s.Tracks[0].Solo=true\ncase \"metadata\":s.Writer=\"writer\";s.Author=\"author\";s.Transcriber=\"tabber\";s.Comments=\"comments\";s.Date=\"2026-09-11\";s.Clipboard=&Clipboard{StartMeasure:0,StopMeasure:0};s.Notice=[]string{\"\",\"embedded\\nline\",\"\"}\ncase \"rests\": b:=s.Tracks[0].Measures[0].Voices[0].Beats[0];r:=b;r.Notes=nil;r.Status=BeatStatusRest;r.Text=\"rest\";e:=r;e.Status=BeatStatusEmpty;e.Text=\"empty\";s.Tracks[0].Measures[0].Voices=[]Voice{{Beats:[]Beat{b,e,r}}, {}, {Beats:[]Beat{b}}};s.Tracks[0].Staves[0].Measures=s.Tracks[0].Measures\ncase \"duration-half\",\"duration-threequarters\":v:=float32(.5);if name==\"duration-threequarters\"{v=.75};s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent=v\n}\nif err:=FinalizeSong(s);err!=nil{t.Fatal(err)}\nif d:=ValidateSong(s);len(d)!=0{t.Fatal(d)}\nb,rep,err:=ExportWithReport(s,ExportFormatGP8,ExportOptions{});if err!=nil{t.Fatal(err)}\n_ = os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".gp\",b,0600)\nstrict,srep,se:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\nif se==nil||len(strict)!=0{t.Fatalf(\"unreported loss: %v %d\",se,len(strict))}\na:=readAlphaTabScore(t,writeConformanceFixture(t,b));g,err:=Parse(b);if err!=nil{t.Fatal(err)}\nx,_:=json.MarshalIndent(map[string]any{\"wire\":extractGPIFLeafText(t,b),\"report\":rep,\"strictReport\":srep,\"alpha\":a,\"goNotice\":g.Notice},\"\",\"  \");if err=os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".json\",x,0600);err!=nil{t.Fatal(err)}\nif name==\"metadata\"&&!slices.Equal(g.Notice,[]string{\"\",\"embedded\",\"line\",\"\"}){t.Fatalf(\"notices: %#v\",g.Notice)}\nt.Logf(\"permissive %d bytes; strict 0 bytes and error; codes %v\",len(b),reportCodes(rep))\n})}}\n\nfunc TestInvestigationMetadataStrictClean(t *testing.T){s:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true;s.Notice=[]string{\"First notice\",\"Second notice\"};b,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil{t.Fatal(e)};os.WriteFile(\"/tmp/investigation-conversion/metadata-strict.gp\",b,0600);t.Logf(\"strict bytes=%d reports=%v\",len(b),reportCodes(r))}\n"
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "sh",
+      "detail": "Executed raw pinned ScoreLoader projection. It retains metadata text, routing state, voice positions and duration percentages omitted by broader normalization.",
+      "code": "(cd conformance && node --input-type=module - /absolute/path/to/output.gp <<'JS'\nimport fs from 'node:fs';\nimport * as alphaTab from '@coderline/alphatab';\nconst oracle = JSON.parse(fs.readFileSync('oracle.json', 'utf8'));\nconst settings = new alphaTab.Settings();\nObject.assign(settings.importer, oracle.importerSettings);\nalphaTab.Logger.logLevel = alphaTab.LogLevel.None;\nconst score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(\n  new Uint8Array(fs.readFileSync(process.argv[2])), settings);\nconsole.log(JSON.stringify({\n  metadata: {\n    music: score.music, tab: score.tab,\n    instructions: score.instructions, notices: score.notices\n  },\n  tracks: score.tracks.map(track => ({\n    playback: {\n      port: track.playbackInfo.port,\n      primaryChannel: track.playbackInfo.primaryChannel,\n      secondaryChannel: track.playbackInfo.secondaryChannel,\n      mute: track.playbackInfo.isMute, solo: track.playbackInfo.isSolo\n    },\n    staves: track.staves.map(staff => ({\n      bars: staff.bars.map(bar => ({\n        voices: bar.voices.map(voice => ({\n          index: voice.index, isEmpty: voice.isEmpty,\n          beats: voice.beats.map(beat => ({\n            isEmpty: beat.isEmpty, isRest: beat.isRest,\n            graceType: beat.graceType, text: beat.text,\n            duration: beat.duration, dots: beat.dots,\n            tupletNumerator: beat.tupletNumerator,\n            tupletDenominator: beat.tupletDenominator,\n            playbackStart: beat.playbackStart,\n            playbackDuration: beat.playbackDuration,\n            notes: beat.notes.map(note => ({\n              string: note.string, fret: note.fret,\n              durationPercent: note.durationPercent,\n              isTieOrigin: note.isTieOrigin,\n              isTieDestination: note.isTieDestination,\n              isLetRing: note.isLetRing\n            }))\n          }))\n        }))\n      }))\n    }))\n  }))\n}, null, 2));\nJS\n)"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/100#issuecomment-5638818544",
+      "detail": "Target behavior is already implemented. Add the missing raw consumer, exact voice-reference and strict-policy assertions in one bounded regression change, without reopening the proven representation limit.",
+      "decision": "confirmed-target-limit-regression-work",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_beat_test.go",
+    "conformance_regression_test.go",
     "gp8_builder.go"
   ],
   "resolution": null,
@@ -87,6 +157,6 @@
     "number": 100,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/100",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:32.190182+00:00"
   }
 }

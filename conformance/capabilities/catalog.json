@@ -627,7 +627,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Ordinary double bars are emitted. AlphaTab GPIF import clears the final bar DoubleBar flag, producing 12 binary-to-GP8 consumer differences. The wire field alone does not prove final-bar parity.",
+      "finding": "Ordinary double bars are emitted. The pinned GPIF consumer clears the final DoubleBar flag. The original Slides.gp4 final LightLight becomes LightHeavy after GP8 export despite retaining the XML and Go flag; the current strict exporter does not report this consumer loss. #95 specifies a scoped report and independent terminal/nonterminal regression.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "MasterBar.isDoubleBar"
@@ -647,6 +647,11 @@
           "kind": "test",
           "reference": "TestConformanceMasterBars",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "actionability-review",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5638814998",
+          "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
         }
       ]
     },
@@ -959,7 +964,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Most score metadata survives. Binary Writer, Comments, Date and clipboard provenance lack equivalent GP8 output. Author and Writer remain distinct.",
+      "finding": "Most score metadata survives, but Go-emitted hexadecimal newline entities become NUL characters in pinned AlphaTab notices, even under strict export with no reports. #99 specifies retaining text encoding and raw consumer checks. Binary Writer, Comments, Date and clipboard provenance still lack equivalent GP8 output; Author and Writer remain distinct.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Score.title",
@@ -1013,6 +1018,11 @@
           "kind": "test",
           "reference": "TestConformanceMetadataExportPolicy",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "actionability-review",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/99#issuecomment-5638817722",
+          "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
         }
       ]
     },
@@ -1543,7 +1553,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Legacy instrument flags parse. GP8 reports fret count, twelve-string and banjo flags as omissions.",
+      "finding": "Legacy instrument flags and representable fret counts parse. Unchecked GP3-GP5 int32-to-uint8 conversion can wrap source fret count 280 to the unreported default 24. #97 requires a contextual representability error before conversion and independent flag-loss policy coverage. GP8 retains its fret-count, twelve-string and banjo omissions.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -1561,6 +1571,11 @@
           "kind": "test",
           "reference": "TestConformanceInstrumentContext",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "actionability-review",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5638816861",
+          "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
         }
       ]
     },
@@ -2086,7 +2101,7 @@
         "model": "partial",
         "export": "missing"
       },
-      "finding": "Legacy RSE records and some GPIF engine/sound state parse. GP8 omits legacy RSE master/track records. Proprietary synthesis is not implemented.",
+      "finding": "Legacy RSE records and some GPIF engine/sound state parse. Four GP5.1 int32-to-int16 conversions can turn 65536 into zero without error; #101 requires checked decoding and isolated descendant loss-policy evidence. GP8 omits legacy master/track RSE records; proprietary synthesis is outside this implementation.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -2109,6 +2124,11 @@
           "kind": "test",
           "reference": "TestConformancePlaybackRouting",
           "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+        },
+        {
+          "kind": "actionability-review",
+          "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5638819239",
+          "detail": "Confirmed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f against AlphaTab 1.8.4 / 022a45c8e42370f9e12e68949d11eada370da83d. Reproduction and acceptance are in the linked ticket and canonical work item; implementation is still open."
         }
       ]
     },

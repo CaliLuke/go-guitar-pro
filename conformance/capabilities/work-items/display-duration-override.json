@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "display-duration-override",
   "capability": "display-duration-override",
-  "title": "Determine whether GP input authors independent display duration",
-  "kind": "investigation",
+  "title": "Exclude MusicXML display-duration placeholders from Guitar Pro gaps",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
@@ -20,20 +20,28 @@
     "model",
     "export"
   ],
-  "scope": "Investigate Beat.overrideDisplayDuration applicability before adding a public field.",
+  "scope": "Correct the capability/source classification and protect the distinction between MusicXML display placeholders, authored Guitar Pro rhythm, and derived playback duration.",
   "acceptance": [
-    "Find a pinned Guitar Pro importer assignment and valid source fixture, or establish that the field belongs to other formats.",
-    "Distinguish displayed duration from authored rhythmic duration and derived playback duration.",
-    "Record a scope disposition or a concrete implementation follow-up with an independent fixture."
+    "Update display-duration-override to outside-Guitar-Pro scope with out-of-scope import/model/export dispositions; retain its reference row and exact MusicXML evidence.",
+    "Correct Beat.overrideDisplayDuration in the canonical upstream model inventory from generic partial/rhythm to the reviewed GP exclusion. Ensure synchronization preserves that classification.",
+    "Add an executable inventory regression asserting the exact recorded outside-GP scope, out-of-scope model/stage dispositions and supporting MusicXML references resolving to the pin. Verify that gap summaries exclude this row while duration/dots/tuplets/exact-timing retain their GP scope. Use existing pin/source-hash drift checks rather than brittle assignment-output snapshots.",
+    "Do not add a public override field or derive it from authored rhythmic duration. Resolve after inventory and existing rhythm tests pass."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No MusicXML importer implementation.",
+    "Do not modify actual Guitar Pro rhythm/playback semantics to mimic a MusicXML display placeholder."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "beat.go"
+      "conformance/capabilities/catalog.json",
+      "conformance/upstream-inventory.json",
+      "conformance/capabilities/test_manage.py",
+      "conformance/sync-upstream-inventory.mjs"
     ],
-    "instructions": "Find a pinned Guitar Pro importer assignment and valid source fixture, or establish that the field belongs to other formats."
+    "instructions": "Run rg -n 'overrideDisplayDuration\\s*=' references/alphaTab/packages/alphatab/src/importer references/alphaTab/packages/alphatab/src/exporter. At the pin the only importer assignments are MusicXmlImporter.ts2511,3155,3271. Current catalog still calls the field guitar-pro/unverified/missing and upstream model inventory marks it partial; correct those false gaps with a focused regression.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -58,10 +66,47 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/111#issuecomment-5625493105",
       "detail": "Record the pinned MusicXML assignments to overrideDisplayDuration and the absence of GP3-GP8 importer/writer mappings. Update the capability scope and documentation association so this other-format field is not counted as a missing Guitar Pro authored feature; keep rhythm/dots/tuplets and exact timing coverage intact. Resolve after the evidence and scope disposition are checked. A future implementation requires an independently authored GP display-duration record, not a derived timing placeholder."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/catalog.json:5342",
+      "detail": "display-duration-override is currently guitar-pro and unverified/missing/unverified.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/upstream-inventory.json:1223",
+      "detail": "Beat.overrideDisplayDuration currently has generic partial disposition.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/MusicXmlImporter.ts:2511",
+      "detail": "Display gap placeholder assignment; further preferred-duration and split assignments at3155 and3271.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/MusicXmlImporter.ts:2511",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L2511"
+    },
+    {
+      "kind": "experiment",
+      "detail": "Pinned importer/exporter assignment scan finds exactly MusicXmlImporter2511,3155,3271, no GPIF or GP3To5 mapping. No explicit upstream ownership model review or focused capability exclusion test currently exists."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/111#issuecomment-5638822230",
+      "detail": "This is actionable tracking implementation: remove a proven other-format false gap and prevent its return. Existing authored rhythm remains covered independently; another investigation or new API would have no supported input contract.",
+      "decision": "confirmed-inventory-defect",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
-    "beat.go"
+    "beat.go",
+    "conformance/capabilities/catalog.json",
+    "conformance/capabilities/test_manage.py",
+    "conformance/sync-upstream-inventory.mjs",
+    "conformance/upstream-inventory.json"
   ],
   "resolution": null,
   "verification": [],
@@ -69,6 +114,6 @@
     "number": 111,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/111",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:51.371715+00:00"
   }
 }

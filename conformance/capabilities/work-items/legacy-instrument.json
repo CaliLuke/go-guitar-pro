@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "legacy-instrument",
   "capability": "legacy-instrument",
-  "title": "Resolve GP8 support for legacy instrument flags",
-  "kind": "investigation",
+  "title": "Reject wrapped legacy fret counts and verify isolated instrument losses",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -11,28 +11,35 @@
     "gp3",
     "gp4",
     "gp5",
-    "gp6",
-    "gp7",
     "gp8"
   ],
   "stages": [
+    "import",
     "export"
   ],
-  "scope": "Determine target representations for fret count, twelve-string simulation and banjo fifth-string flags.",
+  "scope": "Prevent GP3–GP5 source fret counts from wrapping into unrelated public values, and prove that each retained legacy instrument flag produces its own GP8 preservation report. GPIF preservation of non-default fret count, twelve-string simulation and an independent banjo flag remains a documented target limit.",
   "acceptance": [
-    "Show a non-default legacy fixture for each flag and its current export report.",
-    "Check whether the pinned GPIF consumer supports the equivalent instrument state.",
-    "Implement verified mappings or document narrow target limits; do not silently change tuning to simulate a missing flag."
+    "For both GP3/4 readTrack and GP5 readTrackV5, preserve representable authored fret counts exactly and reject source integers outside the public uint8 range before conversion. Include -1, 256, 280 and a large int32 value; 280 must never become the unreported default 24. Do not silently clamp. Include exact valid 0 and 255 boundary controls. Rejection describes the public model representability limit; it does not establish that every out-of-range integer is invalid Guitar Pro syntax.",
+    "Add public Parse/ParseWithOptions regressions using otherwise-valid binary fixtures with a located fret-count field and at least one non-default representable value such as 31. Verify unaffected tuning, capo, channel and flags. Record structural/source oracle limits because AlphaTab skips this source field. The out-of-range regression must assert the contextual fret-count range error, not merely any error; a representable sibling must prove record alignment.",
+    "Exercise FretCount=31, TwelveStringedGuitarTrack=true and BanjoTrack=true separately, from an otherwise clean valid score: exact omission code and track location, strict refusal with no bytes, and success only with the relevant code allowed. Test absent/default controls and a two-flag combination so allowing one loss does not hide another.",
+    "Retain the original target decision with pinned evidence: GPIF writer hardcodes fret count 24; consumer has no corresponding retained fret-count or standalone twelve-string/banjo property. Do not change MIDI program, tuning or string count as a substitute.",
+    "Record targeted regressions and exact source/report evidence in the semantic ledger and work item. Run ./conformance/check.sh and prek run --all-files. Do not promote unsupported GP8 semantics from a checked-decoding or omission-policy fix."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No GPIF FretCount support claim without a non-24 independent retaining consumer.",
+    "No twelve-string synthesis, banjo simulation, staff/track API redesign, or unrelated tuning/channel hardening."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
       "track.go",
-      "gp8_builder.go"
+      "gp8_builder.go",
+      "conformance_instrument_test.go"
     ],
-    "instructions": "Show a non-default legacy fixture for each flag and its current export report."
+    "instructions": "The embedded probe constructs one structurally complete GP4 track record; its int32 fret count is 280. Run it through a temporary Go overlay on conformance_instrument_test.go with go test -overlay OVERLAY.json -count=1 -v -run ^TestInvestigationFretCountWrap$ . . Current result: nil read error and public FretCount=24. Promote the regression to a complete public-API binary fixture during implementation.",
+    "probe_source": "func TestInvestigationFretCountWrap(t *testing.T) {\n data := make([]byte,98)\n data[42]=1 // one string\n data[46]=64 // E4\n data[74]=1 // port\n data[78]=1 // primary channel\n data[82]=1 // effect channel\n data[86]=24; data[87]=1 // 280 frets, currently wraps to the unreported default 24\n song:=Song{Version:Version{Number:[3]byte{4,0,0}}, Channels:[]MidiChannel{defaultMidiChannel()}}\n err:=song.readTrack(newCursor(data),0)\n if err!=nil {t.Logf(\"error=%v\",err);return}\n t.Logf(\"decoded fret count=%d\",song.Tracks[0].FretCount)\n t.Fatal(\"source fret count 280 silently accepted as 24\")\n}\n",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -62,9 +69,54 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5625489523",
       "detail": "FretCount needs a non-default Guitar Pro fixture and an independent consumer that actually retains the value; a writer hardcoding 24 and an ignored parser property do not provide that oracle. Once that evidence exists, define staff versus track edit authority and isolate FretCount as its own implementation slice. Investigate twelve-string and standalone banjo flags independently instead of bundling them into that fix. Until then record explicit limits and verify the existing omission/strict-policy tests. Do not modify tuning or program to simulate preservation of a legacy boolean."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/track.go#L278",
+      "detail": "GP3/4 int32 fret count narrows without a range check at line 282; GP5 repeats this at lines 366–370."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/gp8_builder.go#L256",
+      "detail": "Export reports fret counts only when nonzero and not 24; wrapped 280 therefore loses its omission signal."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L629",
+      "detail": "Pinned importer skips four source bytes for fret count; it is not a retaining oracle.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L629",
+      "symbol": "packages/alphatab/src/importer/Gp3To5Importer.ts#L629"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1264",
+      "detail": "Pinned writer emits fixed FretCount=24; Banjo is derived from MIDI program in the following switch.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1264",
+      "symbol": "packages/alphatab/src/exporter/GpifWriter.ts#L1264"
+    },
+    {
+      "kind": "runtime-review",
+      "reference": "TestInvestigationFretCountWrap",
+      "detail": "At reviewed commit, temporary overlay test fails as intended: decoded fret count=24; source 280 accepted without error. No repository mutation.",
+      "code": "func TestInvestigationFretCountWrap(t *testing.T) {\n data := make([]byte,98)\n data[42]=1 // one string\n data[46]=64 // E4\n data[74]=1 // port\n data[78]=1 // primary channel\n data[82]=1 // effect channel\n data[86]=24; data[87]=1 // 280 frets, currently wraps to the unreported default 24\n song:=Song{Version:Version{Number:[3]byte{4,0,0}}, Channels:[]MidiChannel{defaultMidiChannel()}}\n err:=song.readTrack(newCursor(data),0)\n if err!=nil {t.Logf(\"error=%v\",err);return}\n t.Logf(\"decoded fret count=%d\",song.Tracks[0].FretCount)\n t.Fatal(\"source fret count 280 silently accepted as 24\")\n}\n"
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceInstrumentContext",
+      "detail": "Existing combined omissions and strict/allowlist behavior pass; they do not independently isolate flags or cover raw integer narrowing."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/97#issuecomment-5638816861",
+      "detail": "Keep the existing public fields and target omissions. Fix the proven source boundary, then isolate the loss-policy evidence so individual flags cannot hide behind the combined fixture. Existing target-support investigations are resolved as explicit limits; future mapping requires new consumer evidence.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance_instrument_test.go",
     "gp8_builder.go",
     "track.go"
   ],
@@ -74,6 +126,6 @@
     "number": 97,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/97",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:22.972129+00:00"
   }
 }

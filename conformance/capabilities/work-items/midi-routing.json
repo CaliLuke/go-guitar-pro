@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "midi-routing",
   "capability": "midi-routing",
-  "title": "Classify conflicting MIDI port and playback-state limits",
-  "kind": "investigation",
+  "title": "Add independent regression coverage for conflicting MIDI routes and playback states",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,28 @@
   "stages": [
     "export"
   ],
-  "scope": "Verify whether GP8 can preserve different primary/effect ports and simultaneous mute plus solo.",
+  "scope": "Complete the executable contract for two confirmed GP8 limits: a single connection port and exclusive mute/solo playback state. Preserve the existing primary-port and mute precedence and verify the exact resulting consumer values.",
   "acceptance": [
-    "Create separate-port and mute+solo public scores and record the current normalization decisions.",
-    "Inspect the target wire and pinned consumer for distinct destinations and precedence.",
-    "Implement verified preservation or retain explicit target limits and strict-policy tests; update the capability rating without declaring unsupported combinations preserved."
+    "Use separate valid public scores for Channel=1/EffectChannel=18, Mute=true/Solo=true, and both conflicts together. Assert one scoped normalization entry per conflict with correct track location.",
+    "Assert exact GPIF Port=0, PrimaryChannel=1, SecondaryChannel=2 for the port conflict and PlaybackState=Mute for the state conflict. A raw pinned consumer must report port=0, primaryChannel=1, secondaryChannel=2, isMute=true, isSolo=false when both apply.",
+    "RequirePreservation must return zero bytes and ExportLossError for each unallowed conflict. Allowing one conflict must leave the other blocked; allowing both must emit the documented target values without mutating source values.",
+    "Retain same-port/different-channel and nonconflicting Default/Mute/Solo cases as passing preservation controls. Record the two explicit target limits in the work-item resolution without upgrading export to full support."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No additional public routing fields or invented XML destination.",
+    "Changing precedence or adding simultaneous mute/solo playback semantics is outside this ticket."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "track.go",
-      "gp8_builder.go"
+      "conformance_playback_test.go",
+      "conformance_regression_test.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Create separate-port and mute+solo public scores and record the current normalization decisions."
+    "instructions": "Extend the existing M05 regression coverage. Current TestReviewedMetadataTempoLossesAreReported checks report presence only; TestConformancePlaybackRouting covers channels 18/19 sharing port 1 and mute without solo. In a semanticValidPitchedGP8Song with notation enabled set channels 1/18 and both playback flags, export, inspect raw pinned playbackInfo rather than the normalized adapter which omits effect port and playback flags. For the embedded temporary Go harness, first run mkdir -p /tmp/investigation-conversion; use t.TempDir when converting it to permanent tests. The raw consumer command below runs from the repository root after conformance dependencies are installed; replace /absolute/path/to/output.gp with the exported archive.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -87,9 +94,68 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/66#issuecomment-5625488053",
       "detail": "Verify differing primary/effect ports and simultaneous mute+solo with valid public scores. Assert the emitted single Port and exclusive PlaybackState, the documented precedence and independent consumer values. Assert gp8.normalize.effect-channel-port and gp8.normalize.playback-state and strict rejection when their losses are not allowed. Cite current tests for already-covered cases. Resolve as two explicit target limits after the checklist passes. A new preservation implementation requires a distinct authored GP wire record; changing precedence alone does not add fidelity."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_regression_test.go:7",
+      "detail": "Current conflict cases only check that preflight contains a report code.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_playback_test.go:18",
+      "detail": "Existing nonconflict control uses channels 18/19 and mute=true, solo=false.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:271",
+      "detail": "Mute/solo conflict is normalized; mismatched ports are reported at line302 and emitted from primary channel at line330.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:663",
+      "detail": "One exclusive PlaybackState; _parseGeneralMidi at1181 reads one Port and two channel numbers.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:663",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L663"
+    },
+    {
+      "kind": "experiment",
+      "detail": "Isolated checkout TestInvestigationModelReceipts/routing PASS: permissive11475 bytes, exact two normalization codes; strict0 bytes/error. Raw AlphaTab: port0 primary1 secondary2 mute=true solo=false. No preservation implementation is missing; committed consumer/strict regression evidence is missing."
+    },
+    {
+      "kind": "test",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformancePlaybackRouting|TestReviewedMetadataTempoLossesAreReported|TestConformanceMetadataExportPolicy|TestConformanceBeatSemantics|TestReviewedOwnershipExportPreservesInteriorVoiceSlot|TestAlphaTabGP5DurationPercentWireValues|TestConformanceNoteRepresentation|TestConformanceSelectiveAllowlist)$' .",
+      "detail": "PASS (0.817s), all named current tests execute."
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "go",
+      "detail": "Temporary investigation harness executed in an isolated clone at the reviewed commit; helper functions are existing same-package test helpers. Raw AlphaTab observations are separately detailed above.",
+      "code": "package goguitarpro\nimport(\"testing\";\"encoding/json\";\"slices\";\"os\")\nfunc TestInvestigationModelReceipts(t *testing.T) {\nfor _, name:=range []string{\"routing\",\"metadata\",\"rests\",\"duration-half\",\"duration-threequarters\"}{t.Run(name,func(t *testing.T){\ns:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true\nswitch name{\ncase \"routing\":s.Channels[0].Channel=1;s.Channels[0].EffectChannel=18;s.Tracks[0].Mute=true;s.Tracks[0].Solo=true\ncase \"metadata\":s.Writer=\"writer\";s.Author=\"author\";s.Transcriber=\"tabber\";s.Comments=\"comments\";s.Date=\"2026-09-11\";s.Clipboard=&Clipboard{StartMeasure:0,StopMeasure:0};s.Notice=[]string{\"\",\"embedded\\nline\",\"\"}\ncase \"rests\": b:=s.Tracks[0].Measures[0].Voices[0].Beats[0];r:=b;r.Notes=nil;r.Status=BeatStatusRest;r.Text=\"rest\";e:=r;e.Status=BeatStatusEmpty;e.Text=\"empty\";s.Tracks[0].Measures[0].Voices=[]Voice{{Beats:[]Beat{b,e,r}}, {}, {Beats:[]Beat{b}}};s.Tracks[0].Staves[0].Measures=s.Tracks[0].Measures\ncase \"duration-half\",\"duration-threequarters\":v:=float32(.5);if name==\"duration-threequarters\"{v=.75};s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent=v\n}\nif err:=FinalizeSong(s);err!=nil{t.Fatal(err)}\nif d:=ValidateSong(s);len(d)!=0{t.Fatal(d)}\nb,rep,err:=ExportWithReport(s,ExportFormatGP8,ExportOptions{});if err!=nil{t.Fatal(err)}\n_ = os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".gp\",b,0600)\nstrict,srep,se:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\nif se==nil||len(strict)!=0{t.Fatalf(\"unreported loss: %v %d\",se,len(strict))}\na:=readAlphaTabScore(t,writeConformanceFixture(t,b));g,err:=Parse(b);if err!=nil{t.Fatal(err)}\nx,_:=json.MarshalIndent(map[string]any{\"wire\":extractGPIFLeafText(t,b),\"report\":rep,\"strictReport\":srep,\"alpha\":a,\"goNotice\":g.Notice},\"\",\"  \");if err=os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".json\",x,0600);err!=nil{t.Fatal(err)}\nif name==\"metadata\"&&!slices.Equal(g.Notice,[]string{\"\",\"embedded\",\"line\",\"\"}){t.Fatalf(\"notices: %#v\",g.Notice)}\nt.Logf(\"permissive %d bytes; strict 0 bytes and error; codes %v\",len(b),reportCodes(rep))\n})}}\n\nfunc TestInvestigationMetadataStrictClean(t *testing.T){s:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true;s.Notice=[]string{\"First notice\",\"Second notice\"};b,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil{t.Fatal(e)};os.WriteFile(\"/tmp/investigation-conversion/metadata-strict.gp\",b,0600);t.Logf(\"strict bytes=%d reports=%v\",len(b),reportCodes(r))}\n"
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "sh",
+      "detail": "Executed raw pinned ScoreLoader projection. It retains metadata text, routing state, voice positions and duration percentages omitted by broader normalization.",
+      "code": "(cd conformance && node --input-type=module - /absolute/path/to/output.gp <<'JS'\nimport fs from 'node:fs';\nimport * as alphaTab from '@coderline/alphatab';\nconst oracle = JSON.parse(fs.readFileSync('oracle.json', 'utf8'));\nconst settings = new alphaTab.Settings();\nObject.assign(settings.importer, oracle.importerSettings);\nalphaTab.Logger.logLevel = alphaTab.LogLevel.None;\nconst score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(\n  new Uint8Array(fs.readFileSync(process.argv[2])), settings);\nconsole.log(JSON.stringify({\n  metadata: {\n    music: score.music, tab: score.tab,\n    instructions: score.instructions, notices: score.notices\n  },\n  tracks: score.tracks.map(track => ({\n    playback: {\n      port: track.playbackInfo.port,\n      primaryChannel: track.playbackInfo.primaryChannel,\n      secondaryChannel: track.playbackInfo.secondaryChannel,\n      mute: track.playbackInfo.isMute, solo: track.playbackInfo.isSolo\n    },\n    staves: track.staves.map(staff => ({\n      bars: staff.bars.map(bar => ({\n        voices: bar.voices.map(voice => ({\n          index: voice.index, isEmpty: voice.isEmpty,\n          beats: voice.beats.map(beat => ({\n            isEmpty: beat.isEmpty, isRest: beat.isRest,\n            graceType: beat.graceType, text: beat.text,\n            duration: beat.duration, dots: beat.dots,\n            tupletNumerator: beat.tupletNumerator,\n            tupletDenominator: beat.tupletDenominator,\n            playbackStart: beat.playbackStart,\n            playbackDuration: beat.playbackDuration,\n            notes: beat.notes.map(note => ({\n              string: note.string, fret: note.fret,\n              durationPercent: note.durationPercent,\n              isTieOrigin: note.isTieOrigin,\n              isTieDestination: note.isTieDestination,\n              isLetRing: note.isLetRing\n            }))\n          }))\n        }))\n      }))\n    }))\n  }))\n}, null, 2));\nJS\n)"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/66#issuecomment-5638814224",
+      "detail": "Convert to a bounded test implementation. Do not spend another investigation searching for a second port or dual playback-state token; their absence is established at the pin. Add the missing independent assertions and selective strict-policy checks, then resolve the target-limit contract.",
+      "decision": "confirmed-target-limit-regression-work",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_playback_test.go",
+    "conformance_regression_test.go",
     "gp8_builder.go",
     "track.go"
   ],
@@ -99,6 +165,6 @@
     "number": 66,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/66",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:09.161018+00:00"
   }
 }

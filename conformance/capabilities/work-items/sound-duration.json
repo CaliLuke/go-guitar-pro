@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "sound-duration",
   "capability": "sound-duration",
-  "title": "Determine GP8 support for authored note-duration percentages",
-  "kind": "investigation",
+  "title": "Verify duration-percentage export losses against the pinned consumer",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,35 +18,29 @@
   "stages": [
     "export"
   ],
-  "scope": "Establish whether the existing DurationPercent field has a supported GP8 destination.",
+  "scope": "Complete independent export regression evidence for authored legacy note-duration fractions0.5 and0.75, preserving rhythmic duration, ties and let-ring semantics while explicitly reporting the unavoidable GP8 loss.",
   "acceptance": [
-    "Use 0.5 and 0.75 duration percentages without changing the rhythmic note value.",
-    "Find independent target-consumer support or reproduce the fixed-duration limitation.",
-    "Implement a verified mapping or retain a scoped omission and strict-policy evidence."
+    "Reuse the existing GP5 Effects.gp5 and other-effects.gp5 import assertions for exact0.5/0.75 values. Record the pinned legacy float-endianness defect and the existing narrow oracle correction; do not cite raw malformed subnormal probe values as valid authored inputs.",
+    "For isolated valid public values0.5 and0.75, assert exact note location and ExportDispositionOmitted for gp8.omit.note-duration-percent. Strict export returns zero bytes; allowlisting only that loss succeeds.",
+    "Import both exported archives with the independent pinned GPIF consumer and assert note.durationPercent=1. Assert unchanged authored beat rhythm/dots/tuplets and relevant tie/let-ring flags; do not approximate percentage with rhythmic edits.",
+    "Keep the1.0 preservation control and invalid negative/nonfinite validation checks. Record GP8 percentage loss as a target limit and leave export rating partial."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No mapping of duration percentage to tempo, note value, ties or let-ring.",
+    "No new GPIF note property without independent retaining support."
+  ],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp5/other-effects.gp5",
-    "capability": "sound-duration",
-    "differences": [
-      {
-        "path": "tracks[0].staves[0].bars[0].voices[0].beats[0].notes[0].durationPercent",
-        "source": 2.93747e-319,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      },
-      {
-        "path": "tracks[0].staves[0].bars[0].voices[0].beats[1].notes[0].durationPercent",
-        "source": 2.8363e-319,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "conformance_alphatab_test.go",
+      "conformance_note_representation_test.go",
+      "conformance_interactions_test.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Existing TestAlphaTabGP5DurationPercentWireValues already covers exact legacy import with byte checks; TestConformanceSelectiveAllowlist covers a programmatic0.5 loss mixed with Writer. Missing work is an independent export pair0.5/0.75 with exact scope and semantic controls. Replace stale probe reproduction built from raw subnormal values with these valid values. For the embedded temporary Go harness, first run mkdir -p /tmp/investigation-conversion; use t.TempDir when converting it to permanent tests. The raw consumer command below runs from the repository root after conformance dependencies are installed; replace /absolute/path/to/output.gp with the exported archive.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -86,9 +80,70 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/102#issuecomment-5625491591",
       "detail": "Verify 0.5 and 0.75 legacy DurationPercent values survive public import and are explicitly reported by gp8.omit.note-duration-percent during export. Check strict rejection and preserve rhythmic duration, ties and let-ring behavior unchanged. Cite existing tests or add the missing exact assertions. Resolve as a target limit when the acceptance checklist passes. Reopen implementation only for a dedicated authored GP7/GP8 record retained by a second consumer, not a timing approximation."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_alphatab_test.go:685",
+      "detail": "Existing0.5/0.75 GP5 wire/import tests pass, including exact little-endian byte counts.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_interactions_test.go:383",
+      "detail": "Existing selective policy test only uses programmatic0.5 with writer loss.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:835",
+      "detail": "Nondefault note duration percentage has explicit omission.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1390",
+      "detail": "Pinned legacy importer reads float64BE; repository oracle narrowly corrects affected subnormals.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:1390",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1390"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs:18",
+      "detail": "normalizeLegacyDurationPercent is an explicit narrow oracle correction; no GPIF retention exists.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "experiment",
+      "detail": "Isolated public0.5 and0.75 experiments PASS: each exports11478 bytes permissively with only gp8.omit.note-duration-percent, each strict export0bytes/error. Independent GPIF consumer returns durationPercent1 for both and unchanged eighth-note480tick rhythm."
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "go",
+      "detail": "Temporary investigation harness executed in an isolated clone at the reviewed commit; helper functions are existing same-package test helpers. Raw AlphaTab observations are separately detailed above.",
+      "code": "package goguitarpro\nimport(\"testing\";\"encoding/json\";\"slices\";\"os\")\nfunc TestInvestigationModelReceipts(t *testing.T) {\nfor _, name:=range []string{\"routing\",\"metadata\",\"rests\",\"duration-half\",\"duration-threequarters\"}{t.Run(name,func(t *testing.T){\ns:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true\nswitch name{\ncase \"routing\":s.Channels[0].Channel=1;s.Channels[0].EffectChannel=18;s.Tracks[0].Mute=true;s.Tracks[0].Solo=true\ncase \"metadata\":s.Writer=\"writer\";s.Author=\"author\";s.Transcriber=\"tabber\";s.Comments=\"comments\";s.Date=\"2026-09-11\";s.Clipboard=&Clipboard{StartMeasure:0,StopMeasure:0};s.Notice=[]string{\"\",\"embedded\\nline\",\"\"}\ncase \"rests\": b:=s.Tracks[0].Measures[0].Voices[0].Beats[0];r:=b;r.Notes=nil;r.Status=BeatStatusRest;r.Text=\"rest\";e:=r;e.Status=BeatStatusEmpty;e.Text=\"empty\";s.Tracks[0].Measures[0].Voices=[]Voice{{Beats:[]Beat{b,e,r}}, {}, {Beats:[]Beat{b}}};s.Tracks[0].Staves[0].Measures=s.Tracks[0].Measures\ncase \"duration-half\",\"duration-threequarters\":v:=float32(.5);if name==\"duration-threequarters\"{v=.75};s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent=v\n}\nif err:=FinalizeSong(s);err!=nil{t.Fatal(err)}\nif d:=ValidateSong(s);len(d)!=0{t.Fatal(d)}\nb,rep,err:=ExportWithReport(s,ExportFormatGP8,ExportOptions{});if err!=nil{t.Fatal(err)}\n_ = os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".gp\",b,0600)\nstrict,srep,se:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\nif se==nil||len(strict)!=0{t.Fatalf(\"unreported loss: %v %d\",se,len(strict))}\na:=readAlphaTabScore(t,writeConformanceFixture(t,b));g,err:=Parse(b);if err!=nil{t.Fatal(err)}\nx,_:=json.MarshalIndent(map[string]any{\"wire\":extractGPIFLeafText(t,b),\"report\":rep,\"strictReport\":srep,\"alpha\":a,\"goNotice\":g.Notice},\"\",\"  \");if err=os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".json\",x,0600);err!=nil{t.Fatal(err)}\nif name==\"metadata\"&&!slices.Equal(g.Notice,[]string{\"\",\"embedded\",\"line\",\"\"}){t.Fatalf(\"notices: %#v\",g.Notice)}\nt.Logf(\"permissive %d bytes; strict 0 bytes and error; codes %v\",len(b),reportCodes(rep))\n})}}\n\nfunc TestInvestigationMetadataStrictClean(t *testing.T){s:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true;s.Notice=[]string{\"First notice\",\"Second notice\"};b,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil{t.Fatal(e)};os.WriteFile(\"/tmp/investigation-conversion/metadata-strict.gp\",b,0600);t.Logf(\"strict bytes=%d reports=%v\",len(b),reportCodes(r))}\n"
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "sh",
+      "detail": "Executed raw pinned ScoreLoader projection. It retains metadata text, routing state, voice positions and duration percentages omitted by broader normalization.",
+      "code": "(cd conformance && node --input-type=module - /absolute/path/to/output.gp <<'JS'\nimport fs from 'node:fs';\nimport * as alphaTab from '@coderline/alphatab';\nconst oracle = JSON.parse(fs.readFileSync('oracle.json', 'utf8'));\nconst settings = new alphaTab.Settings();\nObject.assign(settings.importer, oracle.importerSettings);\nalphaTab.Logger.logLevel = alphaTab.LogLevel.None;\nconst score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(\n  new Uint8Array(fs.readFileSync(process.argv[2])), settings);\nconsole.log(JSON.stringify({\n  metadata: {\n    music: score.music, tab: score.tab,\n    instructions: score.instructions, notices: score.notices\n  },\n  tracks: score.tracks.map(track => ({\n    playback: {\n      port: track.playbackInfo.port,\n      primaryChannel: track.playbackInfo.primaryChannel,\n      secondaryChannel: track.playbackInfo.secondaryChannel,\n      mute: track.playbackInfo.isMute, solo: track.playbackInfo.isSolo\n    },\n    staves: track.staves.map(staff => ({\n      bars: staff.bars.map(bar => ({\n        voices: bar.voices.map(voice => ({\n          index: voice.index, isEmpty: voice.isEmpty,\n          beats: voice.beats.map(beat => ({\n            isEmpty: beat.isEmpty, isRest: beat.isRest,\n            graceType: beat.graceType, text: beat.text,\n            duration: beat.duration, dots: beat.dots,\n            tupletNumerator: beat.tupletNumerator,\n            tupletDenominator: beat.tupletDenominator,\n            playbackStart: beat.playbackStart,\n            playbackDuration: beat.playbackDuration,\n            notes: beat.notes.map(note => ({\n              string: note.string, fret: note.fret,\n              durationPercent: note.durationPercent,\n              isTieOrigin: note.isTieOrigin,\n              isTieDestination: note.isTieDestination,\n              isLetRing: note.isLetRing\n            }))\n          }))\n        }))\n      }))\n    }))\n  }))\n}, null, 2));\nJS\n)"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/102#issuecomment-5638820061",
+      "detail": "Import and strict reporting already work. Convert to the finite missing independent export regression pair and remove stale oracle-defect sample evidence from the reproduction; do not open another mapping investigation.",
+      "decision": "confirmed-target-limit-regression-work",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_alphatab_test.go",
+    "conformance_interactions_test.go",
+    "conformance_note_representation_test.go",
     "gp8_builder.go",
     "note.go"
   ],
@@ -98,6 +153,6 @@
     "number": 102,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/102",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:39.888587+00:00"
   }
 }

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "dynamics",
   "capability": "dynamics",
-  "title": "Establish target limits for per-note dynamics and velocities",
-  "kind": "investigation",
+  "title": "Lock down chord-velocity and beat-dynamic export loss policy",
+  "kind": "implementation",
   "priority": 1,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,28 @@
   "stages": [
     "export"
   ],
-  "scope": "Determine which authored dynamic distinctions GP8 can preserve beyond one quantized beat marking.",
+  "scope": "Add permanent public-API and pinned-consumer regressions for the existing one-dynamic-per-beat GP8 contract, including independent note velocities and explicit rest dynamics.",
   "acceptance": [
-    "Use a chord with note velocities 47 and 95, plus a rest with an explicit beat dynamic.",
-    "Check supported wire destinations for per-note velocities and extended dynamic names.",
-    "Preserve verified distinctions or retain exact normalization reports and strict-policy tests; do not award preservation for quantization."
+    "For one two-note chord with velocities 47 and 95 and no explicit beat marking, public values remain distinct before export; GPIF emits Dynamic=P, Go reparse yields 47 on both notes, and pinned AlphaTab reports P on the beat and both notes. Report exactly gp8.normalize.note-velocity at that beat.",
+    "Repeat with explicit Beat.Dynamics=48: P remains the target marking and both gp8.normalize.beat-dynamic and gp8.normalize.note-velocity appear. With canonical Beat.Dynamics=47 only note-velocity loss appears. Do not expect 47 itself to be quantized: it is canonical P.",
+    "A rest with explicit dynamics 47 retains P without a dynamic loss; a rest with 48 produces only gp8.normalize.beat-dynamic, while remaining a rest with no notes.",
+    "Strict export rejects each unallowed loss with zero output. Allowing just one code does not permit the other; allowing exactly the applicable codes succeeds and does not alter the report locations or consumer values.",
+    "Register focused runtime assertions and the pinned-consumer evidence in the semantic ledger. Keep arbitrary per-note velocities rated partial and record the target limitation rather than inventing a per-note GPIF destination."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No independent per-note velocity encoding, extended dynamics, invented GPIF elements, rhythm changes, or capability promotion for quantization."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gp8_notation.go",
-      "gp8_builder.go"
+      "conformance_beat_test.go",
+      "gp8_effects.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Use a chord with note velocities 47 and 95, plus a rest with an explicit beat dynamic."
+    "instructions": "Start from semanticExportProbeSong; set first beat Dynamics to 0, 47, and 48 in separate cases, add a second valid string note, and set note velocities to 47/95. Add note-free rest controls at 47/48. ExportWithReport, inspect Dynamic by XML, Parse, and inspect both note.dynamic and beat.dynamic through the pinned oracle; exercise selective AllowedCodes.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -87,10 +94,82 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/61#issuecomment-5625487101",
       "detail": "Verify the existing policy with a chord whose note velocities are 47 and 95 plus a rest carrying an explicit beat dynamic. Assert the chosen GPIF Dynamic token, the retained consumer beat value, and both beat-dynamic/note-velocity loss reports where applicable. Exercise strict export with and without the exact allowed loss codes. If the current tests already prove every case, cite those tests and the verified commit; add only missing assertions. Resolve as a documented target limit once the acceptance checklist passes. Keep the export assessment partial for arbitrary velocities; do not create per-note GPIF fields or repurpose rhythm to encode velocity."
+    },
+    {
+      "kind": "verification",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestConformance(BeatSemantics|OrderedGraceExport|GraceAuthorityAndLoss|HarmonicVariants|HarmonicAuthorityAndValidation|TechniqueDispositions|MasterBars)$' .",
+      "detail": "PASS on baseline in isolated clone (0.230s). Additional temporary TestNotation probes PASS; results below are observations, not committed regression coverage.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_effects.go:206",
+      "detail": "Existing conversion chooses explicit beat dynamic, otherwise the first note velocity, quantizes to one of eight tokens, and reports beat and note losses separately.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_effects.go:273",
+      "detail": "Existing conversion chooses explicit beat dynamic, otherwise the first note velocity, quantizes to one of eight tokens, and reports beat and note losses separately.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:767",
+      "detail": "Existing conversion chooses explicit beat dynamic, otherwise the first note velocity, quantizes to one of eight tokens, and reports beat and note losses separately.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1768",
+      "detail": "Pinned importer accepts eight Dynamic names; Beat finalization assigns its dynamics to every note.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1768",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1768"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/model/Beat.ts:976",
+      "detail": "Pinned importer accepts eight Dynamic names; Beat finalization assigns its dynamics to every note.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/model/Beat.ts:976",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Beat.ts#L976"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_beat_test.go:16",
+      "detail": "Existing beat case covers one differing note/rest/empty status and report codes, but not the two-note 47/95 matrix with exact independent consumer observations and selective two-code rejection.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationDynamics (temporary public API + pinned-consumer probe)",
+      "detail": "Observed no-authored and 47 chord: wire P, only note-velocity report, both consumer notes P. Authored48 chord: both normalization codes; allowing only note-velocity still fails strict. Rest48: only beat-dynamic report and consumer P.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/61#issuecomment-5638812622",
+      "detail": "Implement the missing chord/rest policy matrix. The boundary is established; no further search for undocumented note-velocity syntax is required. 47 and 95 are canonical P/F, so use 48 to isolate beat quantization.",
+      "decision": "convert-to-implementation",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_beat_test.go",
     "gp8_builder.go",
+    "gp8_effects.go",
     "gp8_notation.go"
   ],
   "resolution": null,
@@ -99,6 +178,6 @@
     "number": 61,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/61",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:00.276050+00:00"
   }
 }

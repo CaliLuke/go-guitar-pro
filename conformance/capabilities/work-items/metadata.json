@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "metadata",
   "capability": "metadata",
-  "title": "Classify GP8 limits for binary-only score metadata",
-  "kind": "investigation",
+  "title": "Preserve metadata text in AlphaTab and verify legacy metadata losses",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,24 +18,31 @@
   "stages": [
     "export"
   ],
-  "scope": "Resolve export gaps for Writer, Comments, Date, notice boundaries and clipboard provenance without confusing authorship fields.",
+  "scope": "Fix GP8 metadata text serialization that silently corrupts line breaks in the pinned consumer, and complete independent coverage for supported credits/notices while retaining explicit legacy-only metadata omissions.",
   "acceptance": [
-    "For each field, show a valid non-default public value and its current omission/normalization report.",
-    "Check GPIF and archive formats for a supported destination; keep Author and Writer independent.",
-    "Implement only verified destinations and classify the remainder as explicit target limits with strict export assertions."
+    "A valid score with Notice=[\"First notice\",\"Second notice\"] must export under strict preservation with no loss report and raw pinned AlphaTab notices equal \"First notice\\nSecond notice\". The current output yields a NUL separator and is a failing regression.",
+    "Preserve supported metadata text with embedded line breaks, tabs, XML metacharacters and Unicode. Independently cover boundary whitespace without a CDATA terminator and a literal CDATA terminator without boundary whitespace; retaining encodings are verified for both classes. Assert raw consumer Music, Tabber, Instructions and Notices independently; Author and Transcriber must not alias Writer or each other.",
+    "For boundary whitespace combined with the literal CDATA terminator, require a verified retaining encoding or a precise consumer-loss report and strict refusal with zero bytes. Test the exact string LF + TAB + A<&]]>B + TAB + LF. Preserve the full XML/Go text; do not accept the suffix-only result from split CDATA. An unrelated allowance must not bypass the new loss. Record the exact remaining consumer normalization when explicitly allowed.",
+    "For notices [\"\", \"embedded\\nline\", \"\"], permissive/allowlisted output must retain the joined target string \"\\nembedded\\nline\\n\" exactly in the raw consumer; Go import may split the embedded line and must retain the existing gp8.normalize.notice-lines report. Separately test one empty notice with gp8.omit.empty-notice and ordinary leading/trailing empty entries that are representable as separators.",
+    "Retain exact gp8.omit.writer/comments/date/clipboard-range reports for independent nondefault values. Strict export rejects unallowed losses and selective allowlisting cannot hide a remaining metadata loss.",
+    "Fix encoding without repurposing credits or adding undocumented target fields; keep capability export partial because binary-only fields and notice slice-boundary limits remain."
   ],
   "exclusions": [
-    "Do not hide values in undocumented XML fields or repurpose unrelated credits."
+    "No attempt to preserve distinct legacy Writer/Comments/Date/clipboard values in unrelated GPIF fields.",
+    "No oracle upgrade or broad normalization of NUL/whitespace differences."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "song.go",
-      "gpif_parser.go",
-      "gp8_builder.go"
+      "gp8_export.go",
+      "gp8_builder.go",
+      "gpif_types.go",
+      "conformance_metadata_test.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "For each field, show a valid non-default public value and its current omission/normalization report."
+    "instructions": "At baseline, semanticValidPitchedGP8Song with notation=true and Notice=[\"First notice\",\"Second notice\"] produces11478 bytes and zero reports with RequirePreservation=true. Extract Content/score.gpif: Notices contains &#xA;. Load the archive through pinned ScoreLoader and inspect score.notices directly: separator is U+0000. Existing normalized metadata projection omits notices and tab. A temp archive experiment replacing Notices with CDATA preserved exact leading/trailing line breaks; decimal entities repaired interior line breaks but were trimmed at boundaries. Choose any target-valid encoding proven by the raw consumer, including safe handling of a CDATA terminator. For the embedded temporary Go harness, first run mkdir -p /tmp/investigation-conversion; use t.TempDir when converting it to permanent tests. The raw consumer command below runs from the repository root after conformance dependencies are installed; replace /absolute/path/to/output.gp with the exported archive.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -90,11 +97,110 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/99#issuecomment-5625490016",
       "detail": "Exercise distinct Writer, Comments, Date and clipboard values plus ambiguous notice boundaries, including embedded newlines and empty entries. Assert current omission/normalization codes and strict behavior. Cross-check the supported GPIF Score fields so Author/Music, Tabber, Instructions and Notices remain independent; do not repurpose one to hide unsupported metadata. If the acceptance cases already pass, record their verified commit and resolve as narrow target limits. A future implementation needs an actual distinct target field and retaining consumer evidence."
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_export.go:91",
+      "detail": "encoding/xml.MarshalIndent emits hexadecimal numeric entities for line breaks.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:95",
+      "detail": "Existing distinct omissions and notice-slice normalization remain required.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_metadata_test.go:196",
+      "detail": "Existing policy suite checks Go wire/reimport and strict reports, but not raw consumer notices/tab whitespace.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs:488",
+      "detail": "Normalized metadata excludes notices and tab, concealing this specific loss.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/xml/XmlParser.ts:386",
+      "detail": "Hex entity is parsed using radix10; &#xA; becomes character0.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/xml/XmlParser.ts:386",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/xml/XmlParser.ts#L386"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/xml/XmlNode.ts:106",
+      "detail": "CDATA first child returns exact text; regular element text is trimmed.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/xml/XmlNode.ts:106",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/xml/XmlNode.ts#L106"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:294",
+      "detail": "Music,Tabber,Instructions,Notices are independent supported destinations.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:294",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L294"
+    },
+    {
+      "kind": "experiment",
+      "detail": "At baseline, TestInvestigationMetadataStrictClean exports 11478 bytes with strict preservation and no reports. Raw pinned Notices contains First notice, U+0000, then Second notice. For leading/trailing empty entries and an embedded line break, each exported hexadecimal newline entity also becomes U+0000. Decimal entities retain the interior LF but the consumer trims boundary LFs. A CDATA candidate retains the exact leading, interior and trailing LFs. These are raw ScoreLoader observations, not committed tests or normalized score comparisons."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceMetadataExportPolicy; TestReviewedMetadataTempoLossesAreReported",
+      "detail": "PASS; existing contracts should be extended, not duplicated."
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "go",
+      "detail": "Temporary investigation harness executed in an isolated clone at the reviewed commit; helper functions are existing same-package test helpers. Raw AlphaTab observations are separately detailed above.",
+      "code": "package goguitarpro\nimport(\"testing\";\"encoding/json\";\"slices\";\"os\")\nfunc TestInvestigationModelReceipts(t *testing.T) {\nfor _, name:=range []string{\"routing\",\"metadata\",\"rests\",\"duration-half\",\"duration-threequarters\"}{t.Run(name,func(t *testing.T){\ns:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true\nswitch name{\ncase \"routing\":s.Channels[0].Channel=1;s.Channels[0].EffectChannel=18;s.Tracks[0].Mute=true;s.Tracks[0].Solo=true\ncase \"metadata\":s.Writer=\"writer\";s.Author=\"author\";s.Transcriber=\"tabber\";s.Comments=\"comments\";s.Date=\"2026-09-11\";s.Clipboard=&Clipboard{StartMeasure:0,StopMeasure:0};s.Notice=[]string{\"\",\"embedded\\nline\",\"\"}\ncase \"rests\": b:=s.Tracks[0].Measures[0].Voices[0].Beats[0];r:=b;r.Notes=nil;r.Status=BeatStatusRest;r.Text=\"rest\";e:=r;e.Status=BeatStatusEmpty;e.Text=\"empty\";s.Tracks[0].Measures[0].Voices=[]Voice{{Beats:[]Beat{b,e,r}}, {}, {Beats:[]Beat{b}}};s.Tracks[0].Staves[0].Measures=s.Tracks[0].Measures\ncase \"duration-half\",\"duration-threequarters\":v:=float32(.5);if name==\"duration-threequarters\"{v=.75};s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].DurationPercent=v\n}\nif err:=FinalizeSong(s);err!=nil{t.Fatal(err)}\nif d:=ValidateSong(s);len(d)!=0{t.Fatal(d)}\nb,rep,err:=ExportWithReport(s,ExportFormatGP8,ExportOptions{});if err!=nil{t.Fatal(err)}\n_ = os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".gp\",b,0600)\nstrict,srep,se:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}})\nif se==nil||len(strict)!=0{t.Fatalf(\"unreported loss: %v %d\",se,len(strict))}\na:=readAlphaTabScore(t,writeConformanceFixture(t,b));g,err:=Parse(b);if err!=nil{t.Fatal(err)}\nx,_:=json.MarshalIndent(map[string]any{\"wire\":extractGPIFLeafText(t,b),\"report\":rep,\"strictReport\":srep,\"alpha\":a,\"goNotice\":g.Notice},\"\",\"  \");if err=os.WriteFile(\"/tmp/investigation-conversion/\"+name+\".json\",x,0600);err!=nil{t.Fatal(err)}\nif name==\"metadata\"&&!slices.Equal(g.Notice,[]string{\"\",\"embedded\",\"line\",\"\"}){t.Fatalf(\"notices: %#v\",g.Notice)}\nt.Logf(\"permissive %d bytes; strict 0 bytes and error; codes %v\",len(b),reportCodes(rep))\n})}}\n\nfunc TestInvestigationMetadataStrictClean(t *testing.T){s:=semanticValidPitchedGP8Song(t);s.Tracks[0].Settings.Notation=true;s.Notice=[]string{\"First notice\",\"Second notice\"};b,r,e:=ExportWithReport(s,ExportFormatGP8,ExportOptions{LossPolicy:ExportLossPolicy{RequirePreservation:true}});if e!=nil{t.Fatal(e)};os.WriteFile(\"/tmp/investigation-conversion/metadata-strict.gp\",b,0600);t.Logf(\"strict bytes=%d reports=%v\",len(b),reportCodes(r))}\n"
+    },
+    {
+      "kind": "reproduction-source",
+      "language": "sh",
+      "detail": "Executed raw pinned ScoreLoader projection. It retains metadata text, routing state, voice positions and duration percentages omitted by broader normalization.",
+      "code": "(cd conformance && node --input-type=module - /absolute/path/to/output.gp <<'JS'\nimport fs from 'node:fs';\nimport * as alphaTab from '@coderline/alphatab';\nconst oracle = JSON.parse(fs.readFileSync('oracle.json', 'utf8'));\nconst settings = new alphaTab.Settings();\nObject.assign(settings.importer, oracle.importerSettings);\nalphaTab.Logger.logLevel = alphaTab.LogLevel.None;\nconst score = alphaTab.importer.ScoreLoader.loadScoreFromBytes(\n  new Uint8Array(fs.readFileSync(process.argv[2])), settings);\nconsole.log(JSON.stringify({\n  metadata: {\n    music: score.music, tab: score.tab,\n    instructions: score.instructions, notices: score.notices\n  },\n  tracks: score.tracks.map(track => ({\n    playback: {\n      port: track.playbackInfo.port,\n      primaryChannel: track.playbackInfo.primaryChannel,\n      secondaryChannel: track.playbackInfo.secondaryChannel,\n      mute: track.playbackInfo.isMute, solo: track.playbackInfo.isSolo\n    },\n    staves: track.staves.map(staff => ({\n      bars: staff.bars.map(bar => ({\n        voices: bar.voices.map(voice => ({\n          index: voice.index, isEmpty: voice.isEmpty,\n          beats: voice.beats.map(beat => ({\n            isEmpty: beat.isEmpty, isRest: beat.isRest,\n            graceType: beat.graceType, text: beat.text,\n            duration: beat.duration, dots: beat.dots,\n            tupletNumerator: beat.tupletNumerator,\n            tupletDenominator: beat.tupletDenominator,\n            playbackStart: beat.playbackStart,\n            playbackDuration: beat.playbackDuration,\n            notes: beat.notes.map(note => ({\n              string: note.string, fret: note.fret,\n              durationPercent: note.durationPercent,\n              isTieOrigin: note.isTieOrigin,\n              isTieDestination: note.isTieDestination,\n              isLetRing: note.isLetRing\n            }))\n          }))\n        }))\n      }))\n    }))\n  }))\n}, null, 2));\nJS\n)"
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/xml/XmlNode.ts#L58",
+      "symbol": "XmlNode.addChild / innerText",
+      "detail": "addChild overwrites firstElement with each CDATA child; innerText at line106 returns only that child, or trims ordinary text. Adjacent CDATA sections do not concatenate in the pinned consumer."
+    },
+    {
+      "kind": "upstream-source",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/xml/XmlParser.ts#L157",
+      "symbol": "XmlParser CDATA dispatch",
+      "detail": "Each CDATA section becomes a separate child; standard terminator splitting triggers the last-section-only limit."
+    },
+    {
+      "kind": "experiment",
+      "reference": "Raw ScoreLoader metadata terminator/boundary experiment",
+      "detail": "Wanted LF + TAB + A<&]]>B + TAB + LF. Standard split CDATA returns only >B + TAB + LF. Decimal-escaped regular text returns A<&]]>B with boundary whitespace removed. Controls retain a literal terminator without boundary whitespace, and a single CDATA retains boundary whitespace/tabs/metacharacters without the terminator. Reviewed at 8d729442b6d2a7f56d304e34b279c143a15ddf1f with the same pinned raw projection embedded above."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/99#issuecomment-5638817722",
+      "detail": "Fix independently proven metadata text cases and add raw consumer regressions. One CDATA retains boundary whitespace; ordinary escaped text retains a literal CDATA terminator without boundary whitespace. Their combination needs an independently verified encoding or a precise strict consumer-loss policy: pinned AlphaTab retains only the final CDATA section and trims ordinary text boundaries. Retain existing legacy-only omissions and notice slice-boundary reports.",
+      "decision": "confirmed-production-defect-and-target-limit-regressions",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_metadata_test.go",
     "gp8_builder.go",
+    "gp8_export.go",
     "gpif_parser.go",
+    "gpif_types.go",
     "song.go"
   ],
   "resolution": null,
@@ -103,6 +209,6 @@
     "number": 99,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/99",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:27.878437+00:00"
   }
 }

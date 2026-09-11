@@ -218,7 +218,15 @@ CREATE VIEW ready_work AS
 SELECT w.* FROM work_item w WHERE w.status='todo'
 AND (w.issue_state IS NULL OR w.issue_state='OPEN')
 AND NOT EXISTS (SELECT 1 FROM work_dependency d JOIN work_item p ON p.id=d.depends_on
-  WHERE d.work_id=w.id AND p.status<>'done');
+  WHERE d.work_id=w.id AND p.status<>'done')
+AND NOT EXISTS (SELECT 1 FROM json_each(w.reproduction_json,'$.external_inputs') i
+  WHERE json_extract(i.value,'$.state')='missing');
+CREATE VIEW external_input_blockers AS
+SELECT w.id,w.title,json_extract(i.value,'$.id') AS input_id,
+  json_extract(i.value,'$.requirement') AS requirement,
+  json_extract(i.value,'$.acquisition') AS acquisition
+FROM work_item w JOIN json_each(w.reproduction_json,'$.external_inputs') i
+WHERE w.status<>'done' AND json_extract(i.value,'$.state')='missing';
 CREATE VIEW blocked_work AS
 SELECT w.id,w.title,p.id AS dependency,p.title AS dependency_title,p.status
 FROM work_item w JOIN work_dependency d ON d.work_id=w.id

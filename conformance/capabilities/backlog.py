@@ -39,6 +39,10 @@ def load():
     return items
 
 
+def missing_external_inputs(w):
+    return [i for i in w['reproduction'].get('external_inputs', []) if i['state'] == 'missing']
+
+
 def validate(items, catalog, meta):
     caps = {c['id']: c for c in catalog['capabilities']}
     by_id = {w['id']: w for w in items}
@@ -67,6 +71,21 @@ def validate(items, catalog, meta):
             raise ValueError(f'Invalid reproduction: {name}')
         if repro['kind'] == 'runtime-candidate' and not (repro.get('fixture') and repro.get('differences')):
             raise ValueError(f'Missing runtime candidate: {name}')
+        inputs = repro.get('external_inputs', [])
+        if not isinstance(inputs, list):
+            raise ValueError(f'Invalid external inputs: {name}')
+        input_ids = set()
+        for item in inputs:
+            if (not isinstance(item, dict) or not isinstance(item.get('id'), str)
+                    or not item['id'] or item['id'] in input_ids
+                    or item.get('state') not in ('missing', 'available')
+                    or not all(isinstance(item.get(k), str) and item[k].strip()
+                               for k in ('requirement', 'acquisition'))):
+                raise ValueError(f'Invalid external input: {name}')
+            input_ids.add(item['id'])
+            if item['state'] == 'available' and not (
+                    isinstance(item.get('reference'), str) and item['reference'].strip()):
+                raise ValueError(f'Available external input requires evidence reference: {name}')
         if any(d not in by_id for d in w['depends_on']):
             raise ValueError(f'Missing dependency: {name}')
         if len(set(w['depends_on'])) != len(w['depends_on']):
@@ -81,6 +100,8 @@ def validate(items, catalog, meta):
         elif meta.get('published'):
             raise ValueError(f'Published backlog has an unticketed item: {name}')
         if w['status'] == 'done':
+            if missing_external_inputs(w):
+                raise ValueError(f'Done work has missing external inputs: {name}')
             if not w.get('resolution') or not w.get('verification'):
                 raise ValueError(f'Done work requires resolution and verification: {name}')
             for receipt in w['verification']:
@@ -156,17 +177,20 @@ def display_evidence(value):
 def issue_body(w, items, meta):
     by_id = {i['id']: i for i in items}
     oracle = read(ROOT / 'conformance/oracle.json')
-    ref = meta.get('baseline_commit') or 'main'
+    ref = w['reproduction'].get('reviewed_commit') or meta.get('baseline_commit') or 'main'
     work_url = f"{BASE}/blob/main/conformance/capabilities/work-items/{w['id']}.json"
     lines = [marker(w['id']), '', w['scope'], '',
              f"**Type:** {w['kind']}. **Priority:** P{w['priority']}. **Capability:** `{w['capability']}`.",
-             f"**Formats:** {', '.join(w['formats'])}. **Stages to assess:** {', '.join(w['stages'])}.", '',
-             '## Acceptance criteria', '']
+             f"**Formats:** {', '.join(w['formats'])}. **Stages to assess:** {', '.join(w['stages'])}.", '']
+    reviews = [e for e in w['evidence'] if e['kind'] == 'actionability-review']
+    if reviews:
+        lines += [f"**Current direction:** {reviews[-1]['detail']}", '']
+    lines += ['## Acceptance criteria', '']
     lines += [f'- [ ] {a}' for a in w['acceptance']]
     if w['kind'] == 'investigation':
         lines += ['', 'Deliver a reproducible decision with stage-specific evidence. Classify valid source loss, intentional format limits, derived values, malformed input, and oracle defects separately. Record follow-up implementation tickets for confirmed unresolved defects. Closing this investigation does not establish feature support.']
     else:
-        lines += ['', 'Any public API change must expose the authored value with a documented edit/reconciliation contract. Add a non-default public API regression and independent pinned-consumer export evidence. Preserve compatibility or explicitly document the change.']
+        lines += ['', 'For semantic changes, expose authored values with a documented edit/reconciliation contract and add non-default public API regressions with independent pinned-consumer export evidence. For inventory-only changes, verify the exact classification and its evidence without adding an unsupported API. Preserve compatibility or explicitly document the change.']
     if w['exclusions']:
         lines += ['', '## Scope boundaries', ''] + [f'- {x}' for x in w['exclusions']]
     lines += ['', '## Reproduction and evidence', '', w['reproduction']['instructions'], '']
@@ -178,18 +202,38 @@ def issue_body(w, items, meta):
                   'python3 conformance/capabilities/manage.py query ' + json.dumps("SELECT * FROM probe_comparison WHERE capability_id='" + repro['capability'] + "' AND fixture_path='" + repro['fixture'].replace("'", "''") + "'"), '```', '',
                   'For a `packages/alphatab/test-data/...` path, obtain the original from the pinned reference checkout. Synthetic fixture construction is recorded in `conformance/capabilities/probe.mjs`.']
     else:
-        lines += ['This starts from a source review. Construct a valid non-default fixture that exercises the acceptance criteria; the lack of a saved probe is not evidence of support.']
+        lines += ['Use the source review and reproductions below as starting evidence. Add the fixture or inventory regression specified by the acceptance criteria; the lack of a saved probe is not evidence of support.']
+    if repro.get('probe_source'):
+        lines += ['', 'Minimal diagnostic reproduction (not committed regression coverage):', '', '```go', repro['probe_source'].rstrip(), '```']
+    if repro.get('external_inputs'):
+        lines += ['', '## Required external inputs', '']
+        for item in repro['external_inputs']:
+            lines += [f"- **{item['id']} ({item['state']})**: {item['requirement']}",
+                      f"  Acquisition: {item['acquisition']}"]
+            if item.get('reference'):
+                lines.append(f"  Evidence: {item['reference']}")
+        lines += ['', 'Record an evidence reference and set the input state to `available` only when the required material exists. Missing inputs exclude this item from `ready_work`.']
     lines.append('')
     if display_evidence(repro.get('differences')) != repro.get('differences'):
         lines += ['Strings with control bytes use an explicit base64-utf8 wrapper above because GitHub rewrites those bytes. The database stores the exact original strings.', '']
     for e in w['evidence']:
         if e['kind'] == 'upstream-source':
-            lines.append(f"- AlphaTab [{e['symbol']}]({e['url']})")
+            lines.append(f"- AlphaTab [{e['symbol']}]({e['url']}). {e.get('detail', '')}")
         elif e['kind'] == 'source':
-            path = e['reference'].split(':')[0]
-            lines.append(f"- Repository [{e['reference']}]({BASE}/blob/{ref}/{path})")
+            reference = e['reference']
+            if reference.startswith('https://'):
+                url = reference
+            else:
+                path, _, line = reference.partition(':')
+                url = f"{BASE}/blob/{e.get('reviewed_commit', ref)}/{path}"
+                if line.isdigit():
+                    url += f'#L{line}'
+            lines.append(f"- Repository [{reference}]({url}). {e.get('detail', '')}")
         else:
             lines.append(f"- {e['kind']}: `{e.get('reference', '')}`. {e.get('detail', '')}")
+        if e.get('code') and e['code'] != repro.get('probe_source'):
+            lines += ['', '<details><summary>Diagnostic reproduction source</summary>', '',
+                      f"```{e.get('language', 'go')}", e['code'].rstrip(), '```', '', '</details>', '']
     lines += ['', f"Oracle: AlphaTab {oracle['version']}, revision `{oracle['sourceRevision']}`. Audit baseline: `{ref}`.", '',
               '## Dependencies and coordination', '']
     lines += [f'- Complete {link(by_id[d])}: {by_id[d]["title"]}.' for d in w['depends_on']] or ['No hard prerequisite.']
@@ -210,7 +254,7 @@ def report(items, meta):
     lines = ['# Capability work backlog', '', 'Generated from `work-items/*.json`. Regenerate with `manage.py refresh`.', '',
              f"{len(items)} work items: {counts['implementation']} implementation tasks and {counts['investigation']} investigations.",
              'Investigation closure records a decision; it does not certify capability support.', '',
-             'Use `manage.py ready` for work without unfinished dependencies. Check shared files before dispatching concurrent work.', '']
+             'Use `manage.py ready` for work without unfinished dependencies or missing external inputs. Check shared files before dispatching concurrent work.', '']
     if meta.get('index_issue'):
         i = meta['index_issue']
         lines += [f"GitHub tracking issue: [#{i['number']}]({i['url']}).", '']
@@ -220,6 +264,8 @@ def report(items, meta):
         state = w['status']
         if state == 'todo' and any(by_id[d]['status'] != 'done' for d in w['depends_on']):
             state = 'blocked'
+        if state == 'todo' and missing_external_inputs(w):
+            state = 'needs-input'
         lines.append(f"| [{w['title']}](work-items/{w['id']}.json) | {w['kind']} | {w['priority']} | {state} | {deps} | {link(w)} |")
     return '\n'.join(lines) + '\n'
 
@@ -261,7 +307,7 @@ def index_body(items, meta):
              f"The audit contains {len(caps)} capabilities ({len(scoped)} in scope). These {len(items)} work items cover all {incomplete} currently incomplete capability rows, including separately scoped diagnostic and audit blockers.",
              'Implementation tickets have bounded observable requirements. Investigation tickets first classify unresolved behavior and record follow-up defects or explicit limits.', '',
              f"[Database and agent workflow]({BASE}/blob/main/conformance/capabilities/README.md) · [Inventory]({BASE}/blob/main/conformance/capabilities/CAPABILITIES.md) · [Backlog]({BASE}/blob/main/conformance/capabilities/BACKLOG.md)", '',
-             'Run `python3 conformance/capabilities/manage.py ready` after checkout. Honor hard dependencies and coordinate shared files. Each ticket contains its evidence and acceptance checklist. Do not close from a passing self-round-trip or coverage count.', '',
+             'Run `python3 conformance/capabilities/manage.py ready` after checkout. Honor hard dependencies and coordinate shared files. Check `external_input_blockers` for fixture acquisition tasks; missing external inputs are excluded from the ready queue. Each ticket contains its evidence and acceptance checklist. Do not close from a passing self-round-trip or coverage count.', '',
              'Ordinary repeat count semantics already have #38. Simile support landed in commit 339113c under #39 and passed the audit recheck. Neither is duplicated here; navigation directions remain a separate task.', '']
     for kind in ('implementation', 'investigation'):
         lines += [f'## {kind.capitalize()}', '']

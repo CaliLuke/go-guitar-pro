@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "harmonics",
   "capability": "harmonics",
-  "title": "Resolve harmonic spelling and octave target limits",
-  "kind": "investigation",
+  "title": "Add independent harmonic-kind coverage and selective spelling-loss policy",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,27 @@
   "stages": [
     "export"
   ],
-  "scope": "Determine whether authored harmonic spelling/octave survives any supported GP8 representation beyond kind and fractional fret.",
+  "scope": "Complete pinned-consumer regression coverage for all retained harmonic kinds/fractional frets and isolate the existing legacy spelling omission contract.",
   "acceptance": [
-    "Use natural and artificial harmonics with explicit non-default spelling, octave and fractional fret.",
-    "Separate contradictory compatibility fret fields from genuinely independent authored information.",
-    "Implement only proven target destinations or record narrow target limits with strict assertions; retain all currently supported harmonic kinds."
+    "For Natural, Artificial, Pinch, Tapped, Semi, and Feedback separately at FretFloat=2.4, assert exact HType/HFret XML, Go kind and fractional fret, and pinned consumer kind and fret; no spelling-loss report without authored Pitch/Octave.",
+    "For natural and artificial harmonics, independently exercise non-default Pitch, Octave, and both together. Preserve the public source fields before export, emit exactly gp8.omit.harmonic-pitch for that authored pair, reject strict export until that code is allowed, and verify allowed output retains kind/fret while omitting only the unsupported spelling fields.",
+    "Keep spelling loss independent from Fret/FretFloat authority: a matching legacy integer view2 and exact2.4 does not itself need the spelling-loss code; a truly conflicting legacy fret gets its existing separate authority report and cannot be bypassed by allowing only harmonic-pitch.",
+    "Use explicit consumer expectations per kind and fractional fret; add the independent consumer evidence and precise allowed-loss assertions to the semantic ledger. Keep spelling/octave export partial and supported kind/fret slices unchanged."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No mapping harmonic-specific spelling to generic note Tone/Octave or alteration of sounded pitch; no invented dedicated GPIF spelling record; no broad support promotion."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gpif_effects.go",
-      "gp8_notation.go"
+      "conformance_harmonics_test.go",
+      "gp8_notation.go",
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Use natural and artificial harmonics with explicit non-default spelling, octave and fractional fret."
+    "instructions": "Extend TestConformanceHarmonicVariants and authority controls. Existing 2.4 cases decode XML and reparse Go; load the same outputs with pinned oracle and compare effects.harmonic.kind/fret. Existing C# PitchClass and OctaveOttava values are valid source examples for isolated spelling reports. Add the selective allow-list matrix without duplicating existing rejection-only checks.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -87,9 +93,74 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/96#issuecomment-5625489007",
       "detail": "Verify all supported harmonic kinds and fractional frets with exact wire and independent consumer assertions. Separately exercise non-default legacy Pitch/Octave values and their precise loss report. Check strict rejection for the unsupported spelling pair without weakening the supported kind/fret cases. Reuse existing conformance assertions where complete. Resolve as a scoped target limit when the checklist passes. Do not map harmonic spelling to generic note pitch/octave; reopen implementation only for a distinct harmonic-specific record retained by another consumer."
+    },
+    {
+      "kind": "verification",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestConformance(BeatSemantics|OrderedGraceExport|GraceAuthorityAndLoss|HarmonicVariants|HarmonicAuthorityAndValidation|TechniqueDispositions|MasterBars)$' .",
+      "detail": "PASS on baseline in isolated clone (0.230s). Additional temporary TestNotation probes PASS; results below are observations, not committed regression coverage.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_harmonics_test.go:68",
+      "detail": "Six-kind loop already proves wire spelling/Go kind. Pitch+octave and isolated-field rejection already exist. Missing work is independent consumer per-kind/fractional evidence and selective spelling/authority allowance; do not reimplement existing parser support.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_harmonics_test.go:124",
+      "detail": "Six-kind loop already proves wire spelling/Go kind. Pitch+octave and isolated-field rejection already exist. Missing work is independent consumer per-kind/fractional evidence and selective spelling/authority allowance; do not reimplement existing parser support.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_harmonics_test.go:345",
+      "detail": "Six-kind loop already proves wire spelling/Go kind. Pitch+octave and isolated-field rejection already exist. Missing work is independent consumer per-kind/fractional evidence and selective spelling/authority allowance; do not reimplement existing parser support.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2393",
+      "detail": "Pinned model destination is harmonicType + harmonicValue; legacy harmonic spelling has no demonstrated harmonic-specific destination.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2393",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L2393"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:303",
+      "detail": "Pinned model destination is harmonicType + harmonicValue; legacy harmonic spelling has no demonstrated harmonic-specific destination.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:303",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L303"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationHarmonics (temporary public API + pinned-consumer probe)",
+      "detail": "All six natural/artificial/pinch/tap/semi/feedback kinds retained exactly at2.4, with empty conversion reports.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/96#issuecomment-5638815923",
+      "detail": "Add the missing independent and selective-policy assertions around existing behavior. Do not reopen an unbounded search for another harmonic encoding or duplicate the existing wire and rejection tests.",
+      "decision": "convert-to-implementation",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_harmonics_test.go",
+    "gp8_builder.go",
     "gp8_notation.go",
     "gpif_effects.go"
   ],
@@ -99,6 +170,6 @@
     "number": 96,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/96",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:18.063602+00:00"
   }
 }

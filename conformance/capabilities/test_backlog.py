@@ -58,13 +58,45 @@ class BacklogTests(unittest.TestCase):
 
     def test_completed_investigation_does_not_promote_support(self):
         items = copy.deepcopy(self.items)
-        w = next(w for w in items if w['kind'] == 'investigation' and not w['depends_on'])
-        w.update(status='done', resolution='Confirmed target-consumer limit; exact decision in evidence.', verification=[{
+        w = next(w for w in items if not w['depends_on'])
+        w['reproduction'].pop('external_inputs', None)
+        w.update(kind='investigation', status='done', resolution='Confirmed target-consumer limit; exact decision in evidence.', verification=[{
             'commit': 'a' * 40, 'commands': ['focused comparison: PASS'], 'evidence': ['decision with non-default source and wire values']
         }])
         before = copy.deepcopy(self.catalog)
         backlog.validate(items, self.catalog, self.meta)
         self.assertEqual(self.catalog, before)
+
+    def test_external_inputs_block_dispatch_and_completion_until_evidenced(self):
+        items = copy.deepcopy(self.items)
+        w = next(w for w in items if w['id'] == 'backing-track')
+        required = {'id': 'authorized-fixture', 'state': 'missing',
+                    'requirement': 'A valid non-default source fixture with provenance.',
+                    'acquisition': 'Create and verify the fixture using an authorized source editor.'}
+        w['reproduction']['external_inputs'] = [required]
+        with closing(sqlite3.connect(':memory:')) as con:
+            con.executescript((manage.HERE / 'schema.sql').read_text())
+            for c in self.catalog['capabilities']:
+                con.execute('INSERT INTO capability VALUES (?,?,?,?,?,?,?,?)',
+                            (c['id'], c['domain'], c['title'], c['scope'], c['priority'], '[]', c['finding'], c['acceptance']))
+            with patch.object(backlog, 'load', return_value=items):
+                backlog.populate(con, self.catalog)
+            self.assertIsNone(con.execute("SELECT id FROM ready_work WHERE id='backing-track'").fetchone())
+            self.assertEqual(con.execute("SELECT input_id,requirement FROM external_input_blockers WHERE id='backing-track'").fetchone(),
+                             ('authorized-fixture', required['requirement']))
+            self.assertIn('needs-input', backlog.report(items, self.meta))
+            w['status'] = 'done'
+            with self.assertRaisesRegex(ValueError, 'missing external inputs'):
+                backlog.validate(items, self.catalog, self.meta)
+            w['status'] = 'todo'
+            required['state'] = 'available'
+            with self.assertRaisesRegex(ValueError, 'evidence reference'):
+                backlog.validate(items, self.catalog, self.meta)
+            required['reference'] = 'A reviewed fixture receipt with authoring settings and checksum.'
+            backlog.validate(items, self.catalog, self.meta)
+            con.execute("UPDATE work_item SET reproduction_json=? WHERE id='backing-track'", (json.dumps(w['reproduction']),))
+            self.assertEqual(con.execute("SELECT id FROM ready_work WHERE id='backing-track'").fetchone(), ('backing-track',))
+            self.assertIsNone(con.execute("SELECT id FROM external_input_blockers WHERE id='backing-track'").fetchone())
 
     def test_dispatch_respects_dependencies_ownership_and_issue_state(self):
         items = copy.deepcopy(self.items)

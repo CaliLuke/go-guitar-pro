@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "trill",
   "capability": "trill",
-  "title": "Determine supported GP8 trill-speed encoding",
-  "kind": "investigation",
+  "title": "Verify fixed GP8 trill speed and selective normalization policy",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,21 +18,27 @@
   "stages": [
     "export"
   ],
-  "scope": "Resolve the current forced sixteenth-note trill duration using actual target syntax and independent consumption.",
+  "scope": "Add the missing 16th/32nd/64th public-API and pinned-consumer regression matrix for the established sixteenth-speed GP8 consumer limit.",
   "acceptance": [
-    "Compare authored 16th, 32nd and 64th trill speeds at the same non-default fret.",
-    "Identify a supported GPIF speed payload, or show that the target consumer has a fixed value.",
-    "Preserve supported speeds or retain the exact normalization policy, with no false full-support rating."
+    "At the same target fret7, export plain sixteenth-, thirty-second-, and sixty-fourth-note TrillEffect.Duration values. All emit Trill=7 and the pinned consumer reports fret7 and duration16; assert beat rhythm, note fret, and unrelated effects remain unchanged.",
+    "Sixteenth input emits no trill-duration loss and strict export succeeds. Thirty-second and sixty-fourth emit exactly gp8.normalize.trill-duration at the authored note and strict refuses output.",
+    "An unrelated allowed loss cannot bypass the trill-duration loss; allowing exactly gp8.normalize.trill-duration succeeds and preserves the target fret while making the normalized duration16 explicit in Go reparse and the pinned consumer.",
+    "Register per-speed runtime assertions and independent consumer evidence in the semantic ledger. Keep arbitrary speed export partial, with the target-consumer limit recorded in the work item and catalog."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No encoding trill speed through beat rhythm, tremolo, ornaments, or undocumented fields. No full-support promotion for sixteenth quantization."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
+      "conformance_note_effects_test.go",
       "gpif_effects.go",
-      "gp8_builder.go"
+      "gp8_builder.go",
+      "conformance/oracle.mjs"
     ],
-    "instructions": "Compare authored 16th, 32nd and 64th trill speeds at the same non-default fret."
+    "instructions": "Start with semanticExportProbeSong; create defaultDuration then set Value16/32/64 and assign TrillEffect{Fret:7,Duration:duration}. ExportWithReport, decode Trill text, public Parse, and inspect pinned effects.trill. Use an otherwise report-free song so selective strict decisions are attributable to this one value.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -77,9 +83,80 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/103#issuecomment-5625492081",
       "detail": "Use the same non-default target fret with authored 16th, 32nd and 64th speeds. Assert exact Trill wire value, the pinned consumer sixteenth result and the precise normalization report. Verify that sixteenth input incurs no speed loss while non-sixteenth input is rejected under strict preservation unless the exact loss is allowed. Resolve as the documented speed limit after verification. Do not encode speed using rhythm, tremolo or ornament properties; those change other authored semantics."
+    },
+    {
+      "kind": "verification",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestConformance(BeatSemantics|OrderedGraceExport|GraceAuthorityAndLoss|HarmonicVariants|HarmonicAuthorityAndValidation|TechniqueDispositions|MasterBars)$' .",
+      "detail": "PASS on baseline in isolated clone (0.230s). Additional temporary TestNotation probes PASS; results below are observations, not committed regression coverage.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_note_effects_test.go:93",
+      "detail": "Existing conformance uses only sixteenth GP8 trill and checks source binary rates separately; broad report table uses a quarter duration. The explicit 16/32/64 independent target matrix and selective-allow policy are missing.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_note_effects_test.go:118",
+      "detail": "Existing conformance uses only sixteenth GP8 trill and checks source binary rates separately; broad report table uses a quarter duration. The explicit 16/32/64 independent target matrix and selective-allow policy are missing.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "export_report_test.go:160",
+      "detail": "Existing conformance uses only sixteenth GP8 trill and checks source binary rates separately; broad report table uses a quarter duration. The explicit 16/32/64 independent target matrix and selective-allow policy are missing.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "gp8_builder.go:860",
+      "detail": "Go reports any noncanonical duration. Pinned GPIF consumer explicitly sets Sixteenth and writer emits only Trill target value.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2260",
+      "detail": "Go reports any noncanonical duration. Pinned GPIF consumer explicitly sets Sixteenth and writer emits only Trill target value.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2260",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L2260"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:191",
+      "detail": "Go reports any noncanonical duration. Pinned GPIF consumer explicitly sets Sixteenth and writer emits only Trill target value.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:191",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L191"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationTrill (temporary public API + pinned-consumer probe)",
+      "detail": "Input16: wire7, consumer{fret:7,duration:16}, no report. Inputs32/64: same wire and consumer, exactly gp8.normalize.trill-duration.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/103#issuecomment-5638820703",
+      "detail": "Implement the concrete target-limit matrix and loss-policy coverage. Existing speed semantics already establish the answer; there is no research prerequisite or new speed wire representation to implement.",
+      "decision": "convert-to-implementation",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_note_effects_test.go",
     "gp8_builder.go",
     "gpif_effects.go"
   ],
@@ -89,6 +166,6 @@
     "number": 103,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/103",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:43.367781+00:00"
   }
 }

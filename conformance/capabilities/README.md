@@ -226,16 +226,24 @@ Integrate changes serially when they share the catalog, semantic ledger, or gene
 ```sql
 SELECT id,kind,priority,title,issue_url FROM ready_work ORDER BY priority,id;
 SELECT * FROM blocked_work;
+SELECT * FROM external_input_blockers;
 SELECT * FROM work_conflicts WHERE work_id='fermata' OR other_work_id='fermata';
 SELECT * FROM uncovered_gaps;
 SELECT * FROM unticketed_work;
 SELECT * FROM backlog_state_drift;
 ```
 
-`ready_work` means no unfinished prerequisite, no active owner status, and no recorded closed issue.
+`ready_work` means no unfinished prerequisite, no missing external input, no active owner status, and no recorded closed issue.
 It does not mean independent files or permission to skip the task's evidence requirements.
 The build rejects uncovered gaps, unknown dependencies, cycles, duplicate issue links, and incomplete completion receipts.
 Once published, it also rejects work items without issue links.
+
+Some evidence tasks require a fixture from an external authoring tool.
+Record each input in `reproduction.external_inputs` with an `id`, `requirement`,
+`acquisition` route, and `state` (`missing` or `available`).
+An available input also requires a `reference` to its evidence.
+Missing inputs appear in `external_input_blockers` and exclude the task from `ready_work`.
+The generated backlog shows `needs-input`. A task cannot be marked done while an input is missing.
 
 ## Publish or extend the tickets
 
@@ -259,6 +267,7 @@ Publish all items, regenerate the database, then commit the links and reports to
 | --- | --- |
 | `work_item`, `work_dependency` | Acceptance, reproduction, evidence, ownership, issue links, and prerequisites |
 | `ready_work`, `blocked_work` | Dependency-aware dispatch |
+| `external_input_blockers` | Missing fixtures or other external inputs, with acquisition instructions |
 | `work_conflicts` | Advisory overlap between source starting points |
 | `unticketed_work`, `uncovered_gaps` | Missing tickets or incomplete backlog coverage |
 | `backlog_state_drift` | Mismatch between reviewed work status and saved GitHub state |

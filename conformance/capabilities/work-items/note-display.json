@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "note-display",
   "capability": "note-display",
-  "title": "Determine GP source support for note visibility and noteheads",
-  "kind": "investigation",
+  "title": "Correct pitched note-display scope and protect percussion ownership",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
@@ -20,20 +20,27 @@
     "model",
     "export"
   ],
-  "scope": "Map pitched-note visibility and custom notehead/style fields to supported Guitar Pro source/target syntax.",
+  "scope": "Make the capability database and pinned upstream inventory agree that arbitrary pitched note visibility and NoteStyle overrides are other-format/rendering fields, while percussion articulation notehead metadata remains in scope and separately owned.",
   "acceptance": [
-    "Find a non-default GP fixture for each proposed note display field, separate from percussion articulation noteheads.",
-    "Distinguish authored source controls from rendering-only or other-format fields.",
-    "Create bounded preservation follow-ups for verified GP fields and explicit scope dispositions for the remainder."
+    "Change only the pitched note-display capability to explicit excluded/out-of-scope import, model and export, with exact source-assignment evidence. Retain a documented reopening criterion: a GP3–GP8 fixture, exact source field and independent retaining consumer for a pitched override.",
+    "Reconcile Note.isVisible, Note.style, NoteStyle.noteHead and NoteStyle.noteHeadCenterOnStem dispositions. The first two are already out-of-scope in the canonical upstream inventory; the two NoteStyle members currently remain partial and need the same evidence-backed disposition. Preserve each named symbol obligation rather than deleting inventory rows.",
+    "Add a focused inventory regression for the exact recorded GP scope, out-of-scope dispositions and source references resolving to the pinned revision. Retain GPIF articulation notehead assignments under percussion, with unchanged owner and symbol identities. Reuse existing ownership/percussion assertions where they already enforce the condition; source drift is enforced by the existing pin/hash checks, not a grep snapshot or an automated judgment about future evidence.",
+    "Regenerate SQLite and verify that pitched note-display is excluded from the Guitar Pro gap denominator while percussion ratings/claims and the canonical upstream symbol count remain unchanged. Run the inventory/ownership checks plus existing percussion notehead tests."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No new public note-style API, invented GPIF properties, use of percussion identities for pitched styles, MusicXML/AlphaTex import, or rendering behavior."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "note.go"
+      "conformance/capabilities/catalog.json",
+      "conformance/upstream-inventory.json",
+      "conformance/capabilities/upstream-ownership.json",
+      "conformance/capabilities/test_manage.py"
     ],
-    "instructions": "Find a non-default GP fixture for each proposed note display field, separate from percussion articulation noteheads."
+    "instructions": "Compare catalog note-display (scope=guitar-pro; all stages missing) with canonical Note.isVisible/Note.style (out-of-scope), NoteStyle.noteHead/noteHeadCenterOnStem (partial). Inspect exact assignments in MusicXmlImporter, AlphaTex1LanguageHandler and Note.finish; GPIF notehead assignments belong to percussion articulations. Existing targeted command: ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^(TestConformanceNoteheadOptions|TestGPIFPitchedTrackHasNoPercussionDefinitions|TestAlphaTabPreservesNativePercussionFallbacks)$' .",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -73,10 +80,65 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/113#issuecomment-5625493608",
       "detail": "Record the actual assignments for pitched Note.isVisible and custom pitched NoteStyle fields, separating MusicXML/AlphaTex/rendering from Guitar Pro import paths. Give pitched visibility/noteheads an explicit scope disposition while retaining the separate percussion articulation notehead contract and tests. Resolve after the assignment evidence and database scope are reviewed. Reopen only with a non-default GP fixture and retaining consumer; do not reuse percussion IDs to simulate pitched styles."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/conformance/capabilities/catalog.json#L4327",
+      "detail": "Capability remains incorrectly counted as a Guitar Pro missing feature."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/conformance/upstream-inventory.json#L2133",
+      "detail": "Note.isVisible is already out-of-scope; Note.style likewise at 2294; NoteStyle fields remain partial at 2420/2427."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L2783",
+      "detail": "Sets note.isVisible; custom notehead and centering assignments occur at 2841, 2853, 2876, 3023 and 3931–3958.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L2783",
+      "symbol": "packages/alphatab/src/importer/MusicXmlImporter.ts#L2783"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/alphaTex/AlphaTex1LanguageHandler.ts#L2321",
+      "detail": "AlphaTex hide changes note.isVisible.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/alphaTex/AlphaTex1LanguageHandler.ts#L2321",
+      "symbol": "packages/alphatab/src/importer/alphaTex/AlphaTex1LanguageHandler.ts#L2321"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L885",
+      "detail": "SongBook let-ring tie finalization derives invisible notes; this is not an authored GP visibility field.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Note.ts#L885",
+      "symbol": "packages/alphatab/src/model/Note.ts#L885"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L795",
+      "detail": "GPIF Noteheads tokens populate articulation.noteHeadDefault/Half/Whole; they are not pitched NoteStyle assignments.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L795",
+      "symbol": "packages/alphatab/src/importer/GpifParser.ts#L795"
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceNoteheadOptions; TestGPIFPitchedTrackHasNoPercussionDefinitions; TestAlphaTabPreservesNativePercussionFallbacks",
+      "detail": "Passed with ALPHATAB_CONFORMANCE=1 at reviewed commit. No new percussion behavior implementation is required."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/113#issuecomment-5638822979",
+      "detail": "This is inventory/conformance implementation, not feature implementation. Apply the narrow scope correction and enforce ownership. Do not close merely from the earlier out-of-scope comment while catalog and inventory still disagree.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
-    "note.go"
+    "conformance/capabilities/catalog.json",
+    "conformance/capabilities/test_manage.py",
+    "conformance/capabilities/upstream-ownership.json",
+    "conformance/upstream-inventory.json"
   ],
   "resolution": null,
   "verification": [],
@@ -84,6 +146,6 @@
     "number": 113,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/113",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:55.430315+00:00"
   }
 }

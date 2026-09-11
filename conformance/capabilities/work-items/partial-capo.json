@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "partial-capo",
   "capability": "partial-capo",
-  "title": "Decide the supported scope for partial capos",
+  "title": "Acquire partial-capo fixtures with verified string ordering",
   "kind": "investigation",
   "priority": 3,
   "status": "todo",
@@ -16,14 +16,17 @@
     "model",
     "export"
   ],
-  "scope": "Determine whether per-string capo data belongs in the Guitar Pro parity target given the documented AlphaTab limitation.",
+  "scope": "Acquire the finite evidence package needed to define a per-string capo mapping. Existing documentation establishes broad capo behavior; this task supplies actual source values, string-flag order and a retaining consumer result. It remains blocked on external authoring/consumer access and is excluded from autonomous implementation readiness.",
   "acceptance": [
-    "Inspect a valid partial-capo Guitar Pro file and record what the pinned importer retains or loses.",
-    "Identify whether independent consumer validation is available for any subset.",
-    "Record a justified scope decision; if supported scope expands, specify a concrete follow-up and oracle before implementation."
+    "Obtain an authorized GP7/GP8 fixture pair authored from the same minimal six-string score: no partial capo control and partial capo fret 3 on asymmetric named strings 1 and 4. Each string must have an identifiable open-string note. Record application version, string naming convention, file hashes and authored UI values.",
+    "Add a combined-capo variant with whole capo 2 and partial capo 5, plus a partial-below-whole control. Reopen in the authoring application and record exact per-string state and output pitches; the verified documentation already states frets are absolute and a partial capo below the whole capo is ineffective.",
+    "Extract and record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Change only one selected string in a controlled sibling file to establish bit/string order; do not infer order from tuning reversal.",
+    "Run public Go ParseWithOptions and pinned AlphaTab on each fixture, recording retained facts and diagnostic paths. Record the independent Guitar Pro consumer facts separately because pinned AlphaTab has no retaining partial-capo field.",
+    "Deliver fixtures and machine-readable receipts in the corpus/database with a narrow proposed mapping/API follow-up only if string ordering and a retaining consumer are proved. Otherwise record the exact missing input and keep the work excluded from ready_work; do not loop into another open-ended source review or promote support."
   ],
   "exclusions": [
-    "Do not count an AlphaTab-unsupported feature as an existing parity defect by default."
+    "No per-string API or pitch conversion before fixture facts exist.",
+    "No tuning modification as a proxy; no AlphaTab upgrade; no claim that absence in AlphaTab validates values."
   ],
   "depends_on": [
     "capo"
@@ -31,9 +34,26 @@
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "track.go"
+      "track.go",
+      "conformance/oracle.mjs",
+      "conformance/capabilities/work-items/capo.json"
     ],
-    "instructions": "Inspect a valid partial-capo Guitar Pro file and record what the pinned importer retains or loses."
+    "instructions": "Use Guitar Pro Track Inspector > Tuning > Partial Capo, following the linked official guide, to author the controlled corpus variants. After acquisition run node conformance/oracle.mjs testdata/gp8/partial-capo-asymmetric.gp; record their default/retained output as the pinned limit, not as an expected mapping. Extract GPIF with python3 -m zipfile -e INPUT.gp TEMP_DIRECTORY and compare only the named staff properties. Add a focused public Go ParseWithOptions regression that prints/asserts the corresponding source paths. Save hashes, exact wire values, authoring facts and outcomes in work-item/database receipts. No acquired file currently exists.",
+    "external_inputs": [
+      {
+        "id": "partial-capo-fixtures",
+        "requirement": "Authorized minimal GP7/GP8 control and nonzero partial-capo variants with asymmetric named strings and controlled single-string difference, including combined-capo cases.",
+        "state": "missing",
+        "acquisition": "An existing licensed Guitar Pro user authors the stated variants through Track Inspector > Tuning > Partial Capo; use the official guide. If no authoring access is available, request this exact package from the repository owner and leave readiness blocked."
+      },
+      {
+        "id": "partial-capo-consumer-receipt",
+        "requirement": "Guitar Pro or another independently retaining consumer reopening the fixtures with application version, exact selected strings, fret values and per-string output pitches.",
+        "state": "missing",
+        "acquisition": "Record the authoring application reopen/pitch facts for each owned fixture; provide an exported MIDI note sequence or explicit app facts with provenance, plus checksums tying results to inputs. Pinned AlphaTab cannot fill this role."
+      }
+    ],
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -53,9 +73,49 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/115#issuecomment-5625494153",
       "detail": "The next required artifact is a Guitar Pro fixture with a nonzero partial capo fret and asymmetric string flags, plus a consumer that retains those values. Use it to establish flag/string order, pitch effects and interaction with whole-staff capo. Pinned AlphaTab currently discards the properties, so its default output cannot validate the semantics. Once those facts are known, create a bounded mapping/API contract linked to #43. Until then keep the unsupported status explicit; do not infer the flags from tuning or collapse them into the whole-staff capo."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1322",
+      "detail": "Known GPIF spellings emit default fret 0 and all-zero string flags.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1322",
+      "symbol": "packages/alphatab/src/exporter/GpifWriter.ts#L1322"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L960",
+      "detail": "The complete pinned staff-property switch handles Tuning, chord collections and CapoFret; it has no PartialCapo reader or retained model mapping.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L960",
+      "symbol": "packages/alphatab/src/importer/GpifParser.ts#L960"
+    },
+    {
+      "kind": "corpus-review",
+      "reference": "testdata and references/alphaTab/packages/alphatab/test-data",
+      "detail": "Fresh ZIP GPIF scan at reviewed commit: 376 containers parsed; 849 PartialCapoFret occurrences all 0; 849 PartialCapoStringFlags occurrences all zero; no non-default partial-capo source. 849 FretCount occurrences all 24."
+    },
+    {
+      "kind": "authoritative-documentation",
+      "reference": "https://www.guitar-pro.com/docs/gp8/score/track-settings/track-tuning",
+      "detail": "Verified 2026-09-11. Capo section: partial applies selected strings; whole and partial may coexist; fret values are absolute; a partial capo below the whole capo is ineffective. These facts need not be re-investigated."
+    },
+    {
+      "kind": "authoritative-documentation",
+      "reference": "https://alphatab.net/docs/formats/guitar-pro-8/",
+      "detail": "Website explicitly lists partial capo unsupported; pinned source remains the behavior authority."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/115#issuecomment-5638823631",
+      "detail": "Acquire the stated fixture/consumer package once. The next implementation task can then define the actual string mapping and public edit authority. Until it exists, keep this missing/target-limited and explicitly blocked on the two named inputs.",
+      "decision": "external-evidence-work",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/capabilities/work-items/capo.json",
+    "conformance/oracle.mjs",
     "track.go"
   ],
   "resolution": null,
@@ -64,6 +124,6 @@
     "number": 115,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/115",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:58.883569+00:00"
   }
 }

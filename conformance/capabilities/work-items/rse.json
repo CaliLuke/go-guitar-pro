@@ -2,40 +2,43 @@
   "schema_version": 1,
   "id": "rse",
   "capability": "rse",
-  "title": "Bound RSE data preservation against real GP8 consumers",
-  "kind": "investigation",
+  "title": "Reject wrapped RSE identifiers and verify each legacy omission",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
   "formats": [
-    "gp3",
-    "gp4",
     "gp5",
-    "gp6",
-    "gp7",
     "gp8"
   ],
   "stages": [
     "import",
-    "model",
     "export"
   ],
-  "scope": "Separate serializable RSE configuration from proprietary synthesis and unsupported legacy records.",
+  "scope": "Prevent GP5 RSE integer records from silently wrapping into zero or unrelated int16 values, and verify that every non-default legacy RSE descendant independently triggers the existing scoped GP8 loss policy. Preserve the explicit proprietary-effect target boundary.",
   "acceptance": [
-    "Inventory non-default master and track RSE descendants currently covered by parent omission reports.",
-    "Find supported GPIF destinations and consumer evidence for each proposed preserved slice.",
-    "Produce bounded follow-ups for supported data; retain explicit target limitations for the remainder without claiming audio synthesis parity."
+    "Check every int32-to-int16 conversion in readRseInstrument before assigning Instrument, Unknown, SoundBank, and GP5.1 EffectNumber. Preserve signed int16 values including -1; reject values below -32768 or above 32767. Cover -32769, 32768 and 65536 independently. GP5.0 EffectNumber remains the signed-16 source case and must retain its record alignment. Exercise -32768 and 32767 as exact passing endpoint controls at each narrowing site.",
+    "Use a valid GP5 source fixture with a located RSE field for a public Parse regression. Add focused reader tests covering every narrowing site and truncated records; malformed data returns contextual errors and cannot produce a silently zeroed RseInstrument.",
+    "For each public RSE leaf independently, start with a score that produces no unrelated loss: master EQ knobs, EQ gain, volume, reverb; track instrument EffectCategory, Effect, Instrument, Unknown, SoundBank, EffectNumber; track EQ knobs, EQ gain, Humanize, each nonzero AutoAccentuation; and UseRse. Assert the correct parent omission code and score/track location, strict no-byte failure, exact-code allowlist success, and unchanged public input. Zero scalar and absent/empty-slice controls must not fabricate losses. A present Knobs=[0] has authored slice shape and must retain its existing omission report; it is not an absent EQ.",
+    "Record the existing target limit: pinned GPIF RSE parsing/writing retains ordinary balance and volume only, while binary RSE bank fields are skipped. Keep gp8.omit.master-rse, gp8.omit.track-rse and gp8.omit.track-use-rse. TrackSound, MIDI effects and volume-automation contracts stay separately owned.",
+    "Record targeted regressions and exact source/report evidence in the semantic ledger and work item. Run ./conformance/check.sh and prek run --all-files. Do not promote unsupported GP8 semantics from a checked-decoding or omission-policy fix."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "No proprietary synthesizer/effect equivalence, audio comparison, archive-blob retention, oracle upgrade, or sound-bank mapping.",
+    "The unnamed RSE integer remains opaque signed data; do not invent an enum or restrict valid negative values solely from examples."
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
       "rse.go",
-      "gpif_types.go",
-      "gp8_builder.go"
+      "gp8_builder.go",
+      "conformance_playback_test.go",
+      "testdata/gp5/RSE.gp5"
     ],
-    "instructions": "Inventory non-default master and track RSE descendants currently covered by parent omission reports."
+    "instructions": "The embedded reader probe writes int32 value 65536 into each of four GP5.1 RSE record fields in turn. Run with a temporary Go overlay on conformance_playback_test.go: go test -overlay OVERLAY.json -count=1 -v -run ^TestInvestigationRSEWideValues$ . . All four currently return zero-valued RseInstrument with nil error. Use the existing RSE.gp5 corpus file as a starting point for a complete public Parse regression; locate the intended source record rather than assuming byte offsets.",
+    "probe_source": "func TestInvestigationRSEWideValues(t *testing.T) {\n for _, index := range []int{0,1,2,3} {\n  data := make([]byte,16)\n  data[index*4+2] = 1 // 65536 as an int32; currently wraps to zero in an int16\n  song := Song{Version: Version{Number:[3]byte{5,1,0}}}\n  got, err := song.readRseInstrument(newCursor(data))\n  t.Logf(\"field=%d result=%#v error=%v\", index, got, err)\n  if err == nil { t.Errorf(\"RSE int32 field %d silently accepted out-of-range value 65536\",index) }\n }\n}\n",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -70,11 +73,62 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5625491158",
       "detail": "Enumerate the non-default legacy master/track RSE values covered by the existing parent omission reports and verify the exact strict-policy behavior for those descendants. Identify a retaining independent GP8 oracle before proposing semantic effect/synthesizer preservation. Ordinary MIDI/channel-strip and TrackSound fields are separately owned and do not prove RSE equivalence. Record the current oracle boundary if none exists. If opaque archive-member retention is desired, define a separate byte-preservation contract; it must not be presented as public RSE semantic support."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/rse.go#L100",
+      "detail": "Four unchecked conversions at lines 105, 110, 115 and 130. GP5.0 uses readShort for the last field."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/gp8_builder.go#L274",
+      "detail": "The RSE omission predicate depends on the nonzero public record, so zeroing a source field can erase the corresponding loss."
+    },
+    {
+      "kind": "source",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/blob/8d729442b6d2a7f56d304e34b279c143a15ddf1f/conformance_playback_test.go#L199",
+      "detail": "Existing field partition asserts all RSE descendants but most are authored together; only AutoAccentuation is isolated."
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1309",
+      "detail": "RSE dispatch handles ChannelStrip; its Parameters path projects only playback balance and volume.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1309",
+      "symbol": "packages/alphatab/src/importer/GpifParser.ts#L1309"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1240",
+      "detail": "Writer emits fixed channel-strip parameters with ordinary playback balance/volume.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1240",
+      "symbol": "packages/alphatab/src/exporter/GpifWriter.ts#L1240"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1216",
+      "detail": "Binary RSE bank implementation skips the int32 slots rather than retaining proprietary semantics.",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L1216",
+      "symbol": "packages/alphatab/src/importer/Gp3To5Importer.ts#L1216"
+    },
+    {
+      "kind": "runtime-review",
+      "reference": "TestInvestigationRSEWideValues",
+      "detail": "Temporary overlay fails for all four fields: 65536 becomes zero and error is nil. Existing TestConformancePlaybackRouting passed.",
+      "code": "func TestInvestigationRSEWideValues(t *testing.T) {\n for _, index := range []int{0,1,2,3} {\n  data := make([]byte,16)\n  data[index*4+2] = 1 // 65536 as an int32; currently wraps to zero in an int16\n  song := Song{Version: Version{Number:[3]byte{5,1,0}}}\n  got, err := song.readRseInstrument(newCursor(data))\n  t.Logf(\"field=%d result=%#v error=%v\", index, got, err)\n  if err == nil { t.Errorf(\"RSE int32 field %d silently accepted out-of-range value 65536\",index) }\n }\n}\n"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/101#issuecomment-5638819239",
+      "detail": "Implement checked decoding and focused loss-policy coverage. Keep detailed RSE GP8 export explicitly unsupported; closure certifies the source/error/reporting contract, not proprietary synthesis preservation.",
+      "decision": "implementation-ready",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance_playback_test.go",
     "gp8_builder.go",
-    "gpif_types.go",
     "rse.go"
   ],
   "resolution": null,
@@ -83,6 +137,6 @@
     "number": 101,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/101",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:35.632816+00:00"
   }
 }

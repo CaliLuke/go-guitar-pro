@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "double-bar",
   "capability": "double-bar",
-  "title": "Resolve final-bar double-line consumer differences",
-  "kind": "investigation",
+  "title": "Report terminal double-bar consumer loss without stripping authored XML",
+  "kind": "implementation",
   "priority": 2,
   "status": "todo",
   "owner": null,
@@ -18,30 +18,28 @@
   "stages": [
     "export"
   ],
-  "scope": "Classify the final-bar double-line difference between legacy import and the pinned GPIF consumer before changing serialization.",
+  "scope": "Report the pinned AlphaTab loss of an authored final DoubleBar, retain the exact GPIF flag and Go round-trip value, and add terminal/nonterminal consumer regressions including the actual resolved line-style difference.",
   "acceptance": [
-    "Reproduce the last-bar difference in testdata/gp4/Slides.gp4 and inspect emitted DoubleBar XML.",
-    "Show whether a supported GP8 wire representation can retain the final visual bar line despite AlphaTab clearing the flag.",
-    "Implement and test a supported representation, or record a narrow target limit and precise preflight behavior without weakening ordinary double-bar assertions."
+    "Public Parse of testdata/gp4/Slides.gp4 retains final MeasureHeader.DoubleBar=true. Assert the final DoubleBar XML and Go reparse true. The pinned original binary consumer reports isDoubleBar=true, barLineRight=LightLight, and getActualBarLineRight()=LightLight; its exported GP8 consumer reports false, Automatic, and LightHeavy. Record these as distinct authored and consumer results, not equivalent projection.",
+    "For an otherwise report-free score with consistent header/measure compatibility flags and final DoubleBar=true, preflight emits one stable scoped consumer-omission report at the final master-bar location. Its reason identifies the authored flag retained in GPIF and the pinned consumer clearing it. Do not substitute the unrelated measure-double-bar-authority report.",
+    "Strict export returns no bytes while this consumer loss is unallowed. Allowing an unrelated code does not bypass it; allowing exactly the new terminal-double-bar consumer code succeeds and retains DoubleBar in XML and Go reparse, while independent consumption confirms the known limit.",
+    "A nonfinal DoubleBar remains true in exact XML, Go reparse, and pinned consumer and receives no terminal-loss report; final DoubleBar=false receives no terminal-loss report. A multi-bar true/false/true case proves correct report location and that only the final consumer flag changes. Keep existing authority-conflict behavior independently covered.",
+    "Extend the independent oracle with a dedicated raw DoubleBar/bar-line projection or direct scoped facts; the ordinary normalized oracle omits isDoubleBar. Register source, wire, consumer, and policy assertions in the semantic ledger. Update documentation and inventory to replace the prior unsupported equivalence statement; export remains partial."
   ],
   "exclusions": [
-    "Do not remove all final-bar comparisons or normalize every bar line."
+    "Do not erase authored DoubleBar XML to match AlphaTab. No global bar-line normalization, renderer implementation, screenshot requirement, or dependency on global stylesheet #109. No new custom-barline public API or invented retaining syntax."
   ],
   "depends_on": [],
   "reproduction": {
-    "kind": "runtime-candidate",
-    "fixture": "testdata/gp4/Slides.gp4",
-    "capability": "double-bar",
-    "differences": [
-      {
-        "path": "masterBars[1].isDoubleBar",
-        "source": true,
-        "target": null,
-        "source_present": true,
-        "target_present": false
-      }
+    "kind": "source-review",
+    "starting_files": [
+      "testdata/gp4/Slides.gp4",
+      "conformance_measures_test.go",
+      "conformance/oracle.mjs",
+      "gp8_notation.go"
     ],
-    "instructions": "Reproduce via the public Go parser and GP8 exporter, then load original and output with pinned AlphaTab. The observed end-to-end difference alone does not locate the failing stage."
+    "instructions": "Public Parse and ExportWithReport testdata/gp4/Slides.gp4. Read original and exported bytes with pinned ScoreLoader and inspect masterBars[1].isDoubleBar plus tracks[0].staves[0].bars[1].barLineRight/getActualBarLineRight(). Original is true/LightLight/LightLight; target is false/Automatic/LightHeavy. Check the exact DoubleBar XML and Go true independently. For strict-policy isolation, use semanticValidPitchedGP8Song with Notation=true and consistent compatibility flags, set final DoubleBar=true, and inspect the currently empty report before adding the new scoped loss.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -76,9 +74,125 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5625488545",
       "detail": "Reproduce both final and non-final double bars. Assert exact DoubleBar XML and Go reparse before comparing pinned AlphaTab finalization. Show that only the final projected flag is cleared and ordinary non-final double-bar evidence remains exact. Keep the wire flag; never delete authored data just to match a derived consumer projection. Record the consumer-only normalization and the verified tests/commit, then resolve this investigation when its checklist passes. If visual terminal-bar fidelity remains required, name a visual/retaining oracle as separate scope. This does not block #109 global stylesheet keys."
+    },
+    {
+      "kind": "verification",
+      "reference": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^TestConformance(BeatSemantics|OrderedGraceExport|GraceAuthorityAndLoss|HarmonicVariants|HarmonicAuthorityAndValidation|TechniqueDispositions|MasterBars)$' .",
+      "detail": "PASS on baseline in isolated clone (0.230s). Additional temporary TestNotation probes PASS; results below are observations, not committed regression coverage.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1367",
+      "detail": "Pinned parser reads DoubleBar, deliberately clears only the final master flag, and assigns remaining double bars LightLight. Together with original binary LightLight and the resolved terminal Automatic->LightHeavy rule this is a real consumer difference, not proof of equivalence.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1367",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1367"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2686",
+      "detail": "Pinned parser reads DoubleBar, deliberately clears only the final master flag, and assigns remaining double bars LightLight. Together with original binary LightLight and the resolved terminal Automatic->LightHeavy rule this is a real consumer difference, not proof of equivalence.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2686",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L2686"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2753",
+      "detail": "Pinned parser reads DoubleBar, deliberately clears only the final master flag, and assigns remaining double bars LightLight. Together with original binary LightLight and the resolved terminal Automatic->LightHeavy rule this is a real consumer difference, not proof of equivalence.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:2753",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L2753"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_measures_test.go:46",
+      "detail": "Current focused evidence checks nonfinal bar2 and XML. Normalized masterBars oracle omits isDoubleBar; a dedicated terminal consumer assertion remains absent.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance_measures_test.go:126",
+      "detail": "Current focused evidence checks nonfinal bar2 and XML. Normalized masterBars oracle omits isDoubleBar; a dedicated terminal consumer assertion remains absent.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/oracle.mjs:498",
+      "detail": "Current focused evidence checks nonfinal bar2 and XML. Normalized masterBars oracle omits isDoubleBar; a dedicated terminal consumer assertion remains absent.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationDoubleBar (temporary public API + raw pinned-consumer probe)",
+      "detail": "Strict output report empty; three-bar emitted XML and Go values [true,false,true], independently parsed AlphaTab values [true,false,false]. XML was checked with ElementTree on the exported archive. Existing SQLite Slides.gp4 receipt still records terminal source true, target absent.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "runtime-verification",
+      "reference": "TestNotationSlidesDoubleBar plus direct pinned Bar.getActualBarLineRight() probe",
+      "detail": "On baseline8d72944, original Slides.gp4 final bar facts were isDoubleBar=true, requested LightLight, actual LightLight. Go-exported GP8 retained authored XML/Go flag but AlphaTab final facts were false, Automatic, LightHeavy. This disproves the old issue comment that terminal flag clearing is only an equivalent derived projection. Current fixture reports unrelated losses plus compatibility authority; clean authored three-bar probe emits no reports despite terminal flag loss.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:765",
+      "detail": "Legacy importer installs explicit LightLight. GPIF removes final DoubleBar before installing bar line overrides. Bar.getActualBarLineRight returns explicit overrides unchanged but maps final Automatic to LightHeavy, so the original/target line styles differ observably without visual rendering.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/Gp3To5Importer.ts:765",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/Gp3To5Importer.ts#L765"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/model/Bar.ts:421",
+      "detail": "Legacy importer installs explicit LightLight. GPIF removes final DoubleBar before installing bar line overrides. Bar.getActualBarLineRight returns explicit overrides unchanged but maps final Automatic to LightHeavy, so the original/target line styles differ observably without visual rendering.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/model/Bar.ts:421",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L421"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/model/Bar.ts:432",
+      "detail": "Legacy importer installs explicit LightLight. GPIF removes final DoubleBar before installing bar line overrides. Bar.getActualBarLineRight returns explicit overrides unchanged but maps final Automatic to LightHeavy, so the original/target line styles differ observably without visual rendering.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/model/Bar.ts:432",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L432"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/model/Bar.ts:464",
+      "detail": "Legacy importer installs explicit LightLight. GPIF removes final DoubleBar before installing bar line overrides. Bar.getActualBarLineRight returns explicit overrides unchanged but maps final Automatic to LightHeavy, so the original/target line styles differ observably without visual rendering.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/model/Bar.ts:464",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/model/Bar.ts#L464"
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/95#issuecomment-5638814998",
+      "detail": "Add a narrow final-DoubleBar consumer-loss preflight report and strict-policy regression, preserving DoubleBar serialization. The prior issue comment treated clearing as an equivalent derived projection; the pinned consumer itself disproves that premise: Slides.gp4 LightLight changes to LightHeavy after export. Document this correction explicitly instead of retaining an inconsistent no-report contract. Suggested code spelling gp8.omit.double-bar-consumer-terminal; choose a stable project-consistent code before implementation.",
+      "decision": "convert-to-implementation-consumer-loss",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/oracle.mjs",
+    "conformance_measures_test.go",
     "gp8_notation.go"
   ],
   "resolution": null,
@@ -87,6 +201,6 @@
     "number": 95,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/95",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:13.206422+00:00"
   }
 }

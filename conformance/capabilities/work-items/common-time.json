@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "common-time",
   "capability": "common-time",
-  "title": "Determine Guitar Pro support for common and cut time",
-  "kind": "investigation",
+  "title": "Exclude other-format common-time glyphs from the Guitar Pro gap inventory",
+  "kind": "implementation",
   "priority": 3,
   "status": "todo",
   "owner": null,
@@ -20,22 +20,28 @@
     "model",
     "export"
   ],
-  "scope": "Establish whether common/cut-time display flags have an authored representation in supported Guitar Pro versions.",
+  "scope": "Correct the capability/source classification and add an executable regression proving that authored common/cut-time glyphs are outside the pinned Guitar Pro importer scope, while numeric4/4 and2/2 remain normal supported meter.",
   "acceptance": [
-    "Find a valid source fixture and importer/exporter path, or document that the AlphaTab field is populated only by other formats.",
-    "Distinguish numeric 4/4 or 2/2 from an explicitly authored display symbol.",
-    "Record a scoped implementation follow-up only if a supported Guitar Pro source can express the distinction."
+    "Update the common-time capability to an explicit outside-Guitar-Pro scope and out-of-scope stage dispositions. Retain the row and citations; do not relabel it supported or delete the comparison item.",
+    "Correct MasterBar.timeSignatureCommon in the canonical upstream model inventory, currently partial/staff-ownership, to a reviewed exclusion for GP3-GP8. Ensure inventory regeneration preserves the decision.",
+    "Add a focused inventory regression asserting the exact recorded GP scope, out-of-scope model/stage dispositions and supporting references resolving to the pin. Preserve the numeric meter owner. The existing pin/source-hash checks enforce upstream drift; do not substitute a grep-output snapshot for the reviewed importer/writer evidence.",
+    "Keep numeric4/4 and2/2 meter tests and documentation mappings attached to time-signatures; do not infer common/cut glyphs from those values. Resolve the implementation after inventory checks pass."
   ],
   "exclusions": [
-    "Do not infer a notation symbol from a numeric meter."
+    "No public common-time enum/flag or GPIF glyph writer without a valid independently authored Guitar Pro record.",
+    "No claim that other formats lack the feature."
   ],
   "depends_on": [],
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "headers.go"
+      "conformance/capabilities/catalog.json",
+      "conformance/upstream-inventory.json",
+      "conformance/capabilities/test_manage.py",
+      "conformance/sync-upstream-inventory.mjs"
     ],
-    "instructions": "Find a valid source fixture and importer/exporter path, or document that the AlphaTab field is populated only by other formats."
+    "instructions": "Run rg -n 'timeSignatureCommon\\s*=' references/alphaTab/packages/alphatab/src/importer references/alphaTab/packages/alphatab/src/exporter. At the pin only MusicXML, Capella and AlphaTex importer assignments exist. Current catalog nevertheless scope=guitar-pro and all stages=missing; upstream model declaration is partial. This is an inventory defect with executable scope-regression work, not an unproven model feature.",
+    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
   },
   "evidence": [
     {
@@ -60,9 +66,70 @@
       "kind": "review-next-steps",
       "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/110#issuecomment-5625492569",
       "detail": "Record the pinned assignment search showing no GP3-GP8 importer assignment to timeSignatureCommon, with source references for the actual AlphaTex/MusicXML/other-format assignments. Update the capability scope/finding and documentation mapping to distinguish authored common/cut-time glyphs from ordinary numeric 4/4 and 2/2. Keep numeric time-signature tests intact. Resolve the investigation after the scoped exclusion and references are reviewed. Add an implementation ticket only if a real Guitar Pro fixture demonstrates a distinct authored glyph record and retaining consumer."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/catalog.json:462",
+      "detail": "common-time is currently counted as guitar-pro missing across three stages.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/upstream-inventory.json:1720",
+      "detail": "timeSignatureCommon currently has generic partial disposition.",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/MusicXmlImporter.ts:1960",
+      "detail": "Actual authored common-time assignment.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/MusicXmlImporter.ts:1960",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/MusicXmlImporter.ts#L1960"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/CapellaParser.ts:486",
+      "detail": "Capella common/cut-time assignments; AlphaTex1LanguageHandler.ts641 is another source.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/CapellaParser.ts:486",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/CapellaParser.ts#L486"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1359",
+      "detail": "GPIF Time parses only numeric numerator/denominator.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/importer/GpifParser.ts:1359",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/importer/GpifParser.ts#L1359"
+    },
+    {
+      "kind": "upstream-source",
+      "reference": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:1614",
+      "detail": "GPIF Time serialization is numeric.",
+      "reviewed_commit": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "symbol": "references/alphaTab/packages/alphatab/src/exporter/GpifWriter.ts:1614",
+      "url": "https://github.com/CoderLine/alphaTab/blob/022a45c8e42370f9e12e68949d11eada370da83d/packages/alphatab/src/exporter/GpifWriter.ts#L1614"
+    },
+    {
+      "kind": "experiment",
+      "detail": "Pinned assignment search returned no GP3To5Importer/GpifParser/GpifWriter assignment; actual assignments were MusicXmlImporter1960,CapellaParser460/486/491/498/547/638 and AlphaTex1LanguageHandler641. Existing upstream ownership has no model review for this declaration, and no focused capability exclusion regression exists."
+    },
+    {
+      "kind": "actionability-review",
+      "reference": "https://github.com/CaliLuke/go-guitar-pro/issues/110#issuecomment-5638821594",
+      "detail": "The investigation question has a proven answer. Convert to concrete inventory classification and regression work; do not leave a perpetual search for a nonexistent pinned GP flag or manufacture a public feature.",
+      "decision": "confirmed-inventory-defect",
+      "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f",
+      "oracle_revision": "022a45c8e42370f9e12e68949d11eada370da83d",
+      "reviewed_at": "2026-09-11"
     }
   ],
   "shared_files": [
+    "conformance/capabilities/catalog.json",
+    "conformance/capabilities/test_manage.py",
+    "conformance/sync-upstream-inventory.mjs",
+    "conformance/upstream-inventory.json",
     "headers.go"
   ],
   "resolution": null,
@@ -71,6 +138,6 @@
     "number": 110,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/110",
     "state": "OPEN",
-    "checked_at": "2026-09-10T21:05:35.814214+00:00"
+    "checked_at": "2026-09-11T18:15:47.979060+00:00"
   }
 }
