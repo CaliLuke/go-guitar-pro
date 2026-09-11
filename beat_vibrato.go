@@ -17,25 +17,7 @@ func (effect BeatEffects) resolvedVibrato() (BeatVibrato, bool) {
 	if effect.Vibrato {
 		legacy = BeatVibratoSlight
 	}
-	if !effect.hasImportedVibrato {
-		if effect.VibratoStrength != BeatVibratoNone {
-			return effect.VibratoStrength, false
-		}
-		return legacy, false
-	}
-
-	typedChanged := effect.VibratoStrength != effect.importedVibratoStrength
-	legacyChanged := effect.Vibrato != effect.importedVibrato
-	switch {
-	case typedChanged && !legacyChanged:
-		return effect.VibratoStrength, false
-	case legacyChanged && !typedChanged:
-		return legacy, false
-	case typedChanged && legacyChanged:
-		return effect.VibratoStrength, effect.VibratoStrength != legacy
-	default:
-		return effect.importedVibratoStrength, false
-	}
+	return resolveImportedEffectValue(effect.VibratoStrength, legacy, effect.importedVibratoStrength, effect.importedVibrato, effect.Vibrato, effect.hasImportedVibrato)
 }
 
 func gp8BeatVibratoStrength(strength BeatVibrato) string {

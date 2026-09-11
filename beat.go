@@ -63,9 +63,15 @@ type BeatEffects struct {
 	Stroke         BeatStroke
 	HasRasgueado   bool
 	PickStroke     BeatStrokeDirection
-	FadeIn         bool
-	Hairpin        Hairpin
-	SlapEffect     SlapEffect
+	// Fade is the typed authored fade view. For a programmatic score, a
+	// nonzero value is authoritative and FadeIn=true is the legacy fallback.
+	// On an imported beat, editing only one view makes that view authoritative;
+	// when both are edited incompatibly, Fade wins and GP8 export reports the
+	// conflict. Export and validation do not mutate either view.
+	Fade       BeatFade
+	FadeIn     bool
+	Hairpin    Hairpin
+	SlapEffect SlapEffect
 	// VibratoStrength is the typed beat-wide vibrato view. For a programmatic
 	// score, a nonzero strength is authoritative and Vibrato=true is the legacy
 	// Slight fallback. On an imported beat, editing only one view makes that view
@@ -78,6 +84,9 @@ type BeatEffects struct {
 	importedVibratoStrength BeatVibrato
 	importedVibrato         bool
 	hasImportedVibrato      bool
+	importedFade            BeatFade
+	importedFadeIn          bool
+	hasImportedFade         bool
 }
 
 // Beat contains multiple notes.
@@ -325,7 +334,10 @@ func (s *Song) readBeatEffectsV3(c *cursor, noteEffect *NoteEffect) (BeatEffects
 	if flags&0x03 != 0 {
 		be.setImportedVibrato(BeatVibratoSlight)
 	}
-	be.FadeIn = (flags & 0x10) == 0x10
+	be.setImportedFade(BeatFadeNone)
+	if (flags & 0x10) == 0x10 {
+		be.setImportedFade(BeatFadeIn)
+	}
 	if (flags & 0x20) == 0x20 {
 		slapByte, err := c.readByte()
 		if err != nil {
@@ -373,7 +385,10 @@ func (s *Song) readBeatEffectsV4(c *cursor) (BeatEffects, error) {
 	if (flags1 & 0x02) == 0x02 {
 		be.setImportedVibrato(BeatVibratoSlight)
 	}
-	be.FadeIn = (flags1 & 0x10) == 0x10
+	be.setImportedFade(BeatFadeNone)
+	if (flags1 & 0x10) == 0x10 {
+		be.setImportedFade(BeatFadeIn)
+	}
 	if (flags1 & 0x20) == 0x20 {
 		slapByte, err := c.readSignedByte()
 		if err != nil {

@@ -800,6 +800,9 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 	if _, conflict := beat.Effect.resolvedVibrato(); conflict {
 		builder.addReport("gp8.normalize.beat-vibrato-authority", "beat-vibrato", ExportDispositionNormalized, location, "the typed beat vibrato takes precedence after incompatible edits to both typed and legacy views")
 	}
+	if _, conflict := beat.Effect.resolvedFade(); conflict {
+		builder.addReport("gp8.normalize.fade-authority", "fade-other", ExportDispositionNormalized, location, "the typed beat fade takes precedence after incompatible edits to both typed and legacy views")
+	}
 	stroke := beat.Effect.Stroke.resolved()
 	if stroke.conflict {
 		builder.addReport("gp8.normalize.stroke-duration-authority", "brush", ExportDispositionNormalized, location, "the edited compatibility duration takes precedence over conflicting exact brush timing")

@@ -168,7 +168,7 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	doc := gpifDocument{
 		Tracks: gpifTracks{Tracks: []gpifTrack{track}},
 		Beats: gpifBeats{Beats: []gpifBeat{{
-			ID: "beat-id", Tremolo: "future-rate", Wah: "Open", Fadding: "FadeOut",
+			ID: "beat-id", Tremolo: "future-rate", Wah: "Open", Fadding: "FutureFade",
 			Properties: gpifProperties{Properties: []gpifProperty{{Name: "FutureBeatProperty"}}},
 		}}},
 		Notes: gpifNotes{Notes: []gpifNote{{
@@ -180,7 +180,7 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	run.Wire("gpifBeat.Tremolo", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Tremolo.InvalidValue") != nil, true)
 	run.Wire("gpifBeat.Wah", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Wah") != nil, true)
 	run.Wire("gpifInstrument.Ref", doc.Tracks.Tracks[0].isPercussionTrack(), true)
-	run.ClaimPrimary(claimSite("strict-policy", "import", "M20-BEHAVIOR-RECONCILIATION", "unsupported tremolo, wah, fade, and transpose")).Dispatch("gpifAuditDiagnostics:beat.Fadding", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Fadding.Lossy") != nil, true)
+	run.ClaimPrimary(claimSite("strict-policy", "import", "M20-BEHAVIOR-RECONCILIATION", "unsupported tremolo, wah, fade, and transpose")).Dispatch("gpifAuditDiagnostics:beat.Fadding", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Fadding.InvalidValue") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:property.Name", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Note.Property.Element") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:track.AudioEngineState", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Track.AudioEngineState.InvalidValue") != nil, true)
 

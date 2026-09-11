@@ -377,7 +377,7 @@ attributes. The pinned consumer retains origins and derives each destination
 from the preceding origin, so exact wire and Go reimport checks cover a
 destination that begins before an excerpt.
 
-GP8 preserves fade-in, hairpin, octave, stroke kind and direction, and integral
+GP8 preserves every beat fade, hairpin, octave, stroke kind and direction, and integral
 exact stroke timing from 0 through 2147483647 ticks. `BeatStroke.Duration` is a
 note-value-denominator compatibility view, while `ExactDuration` retains the
 authored tick value and source absence. Imported exact timing owns export until
@@ -385,6 +385,16 @@ authored tick value and source absence. Imported exact timing owns export until
 Fractional or larger exact values receive a scoped omission report. GP8 also
 reports rasgueado, pick stroke, and slap effects because the writer does not
 emit them.
+
+`BeatEffects.Fade` preserves `None`, `FadeIn`, `FadeOut`, and `VolumeSwell`.
+Binary GP3 through GP5 presence maps to `FadeIn`. Those formats cannot author
+the other variants. For a programmatic score, a nonzero typed fade is
+authoritative and a true legacy `BeatEffects.FadeIn` falls back to `FadeIn`.
+For an imported beat, editing only one view makes that view authoritative,
+including clearing it. If both views are edited incompatibly, the typed value
+wins and GP8 export reports the conflict. Reconciliation does not mutate the
+public model. Fade values are notation marks only; dynamics, hairpins,
+mix-table volume, playback automation, and envelope timing are independent.
 
 `BeatEffects.VibratoStrength` preserves the beat-wide whammy-bar vibrato as
 `Slight` or `Wide`, independently from note vibrato. Binary GP3 through GP5

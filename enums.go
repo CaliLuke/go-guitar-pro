@@ -97,6 +97,17 @@ const (
 	BeatVibratoWide   BeatVibrato = 2
 )
 
+// BeatFade identifies the authored volume-envelope mark on a beat.
+type BeatFade uint8
+
+// Beat fade values preserve every GPIF Fadding spelling.
+const (
+	BeatFadeNone        BeatFade = 0
+	BeatFadeIn          BeatFade = 1
+	BeatFadeOut         BeatFade = 2
+	BeatFadeVolumeSwell BeatFade = 3
+)
+
 // BeatStrokeKind identifies whether a multi-string stroke is a brush or an arpeggio.
 type BeatStrokeKind uint8
 

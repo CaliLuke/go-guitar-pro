@@ -7419,14 +7419,6 @@
       ],
       "diagnostics": [
         {
-          "code": "GPIF.Beat.Fadding.Lossy",
-          "kind": "lossy-projection",
-          "count": 2,
-          "sourcePath": "/GPIF/Beats/Beat[@id=\"0\"]/Fadding",
-          "objectId": "0",
-          "locationsSha256": "00314a63ecdd39f8c578e3e7c76b093ccca0d7fdcde43995656b514a33b323b0"
-        },
-        {
           "code": "GPIF.Beat.Property.PrimaryPickupTone",
           "kind": "deliberate-ignore",
           "count": 3,

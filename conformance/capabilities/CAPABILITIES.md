@@ -14,15 +14,15 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 68 | 16 | 15 | 2 |
-| model | 67 | 17 | 16 | 1 |
-| export | 45 | 23 | 30 | 3 |
+| import | 69 | 16 | 14 | 2 |
+| model | 68 | 17 | 15 | 1 |
+| export | 46 | 23 | 29 | 3 |
 
-All three stages have a supported rating in 45 rows. This is a checklist count, not a percentage of all musical behavior.
+All three stages have a supported rating in 46 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 364 input files. Probe freshness against the current source: `false`.
+The receipt contains 364 input files. Probe freshness against the current source: `true`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -52,7 +52,6 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Authored timer marks | 2 | 355 | 2 | 0 | 7 |
 | Golpe thumb and finger marks | 2 | 355 | 2 | 0 | 7 |
 | Explicit note string-number display | 1 | 356 | 1 | 0 | 7 |
-| Fade out and volume swell | 1 | 356 | 1 | 0 | 7 |
 | Pan and balance automation events | 1 | 356 | 1 | 0 | 7 |
 | Rasgueado patterns | 1 | 356 | 1 | 0 | 7 |
 | Turns and mordents | 1 | 356 | 1 | 0 | 7 |
@@ -64,6 +63,7 @@ Raw consumer differences require review. Default-only cases do not prove feature
 | Common-time and cut-time notation | 0 | 357 | 0 | 0 | 7 |
 | Dead-slapped beats | 2 | 355 | 0 | 0 | 7 |
 | Fade in | 17 | 343 | 0 | 0 | 7 |
+| Fade out and volume swell | 1 | 356 | 0 | 0 | 7 |
 | Fermata placement, kind and length | 4 | 353 | 0 | 0 | 7 |
 | Free-time bars | 1 | 356 | 0 | 0 | 7 |
 | Key signatures and key mode spelling | 44 | 315 | 0 | 0 | 7 |
@@ -269,19 +269,19 @@ Expression. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro
 
 Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Fade-in is preserved. Fade-out and volume swell require a richer public model.
+Fade-in is preserved through the typed BeatEffects.Fade authority and the legacy FadeIn compatibility view.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep binary fade-in presence and GPIF FadeIn exact through import, compatibility edits, and GP8 export.
 
 ### fade-other: Fade out and volume swell
 
 Expression. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **supported**. Model: **supported**. GP8 export: **supported**.
 
-Only a FadeIn boolean is exposed. Other GPIF Fadding variants produce lossy-projection diagnostics and disappear.
+BeatEffects.Fade preserves None, FadeIn, FadeOut, and VolumeSwell exactly. FadeIn remains an explicit compatibility view.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Keep every GPIF Fadding value exact through import, public edits, validation, GP8 output, reimport, and pinned AlphaTab consumption.
 
 Bounded work: [Preserve fade-out and volume-swell beat effects](https://github.com/CaliLuke/go-guitar-pro/issues/81).
 

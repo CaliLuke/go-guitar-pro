@@ -444,7 +444,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 										beat.Duration = duration
 									}
 
-									beat.Effect.FadeIn = b.Fadding == "FadeIn"
+									beat.Effect.setImportedFade(gpifBeatFade(b.Fadding))
 									beat.Effect.Hairpin = gpifHairpin(b.Hairpin)
 									gpifApplyBeatEffects(b, &beat)
 									gpifApplyBeaming(b, &beat)

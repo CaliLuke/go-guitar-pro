@@ -5,8 +5,8 @@
   "title": "Preserve fade-out and volume-swell beat effects",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "implement_ticket_81_fade",
   "formats": [
     "gp6",
     "gp7",
@@ -23,7 +23,13 @@
     "A post-parse change from fade-out to swell exports as the exact target variant.",
     "Unknown source and authored enum values are diagnosed; the existing fade-in case remains supported."
   ],
-  "exclusions": [],
+  "exclusions": [
+    "dynamics and hairpins",
+    "MIDI and mix-table volume",
+    "automations and playback",
+    "envelope points, timing, and interpolation",
+    "GP3 through GP5 FadeOut or VolumeSwell source claims"
+  ],
   "depends_on": [],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -83,7 +89,27 @@
     {
       "kind": "source",
       "reference": "gpif_parser.go",
-      "detail": "Reviewed implementation or documented contract."
+      "detail": "Maps each valid Fadding token into the typed public fade authority and import baseline."
+    },
+    {
+      "kind": "source",
+      "reference": "beat_fade.go",
+      "detail": "Resolves typed and legacy values after import without mutating the public score."
+    },
+    {
+      "kind": "field",
+      "reference": "BeatEffects.Fade",
+      "detail": "Typed public authority for all four fade values."
+    },
+    {
+      "kind": "test",
+      "reference": "TestConformanceBeatFade",
+      "detail": "Covers GP3-8 import, all enum values, edits, exact output, reimport, validation, diagnostics, strict policy, and read-only behavior."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPreservesBeatFade",
+      "detail": "Pinned AlphaTab verifies the real GP7 fixture and a FadeOut-to-VolumeSwell public edit."
     },
     {
       "kind": "probe",
@@ -95,7 +121,7 @@
     "gpif_audit.go",
     "gpif_parser.go"
   ],
-  "resolution": null,
+  "resolution": "Added BeatFade None, FadeIn, FadeOut, and VolumeSwell. BeatEffects.Fade is the typed authority, and FadeIn remains a compatibility view. GP3-5 fade presence imports as FadeIn. GPIF preserves every valid Fadding token and reports only unknown values. Programmatic nonzero typed values win while legacy true falls back to FadeIn. Imported beats track both source views. Either single-side edit wins, and compatible double edits remain exact. Only incompatible double edits receive gp8.normalize.fade-authority with typed precedence. GP8 emits the resolved exact token without model changes. M10-FADE covers actual GP3-5 Effects and the GP7 fade fixture. It covers all enum values, all compatibility edits, exact output, reimport, validation, and strict policy. Pinned AlphaTab checks source and output facts, including a FadeOut-to-VolumeSwell edit. The probe retained the same 364-fixture set. Only testdata/gp7/fade.gp:fade-other changed, from 3/0 different to 3/3 equal-nondefault. The obsolete two-occurrence Fadding lossy diagnostic was removed. No other capability comparison changed. Dynamics, hairpins, volume controls, automation, playback, and envelope shape remain outside this contract.",
   "verification": [],
   "issue": {
     "number": 81,

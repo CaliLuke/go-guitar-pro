@@ -712,6 +712,16 @@ const mutations = [
     want: 'gpifProperty.Strength'
   },
   {
+    id: 'beat-fade-volume-swell-wire',
+    contract: 'beat-fade-preservation',
+    category: 'serialization',
+    file: 'beat_fade.go',
+    before: '\tcase BeatFadeVolumeSwell:\n\t\treturn "VolumeSwell"\n',
+    after: '\tcase BeatFadeVolumeSwell:\n\t\treturn "FadeOut"\n',
+    test: '^TestConformanceBeatFade$',
+    want: 'gpifBeat.Fadding'
+  },
+  {
     id: 'dead-slap-import-drop',
     contract: 'dead-slap-preservation',
     category: 'import',

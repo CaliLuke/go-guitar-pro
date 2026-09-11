@@ -84,9 +84,9 @@ func conformanceResilienceAssertParseDiagnosticEnums(run *conformanceRun) {
 		},
 		{
 			member: "ParseDiagnosticLossyProjection", kind: ParseDiagnosticLossyProjection,
-			code: "GPIF.Beat.Fadding.Lossy", defaultReject: true,
+			code: "GPIF.Note.Property.HopoDestination", defaultReject: true,
 			mutate: func(source string) string {
-				return insertFirstGPIFObjectChild(t, source, "<Beats>", "</Beat>", "<Fadding>FadeOut</Fadding>")
+				return insertFirstNoteProperty(t, source, `<Property name="HopoDestination"><Enable>true</Enable></Property>`)
 			},
 		},
 		{

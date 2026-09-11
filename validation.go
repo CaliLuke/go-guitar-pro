@@ -402,6 +402,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 			if beat.Effect.VibratoStrength > BeatVibratoWide {
 				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.vibrato", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat vibrato %d is not defined", beat.Effect.VibratoStrength)})
 			}
+			if beat.Effect.Fade > BeatFadeVolumeSwell {
+				*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.fade", Kind: ScoreDiagnosticValue, Location: location, Reason: fmt.Sprintf("beat fade %d is not defined", beat.Effect.Fade)})
+			}
 			if tremolo, _ := beat.resolvedTremoloPicking(); tremolo != nil {
 				if _, err := tremolo.Duration.MusicalDuration(); err != nil {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.beat.tremolo-picking-duration", Kind: ScoreDiagnosticValue, Location: location, Reason: err.Error()})

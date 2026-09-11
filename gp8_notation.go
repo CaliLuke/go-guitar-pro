@@ -283,8 +283,8 @@ func (builder *gp8Builder) addBeat(trackIndex int, staffStrings []GuitarString, 
 	if beat.Effect.Chord != nil {
 		result.Chord = builder.chordIDs[trackIndex][beat.Effect.Chord]
 	}
-	if beat.Effect.FadeIn {
-		result.Fadding = "FadeIn"
+	if fade := gp8BeatFadeValue(beat.Effect); fade != "" {
+		result.Fadding = fade
 	}
 	if tremolo, _ := beat.resolvedTremoloPicking(); tremolo != nil {
 		result.Tremolo, _ = gp8TremoloPickingValue(tremolo)

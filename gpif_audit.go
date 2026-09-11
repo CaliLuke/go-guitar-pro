@@ -319,13 +319,7 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 			})
 		}
 		switch beat.Fadding {
-		case "", "FadeIn":
-		case "FadeOut", "VolumeSwell":
-			context.add(diagnosticSource("GPIF.Beat.Fadding.Lossy", "note-and-beat-semantics", ParseDiagnosticLossyProjection), ParseDiagnostic{
-				Kind: ParseDiagnosticLossyProjection, SourcePath: path + "/Fadding", ObjectID: beat.ID,
-				Location: ParseLocation{BeatID: beat.ID}, Feature: "note-and-beat-semantics",
-				Reason: "Song combines fade-out and volume-swell values into FadeIn",
-			})
+		case "", "FadeIn", "FadeOut", "VolumeSwell":
 		default:
 			gpifAuditEnum(context, diagnosticSource("GPIF.Beat.Fadding.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), beat.Fadding, []string{"", "FadeIn", "FadeOut", "VolumeSwell"}, path+"/Fadding", beat.ID, "note-and-beat-semantics")
 		}

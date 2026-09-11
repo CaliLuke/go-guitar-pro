@@ -2625,8 +2625,8 @@
         "model": "supported",
         "export": "supported"
       },
-      "finding": "Fade-in is preserved. Fade-out and volume swell require a richer public model.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "Fade-in is preserved through the typed BeatEffects.Fade authority and the legacy FadeIn compatibility view.",
+      "acceptance": "Keep binary fade-in presence and GPIF FadeIn exact through import, compatibility edits, and GP8 export.",
       "upstream": [
         "Beat.fadeIn"
       ],
@@ -2648,8 +2648,8 @@
         },
         {
           "kind": "test",
-          "reference": "TestConformanceBeatEffects",
-          "detail": "Existing scoped evidence; not proof of all AlphaTab variants."
+          "reference": "TestConformanceBeatFade",
+          "detail": "Binary and GPIF fade-in behavior remains exact through typed and legacy views."
         }
       ]
     },
@@ -2665,12 +2665,12 @@
         "gp8"
       ],
       "stages": {
-        "import": "missing",
-        "model": "missing",
-        "export": "missing"
+        "import": "supported",
+        "model": "supported",
+        "export": "supported"
       },
-      "finding": "Only a FadeIn boolean is exposed. Other GPIF Fadding variants produce lossy-projection diagnostics and disappear.",
-      "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
+      "finding": "BeatEffects.Fade preserves None, FadeIn, FadeOut, and VolumeSwell exactly. FadeIn remains an explicit compatibility view.",
+      "acceptance": "Keep every GPIF Fadding value exact through import, public edits, validation, GP8 output, reimport, and pinned AlphaTab consumption.",
       "upstream": [
         "Beat.fade",
         "FadeType.*"
@@ -2685,6 +2685,16 @@
           "kind": "source",
           "reference": "gpif_parser.go",
           "detail": "Reviewed implementation or documented contract."
+        },
+        {
+          "kind": "field",
+          "reference": "BeatEffects.Fade",
+          "detail": "Typed public authority with documented FadeIn compatibility reconciliation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestConformanceBeatFade",
+          "detail": "M10-FADE covers all values, edits, malformed input, exact wire output, and reimport."
         },
         {
           "kind": "probe",
