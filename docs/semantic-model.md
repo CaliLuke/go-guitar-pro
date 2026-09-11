@@ -1066,7 +1066,9 @@ capo, transpositions, and octave marks remain unchanged. A change to any of
 those values invalidates the receipt. Export then derives spelling from the
 edited numeric context and validates the requested accidental. Clearing the
 mode removes the preference. Reimport retains the original context across
-successive exports. Malformed pitch syntax, contradictory concert pitch, and
+successive exports. Derived spellings must use GPIF octaves -1 through 11.
+Validation rejects an out-of-range written octave before serialization.
+Malformed pitch syntax, contradictory concert pitch, and
 unsubstantiated transposed-only pitch contradictions remain invalid source data.
 
 `Song.SystemLayout` and `Track.SystemLayout` retain independent authored system counts.

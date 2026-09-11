@@ -87,7 +87,11 @@ func spelledPitch(midi int64, mode NoteAccidentalMode) (gpifPitch, bool) {
 	if !valid {
 		return gpifPitch{}, false
 	}
-	return gpifPitch{Step: step, Accidental: &token, Octave: int((natural - chroma) / 12)}, true
+	octave := (natural - chroma) / 12
+	if octave < -1 || octave > 11 {
+		return gpifPitch{}, false
+	}
+	return gpifPitch{Step: step, Accidental: &token, Octave: int(octave)}, true
 }
 
 func octavePitch(octave Octave) int64 {
@@ -212,6 +216,6 @@ func validateNoteAccidental(staff *Staff, measure *Measure, beat *Beat, note *No
 		return
 	}
 	if _, valid := spelledPitch(writtenNoteMIDI(staff, measure, beat, note), note.AccidentalMode); !valid {
-		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.accidental-pitch", Kind: ScoreDiagnosticValue, Location: location, Reason: "authored accidental contradicts the written numeric pitch"})
+		*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.accidental-pitch", Kind: ScoreDiagnosticValue, Location: location, Reason: "authored accidental cannot spell the written numeric pitch within GPIF octave bounds"})
 	}
 }

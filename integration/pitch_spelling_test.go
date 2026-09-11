@@ -145,3 +145,32 @@ func TestGP8AccidentalSwapPolicy(t *testing.T) {
 		}
 	}
 }
+
+func TestGP8AccidentalWrittenPitchBounds(t *testing.T) {
+	for _, offset := range []int32{-96, -84, -72, 72, 84, 96} {
+		song := accidentalPublicSong(t)
+		song.Tracks[0].Staves[0].DisplayTranspositionPitch = offset
+		for i := range song.Tracks[0].Measures[0].Voices[0].Beats[1].Notes {
+			song.Tracks[0].Measures[0].Voices[0].Beats[1].Notes[i].Velocity = 47
+		}
+		note := &song.Tracks[0].Measures[0].Voices[0].Beats[1].Notes[0]
+		note.String, note.Value, note.AccidentalMode = 1, 0, gp.NoteAccidentalNatural
+		before := *note
+		valid := offset == -72 || offset == 72
+		diagnostics := gp.ValidateSong(song)
+		data, _, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
+		if valid {
+			if len(diagnostics) != 0 || err != nil {
+				t.Fatalf("boundary offset %d: %v, %v", offset, diagnostics, err)
+			}
+			if _, err := gp.ParseWithOptions(data, gp.ParseOptions{Strict: true, StrictKinds: []gp.ParseDiagnosticKind{gp.ParseDiagnosticInvalidData}}); err != nil {
+				t.Fatalf("boundary offset %d emits invalid pitch: %v", offset, err)
+			}
+		} else if len(diagnostics) != 1 || diagnostics[0].Code != "score.note.accidental-pitch" || diagnostics[0].Location.Beat != 1 || diagnostics[0].Location.Note != 0 || err == nil || len(data) != 0 {
+			t.Fatalf("invalid offset %d accepted: %v, %v", offset, diagnostics, err)
+		}
+		if !reflect.DeepEqual(before, *note) || song.Tracks[0].Staves[0].DisplayTranspositionPitch != offset {
+			t.Fatal("validation or export changed authored pitch")
+		}
+	}
+}

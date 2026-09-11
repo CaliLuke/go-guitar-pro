@@ -42,6 +42,7 @@ func accidentalSong(t *testing.T, mode NoteAccidentalMode, midi int16) *Song {
 }
 func TestConformancePitchSpelling(t *testing.T) { runConformancePitchSpelling(newConformanceRun(t)) }
 func runConformancePitchSpelling(run *conformanceRun) {
+	assertPitchSpellingBounds(run)
 	t := run.t
 	for _, test := range accidentalCases() {
 		song := accidentalSong(t, test.mode, test.midi)
@@ -526,4 +527,30 @@ func runConformancePitchSourceContext(run *conformanceRun) {
 	run.Wire("gpifPitch.Step", []string{values["ConcertPitch"].Step, values["TransposedPitch"].Step}, []string{"D", "F"})
 	run.Wire("gpifPitch.Accidental", []string{*values["ConcertPitch"].Accidental, *values["TransposedPitch"].Accidental}, []string{"#", ""})
 	run.Wire("gpifPitch.Octave", []int{values["ConcertPitch"].Octave, values["TransposedPitch"].Octave}, []int{5, 6})
+}
+
+func assertPitchSpellingBounds(run *conformanceRun) {
+	for _, offset := range []int32{-72, 72} {
+		song := accidentalSong(run.t, NoteAccidentalNatural, 60)
+		song.Tracks[0].Staves[0].DisplayTranspositionPitch = offset
+		data, _ := assertConsumerLossPolicy(run.t, song, []string{})
+		doc := conformanceWireDocument(run.t, data)
+		for _, property := range doc.Notes.Notes[0].Properties.Properties {
+			if property.Name == "TransposedPitch" {
+				run.Wire("gpifPitch.Octave", property.Pitch.Octave, int((60-offset)/12))
+			}
+		}
+		parsed, err := ParseWithOptions(data, ParseOptions{Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticInvalidData}})
+		if err != nil {
+			run.t.Fatal(err)
+		}
+		run.Preserved("Note.AccidentalMode", parsed.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode, NoteAccidentalNatural)
+		if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+			var facts []accidentalFact
+			readAlphaTabOracleFacts(run.t, "--accidental-facts", writeConformanceFixture(run.t, data), &facts)
+			if len(facts) != 1 || facts[0].Mode != 2 || facts[0].MIDI != 60 || facts[0].Display != int(60-offset) {
+				run.t.Fatalf("boundary raw facts: %#v", facts)
+			}
+		}
+	}
 }

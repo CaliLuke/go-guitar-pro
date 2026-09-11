@@ -1168,6 +1168,7 @@
           "TransposedPitch precedence in either property order",
           "typed edits and clearing independent of legacy SwapAccidentals",
           "invalid modes and accidental/pitch contradictions",
+          "written octave -1 and 11 preserve exact consumer pitch; octaves -3, -2, 12 and 13 reject before export",
           "display offset context and narrow unsupported-context omissions"
         ],
         "oracle": "Exact GPIF Step/Accidental/Octave, public typed-mode edits and validation, and pinned raw accidentalMode plus sounding and display pitch. The original GP5 No Wah first note keeps automatic mode0.",
