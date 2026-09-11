@@ -19,6 +19,9 @@ type gp8Builder struct {
 	chordIDs           []map[*Chord]string
 	articulationIDs    []map[int16]int
 	percussionElements [][]gpifElement
+	spellingStaff      *Staff
+	spellingMeasure    *Measure
+	spellingBeat       *Beat
 	report             *ExportReport
 }
 
@@ -751,6 +754,7 @@ func (builder *gp8Builder) buildScoreGraph() error {
 					beatIDs := make([]string, 0, len(voice.Beats))
 					for beatIndex := range voice.Beats {
 						location := ScoreLocation{Track: trackIndex, Staff: staffIndex, Measure: measureIndex, Voice: voiceIndex, Beat: beatIndex}
+						builder.spellingStaff, builder.spellingMeasure, builder.spellingBeat = staff, measure, &voice.Beats[beatIndex]
 						builder.reportBeatConversion(&voice.Beats[beatIndex], location)
 						graceIDs, err := builder.addGraceBeats(trackIndex, staff.Strings, &voice.Beats[beatIndex])
 						if err != nil {
@@ -883,6 +887,11 @@ func (builder *gp8Builder) reportBeatConversion(beat *Beat, location ScoreLocati
 }
 
 func (builder *gp8Builder) reportNoteConversion(note *Note, location ScoreLocation) {
+	if note.AccidentalMode != NoteAccidentalDefault && builder.spellingStaff != nil {
+		if reason := accidentalContextLimit(builder.spellingStaff, note); reason != "" {
+			builder.addReport("gp8.omit.note-accidental-context", "note-and-beat-semantics", ExportDispositionOmitted, location, reason)
+		}
+	}
 	if note.SwapAccidentals {
 		builder.addReport("gp8.omit.swap-accidentals", "note-and-beat-semantics", ExportDispositionOmitted, location, "GP8 writer does not emit the legacy accidental-swap preference")
 	}

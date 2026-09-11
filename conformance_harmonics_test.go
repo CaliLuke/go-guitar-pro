@@ -231,7 +231,7 @@ func runConformanceGPIFCompatibilityAndDiagnostics(run *conformanceRun) {
 	} {
 		t.Run(test.source, func(t *testing.T) {
 			context := &parseContext{format: "GPIF"}
-			gpifAuditNoteProperty(context, "n1", `/GPIF/Notes/Note[@id="n1"]`, gpifProperty{Name: "HarmonicType", HType: &test.source}, nil)
+			gpifAuditNoteProperty(context, "n1", `/GPIF/Notes/Note[@id="n1"]`, gpifProperty{Name: "HarmonicType", HType: &test.source})
 			gotDisposition := "preserved"
 			wantDisposition := "preserved"
 			if len(context.diagnostics) != 0 {

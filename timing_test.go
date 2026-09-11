@@ -105,7 +105,7 @@ func TestTimingDoesNotAdvanceOrphanGraceBeat(t *testing.T) {
 	orphans := gpifApplyPendingGrace(
 		&target,
 		[]gpifPendingGrace{{beat: grace}},
-		false,
+		false, nil,
 	)
 	if len(orphans) != 1 || !orphans[0].isGrace {
 		t.Fatalf("orphan grace beats = %#v, want one timing-marked grace beat", orphans)

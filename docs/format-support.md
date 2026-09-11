@@ -70,8 +70,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.BendNumber.Quantized` | `note-and-beat-semantics` | `lossy-projection` | Note bend heights still use a narrower integer semitone scale; exact note offsets are preserved separately. |
 | `GPIF.Beat.Whammy.Invalid` | `note-and-beat-semantics` | `invalid-data` | A whammy number must be finite and inside the public curve range. |
 | `GPIF.Beat.Whammy.Quantized` | `note-and-beat-semantics` | `lossy-projection` | The public whammy curve uses a narrower integer scale. |
-| `GPIF.Note.Property.ConcertPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
-| `GPIF.Note.Property.TransposedPitch.Redundant` | `note-and-beat-semantics` | `deliberate-ignore` | The pitch agrees with the mapped absolute MIDI value. |
 | `GPIF.Chord.Diagram.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Staff.Property.CapoFret.MissingFret` | `staff-ownership` | `invalid-data` | A capo property needs an explicit fret value. |
 | `GPIF.Staff.Property.CapoFret.Negative` | `staff-ownership` | `invalid-data` | A capo fret cannot be negative. |
@@ -174,7 +172,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.BendMiddleValue.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendOriginOffset.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendOriginValue.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
-| `GPIF.Note.Property.ConcertPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Element` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Fret.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicFret.Invalid` | `harmonics` | `invalid-data` | A harmonic fret must be finite and within the public harmonic-fret range. |
@@ -187,7 +184,6 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.Slide.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.String.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.Tone` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
-| `GPIF.Note.Property.TransposedPitch` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
 | `GPIF.Note.Property.Variation` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.LeftFingering.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source left-hand fingering token is not one of P, I, M, A, or C. |
@@ -235,6 +231,9 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Chord.Diagram.Property.ShowName` | `note-and-beat-semantics` | `invalid-data` | Chord visibility properties require a literal true or false value. |
 | `GPIF.Beat.Timer.InvalidValue` | `note-and-beat-semantics` | `invalid-data` | Timer values must be empty, -1, or an integer in the supported nonnegative safe range. |
 | `GPIF.Beat.Timer.GraceUnsupported` | `grace-relationships` | `unsupported-feature` | The grace-note model has no beat timer destination; strict source import rejects the loss. |
+| `GPIF.Note.Pitch.Authority` | `note-and-beat-semantics` | `lossy-projection` | TransposedPitch takes precedence over a distinct ConcertPitch accidental mode. |
+| `GPIF.Note.Pitch.Context` | `note-and-beat-semantics` | `unsupported-feature` | The note spelling has a contextual distinction outside the compact accidental-mode representation. |
+| `GPIF.Note.Pitch.Invalid` | `note-and-beat-semantics` | `invalid-data` | Pitch syntax or authored step/accidental/octave contradicts its numeric note context. |
 
 ## Public model inventory
 
@@ -294,7 +293,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Barre` | `note-and-beat-semantics` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The barre contains authored chord fingering data. |
 | `PanAutomation` | `score-core` | 5 authored, 0 compatibility, 0 derived, 0 out-of-scope | Authored normalized pan points are independent from initial channel balance. |
 | `Song` | `score-core` | 32 authored, 1 compatibility, 0 derived, 0 out-of-scope | The root contains authored score data. Tempo is the legacy view of InitialTempo. |
-| `Note` | `note-and-beat-semantics` | 12 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
+| `Note` | `note-and-beat-semantics` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The note contains authored pitch, articulation, duration, and effect values. |
 | `BeatEffects` | `note-and-beat-semantics` | 17 authored, 2 compatibility, 0 derived, 0 out-of-scope | Fade is the authored authority. FadeIn is its legacy compatibility view. The remaining fields contain authored notation and playback effects. Tap/slap/pop are independent; the imported legacy enum uses Pop, Slap, Tap priority and edits reconcile explicitly. WahPedal is a beat event with explicit reconciliation against legacy mix-table wah values. |
 | `Chord` | `note-and-beat-semantics` | 22 authored, 0 compatibility, 0 derived, 0 out-of-scope | The chord contains authored identity, pitch, fingering, and diagram data. |
 | `Beat` | `note-and-beat-semantics` | 18 authored, 0 compatibility, 2 derived, 0 out-of-scope | The beat contains authored values and finalized starts. BeamingMode controls the connection to the next beat; inversion and preferred direction are independent authored stem overrides. Beat-level barre fields, dead-slap marks, legato endpoints, and ordered lyric lines are independent authored values. |
@@ -305,7 +304,7 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 266 |
+| `preserved` | 267 |
 | `normalized` | 42 |
 | `omitted` | 103 |
 | `rejected` | 0 |
@@ -316,7 +315,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 132 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 199 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 134 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 205 discovered public enum members.
 
 ## GPIF wire inventory
 
@@ -360,7 +359,6 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifReadTuningName:property.Name` | `staff-ownership` | 1 | `tuning-label-preservation` | `delegated-to-audit` | The importer maps the classified tuning label independently from pitch values. |
 | `gpifAuditChordIDs:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The audit checks IDs in both supported chord collection spellings. |
 | `gpifReadChordProperties:property.Name` | `note-and-beat-semantics` | 2 | `chord-occurrence-isolation` | `delegated-to-audit` | The importer maps both supported chord collection spellings. |
-| `gpifAuditDiagnostics:property.Name` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | The audit uses valid MIDI properties when it checks percussion fallbacks. |
 | `isPercussionTrack:t.InstrumentSet.Type` | `percussion-articulations` | 3 | `percussion-identity` | `delegated-to-audit` | Known instrument-set spellings map to one percussion-track value. |
 | `gpifNormalizePercussionArticulation:element.Type` | `percussion-articulations` | 1 | `percussion-identity` | `delegated-to-audit` | Percussion elements use their authored articulation identity. |
 | `gpifRhythmToDuration:r.NoteValue` | `rhythm` | 8 | `timing-finalization` | `unsupported-feature` | The importer maps each supported GPIF note value to one public duration. |
@@ -383,6 +381,8 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 20 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `gpifNoteOrnament:n.Ornament` | `note-and-beat-semantics` | 4 | `note-ornaments` | `unsupported-feature` | The four GPIF spellings retain exact variants. Absence maps to None; the source audit reports unknown strings before conversion. |
 | `gpifApplyBeatEffects:p.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented beat properties after the audit classifies all names. |
+| `gpifAuthoredAccidental:p.Name` | `note-and-beat-semantics` | 2 | `pitch-spelling-preservation` | `delegated-to-audit` | TransposedPitch takes precedence over ConcertPitch independent of property order. |
+| `gpifAuditNoteSpelling:property.Name` | `note-and-beat-semantics` | 3 | `pitch-spelling-preservation` | `delegated-to-audit` | Source pitch spelling is checked against the owning staff and beat context; TransposedPitch is the accidental-mode authority. |
 
 ## Behavioral contracts
 
@@ -474,3 +474,5 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-timer` | `note-and-beat-semantics` | `TestConformanceBeatTimer` | `TestAlphaTabBeatTimer` | no | Exact absence, derived and authored timer states survive export without calculating playback time; grace conversion has an explicit source limitation. |
 | `slash-notation` | `note-and-beat-semantics` | `TestConformanceSlashNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `staff-notation` | `score-core` | `TestConformanceStaffNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
+| `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
+| `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |

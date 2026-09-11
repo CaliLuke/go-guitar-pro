@@ -4591,9 +4591,9 @@
       "stages": {
         "import": "partial",
         "model": "partial",
-        "export": "missing"
+        "export": "partial"
       },
-      "finding": "Pitch is projected to MIDI/fret. Concert/transposed spelling and explicit accidental modes are not lossless. SwapAccidentals is omitted on export.",
+      "finding": "Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Note.accidentalMode",
@@ -4619,6 +4619,36 @@
           "kind": "field",
           "reference": "Note.SwapAccidentals",
           "detail": "Public contract; linked matrix cases are in obligation."
+        },
+        {
+          "kind": "source",
+          "reference": "pitch_spelling.go",
+          "detail": "Public accidental enum and numeric-context validation; one spelling authority."
+        },
+        {
+          "kind": "source",
+          "reference": "gpif_pitch.go",
+          "detail": "Transposed property precedence, contradictory payload diagnostics and contextual import limits."
+        },
+        {
+          "kind": "field",
+          "reference": "Note.AccidentalMode",
+          "detail": "Exact six-mode runtime field, enum, wire and report assertions."
+        },
+        {
+          "kind": "test",
+          "reference": "TestGP8AuthoredAccidentals",
+          "detail": "Public non-default modes, equal-pitch enharmonics, edits, contradictions and nonmutation."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPitchSpelling",
+          "detail": "Pinned raw mode and unchanged sounding pitch for all six modes, property precedence and original No Wah GP5 regression."
+        },
+        {
+          "kind": "test",
+          "reference": "TestAlphaTabPitchSpellingContexts",
+          "detail": "Exact explicit omissions and consumer automatic spelling in four unsupported contexts."
         }
       ]
     },

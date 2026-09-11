@@ -443,6 +443,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 								}
 								beat := defaultBeat()
 								isGrace := false
+								var sourceNoteIDs []string
 								graceOnBeat := false
 								if b, ok := beatMap[beatID]; ok {
 									if r, ok := rhythmMap[b.Rhythm.Ref]; ok {
@@ -480,8 +481,10 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 												return nil, fmt.Errorf("note %q: %w", n.ID, noteErr)
 											}
 											gpifNormalizePercussionArticulation(track, &note, &fallbackArticulations[trackIdx])
+											gpifAuditNoteSpelling(context, n, &note, staff, &m, &beat)
 											note.Velocity = velocity
 											beat.Notes = append(beat.Notes, note)
+											sourceNoteIDs = append(sourceNoteIDs, noteID)
 										}
 									}
 									beat.importGPIFTechniques()
@@ -491,19 +494,19 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 									}
 								}
 								if isGrace {
-									pendingGrace = append(pendingGrace, gpifPendingGrace{beat: beat, onBeat: graceOnBeat})
+									pendingGrace = append(pendingGrace, gpifPendingGrace{beat: beat, onBeat: graceOnBeat, noteIDs: sourceNoteIDs})
 									continue
 								}
 								voice.Beats = append(
 									voice.Beats,
-									gpifApplyPendingGrace(&beat, pendingGrace, staff.PercussionTrack)...,
+									gpifApplyPendingGrace(&beat, pendingGrace, staff.PercussionTrack, context)...,
 								)
 								pendingGrace = nil
 								voice.Beats = append(voice.Beats, beat)
 							}
 							voice.Beats = append(
 								voice.Beats,
-								gpifApplyPendingGrace(nil, pendingGrace, staff.PercussionTrack)...,
+								gpifApplyPendingGrace(nil, pendingGrace, staff.PercussionTrack, context)...,
 							)
 						}
 						m.Voices = append(m.Voices, voice)

@@ -528,6 +528,18 @@ function loadScore(fixture) {
 
 // Retained consumer controls, before the normalized comparison projection.
 // Retained native consumer offsets (0..60), without comparison rounding.
+export function loadAccidentalFacts(fixture) {
+  const facts = [];
+  for (const track of loadScore(fixture).tracks) for (const staff of track.staves)
+    for (const bar of staff.bars) for (const voice of bar.voices) for (const beat of voice.beats)
+      for (const note of beat.notes) facts.push({track:track.index,staff:staff.index,bar:bar.index,
+        voice:voice.index,beat:beat.index,note:note.index,mode:note.accidentalMode,
+        midi:note.realValueWithoutHarmonic,display:note.displayValueWithoutBend,
+        fret:note.fret,string:note.string,articulation:note.percussionArticulation,
+        percussionMidi:track.percussionArticulations[note.percussionArticulation]?.outputMidiNumber ?? null});
+  return facts;
+}
+
 export function loadWhammyControls(fixture) {
   const facts = [];
   for (const track of loadScore(fixture).tracks) for (const staff of track.staves)
@@ -1340,6 +1352,10 @@ function main() {
   }
   if (args[0] === '--section-track-names' && args.length === 2) {
     process.stdout.write(`${JSON.stringify(loadSectionTrackNameFacts(args[1]))}\n`);
+    return;
+  }
+  if (args[0] === '--accidental-facts' && args.length === 2) {
+    process.stdout.write(`${JSON.stringify(loadAccidentalFacts(args[1]), null, 2)}\n`);
     return;
   }
   if (args[0] === '--whammy-controls' && args.length === 2) {

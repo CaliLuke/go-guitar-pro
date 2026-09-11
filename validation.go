@@ -438,6 +438,7 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				percussion := track.PercussionTrack || staff.PercussionTrack
 				validateBendEffect(note.Effect.Bend, "score.note.bend", noteLocation, diagnostics)
 				validateHarmonicEffect(note.Effect.Harmonic, noteLocation, diagnostics)
+				validateNoteAccidental(staff, measure, beat, &note, percussion, noteLocation, diagnostics)
 				if note.Effect.LeftHandFinger < FingeringOpen || note.Effect.LeftHandFinger > FingeringLittle {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.left-hand-fingering", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("left-hand fingering %d is not defined", note.Effect.LeftHandFinger)})
 				}

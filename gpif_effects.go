@@ -390,6 +390,10 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	note := defaultNote()
 	note.Kind = NoteTypeNormal
 	note.Ornament = gpifNoteOrnament(*n)
+
+	if !percussion {
+		note.AccidentalMode = gpifAuthoredAccidental(n.Properties.Properties)
+	}
 	if percussion && n.InstrumentArticulation != nil && *n.InstrumentArticulation >= 0 {
 		if _, err := NewPercussionArticulationID(int64(*n.InstrumentArticulation)); err != nil {
 			return Note{}, err
@@ -409,6 +413,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 				// Numbered-notation GPIF can persist a negative derived fret beside
 				// its usable absolute MIDI value. Let that MIDI property supply Value.
 				if *p.Fret < 0 {
+					note.AccidentalMode = NoteAccidentalDefault
 					continue
 				}
 				fret, err := NewFret(int64(*p.Fret))

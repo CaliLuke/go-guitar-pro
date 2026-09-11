@@ -5,8 +5,8 @@
   "title": "Preserve authored pitch spelling and accidental choices",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "agent:whammy-spelling",
   "formats": [
     "gp3",
     "gp4",
@@ -85,6 +85,41 @@
       "kind": "field",
       "reference": "Note.SwapAccidentals",
       "detail": "Public contract; linked matrix cases are in obligation."
+    },
+    {
+      "kind": "source",
+      "reference": "pitch_spelling.go",
+      "detail": "Public accidental enum and numeric-context validation; one spelling authority."
+    },
+    {
+      "kind": "source",
+      "reference": "gpif_pitch.go",
+      "detail": "Transposed property precedence, contradictory payload diagnostics and contextual import limits."
+    },
+    {
+      "kind": "field",
+      "reference": "Note.AccidentalMode",
+      "detail": "Exact six-mode runtime field, enum, wire and report assertions."
+    },
+    {
+      "kind": "test",
+      "reference": "TestGP8AuthoredAccidentals",
+      "detail": "Public non-default modes, equal-pitch enharmonics, edits, contradictions and nonmutation."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPitchSpelling",
+      "detail": "Pinned raw mode and unchanged sounding pitch for all six modes, property precedence and original No Wah GP5 regression."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabPitchSpellingContexts",
+      "detail": "Exact explicit omissions and consumer automatic spelling in four unsupported contexts."
+    },
+    {
+      "kind": "source",
+      "reference": "docs/semantic-model.md",
+      "detail": "Authored edit authority, compatibility reconciliation and narrow contextual limits. Fresh independent review and integrated gates remain pending."
     }
   ],
   "shared_files": [
@@ -93,7 +128,28 @@
     "gpif_effects.go"
   ],
   "resolution": null,
-  "verification": [],
+  "verification": [
+    {
+      "command": "go test -count=1 -run 'TestGP8.*Accidental|TestGP8Enharmonic' ./integration",
+      "result": "passed"
+    },
+    {
+      "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'TestConformancePitchSpelling|TestGPIF.*Accidental|TestGPIF.*Spelling|TestAlphaTabPitchSpelling|TestPitchSpelling' .",
+      "result": "passed"
+    },
+    {
+      "command": "go test -count=1 -run 'TestSemanticContractInventory|TestSemanticMatrixInventory' .",
+      "result": "passed; two spelling cases added; 399 public fields, 260 wire fields, 49 dispatches and 178 enum members covered"
+    },
+    {
+      "command": "golangci-lint run; dupl -threshold 75 .; goimports -l .",
+      "result": "passed; zero issues, clone groups and unformatted files"
+    },
+    {
+      "command": "node conformance/verify.mjs --write-docs",
+      "result": "passed"
+    }
+  ],
   "issue": {
     "number": 73,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/73",

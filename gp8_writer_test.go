@@ -669,7 +669,7 @@ func TestGP8CrashArticulationMetadata(t *testing.T) {
 	}
 }
 
-func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
+func TestExportGP8DefaultPitchedNotesHaveNumericMetadata(t *testing.T) {
 	song := syntheticGP8Song()
 	track := &song.Tracks[0]
 	track.Name = "Guitar"
@@ -712,9 +712,8 @@ func TestExportGP8PitchedNotesHaveConsumerMetadata(t *testing.T) {
 		properties[property.Name] = property
 	}
 	for _, name := range []string{"ConcertPitch", "TransposedPitch"} {
-		pitch := properties[name].Pitch
-		if pitch == nil || *pitch != (gpifPitch{Step: "G", Octave: 4}) {
-			t.Errorf("%s = %#v, want G4", name, pitch)
+		if pitch := properties[name].Pitch; pitch != nil {
+			t.Errorf("default spelling invented %s = %#v", name, pitch)
 		}
 	}
 	if number := properties["Midi"].Number; number == nil || *number != 67 {

@@ -62,7 +62,7 @@ func TestGP8ReexportsOrphanGraceAtBeatLevel(t *testing.T) {
 	graceBeat := defaultBeat()
 	graceBeat.Duration.Value = uint16(DurationThirtySecond)
 	graceBeat.Notes = []Note{{Value: 2, String: 1, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1, Effect: defaultNoteEffect()}}
-	orphans := gpifApplyPendingGrace(nil, []gpifPendingGrace{{beat: graceBeat}}, false)
+	orphans := gpifApplyPendingGrace(nil, []gpifPendingGrace{{beat: graceBeat}}, false, nil)
 	if len(orphans) != 1 {
 		t.Fatalf("orphan construction = %#v", orphans)
 	}

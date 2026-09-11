@@ -24,6 +24,11 @@ type Note struct {
 	// It is independent from String, pitch, and tuning; direct edits control GP8 output.
 	ShowStringNumber bool
 	SwapAccidentals  bool
+
+	// AccidentalMode is the authored spelling preference. GPIF TransposedPitch
+	// takes precedence over ConcertPitch. Default clears an authored preference.
+	// This field does not rewrite Value or reinterpret SwapAccidentals.
+	AccidentalMode NoteAccidentalMode
 	// TieOrigin marks this note as the start of a tie in formats that model
 	// tie direction explicitly, such as GPIF.
 	TieOrigin        bool

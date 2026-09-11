@@ -16,7 +16,7 @@ A linked source construct has a capability association, not individual behavior 
 | --- | ---: | ---: | ---: | ---: |
 | import | 75 | 18 | 4 | 1 |
 | model | 74 | 19 | 4 | 1 |
-| export | 53 | 34 | 10 | 1 |
+| export | 53 | 35 | 9 | 1 |
 
 All three stages have a supported rating in 53 rows. This is a checklist count, not a percentage of all musical behavior.
 
@@ -681,9 +681,9 @@ Completion criterion: Keep all three typed accent values exact through GPIF impo
 
 Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
-Import: **partial**. Model: **partial**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Pitch is projected to MIDI/fret. Concert/transposed spelling and explicit accidental modes are not lossless. SwapAccidentals is omitted on export.
+Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

@@ -181,7 +181,6 @@ func runConformanceBehaviorReconciliation(run *conformanceRun) {
 	run.Wire("gpifBeat.Wah", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Wah") != nil, true)
 	run.Wire("gpifInstrument.Ref", doc.Tracks.Tracks[0].isPercussionTrack(), true)
 	run.ClaimPrimary(claimSite("strict-policy", "import", "M20-BEHAVIOR-RECONCILIATION", "unsupported tremolo, wah, fade, and transpose")).Dispatch("gpifAuditDiagnostics:beat.Fadding", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Beat.Fadding.InvalidValue") != nil, true)
-	run.Dispatch("gpifAuditDiagnostics:property.Name", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Note.Property.Element") != nil, true)
 	run.Dispatch("gpifAuditDiagnostics:track.AudioEngineState", conformanceSourceAuditDiagnosticByCode(context.diagnostics, "GPIF.Track.AudioEngineState.InvalidValue") != nil, true)
 
 	xmlContext := &parseContext{format: "GP8"}

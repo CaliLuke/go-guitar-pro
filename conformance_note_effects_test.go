@@ -123,7 +123,7 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 	run.ClaimSerialization(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Wire("gpifNote.Vibrato", values["GPIF/Notes/Note/Vibrato"], "Slight")
 	run.Wire("gpifNote.Trill", values["GPIF/Notes/Note/Trill"], "7")
 	run.Wire("gpifTrill.Fret", values["GPIF/Notes/Note/Trill"], "7")
-	run.ClaimSerialization(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Wire("gpifProperty.Name", wire.propertyNames(), []string{"ConcertPitch", "TransposedPitch", "Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
+	run.ClaimSerialization(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Wire("gpifProperty.Name", wire.propertyNames(), []string{"Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
 	run.ClaimSerialization(claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Wire("gpifProperty.Enable", wire.allEnabled("Muted", "PalmMuted", "HopoOrigin"), true)
 	run.ClaimSerialization(claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags")).Wire("gpifProperty.Flags", wire.propertyText("Slide", "flags"), "63")
 	run.Wire("gpifProperty.HType", wire.propertyText("HarmonicType", "type"), "Natural")
@@ -188,7 +188,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 	empty := ""
 	for _, property := range []gpifProperty{{Name: "Muted"}, {Name: "PalmMuted"}, {Name: "HopoOrigin"}} {
 		context := &parseContext{format: "GPIF"}
-		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", property, nil)
+		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", property)
 		if !slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool {
 			return diagnostic.Kind == ParseDiagnosticInvalidData && diagnostic.SourcePath != ""
 		}) {
@@ -198,7 +198,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 
 	for _, property := range []gpifProperty{{Name: "Muted", Enable: &empty}, {Name: "PalmMuted", Enable: &empty}, {Name: "HopoOrigin", Enable: &empty}} {
 		context := &parseContext{format: "GPIF"}
-		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", property, nil)
+		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", property)
 		if slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool { return diagnostic.Kind == ParseDiagnosticInvalidData }) {
 			t.Errorf("%s enabled diagnostics = %#v", property.Name, context.diagnostics)
 		}
@@ -261,7 +261,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 
 	flags := "256"
 	context := &parseContext{format: "GPIF"}
-	gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", gpifProperty{Name: "Slide", Flags: &flags}, nil)
+	gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", gpifProperty{Name: "Slide", Flags: &flags})
 	if !slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool {
 		return diagnostic.Kind == ParseDiagnosticUnsupportedFeature && diagnostic.Code == "GPIF.Note.Property.Slide.UnknownFlags"
 	}) {
@@ -278,7 +278,7 @@ func runConformanceSourceDistinctions(run *conformanceRun) {
 		{property: gpifProperty{Name: "LeftHandTapped", Enable: &empty}},
 	} {
 		context := &parseContext{format: "GPIF"}
-		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", test.property, nil)
+		gpifAuditNoteProperty(context, "n1", "/GPIF/Notes/Note[@id=\"n1\"]", test.property)
 		run.Dispatch("gpifAuditNoteProperty:property.Name", slices.ContainsFunc(context.diagnostics, func(diagnostic ParseDiagnostic) bool {
 			return diagnostic.Kind == ParseDiagnosticLossyProjection
 		}), test.wantLoss)

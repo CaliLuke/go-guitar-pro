@@ -541,9 +541,9 @@ type gpifProperty struct {
 }
 
 type gpifPitch struct {
-	Step       string `xml:"Step"`
-	Accidental string `xml:"Accidental"`
-	Octave     int    `xml:"Octave"`
+	Step       string  `xml:"Step"`
+	Accidental *string `xml:"Accidental"`
+	Octave     int     `xml:"Octave"`
 }
 
 type gpifNotes struct {

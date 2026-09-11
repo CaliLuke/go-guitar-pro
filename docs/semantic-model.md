@@ -975,3 +975,49 @@ GPIF grace beats become `GraceEffect` records, which have no beat-timer destinat
 A timer on such a source beat produces `GPIF.Beat.Timer.GraceUnsupported`.
 Strict source import rejects this loss; permissive import retains the grace note without its timer.
 The raw grace source and exported artifact record that remaining limit under #108.
+
+`Note.AccidentalMode` owns an authored accidental choice independently of numeric
+pitch. Its zero value, `NoteAccidentalDefault`, leaves spelling to the consumer.
+The other modes request natural, sharp, double sharp, flat, or double flat.
+For a pitched string note, GP8 derives the unique compatible step and octave
+from its written numeric pitch. It emits one `TransposedPitch` property. An
+explicit natural emits an empty `Accidental` child. Default emits no pitch
+property.
+
+GPIF octave zero starts at MIDI zero. Contradictory modes and undefined
+enum values fail validation without changing pitch or mutating the song.
+
+On GPIF import, `TransposedPitch` wins over `ConcertPitch` regardless of property
+order. An absent accidental child means default. An empty child means natural.
+A distinct concert accidental produces `GPIF.Note.Pitch.Authority`. This reports
+the unretained second spelling.
+
+Numeric fret, tuning, capo, display transposition,
+beat octave, and clef octave remain the pitch context. The `AccidentalMode` field
+controls spelling. A default value restores automatic spelling.
+
+After a numeric pitch edit, update or clear an incompatible accidental mode.
+
+Neither edit rewrites the other authority. Invalid source step, token, octave,
+or conflicting numeric pitch produces `GPIF.Note.Pitch.Invalid`.
+
+The legacy `Note.SwapAccidentals` field remains a separate contextual preference.
+It does not overwrite `AccidentalMode` after parsing or editing. GP8 still reports
+`gp8.omit.swap-accidentals`. The writer has no faithful target mapping.
+The API does not expose the consumer's forced-hidden accidental mode because
+these GPIF pitch properties cannot encode it distinctly.
+
+GP8 reports `gp8.omit.note-accidental-context` for an authored mode on percussion
+or an absolute note without string context. The same report covers natural
+harmonics and staves with omitted sounding transposition. Strict export rejects that omission unless
+the export policy explicitly allows it. These limits do not change the existing
+numeric pitch contract. In particular, the pinned consumer does not read absolute pitch from
+the writer's `Midi` property alone. Harmonic pitch and octave metadata remain
+separate fields with their existing omission reports.
+
+GPIF import reports `GPIF.Note.Pitch.Context` when context prevents supported
+spelling interpretation. A negative source fret falls back to the existing
+numeric representation and clears the accidental mode. A matched grace becomes
+an ordered `GraceEffect`, which has no independent accidental field. Its source
+note ID identifies that loss. An orphan grace remains a `Note` and retains its
+mode. Generated grace notes do not inherit their owner's accidental choice.

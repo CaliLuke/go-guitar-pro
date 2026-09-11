@@ -43,7 +43,7 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Classify authored GP constructs with importer-backed ownership](work-items/upstream-discovery.json) | implementation | 1 | done | — | [#71](https://github.com/CaliLuke/go-guitar-pro/issues/71) |
 | [Export authored channel-strip volume automation](work-items/volume-automation.json) | implementation | 1 | done | — | [#59](https://github.com/CaliLuke/go-guitar-pro/issues/59) |
 | [Apply exact authored offset preservation to whammy curves](work-items/whammy.json) | implementation | 1 | in_progress | [#60](https://github.com/CaliLuke/go-guitar-pro/issues/60), [#62](https://github.com/CaliLuke/go-guitar-pro/issues/62) | [#72](https://github.com/CaliLuke/go-guitar-pro/issues/72) |
-| [Preserve authored pitch spelling and accidental choices](work-items/accidentals.json) | implementation | 2 | todo | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | [#73](https://github.com/CaliLuke/go-guitar-pro/issues/73) |
+| [Preserve authored pitch spelling and accidental choices](work-items/accidentals.json) | implementation | 2 | in_progress | [#56](https://github.com/CaliLuke/go-guitar-pro/issues/56) | [#73](https://github.com/CaliLuke/go-guitar-pro/issues/73) |
 | [Preserve beat barre fret and shape](work-items/barre.json) | implementation | 2 | done | — | [#74](https://github.com/CaliLuke/go-guitar-pro/issues/74) |
 | [Preserve authored beam groups and stem overrides](work-items/beaming.json) | implementation | 2 | done | — | [#75](https://github.com/CaliLuke/go-guitar-pro/issues/75) |
 | [Preserve lyrics authored directly on beats](work-items/beat-lyrics.json) | implementation | 2 | done | — | [#76](https://github.com/CaliLuke/go-guitar-pro/issues/76) |

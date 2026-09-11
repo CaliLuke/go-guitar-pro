@@ -280,15 +280,8 @@ func gpifAuditDiagnostics(doc gpifDocument, context *parseContext) {
 				Reason: fmt.Sprintf("percussion articulation identity %d must be non-negative", *note.InstrumentArticulation),
 			})
 		}
-		var mappedMIDI *int
 		for _, property := range note.Properties.Properties {
-			if property.Name == "Midi" && property.Number != nil && *property.Number >= 0 && *property.Number <= 127 {
-				value := *property.Number
-				mappedMIDI = &value
-			}
-		}
-		for _, property := range note.Properties.Properties {
-			gpifAuditNoteProperty(context, note.ID, path, property, mappedMIDI)
+			gpifAuditNoteProperty(context, note.ID, path, property)
 		}
 		gpifAuditEnum(context, diagnosticSource("GPIF.Note.Ornament.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), note.Ornament, []string{"", "Turn", "InvertedTurn", "UpperMordent", "LowerMordent"}, path+"/Ornament", note.ID, "ornaments")
 		gpifAuditEnum(context, diagnosticSource("GPIF.Note.Vibrato.InvalidValue", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature), note.Vibrato, []string{"", "None", "Slight", "Wide"}, path+"/Vibrato", note.ID, "note-and-beat-semantics")
@@ -622,8 +615,6 @@ var gpifNotePropertySources = map[string]parseDiagnosticSource{
 	"HopoDestination":       diagnosticSource("GPIF.Note.Property.HopoDestination", "note-and-beat-semantics", ParseDiagnosticLossyProjection),
 	"Element":               diagnosticSource("GPIF.Note.Property.Element", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
 	"Variation":             diagnosticSource("GPIF.Note.Property.Variation", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
-	"ConcertPitch":          diagnosticSource("GPIF.Note.Property.ConcertPitch", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
-	"TransposedPitch":       diagnosticSource("GPIF.Note.Property.TransposedPitch", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Tone":                  diagnosticSource("GPIF.Note.Property.Tone", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Octave":                diagnosticSource("GPIF.Note.Property.Octave", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 }
@@ -644,11 +635,6 @@ var (
 	gpifWhammyQuantizedSource        = diagnosticSource("GPIF.Beat.Whammy.Quantized", "note-and-beat-semantics", ParseDiagnosticLossyProjection)
 	gpifTempoAutomationInvalidSource = diagnosticSource("GPIF.MasterTrack.Automation.Tempo.Invalid", "tempo-automations", ParseDiagnosticInvalidData)
 )
-
-var gpifRedundantPitchSources = map[string]parseDiagnosticSource{
-	"ConcertPitch":    diagnosticSource("GPIF.Note.Property.ConcertPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-	"TransposedPitch": diagnosticSource("GPIF.Note.Property.TransposedPitch.Redundant", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
-}
 
 var gpifBeatPropertySources = map[string]parseDiagnosticSource{
 	"PrimaryPickupVolume":             diagnosticSource("GPIF.Beat.Property.PrimaryPickupVolume", "note-and-beat-semantics", ParseDiagnosticDeliberateIgnore),
@@ -692,7 +678,7 @@ func gpifAuditBarrePair(context *parseContext, beatID, path string, properties [
 	})
 }
 
-func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty, mappedMIDI *int) {
+func gpifAuditNoteProperty(context *parseContext, noteID, path string, property gpifProperty) {
 	propertyPath := fmt.Sprintf("%s/Properties/Property[@name=%q]", path, property.Name)
 	switch property.Name {
 	case "Fret":
@@ -779,18 +765,7 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			Reason: fmt.Sprintf("recognized GPIF percussion property %q has no destination in Song", property.Name),
 		})
 	case "ConcertPitch", "TransposedPitch":
-		if mappedMIDI != nil && gpifPitchMatchesMIDI(property.Pitch, *mappedMIDI) {
-			context.add(gpifRedundantPitchSources[property.Name], ParseDiagnostic{
-				SourcePath: propertyPath, ObjectID: noteID, Location: ParseLocation{NoteID: noteID},
-				Reason: fmt.Sprintf("GPIF pitch property %q is redundant with the mapped fret or MIDI value", property.Name),
-			})
-			return
-		}
-		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
-			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
-			Location: ParseLocation{NoteID: noteID}, Feature: "note-and-beat-semantics",
-			Reason: fmt.Sprintf("recognized GPIF pitch property %q has no destination in Song", property.Name),
-		})
+		gpifAuditPitchPayload(context, noteID, propertyPath, property)
 	case "Tone", "Octave":
 		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
 			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
@@ -804,23 +779,6 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			Reason: fmt.Sprintf("unknown GPIF note property %q", property.Name),
 		})
 	}
-}
-
-func gpifPitchMatchesMIDI(pitch *gpifPitch, midi int) bool {
-	if pitch == nil {
-		return false
-	}
-	steps := map[string]int{"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
-	step, ok := steps[pitch.Step]
-	if !ok {
-		return false
-	}
-	alterations := map[string]int{"": 0, "#": 1, "##": 2, "b": -1, "bb": -2}
-	alteration, ok := alterations[pitch.Accidental]
-	if !ok {
-		return false
-	}
-	return (pitch.Octave+1)*12+step+alteration == midi
 }
 
 func gpifAuditPropertyPayload(context *parseContext, source parseDiagnosticSource, present bool, path, objectID, feature, payload string) {

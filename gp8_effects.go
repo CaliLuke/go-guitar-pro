@@ -175,16 +175,6 @@ func gp8NoteMIDI(track *Track, staffStrings []GuitarString, note *Note) int {
 	return midi
 }
 
-func gp8Pitch(midi int) gpifPitch {
-	steps := [...]string{"C", "C", "D", "D", "E", "F", "F", "G", "G", "A", "A", "B"}
-	accidental := ""
-	switch midi % 12 {
-	case 1, 3, 6, 8, 10:
-		accidental = "#"
-	}
-	return gpifPitch{Step: steps[midi%12], Accidental: accidental, Octave: midi/12 - 1}
-}
-
 func gp8NoteValue(value uint16) (string, bool) {
 	switch value {
 	case 1:

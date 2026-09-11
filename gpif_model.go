@@ -11,11 +11,12 @@ import (
 )
 
 type gpifPendingGrace struct {
-	beat   Beat
-	onBeat bool
+	beat    Beat
+	onBeat  bool
+	noteIDs []string
 }
 
-func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion bool) []Beat {
+func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion bool, context *parseContext) []Beat {
 	var orphans []Beat
 	for pendingIndex, pendingBeat := range pending {
 		orphan := pendingBeat.beat
@@ -27,6 +28,13 @@ func gpifApplyPendingGrace(target *Beat, pending []gpifPendingGrace, percussion 
 			effect := gpifGraceEffect(&graceNote, &pendingBeat.beat.Duration, pendingBeat.onBeat, pendingIndex)
 			targetIndex := gpifGraceTarget(target, &graceNote, percussion)
 			if targetIndex >= 0 {
+				if graceNote.AccidentalMode != NoteAccidentalDefault {
+					noteID := ""
+					if noteIndex < len(pendingBeat.noteIDs) {
+						noteID = pendingBeat.noteIDs[noteIndex]
+					}
+					context.add(gpifPitchContextSource, ParseDiagnostic{SourcePath: gpifObjectPath("Notes/Note", noteID) + "/Properties", ObjectID: noteID, Location: ParseLocation{NoteID: noteID}, Reason: "ordered GraceEffect has no independent authored accidental mode"})
+				}
 				target.Notes[targetIndex].Effect.Graces = append(target.Notes[targetIndex].Effect.Graces, effect)
 				continue
 			}

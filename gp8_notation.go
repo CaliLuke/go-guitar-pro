@@ -175,6 +175,8 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 				groupIndex = len(groups) - 1
 			}
 			graceNote := *note
+			// GraceEffect has no independent accidental preference.
+			graceNote.AccidentalMode = NoteAccidentalDefault
 			if builder.song.Tracks[trackIndex].PercussionTrack {
 				percussionGrace := gp8PercussionGraceNote(note, grace)
 				graceNote.Value = percussionGrace.Value
@@ -423,10 +425,14 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		}
 		properties = append(properties, gpifProperty{Name: "String", String: &stringValue})
 	}
-	if !track.PercussionTrack {
-		pitch := gp8Pitch(midi)
-		properties = append([]gpifProperty{{Name: "ConcertPitch", Pitch: &pitch}, {Name: "TransposedPitch", Pitch: &pitch}}, properties...)
+	if note.AccidentalMode != NoteAccidentalDefault && builder.spellingStaff != nil && accidentalContextLimit(builder.spellingStaff, note) == "" {
+		pitch, ok := spelledPitch(writtenNoteMIDI(builder.spellingStaff, builder.spellingMeasure, builder.spellingBeat, note), note.AccidentalMode)
+		if !ok {
+			return "", fmt.Errorf("accidental mode %d cannot spell written note pitch", note.AccidentalMode)
+		}
+		properties = append([]gpifProperty{{Name: "TransposedPitch", Pitch: &pitch}}, properties...)
 	}
+
 	articulation := 0
 	result := gpifNote{Ornament: gp8NoteOrnament(note.Ornament), ID: noteID, InstrumentArticulation: &articulation, Properties: gpifProperties{Properties: properties}}
 	result.Properties.Properties = append(result.Properties.Properties, gp8ConvertBend(note.Effect.Bend).properties...)
