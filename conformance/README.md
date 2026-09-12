@@ -6,6 +6,15 @@ pinned AlphaTab package, and separately compares source semantics with a Go GP8
 export imported by AlphaTab. No Node dependency is linked into the production Go
 package.
 
+AlphaTab is an independent reference, not the authority for Guitar Pro behavior.
+Controlled Guitar Pro authoring and reopening can establish a reference defect.
+Keep correct GPIF values when the pinned consumer loses them.
+Separate reference defects, library defects, and actual format limits in each receipt.
+Record the application version, file hashes, exact values, and reproduction steps.
+Successful opening alone does not prove note retention or playback correctness.
+Native receipts under `capabilities/evidence/guitar-pro-native` expose failures
+that the pinned consumer does not detect. These receipts do not establish broad support.
+
 The [capability database](capabilities/README.md) tracks broader AlphaTab gaps.
 It includes the public format tables, an expanded source inventory, and runtime
 audit receipts. A complete semantic matrix covers the declared library contract.

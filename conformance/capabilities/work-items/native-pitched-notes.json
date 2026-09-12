@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "id": "native-pitched-notes",
+  "capability": "accidentals",
+  "title": "Preserve pitched notes when GP8 exports reopen in Guitar Pro",
+  "kind": "implementation",
+  "priority": 1,
+  "status": "todo",
+  "owner": null,
+  "formats": [
+    "gp3",
+    "gp4",
+    "gp5",
+    "gp6",
+    "gp7",
+    "gp8"
+  ],
+  "stages": [
+    "export"
+  ],
+  "scope": "Emit native-required concert and transposed pitch records without corrupting default spelling, numeric pitch authority or later public edits.",
+  "acceptance": [
+    "Preserve every note occurrence, string, fret, pitch and duration through Guitar Pro reopening, including the 12-note GP3 mix-table regression.",
+    "Define and test the default-spelling reconciliation contract and representable pitch bounds.",
+    "Cover explicit spelling, capo, transposition, clef/beat octaves, natural harmonics, absolute notes and grace context with native evidence and public regressions.",
+    "Run the full semantic and repository gates and review the exact commit against native facts before closure."
+  ],
+  "exclusions": [
+    "Do not silently change notes to match an AlphaTab limitation."
+  ],
+  "depends_on": [],
+  "reproduction": {
+    "kind": "source-review",
+    "starting_files": [
+      "gp8_notation.go",
+      "gpif_pitch.go",
+      "pitch_spelling.go"
+    ],
+    "instructions": "Export testdata/gp3/mix-table-events.gp3 with the public probe.go bridge. Open and Save As in Guitar Pro 8.1.5 build 31. Native output contains 0 note occurrences instead of 12. Both ConcertPitch and TransposedPitch are required; see the hash-bound native receipt."
+  },
+  "evidence": [
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
+      "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+    }
+  ],
+  "shared_files": [
+    "gp8_notation.go",
+    "gpif_pitch.go",
+    "pitch_spelling.go"
+  ],
+  "resolution": "Confirmed native exporter defect. The isolated both-pitch-record experiment retains all 12 notes; its naive integration also changes default spelling semantics and breaks existing edit/context tests, so it is not a complete fix.",
+  "verification": [],
+  "issue": {
+    "number": 118,
+    "url": "https://github.com/CaliLuke/go-guitar-pro/issues/118",
+    "state": "OPEN",
+    "checked_at": "2026-09-12T00:03:14.998949+00:00"
+  }
+}

@@ -47,8 +47,18 @@ func (track gpifTrack) MarshalXML(encoder *xml.Encoder, start xml.StartElement) 
 	}
 	return encoder.EncodeElement(struct {
 		*plainTrack
+		Name      gpifCDATA  `xml:"Name"`
 		ShortName *gpifCDATA `xml:"ShortName,omitempty"`
-	}{plainTrack: (*plainTrack)(&track), ShortName: shortName}, start)
+	}{plainTrack: (*plainTrack)(&track), Name: gpifCDATA(track.Name), ShortName: shortName}, start)
+}
+
+func (sound gpifSound) MarshalXML(encoder *xml.Encoder, start xml.StartElement) error {
+	type plainSound gpifSound
+	return encoder.EncodeElement(struct {
+		*plainSound
+		Name  gpifCDATA `xml:"Name"`
+		Label gpifCDATA `xml:"Label,omitempty"`
+	}{plainSound: (*plainSound)(&sound), Name: gpifCDATA(sound.Name), Label: gpifCDATA(sound.Label)}, start)
 }
 
 func gpifTextConsumerTrims(text string) bool {

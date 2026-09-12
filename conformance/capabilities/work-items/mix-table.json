@@ -31,7 +31,8 @@
     "volume-automation",
     "pan-automation",
     "midi-bank",
-    "automation-detail"
+    "automation-detail",
+    "native-pitched-notes"
   ],
   "reproduction": {
     "kind": "source-review",
@@ -71,13 +72,18 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
       "detail": "Independent agent acceptance review for issue 85; preserved current criteria, exact source commits, commands and scoped residual failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
+      "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "mix_table.go"
   ],
-  "resolution": "Fresh independent review reproduces the remaining timing failure: source program 73 at MIDI tick 960 becomes target tick 0 on both channels. Public/GPIF positions remain exact; per-event consumer normalization is reported. The timing acceptance criterion remains unsatisfied.",
+  "resolution": "Native Guitar Pro validation disproves an AlphaTab-only blocker: all 12 notes disappear and the sound event displays tick 121 instead of 481. Legacy volume and interpolation differ from native conversion and need controlled checks, including audio-engine state. Sound names now use CDATA and survive native reopening. Native pitch repair is #118; this ticket remains open.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",
@@ -112,6 +118,6 @@
     "number": 85,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/85",
     "state": "OPEN",
-    "checked_at": "2026-09-11T22:41:42.791782+00:00"
+    "checked_at": "2026-09-11T23:49:39.212866+00:00"
   }
 }

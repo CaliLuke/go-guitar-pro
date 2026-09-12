@@ -121,6 +121,11 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
       "detail": "Independent agent acceptance review for issue 115; preserved current criteria, exact source commits, commands and scoped residual failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
+      "detail": "Guitar Pro 8.1.5 build 31 is accessible. Keyboard navigation sets partial fret 3, but the string selector remains No strings capoed. The attempt was cancelled; the required asymmetric-string fixture and retaining pitch receipt remain missing."
     }
   ],
   "shared_files": [
@@ -128,7 +133,7 @@
     "conformance/oracle.mjs",
     "track.go"
   ],
-  "resolution": "Fresh independent review confirms both required external inputs are still missing: a native asymmetric partial-capo source and a retaining independent consumer pitch receipt. The saved authoring control has fret 0 and no selected strings; it is explicitly not the requested evidence. No fixture mapping was invented.",
+  "resolution": "Native authoring access is available. A further keyboard attempt reached partial capo fret 3 but could not select strings; the dialog was cancelled. Both required inputs remain missing: the controlled asymmetric-string fixture package and native per-string pitch receipts. No mapping was inferred and no support was promoted.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",

@@ -22,7 +22,7 @@ All three stages have a supported rating in 56 rows. This is a checklist count, 
 
 ## Runtime probe
 
-The receipt contains 377 input files. Probe freshness against the current source: `true`.
+The receipt contains 377 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -543,7 +543,7 @@ Notation. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86.
+GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -555,7 +555,7 @@ Notation. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open.
+Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -591,7 +591,7 @@ Notation. Priority 3. Formats: gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open.
+Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -683,11 +683,11 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits.
+Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits. Native Guitar Pro drops default-spelled exported notes because both required pitch records are absent; #118 tracks the complete repair and default-spelling contract.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
-Bounded work: [Preserve authored pitch spelling and accidental choices](https://github.com/CaliLuke/go-guitar-pro/issues/73).
+Bounded work: [Preserve pitched notes when GP8 exports reopen in Guitar Pro](https://github.com/CaliLuke/go-guitar-pro/issues/118); [Preserve authored pitch spelling and accidental choices](https://github.com/CaliLuke/go-guitar-pro/issues/73).
 
 ### dead-ghost: Dead notes and ghost notes
 
@@ -947,7 +947,7 @@ Playback data. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Raw legacy fields remain modeled. Import promotes tempo, program, volume and balance into authoritative collections; programmatic export projects missing events without mutating input. GPIF and Go retain event timing, values, order and ownership. Pinned AlphaTab preserves tempo timing, ignores gain/pan events and moves positive-position program events to the first beat; exact per-event reports expose these limits. Other controllers, transitions and RSE fields have individual omissions.
+Public collections retain legacy events, but native Guitar Pro 8.1.5 validation exposes wrong sound-position units and unresolved legacy volume/interpolation differences, plus pitched-note loss tracked by #118. Sound names and labels now use CDATA and retain exact native text. Pinned AlphaTab differences remain separate reference limits; passing the oracle does not establish native correctness.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

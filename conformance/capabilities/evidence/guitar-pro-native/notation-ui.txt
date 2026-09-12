@@ -1,0 +1,166 @@
+Window: "notation-export", App: Guitar Pro 8.
+0 standard window notation-export, Secondary Actions: Raise
+	1 button Browse (⌘B)
+	2 checkbox Description: Show/Hide Editing Palette (F2), Value: 0
+	3 checkbox Description: Show/Hide Global View (F8), Value: 1
+	4 checkbox Description: Show/Hide Inspector (F5, F6), Value: 1
+	5 menu button View: Page - Grid
+	6 menu button 100%, Description: Zoom: 100%
+	7 button Go to first bar (⌘↖)
+	8 button Go to last bar (⌘↘)
+	9 button Go to previous bar (⌘←)
+	10 button Go to next bar (⌘→)
+	11 checkbox Description: Play (Space), Value: 0
+	12 checkbox Description: Enable loop (F9), Value: 0
+	13 checkbox 100%, Value: 0, Description: <nobr>Relative speed (⌘F9)</nobr><br><nobr><b>100%</b> of normal speed</nobr><br><nobr>(Use + and − keys when playing to modify relative speed)</nobr>
+	14 checkbox 0, Description: Enable/Disable relative tonality
+	15 button Increase relative tonality by one semitone
+	16 button Decrease relative tonality by one semitone
+	17 checkbox Description: Show/Hide Audio Track, Value: 0
+	18 checkbox Description: Show/Hide Fretboard View (⌘F6), Value: 0
+	19 checkbox Description: Show/Hide Keyboard View, Value: 0
+	20 checkbox Description: Show/Hide Virtual Drum Kit, Value: 0
+	21 button Tuner
+	22 checkbox Description: Line-in, Value: 0
+	23 menu button 1. Track 1, Description:
+<p>Current track
+<br>
+<nobr>(Click to change)</nobr></p>
+
+	24 checkbox Description: Activate/Deactivate count-in, Value: 0
+	25 checkbox Description: Activate/Deactivate metronome, Value: 0
+	26 button Metronome & Count-in settings
+	27 button 1/1, Description:
+<p>Bar position
+<br>
+<nobr>(Click to open Go to dialog)</nobr></p>
+
+	28 button 4.0:4.0, Description: Bar current duration<br>No bar completion error
+	29 button 00:00 / 00:02, Description: Time
+	30 button No triplet feel
+	31 button 120, Description:
+<p>Current tempo
+<br>
+<nobr>(Click to open Tempo Automation dialog)</nobr></p>
+
+	32 button Time signature
+	33 button Undo (⌘Z)
+	34 button Redo (⇧⌘Z)
+	35 button Print... (⌘P)
+	36 progress indicator (settable) 4999
+	37 slider (settable) 0
+	38 menu button Add tab
+	39 text mix-native-save mix-ori…-native mix-pitch-native mix-po…-probe notation-export without…-native without…-native mix-cor…-native sound-t…-native labeled…-native
+	40 checkbox Song, Description: Song (F5), Value: 0
+	41 checkbox Track, Description: Track (F6), Value: 1
+	42 container
+		43 text Information
+		44 button Track color
+		45 button Track icon
+		46 text field (settable) Description: Full name, Value: Track 1, Secondary Actions: Raise
+		47 text field (settable) Description: Abbreviated name, Secondary Actions: Raise
+		48 text Musical notation Notation:
+		49 checkbox Description: Tablature notation, Value: 0
+		50 checkbox Description: Standard notation, Value: 1
+		51 checkbox Description: Slash notation, Value: 0
+		52 checkbox Description: Numbered notation, Value: 0
+		53 checkbox Description: Single staff, Value: 0
+		54 checkbox Description: Grand staff, Value: 1
+		55 text Tuning:
+		56 button E A D G B E, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr>No partial capo</nobr>
+		57 checkbox 0
+		58 button E A D G B E, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr>No partial capo</nobr>
+		59 checkbox 0
+		60 button More
+		61 text Sounds
+		62 checkbox Description: Switch track to RSE, Value: 0
+		63 checkbox Description: Switch track to MIDI, Value: 1
+		64 menu button Add a sound
+		65 button Open sound automations dialog
+		66 menu button 1. [25] - Acoustic Guitar (steel), Description: Sounds library
+		67 menu button Sound options
+		68 checkbox 1
+		69 checkbox MSB: 0 - LSB: 0, Description: Show/Hide sound details, Value: 0
+		70 text Interpretation Playing style: Palm mute:
+		71 slider (settable) Description: 0%, Value: 0
+		72 text Accentuation:
+		73 slider (settable) Description: 0%, Value: 0
+		74 text Auto let ring:
+		75 checkbox 0
+		76 text Off Auto brush:
+		77 checkbox 0
+		78 text Off Stringed:
+		79 checkbox 0
+		80 text Off
+		81 combo box Default, Description: Playing style
+			82 list
+				83 text Default
+				84 text Pick
+		85 menu button 2
+		86 text 2nd channel:
+		87 menu button 1
+		88 text MIDI Settings Port:
+		89 menu button Port Software Synthesizer
+		90 text Force 11-16:
+		91 checkbox 0
+		92 text Off
+		93 button Use a channel by string
+		94 text 1st channel:
+	95 button Add Track
+	96 text Tracks
+	97 menu button Global view options
+	98 button Move current track down
+	99 button Move current track up
+	100 checkbox Description: Switch single track / multitrack, Value: 0
+	101 button Reset mute
+	102 button Reset solo
+	103 text Vol. Pan. Eq.
+	104 button
+	105 text 1. Track 1
+	106 checkbox Description: Visibility, Value: 1
+	107 checkbox Description: Mute, Value: 0
+	108 checkbox Description: Solo, Value: 0
+	109 slider (settable) Description: 1.0dB, Value: 81
+	110 button
+	111 checkbox Description: Volume automation, Value: 0
+	112 container (settable) Description: Center, Value: 50
+	113 checkbox Description: Pan automation, Value: 0
+	114 checkbox Description: Equalizer, Value: 0
+	115 button
+	116 text 2. Track 2
+	117 checkbox Description: Visibility, Value: 0
+	118 checkbox Description: Mute, Value: 0
+	119 checkbox Description: Solo, Value: 0
+	120 slider (settable) Description: 1.0dB, Value: 81
+	121 button
+	122 checkbox Description: Volume automation, Value: 0
+	123 container (settable) Description: Center, Value: 50
+	124 checkbox Description: Pan automation, Value: 0
+	125 checkbox Description: Equalizer, Value: 0
+	126 text Master
+	127 button
+	128 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	129 slider (settable) Description: 0 dB, Value: 75
+	130 button
+	131 checkbox Description: Master volume automation, Value: 0
+	132 container (settable) Description: Center, Value: 50
+	133 checkbox Description: Master pan automation, Value: 0
+	134 button
+	135 close button
+	136 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	137 minimize button
+	138 text notation-export
+139 menu bar
+	140 Guitar Pro 8
+	141 File
+	142 Edit
+	143 Track
+	144 Bar
+	145 Note
+	146 Effects
+	147 Section
+	148 Tools
+	149 Sound
+	150 View
+	151 Window
+	152 Help

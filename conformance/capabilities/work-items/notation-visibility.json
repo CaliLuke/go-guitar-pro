@@ -26,7 +26,9 @@
     "Import and GP8 export preserve each flag through the pinned consumer and diagnose malformed configuration lengths."
   ],
   "exclusions": [],
-  "depends_on": [],
+  "depends_on": [
+    "native-pitched-notes"
+  ],
   "reproduction": {
     "kind": "runtime-candidate",
     "fixture": "testdata/gp5/Chords.gp5",
@@ -97,6 +99,11 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
       "detail": "Independent agent acceptance review for issue 86; preserved current criteria, exact source commits, commands and scoped residual failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
+      "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
     }
   ],
   "shared_files": [
@@ -104,7 +111,7 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "Fresh independent review reproduces differing notation flags within one track being flattened to the first staff by the pinned PartConfiguration consumer. Exact per-staff loss reports remain. The independent-staff acceptance criterion remains unsatisfied.",
+  "resolution": "Native Guitar Pro exposes notation selection at track level, including a grand staff, and independent hidden-track state. The blanket per-staff AlphaTab blocker needs scope correction. Current export loses notes in Guitar Pro, so native note-preservation acceptance remains blocked by #118; no closure or support promotion.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",
@@ -139,6 +146,6 @@
     "number": 86,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/86",
     "state": "OPEN",
-    "checked_at": "2026-09-11T22:41:42.792752+00:00"
+    "checked_at": "2026-09-11T23:49:39.214043+00:00"
   }
 }

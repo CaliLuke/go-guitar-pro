@@ -112,6 +112,13 @@ A successful parse, statement coverage, a self-round-trip, or a new snapshot is
 not sufficient evidence. Keep each unresolved difference narrow and link it to
 an open issue. Do not hide a difference with broad normalization.
 
+AlphaTab is a reference implementation, not the authority for Guitar Pro behavior.
+When consumers disagree, use controlled Guitar Pro authoring, reopening, and
+playback evidence to establish correctness. Preserve correct format behavior
+even when the pinned AlphaTab version loses it. Record an AlphaTab defect
+separately from a library defect or a target-format limit. Do not close a ticket
+from AlphaTab agreement when native Guitar Pro evidence contradicts it.
+
 ## Commits and Pull Requests
 
 Use a short imperative subject. The history uses prefixes such as `feat:`, `test:`, and `build:`. In each pull request, state the affected formats and the public API changes. Include the results of `go test ./...`, `go vet ./...`, and `golangci-lint run`.

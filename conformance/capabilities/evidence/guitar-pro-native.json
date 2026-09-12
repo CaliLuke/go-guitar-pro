@@ -1,0 +1,569 @@
+{
+  "schema_version": 1,
+  "application": {
+    "name": "Guitar Pro 8",
+    "version": "8.1.5",
+    "build": 31
+  },
+  "baseline_commit": "323df1d412583ac530d54eb59673f124d1d34efa",
+  "source_fixture": "testdata/gp3/mix-table-events.gp3",
+  "method": "Opened each local file in Guitar Pro. Used Save As to obtain native GPIF. Read Sound Automations dialog. MIDI export does not retain program changes even for the native original, so it is not program-timing evidence. Experimental pitch/position probes are isolated XML edits, not production fixes. Trailing line whitespace in the notation accessibility log is trimmed.",
+  "artifacts": [
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/baseline-export.gp",
+      "sha256": "0c05bb2de2a9b181c1267a528865e9f149301b4b1f4898250da5bd42245011d6",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 73 bank 0;program"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 25 bank 0;program"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          },
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/baseline-native.gp",
+      "sha256": "ae49d01344f07a75f817ae54efb931232f1f27e90c7129c53ade8a4daddcbeff",
+      "facts": {
+        "note_occurrences": 0,
+        "sound_names": [
+          "",
+          "",
+          ""
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;;User"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;;User"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          },
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/current-sound-ui.txt",
+      "sha256": "5508925030a5f1bf07b86cd5e9c00d33718547312e5d34af376c2e180892e361"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/original-native.gp",
+      "sha256": "350c8b1978d124dbf11718c09b42faca86dd248c1bb32d6e23d30cb716d53f10",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Acoustic Guitar (steel)",
+          "Flute"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.0,
+            "linear": "false",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;Acoustic Guitar (steel);User"
+          },
+          {
+            "bar": 0,
+            "position": 1.0,
+            "linear": "false",
+            "value": "Orchestra/Winds/Flute;Flute;User"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "false",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;Acoustic Guitar (steel);User"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.0,
+            "linear": "false",
+            "value": 0.5
+          },
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "false",
+            "value": 0.3125
+          },
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.0,
+            "linear": "false",
+            "value": 0.58
+          },
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "false",
+            "value": 0.56
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/original-native.mid",
+      "sha256": "b0d2ecfc5f3671a575116aee6a6a1c7d1909ae1354e2e5e4a615e85487f3c0dd"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/original-sound-ui.txt",
+      "sha256": "4605ae9a005a6aa525cf5972ffeb7fd9e5c6ddb3958c937a7c7b549ffc678413"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/pitch-probe-native.gp",
+      "sha256": "7bcc6262f258f6293dba1ff97980d041c60ee00e77a6e391c657b9fffc39ff4c",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "Orchestra/Winds/Flute;Legacy program 73 bank 0;Factory"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;Legacy program 25 bank 0;Factory"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          },
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/pitch-probe.gp",
+      "sha256": "41cc95445b142acfafb7099c4f91f532c28ef6a4380554d07f33b4d06af27103",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 73 bank 0;program"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 25 bank 0;program"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          },
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/position-probe-sound-ui.txt",
+      "sha256": "1bef6b39eca17ca7123c3f369df8c7fb87e38973b175e1439191741efeeb5230"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/position-probe.gp",
+      "sha256": "28bf2bd9d108c194eac8fa478eacf2da0c8143e248cda268165cb529a55eedc0",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 1.0,
+            "linear": "false",
+            "value": "go-guitar-pro/mix-table;Legacy program 73 bank 0;program"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "false",
+            "value": "go-guitar-pro/mix-table;Legacy program 25 bank 0;program"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          },
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/sound-text-fixed-native.gp",
+      "sha256": "8d20a3734d0173180a720d2c94e9288097f1786a2dcdc8dd4b4130790652f241",
+      "facts": {
+        "note_occurrences": 0,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "Orchestra/Winds/Flute;Legacy program 73 bank 0;Factory"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "Stringed/Acoustic Guitars/Steel Guitar;Legacy program 25 bank 0;Factory"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          },
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/sound-text-fixed.gp",
+      "sha256": "e552b8a7ebb0161cb308ebfacdbb646d2b4a0b78d31e11c64e2786e70d520134",
+      "facts": {
+        "note_occurrences": 12,
+        "sound_names": [
+          "Track 1",
+          "Legacy program 73 bank 0",
+          "Legacy program 25 bank 0"
+        ],
+        "sound_events": [
+          {
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 73 bank 0;program"
+          },
+          {
+            "bar": 4,
+            "position": 0.0,
+            "linear": "true",
+            "value": "go-guitar-pro/mix-table;Legacy program 25 bank 0;program"
+          }
+        ],
+        "channel_strip_events": [
+          {
+            "type": "DSPParam_12",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.75
+          },
+          {
+            "type": "DSPParam_11",
+            "bar": 0,
+            "position": 0.25,
+            "linear": "true",
+            "value": 0.3125
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/labeled-sound.gp",
+      "sha256": "0ee49bf811a8c52053e110ca6f65123a27b047a347c46154fe8a1b16e22d6d94"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/labeled-sound-native.gp",
+      "sha256": "ca8dbe3cc6e65513aadbaf56cf824eea9dbba77f854aa6f91899bff2650a048c"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/notation-ui.txt",
+      "sha256": "7810f0d27a9ad8a82f2b52d94979263bd72a4a9404b03ef8f785c34ecbdd8ecb"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/notation-native.gp",
+      "sha256": "d5991fdaa12531f349d156755640e47b0303c3345d3f04bd9ef85dd906ba6952"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/without-ConcertPitch.gp",
+      "sha256": "093d9762ff56522a2a6e3f64b1259b423c8c3d976819c04e163dc7621b398fcd"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/without-TransposedPitch.gp",
+      "sha256": "1ccdd38334f21b8d562f25971d9e47887138b8680f6c2507284dc1ffddd6d069"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/without-concert-native.gp",
+      "sha256": "81e2bc17470f0f177bee2a22f58fff30eb2423f3c4ca1dad64f431a3185fac18"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/without-transposed-native.gp",
+      "sha256": "81e2bc17470f0f177bee2a22f58fff30eb2423f3c4ca1dad64f431a3185fac18"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/absent-accidental-probe.gp",
+      "sha256": "241d111cb980445aa1c2b860f9f8b4e8ffcea9be0a40874eaae75e9603e4a031"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/absent-accidental-native.gp",
+      "sha256": "1a6c8a7dc4c47acce603639a743b8c9f73206a4475d446c8a6abce6a491746ee"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/position-only-probe.gp",
+      "sha256": "95487bba4c7e88e362bed17e60c5246359aa6323d566a11d3b1b96b52487656e"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/position-only-ui.txt",
+      "sha256": "1bef6b39eca17ca7123c3f369df8c7fb87e38973b175e1439191741efeeb5230"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-native/partial-capo-attempt-ui.txt",
+      "sha256": "bf1136c95466f72ede465d966df8014456ccc7be424b493ae97248b7ccf0ecae"
+    }
+  ],
+  "findings": [
+    {
+      "id": "sound-text",
+      "status": "fixed",
+      "detail": "Plain-text Sound.Name becomes empty in native save. CDATA retains all three names. No claim about other sound metadata or playback."
+    },
+    {
+      "id": "pitched-notes",
+      "status": "confirmed-defect",
+      "detail": "Current export loses all 12 note occurrences in Guitar Pro. Adding both ConcertPitch and TransposedPitch retains the 12 notes; either field alone still loses them. This requires a public default-spelling contract and complete pitch-context coverage before integration."
+    },
+    {
+      "id": "sound-position",
+      "status": "confirmed-defect",
+      "detail": "Original native Sound Position=1 displays tick 481. Current exported Position=0.25 displays tick 121. The position-only probe changes only the first Sound.Position to 1, keeps Linear=true, and displays tick 481. Tempo and channel-strip positions remain 0.25. Do not apply one unit conversion to every automation type."
+    },
+    {
+      "id": "legacy-volume",
+      "status": "confirmed-discrepancy",
+      "detail": "Native GP3 conversion emits DSPParam_12=0.56 at position 0.25; Go emits 0.75 for raw volume 12. Native initial event 0.58 is also absent from Go channel-strip events. The complete legacy conversion needs further controls."
+    },
+    {
+      "id": "legacy-interpolation",
+      "status": "confirmed-discrepancy",
+      "detail": "Native GP3 conversion uses Linear=false for zero-duration tempo, sound, volume and pan changes. Go projects Linear=true. Verify native interpolation semantics before closure."
+    },
+    {
+      "id": "notation-ownership",
+      "status": "native-observation",
+      "detail": "Guitar Pro track inspector shows one notation selection for the grand-staff track, with separate staff tuning controls. The second track is independently hidden. The current export still loses notes, so this does not satisfy the full notation-ticket acceptance checklist."
+    },
+    {
+      "id": "absent-accidental-probe",
+      "status": "rejected-experiment",
+      "detail": "Removing Accidental from both experimental pitch records retains notes, but native save fills an empty Accidental and preserves Step C / Octave 5 beside MIDI 61. This creates contradictory notation and numeric pitch; it is not a default-spelling solution."
+    },
+    {
+      "id": "partial-capo-acquisition",
+      "status": "missing-input",
+      "detail": "Keyboard navigation reached the partial-capo numeric editor and set fret 3, but the string selector still displayed No strings capoed after accessibility, coordinate and keyboard attempts. Cancelled tuning changes. No asymmetric-string fixture or verified flag order was acquired; #115 remains open."
+    }
+  ],
+  "fix_source_hashes": {
+    "gpif_text.go": "84a7c9d29eb8ed25beeab34654f0fb5e2db3f02d4e02dcba94d98db0364ec012",
+    "conformance_native_sound_test.go": "9cfacc8abd05ca9e44557facf320c55e6a7215243746e644cc26e36f465fe82d",
+    "integration/guitar_pro_native_test.go": "18147907f9b42c0fa6af4b20e78cee2b69a0e83c502b45d4b8cca3f6de3c3313"
+  },
+  "ticket_reviews": [
+    {
+      "issue": 85,
+      "decision": "keep-open",
+      "criteria": [
+        {
+          "criterion": "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position.",
+          "status": "PASS",
+          "evidence": "The GP3 mix-table fixture has simultaneous tempo, program, volume and balance changes at a nonzero position."
+        },
+        {
+          "criterion": "Preserve timing and event order while avoiding duplicates with score/track automation collections.",
+          "status": "FAIL",
+          "evidence": "Native original sound dialog displays tick 481; exported sound displays tick 121. Native volume and interpolation also differ and need controlled checks."
+        },
+        {
+          "criterion": "For chorus, reverb, phaser, tremolo and transitions, implement a verified wire mapping or retain an exact per-controller omission.",
+          "status": "PASS",
+          "evidence": "Existing per-controller reports and public tests remain unchanged; semantic tests pass."
+        }
+      ]
+    },
+    {
+      "issue": 86,
+      "decision": "keep-open",
+      "criteria": [
+        {
+          "criterion": "Use two staves with different standard/tab flags and an independently hidden track.",
+          "status": "PARTIAL",
+          "evidence": "Independent tracks have distinct settings and hidden visibility. Native inspector shows one notation selection per grand-staff track; divergent same-track settings are not established."
+        },
+        {
+          "criterion": "Document authority with Track.Settings compatibility fields, including edits after parsing.",
+          "status": "PASS",
+          "evidence": "Staff authority and compatibility-field reconciliation are documented and tested."
+        },
+        {
+          "criterion": "Import and GP8 export preserve each flag through the pinned consumer and diagnose malformed configuration lengths.",
+          "status": "FAIL",
+          "evidence": "Same-track reference loss remains; native note loss under #118 prevents valid end-to-end GP8 confirmation."
+        }
+      ]
+    },
+    {
+      "issue": 92,
+      "decision": "keep-open",
+      "criteria": [
+        {
+          "criterion": "A staff can request slash notation while a distinct beat has an authored slashed flag; neither replaces the other.",
+          "status": "PASS",
+          "evidence": "Existing independent staff preference and authored beat-slashed flag tests remain intact."
+        },
+        {
+          "criterion": "Test mixed notation preferences on two staves using PartConfiguration and GPIF where applicable.",
+          "status": "PARTIAL",
+          "evidence": "Distinct track groups work in existing reference checks. Divergent settings within one track lack native evidence."
+        },
+        {
+          "criterion": "Public edits and GP8 output preserve exact consumer flags without creating or deleting notes.",
+          "status": "FAIL",
+          "evidence": "Native GP8 export deletes notes on reopening; #118 must be fixed before native note-preservation acceptance."
+        }
+      ]
+    },
+    {
+      "issue": 106,
+      "decision": "keep-open",
+      "criteria": [
+        {
+          "criterion": "Use two staves with different numbered-notation flags and preserve their ownership.",
+          "status": "PARTIAL",
+          "evidence": "Distinct track groups retain ownership in existing tests. Native controls do not establish independent settings on staves within one track."
+        },
+        {
+          "criterion": "Read and write the appropriate GP8 part settings without changing tuning or note values.",
+          "status": "FAIL",
+          "evidence": "Native GP8 export deletes notes on reopening; #118 is an actual library defect."
+        },
+        {
+          "criterion": "Pinned AlphaTab sees the edited numbered-notation state and the existing display flags remain independent.",
+          "status": "PARTIAL",
+          "evidence": "Pinned consumer retains independent track settings but applies one setting to all staves of a track. This does not prove an AlphaTab defect without native evidence."
+        }
+      ]
+    }
+  ]
+}

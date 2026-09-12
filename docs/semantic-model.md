@@ -199,6 +199,11 @@ zero supplies the opening selection. It does not rewrite the first definition
 or channel mirror. Multiple opening events retain their authored order. A
 conflicting channel mirror receives `gp8.normalize.sound-authority`.
 
+GP8 writes track names, sound names, and sound labels as CDATA when possible.
+Guitar Pro reads plain sound-name text as empty. Native reopening preserves
+the corrected names and a label with XML-sensitive characters and Unicode.
+This evidence establishes text preservation, not playback correctness.
+
 Pinned AlphaTab exposes the base program and instrument events but does not
 retain a public named sound table. Consumer evidence covers event count, order,
 position, program, text, and interpolation. Exact wire references and Go
@@ -270,7 +275,14 @@ Explicit tempo and sound slice order remains intact; raw events follow score
 traversal order. Gain and pan events stay chronological within each track, with
 stable order at equal positions. The exporter never changes the input score.
 
-GPIF retains event positions, values, and interpolation flags. The pinned
+The current writer retains numeric event positions, values, and interpolation flags.
+Native Guitar Pro validation exposes incorrect sound-position units: the original
+event appears at native tick 481, but the Go export appears at tick 121.
+Native conversion also differs for legacy volume and zero-duration interpolation.
+Sound timing is a library defect under #85. The other differences need controlled
+native checks, including audio-engine state, before closure.
+Native pitched-note loss is a prerequisite defect under #118.
+The pinned
 consumer retains tempo timing, ignores channel-strip gain and pan events, and
 attaches positive-position sound events to the first beat of their bar.
 `gp8.normalize.sound-automation-consumer-position` reports that timing change

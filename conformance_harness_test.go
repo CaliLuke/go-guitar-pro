@@ -230,6 +230,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceLegacyInstrumentBounds": runConformanceLegacyInstrumentBounds,
 	"TestConformanceRSEBounds":              runConformanceRSEBounds,
 	"TestConformanceNoteOrnaments":          runConformanceNoteOrnaments,
+	"TestConformanceNativeSoundText":        runConformanceNativeSoundText,
 	"TestConformanceStaffNotation":          runConformanceStaffNotation,
 	"TestConformanceSlashNotation":          runConformanceSlashNotation,
 

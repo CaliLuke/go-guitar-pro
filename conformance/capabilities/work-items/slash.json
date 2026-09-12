@@ -25,7 +25,8 @@
   ],
   "exclusions": [],
   "depends_on": [
-    "notation-visibility"
+    "notation-visibility",
+    "native-pitched-notes"
   ],
   "reproduction": {
     "kind": "runtime-candidate",
@@ -87,13 +88,18 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
       "detail": "Independent agent acceptance review for issue 92; preserved current criteria, exact source commits, commands and scoped residual failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
+      "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
     }
   ],
   "shared_files": [
     "gpif_types.go",
     "track.go"
   ],
-  "resolution": "Fresh independent review confirms slashed beats work, but distinct slash staff notation within one track is flattened by the pinned consumer. The staff criterion and dependency 86 remain unsatisfied.",
+  "resolution": "Native Guitar Pro exposes notation selection at track level, including a grand staff, and independent hidden-track state. The blanket per-staff AlphaTab blocker needs scope correction. Current export loses notes in Guitar Pro, so native note-preservation acceptance remains blocked by #118; no closure or support promotion.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",
@@ -128,6 +134,6 @@
     "number": 92,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/92",
     "state": "OPEN",
-    "checked_at": "2026-09-11T22:41:42.803265+00:00"
+    "checked_at": "2026-09-11T23:49:39.225798+00:00"
   }
 }

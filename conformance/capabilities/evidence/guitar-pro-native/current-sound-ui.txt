@@ -1,0 +1,41 @@
+Window: "Sound Automations", App: Guitar Pro 8.
+0 sheet Secondary Actions: Raise
+	1 text Sound Automations Automatically change the track's sound during the song. Bar Position (ticks) Sound
+	2 text 1.
+	3 stepper (settable) 1
+	4 stepper (settable) 121
+	5 combo box 2. Legacy program 73 bank 0
+		6 list
+			7 text 1. Track 1
+			8 text 2. Legacy program 73 bank 0
+			9 text 3. Legacy program 25 bank 0
+	10 button Delete this automation
+	11 text 2.
+	12 stepper (settable) Value: 5, Secondary Actions: Raise
+	13 stepper (settable) Value: 1, Secondary Actions: Raise
+	14 combo box 3. Legacy program 25 bank 0
+		15 list
+			16 text 1. Track 1
+			17 text 2. Legacy program 73 bank 0
+			18 text 3. Legacy program 25 bank 0
+	19 button Description: Delete this automation, Secondary Actions: Raise
+	20 menu button Add an automation at the cursor, Secondary Actions: Raise
+	21 container
+		22 button OK, Secondary Actions: Raise
+		23 button Cancel, Secondary Actions: Raise
+24 menu bar
+	25 Guitar Pro 8
+	26 File
+	27 Edit
+	28 Track
+	29 Bar
+	30 Note
+	31 Effects
+	32 Section
+	33 Tools
+	34 Sound
+	35 View
+	36 Window
+	37 Help
+
+The focused UI element is 0 sheet Secondary Actions: Raise
