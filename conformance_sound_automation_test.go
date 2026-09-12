@@ -129,11 +129,12 @@ func soundPrerollConformanceSong(t *testing.T) *Song {
 }
 
 func TestConformanceSoundSelectionIdentity(t *testing.T) {
-	runSoundSelectionIdentity(newConformanceRun(t), false)
+	runConformanceSoundSelectionIdentity(newConformanceRun(t))
 }
 
 func runConformanceSoundSelectionIdentity(run *conformanceRun) {
 	runSoundSelectionIdentity(run, false)
+	runSoundReferenceCollisions(run)
 }
 
 func TestAlphaTabSoundSelectionIdentity(t *testing.T) {
@@ -286,5 +287,18 @@ func runSoundOpeningAuthority(run *conformanceRun, oracle bool) {
 				}
 			}
 		})
+	}
+}
+
+func runSoundReferenceCollisions(run *conformanceRun) {
+	for _, sounds := range [][]TrackSound{
+		{{Name: "Clean", Path: "user", Role: "User", Program: 25}, {Name: "Clean", Path: "user", Role: "User", Program: 73}},
+		{{Name: "Clean;Lead", Path: "user", Role: "User", Program: 25}, {Name: "Lead", Path: "user;Clean", Role: "User", Program: 73}},
+	} {
+		song := soundPrerollConformanceSong(run.t)
+		song.Tracks[0].Sounds = sounds
+		song.Tracks[0].SoundAutomations = []SoundAutomation{{Sound: 0}, {Sound: 1}}
+		report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
+		run.Report("M17-SOUND-IDENTITY", reportCodes(report), []string{"gp8.reject.score.track-sound.reference-collision"})
 	}
 }

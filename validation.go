@@ -155,6 +155,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.CapoFret)
 		}
 		for staffIndex := range track.Staves {
+			validatePartialCapo(&track.Staves[staffIndex], ScoreLocation{Track: trackIndex, Staff: staffIndex}, &diagnostics)
 			if track.Staves[staffIndex].CapoFret < 0 {
 				add("score.staff.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "capo fret %d is negative", track.Staves[staffIndex].CapoFret)
 			}
@@ -266,7 +267,14 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 				add("score.sound-automation.location", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound automation %d has bar %d position %v; bar must reference a measure and position must be finite within 0..1, or -0.125..0 in bar 0", automationIndex, automation.Bar, automation.Position)
 			}
 		}
+		soundReferences := make(map[string]int, len(track.Sounds))
 		for soundIndex, sound := range track.Sounds {
+			reference := sound.Path + ";" + sound.Name + ";" + sound.Role
+			if previous, exists := soundReferences[reference]; exists {
+				add("score.track-sound.reference-collision", ScoreDiagnosticStructural, ScoreLocation{Track: trackIndex}, "sound %d and sound %d have the same GPIF reference %q", soundIndex, previous, reference)
+			} else {
+				soundReferences[reference] = soundIndex
+			}
 			if sound.Bank < 0 || sound.Bank > 16383 {
 				add("score.track-sound.bank", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "sound %d bank %d is outside 0..16383", soundIndex, sound.Bank)
 			}
@@ -486,6 +494,9 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				}
 				if !percussion && (note.String < 0 || int(note.String) > len(staff.Strings)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.string", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("string %d is outside 0..%d", note.String, len(staff.Strings))})
+				}
+				if !percussion {
+					validatePartialCapoPitches(staff, &note, noteLocation, diagnostics)
 				}
 				if !percussion && staff.TranspositionPitch != 0 && note.String >= 0 && int(note.String) <= len(staff.Strings) {
 					midi := soundingNoteMIDI(staff, &note)

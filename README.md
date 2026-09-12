@@ -133,14 +133,26 @@ note durations and tuplets, percussion articulations, beat dynamics,
 grace-note pitch, duration, velocity and placement, accents, ties, and the
 supported note effects represented in GPIF.
 
-Enabled local backing audio and its asset metadata are embedded in GP8 output.
-Fields not listed above are intentionally not serialized. In particular, GP8
-export currently omits sync points, volume automations,
-lyrics, page and RSE settings, bend/tremolo/mix-table effects, detailed chord
-harmony and fingering metadata, trill subdivisions, and grace-note bend
-transitions. GPIF stores dynamics at beat level, so differing note velocities
-within one chord normalize to the first note's dynamic. Explicit empty beats
-normalize to rests.
+GP8 output also preserves supported sync points, volume and pan automation,
+assigned lyrics, bend and whammy controls, staff notation requests, and score
+display settings. Legacy mix-table tempo, instrument, volume, and pan events
+convert to GP8 automation. Enabled local backing audio and its asset metadata
+are embedded in the output.
+
+Some source values still have target limits. These include legacy controller
+transitions, detailed chord fingering metadata, some RSE settings, and
+grace-note bend transitions. The export report identifies each applicable
+normalization, omission, or rejection. The [semantic score model](docs/semantic-model.md)
+documents field ownership, public edits, and the exact limits.
+
+GPIF stores dynamics at beat level. Differing note velocities within one chord
+normalize to the first note's dynamic. Explicit empty beats normalize to rests.
+
+`Staff.PartialCapo` preserves GP8 partial capos. Its `Strings` slice selects
+strings from highest to lowest. Its `Offset` is relative to the whole-staff
+capo and affects selected open-string notes only. A nil value removes the
+partial capo. Native Guitar Pro evidence establishes this behavior independently
+of AlphaTab, which does not retain partial capos.
 
 ## Format support
 

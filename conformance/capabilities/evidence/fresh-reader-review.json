@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-12T17:30:17.397911+00:00",
+  "reviewer_role": "independent reader/model reviewer, then partial-capo implementation author",
+  "initial_independent_review": {
+    "base": "v0.9.0",
+    "head": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+    "scope": "All changed non-test reader, public model, source audit, ownership, configuration, finalization and validation production files. Export implementation was assigned separately.",
+    "files": [
+      "beaming.go",
+      "beat.go",
+      "beat_techniques.go",
+      "beat_timer.go",
+      "bend_offsets.go",
+      "binary_stylesheet.go",
+      "chord.go",
+      "effects.go",
+      "gp7_zip.go",
+      "gpif_audit.go",
+      "gpif_automations.go",
+      "gpif_effects.go",
+      "gpif_model.go",
+      "gpif_parser.go",
+      "gpif_pitch.go",
+      "gpif_text.go",
+      "gpif_types.go",
+      "gpx_filesystem.go",
+      "header_footer.go",
+      "headers.go",
+      "layout.go",
+      "lyric.go",
+      "measure.go",
+      "mix_table.go",
+      "mix_table_projection.go",
+      "note.go",
+      "ornament.go",
+      "page.go",
+      "pan_automation.go",
+      "parser.go",
+      "part_configuration.go",
+      "pitch_spelling.go",
+      "rasgueado.go",
+      "rse.go",
+      "score_display.go",
+      "score_style.go",
+      "song.go",
+      "track.go",
+      "validation.go",
+      "wah.go"
+    ],
+    "file_count": 40,
+    "finding": "No confirmed actionable regression in the reviewed declared reader/model contract. Native partial-capo evidence acquired afterward demonstrated valid-source false rejection and omitted pitch context.",
+    "validation": {
+      "command": "go test ./... -run 'Test(GPIF|GP8|Legacy|Grace|Pan|Header|Score|.*Notation|.*Pitch|.*Timer|.*Layout|.*Style|.*Numeric|.*Rse|.*RSE|.*Techniques|.*Wah|.*Rasgueado|.*Ornament)' -count=1",
+      "result": "PASS",
+      "root_seconds": 2.275,
+      "integration_seconds": 3.517
+    }
+  },
+  "authored_fix": {
+    "independent_review": false,
+    "working_tree_parent": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+    "problem": "Native strings 1/4 partial capo at relative offset3 has MIDI67/59/55/53/45/40. The prior library omitted the offset and emitted four GPIF.Note.Pitch.Invalid diagnostics for correct native ConcertPitch/TransposedPitch records.",
+    "failing_public_test": "TestNativePartialCapoPitchAudit failed with strict parsing rejected 4 diagnostic(s).",
+    "implementation": "Staff.PartialCapo retains Offset and high-first Strings independently. Paired GP8 Bitset payloads are checked and reversed on import. Export and numerical pitch use selected open notes only. Native whole2/absolutepartial5 is relativeOffset3. Nonzero frets keep ordinary pitch. Coordinated exporter changes preserve native wire without treating AlphaTab loss as a target loss.",
+    "boundaries": [
+      "negative and overflowing source offsets rejected",
+      "missing, duplicate, invalid, active short and active long selection payloads rejected",
+      "GP7 Flags integer0 retains inactive all-false selection; nonzero legacy integer mapping remains explicitly unsupported",
+      "zero offset and all-zero native placeholder of a different length normalizes to the actual tuning with GPIF.Staff.PartialCapo.InactiveFlags.Normalized",
+      "independent mutable masks across repeated staff occurrences",
+      "normal and selected-string malformed pitches remain invalid",
+      "nil, explicit inactive, relative-offset edits and selection edits retain public authority",
+      "complete local mask overrides a differently-sized valid inherited track mask",
+      "inactive zero inherited masks normalize after a local tuning change; active inherited mismatches remain rejected",
+      "imported spelling coordinates survive inactive configuration edits; only effective per-note offset changes invalidate the private receipt"
+    ],
+    "source_hashes": {
+      "partial_capo.go": "c2ddeb34302512c80c174a666c4a95a7053a608160829ab1c165c6ff4b8c7da4",
+      "gpif_parser.go": "49acaa816a06a04a12d5a389a93bb129a1da98f6bb74d7368cca70da27c91108",
+      "gpif_types.go": "85d4d640bd86dc6e810277178015aee2f14dffe77ded8529cd4e2b1c85c65f64",
+      "gpif_audit.go": "5653d3714f302fa79c6c9c4cdf759feb118c7422f47a6874f739e6a29546d45d",
+      "track.go": "3e9e4e3226c22183ae498c67256c2b8e3b1c176b3caf4282dd12a7a203b1611d",
+      "integration/partial_capo_test.go": "42fb0ae814bd6c5810ac0013e2e6aeed8c2d3c67faff684c9aeac14609a6b69e",
+      "conformance_partial_capo_test.go": "176f1c34d041cee15ebb01ce47e48288a75e76e85c44cc953f3d735c27a9dabf",
+      "conformance_harness_test.go": "cae0984db54f6b242ec166dd8d13ca31176c98effc4446763662d32dcc83737a",
+      "conformance/feature-ledger.json": "ccd168e320f529e7fc4312004f79f3bd441ca12154ebe083fc21813f452ffc3a",
+      "gp8_builder.go": "9f3c25da08e623468a43f30bd2da1f88338d027a56f5b311803d9f4387d3c379",
+      "partial_capo_validation.go": "941f48d939f0a3a9ed76c1808ec341ee78f551aa7283ab6b18d1863b0889a874",
+      "transposition.go": "aae1cd87757c8d2cb05cbf5905c3b9ec45e65964726d83f5795c2a58521f599a",
+      "pitch_spelling.go": "77b3324a82a8014a4682c4daae45f567a6b47530e8f6fc19eadabdd397df557e",
+      "validation.go": "92f17bb5717311cea49c217d01802a6db8707ff26c6e05341287892c65697d51",
+      "gp8_notation.go": "1b320546d81a4f9317ad9386c4b0bc0dd4ab6b0b4ea7636226ba37168542795b",
+      "gp8_note_pitch.go": "3f79783d61dbfbccea01cb64fc4930deeb52010a2352379181fa910a03da21e3",
+      "conformance_go_adapter_test.go": "24518eb0494dcd96a67ea1c38598695564eb2bb8ad817058d70c6bba84ac1b8e",
+      "conformance/fixture-inventory.json": "7b72edb894fbf4721f7e4754c445e703bf2ea74fbebf97115745bf2b529c6385",
+      "conformance/corpus-snapshot.json": "62f7893cbc0038a63227e384911c0c2dad480f6df88d5bf813581a24f41f5cc4",
+      "docs/semantic-model.md": "f2f7046d2eed6cd90cfa111a3f9bdad98917903e9cd15ec0638cdd86606027e6"
+    },
+    "validation": [
+      {
+        "command": "ALPHATAB_CONFORMANCE=1 go test ./... -run 'TestNativePartialCapoPitchAudit|TestPartialCapoMalformedSource|TestPartialCapoPublicEditsAndBounds|TestPartialCapoInactivePlaceholder|TestConformancePartialCapo' -count=1",
+        "result": "PASS",
+        "root_seconds": 0.846,
+        "integration_seconds": 0.686
+      },
+      {
+        "command": "go test ./integration -run 'PartialCapo|Compatibility' -count=1",
+        "result": "PASS",
+        "seconds": 1.349
+      },
+      {
+        "command": "golangci-lint run",
+        "result": "PASS",
+        "issues": 0
+      },
+      {
+        "command": "go test ./integration -run 'PartialCapo|PitchSpellingImportedContextEdits' -count=1",
+        "result": "PASS",
+        "seconds": 1.238
+      },
+      {
+        "command": "go test -run '^TestSemanticMatrixInventory$' . -count=1",
+        "result": "PASS",
+        "seconds": 12.558
+      },
+      {
+        "command": "ALPHATAB_CONFORMANCE=1 go test -run '^TestConformanceWholeCorpusAccounting$' . -count=1",
+        "result": "PASS",
+        "seconds": 10.06
+      }
+    ],
+    "matrix": {
+      "obligation_digest": "edc1f4c4b004a71210b6f78605cbb3a44e0fe7eaa16d996c1ed8360e38ae9e0c",
+      "public_fields": 469,
+      "wire_fields": 279,
+      "source_dispatches": 56,
+      "enum_members": 214,
+      "coverage": "PASS: all assigned and executed, final reviewed digest accepted."
+    },
+    "fresh_review_corrections": [
+      {
+        "reviewer": "independent acceptance reviewer",
+        "problem": "complete four-string local partial override rejected by unused inherited six-string mask",
+        "resolution": "track defaults validate against track tuning; complete local override validates against staff tuning",
+        "test": "TestPartialCapoStaffOverride"
+      },
+      {
+        "reviewer": "root",
+        "problem": "inactive inherited six-zero mask rejected after local four-string tuning change",
+        "resolution": "reuse scoped inactive zero-placeholder normalization after inheritance; active inherited mismatch still fails",
+        "test": "TestPartialCapoStaffOverride/inactive_inherited_placeholder"
+      }
+    ],
+    "corpus_review": {
+      "fixtures": 338,
+      "new_native_partial_fixtures": 7,
+      "new_reference_differences": 7,
+      "difference_scope": "Only seven exact selected-open-note MIDI paths, each Go minus AlphaTab equals3, linked to open issue40. No existing semantic difference changed.",
+      "existing_diagnostic_changes": {
+        "GPIF.UnknownElement.StaffOwnership": 175,
+        "GPIF.Staff.Property.Unknown": 175,
+        "GPIF.Staff.PartialCapo.InactiveFlags.Normalized": 2
+      },
+      "diagnostic_explanation": "Previously unknown Bitset/Flags children and their partial-capo properties are now decoded. Two existing faulty.gp fixtures retain a zero-offset six-zero placeholder on a four-string staff; each receives the scoped normalization diagnostic.",
+      "adapter": "Independent Go comparison includes selected open-note partial offset directly; no broad normalization and no production pitch helper reuse."
+    }
+  },
+  "remaining_review": "Authored fixes require fresh independent acceptance review and final source-commit quality gates before release. This receipt does not close tickets or authorize a claim that release checks are complete."
+}

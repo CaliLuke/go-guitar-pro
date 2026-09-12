@@ -1,0 +1,105 @@
+Window: "experiment-first", App: Guitar Pro 8.
+0 standard window experiment-first, Secondary Actions: Raise (showing 40-140 of 140 items)
+	1 menu button Add tab
+	2 menu button Show all open files...
+	3 text mix…ave mix…ive mix…ive mix…obe not…ive wit…ive wit…ive mix…ive sou…ive lab…ive pro…ted abs…ive po…be mix…ive v00 v01 v02 v03 v04 v05 v06 v07 v08 v09 v10 v11 v12 v13 v14 v15 v16 def…ive flat…tive cap…ive dis…ive clef…tive oct…ive har…ive abs…ive gra…ive har…ive oct…ive clef…tive def…ive flat…tive cap…ive dis…ive abs…ive gra…ive sou…ive ind…ive mix…ive not…ive nat…ive dou…ive dou…ive mix…nts exp…rst
+	4 checkbox Song, Description: Song (F5), Value: 0
+	5 checkbox Track, Description: Track (F6), Value: 1
+	6 container
+		7 text Information
+		8 button Track color
+		9 button Track icon
+		10 text field (settable) Description: Full name, Value: Partial capo control, Secondary Actions: Raise
+		11 text field (settable) Description: Abbreviated name, Secondary Actions: Raise
+		12 text Musical notation Notation:
+		13 checkbox Description: Tablature notation, Value: 1
+		14 checkbox Description: Standard notation, Value: 1
+		15 checkbox Description: Slash notation, Value: 0
+		16 checkbox Description: Numbered notation, Value: 0
+		17 checkbox Description: Single staff, Value: 1
+		18 checkbox Description: Grand staff, Value: 0
+		19 text Tuning:
+		20 button E A D G B E, 3+, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr><b>Partial capo</b> fret 3 on string 1</nobr>
+		21 checkbox 0
+		22 button More
+		23 text Sounds
+		24 checkbox Description: Switch track to RSE, Value: 0
+		25 checkbox Description: Switch track to MIDI, Value: 1
+		26 menu button Add a sound
+		27 button Open sound automations dialog
+		28 menu button 1. [25] - Acoustic Guitar (steel), Description: Sounds library
+		29 menu button Sound options
+		30 checkbox 1
+		31 checkbox MSB: 0 - LSB: 0, Description: Show/Hide sound details, Value: 0
+		32 text Interpretation Playing style: Palm mute:
+		33 slider (settable) Description: 0%, Value: 0
+		34 text Accentuation:
+		35 slider (settable) Description: 0%, Value: 0
+		36 text Auto let ring:
+		37 checkbox 0
+		38 text Off Auto brush:
+		39 checkbox 0
+		40 text Off Stringed:
+		41 checkbox 0
+		42 text Off
+		43 combo box Default, Description: Playing style
+			44 list
+				45 text Default
+				46 text Pick
+		47 menu button 2
+		48 text 2nd channel:
+		49 menu button 1
+		50 text MIDI Settings Port:
+		51 menu button Port Software Synthesizer
+		52 text Force 11-16:
+		53 checkbox 0
+		54 text Off
+		55 button Use a channel by string
+		56 text 1st channel:
+	57 button Add Track
+	58 text Tracks
+	59 menu button Global view options
+	60 button Move current track down
+	61 button Move current track up
+	62 checkbox Description: Switch single track / multitrack, Value: 0
+	63 button Reset mute
+	64 button Reset solo
+	65 text Vol. Pan. Eq.
+	66 button
+	67 text 1. Partial capo control
+	68 checkbox Description: Visibility, Value: 1
+	69 checkbox Description: Mute, Value: 0
+	70 checkbox Description: Solo, Value: 0
+	71 slider (settable) Description: 1.0dB, Value: 81
+	72 button
+	73 checkbox Description: Volume automation, Value: 0
+	74 container (settable) Description: Center, Value: 50
+	75 checkbox Description: Pan automation, Value: 0
+	76 checkbox Description: Equalizer, Value: 0
+	77 text Master
+	78 button
+	79 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	80 slider (settable) Description: 0 dB, Value: 75
+	81 button
+	82 checkbox Description: Master volume automation, Value: 0
+	83 container (settable) Description: Center, Value: 50
+	84 checkbox Description: Master pan automation, Value: 0
+	85 button
+	86 close button
+	87 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	88 minimize button
+	89 text experiment-first
+90 menu bar
+	91 Guitar Pro 8
+	92 File
+	93 Edit
+	94 Track
+	95 Bar
+	96 Note
+	97 Effects
+	98 Section
+	99 Tools
+	100 Sound
+	101 View
+	102 Window
+	103 Help

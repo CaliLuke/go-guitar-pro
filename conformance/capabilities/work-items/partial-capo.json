@@ -5,8 +5,8 @@
   "title": "Acquire partial-capo fixtures with verified string ordering",
   "kind": "investigation",
   "priority": 3,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "review_acceptance",
   "formats": [
     "gp7",
     "gp8"
@@ -16,13 +16,13 @@
     "model",
     "export"
   ],
-  "scope": "Acquire the finite evidence package needed to define a per-string capo mapping. Existing documentation establishes broad capo behavior; this task supplies actual source values, string-flag order and a retaining consumer result. It remains blocked on external authoring/consumer access and is excluded from autonomous implementation readiness.",
+  "scope": "Acquire controlled native fixtures that establish partial-capo string order, fret units and note pitches. The native evidence package is available. Implementation and final acceptance review remain in progress.",
   "acceptance": [
-    "Obtain an authorized GP7/GP8 fixture pair authored from the same minimal six-string score: no partial capo control and partial capo fret 3 on asymmetric named strings 1 and 4. Each string must have an identifiable open-string note. Record application version, string naming convention, file hashes and authored UI values.",
-    "Add a combined-capo variant with whole capo 2 and partial capo 5, plus a partial-below-whole control. Reopen in the authoring application and record exact per-string state and output pitches; the verified documentation already states frets are absolute and a partial capo below the whole capo is ineffective.",
-    "Extract and record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Change only one selected string in a controlled sibling file to establish bit/string order; do not infer order from tuning reversal.",
-    "Run public Go ParseWithOptions and pinned AlphaTab on each fixture, recording retained facts and diagnostic paths. Record the independent Guitar Pro consumer facts separately because pinned AlphaTab has no retaining partial-capo field.",
-    "Deliver fixtures and machine-readable receipts in the corpus/database with a narrow proposed mapping/API follow-up only if string ordering and a retaining consumer are proved. Otherwise record the exact missing input and keep the work excluded from ready_work; do not loop into another open-ended source review or promote support."
+    "Provide an authorized native-saved control and asymmetric partial-capo fixture from the same minimal six-string score. Use partial fret 3 on named strings 1 and 4. Give each string one identifiable open note. Record application version, hashes, UI values and experimental seed provenance. State the actual authoring version within the shared GP7/GP8 GPIF family.",
+    "Provide a native combined-capo variant with whole capo 2 and partial absolute fret 5. Record exact wire offsets and native MIDI pitches. Record the native response to a partial fret less than the whole capo. If the application refuses that value, provide its refusal and a zero-offset control instead of an invented valid fixture.",
+    "Record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Use controlled single-string siblings to establish flag order independently from tuning reversal. Retain the named native UI labels and corresponding MIDI pitches.",
+    "Run public Go ParseWithOptions and pinned AlphaTab on every valid fixture. Record source fields, diagnostic paths and parser settings. Keep native Guitar Pro results separate because the pinned reference does not retain partial capo.",
+    "Deliver the fixtures and machine-readable receipts in the corpus and database. Define the mapping and public edit contract only after native facts establish them. Keep acquisition evidence separate from implementation tests and support ratings. Review the exact final commit before closure."
   ],
   "exclusions": [
     "No per-string API or pitch conversion before fixture facts exist.",
@@ -34,23 +34,27 @@
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "track.go",
-      "conformance/oracle.mjs",
-      "conformance/capabilities/work-items/capo.json"
+      "conformance/capabilities/partial_capo_probe.go",
+      "conformance/capabilities/partial_capo_probe.mjs",
+      "conformance/capabilities/test_partial_capo_native.py",
+      "conformance/capabilities/evidence/partial-capo-native.json",
+      "partial_capo.go"
     ],
-    "instructions": "Use Guitar Pro Track Inspector > Tuning > Partial Capo, following the linked official guide, to author the controlled corpus variants. After acquisition run node conformance/oracle.mjs testdata/gp8/partial-capo-asymmetric.gp; record their default/retained output as the pinned limit, not as an expected mapping. Extract GPIF with python3 -m zipfile -e INPUT.gp TEMP_DIRECTORY and compare only the named staff properties. Add a focused public Go ParseWithOptions regression that prints/asserts the corresponding source paths. Save hashes, exact wire values, authoring facts and outcomes in work-item/database receipts. No acquired file currently exists.",
+    "instructions": "Use the seven testdata/gp8/partial-capo-*.gp native fixtures. Run conformance/capabilities/partial_capo_probe.go and partial_capo_probe.mjs on those files. Compare the results with evidence/partial-capo-native.json. Run the test_partial_capo_native.py tests for exact wire fields, native MIDI events and artifact hashes. The receipt distinguishes controlled XML seeds from native edits and saves.",
     "external_inputs": [
       {
         "id": "partial-capo-fixtures",
-        "requirement": "Authorized minimal GP7/GP8 control and nonzero partial-capo variants with asymmetric named strings and controlled single-string difference, including combined-capo cases.",
-        "state": "missing",
-        "acquisition": "An existing licensed Guitar Pro user authors the stated variants through Track Inspector > Tuning > Partial Capo; use the official guide. If no authoring access is available, request this exact package from the repository owner and leave readiness blocked."
+        "requirement": "Owned native GP8 control, asymmetric and single-string variants, combined whole/partial capo, zero-offset boundary and selected fretted-note control.",
+        "state": "available",
+        "acquisition": "Controlled XML seeds followed by native Guitar Pro Tuning edits, Keep the Fingering and Save As. Exact seed provenance is retained. No native string-selection-menu action is claimed.",
+        "reference": "conformance/capabilities/evidence/partial-capo-native.json"
       },
       {
         "id": "partial-capo-consumer-receipt",
-        "requirement": "Guitar Pro or another independently retaining consumer reopening the fixtures with application version, exact selected strings, fret values and per-string output pitches.",
-        "state": "missing",
-        "acquisition": "Record the authoring application reopen/pitch facts for each owned fixture; provide an exported MIDI note sequence or explicit app facts with provenance, plus checksums tying results to inputs. Pinned AlphaTab cannot fill this role."
+        "requirement": "Native Tuning labels, exact whole/partial values and per-string MIDI pitches, bound to fixture hashes. Include the refused below-whole value and accepted zero-offset boundary.",
+        "state": "available",
+        "acquisition": "Guitar Pro 8.1.5 build 31 reopened and saved the controlled files and exported MIDI. Named Tuning labels and note events establish string order independently.",
+        "reference": "conformance/capabilities/evidence/partial-capo-native.json"
       }
     ],
     "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
@@ -126,6 +130,16 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
       "detail": "Guitar Pro 8.1.5 build 31 is accessible. Keyboard navigation sets partial fret 3, but the string selector remains No strings capoed. The attempt was cancelled; the required asymmetric-string fixture and retaining pitch receipt remain missing."
+    },
+    {
+      "kind": "acquisition-receipt",
+      "reference": "conformance/capabilities/evidence/partial-capo-native.json",
+      "detail": "Seven native cases, exact hashes, wire fields, occurrence paths, MIDI events and UI records. Relative partial offsets affect only selected open-string notes. The below-whole attempt is a finite native refusal, not a missing external input."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/test_partial_capo_native.py",
+      "detail": "Four executable checks cover artifact integrity, exact native wire/MIDI values, named UI/boundary facts and old public/pinned limitations."
     }
   ],
   "shared_files": [
@@ -133,7 +147,7 @@
     "conformance/oracle.mjs",
     "track.go"
   ],
-  "resolution": "Native authoring access is available. A further keyboard attempt reached partial capo fret 3 but could not select strings; the dialog was cancelled. Both required inputs remain missing: the controlled asymmetric-string fixture package and native per-string pitch receipts. No mapping was inferred and no support was promoted.",
+  "resolution": "The finite acquisition package is complete. Guitar Pro 8.1.5 build 31 independently establishes high-to-low public string ownership, reversed wire flags and offsets relative to the whole capo. Only selected open notes receive the partial offset. Native UI refuses a partial fret less than the whole capo. The zero-offset boundary provides its valid control. All seven valid files have native MIDI, source fields, hashes and public/pinned baseline receipts. Experimental XML seeds and unsuccessful variants remain explicitly labeled. No Guitar Pro 7 application session is claimed. The retaining public API and exporter are under implementation and final review in the same release work. Historical missing-input reports retain their original commits and wording.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",

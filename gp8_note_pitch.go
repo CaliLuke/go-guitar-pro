@@ -55,8 +55,9 @@ func (builder *gp8Builder) nativeNotePitch(note *Note) ([]gpifProperty, int, err
 	// from the actual exported tuning, capo and fret, never from an omitted offset.
 	concertMIDI := soundingNoteMIDI(staff, note) + int64(staff.TranspositionPitch)
 	writtenMIDI := concertMIDI - int64(staff.DisplayTranspositionPitch) - octavePitch(measure.ClefOctave) - octavePitch(beat.Octave)
-	concert, concertOK := automaticPitch(concertMIDI, measure.KeySignature)
-	written, writtenOK := automaticPitch(writtenMIDI, measure.KeySignature)
+	concert, concertOK := automaticPitch(concertMIDI, builder.spellingKey)
+	writtenKey := transposeKeySignature(builder.spellingKey, staff.DisplayTranspositionPitch)
+	written, writtenOK := automaticPitch(writtenMIDI, writtenKey)
 	if note.AccidentalMode != NoteAccidentalDefault && accidentalContextLimit(staff, note) == "" {
 		if source := note.sourceAccidental(staff, measure, beat); source != nil {
 			if source.propertyName == "ConcertPitch" {

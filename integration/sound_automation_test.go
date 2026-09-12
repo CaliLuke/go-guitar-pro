@@ -131,3 +131,27 @@ func assertSoundPrerollExport(t *testing.T, song *guitarpro.Song) {
 		t.Fatal("validation or export mutated authored sound events")
 	}
 }
+
+func TestSoundAutomationRejectsAmbiguousReferences(t *testing.T) {
+	for _, sounds := range [][]guitarpro.TrackSound{
+		{{Name: "Clean", Path: "user", Role: "User", Program: 25}, {Name: "Clean", Path: "user", Role: "User", Program: 73}},
+		{{Name: "Clean;Lead", Path: "user", Role: "User", Program: 25}, {Name: "Lead", Path: "user;Clean", Role: "User", Program: 73}},
+	} {
+		song := soundPrerollFixture(t)
+		song.Tracks[0].Sounds = sounds
+		song.Tracks[0].SoundAutomations = []guitarpro.SoundAutomation{{Sound: 0}, {Sound: 1}}
+		code := "score.track-sound.reference-collision"
+		if !slices.ContainsFunc(guitarpro.ValidateSong(song), func(d guitarpro.ScoreDiagnostic) bool {
+			return d.Code == code && d.Location.Track == 0 && strings.Contains(d.Reason, "sound 1") && strings.Contains(d.Reason, "sound 0")
+		}) {
+			t.Fatalf("ambiguous sound selections accepted: %#v", sounds)
+		}
+		options := guitarpro.ExportOptions{LossPolicy: guitarpro.ExportLossPolicy{AllowedCodes: []string{"gp8.reject." + code}}}
+		data, report, err := guitarpro.ExportWithReport(song, guitarpro.ExportFormatGP8, options)
+		if err == nil || len(data) != 0 || !slices.ContainsFunc(report.Entries, func(e guitarpro.ExportReportEntry) bool {
+			return e.Code == "gp8.reject."+code && e.Disposition == guitarpro.ExportDispositionRejected
+		}) {
+			t.Fatalf("ambiguous reference exported: %v %#v", err, report)
+		}
+	}
+}

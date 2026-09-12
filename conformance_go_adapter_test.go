@@ -355,6 +355,10 @@ func normalizeGoNoteWithLinks(track *Track, staff *Staff, note *Note, links goNo
 		fret = nil
 	} else if note.String > 0 && int(note.String) <= len(staff.Strings) {
 		midi += int(staff.Strings[note.String-1].Value) + int(track.CapoFret)
+		// Independent native-evidenced rule; do not reuse production pitch helpers.
+		if partial := staff.PartialCapo; partial != nil && note.Value == 0 && int(note.String) <= len(partial.Strings) && partial.Strings[note.String-1] {
+			midi += int(partial.Offset)
+		}
 	}
 	graces := make([]any, 0, len(note.Effect.Graces))
 	for _, grace := range note.Effect.Graces {

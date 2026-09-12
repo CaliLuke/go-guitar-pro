@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "reviewer": "review_acceptance",
+  "status": "PASS for reviewed code, acquisition evidence and corrected bounded acceptance criteria",
+  "reviewed_git_head": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+  "reviewed_source_state": "Uncommitted release implementation. Source SHA256s below identify the reviewed production state. Final frozen-commit gates and closure review remain required.",
+  "release_version": "v0.10.0",
+  "initial_ticket_audit": {
+    "reviewer": "review_acceptance",
+    "reviewed_commit": "9d282eb",
+    "comparison": "v0.9.0..9d282eb",
+    "scope": [
+      "All 78 latest GitHub issue bodies #41 through #118, closed-state hard dependencies, native repair acceptance, protection acquisition evidence and historical independent acceptance probes",
+      "New binary stylesheet and PartConfiguration codecs, GP7/GPX metadata integration, native evidence verification, public API/reconciliation regressions",
+      "Release version and publication prerequisites"
+    ],
+    "findings": [
+      {
+        "priority": "P2",
+        "kind": "acceptance/documentation drift",
+        "issue": 64,
+        "path": "conformance/capabilities/work-items/export-negative-sound-position.json:23",
+        "detail": "Latest GitHub/canonical criterion still requires public Go Position=-0.125 for grace.gp. Correct native units now yield public bar ratio -0.03125 and preserved wire/pinned quarter offset -0.125. Update active criteria, reproduction instructions and resolution with explicit units; historical receipts may remain marked historical. Do not revert correct native conversion.",
+        "resolution": "Corrected current issue body and canonical work item. History retained. See /tmp/issue64-acceptance-correction.json. Final commit/gates pending."
+      }
+    ],
+    "completion_limits": [
+      {
+        "issue": 115,
+        "status": "unmet at reviewed commit",
+        "required": "Finite asymmetric/single-string/whole-plus-partial/below-whole native fixture and retaining pitch evidence. Native-derived files are acceptable with transparent XML seed versus native authoring provenance."
+      },
+      {
+        "issue": 40,
+        "status": "open umbrella pending #115",
+        "detail": "Reference defects are retained separately and do not invalidate native-correct library fixes."
+      }
+    ],
+    "closed_ticket_review": {
+      "issues": [
+        85,
+        86,
+        92,
+        106,
+        118
+      ],
+      "verdict": "PASS for latest literal acceptance criteria",
+      "note": "No requirement in current criteria explicitly mandates differing notation flags on staves within one track. Cross-track staff ownership is preserved; same-track conflicts have explicit target-limit reports. No closed issue has an open hard dependency."
+    },
+    "checks": [
+      {
+        "command": "python3 -m unittest discover -s conformance/capabilities -p test_native_repair.py -v",
+        "result": "PASS 5 tests"
+      },
+      {
+        "command": "ALPHATAB_CONFORMANCE=1 go test -overlay /tmp/acceptance-review-overlay.json -count=1 -v -run ^TestFresh .",
+        "result": "PASS 9 independent probes",
+        "log": "/tmp/acceptance-review-probes-adjusted.log",
+        "detail": "Historical probes were adapted only to native-correct Sound quarter-note wire units and step legacy changes; original two stale assumptions produced expected failures before adaptation."
+      },
+      {
+        "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run 'Test(PartConfiguration|StaffNotation|ScoreStyle|HeaderFooter|GP8Protection|AlphaTab.*(PartConfiguration|StaffNotation|HeaderFooter|ScoreDisplay|MultiRest)|Conformance(StaffNotation|HeaderFooter|ScoreDisplay|MultiRest))' ./...",
+        "result": "PASS root 18.047s, integration 1.140s",
+        "log": "/tmp/acceptance-focused.log"
+      }
+    ],
+    "nonblocking_test_hardening": "assertNativePitchRecords should assert both distinct property names rather than only count=2; the separate public API regression already detects this, so no uncovered production defect is asserted.",
+    "release": "v0.10.0 required by new exported APIs; release only after remaining work, final exact-commit gates and origin/main alignment."
+  },
+  "sound_unit_correction": {
+    "issue": 64,
+    "reviewed_source_commit": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+    "original_updated_at": "2026-09-11T22:40:45Z",
+    "historical_acceptance": [
+      "testdata/gp7/grace.gp must pass the sound-position export boundary and retain bar 0, position -0.125, and the exact referenced sound through Go and pinned AlphaTab.",
+      "Retain event order relative to a position-zero event and other equal-position events. No event may be silently moved to zero.",
+      "For this evidenced slice, support finite opening-bar positions in [-0.125, 0), while regular positions remain in [0, 1]. Explicitly reject earlier preroll and negative positions on later bars; test -0.125, zero and values just outside the supported bounds. Document this as a bounded support contract, not a universal GPIF limit.",
+      "Continue rejecting non-finite positions, invalid bar/sound references and unsupported positions with precise diagnostics. Align preflight, validation and serialization without changing positive-position semantics."
+    ],
+    "current_acceptance": [
+      "Preserve the exact sound reference and bar 0 in testdata/gp7/grace.gp. Assert public Position=-0.03125 and GPIF/pinned Position=-0.125 in its 4/4 bar.",
+      "Retain event order relative to a position-zero event and other equal-position events. Do not move an authored event to zero.",
+      "Use bar ratios for public positions. Support finite opening preroll in [-0.125, 0) and regular positions in [0, 1]. Reject earlier preroll and negative positions on later bars. Cover -0.125, zero and adjacent values outside these public bounds. Document this bounded contract separately from GPIF quarter-note units.",
+      "Reject non-finite positions and invalid bar or sound references with precise diagnostics. Keep preflight, validation and serialization consistent. Convert public ratios to GPIF quarter-note offsets without changing authored timing."
+    ],
+    "reason": "Native evidence distinguishes GPIF quarter-note offsets from public bar ratios. Source/event timing is unchanged.",
+    "native_evidence": "conformance/capabilities/evidence/guitar-pro-repair.json",
+    "history_policy": "Existing verification arrays, historical receipts and issue comments are unchanged.",
+    "changes": [
+      "Updated current GitHub criteria, scope and reproduction with explicit units.",
+      "Updated canonical current criteria, scope, reproduction, resolution and evidence.",
+      "Preserved canonical verification history and existing historical evidence.",
+      "Corrected obsolete canon export-failure paragraph in docs/semantic-model.md."
+    ],
+    "checks": [
+      {
+        "command": "ALPHATAB_CONFORMANCE=1 go test -count=1 -run '^Test(SoundAutomationOpeningPreroll|SoundAutomationPositionBounds|ConformanceSoundPreroll|AlphaTabSoundPreroll)$' ./...",
+        "result": "PASS root 1.307s, integration 0.419s",
+        "scope": "Shared working tree during review; final exact-commit checks remain required."
+      },
+      {
+        "command": "git diff --check -- docs/semantic-model.md conformance/capabilities/work-items/export-negative-sound-position.json",
+        "result": "PASS"
+      },
+      {
+        "command": "simple-english pragmatic self-check",
+        "result": "PASS current authored criteria, scope, reproduction and resolution use short sentences and explicit units."
+      }
+    ],
+    "github_url": "https://github.com/CaliLuke/go-guitar-pro/issues/64",
+    "status": "corrected; final integration review pending"
+  },
+  "partial_capo_review": {
+    "issue": 115,
+    "baseline_commit": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+    "historical_acceptance": [
+      "Obtain an authorized GP7/GP8 fixture pair authored from the same minimal six-string score: no partial capo control and partial capo fret 3 on asymmetric named strings 1 and 4. Each string must have an identifiable open-string note. Record application version, string naming convention, file hashes and authored UI values.",
+      "Add a combined-capo variant with whole capo 2 and partial capo 5, plus a partial-below-whole control. Reopen in the authoring application and record exact per-string state and output pitches; the verified documentation already states frets are absolute and a partial capo below the whole capo is ineffective.",
+      "Extract and record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Change only one selected string in a controlled sibling file to establish bit/string order; do not infer order from tuning reversal.",
+      "Run public Go ParseWithOptions and pinned AlphaTab on each fixture, recording retained facts and diagnostic paths. Record the independent Guitar Pro consumer facts separately because pinned AlphaTab has no retaining partial-capo field.",
+      "Deliver fixtures and machine-readable receipts in the corpus/database with a narrow proposed mapping/API follow-up only if string ordering and a retaining consumer are proved. Otherwise record the exact missing input and keep the work excluded from ready_work; do not loop into another open-ended source review or promote support."
+    ],
+    "current_acceptance": [
+      "Provide an authorized native-saved control and asymmetric partial-capo fixture from the same minimal six-string score. Use partial fret 3 on named strings 1 and 4. Give each string one identifiable open note. Record application version, hashes, UI values and experimental seed provenance. State the actual authoring version within the shared GP7/GP8 GPIF family.",
+      "Provide a native combined-capo variant with whole capo 2 and partial absolute fret 5. Record exact wire offsets and native MIDI pitches. Record the native response to a partial fret less than the whole capo. If the application refuses that value, provide its refusal and a zero-offset control instead of an invented valid fixture.",
+      "Record exact GPIF PartialCapoFret and PartialCapoStringFlags fields. Use controlled single-string siblings to establish flag order independently from tuning reversal. Retain the named native UI labels and corresponding MIDI pitches.",
+      "Run public Go ParseWithOptions and pinned AlphaTab on every valid fixture. Record source fields, diagnostic paths and parser settings. Keep native Guitar Pro results separate because the pinned reference does not retain partial capo.",
+      "Deliver the fixtures and machine-readable receipts in the corpus and database. Define the mapping and public edit contract only after native facts establish them. Keep acquisition evidence separate from implementation tests and support ratings. Review the exact final commit before closure."
+    ],
+    "status": "PASS acquisition and new production review; final commit, database synchronization and full gates remain parent-owned",
+    "evidence": "conformance/capabilities/evidence/partial-capo-native.json",
+    "checks": [
+      "python3 -m unittest discover -s conformance/capabilities -p test_partial_capo_native.py -v: PASS 5 tests, seven source cases and six native-reopened library exports.",
+      "Public baseline probe: clean 9d282eb source, all seven fixtures, original diagnostic paths retained.",
+      "Public current probe: all seven fixtures parse and export without errors; invalid-data strict mode succeeds.",
+      "Pinned AlphaTab acquisition probe: all seven fixtures loaded; ignored partial offsets recorded separately.",
+      "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(PartialCapo.*|NativePartialCapoPitchAudit|InactivePartialCapoRetainsImportedSpelling|GP8AutomaticPitchKeyAndBounds|GP8TransposedKeyTonic|SoundAutomationRejectsAmbiguousReferences|AlphaTabGeneratedGraceOrnamentOwnership|ConformancePartialCapo.*)$ ./...: PASS root0.894s/integration0.912s.",
+      "Independent /tmp/partial-override-four-strings.gp reproducer: FAILED before fix with unused inherited mask length error; PASS after fix, loose and invalid-data strict parse.",
+      "git diff --check: PASS.",
+      "manage.py check: schema accepted; expected stale database requires parent refresh."
+    ],
+    "corrections": [
+      "Explicit controlled-seed/native-save provenance rather than claiming UI-selected strings.",
+      "Actual native GP8 authoring version within shared GP7/GP8 container family.",
+      "Relative wire offset versus absolute native UI fret.",
+      "Native refusal of below-whole value plus accepted zero-offset boundary."
+    ],
+    "fresh_production_review": {
+      "reviewer": "review_acceptance",
+      "scope": [
+        "paired partial property parser, inherited/local tuning and field selection, inactive placeholder normalization",
+        "public partial model ownership, per-note pitch calculation, checked bounds and exact grace behavior",
+        "partial GP8 emission, immutable effective-offset spelling receipt, clear/edit behavior",
+        "master-key authority and derived written key, corrected transposition table tonic, serialized sound-reference collisions, generated grace ownership"
+      ],
+      "findings": [
+        {
+          "status": "fixed and independently rechecked",
+          "priority": "P2",
+          "detail": "Track-level partial selection was validated against local tuning before a complete local override. Reader now validates parent scope independently and applies local override before effective length check.",
+          "reproducer": "/tmp/partial-override-four-strings.gp",
+          "regression": "TestPartialCapoStaffOverride"
+        },
+        {
+          "status": "fixed and independently rechecked",
+          "priority": "P2",
+          "detail": "An inactive inherited six-string mask rejected a local four-string tuning without a local override. The parser now reuses the inactive-placeholder normalization at the inherited boundary. Active inherited width mismatches still reject.",
+          "regression": "TestPartialCapoStaffOverride/inactive_inherited_placeholder"
+        }
+      ],
+      "additional_review": "Effective per-note offset is the correct immutable spelling receipt. Nil and inactive configurations retain equal numeric context; audible edits invalidate the receipt. No additional blocking findings."
+    },
+    "remaining_gate": "Root must review and bind exact final commit, refresh corpus/database, complete prescribed gates, then close #115. #40 remains a scoped reference/format-limit tracker."
+  },
+  "final_inheritance_recheck": {
+    "result": "PASS",
+    "cases": [
+      {
+        "derived_input_sha256": "adaedcf0cad3ef815f13dca688553d46a5ca7b7b57ad8dc371b9ecf72f81c698",
+        "case": "partial-override-four-strings.gp",
+        "error": "",
+        "strict_invalid_data_error": "",
+        "partial_capo": {
+          "Offset": 3,
+          "Strings": [
+            true,
+            false,
+            false,
+            false
+          ]
+        },
+        "partial_diagnostics": []
+      },
+      {
+        "derived_input_sha256": "a69970c2dc131ff7abe58d362bb2f2aefafa3b67c32e49a67f9b1ecbd764f8b2",
+        "case": "partial-inactive-inherited.gp",
+        "error": "",
+        "strict_invalid_data_error": "",
+        "partial_capo": {
+          "Offset": 0,
+          "Strings": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "partial_diagnostics": [
+          {
+            "Code": "GPIF.Staff.PartialCapo.InactiveFlags.Normalized",
+            "Kind": "lossy-projection",
+            "Format": "GP8",
+            "SourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/Properties/Property[@name=\"PartialCapoStringFlags\"]/Bitset",
+            "ObjectID": "0",
+            "Location": {
+              "TrackID": "0",
+              "BarID": "",
+              "VoiceID": "",
+              "BeatID": "",
+              "NoteID": ""
+            },
+            "Feature": "staff-ownership",
+            "Reason": "inactive zero-offset partial capo has 6 zero flags for 4 strings; selection normalized to the staff tuning",
+            "BinaryOffset": null
+          }
+        ]
+      },
+      {
+        "derived_input_sha256": "71374eb8335a730f27fdafd592fc76da0e46686b81278a1991fcffa33d75c847",
+        "case": "partial-active-inherited-review.gp",
+        "error": "unparseable Guitar Pro file: track 0 staff 0 inherited partial capo: partial capo has 6 flags for 4 strings",
+        "strict_invalid_data_error": "unparseable Guitar Pro file: track 0 staff 0 inherited partial capo: partial capo has 6 flags for 4 strings",
+        "partial_capo": null,
+        "partial_diagnostics": []
+      }
+    ],
+    "commands": [
+      "go run conformance/capabilities/partial_capo_probe.go on complete-local-override, inactive-inherited and active-inherited derived fixtures: exact independent assertions PASS.",
+      "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(PartialCapoStaffOverride|PartialCapoInactivePlaceholder|InactivePartialCapoRetainsImportedSpelling|ConformancePartialCapo)$ ./...: PASS root1.905s/integration1.474s."
+    ],
+    "regressions": "integration/partial_capo_test.go:TestPartialCapoStaffOverride and TestPartialCapoInactivePlaceholder"
+  },
+  "reviewed_production_sha256": {
+    "beaming.go": "37791486411022e83c859c2961a57e9413d9d371765cf55fc04d54fac15eacec",
+    "beat.go": "7a03897d7329b0b478139cf1cc01e39d1b2fe172bc365c904508193d0760ba99",
+    "beat_fade.go": "dae01ad83671c2cb2bd34d6d4d6f025c30fc9cc93545aaec7b664f51d315ca17",
+    "beat_techniques.go": "d42af5531d7ec978ef46bc9ff43dd55a0f525a7e906c118a4954d0322bfb4d03",
+    "beat_timer.go": "e5c6a56804048cdc0ca9d12e2b62d5f8f491cad3d7c539260522174557357ec0",
+    "beat_vibrato.go": "c44d09058f0f0af76434bc3b486b4866f73d7db668dd8668246e17361060144c",
+    "bend_offsets.go": "f985edc53d53be8bca97b54db9e1439aab2b7f81afd9a0a6466f90c16fe645a9",
+    "binary_stylesheet.go": "eac799d5d0f0cf6fa294c4d2c6f302b4394c0bdf4e3a9cff9cf2dfa8ca90aaee",
+    "brush.go": "9ffff891ab2a97577d13d224c0fd9e0f597107de8ddf527753cd79f153da9d57",
+    "chord.go": "1a844c80c0639e263fc776b6bd59170c98a9a674635b9e845e5d4e4a432b9ec8",
+    "directions.go": "a96023c00053cbb2821d1a52f4134613538a70ed9b9e4744c60aaac3588fe450",
+    "duration.go": "7cae854579f80064a95c9ce3660a6b4785c095362ec82dc070c1f2e178287d70",
+    "effects.go": "60a5c65e55c66b3a86ccde94be36b826eae77b9f2b9d9de9320e97325658a67d",
+    "enums.go": "970b5341a6d5f8b45c8edc517d8b41113f3e11e251155e5f4a1ec362b5d6c08c",
+    "export_report.go": "48075e8829b6854ac7f682df97604f6d5f238b2b97113d85332b6fdd8d6a1e6e",
+    "fermata.go": "d0fac0cf77a2225b3a1a64f60dd433e7ae1fa28f2de5a330d30fdf8ef16206e0",
+    "file_api.go": "467e72bb6c70f3b9a1197da192380c46c61d4d0f0c2317e6d6724be096dc92a8",
+    "gp7_zip.go": "ccf4100883357bd0daca868c33458c7e9eccd2e7c9ff07f0adf607e1bdbab70b",
+    "gp8_builder.go": "9f3c25da08e623468a43f30bd2da1f88338d027a56f5b311803d9f4387d3c379",
+    "gp8_consumer_limits.go": "5a5a7e1118b5e8397d8fa6e92f098c94195d760191b96f6edf917dcac597c1d2",
+    "gp8_effects.go": "119e0e2d81bf3826098e811937b834ff958c5450ba0416c77cf0402341b7bdd8",
+    "gp8_export.go": "63e6d4fe7778e0bce782f13385856bc1a3ac468877e6077c60fcc27d518c51d7",
+    "gp8_hammer.go": "1a5bbed794bce0febfc384b90cddbb7957777968aad92419726f33d0dc04aa04",
+    "gp8_lyrics.go": "5348dadfc7f647c0aa6eb431c13f93a4902875167c339137e106cf55e2e542cd",
+    "gp8_mix_table.go": "cfaa3dd992a49e97847be08b3684ab26306f2b2621c881bb39135f1d61a1edc3",
+    "gp8_notation.go": "1b320546d81a4f9317ad9386c4b0bc0dd4ab6b0b4ea7636226ba37168542795b",
+    "gp8_note_pitch.go": "3f79783d61dbfbccea01cb64fc4930deeb52010a2352379181fa910a03da21e3",
+    "gp8_partial_capo.go": "5627e26922932f59fab0e214b9628aa750d25e06841d80b0fe62c122f38b9961",
+    "gp8_percussion.go": "145809aee990d19adc385acbea0f0aa29ad1e4cfc0b904e2fcd3fcb21dd1ccd3",
+    "gp8_sync_points.go": "35fc4e54b42c8919ea55fe33f8bf5d751059099d1260ac509cb6ea679021ecc3",
+    "gpif_audit.go": "5653d3714f302fa79c6c9c4cdf759feb118c7422f47a6874f739e6a29546d45d",
+    "gpif_automations.go": "3e53ca864f009df3f4edb0c8e4c995fdb407ee066b96bcd396537e9d812a1e64",
+    "gpif_effects.go": "27503f82e726459ecbf5dd2254b62eebb1892222be6b28303a60829c32421a0a",
+    "gpif_model.go": "4d460e598182c98173e735ab25ecb9435e2417f4d880369b4c55e81f74a0d4a3",
+    "gpif_parser.go": "49acaa816a06a04a12d5a389a93bb129a1da98f6bb74d7368cca70da27c91108",
+    "gpif_pitch.go": "78978c423ad88cb25f045b6d73f6d58e4c87535957fcc0da67e5dbb4e5d3687e",
+    "gpif_text.go": "84a7c9d29eb8ed25beeab34654f0fb5e2db3f02d4e02dcba94d98db0364ec012",
+    "gpif_types.go": "85d4d640bd86dc6e810277178015aee2f14dffe77ded8529cd4e2b1c85c65f64",
+    "gpx_filesystem.go": "a1467754ade8530af42d59302196ef36cd06b57cbb27b37517a575782ef5b3b6",
+    "header_footer.go": "4b00e09373c423c68609502636c0bec10750d8257cb4b39d970317ae59aaf09a",
+    "headers.go": "7bd988096d6c4711ef1504b35585f854264464bb2309d8256fc7ebdbf77fa99d",
+    "io.go": "e591c47d191db130a2485e79c479e536eebde07bb03e28a261a0601467d12f7f",
+    "layout.go": "53f759eec05312c331c51d2e7ca4f6b983fa0af30cbc2d87b5aae29ba64e0b48",
+    "lyric.go": "1430582a50d35e83de0b97d74f24bb61ce5d93bc9017e3d5573a9423448145f7",
+    "measure.go": "1129abab4e667b44b36004ee36832cbde770e66c08d86ca094d9e852e8b4c5a9",
+    "midi.go": "99a1f15ed648efaed3e9bfbc86a249673c00949974409340900da25a22857c5a",
+    "mix_table.go": "400f8d9cdb1e2f9d509157cc06a3eb604043cbb61f1a8f2aa326315507e8e536",
+    "mix_table_projection.go": "e4c18a993dddc6998c99e8cadd9ebefdcb37f677bc86a736b56903f3c5d167d3",
+    "musical_values.go": "691bd339e5ab2055fb40f05c30f0271226894301a33137469d8a492b64d9a2d7",
+    "note.go": "1a3f3176893e03d86e879c3cdf6215437bade6f6a28a736d2ba26d5f1b794f45",
+    "ornament.go": "fd91afb6c11093d9ee27330ada430fa6e0bc651de0a32870d1d7bed3c80f5465",
+    "page.go": "bdc843884f55a60a2de1349d4cd5d711908bdaeb0d99022e206e9af8dcda7956",
+    "pan_automation.go": "64c391991f15436d337fe7560085749bc3dd1b5f76eaf1cad2103a8c5646bb7f",
+    "parser.go": "c6d3aba713636015e3c84c5f9791fb0f29e1d79c90a64d0691b6f3386ac984d7",
+    "part_configuration.go": "1ace6c407c3bf46ed65bd405f5e89bfa61a48ca7f674bd07e9a8d7d7201557d6",
+    "partial_capo.go": "c2ddeb34302512c80c174a666c4a95a7053a608160829ab1c165c6ff4b8c7da4",
+    "partial_capo_validation.go": "941f48d939f0a3a9ed76c1808ec341ee78f551aa7283ab6b18d1863b0889a874",
+    "pitch_spelling.go": "77b3324a82a8014a4682c4daae45f567a6b47530e8f6fc19eadabdd397df557e",
+    "rasgueado.go": "33c4e3abd480887969c41fd5e6de4ac8f31ebc59344ed182f68ef637ad5f5bd6",
+    "rse.go": "f4ac1cc2368404eb19712547d22abf15d63688c30d120d4a8460faa1cd086980",
+    "score.go": "9f68ccaa7c2891f65f9ed69afd483c474597ed7f17402e3151f472d9fdad5e38",
+    "score_display.go": "1c45ad53e7714e61efe99eaa47caa5f624d7f49c4c2ffc19713d7d66d2399ab6",
+    "score_style.go": "f383543dc6b8feee02cdafd0a22fefe05f15dc83399db086fceff872beed3bab",
+    "song.go": "05ed1f33a644a3701369166b7ea23022bd9164c2b7b2c26becd2bb298c51f88a",
+    "sustain_pedal.go": "4832baa8ff44de51bc9ef22de6fd85159e2ed3064bcaecb430334531c63e515c",
+    "track.go": "3e9e4e3226c22183ae498c67256c2b8e3b1c176b3caf4282dd12a7a203b1611d",
+    "transposition.go": "aae1cd87757c8d2cb05cbf5905c3b9ec45e65964726d83f5795c2a58521f599a",
+    "tremolo_picking.go": "26b185d0294ff60b1c803c0b6dba8211a850ee5d90e9ae6ac2c7532ae62467c4",
+    "validation.go": "92f17bb5717311cea49c217d01802a6db8707ff26c6e05341287892c65697d51",
+    "wah.go": "36f0ca4214952b3c3401112a09a6a7d81cd959b43a90f4b75bd3d78921a9dabb"
+  },
+  "final_gate_requirements": [
+    "Bind the reviewed production hashes to the final commit.",
+    "Complete the capability/corpus database refresh and prescribed full gates.",
+    "Review exact final commit and current #115 criteria before closure.",
+    "Keep #40 open for scoped reference and format limits. Do not claim zero open issues."
+  ]
+}

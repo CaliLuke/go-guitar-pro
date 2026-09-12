@@ -523,6 +523,9 @@ func gpifAuditOwnedStaffProperty(
 		}
 	case "DiagramCollection", "ChordCollection":
 		return
+	case "PartialCapoFret", "PartialCapoStringFlags":
+		// The staff reader validates the paired payload and selected-string order.
+		return
 	case "CapoFret":
 		if property.Fret == nil {
 			context.add(capoMissingSource, ParseDiagnostic{

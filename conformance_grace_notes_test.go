@@ -17,6 +17,7 @@ func TestConformanceOrderedGraceExport(t *testing.T) {
 }
 
 func runConformanceOrderedGraceExport(run *conformanceRun) {
+	runConformanceGraceMarkerOwnership(run)
 	t := run.t
 	song := semanticExportProbeSong(t)
 	track := &song.Tracks[0]
@@ -471,4 +472,43 @@ func extractGraceWire(t *testing.T, data []byte) conformanceGraceWire {
 		result.graceNoteValues = append(result.graceNoteValues, rhythmValues[beat.Rhythm.Ref])
 	}
 	return result
+}
+
+func runConformanceGraceMarkerOwnership(run *conformanceRun) {
+	song := parseTestFixture(run.t, nativeRepairPath+"contexts/grace.gp")
+	note := &song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Ornament, note.ShowStringNumber, note.TieOrigin = NoteOrnamentTurn, true, true
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		run.t.Fatal(err)
+	}
+	doc := conformanceWireDocument(run.t, data)
+	for i, note := range doc.Notes.Notes {
+		want := ""
+		if i == 1 {
+			want = "Turn"
+		}
+		run.Wire("gpifNote.Ornament", note.Ornament, want)
+		run.Wire("gpifTie.Origin", note.Tie != nil && note.Tie.Origin == "true", i == 1)
+		showString := false
+		for _, p := range note.Properties.Properties {
+			showString = showString || p.Name == "ShowStringNumber"
+		}
+		run.Wire("gpifProperty.Name", showString, i == 1)
+	}
+}
+
+func TestAlphaTabGeneratedGraceOrnamentOwnership(t *testing.T) {
+	requireAlphaTabConformance(t)
+	song := parseTestFixture(t, nativeRepairPath+"contexts/grace.gp")
+	song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0].Ornament = NoteOrnamentTurn
+	data, err := Export(song, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var facts []ornamentFact
+	readAlphaTabOracleFacts(t, "--note-ornaments", writeConformanceFixture(t, data), &facts)
+	if len(facts) != 2 || facts[0].Ornament != "None" || facts[1].Ornament != "Turn" || facts[0].Fret != 3 || facts[1].Fret != 1 {
+		t.Fatalf("grace/owner ornament facts %#v", facts)
+	}
 }

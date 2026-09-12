@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "application": "Guitar Pro 8.1.5 build 31",
+  "validated_at": "2026-09-12T17:24:02.356881+00:00",
+  "procedure": "Export a one-note C-major score at display offsets -1 and 11, reopen each in native Guitar Pro, inspect the five-flat key signature, save a native copy, and export MIDI.",
+  "findings": {
+    "master_key": 0,
+    "written_key": -5,
+    "concert_midi": 60,
+    "display_offsets": [
+      -1,
+      11
+    ],
+    "written_midis": [
+      61,
+      49
+    ],
+    "written_pitch": "D-flat",
+    "native_midi_note": 60,
+    "native_midi_duration_ticks": 1920,
+    "native_midi_division": 480,
+    "reference_defect": "Pinned AlphaTab table maps C major at chromatic11 to F-sharp major (6); native Guitar Pro retains D-flat major (-5)."
+  },
+  "artifacts": [
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/minus-one-export.gp",
+      "sha256": "c034623a382b4181f6b505ba43dafccda184aacc1f4d732eb1a6cae8e72446c1",
+      "gpif": {
+        "note_occurrences": [
+          {
+            "path": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "properties": {
+              "ConcertPitch": {
+                "Step": "C",
+                "Accidental": "",
+                "Octave": "5"
+              },
+              "TransposedPitch": {
+                "Step": "D",
+                "Accidental": "b",
+                "Octave": "5"
+              },
+              "Fret": "0",
+              "Midi": "60",
+              "String": "5"
+            },
+            "grace": null,
+            "rhythm": [
+              [
+                "NoteValue",
+                "Whole",
+                {}
+              ]
+            ]
+          }
+        ],
+        "automations": [
+          {
+            "Type": "Tempo",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "120 2",
+            "Linear": "false"
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/minus-one-native.gp",
+      "sha256": "b511b3081cbc003df0785646a98f4ccb9cbb122d32ba12f4e3e167f87442cee8",
+      "gpif": {
+        "note_occurrences": [
+          {
+            "path": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "properties": {
+              "ConcertPitch": {
+                "Step": "C",
+                "Accidental": "",
+                "Octave": "5"
+              },
+              "Fret": "0",
+              "Midi": "60",
+              "String": "5",
+              "TransposedPitch": {
+                "Step": "D",
+                "Accidental": "b",
+                "Octave": "5"
+              }
+            },
+            "grace": null,
+            "rhythm": [
+              [
+                "NoteValue",
+                "Whole",
+                {}
+              ]
+            ]
+          }
+        ],
+        "automations": [
+          {
+            "Type": "Tempo",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "120 2",
+            "Linear": "false"
+          },
+          {
+            "Type": "Sound",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "Stringed/Acoustic Guitars/Steel Guitar;Track 1;User",
+            "Linear": "false"
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/minus-one-native.mid",
+      "sha256": "ca4152fc3004f7acbaaf311d5b99a1ad7cdd29e93919a10669545ddb0419fe4a",
+      "midi": {
+        "division": 480,
+        "note_events": [
+          [],
+          [
+            [
+              0,
+              144,
+              60,
+              89
+            ],
+            [
+              1920,
+              128,
+              60,
+              64
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/minus-one.png",
+      "sha256": "17e9e9164d2a6a3f9ed17b222b1ea4a2954fbd3bbd9c154d8620d7e61c3d9b42"
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/plus-eleven-export.gp",
+      "sha256": "19b7004fc5c7283618966c0ac62438d7fa5e7412fe393e4500b19ae4d21ef1f0",
+      "gpif": {
+        "note_occurrences": [
+          {
+            "path": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "properties": {
+              "ConcertPitch": {
+                "Step": "C",
+                "Accidental": "",
+                "Octave": "5"
+              },
+              "TransposedPitch": {
+                "Step": "D",
+                "Accidental": "b",
+                "Octave": "4"
+              },
+              "Fret": "0",
+              "Midi": "60",
+              "String": "5"
+            },
+            "grace": null,
+            "rhythm": [
+              [
+                "NoteValue",
+                "Whole",
+                {}
+              ]
+            ]
+          }
+        ],
+        "automations": [
+          {
+            "Type": "Tempo",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "120 2",
+            "Linear": "false"
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/plus-eleven-native.gp",
+      "sha256": "108b44d04c3488a12816ea763fd351768b61d7c37e1f87ec9de63fe7677fd456",
+      "gpif": {
+        "note_occurrences": [
+          {
+            "path": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "properties": {
+              "ConcertPitch": {
+                "Step": "C",
+                "Accidental": "",
+                "Octave": "5"
+              },
+              "Fret": "0",
+              "Midi": "60",
+              "String": "5",
+              "TransposedPitch": {
+                "Step": "D",
+                "Accidental": "b",
+                "Octave": "4"
+              }
+            },
+            "grace": null,
+            "rhythm": [
+              [
+                "NoteValue",
+                "Whole",
+                {}
+              ]
+            ]
+          }
+        ],
+        "automations": [
+          {
+            "Type": "Tempo",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "120 2",
+            "Linear": "false"
+          },
+          {
+            "Type": "Sound",
+            "Bar": "0",
+            "Position": "0",
+            "Value": "Stringed/Acoustic Guitars/Steel Guitar;Track 1;User",
+            "Linear": "false"
+          }
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/plus-eleven-native.mid",
+      "sha256": "20610e576e3f71a3b228d31193b6aa8c1b437652a874243db403e92d6b35eef8",
+      "midi": {
+        "division": 480,
+        "note_events": [
+          [],
+          [
+            [
+              0,
+              144,
+              60,
+              89
+            ],
+            [
+              1920,
+              128,
+              60,
+              64
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "path": "conformance/capabilities/evidence/guitar-pro-key-authority/plus-eleven.png",
+      "sha256": "5585629c205bd9185a7cecf7feb785b30c91fdbedbee2596bfe9d6517fd2e5a0"
+    }
+  ]
+}

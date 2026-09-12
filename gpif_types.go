@@ -198,6 +198,8 @@ type gpifStaff struct {
 }
 
 type gpifStaffProperty struct {
+	Flags   *string    `xml:"Flags,omitempty"`
+	Bitset  *string    `xml:"Bitset,omitempty"`
 	Name    string     `xml:"name,attr"`
 	Pitches string     `xml:"Pitches,omitempty"`
 	Label   *string    `xml:"Label,omitempty"`

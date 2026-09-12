@@ -233,6 +233,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Pitch.Context` | `note-and-beat-semantics` | `unsupported-feature` | The note spelling has a contextual distinction outside the compact accidental-mode representation. |
 | `GPIF.Note.Pitch.Invalid` | `note-and-beat-semantics` | `invalid-data` | Pitch syntax or authored step/accidental/octave contradicts its numeric note context. |
 | `GPIF.Note.HammerDestination.Grace` | `note-and-beat-semantics` | `unsupported-feature` | Matched source grace becomes an ordered GraceEffect with no independent authored destination marker. |
+| `GPIF.Staff.PartialCapo.InactiveFlags.Normalized` | `staff-ownership` | `lossy-projection` | An all-zero bitset with zero partial offset may retain the native six-string placeholder on another tuning. Import reports normalization to an all-false selection matching the actual string count; active mismatched masks remain errors. |
 
 ## Public model inventory
 
@@ -257,7 +258,7 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `Marker` | `score-core` | 3 authored, 1 compatibility, 0 derived, 0 out-of-scope | Letter and Text are independent authored section fields. Title is the legacy caption; a post-parse title edit overrides text and preserves the letter. |
 | `SourceValue` | `score-core` | 3 authored, 0 compatibility, 0 derived, 0 out-of-scope | The wrapper preserves source presence and unknown values. |
 | `Track` | `staff-ownership` | 24 authored, 3 compatibility, 0 derived, 0 out-of-scope | The track owns staves. CapoFret is a first-staff compatibility scalar; Measures and Strings are first-staff compatibility views. |
-| `Staff` | `staff-ownership` | 8 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
+| `Staff` | `staff-ownership` | 9 authored, 0 compatibility, 1 derived, 0 out-of-scope | The staff owns its capo, display and sounding transposition, measures, tuning pitches, and tuning label. PercussionTrack mirrors its track. |
 | `TrackSettings` | `score-core` | 11 authored, 0 compatibility, 0 derived, 0 out-of-scope | The track settings are authored display data. |
 | `PercussionArticulation` | `percussion-articulations` | 13 authored, 0 compatibility, 0 derived, 0 out-of-scope | The articulation preserves track-local notation and playback identity. |
 | `TrackSound` | `score-core` | 6 authored, 0 compatibility, 0 derived, 0 out-of-scope | The sound definition owns its authored program and combined MIDI bank. The first sound is authoritative; MidiChannel mirrors it on import and supplies the fallback only when no explicit sounds exist. |
@@ -302,12 +303,13 @@ The inventory starts at `Song`. Unlisted roles are authored values. Compatibilit
 | `ScoreStyle` | `score-core` | 18 authored, 0 compatibility, 0 derived, 0 out-of-scope | Score-wide authored settings have optional public authorities independent of per-bar layout. Other validated source records remain privately preserved. |
 | `HeaderFooterSettings` | `score-core` | 10 authored, 0 compatibility, 0 derived, 0 out-of-scope | Independent template/visibility entries preserve all ten supported GP header/footer elements. Empty entries normalize to absence. |
 | `HeaderFooterStyle` | `score-core` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Literal optional template text and optional visibility are independent authored values; nil leaves retain absent records. |
+| `PartialCapo` | `staff-ownership` | 2 authored, 0 compatibility, 0 derived, 0 out-of-scope | Staff-owned relative capo offset and high-to-low selected strings; only open notes receive the offset. |
 
 Every field also has one target conversion disposition. The gate compares this partition with the public model inventory.
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 289 |
+| `preserved` | 292 |
 | `normalized` | 70 |
 | `omitted` | 93 |
 | `rejected` | 0 |
@@ -318,7 +320,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 146 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 147 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -326,7 +328,7 @@ The schema inventory records every decoded GPIF field and each explicitly tagged
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 277 |
+| `schema` | 279 |
 
 ## Source dispatch inventory
 
@@ -335,7 +337,7 @@ The gate compares these cases with the source switches. Each default has an expl
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
 | `buildTrack:track.Name` | `score-core` | 1 | `section-track-names` | `unsupported-feature` | An authored empty short name remains empty in the final consumer only when the full name is also empty; a nonempty full name produces a scoped consumer-loss report. |
-| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 4 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
+| `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 6 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
 | `gpifBeatWhammyProperties:property.Name` | `note-and-beat-semantics` | 8 | `gpif-property-dispatch` | `delegated-to-audit` | The GP6 importer reconstructs the authored whammy curve after the audit validates each named property. |
 | `gpifApplyBeatEffects:p.Strength` | `note-and-beat-semantics` | 2 | `beat-vibrato-preservation` | `delegated-to-audit` | The importer preserves each audited GPIF beat-vibrato strength. |
@@ -388,6 +390,8 @@ The gate compares these cases with the source switches. Each default has an expl
 | `gpifAuditNoteProperty:property.Name` | `note-and-beat-semantics` | 28 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named note property before import. |
 | `gpifNoteToNote:p.Name` | `note-and-beat-semantics` | 21 | `gpif-property-dispatch` | `delegated-to-audit` | The importer maps represented note properties after the audit classifies all names. |
 | `applyScoreDisplayRecord:record.key` | `score-core` | 3 | `score-display` | `opaque-preserved` | Recognized enum payloads are checked before narrowing; other validated records are retained by the shared codec. |
+| `gpifReadPartialCapo:property.Name` | `staff-ownership` | 2 | `partial-capo-native` | `delegated-to-audit` | The paired native payload retains a checked relative offset and reversed high-first selection. |
+| `gpifReadPartialCapoWithContext:property.Name` | `staff-ownership` | 1 | `partial-capo-native` | `delegated-to-audit` | The reader reports native inactive all-zero placeholder masks whose length differs from the current tuning. |
 
 ## Behavioral contracts
 
@@ -489,3 +493,4 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `header-footer` | `score-core` | `TestConformanceHeaderFooter` | `TestAlphaTabHeaderFooter` | no | Exact raw typed records retain templates, visibility, existing source alignment and independent legacy edit reconciliation; physical geometry remains an explicit limit. |
 | `score-display` | `score-core` | `TestConformanceScoreDisplay` | `TestAlphaTabScoreDisplay` | no | Optional authored keys retain exact values, types and precedence. The page-specific name mode has an explicit final-consumer normalization report. |
 | `grace-timer` | `grace-relationships` | `TestConformanceGraceTimers` | `TestAlphaTabGraceTimers` | no | Owned timer requests retain ordered source grace-beat addresses and edits; same-group conflicts reject before export. |
+| `partial-capo-native` | `staff-ownership` | `TestConformancePartialCapo` | `TestConformancePartialCapo` | no | Native fixture MIDI establishes the pitch rule; the pinned consumer independently demonstrates its reference loss. |

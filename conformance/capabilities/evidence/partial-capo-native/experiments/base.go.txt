@@ -1,0 +1,11 @@
+package main
+import("os";"fmt";gp "github.com/CaliLuke/go-guitar-pro")
+func main(){
+s,e:=gp.ParseFile("testdata/gp3/mix-table-events.gp3");if e!=nil{panic(e)}
+s.MeasureHeaders=s.MeasureHeaders[:1];s.MeasureHeaders[0].TimeSignature.Numerator=6;s.MeasureHeaders[0].TimeSignature.Denominator.Value=4;s.TempoAutomations=nil;s.VolumeAutomations=nil;s.PanAutomations=nil
+tr:=&s.Tracks[0];tr.Sounds=nil;tr.SoundAutomations=nil;tr.Staves=nil;tr.Measures=tr.Measures[:1];tr.CapoFret=0;tr.Name="Partial capo control"
+m:=&tr.Measures[0];m.Voices=m.Voices[:1];m.Voices[0].Beats=nil
+for i:=1;i<=6;i++{m.Voices[0].Beats=append(m.Voices[0].Beats,gp.Beat{Status:gp.BeatStatusNormal,Duration:gp.Duration{Value:4},Notes:[]gp.Note{{String:int8(i),Value:0,Velocity:95,Kind:gp.NoteTypeNormal,DurationPercent:1}}})}
+tr.Staves=[]gp.Staff{{Strings:tr.Strings,Measures:tr.Measures,TuningName:"Standard"}}
+data,report,e:=gp.ExportWithReport(s,gp.ExportFormatGP8,gp.ExportOptions{});fmt.Println(e,report);if e!=nil{panic(e)};if e=os.WriteFile("/tmp/gp-release-review/partial/control-input.gp",data,0600);e!=nil{panic(e)}
+}

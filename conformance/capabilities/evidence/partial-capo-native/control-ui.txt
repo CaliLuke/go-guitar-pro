@@ -1,0 +1,104 @@
+Window: "control-input", App: Guitar Pro 8.
+0 standard window control-input, Secondary Actions: Raise (showing 42-142 of 142 items)
+	1 menu button Show all open files...
+	2 text mix…ave mix…ive mix…ive mix…obe not…ive wit…ive wit…ive mix…ive sou…ive lab…ive pro…ted abs…ive po…be mix…ive v00 v01 v02 v03 v04 v05 v06 v07 v08 v09 v10 v11 v12 v13 v14 v15 v16 def…ive flat…tive cap…ive dis…ive clef…tive oct…ive har…ive abs…ive gra…ive har…ive oct…ive clef…tive def…ive flat…tive cap…ive dis…ive abs…ive gra…ive sou…ive ind…ive mix…ive not…ive nat…ive dou…ive dou…ive mix…nts firs…tive asy…ive co…ut
+	3 checkbox Song, Description: Song (F5), Value: 0
+	4 checkbox Track, Description: Track (F6), Value: 1
+	5 container
+		6 text Information
+		7 button Track color
+		8 button Track icon
+		9 text field (settable) Description: Full name, Value: Partial capo control, Secondary Actions: Raise
+		10 text field (settable) Description: Abbreviated name, Secondary Actions: Raise
+		11 text Musical notation Notation:
+		12 checkbox Description: Tablature notation, Value: 1
+		13 checkbox Description: Standard notation, Value: 1
+		14 checkbox Description: Slash notation, Value: 0
+		15 checkbox Description: Numbered notation, Value: 0
+		16 checkbox Description: Single staff, Value: 1
+		17 checkbox Description: Grand staff, Value: 0
+		18 text Tuning:
+		19 button E A D G B E, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr>No partial capo</nobr>
+		20 checkbox 0
+		21 button More
+		22 text Sounds
+		23 checkbox Description: Switch track to RSE, Value: 0
+		24 checkbox Description: Switch track to MIDI, Value: 1
+		25 menu button Add a sound
+		26 button Open sound automations dialog
+		27 menu button 1. [25] - Acoustic Guitar (steel), Description: Sounds library
+		28 menu button Sound options
+		29 checkbox 1
+		30 checkbox MSB: 0 - LSB: 0, Description: Show/Hide sound details, Value: 0
+		31 text Interpretation Playing style: Palm mute:
+		32 slider (settable) Description: 0%, Value: 0
+		33 text Accentuation:
+		34 slider (settable) Description: 0%, Value: 0
+		35 text Auto let ring:
+		36 checkbox 0
+		37 text Off Auto brush:
+		38 checkbox 0
+		39 text Off Stringed:
+		40 checkbox 0
+		41 text Off
+		42 combo box Default, Description: Playing style
+			43 list
+				44 text Default
+				45 text Pick
+		46 menu button 2
+		47 text 2nd channel:
+		48 menu button 1
+		49 text MIDI Settings Port:
+		50 menu button Port Software Synthesizer
+		51 text Force 11-16:
+		52 checkbox 0
+		53 text Off
+		54 button Use a channel by string
+		55 text 1st channel:
+	56 button Add Track
+	57 text Tracks
+	58 menu button Global view options
+	59 button Move current track down
+	60 button Move current track up
+	61 checkbox Description: Switch single track / multitrack, Value: 0
+	62 button Reset mute
+	63 button Reset solo
+	64 text Vol. Pan. Eq.
+	65 button
+	66 text 1. Partial capo control
+	67 checkbox Description: Visibility, Value: 1
+	68 checkbox Description: Mute, Value: 0
+	69 checkbox Description: Solo, Value: 0
+	70 slider (settable) Description: 1.0dB, Value: 81
+	71 button
+	72 checkbox Description: Volume automation, Value: 0
+	73 container (settable) Description: Center, Value: 50
+	74 checkbox Description: Pan automation, Value: 0
+	75 checkbox Description: Equalizer, Value: 0
+	76 text Master
+	77 button
+	78 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	79 slider (settable) Description: 0 dB, Value: 75
+	80 button
+	81 checkbox Description: Master volume automation, Value: 0
+	82 container (settable) Description: Center, Value: 50
+	83 checkbox Description: Master pan automation, Value: 0
+	84 button
+	85 close button
+	86 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	87 minimize button
+	88 text control-input
+89 menu bar
+	90 Guitar Pro 8
+	91 File
+	92 Edit
+	93 Track
+	94 Bar
+	95 Note
+	96 Effects
+	97 Section
+	98 Tools
+	99 Sound
+	100 View
+	101 Window
+	102 Help

@@ -185,9 +185,10 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 				groups = append(groups, gp8GraceGroup{graceBeatKey: key, timer: grace.Timer})
 				groupIndex = len(groups) - 1
 			}
-			graceNote := *note
-			// GraceEffect has no independent accidental preference.
-			graceNote.AccidentalMode = NoteAccidentalDefault
+			// A generated grace owns only its grace fields and string context.
+			// It must not inherit its owner's ornament, display marks, or ties.
+			graceNote := defaultNote()
+			graceNote.String = note.String
 			if builder.song.Tracks[trackIndex].PercussionTrack {
 				percussionGrace := gp8PercussionGraceNote(note, grace)
 				graceNote.Value = percussionGrace.Value
@@ -201,7 +202,6 @@ func (builder *gp8Builder) graceGroups(trackIndex int, beat *Beat, sequence uint
 			}
 			graceNote.Velocity = key.velocity
 			graceNote.Kind = NoteTypeNormal
-			graceNote.Effect = defaultNoteEffect()
 			if grace.IsDead {
 				graceNote.Kind = NoteTypeDead
 			}

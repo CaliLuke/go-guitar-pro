@@ -3550,6 +3550,90 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp8/partial-capo-asymmetric.gp",
+      "sha256": "0210cdd2de9d5adbb3227f2f46453def03cb93811b22ac3f4409feddf4088b0e",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-at-whole.gp",
+      "sha256": "aff3dee7ad6175f6319e3bcc2fd39d6786038f64dddccee0f02c5bf93e028a3d",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-combined.gp",
+      "sha256": "cc3585fb4e76c0d9dc5478154e4698acf60ca6b581b743c54aea9eae687cda87",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-control.gp",
+      "sha256": "e0afa0989af0bc692768d2459fa61ecbc964e19a5d9f0134c3e4fb5db5019114",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-fretted.gp",
+      "sha256": "9817340fef05e50ab44f3fe5172377c2008b2e73512507ed18fd8cbb345aa1ed",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-single-first.gp",
+      "sha256": "bdada6b511f9c98fa13b2f2aaf493bfc7b88bbb003430ef0b0f18b871581f24d",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/partial-capo-single-fourth.gp",
+      "sha256": "0edf536ddaa8c526ca4ac3116dd8ef03a79f95973fd118139e8096fd8cab6f91",
+      "format": "gp8",
+      "disposition": "partial",
+      "reason": "Native-authored partial-capo acquisition validates relative offset, string order and selected open-note pitch. Pinned AlphaTab drops active partial-capo pitch; precise corpus differences remain linked to #40.",
+      "features": [
+        "staff-ownership",
+        "note-and-beat-semantics"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp8/protection-edit-locked.gp",
       "sha256": "dc3e90467f5b240f3529c8841b24911f91a7b6c0134dcbe75dabe00d855235e4",
       "format": "gp8",

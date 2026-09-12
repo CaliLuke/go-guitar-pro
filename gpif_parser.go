@@ -201,7 +201,27 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 							tuningName = parsed
 						}
 					}
+					partialCapo, partialErr := gpifReadPartialCapoWithContext(t.Properties, len(trackStrings), context, trackID, -1)
+					if partialErr != nil {
+						return nil, fmt.Errorf("track %s partial capo: %w", trackID, partialErr)
+					}
+					if staffIndex < len(t.Staves.Staff) {
+						local, localErr := gpifReadPartialCapoWithContext(t.Staves.Staff[staffIndex].Properties, len(strings), context, trackID, staffIndex)
+						if localErr != nil {
+							return nil, fmt.Errorf("track %s staff %d partial capo: %w", trackID, staffIndex, localErr)
+						}
+						if local != nil {
+							partialCapo = local
+						}
+					}
+					if partialCapo != nil && len(partialCapo.Strings) != len(strings) {
+						partialCapo, partialErr = gpifReadPartialCapoWithContext(t.Properties, len(strings), context, trackID, -1)
+						if partialErr != nil {
+							return nil, fmt.Errorf("track %s staff %d inherited partial capo: %w", trackID, staffIndex, partialErr)
+						}
+					}
 					track.Staves[staffIndex] = Staff{
+						PartialCapo:               partialCapo,
 						Strings:                   strings,
 						TuningName:                tuningName,
 						PercussionTrack:           track.PercussionTrack,

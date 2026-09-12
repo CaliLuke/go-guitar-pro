@@ -21,6 +21,9 @@ type TrackSettings struct {
 
 // Staff represents one notation staff owned by a track.
 type Staff struct {
+	// PartialCapo owns the selected-string offset. Nil means no authored partial capo;
+	// an explicit zero offset or all-false selection remains independently editable.
+	PartialCapo *PartialCapo
 	// NotationSettings owns this staff's standard, tab, slash and numbered requests.
 	// Nil uses Track.Settings for standard/tab and false for slash/numbered.
 	// Changed parsed Track.Settings flags override only their corresponding staff flag.

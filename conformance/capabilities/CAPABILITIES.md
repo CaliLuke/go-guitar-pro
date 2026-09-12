@@ -14,15 +14,15 @@ A linked source construct has a capability association, not individual behavior 
 
 | Stage | Supported | Partial | Missing | Unverified |
 | --- | ---: | ---: | ---: | ---: |
-| import | 80 | 15 | 2 | 1 |
-| model | 79 | 16 | 2 | 1 |
-| export | 56 | 38 | 3 | 1 |
+| import | 80 | 16 | 1 | 1 |
+| model | 79 | 17 | 1 | 1 |
+| export | 56 | 39 | 2 | 1 |
 
 All three stages have a supported rating in 56 rows. This is a checklist count, not a percentage of all musical behavior.
 
 ## Runtime probe
 
-The receipt contains 377 input files. Probe freshness against the current source: `true`.
+The receipt contains 377 input files. Probe freshness against the current source: `false`.
 Raw consumer differences require review. Default-only cases do not prove feature support. Source and target consumer failures are counted separately.
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
@@ -483,11 +483,11 @@ Bounded work: [Reject wrapped legacy fret counts and verify isolated instrument 
 
 Instrument. Priority 3. Formats: gp7, gp8. Scope: guitar-pro.
 
-Import: **missing**. Model: **missing**. GP8 export: **missing**.
+Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-No per-string capo model. Website lists this as unsupported in AlphaTab too; keep it separate from parity blockers.
+Native Guitar Pro 8.1.5 proves relative partial offsets and reversed string flags. Staff.PartialCapo retains the authored offset and public high-to-low selection. Only selected open notes receive the shift. GP8 native exports retain exact pitches and flags. Pinned AlphaTab ignores these properties, which is a reference defect. Native acquisition covers seven six-string GP8 cases; no GP7 application session is claimed.
 
-Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
+Completion criterion: Retain independent mutable per-staff values and validated public edits. Preserve partial fields and selected open-note pitches in native GP8. Keep pinned reference differences explicit. Use the native receipt and executable regression assertions for the proved slice.
 
 Bounded work: [Acquire partial-capo fixtures with verified string ordering](https://github.com/CaliLuke/go-guitar-pro/issues/115).
 

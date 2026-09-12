@@ -6,6 +6,8 @@ import "fmt"
 
 // Guitar Pro chooses enharmonic key spellings from this table when a display
 // transposition is active. Columns run from seven flats through seven sharps.
+// The C/11 entry corrects the reference table: C shifted up one semitone is
+// D-flat, not F-sharp. Every entry must retain the transposed tonic.
 var transposedKeySignatures = [12][15]int8{
 	{-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7},
 	{-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2, -1, 0},
@@ -18,7 +20,7 @@ var transposedKeySignatures = [12][15]int8{
 	{-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2, -1},
 	{2, 3, 4, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4},
 	{-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, -4, -3},
-	{0, 1, 2, 3, 4, -7, -6, 6, -4, -3, -2, -1, 0, 1, 2},
+	{0, 1, 2, 3, 4, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2},
 }
 
 func transposeKeySignature(key KeySignature, pitch int32) KeySignature {
@@ -36,7 +38,7 @@ func transposeKeySignature(key KeySignature, pitch int32) KeySignature {
 func soundingNoteMIDI(staff *Staff, note *Note) int64 {
 	midi := int64(note.Value)
 	if note.String > 0 && int(note.String) <= len(staff.Strings) {
-		midi += int64(staff.Strings[int(note.String)-1].Value) + int64(staff.CapoFret)
+		midi += int64(staff.Strings[int(note.String)-1].Value) + int64(staff.CapoFret) + partialCapoOffset(staff, note)
 	}
 	return midi - int64(staff.TranspositionPitch)
 }

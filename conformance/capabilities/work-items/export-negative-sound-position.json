@@ -18,12 +18,12 @@
   "stages": [
     "export"
   ],
-  "scope": "Preserve the valid opening Sound automation at position -0.125 in the GPIF grace fixture without clamping its position.",
+  "scope": "Preserve the opening Sound event in the GP7 grace fixture. Its GPIF offset is -0.125 quarter notes. Its public bar ratio is -0.03125 in 4/4.",
   "acceptance": [
-    "testdata/gp7/grace.gp must pass the sound-position export boundary and retain bar 0, position -0.125, and the exact referenced sound through Go and pinned AlphaTab.",
-    "Retain event order relative to a position-zero event and other equal-position events. No event may be silently moved to zero.",
-    "For this evidenced slice, support finite opening-bar positions in [-0.125, 0), while regular positions remain in [0, 1]. Explicitly reject earlier preroll and negative positions on later bars; test -0.125, zero and values just outside the supported bounds. Document this as a bounded support contract, not a universal GPIF limit.",
-    "Continue rejecting non-finite positions, invalid bar/sound references and unsupported positions with precise diagnostics. Align preflight, validation and serialization without changing positive-position semantics."
+    "Preserve the exact sound reference and bar 0 in testdata/gp7/grace.gp. Assert public Position=-0.03125 and GPIF/pinned Position=-0.125 in its 4/4 bar.",
+    "Retain event order relative to a position-zero event and other equal-position events. Do not move an authored event to zero.",
+    "Use bar ratios for public positions. Support finite opening preroll in [-0.125, 0) and regular positions in [0, 1]. Reject earlier preroll and negative positions on later bars. Cover -0.125, zero and adjacent values outside these public bounds. Document this bounded contract separately from GPIF quarter-note units.",
+    "Reject non-finite positions and invalid bar or sound references with precise diagnostics. Keep preflight, validation and serialization consistent. Convert public ratios to GPIF quarter-note offsets without changing authored timing."
   ],
   "exclusions": [
     "Do not infer a universal negative-position range from a permissive AlphaTab parser or add a playback engine."
@@ -34,11 +34,12 @@
   "reproduction": {
     "kind": "source-review",
     "starting_files": [
-      "gp8_export.go",
       "gpif_automations.go",
-      "conformance_automations_test.go"
+      "gp8_builder.go",
+      "integration/sound_automation_test.go",
+      "conformance_sound_automation_test.go"
     ],
-    "instructions": "testdata/gp7/grace.gp must pass the sound-position export boundary and retain bar 0, position -0.125, and the exact referenced sound through Go and pinned AlphaTab. See the linked investigation decision and review receipt for the confirmed baseline."
+    "instructions": "Parse testdata/gp7/grace.gp through the public API. Assert bar 0, public Position=-0.03125 and the exact sound reference. Export to GP8. Assert GPIF and pinned AlphaTab Position=-0.125. The 4/4 bar converts each public ratio to four quarter notes."
   },
   "evidence": [
     {
@@ -93,6 +94,16 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/final-ticket-reviews.json",
       "detail": "Independent agent acceptance review for issue 64; preserved current criteria, exact source commits, commands and scoped residual failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+      "detail": "Native Guitar Pro 8.1.5 build 31 retains a Sound offset of 1 quarter note at tick 481. The 4/4 public ratio is 0.25. This evidence established the unit conversion and supersedes the historical shared-unit assumption."
+    },
+    {
+      "kind": "test",
+      "reference": "TestAlphaTabSoundPreroll",
+      "detail": "Current source and export retain raw pinned offset -0.125. TestSoundAutomationOpeningPreroll separately asserts the public ratio -0.03125. Both values describe the same event in 4/4."
     }
   ],
   "shared_files": [
@@ -101,7 +112,7 @@
     "gp8_export.go",
     "gpif_automations.go"
   ],
-  "resolution": "Preserved finite opening sound preroll in [-0.125, 0), authored order and references. Later bars retain [0, 1]. Adjacent boundaries and malformed locations reject without mutation. Independently reviewed as solved. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
+  "resolution": "The library preserves opening Sound preroll, event order and references. Public positions use bar ratios, with opening preroll in [-0.125, 0). Later bars retain [0, 1]. GPIF Sound positions use quarter-note offsets. The GP7 grace fixture retains public -0.03125 and wire/pinned -0.125 in 4/4. Native Guitar Pro evidence established this unit conversion in c48f8d7a1b36fb23d0847e55390a460cb210d4ac. The 2026-09-12 acceptance correction distinguishes these units. Earlier verification entries retain their historical wording and commits. Adjacent boundaries and invalid references reject without source mutation. This correction does not change support ratings or close another ticket.",
   "verification": [
     {
       "commit": "cf139522378e4fed5ea487383e2bb5e13d29a45e",

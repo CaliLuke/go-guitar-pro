@@ -121,6 +121,50 @@ including an explicitly empty element, overrides that inherited label; a
 staff-local tuning property without `Label` keeps the inherited name. GP3
 through GP5 do not author a tuning label, so their imported value is empty.
 
+`Staff.PartialCapo` owns the partial capo independently from `Staff.CapoFret`.
+Its `Offset` is a non-negative fret offset from the resolved whole capo.
+Its `Strings` slice follows public string order, from the highest string to
+the lowest string. Each flag selects that string. GPIF stores these flags
+in reverse order. Nil means that no partial-capo properties were authored.
+An explicit zero offset or all-false selection remains distinct from absence.
+
+Native Guitar Pro evidence establishes the units and string order. Whole capo 2
+and partial capo 5 in the tuning dialog produce `CapoFret=2` and
+`PartialCapoFret=3`. The dialog identifies strings 1 and 4 for wire flags
+`001001`. Separate single-string controls and native MIDI confirm this mapping.
+The tuning tooltip uses reversed string labels, so the receipt uses the dialog
+and MIDI sequence as its references.
+
+A partial capo changes only selected open-string notes (`Note.Value == 0`).
+Fretted notes retain their fret pitch plus the whole capo. Direct edits to
+`Offset` or `Strings` control export without changing tuning or note frets.
+GPIF import creates separate mutable partial-capo data for each staff occurrence.
+The library rejects negative offsets and active masks whose flag count differs from the tuning.
+Native files can retain six zero flags on another tuning when the offset is zero.
+Import replaces that inactive placeholder with one false flag per actual string.
+`GPIF.Staff.PartialCapo.InactiveFlags.Normalized` reports this source normalization.
+Other mismatched masks remain errors.
+
+Older GP7 files can store `<Flags>0</Flags>` instead of a `Bitset`.
+Zero imports as an all-false selection. Nonzero integer flags have no verified
+string-order mapping and return an explicit unsupported-mapping error.
+GP8 export uses the verified `Bitset` representation.
+
+A complete staff-local partial-capo record overrides the track default.
+Track defaults are checked against track tuning; local records use staff tuning.
+Without a local override, an active inherited selection must match the staff tuning.
+The inactive zero-placeholder normalization also applies after inheritance.
+Malformed local payloads remain errors.
+Imported spelling receipts depend on the partial offset applied to that note.
+Inactive configurations and nonzero frets do not invalidate unchanged spelling.
+
+Guitar Pro 8.1.5 build 31 refuses a partial fret less than the whole capo.
+The zero-offset control retains the whole-capo pitches. A negative wire offset
+is an invalid experiment, not a supported below-whole value. The acquisition
+receipt records that finite limit instead of a missing-authoring-access claim.
+Pinned AlphaTab ignores partial-capo properties. Native GPIF and MIDI evidence
+therefore establish preservation independently from that reference limitation.
+
 GPIF master-bar references list bars by track, then by staff. An interior `-1`
 voice reference keeps an empty voice slot. A bar-level `-1` replaces one whole
 track. The parser reports a short, long, or misplaced bar list as invalid data.
@@ -796,9 +840,9 @@ the GP7/GP8 Whammy element use this same percentage authority.
 The GP7 and GP8 canon sources author note177 at offsets 0, 50, 50, 35.
 Go preserves those controls. Pinned AlphaTab keeps only the hold endpoints
 at offsets 0 and 21 on its 0-through-60 scale, for both source and output.
-The complete source still fails export because track2 sound event1 has
-bar179 and position2. The isolated bend regression removes only that event;
-it does not expand the sound-event domain.
+Both complete sources now export. Track2 sound event1 has bar179 and a
+GPIF Sound position of 2 quarter notes. That 6/4 bar gives a public
+`SoundAutomation.Position` of 1/3. The bend regression retains this event.
 
 GP8 percussion resources cover every resolved staff, including articulations
 used only by grace notes. The writer emits staff definitions before the shared

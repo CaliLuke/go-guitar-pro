@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: MIT
+import fs from 'node:fs';
+import * as alphaTab from '@coderline/alphatab';
+const oracle=JSON.parse(fs.readFileSync(new URL('../oracle.json', import.meta.url)));
+const results=process.argv.slice(2).map(file=>{const settings=new alphaTab.Settings();Object.assign(settings.importer,oracle.importerSettings);try {const score=alphaTab.importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(fs.readFileSync(file)),settings);return {file,staves:score.tracks.flatMap(track=>track.staves.map(staff=>({track:track.index,staff:staff.index,capo:staff.capo,tuning:Array.from(staff.tuning)}))),notes:score.tracks.flatMap(track=>track.staves.flatMap(staff=>staff.bars.flatMap(bar=>bar.voices.flatMap(voice=>voice.beats.flatMap(beat=>beat.notes.map(note=>({track:track.index,staff:staff.index,bar:bar.index,voice:voice.index,beat:beat.index,note:note.index,string:note.string,fret:note.fret,midi:note.realValue,accidentalMode:note.accidentalMode})))))))};}catch(e){return {file,error:String(e)}}});console.log(JSON.stringify({oracle,results},null,2));

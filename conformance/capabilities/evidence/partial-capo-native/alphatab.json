@@ -1,0 +1,663 @@
+{
+  "oracle": {
+    "schemaVersion": 1,
+    "package": "@coderline/alphatab",
+    "version": "1.8.4",
+    "integrity": "sha512-VN5rfTZZWgA63Ny1aDKCp02k3Qm9CHhg4Q9AnK0kHm7G+fNDNZo36TeToPDFoJ6VpB9+AHcCrHwHFUP1tKqdsw==",
+    "sourceRepository": "https://github.com/CoderLine/alphaTab",
+    "sourceRef": "v1.8.4",
+    "sourceRevision": "022a45c8e42370f9e12e68949d11eada370da83d",
+    "importerSettings": {
+      "encoding": "utf-8",
+      "mergePartGroupsInMusicXml": false,
+      "beatTextAsLyrics": false,
+      "maxDecodingBufferSize": 128000000
+    }
+  },
+  "results": [
+    {
+      "file": "testdata/gp8/partial-capo-control.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 0,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 59,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 55,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 50,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 45,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 40,
+          "accidentalMode": 2
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-asymmetric.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 0,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 59,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 55,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 50,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 45,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 40,
+          "accidentalMode": 2
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-single-first.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 0,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 59,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 55,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 50,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 45,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 40,
+          "accidentalMode": 2
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-single-fourth.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 0,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 59,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 55,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 50,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 45,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 40,
+          "accidentalMode": 2
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-combined.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 2,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 66,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 61,
+          "accidentalMode": 3
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 57,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 52,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 47,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 42,
+          "accidentalMode": 3
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-at-whole.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 5,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 69,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 0,
+          "midi": 60,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 0,
+          "midi": 55,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 0,
+          "midi": 50,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 0,
+          "midi": 45,
+          "accidentalMode": 2
+        }
+      ]
+    },
+    {
+      "file": "testdata/gp8/partial-capo-fretted.gp",
+      "staves": [
+        {
+          "track": 0,
+          "staff": 0,
+          "capo": 0,
+          "tuning": [
+            64,
+            59,
+            55,
+            50,
+            45,
+            40
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 0,
+          "note": 0,
+          "string": 6,
+          "fret": 0,
+          "midi": 64,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 1,
+          "note": 0,
+          "string": 5,
+          "fret": 1,
+          "midi": 60,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 2,
+          "note": 0,
+          "string": 4,
+          "fret": 2,
+          "midi": 57,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 3,
+          "note": 0,
+          "string": 3,
+          "fret": 3,
+          "midi": 53,
+          "accidentalMode": 2
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 4,
+          "note": 0,
+          "string": 2,
+          "fret": 4,
+          "midi": 49,
+          "accidentalMode": 3
+        },
+        {
+          "track": 0,
+          "staff": 0,
+          "bar": 0,
+          "voice": 0,
+          "beat": 5,
+          "note": 0,
+          "string": 1,
+          "fret": 5,
+          "midi": 45,
+          "accidentalMode": 2
+        }
+      ]
+    }
+  ]
+}

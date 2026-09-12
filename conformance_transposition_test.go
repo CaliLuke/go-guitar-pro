@@ -28,6 +28,12 @@ func TestConformanceTransposition(t *testing.T) {
 }
 
 func runConformanceTransposition(run *conformanceRun) {
+	for key := int8(-7); key <= 7; key++ {
+		for display := int32(-12); display <= 12; display++ {
+			written := transposeKeySignature(KeySignature{Key: key}, display)
+			run.Normalized("Measure.KeySignature", ((7*int(written.Key))%12+12)%12, ((7*int(key)-int(display))%12+12)%12)
+		}
+	}
 	t := run.t
 	source := conformanceTranspositionGPIF()
 	result, err := ParseWithOptions(conformanceGPIFArchive(t, source), ParseOptions{Strict: true})
@@ -39,7 +45,7 @@ func runConformanceTransposition(run *conformanceRun) {
 	}
 
 	wantDisplay := [][]int32{{4, 4}, {-13}, {14, 14}}
-	wantKeys := [][]int8{{-4, -4}, {6}, {-2, -2}}
+	wantKeys := [][]int8{{-4, -4}, {-5}, {-2, -2}}
 	for trackIndex := range result.Song.Tracks {
 		track := &result.Song.Tracks[trackIndex]
 		for staffIndex := range track.Staves {
@@ -102,8 +108,8 @@ func runConformanceTransposition(run *conformanceRun) {
 	}
 	run.ClaimPrimary(claimSite("transposition", "model", "M04-TRANSPOSITION", "distinct sounding and display offsets")).Preserved("Staff.DisplayTranspositionPitch", roundTrip.Tracks[0].Staves[0].DisplayTranspositionPitch, int32(-13))
 	run.Omitted("Staff.TranspositionPitch", roundTrip.Tracks[0].Staves[0].TranspositionPitch, int32(0))
-	if got := roundTrip.Tracks[0].Staves[0].Measures[0].KeySignature.Key; got != 6 {
-		t.Fatalf("edited effective key = %d, want 6", got)
+	if got := roundTrip.Tracks[0].Staves[0].Measures[0].KeySignature.Key; got != -5 {
+		t.Fatalf("edited effective key = %d, want -5", got)
 	}
 	if got := roundTrip.Tracks[2].Staves[1].DisplayTranspositionPitch; got != 14 {
 		t.Fatalf("later-staff target projection = %d, want track display 14", got)

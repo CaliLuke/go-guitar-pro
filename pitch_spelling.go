@@ -158,6 +158,7 @@ type noteAccidentalSource struct {
 	value                   int16
 	stringNumber            int8
 	tuning                  []GuitarString
+	partialOffset           int64
 	capo, sounding, display int32
 	clef, octave            Octave
 }
@@ -165,7 +166,7 @@ type noteAccidentalSource struct {
 func (note *Note) sourceAccidental(staff *Staff, measure *Measure, beat *Beat) *noteAccidentalSource {
 	source := note.accidentalSource
 	if source == nil || source.mode != note.AccidentalMode || source.value != note.Value || source.stringNumber != note.String ||
-		source.capo != staff.CapoFret || source.sounding != staff.TranspositionPitch || source.display != staff.DisplayTranspositionPitch ||
+		source.capo != staff.CapoFret || source.partialOffset != partialCapoOffset(staff, note) || source.sounding != staff.TranspositionPitch || source.display != staff.DisplayTranspositionPitch ||
 		source.clef != measure.ClefOctave || source.octave != beat.Octave || !slices.Equal(source.tuning, staff.Strings) {
 		return nil
 	}
@@ -201,7 +202,7 @@ func (pitch *noteAccidentalPitch) gpif() *gpifPitch {
 func (note *Note) rememberAccidentalSource(property gpifProperty, concert *gpifPitch, staff *Staff, measure *Measure, beat *Beat) {
 	note.accidentalSource = &noteAccidentalSource{mode: note.AccidentalMode, propertyName: property.Name,
 		pitch: rememberAccidentalPitch(property.Pitch), concert: rememberAccidentalPitch(concert),
-		value: note.Value, stringNumber: note.String, tuning: slices.Clone(staff.Strings), capo: staff.CapoFret, sounding: staff.TranspositionPitch,
+		value: note.Value, stringNumber: note.String, tuning: slices.Clone(staff.Strings), partialOffset: partialCapoOffset(staff, note), capo: staff.CapoFret, sounding: staff.TranspositionPitch,
 		display: staff.DisplayTranspositionPitch, clef: measure.ClefOctave, octave: beat.Octave}
 }
 

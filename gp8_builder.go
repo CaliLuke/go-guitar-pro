@@ -20,6 +20,7 @@ type gp8Builder struct {
 	articulationIDs    []map[int16]int
 	percussionElements [][]gpifElement
 	spellingStaff      *Staff
+	spellingKey        KeySignature
 	spellingMeasure    *Measure
 	spellingBeat       *Beat
 	hammerBeats        []gp8HammerBeat
@@ -470,6 +471,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 	result.Staves.Staff = make([]gpifStaff, len(staves))
 	for staffIndex := range staves {
 		staff := &staves[staffIndex]
+		buildGP8PartialCapo(&result.Staves.Staff[staffIndex], staff)
 		capo := int(staff.CapoFret)
 		result.Staves.Staff[staffIndex].Properties = append(
 			result.Staves.Staff[staffIndex].Properties,
@@ -704,6 +706,7 @@ func gp8ChordFingerToken(finger Fingering) string {
 func (builder *gp8Builder) buildScoreGraph() error {
 	for measureIndex := range builder.song.MeasureHeaders {
 		header := &builder.song.MeasureHeaders[measureIndex]
+		builder.spellingKey = header.KeySignature
 		headerLocation := ScoreLocation{Measure: measureIndex}
 		builder.reportFermataConsumerLimits(header, headerLocation)
 		if header.DoubleBar && measureIndex == len(builder.song.MeasureHeaders)-1 {

@@ -1,0 +1,77 @@
+Window: "Tuning", App: Guitar Pro 8.
+0 sheet Secondary Actions: Raise
+	1 checkbox Value: 0, Secondary Actions: Raise
+	2 checkbox Value: 1, Secondary Actions: Raise
+	3 combo box 6 strings
+		4 list
+			5 text 3 strings
+			6 text 4 strings
+			7 text 5 strings
+			8 text 6 strings
+			9 text 7 strings
+			10 text 8 strings
+			11 text 9 strings
+			12 text 10 strings
+	13 combo box Undefined
+		14 list
+			15 text Banjo
+			16 text Bass
+			17 text Guitar
+			18 text separator
+			19 text Undefined
+	20 combo box
+		21 list
+			22 text
+	23 menu button Secondary Actions: Raise
+	24 checkbox Description: Listen to all strings, Value: 0, Secondary Actions: Raise
+	25 checkbox Detail, Value: 1, Secondary Actions: Raise
+	26 text Value: E2 A2 D3 G3 B3 E4 Partial Capo: Display Label:, Secondary Actions: Raise
+	27 menu button Show, Secondary Actions: Raise
+	28 container Secondary Actions: Raise
+		29 button Adjust the Fingering, Secondary Actions: Raise
+		30 button Keep the Fingering, Secondary Actions: Raise
+		31 button Cancel, Secondary Actions: Raise
+	32 text Capo Tuning
+	33 button No strings capoed, Secondary Actions: Raise
+	34 stepper (settable) Value: 5, Secondary Actions: Raise
+	35 text Capo: Strings: Library:
+	36 stepper (settable) Value: 5, Secondary Actions: Raise
+	37 text field (settable) Description: Tuning label, Secondary Actions: Raise
+	38 checkbox Visible, Value: 1, Secondary Actions: Raise
+	39 text Alteration:
+	40 button Description: Shift one semitone down, Secondary Actions: Raise
+	41 button Description: Shift one semitone up, Secondary Actions: Raise
+	42 button
+	43 stepper (settable) Value: 64, Secondary Actions: Raise
+	44 checkbox Value: 0, Secondary Actions: Raise
+	45 button
+	46 stepper (settable) Value: 59, Secondary Actions: Raise
+	47 checkbox Value: 0, Secondary Actions: Raise
+	48 button
+	49 stepper (settable) Value: 55, Secondary Actions: Raise
+	50 checkbox Value: 0, Secondary Actions: Raise
+	51 button
+	52 stepper (settable) Value: 50, Secondary Actions: Raise
+	53 checkbox Value: 0, Secondary Actions: Raise
+	54 button
+	55 stepper (settable) Value: 45, Secondary Actions: Raise
+	56 checkbox Value: 0, Secondary Actions: Raise
+	57 button
+	58 stepper (settable) Value: 40, Secondary Actions: Raise
+	59 checkbox Value: 0, Secondary Actions: Raise
+60 menu bar
+	61 Guitar Pro 8
+	62 File
+	63 Edit
+	64 Track
+	65 Bar
+	66 Note
+	67 Effects
+	68 Section
+	69 Tools
+	70 Sound
+	71 View
+	72 Window
+	73 Help
+
+The focused UI element is 0 sheet Secondary Actions: Raise

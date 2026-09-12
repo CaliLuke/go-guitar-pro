@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-12T17:32:14.495765+00:00",
+  "comparison_base": "v0.9.0",
+  "reviewed_base_commit": "9d282eb5dd2d403a647cbda98634210d42bf7196",
+  "status": "confirmed findings corrected in working tree; final integrated commit and full gates require final review",
+  "covered_production_files": [
+    "gp8_builder.go",
+    "gp8_export.go",
+    "gp8_notation.go",
+    "gp8_effects.go",
+    "gp8_consumer_limits.go",
+    "gp8_hammer.go",
+    "gp8_lyrics.go",
+    "gp8_mix_table.go",
+    "gp8_sync_points.go",
+    "gp8_note_pitch.go",
+    "export_report.go",
+    "part_configuration.go",
+    "pitch_spelling.go",
+    "gpif_pitch.go",
+    "gpif_types.go",
+    "gpif_automations.go",
+    "gpif_text.go",
+    "mix_table_projection.go",
+    "pan_automation.go",
+    "beat_timer.go",
+    "ornament.go",
+    "transposition.go",
+    "validation.go"
+  ],
+  "findings": [
+    {
+      "id": "automatic-key-authority",
+      "priority": "P2",
+      "file": "gp8_note_pitch.go",
+      "reproduction": "Edit only master key from C to Bb, reset note MIDI70 to Default; output spelled A# despite the authored Bb master key. Editing the compatibility key incorrectly controlled spelling.",
+      "resolution": "Use master key for concert spelling and its derived display-transposed key for written spelling.",
+      "test": "TestGP8AutomaticPitchKeyAndBounds; four failures reproduced before repair; passes after repair."
+    },
+    {
+      "id": "wrong-transposed-tonic",
+      "priority": "P2",
+      "file": "transposition.go",
+      "reproduction": "C major plus display offset -1/+11 resolved to F# major, tonic6 instead of tonic1. The pinned AlphaTab table had the same error.",
+      "resolution": "Correct C/chromatic11 to Db major (-5). Public sweep validates all375 key/offset combinations. Native Guitar Pro validates Db signatures and written Db5/Db4 with unchanged MIDI60.",
+      "test": "TestGP8TransposedKeyTonic failed before repair; passes after repair. guitar-pro-key-authority.json binds native artifacts."
+    },
+    {
+      "id": "ambiguous-sound-reference",
+      "priority": "P1",
+      "file": "validation.go",
+      "reproduction": "Two sounds with same Path/Name/Role and programs25/73 produce identical reference keys. Export succeeds but reparse selects sound0 for both authored0/1 events. Distinct tuples containing semicolons can also collide.",
+      "resolution": "Reject duplicate serialized sound keys with score.track-sound.reference-collision, identifying both indices and track. Rejection cannot be bypassed by loss allowances.",
+      "test": "TestSoundAutomationRejectsAmbiguousReferences failed before repair; duplicate and semicolon collisions now pass rejection tests."
+    },
+    {
+      "id": "grace-owner-marker-inheritance",
+      "priority": "P2",
+      "file": "gp8_notation.go",
+      "reproduction": "Add an ornament, explicit string-number marker and tie origin to a note with a grace. Both generated grace and owning note received those markers.",
+      "resolution": "Initialize generated grace from a default note and copy only string context and grace-owned values.",
+      "test": "TestGraceNotesDoNotInheritOwnerMarkers failed before repair; passes after repair. TestAlphaTabGeneratedGraceOrnamentOwnership independently verifies grace None versus owner Turn."
+    }
+  ],
+  "partial_capo_implementation": {
+    "status": "export, validation, pitch and source receipt integration implemented; independent review and native export validation delegated to parent/acceptance reviewer",
+    "public_tests": [
+      "TestPartialCapoEditsInvalidatePitchSpelling",
+      "TestPartialCapoAppliesToOpenGraceOnly",
+      "TestPartialCapoValidation"
+    ],
+    "policy": "Native-correct GP8 output does not receive an AlphaTab-derived target-loss report. Pinned reference omission remains independent evidence."
+  },
+  "validation": {
+    "focused_public": "PASS",
+    "focused_native_and_alpha": "PASS",
+    "native_key_python": "PASS: 2 tests verify all artifact hashes, exact pitch records and native MIDI60 duration1920 at480PPQ",
+    "golangci_lint": "PASS: 0 issues",
+    "git_diff_check": "PASS",
+    "full_integration": "Only new inactive partial-mask length edge in existing gp7/gp8 faulty.gp failed; assigned to parser reviewer for repair. All remaining integration tests passed.",
+    "full_go_suite": "Before partial-capo implementation, only stale obligation digest failed; integration passed. Final integrated suite pending.",
+    "full_quality_gates": "Parent runs after all reviewers finish; not run by this reviewer."
+  },
+  "repaired_source_hashes": {
+    "gp8_builder.go": "9f3c25da08e623468a43f30bd2da1f88338d027a56f5b311803d9f4387d3c379",
+    "gp8_note_pitch.go": "3f79783d61dbfbccea01cb64fc4930deeb52010a2352379181fa910a03da21e3",
+    "gp8_notation.go": "1b320546d81a4f9317ad9386c4b0bc0dd4ab6b0b4ea7636226ba37168542795b",
+    "gp8_partial_capo.go": "5627e26922932f59fab0e214b9628aa750d25e06841d80b0fe62c122f38b9961",
+    "partial_capo_validation.go": "941f48d939f0a3a9ed76c1808ec341ee78f551aa7283ab6b18d1863b0889a874",
+    "transposition.go": "aae1cd87757c8d2cb05cbf5905c3b9ec45e65964726d83f5795c2a58521f599a",
+    "pitch_spelling.go": "77b3324a82a8014a4682c4daae45f567a6b47530e8f6fc19eadabdd397df557e",
+    "validation.go": "92f17bb5717311cea49c217d01802a6db8707ff26c6e05341287892c65697d51"
+  },
+  "follow_up_findings": [
+    {
+      "id": "inactive-partial-capo-spelling-receipt",
+      "reported_by": "root final code review",
+      "priority": "P2",
+      "reproduction": "The existing TestPitchSpellingImportedContextEdits failed when an imported note was copied to a staff with nil partial capo instead of explicit inactive defaults. Comparing the whole configuration invalidated an unchanged source spelling.",
+      "resolution": "Store the immutable effective partial offset of this note, not the configuration identity. Nil, inactive, unselected and nonzero-fret contexts retain the receipt; an active effective-offset change invalidates it.",
+      "regression": "TestInactivePartialCapoRetainsImportedSpelling reproduced four failures before correction; all five cases pass after correction. Existing TestPitchSpellingImportedContextEdits passes without test edits.",
+      "validation": "go test . -run ^TestPitchSpellingImportedContextEdits$ -count=1: PASS; go test ./integration -run (PartialCapo|GraceNotesDoNotInheritOwnerMarkers) -count=1: PASS."
+    }
+  ]
+}

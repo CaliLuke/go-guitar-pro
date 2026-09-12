@@ -148,44 +148,67 @@ func TestLegacyVolumeNativeScale(t *testing.T) {
 
 func TestGP8AutomaticPitchKeyAndBounds(t *testing.T) {
 	for _, test := range []struct {
-		key              int8
-		step, accidental string
-	}{{-2, "B", "b"}, {2, "A", "#"}} {
-		song := accidentalPublicSong(t)
-		song.Tracks[0].Staves[0].Measures[0].KeySignature.Key = test.key
-		for bi := range song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats {
-			for ni := range song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[bi].Notes {
-				n := &song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[bi].Notes[ni]
-				n.String = 1
-				n.Value = 10
-				n.AccidentalMode = gp.NoteAccidentalDefault
-			}
-		}
-		data, err := gp.Export(song, gp.ExportFormatGP8)
-		if err != nil {
-			t.Fatal(err)
-		}
-		var doc struct {
-			Notes []struct {
-				Properties []struct {
-					Name  string `xml:"name,attr"`
-					Pitch *struct {
-						Step, Accidental string
-						Octave           int
-					}
-				} `xml:"Properties>Property"`
-			} `xml:"Notes>Note"`
-		}
-		if err := xml.Unmarshal(textContractGPIF(t, data), &doc); err != nil {
-			t.Fatal(err)
-		}
-		for _, n := range doc.Notes {
-			for _, p := range n.Properties {
-				if p.Pitch != nil && (p.Pitch.Step != test.step || p.Pitch.Accidental != test.accidental || p.Pitch.Octave != 5) {
-					t.Fatalf("key%d: %#v", test.key, p.Pitch)
+		name                         string
+		key, compatibilityKey        int8
+		display                      int32
+		midi                         int16
+		concertStep, concertToken    string
+		writtenStep, writtenToken    string
+		concertOctave, writtenOctave int
+	}{
+		{"edited flat master key", -2, 0, 0, 70, "B", "b", "B", "b", 5, 5},
+		{"edited sharp master key", 2, -2, 0, 70, "A", "#", "A", "#", 5, 5},
+		{"conflicting compatibility key", 0, -2, 0, 70, "A", "#", "A", "#", 5, 5},
+		{"transposed written key", 0, 0, -3, 60, "C", "", "E", "b", 5, 5},
+		{"separate concert and written keys", -2, -2, -2, 70, "B", "b", "C", "", 5, 6},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			song := accidentalPublicSong(t)
+			song.MeasureHeaders[0].KeySignature.Key = test.key
+			staff := &song.Tracks[0].Staves[0]
+			staff.DisplayTranspositionPitch = test.display
+			staff.Measures[0].KeySignature.Key = test.compatibilityKey
+			for bi := range staff.Measures[0].Voices[0].Beats {
+				for ni := range staff.Measures[0].Voices[0].Beats[bi].Notes {
+					n := &staff.Measures[0].Voices[0].Beats[bi].Notes[ni]
+					n.String = 1
+					n.Value = test.midi - 60
+					n.AccidentalMode = gp.NoteAccidentalDefault
 				}
 			}
-		}
+			data, err := gp.Export(song, gp.ExportFormatGP8)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var doc struct {
+				Notes []struct {
+					Properties []struct {
+						Name  string `xml:"name,attr"`
+						Pitch *struct {
+							Step, Accidental string
+							Octave           int
+						}
+					} `xml:"Properties>Property"`
+				} `xml:"Notes>Note"`
+			}
+			if err := xml.Unmarshal(textContractGPIF(t, data), &doc); err != nil {
+				t.Fatal(err)
+			}
+			for _, n := range doc.Notes {
+				for _, p := range n.Properties {
+					if p.Pitch == nil {
+						continue
+					}
+					step, token, octave := test.concertStep, test.concertToken, test.concertOctave
+					if p.Name == "TransposedPitch" {
+						step, token, octave = test.writtenStep, test.writtenToken, test.writtenOctave
+					}
+					if p.Pitch.Step != step || p.Pitch.Accidental != token || p.Pitch.Octave != octave {
+						t.Fatalf("%s: got %#v, want %s%s%d", p.Name, p.Pitch, step, token, octave)
+					}
+				}
+			}
+		})
 	}
 	song := accidentalPublicSong(t)
 	song.Tracks[0].Staves[0].CapoFret = 2147483647
@@ -199,5 +222,34 @@ func TestGP8AutomaticPitchKeyAndBounds(t *testing.T) {
 	}
 	if !found {
 		t.Fatal("pitch failure lacks preflight rejection", report)
+	}
+}
+
+func TestGP8TransposedKeyTonic(t *testing.T) {
+	for key := int8(-7); key <= 7; key++ {
+		for display := int32(-12); display <= 12; display++ {
+			song := accidentalPublicSong(t)
+			song.MeasureHeaders[0].KeySignature.Key = key
+			song.Tracks[0].Staves[0].DisplayTranspositionPitch = display
+			for bi := range song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats {
+				for ni := range song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[bi].Notes {
+					song.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[bi].Notes[ni].AccidentalMode = gp.NoteAccidentalDefault
+				}
+			}
+			data, err := gp.Export(song, gp.ExportFormatGP8)
+			if err != nil {
+				t.Fatal(err)
+			}
+			parsed, err := gp.Parse(data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			actual := int(parsed.Tracks[0].Staves[0].Measures[0].KeySignature.Key)
+			wantTonic := ((7*int(key)-int(display))%12 + 12) % 12
+			gotTonic := ((7*actual)%12 + 12) % 12
+			if gotTonic != wantTonic {
+				t.Fatalf("concert key %d display %d: written key %d has tonic %d, want %d", key, display, actual, gotTonic, wantTonic)
+			}
+		}
 	}
 }
