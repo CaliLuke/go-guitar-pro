@@ -90,14 +90,15 @@
         "Native default, natural, sharp, flat, double-sharp/flat, independent capo0/3, display12, sounding12 omission, clef8vb, beat8va, harmonic5, absolute61 and grace3 contexts verified.",
         "Public regressions, M09-NATIVE-PITCH ledger assertions and hash-bound native GP/MIDI/UI artifacts committed.",
         "Pinned consumer tests pass with raw reference differences preserved. Native-correct output takes precedence.",
-        "Both prescribed gates pass. Exact source and native receipts reviewed."
+        "Both prescribed gates pass. Exact source and native receipts reviewed.",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/118#issuecomment-5643009536"
       ]
     }
   ],
   "issue": {
     "number": 118,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/118",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T02:58:18.450778+00:00"
   }
 }

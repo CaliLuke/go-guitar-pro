@@ -164,14 +164,15 @@
         "conformance/capabilities/evidence/native-repair-acceptance.json",
         "Native first staff has a slashed beat with staff Slash=false; separate track requests Slash=true with beat Slashed=false. Both remain independent.",
         "Mixed track groups retain exact PartConfiguration flags 1/14; first track has two staves. Same-track conflicts have explicit per-field target-limit reports.",
-        "Public edits and pinned consumer checks pass. Native save retains all 3 ordered occurrences, tuning and note values; MIDI 58 and duration 1920 remain exact on each staff."
+        "Public edits and pinned consumer checks pass. Native save retains all 3 ordered occurrences, tuning and note values; MIDI 58 and duration 1920 remain exact on each staff.",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5643010408"
       ]
     }
   ],
   "issue": {
     "number": 92,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/92",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T02:58:18.450778+00:00"
   }
 }

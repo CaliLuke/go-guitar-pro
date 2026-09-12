@@ -146,14 +146,15 @@
         "conformance/capabilities/evidence/native-repair-acceptance.json",
         "First track staff group requests Numbered=false; second track requests true. Native flags 1/14 and public ownership remain distinct.",
         "Native PartConfiguration views remain [[1,14],[1],[14]]; all 3 notes retain string 3, fret 3, MIDI 58 and native duration 1920 at 480PPQ.",
-        "All 15 nonzero notation combinations have pinned-consumer tests. Native standard/tab/slash/numbered flags remain independent across track groups. Differing same-track requests retain exact format-limit reports."
+        "All 15 nonzero notation combinations have pinned-consumer tests. Native standard/tab/slash/numbered flags remain independent across track groups. Differing same-track requests retain exact format-limit reports.",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/106#issuecomment-5643010685"
       ]
     }
   ],
   "issue": {
     "number": 106,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/106",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T02:58:18.450778+00:00"
   }
 }

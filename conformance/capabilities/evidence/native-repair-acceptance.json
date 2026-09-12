@@ -16,7 +16,7 @@
       "issue": 118,
       "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
       "acceptance_updated_at": "2026-09-12T00:29:10Z",
-      "decision": "complete-after-dependencies-close",
+      "decision": "complete",
       "criteria": [
         {
           "criterion": "Export default-spelled pitched notes with the native-required ConcertPitch and TransposedPitch records. Preserve all original note occurrences, strings, frets, MIDI pitches, and durations through native Guitar Pro reopening.",
@@ -48,13 +48,15 @@
           "status": "PASS",
           "evidence": "Both prescribed gates pass. Exact source and native receipts reviewed."
         }
-      ]
+      ],
+      "issue_state": "CLOSED",
+      "closure_comment": "https://github.com/CaliLuke/go-guitar-pro/issues/118#issuecomment-5643009536"
     },
     {
       "issue": 85,
       "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
       "acceptance_updated_at": "2026-09-12T00:29:03Z",
-      "decision": "complete-after-dependencies-close",
+      "decision": "complete",
       "criteria": [
         {
           "criterion": "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position.",
@@ -71,13 +73,15 @@
           "status": "PASS",
           "evidence": "Chorus, reverb, phaser, tremolo, nonzero transitions and RSE fields keep individual exact omission reports."
         }
-      ]
+      ],
+      "issue_state": "CLOSED",
+      "closure_comment": "https://github.com/CaliLuke/go-guitar-pro/issues/85#issuecomment-5643009896"
     },
     {
       "issue": 86,
       "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
       "acceptance_updated_at": "2026-09-12T00:29:04Z",
-      "decision": "complete-after-dependencies-close",
+      "decision": "complete",
       "criteria": [
         {
           "criterion": "Use two staves with different standard/tab flags and an independently hidden track.",
@@ -94,13 +98,15 @@
           "status": "PASS",
           "evidence": "Native PartConfiguration views remain [[1,14],[1],[14]], tuning and all 3 note occurrences survive, and malformed-length regressions pass. Same-track conflicting flags are a native track-group format limit, not an unstated acceptance prerequisite."
         }
-      ]
+      ],
+      "issue_state": "CLOSED",
+      "closure_comment": "https://github.com/CaliLuke/go-guitar-pro/issues/86#issuecomment-5643010131"
     },
     {
       "issue": 92,
       "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
       "acceptance_updated_at": "2026-09-12T00:29:06Z",
-      "decision": "complete-after-dependencies-close",
+      "decision": "complete",
       "criteria": [
         {
           "criterion": "A staff can request slash notation while a distinct beat has an authored slashed flag; neither replaces the other.",
@@ -117,13 +123,15 @@
           "status": "PASS",
           "evidence": "Public edits and pinned consumer checks pass. Native save retains all 3 ordered occurrences, tuning and note values; MIDI 58 and duration 1920 remain exact on each staff."
         }
-      ]
+      ],
+      "issue_state": "CLOSED",
+      "closure_comment": "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5643010408"
     },
     {
       "issue": 106,
       "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
       "acceptance_updated_at": "2026-09-12T00:29:08Z",
-      "decision": "complete-after-dependencies-close",
+      "decision": "complete",
       "criteria": [
         {
           "criterion": "Use two staves with different numbered-notation flags and preserve their ownership.",
@@ -140,7 +148,9 @@
           "status": "PASS",
           "evidence": "All 15 nonzero notation combinations have pinned-consumer tests. Native standard/tab/slash/numbered flags remain independent across track groups. Differing same-track requests retain exact format-limit reports."
         }
-      ]
+      ],
+      "issue_state": "CLOSED",
+      "closure_comment": "https://github.com/CaliLuke/go-guitar-pro/issues/106#issuecomment-5643010685"
     }
   ],
   "residuals": [
@@ -154,5 +164,7 @@
       "kind": "reference-defects",
       "detail": "Pinned AlphaTab moves nonzero-position Sound changes to bar start, ignores gain/pan channel-strip events and imports instantaneous legacy tempo events as linear. Raw receipts remain visible; these do not block the native-correct library repair."
     }
-  ]
+  ],
+  "final_review_commit": "f66bb553abcd2bc6954fc8ef8c6e83fdc42a14c9",
+  "closure_checked_at": "2026-09-12T02:58:18.450778+00:00"
 }

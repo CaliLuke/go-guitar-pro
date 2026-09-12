@@ -176,14 +176,15 @@
         "conformance/capabilities/evidence/native-repair-acceptance.json",
         "Grand-staff track uses standard-only flags 1; a separate hidden track uses tab/slash/numbered flags 14. Native and pinned consumers retain their distinct staff ownership.",
         "Staff settings own edits; field-specific Track.Settings compatibility precedence is documented and tested, including clearing and conflicts.",
-        "Native PartConfiguration views remain [[1,14],[1],[14]], tuning and all 3 note occurrences survive, and malformed-length regressions pass. Same-track conflicting flags are a native track-group format limit, not an unstated acceptance prerequisite."
+        "Native PartConfiguration views remain [[1,14],[1],[14]], tuning and all 3 note occurrences survive, and malformed-length regressions pass. Same-track conflicting flags are a native track-group format limit, not an unstated acceptance prerequisite.",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/86#issuecomment-5643010131"
       ]
     }
   ],
   "issue": {
     "number": 86,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/86",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T02:58:18.450778+00:00"
   }
 }

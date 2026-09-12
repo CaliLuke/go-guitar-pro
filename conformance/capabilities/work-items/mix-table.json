@@ -148,14 +148,15 @@
         "conformance/capabilities/evidence/native-repair-acceptance.json",
         "Complete GP3 simultaneous tempo 173, program 73, volume 12, balance 5 at beat 1 is used by public, native and independent-consumer tests.",
         "Native Sound position 1 displays tick 481. Native saves retain step tempo 173, gain 0.56 and pan 0.3125 at ratio 0.25. Collection edit/clear/order and duplicate-avoidance tests pass.",
-        "Chorus, reverb, phaser, tremolo, nonzero transitions and RSE fields keep individual exact omission reports."
+        "Chorus, reverb, phaser, tremolo, nonzero transitions and RSE fields keep individual exact omission reports.",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/85#issuecomment-5643009896"
       ]
     }
   ],
   "issue": {
     "number": 85,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/85",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T02:58:18.450778+00:00"
   }
 }
