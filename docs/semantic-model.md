@@ -897,7 +897,9 @@ Grace notes keep their order, exact fret, articulation identity, dead state,
 placement, transition, and supported duration. GP8 reports a raw source fret,
 an unsupported duration, a conflicting legacy fret, a noncanonical velocity,
 or a bend transition. Reused grace definitions produce independent occurrence
-data.
+data. GPIF associates a percussion grace group with the following beat rather
+than a particular note. Import first uses an exact percussion-note match, then
+assigns unmatched grace notes across the following beat's notes in stable order.
 
 The GP4 fade-to-black grace record at byte70913 is `16 06 02 02`.
 Public Parse retains transition Bend at track6/measure201/voice0/beat4/note0/grace0,
