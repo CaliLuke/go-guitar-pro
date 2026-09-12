@@ -26577,5 +26577,10 @@
       ]
     }
   ],
-  "diagnostics": "213 existing fixtures change only diagnostics because partial-capo fields and child payloads are now recognized; inactive placeholders are narrowly diagnosed."
+  "diagnostics": "213 existing fixtures change only diagnostics because partial-capo fields and child payloads are now recognized; inactive placeholders are narrowly diagnosed.",
+  "final_validation_refresh": {
+    "source_commit": "eda917eb0477d8daf762dab52f03aef4c7f366f2",
+    "fixture_count": 384,
+    "result": "All 384 fixture receipts are identical to the preceding reviewed probe. Only run time, source commit and input hashes changed after resolved-tuning validation."
+  }
 }
