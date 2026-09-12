@@ -255,33 +255,16 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	t := run.t
 	valid := conformanceBackingProgrammaticSong(t)
 	report := PreflightExport(valid, ExportFormatGP8, ExportOptions{})
-	run.Report("M19-VALIDATION-EXPORT-POLICY", reportCodes(report), []string{"gp8.omit.sync-point-consumer-tempo", "gp8.omit.sync-point-consumer-tempo"})
+	run.Report("M19-VALIDATION-EXPORT-POLICY", reportCodes(report), []string{})
 	if hasExportCode(report, "gp8.normalize.sync-point-frame-authority") || hasExportCode(report, "gp8.normalize.sync-point-position-authority") {
 		t.Fatalf("agreeing sync points report = %#v", report.Entries)
 	}
 	if backingEntries := conformanceBackingExportEntries(report, "gp8.omit.backing-track"); len(backingEntries) != 0 {
 		t.Fatalf("implemented backing track report = %#v, want no omission", backingEntries)
 	}
-	syncEntries := conformanceBackingExportEntries(report, "gp8.omit.sync-point-consumer-tempo")
-	wantLocations := []ScoreLocation{{Measure: 0}, {Measure: 1}}
-	gotLocations := make([]ScoreLocation, len(syncEntries))
-	for index := range syncEntries {
-		gotLocations[index] = syncEntries[index].Location
-	}
-	if !reflect.DeepEqual(gotLocations, wantLocations) {
-		t.Fatalf("sync omission locations = %#v, want %#v", gotLocations, wantLocations)
-	}
 	data, strictReport, err := ExportWithReport(valid, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true}})
-	var lossErr *ExportLossError
-	if len(data) != 0 || !errors.As(err, &lossErr) || len(conformanceBackingExportEntries(strictReport, "gp8.omit.sync-point-consumer-tempo")) != 2 {
-		t.Fatalf("strict omission export = %d bytes, %#v, %v", len(data), strictReport.Entries, err)
-	}
-	data, _, err = ExportWithReport(valid, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
-		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.sync-point-consumer-tempo"},
-	}})
-	if err != nil {
-		t.Fatal(err)
+	if err != nil || len(data) == 0 || len(strictReport.Entries) != 0 {
+		t.Fatalf("strict preserved export = %d bytes, %#v, %v", len(data), strictReport.Entries, err)
 	}
 	outputWire := decodeBackingWire(t, readBackingGPIF(t, data))
 	hasSyncPoint := slices.ContainsFunc(outputWire.MasterTrack.Automations.Items, func(automation struct {
@@ -336,8 +319,8 @@ func runConformanceValidationAndExportPolicy(run *conformanceRun) {
 	}
 	data, _, err = ExportWithReport(conflict, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{
 		RequirePreservation: true,
-		AllowedCodes:        []string{"gp8.omit.sync-point-consumer-tempo"},
 	}})
+	var lossErr *ExportLossError
 	if len(data) != 0 || !errors.As(err, &lossErr) {
 		t.Fatalf("strict compatibility export = %d bytes, %v, want refusal", len(data), err)
 	}

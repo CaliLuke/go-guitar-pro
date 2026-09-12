@@ -104,7 +104,7 @@
     "gp8_builder.go",
     "gpif_automations.go"
   ],
-  "resolution": "Implemented exact authored sync-point serialization using existing checked field authority. Independent consumer retains occurrence, position, media timing, interpolation and visibility. Persisted tempo metadata remains a reported consumer limit; integer precision and missing backing padding are reported and unrepresentable exact positions rejected. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
+  "resolution": "Implemented exact authored sync-point serialization using existing checked field authority. Independent consumer retains occurrence, position, media timing, interpolation and visibility. Persisted tempo metadata is retained without a loss report or strict-policy exception (issue #119); pinned AlphaTab still ignores it; integer precision and missing backing padding are reported and unrepresentable exact positions rejected. Fresh independent acceptance review, integrated full gates and the refreshed370-fixture probe passed. Fresh independent agent review passed the current bounded acceptance criteria. Closed as completed after current-commit acceptance review and user-authorized disposition. Review evidence is recorded in the original GitHub ticket.",
   "verification": [
     {
       "commit": "3a376f07bd2ae6e4b512755692b7f53ee1c4150c",

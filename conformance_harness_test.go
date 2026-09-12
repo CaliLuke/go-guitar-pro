@@ -262,6 +262,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceMIDIBank":                           runConformanceMIDIBank,
 	"TestConformanceTempoAuthority":                     runConformanceTempoAuthority,
 	"TestConformancePanAutomations":                     runConformancePanAutomations,
+	"TestConformanceDenseSyncTempoExport":               runConformanceDenseSyncTempoExport,
 	"TestConformanceSyncPointExport":                    runConformanceSyncPointExport,
 	"TestConformanceTerminalDoubleBar":                  runConformanceTerminalDoubleBar,
 	"TestConformanceMasterBars":                         runConformanceMasterBars,

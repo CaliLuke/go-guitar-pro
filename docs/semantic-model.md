@@ -990,9 +990,14 @@ survive the numeric GPIF representation receive
 values. Occurrence, position, interpolation, and visibility survive independent
 consumption for representable values.
 
-GPIF and Go retain `ModifiedTempo` and `OriginalTempo`. Pinned AlphaTab ignores
-these metadata fields. Nonzero values receive `gp8.omit.sync-point-consumer-tempo`.
-If an omitted backing track has nonzero padding, each point also receives
+GPIF and Go retain `ModifiedTempo` and `OriginalTempo`, including nonzero values.
+Strict GP8 export accepts these fields without an allowance or a loss report.
+Pinned AlphaTab ignores both fields. This reference limitation remains covered
+by the independent consumer test and does not restrict library serialization.
+The exporter no longer emits `gp8.omit.sync-point-consumer-tempo`.
+Existing allowlists can retain that code without changing export behavior.
+
+If an omitted backing track has nonzero padding, each point receives
 `gp8.normalize.sync-point-consumer-padding`: its frame survives, but target media
 time changes. Strict export requires each applicable allowance. Export remains
 partial for these documented consumer limits.

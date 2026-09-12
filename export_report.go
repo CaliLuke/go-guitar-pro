@@ -149,9 +149,6 @@ func planExport(song *Song, target ExportFormat, options ExportOptions) (ExportR
 		if !gp8SyncPositionExact(point) {
 			add("gp8.reject.sync-point-position-precision", "sync-points", ExportDispositionRejected, location, "the checked sync-point position cannot be retained exactly by the GPIF numeric position")
 		}
-		if point.ModifiedTempo != 0 || point.OriginalTempo != 0 {
-			add("gp8.omit.sync-point-consumer-tempo", "sync-points", ExportDispositionOmitted, location, "GPIF retains ModifiedTempo and OriginalTempo; pinned AlphaTab ignores both persisted sync-point tempo fields")
-		}
 		if !gp8SyncIntegerExact(int64(point.AudioFrame)) || !gp8SyncIntegerExact(int64(point.BarOccurrence)) {
 			add("gp8.normalize.sync-point-consumer-integer", "sync-points", ExportDispositionNormalized, location, "GPIF retains exact frame and occurrence integers; the pinned consumer rounds these integers to binary64")
 		}

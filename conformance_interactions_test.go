@@ -356,12 +356,12 @@ func runConformanceBackingSyncTempo(run *conformanceRun) {
 	run.Field("SyncPoint.AudioFrame", song.SyncPoints[0].AudioFrame, audioFrame)
 	run.Field("Song.InitialTempo", song.InitialTempo.Value, BPM(132.5))
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.sync-point-consumer-padding"} {
+	for _, code := range []string{"gp8.omit.backing-track", "gp8.normalize.sync-point-consumer-padding"} {
 		if !hasExportCode(report, code) {
 			t.Fatalf("backing combination report = %#v, want %s", report.Entries, code)
 		}
 	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.sync-point-consumer-padding"}}})
+	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{LossPolicy: ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.omit.backing-track", "gp8.normalize.sync-point-consumer-padding"}}})
 	if err != nil {
 		t.Fatal(err)
 	}

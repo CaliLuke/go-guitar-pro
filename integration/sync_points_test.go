@@ -20,15 +20,9 @@ func TestGP8SyncPointExport(t *testing.T) {
 		{Bar: 1, Position: 0.75, BarPosition: q, BarOccurrence: 3, FrameOffset: 88200, AudioFrame: 88200, MediaTimeMS: 2500, ModifiedTempo: 91.25, OriginalTempo: 99.5, Linear: true},
 	}
 	before := append([]gp.SyncPoint(nil), song.SyncPoints...)
-	code := "gp8.omit.sync-point-consumer-tempo"
-	data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{code}}})
-	if err != nil || len(report.Entries) != 2 {
+	data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true}})
+	if err != nil || len(report.Entries) != 0 {
 		t.Fatalf("export %v %#v", err, report)
-	}
-	for i, e := range report.Entries {
-		if e.Code != code || e.Location != (gp.ScoreLocation{Measure: i}) {
-			t.Fatal(e)
-		}
 	}
 	parsed, err := gp.Parse(data)
 	if err != nil {
@@ -40,10 +34,10 @@ func TestGP8SyncPointExport(t *testing.T) {
 	if !reflect.DeepEqual(song.SyncPoints, before) {
 		t.Fatal("export mutated input")
 	}
-	for _, allowed := range [][]string{nil, {"gp8.omit.sync-points"}} {
+	for _, allowed := range [][]string{{"gp8.omit.sync-point-consumer-tempo"}, {"unrelated"}} {
 		data, _, err = gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{LossPolicy: gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: allowed}})
-		if err == nil || len(data) != 0 {
-			t.Fatal("unallowed consumer metadata loss succeeded")
+		if err != nil || len(data) == 0 {
+			t.Fatalf("retained metadata depends on allowlist: %v", err)
 		}
 	}
 }

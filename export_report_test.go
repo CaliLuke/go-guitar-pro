@@ -23,7 +23,7 @@ func TestExportPreflightReportsActualGP8Losses(t *testing.T) {
 	beat.Notes[1].Velocity = beat.Notes[0].Velocity + 1
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
-	for _, code := range []string{"gp8.omit.backing-track", "gp8.omit.sync-point-consumer-tempo", "gp8.normalize.note-velocity"} {
+	for _, code := range []string{"gp8.omit.backing-track", "gp8.normalize.note-velocity"} {
 		if !hasExportReportEntry(report, code) {
 			t.Errorf("report = %#v, want %s", report.Entries, code)
 		}
@@ -100,10 +100,6 @@ func TestExportPreflightLocatesEachOmittedAutomation(t *testing.T) {
 
 	report := PreflightExport(song, ExportFormatGP8, ExportOptions{})
 	want := map[string][]ScoreLocation{
-		"gp8.omit.sync-point-consumer-tempo": {
-			{Measure: 0},
-			{Measure: 1},
-		},
 		"gp8.omit.volume-automation-consumer": {
 			{Track: 0, Measure: 0},
 			{Track: 0, Measure: 1},

@@ -320,7 +320,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 147 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 148 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -399,6 +399,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `sync-tempo-strict-preservation` | `timing` | `TestConformanceDenseSyncTempoExport` | `TestAlphaTabDenseSyncTempoExport` | no | Issue #119: all 136 repeat-aware points retain exact tempo metadata and produce no loss reports. Pinned AlphaTab omissions remain independently asserted reference limitations. |
 | `pick-stroke-preservation` | `note-and-beat-semantics` | `TestConformancePickStroke` | `TestAlphaTabPreservesPickStroke` | no | Up, down, and absent pick marks retain their exact direction independently from brush through strict GP8 export, Go reimport, and pinned AlphaTab. |
 | `chord-rest-dynamic-policy` | `note-and-beat-semantics` | `TestConformanceChordAndRestDynamics` | `TestAlphaTabChordAndRestDynamics` | no | Two-note velocities 47/95 and explicit beat/rest dynamics 47/48 preserve authored values, emit P, and report exact target losses; strict export requires each applicable code. |
 | `simile-mark-preservation` | `rhythm` | `TestParseGPIFPreservesSimileMarks` | `TestAlphaTabPreservesSimileMarks` | no | One-bar and both halves of two-bar simile repeats survive the public model and an independently consumed GP8 export. |

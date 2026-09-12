@@ -6,6 +6,7 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"strconv"
 	"testing"
 )
 
@@ -108,6 +109,80 @@ func TestAlphaTabSyncPointExport(t *testing.T) {
 	requireAlphaTabConformance(t)
 	runConformanceSyncPointExport(newConformanceRun(t))
 }
+
+func TestConformanceDenseSyncTempoExport(t *testing.T) {
+	runConformanceDenseSyncTempoExport(newConformanceRun(t))
+}
+
+func TestAlphaTabDenseSyncTempoExport(t *testing.T) {
+	requireAlphaTabConformance(t)
+	runConformanceDenseSyncTempoExport(newConformanceRun(t))
+}
+
+func runConformanceDenseSyncTempoExport(run *conformanceRun) {
+	t := run.t
+	song := conformanceBackingProgrammaticSong(t)
+	song.MeasureHeaders[0].RepeatStart = true
+	song.MeasureHeaders[1].RepeatCount = 68
+	song.SyncPoints = nil
+	for i := range 136 {
+		position := float64(i%4) / 4
+		barPosition, err := NewBarPositionFromFloat64(position)
+		if err != nil {
+			t.Fatal(err)
+		}
+		frame := int64(i * 44100)
+		song.SyncPoints = append(song.SyncPoints, SyncPoint{
+			Bar: i % 2, BarOccurrence: i / 2, Position: position, BarPosition: barPosition,
+			FrameOffset: frame, AudioFrame: AudioFrame(frame), MediaTimeMS: float64(i*1000 + 500),
+			ModifiedTempo: 90.25 + float64(i), OriginalTempo: 120.5 + float64(i),
+			Linear: i%2 == 0, Visible: i%3 == 0,
+		})
+	}
+	// Exercise each metadata field independently as well as together.
+	song.SyncPoints[0].ModifiedTempo = 0
+	song.SyncPoints[1].OriginalTempo = 0
+	before := append([]SyncPoint(nil), song.SyncPoints...)
+	data, report := assertConsumerLossPolicy(t, song, []string{})
+	run.Report("M19-SYNC-TEMPO-PRESERVATION", reportCodes(report), []string{})
+	parsed, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run.Preserved("Song.SyncPoints", parsed.SyncPoints, before)
+	if !reflect.DeepEqual(song.SyncPoints, before) {
+		t.Fatal("export mutated sync points")
+	}
+	index := 0
+	for _, automation := range conformanceWireDocument(t, data).MasterTrack.Automations.Automations {
+		if automation.Type != "SyncPoint" {
+			continue
+		}
+		if index >= len(before) {
+			t.Fatal("export added sync points")
+		}
+		want := before[index]
+		run.Wire("gpifAutomationValue.ModifiedTempo", automation.Value.ModifiedTempo, strconv.FormatFloat(want.ModifiedTempo, 'g', -1, 64))
+		run.Wire("gpifAutomationValue.OriginalTempo", automation.Value.OriginalTempo, strconv.FormatFloat(want.OriginalTempo, 'g', -1, 64))
+		index++
+	}
+	if index != len(before) {
+		t.Fatalf("export retained %d of %d sync points", index, len(before))
+	}
+	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
+		var facts []struct{ ModifiedTempoPresent, OriginalTempoPresent bool }
+		readAlphaTabOracleFacts(t, "--sync-points", writeConformanceFixture(t, data), &facts)
+		if len(facts) != len(before) {
+			t.Fatalf("consumer retained %d of %d sync points", len(facts), len(before))
+		}
+		for _, fact := range facts {
+			if fact.ModifiedTempoPresent || fact.OriginalTempoPresent {
+				t.Fatal("recheck the pinned consumer tempo limitation", fact)
+			}
+		}
+	}
+}
+
 func runConformanceSyncPointExport(run *conformanceRun) {
 	t := run.t
 	song := conformanceBackingProgrammaticSong(t)
@@ -120,8 +195,8 @@ func runConformanceSyncPointExport(run *conformanceRun) {
 		point.AudioFrame = AudioFrame(point.FrameOffset)
 		point.MediaTimeMS = float64(1500 + 1000*i)
 	}
-	data, report := assertConsumerLossPolicy(t, song, []string{"gp8.omit.sync-point-consumer-tempo", "gp8.omit.sync-point-consumer-tempo"})
-	run.Report("M19-SYNC-EXPORT", reportCodes(report), []string{"gp8.omit.sync-point-consumer-tempo", "gp8.omit.sync-point-consumer-tempo"})
+	data, report := assertConsumerLossPolicy(t, song, []string{})
+	run.Report("M19-SYNC-EXPORT", reportCodes(report), []string{})
 	parsed, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
