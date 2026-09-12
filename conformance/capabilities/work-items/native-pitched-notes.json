@@ -51,11 +51,27 @@
     "pitch_spelling.go"
   ],
   "resolution": "Confirmed native exporter defect. The isolated both-pitch-record experiment retains all 12 notes; its naive integration also changes default spelling semantics and breaks existing edit/context tests, so it is not a complete fix.",
-  "verification": [],
+  "verification": [
+    {
+      "commit": "fdf14d3963bfa9bc0d789786a9e5ec5f045455a2",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS on the unchanged committed tree; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and 92.5% statement coverage.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture comparisons have no new semantic differences.",
+        "python3 -B conformance/capabilities/manage.py check: PASS."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/118#issuecomment-5642176314",
+        "conformance/capabilities/evidence/guitar-pro-native.json",
+        "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
+    }
+  ],
   "issue": {
     "number": 118,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/118",
     "state": "OPEN",
-    "checked_at": "2026-09-12T00:03:14.998949+00:00"
+    "checked_at": "2026-09-12T00:29:20.976442+00:00"
   }
 }

@@ -128,12 +128,27 @@
         "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5641451059",
         "Live acceptance criteria match the canonical checklist; dependencies and exact current source were reviewed. Ticket remains open because its documented acceptance failure or external evidence blocker remains unresolved."
       ]
+    },
+    {
+      "commit": "fdf14d3963bfa9bc0d789786a9e5ec5f045455a2",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS on the unchanged committed tree; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and 92.5% statement coverage.",
+        "node conformance/capabilities/probe.mjs: PASS; 377 fixture comparisons have no new semantic differences.",
+        "python3 -B conformance/capabilities/manage.py check: PASS."
+      ],
+      "evidence": [
+        "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5642176003",
+        "conformance/capabilities/evidence/guitar-pro-native.json",
+        "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
     }
   ],
   "issue": {
     "number": 92,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/92",
     "state": "OPEN",
-    "checked_at": "2026-09-11T23:49:39.225798+00:00"
+    "checked_at": "2026-09-12T00:29:20.976442+00:00"
   }
 }

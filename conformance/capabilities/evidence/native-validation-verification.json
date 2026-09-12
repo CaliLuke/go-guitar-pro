@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "verified_commit": "fdf14d3963bfa9bc0d789786a9e5ec5f045455a2",
+  "verified_at": "2026-09-12T00:29:20.976442+00:00",
+  "commands": [
+    "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+    "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+    "prek run --all-files: PASS on the unchanged committed tree; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and 92.5% statement coverage.",
+    "node conformance/capabilities/probe.mjs: PASS; 377 fixture comparisons have no new semantic differences.",
+    "python3 -B conformance/capabilities/manage.py check: PASS."
+  ],
+  "native_receipt": "conformance/capabilities/evidence/guitar-pro-native.json",
+  "issue_reviews": {
+    "85": "https://github.com/CaliLuke/go-guitar-pro/issues/85#issuecomment-5642175634",
+    "86": "https://github.com/CaliLuke/go-guitar-pro/issues/86#issuecomment-5642175822",
+    "92": "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5642176003",
+    "106": "https://github.com/CaliLuke/go-guitar-pro/issues/106#issuecomment-5642176141",
+    "115": "https://github.com/CaliLuke/go-guitar-pro/issues/115#issuecomment-5642176480",
+    "118": "https://github.com/CaliLuke/go-guitar-pro/issues/118#issuecomment-5642176314"
+  },
+  "closure_decision": "No tickets closed: native facts do not satisfy all acceptance criteria.",
+  "initial_gate_retry": "The first prek wrapper returned failure because evidence files were updated during the run. Its underlying checks all passed. The final run held repository files unchanged and returned success."
+}
