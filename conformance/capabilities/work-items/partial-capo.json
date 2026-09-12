@@ -211,14 +211,15 @@
         "PASS: Independent single-string siblings establish high-first public order and reversed wire bits; UI labels and native MIDI pitches agree.",
         "PASS: Every valid source has public Go and pinned AlphaTab receipts. Native playback is separate; AlphaTab discards the partial capo.",
         "PASS: Corpus fixtures, database, native receipts, public API, parser, exporter, edit contract and regression tests are committed. Exact final source matches independent review hashes; the prescribed full gate passes.",
-        "conformance/capabilities/evidence/release-acceptance.json"
+        "conformance/capabilities/evidence/release-acceptance.json",
+        "https://github.com/CaliLuke/go-guitar-pro/issues/115#issuecomment-5647736283"
       ]
     }
   ],
   "issue": {
     "number": 115,
     "url": "https://github.com/CaliLuke/go-guitar-pro/issues/115",
-    "state": "OPEN",
-    "checked_at": "2026-09-12T00:29:20.976442+00:00"
+    "state": "CLOSED",
+    "checked_at": "2026-09-12T18:09:59.000486+00:00"
   }
 }
