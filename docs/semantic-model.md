@@ -139,7 +139,10 @@ A partial capo changes only selected open-string notes (`Note.Value == 0`).
 Fretted notes retain their fret pitch plus the whole capo. Direct edits to
 `Offset` or `Strings` control export without changing tuning or note frets.
 GPIF import creates separate mutable partial-capo data for each staff occurrence.
-The library rejects negative offsets and active masks whose flag count differs from the tuning.
+The public model rejects negative offsets and masks whose length differs from the
+resolved export tuning. `Track.Strings` compatibility edits can change the first
+staff's tuning. Edit its `PartialCapo.Strings` to match the new string count.
+Validation and export do not resize an authored mask.
 Native files can retain six zero flags on another tuning when the offset is zero.
 Import replaces that inactive placeholder with one false flag per actual string.
 `GPIF.Staff.PartialCapo.InactiveFlags.Normalized` reports this source normalization.

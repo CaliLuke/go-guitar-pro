@@ -155,7 +155,6 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 			add("score.track.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex}, "capo fret %d is negative", track.CapoFret)
 		}
 		for staffIndex := range track.Staves {
-			validatePartialCapo(&track.Staves[staffIndex], ScoreLocation{Track: trackIndex, Staff: staffIndex}, &diagnostics)
 			if track.Staves[staffIndex].CapoFret < 0 {
 				add("score.staff.capo", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "capo fret %d is negative", track.Staves[staffIndex].CapoFret)
 			}
@@ -183,6 +182,7 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		}
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
+			validatePartialCapo(&staves[staffIndex], ScoreLocation{Track: trackIndex, Staff: staffIndex}, &diagnostics)
 			tiedNotes := make(map[int]map[int8]int16)
 			pedalDown := false
 			if len(staves[staffIndex].Measures) != len(song.MeasureHeaders) {

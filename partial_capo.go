@@ -15,7 +15,9 @@ type PartialCapo struct {
 	// Guitar Pro displays the absolute position as CapoFret + Offset.
 	Offset int32
 	// Strings selects strings in public tuning order, highest string first.
-	// Its length must equal Staff.Strings. Each parsed staff owns its slice.
+	// Its length must match the staff's resolved export tuning. Track.Strings
+	// compatibility edits can override the first staff's tuning.
+	// Each parsed staff owns its slice.
 	Strings []bool
 }
 

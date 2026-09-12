@@ -2,8 +2,8 @@
   "schema_version": 1,
   "reviewer": "review_acceptance",
   "status": "PASS for reviewed code, acquisition evidence and corrected bounded acceptance criteria",
-  "reviewed_git_head": "9d282eb5dd2d403a647cbda98634210d42bf7196",
-  "reviewed_source_state": "Uncommitted release implementation. Source SHA256s below identify the reviewed production state. Final frozen-commit gates and closure review remain required.",
+  "reviewed_git_head": "1e7e80b841b8556b0cd66b04db3d8b003c9e8aed",
+  "reviewed_source_state": "Release-validation correction in the working tree after the listed HEAD. The production SHA256s identify the final reviewed state. Final frozen-commit gates remain required.",
   "release_version": "v0.10.0",
   "initial_ticket_audit": {
     "reviewer": "review_acceptance",
@@ -296,7 +296,7 @@
     "pan_automation.go": "64c391991f15436d337fe7560085749bc3dd1b5f76eaf1cad2103a8c5646bb7f",
     "parser.go": "c6d3aba713636015e3c84c5f9791fb0f29e1d79c90a64d0691b6f3386ac984d7",
     "part_configuration.go": "1ace6c407c3bf46ed65bd405f5e89bfa61a48ca7f674bd07e9a8d7d7201557d6",
-    "partial_capo.go": "c2ddeb34302512c80c174a666c4a95a7053a608160829ab1c165c6ff4b8c7da4",
+    "partial_capo.go": "fb5416479d1f5c2a793c36139ad7208d09e4eb5d7a190b7f3b56a61515f258fd",
     "partial_capo_validation.go": "941f48d939f0a3a9ed76c1808ec341ee78f551aa7283ab6b18d1863b0889a874",
     "pitch_spelling.go": "77b3324a82a8014a4682c4daae45f567a6b47530e8f6fc19eadabdd397df557e",
     "rasgueado.go": "33c4e3abd480887969c41fd5e6de4ac8f31ebc59344ed182f68ef637ad5f5bd6",
@@ -309,7 +309,7 @@
     "track.go": "3e9e4e3226c22183ae498c67256c2b8e3b1c176b3caf4282dd12a7a203b1611d",
     "transposition.go": "aae1cd87757c8d2cb05cbf5905c3b9ec45e65964726d83f5795c2a58521f599a",
     "tremolo_picking.go": "26b185d0294ff60b1c803c0b6dba8211a850ee5d90e9ae6ac2c7532ae62467c4",
-    "validation.go": "92f17bb5717311cea49c217d01802a6db8707ff26c6e05341287892c65697d51",
+    "validation.go": "6a2bd7a858e392b53d2fcde175dadf76c2f14fbd090b8602edb58173479c8081",
     "wah.go": "36f0ca4214952b3c3401112a09a6a7d81cd959b43a90f4b75bd3d78921a9dabb"
   },
   "final_gate_requirements": [
@@ -317,5 +317,368 @@
     "Complete the capability/corpus database refresh and prescribed full gates.",
     "Review exact final commit and current #115 criteria before closure.",
     "Keep #40 open for scoped reference and format limits. Do not claim zero open issues."
-  ]
+  ],
+  "previous_reviewed_git_heads": [
+    "9d282eb5dd2d403a647cbda98634210d42bf7196"
+  ],
+  "compatibility_validation_recheck": {
+    "status": "PASS after correction",
+    "discovered_by": "root release validation",
+    "finding": "Partial-capo selection length was validated against raw Staff.Strings before Track.Strings compatibility resolution. A legacy four-string tuning edit could export a six-flag mask that the parser rejected.",
+    "fix": "Validate partial-capo configuration on every gp8ExportStaves result. Invalid masks reject without truncation. Valid four-flag edits succeed against the resolved four-string tuning even when the raw Staff.Strings view still has six entries.",
+    "scope_review": [
+      "Export, ExportWithOptions, ExportWithReport and file exports share planExport. Preflight uses the same plan.",
+      "planExport calls authoredScoreDiagnostics and ValidateSong before serialization, and repeats authored validation after any mix-table projection.",
+      "Partial configuration and note/grace pitch validation use the same resolved staff state. Track.Strings nil fallback, first-staff overrides, Track.Measures and all staff capo reconciliation use gp8ExportStaves.",
+      "The second staff retains independent tuning and partial selection. No additional public compatibility bypass found in these paths."
+    ],
+    "independent_cases": [
+      {
+        "Case": "legacy-invalid-six-mask",
+        "Diagnostics": [
+          {
+            "Code": "score.staff.partial-capo.strings",
+            "Kind": "structural",
+            "Location": {
+              "Track": 0,
+              "Staff": 0,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "partial capo has 6 flags for 4 strings"
+          }
+        ],
+        "Report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.reject.score.staff.partial-capo.strings",
+              "Feature": "score-core",
+              "Disposition": "rejected",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "partial capo has 6 flags for 4 strings"
+            }
+          ]
+        },
+        "Error": "exporting Guitar Pro file: partial capo has 6 flags for 4 strings",
+        "OutputBytes": 0,
+        "RoundError": "",
+        "Masks": null,
+        "Tunings": null,
+        "Unmutated": true
+      },
+      {
+        "Case": "legacy-valid-four-mask",
+        "Diagnostics": [],
+        "Report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            },
+            {
+              "Code": "gp8.omit.short-name-consumer-empty",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation"
+            }
+          ]
+        },
+        "Error": "",
+        "OutputBytes": 31916,
+        "RoundError": "",
+        "Masks": [
+          4
+        ],
+        "Tunings": [
+          4
+        ],
+        "Unmutated": true
+      },
+      {
+        "Case": "staff-direct-four-mask",
+        "Diagnostics": [],
+        "Report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            },
+            {
+              "Code": "gp8.omit.short-name-consumer-empty",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation"
+            }
+          ]
+        },
+        "Error": "",
+        "OutputBytes": 31916,
+        "RoundError": "",
+        "Masks": [
+          4
+        ],
+        "Tunings": [
+          4
+        ],
+        "Unmutated": true
+      },
+      {
+        "Case": "second-staff-six-mask",
+        "Diagnostics": [],
+        "Report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.normalize.track-name-page-policy",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer has no separate policy for names on the first system of each page in the multi-track view; wire value 1 remains exact"
+            },
+            {
+              "Code": "gp8.normalize.source-version",
+              "Feature": "score-core",
+              "Disposition": "normalized",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 output uses the writer version instead of source-format provenance"
+            },
+            {
+              "Code": "gp8.omit.track-display-settings",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "GP8 writer emits notation and tablature selection but not the remaining track display settings"
+            },
+            {
+              "Code": "gp8.omit.short-name-consumer-empty",
+              "Feature": "score-core",
+              "Disposition": "omitted",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "the pinned consumer replaces an authored empty short name with a derived full-name abbreviation"
+            }
+          ]
+        },
+        "Error": "",
+        "OutputBytes": 36831,
+        "RoundError": "",
+        "Masks": [
+          4,
+          6
+        ],
+        "Tunings": [
+          4,
+          6
+        ],
+        "Unmutated": true
+      },
+      {
+        "Case": "legacy-whole-capo-bounds",
+        "Diagnostics": [
+          {
+            "Code": "score.note.partial-capo-midi",
+            "Kind": "value",
+            "Location": {
+              "Track": 0,
+              "Staff": 0,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 0,
+              "Note": 0
+            },
+            "Reason": "note sounding MIDI value 167 after partial capo is outside 0..127"
+          },
+          {
+            "Code": "score.note.partial-capo-midi",
+            "Kind": "value",
+            "Location": {
+              "Track": 0,
+              "Staff": 0,
+              "Measure": 0,
+              "Voice": 0,
+              "Beat": 3,
+              "Note": 0
+            },
+            "Reason": "note sounding MIDI value 153 after partial capo is outside 0..127"
+          }
+        ],
+        "Report": {
+          "Target": 8,
+          "Entries": [
+            {
+              "Code": "gp8.reject.score.note.partial-capo-midi",
+              "Feature": "score-core",
+              "Disposition": "rejected",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 0,
+                "Note": 0
+              },
+              "Reason": "note sounding MIDI value 167 after partial capo is outside 0..127"
+            },
+            {
+              "Code": "gp8.reject.score.note.partial-capo-midi",
+              "Feature": "score-core",
+              "Disposition": "rejected",
+              "Location": {
+                "Track": 0,
+                "Staff": 0,
+                "Measure": 0,
+                "Voice": 0,
+                "Beat": 3,
+                "Note": 0
+              },
+              "Reason": "note sounding MIDI value 153 after partial capo is outside 0..127"
+            }
+          ]
+        },
+        "Error": "exporting Guitar Pro file: note sounding MIDI value 167 after partial capo is outside 0..127",
+        "OutputBytes": 0,
+        "RoundError": "",
+        "Masks": null,
+        "Tunings": null,
+        "Unmutated": true
+      }
+    ],
+    "commands": [
+      "go run /tmp/partial-compatibility-independent.go: PASS five exact assertions; no source mutation and no unrelated diagnostics in passing cases.",
+      "ALPHATAB_CONFORMANCE=1 go test -count=1 -run ^Test(PartialCapoCompatibilityTuningValidation|PartialCapo.*|ConformancePartialCapo|InactivePartialCapoRetainsImportedSpelling)$ ./...: PASS root0.618s/integration0.672s."
+    ],
+    "regression": "integration/partial_capo_export_test.go:TestPartialCapoCompatibilityTuningValidation",
+    "probe_source": "package main\nimport(\"encoding/json\";\"fmt\";\"os\";gp \"github.com/CaliLuke/go-guitar-pro\")\ntype Result struct {Case string;Diagnostics []gp.ScoreDiagnostic;Report gp.ExportReport;Error string;OutputBytes int;RoundError string;Masks []int;Tunings []int;Unmutated bool}\nfunc main(){var out []Result;for _,name:=range []string{\"legacy-invalid-six-mask\",\"legacy-valid-four-mask\",\"staff-direct-four-mask\",\"second-staff-six-mask\",\"legacy-whole-capo-bounds\"}{\n s,e:=gp.ParseFile(\"testdata/gp8/partial-capo-asymmetric.gp\");if e!=nil{panic(e)};tr:=&s.Tracks[0];tr.Strings=tr.Strings[:4];tr.Measures[0].Voices[0].Beats=tr.Measures[0].Voices[0].Beats[:4];for i:=range tr.Measures[0].Voices[0].Beats{tr.Measures[0].Voices[0].Beats[i].Notes[0].AccidentalMode=gp.NoteAccidentalDefault}\n if name!=\"legacy-invalid-six-mask\"{tr.Staves[0].PartialCapo.Strings=[]bool{true,false,false,true}}\n if name==\"staff-direct-four-mask\"{tr.Staves[0].Strings=tr.Strings;tr.Strings=nil}\n if name==\"second-staff-six-mask\"{second:=tr.Staves[0];second.Measures=append([]gp.Measure(nil),second.Measures...);for i:=range second.Measures{second.Measures[i].StaffIndex=1};second.PartialCapo=&gp.PartialCapo{Offset:3,Strings:[]bool{true,false,false,true,false,false}};tr.Staves=append(tr.Staves,second)}\n if name==\"legacy-whole-capo-bounds\"{tr.CapoFret=100}\n before,_:=json.Marshal(s);r:=Result{Case:name};r.Diagnostics=gp.ValidateSong(s);data,report,e:=gp.ExportWithReport(s,gp.ExportFormatGP8,gp.ExportOptions{});r.Report=report;r.OutputBytes=len(data);if e!=nil{r.Error=e.Error()}else{round,re:=gp.Parse(data);if re!=nil{r.RoundError=re.Error()}else{for _,st:=range round.Tracks[0].Staves{r.Tunings=append(r.Tunings,len(st.Strings));r.Masks=append(r.Masks,len(st.PartialCapo.Strings))}}};after,_:=json.Marshal(s);r.Unmutated=string(before)==string(after);out=append(out,r)\n };b,e:=json.MarshalIndent(out,\"\",\"  \");if e!=nil{panic(e)};fmt.Fprintln(os.Stdout,string(b))}\n"
+  }
 }

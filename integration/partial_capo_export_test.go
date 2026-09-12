@@ -189,3 +189,53 @@ func TestInactivePartialCapoRetainsImportedSpelling(t *testing.T) {
 		})
 	}
 }
+
+func TestPartialCapoCompatibilityTuningValidation(t *testing.T) {
+	for _, resizeMask := range []bool{false, true} {
+		song, err := gp.ParseFile("../testdata/gp8/partial-capo-asymmetric.gp")
+		if err != nil {
+			t.Fatal(err)
+		}
+		track := &song.Tracks[0]
+		track.Strings = track.Strings[:4]
+		track.Measures[0].Voices[0].Beats = track.Measures[0].Voices[0].Beats[:4]
+		for i := range track.Measures[0].Voices[0].Beats {
+			track.Measures[0].Voices[0].Beats[i].Notes[0].AccidentalMode = gp.NoteAccidentalDefault
+		}
+		if resizeMask {
+			track.Staves[0].PartialCapo.Strings = []bool{true, false, false, true}
+		}
+		code := "score.staff.partial-capo.strings"
+		invalid := slices.ContainsFunc(gp.ValidateSong(song), func(d gp.ScoreDiagnostic) bool {
+			return d.Code == code && d.Location.Track == 0 && d.Location.Staff == 0
+		})
+		if invalid == resizeMask {
+			t.Fatalf("resizeMask=%t: invalid=%t; validation must use the four-string compatibility tuning", resizeMask, invalid)
+		}
+		options := gp.ExportOptions{}
+		if !resizeMask {
+			options.LossPolicy = gp.ExportLossPolicy{RequirePreservation: true, AllowedCodes: []string{"gp8.reject." + code}}
+		}
+		data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, options)
+		if !resizeMask {
+			if err == nil || len(data) != 0 || !slices.ContainsFunc(report.Entries, func(e gp.ExportReportEntry) bool { return e.Code == "gp8.reject."+code }) {
+				t.Fatalf("mismatched resolved mask exported: %v %#v", err, report)
+			}
+			continue
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		round, err := gp.Parse(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := round.Tracks[0].Staves[0]
+		if len(got.Strings) != 4 || got.PartialCapo == nil || !slices.Equal(got.PartialCapo.Strings, []bool{true, false, false, true}) {
+			t.Fatalf("edited tuning/mask not retained: %#v", got.PartialCapo)
+		}
+		if len(track.Staves[0].Strings) != 6 || len(track.Strings) != 4 {
+			t.Fatal("validation/export mutated tuning views")
+		}
+	}
+}

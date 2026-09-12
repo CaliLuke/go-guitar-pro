@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-09-12T17:32:14.495765+00:00",
+  "reviewed_at": "2026-09-12T17:48:34.603478+00:00",
   "comparison_base": "v0.9.0",
   "reviewed_base_commit": "9d282eb5dd2d403a647cbda98634210d42bf7196",
   "status": "confirmed findings corrected in working tree; final integrated commit and full gates require final review",
@@ -83,14 +83,16 @@
     "full_quality_gates": "Parent runs after all reviewers finish; not run by this reviewer."
   },
   "repaired_source_hashes": {
-    "gp8_builder.go": "9f3c25da08e623468a43f30bd2da1f88338d027a56f5b311803d9f4387d3c379",
-    "gp8_note_pitch.go": "3f79783d61dbfbccea01cb64fc4930deeb52010a2352379181fa910a03da21e3",
     "gp8_notation.go": "1b320546d81a4f9317ad9386c4b0bc0dd4ab6b0b4ea7636226ba37168542795b",
-    "gp8_partial_capo.go": "5627e26922932f59fab0e214b9628aa750d25e06841d80b0fe62c122f38b9961",
+    "gp8_note_pitch.go": "3f79783d61dbfbccea01cb64fc4930deeb52010a2352379181fa910a03da21e3",
     "partial_capo_validation.go": "941f48d939f0a3a9ed76c1808ec341ee78f551aa7283ab6b18d1863b0889a874",
+    "docs/semantic-model.md": "aecb3d830d9c7abd9abefb1e577407671c5ee63dcb264de1f949c7017652f149",
     "transposition.go": "aae1cd87757c8d2cb05cbf5905c3b9ec45e65964726d83f5795c2a58521f599a",
+    "validation.go": "6a2bd7a858e392b53d2fcde175dadf76c2f14fbd090b8602edb58173479c8081",
+    "partial_capo.go": "fb5416479d1f5c2a793c36139ad7208d09e4eb5d7a190b7f3b56a61515f258fd",
+    "gp8_builder.go": "9f3c25da08e623468a43f30bd2da1f88338d027a56f5b311803d9f4387d3c379",
     "pitch_spelling.go": "77b3324a82a8014a4682c4daae45f567a6b47530e8f6fc19eadabdd397df557e",
-    "validation.go": "92f17bb5717311cea49c217d01802a6db8707ff26c6e05341287892c65697d51"
+    "gp8_partial_capo.go": "5627e26922932f59fab0e214b9628aa750d25e06841d80b0fe62c122f38b9961"
   },
   "follow_up_findings": [
     {
@@ -101,6 +103,16 @@
       "resolution": "Store the immutable effective partial offset of this note, not the configuration identity. Nil, inactive, unselected and nonzero-fret contexts retain the receipt; an active effective-offset change invalidates it.",
       "regression": "TestInactivePartialCapoRetainsImportedSpelling reproduced four failures before correction; all five cases pass after correction. Existing TestPitchSpellingImportedContextEdits passes without test edits.",
       "validation": "go test . -run ^TestPitchSpellingImportedContextEdits$ -count=1: PASS; go test ./integration -run (PartialCapo|GraceNotesDoNotInheritOwnerMarkers) -count=1: PASS."
+    },
+    {
+      "id": "resolved-partial-mask-validation",
+      "reported_by": "root final release validation",
+      "priority": "P1",
+      "reproduction": "Shorten parsed Track.Strings from six to four while keeping the staff partial mask at six flags. Validation used raw Staff.Strings and allowed an export that its own parser rejected.",
+      "resolution": "Validate the partial configuration in the existing resolved gp8ExportStaves loop. Reject six flags for the authoritative four-string tuning; accept an explicit four-flag edit even while raw Staff.Strings retains six entries.",
+      "regression": "TestPartialCapoCompatibilityTuningValidation failed before the repair and passes after. M04-PARTIAL-CAPO now asserts the exact rejection and successful matching-mask round trip.",
+      "validation": "Focused public and conformance tests PASS; semantic matrix inventory PASS; golangci-lint reports 0 issues. The invalid resolved mask remains rejected with RequirePreservation and its rejection code explicitly allowed. Independent acceptance recheck requested.",
+      "documentation": "PartialCapo.Strings and semantic-model documentation now require resolved export tuning length, including first-staff Track.Strings compatibility overrides."
     }
   ]
 }

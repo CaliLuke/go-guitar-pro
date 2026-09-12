@@ -12,6 +12,7 @@ import (
 
 func TestConformancePartialCapo(t *testing.T) { runConformancePartialCapo(newConformanceRun(t)) }
 func runConformancePartialCapo(run *conformanceRun) {
+	assertPartialCapoCompatibilityTuning(run)
 	t := run.t
 	for _, test := range []struct {
 		name        string
@@ -151,4 +152,33 @@ func assertPartialCapoInactiveFlags(run *conformanceRun) {
 	}
 	run.Report("M04-PARTIAL-CAPO", codes, []string{"GPIF.Staff.PartialCapo.InactiveFlags.Normalized"})
 	run.Dispatch("gpifReadPartialCapoWithContext:property.Name", codes, []string{"GPIF.Staff.PartialCapo.InactiveFlags.Normalized"})
+}
+
+func assertPartialCapoCompatibilityTuning(run *conformanceRun) {
+	song := parseTestFixture(run.t, "testdata/gp8/partial-capo-asymmetric.gp")
+	track := &song.Tracks[0]
+	track.Strings = track.Strings[:4]
+	track.Measures[0].Voices[0].Beats = track.Measures[0].Voices[0].Beats[:4]
+	for i := range track.Measures[0].Voices[0].Beats {
+		track.Measures[0].Voices[0].Beats[i].Notes[0].AccidentalMode = NoteAccidentalDefault
+	}
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+	if err == nil || len(data) != 0 {
+		run.t.Fatal("invalid resolved partial mask exported")
+	}
+	run.Report("M04-PARTIAL-CAPO", reportCodes(report), []string{"gp8.reject.score.staff.partial-capo.strings"})
+	flags := []bool{true, false, false, true}
+	track.Staves[0].PartialCapo.Strings = flags
+	data, err = Export(song, ExportFormatGP8)
+	if err != nil {
+		run.t.Fatal(err)
+	}
+	round, err := Parse(data)
+	if err != nil {
+		run.t.Fatal(err)
+	}
+	if len(round.Tracks[0].Staves[0].Strings) != 4 {
+		run.t.Fatal("compatibility tuning lost")
+	}
+	run.Preserved("PartialCapo.Strings", round.Tracks[0].Staves[0].PartialCapo.Strings, flags)
 }
