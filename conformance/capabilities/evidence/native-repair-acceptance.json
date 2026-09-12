@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "reviewed_source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+  "reviewed_at": "2026-09-12T02:56:23.076125+00:00",
+  "commands": [
+    "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+    "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+    "prek run --all-files: PASS; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and the 80% coverage floor.",
+    "Native evidence verification: 5 tests PASS; 14 pitch/spelling contexts plus notation and the 17-value volume sweep.",
+    "Semantic inventory: 466/466 public fields, 277/277 wire fields, 54/54 dispatches and 214/214 enum obligations assigned; two new native cases.",
+    "Final capability probe: 377 fixtures; reviewed raw spelling resolution and corrected quarter-note offsets; the two canon audio-track exports are no longer rejected."
+  ],
+  "scope_rule": "Use the published checklist. Same-track conflicts are retained as explicit native GP8 track-group limits; free-form requests to preserve incompatible flags within one track do not add acceptance criteria.",
+  "reviews": [
+    {
+      "issue": 118,
+      "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "acceptance_updated_at": "2026-09-12T00:29:10Z",
+      "decision": "complete-after-dependencies-close",
+      "criteria": [
+        {
+          "criterion": "Export default-spelled pitched notes with the native-required ConcertPitch and TransposedPitch records. Preserve all original note occurrences, strings, frets, MIDI pitches, and durations through native Guitar Pro reopening.",
+          "status": "PASS",
+          "evidence": "Native mix input/output preserve all 12 ordered note occurrences, strings, frets and MIDI 61; all original/repaired native MIDI note-on/off events, velocities and durations match."
+        },
+        {
+          "criterion": "Define and test how default spelling becomes concrete wire spelling without accidentally changing later public edits. Keep the numeric pitch authority independent from the selected enharmonic spelling.",
+          "status": "PASS",
+          "evidence": "Default resolves to concrete key-aware spelling; public edit/clear and bounds regressions pass."
+        },
+        {
+          "criterion": "Cover explicit accidentals, independent capo values, display and sounding transposition, clef/beat octave changes, natural harmonics, absolute notes, and grace-note context. Reject unrepresentable values with an exact diagnostic; do not silently omit required pitch fields.",
+          "status": "PASS",
+          "evidence": "Native default, natural, sharp, flat, double-sharp/flat, independent capo0/3, display12, sounding12 omission, clef8vb, beat8va, harmonic5, absolute61 and grace3 contexts verified."
+        },
+        {
+          "criterion": "Add public API regressions and ledger assertions. Native evidence must include original input, generated output, native save or MIDI result, application version, hashes, and exact occurrence-level pitch facts.",
+          "status": "PASS",
+          "evidence": "Public regressions, M09-NATIVE-PITCH ledger assertions and hash-bound native GP/MIDI/UI artifacts committed."
+        },
+        {
+          "criterion": "Keep pinned AlphaTab assertions as reference checks. Do not reproduce a reference defect merely to make the oracle match.",
+          "status": "PASS",
+          "evidence": "Pinned consumer tests pass with raw reference differences preserved. Native-correct output takes precedence."
+        },
+        {
+          "criterion": "Run `./conformance/check.sh` and `prek run --all-files`, then review the exact commit before closure.",
+          "status": "PASS",
+          "evidence": "Both prescribed gates pass. Exact source and native receipts reviewed."
+        }
+      ]
+    },
+    {
+      "issue": 85,
+      "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "acceptance_updated_at": "2026-09-12T00:29:03Z",
+      "decision": "complete-after-dependencies-close",
+      "criteria": [
+        {
+          "criterion": "Use a legacy beat with simultaneous tempo, program, volume and balance changes at a nonzero position.",
+          "status": "PASS",
+          "evidence": "Complete GP3 simultaneous tempo 173, program 73, volume 12, balance 5 at beat 1 is used by public, native and independent-consumer tests."
+        },
+        {
+          "criterion": "Preserve timing and event order while avoiding duplicates with score/track automation collections.",
+          "status": "PASS",
+          "evidence": "Native Sound position 1 displays tick 481. Native saves retain step tempo 173, gain 0.56 and pan 0.3125 at ratio 0.25. Collection edit/clear/order and duplicate-avoidance tests pass."
+        },
+        {
+          "criterion": "For chorus, reverb, phaser, tremolo and transitions, implement a verified wire mapping or retain an exact per-controller omission.",
+          "status": "PASS",
+          "evidence": "Chorus, reverb, phaser, tremolo, nonzero transitions and RSE fields keep individual exact omission reports."
+        }
+      ]
+    },
+    {
+      "issue": 86,
+      "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "acceptance_updated_at": "2026-09-12T00:29:04Z",
+      "decision": "complete-after-dependencies-close",
+      "criteria": [
+        {
+          "criterion": "Use two staves with different standard/tab flags and an independently hidden track.",
+          "status": "PASS",
+          "evidence": "Grand-staff track uses standard-only flags 1; a separate hidden track uses tab/slash/numbered flags 14. Native and pinned consumers retain their distinct staff ownership."
+        },
+        {
+          "criterion": "Document authority with Track.Settings compatibility fields, including edits after parsing.",
+          "status": "PASS",
+          "evidence": "Staff settings own edits; field-specific Track.Settings compatibility precedence is documented and tested, including clearing and conflicts."
+        },
+        {
+          "criterion": "Import and GP8 export preserve each flag through the pinned consumer and diagnose malformed configuration lengths.",
+          "status": "PASS",
+          "evidence": "Native PartConfiguration views remain [[1,14],[1],[14]], tuning and all 3 note occurrences survive, and malformed-length regressions pass. Same-track conflicting flags are a native track-group format limit, not an unstated acceptance prerequisite."
+        }
+      ]
+    },
+    {
+      "issue": 92,
+      "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "acceptance_updated_at": "2026-09-12T00:29:06Z",
+      "decision": "complete-after-dependencies-close",
+      "criteria": [
+        {
+          "criterion": "A staff can request slash notation while a distinct beat has an authored slashed flag; neither replaces the other.",
+          "status": "PASS",
+          "evidence": "Native first staff has a slashed beat with staff Slash=false; separate track requests Slash=true with beat Slashed=false. Both remain independent."
+        },
+        {
+          "criterion": "Test mixed notation preferences on two staves using PartConfiguration and GPIF where applicable.",
+          "status": "PASS",
+          "evidence": "Mixed track groups retain exact PartConfiguration flags 1/14; first track has two staves. Same-track conflicts have explicit per-field target-limit reports."
+        },
+        {
+          "criterion": "Public edits and GP8 output preserve exact consumer flags without creating or deleting notes.",
+          "status": "PASS",
+          "evidence": "Public edits and pinned consumer checks pass. Native save retains all 3 ordered occurrences, tuning and note values; MIDI 58 and duration 1920 remain exact on each staff."
+        }
+      ]
+    },
+    {
+      "issue": 106,
+      "source_commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "acceptance_updated_at": "2026-09-12T00:29:08Z",
+      "decision": "complete-after-dependencies-close",
+      "criteria": [
+        {
+          "criterion": "Use two staves with different numbered-notation flags and preserve their ownership.",
+          "status": "PASS",
+          "evidence": "First track staff group requests Numbered=false; second track requests true. Native flags 1/14 and public ownership remain distinct."
+        },
+        {
+          "criterion": "Read and write the appropriate GP8 part settings without changing tuning or note values.",
+          "status": "PASS",
+          "evidence": "Native PartConfiguration views remain [[1,14],[1],[14]]; all 3 notes retain string 3, fret 3, MIDI 58 and native duration 1920 at 480PPQ."
+        },
+        {
+          "criterion": "Pinned AlphaTab sees the edited numbered-notation state and the existing display flags remain independent.",
+          "status": "PASS",
+          "evidence": "All 15 nonzero notation combinations have pinned-consumer tests. Native standard/tab/slash/numbered flags remain independent across track groups. Differing same-track requests retain exact format-limit reports."
+        }
+      ]
+    }
+  ],
+  "residuals": [
+    {
+      "issue": 115,
+      "kind": "missing-fixture-evidence",
+      "detail": "The required asymmetric partial-capo fixture/consumer package is still missing. No per-string mapping was inferred."
+    },
+    {
+      "issue": 40,
+      "kind": "reference-defects",
+      "detail": "Pinned AlphaTab moves nonzero-position Sound changes to bar start, ignores gain/pan channel-strip events and imports instantaneous legacy tempo events as linear. Raw receipts remain visible; these do not block the native-correct library repair."
+    }
+  ]
+}

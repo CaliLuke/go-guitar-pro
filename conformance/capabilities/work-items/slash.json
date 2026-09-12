@@ -5,8 +5,8 @@
   "title": "Preserve slashed beats and slash staff notation separately",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp6",
     "gp7",
@@ -147,6 +147,24 @@
         "https://github.com/CaliLuke/go-guitar-pro/issues/92#issuecomment-5642176003",
         "conformance/capabilities/evidence/guitar-pro-native.json",
         "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
+    },
+    {
+      "commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and the 80% coverage floor.",
+        "Native evidence verification: 5 tests PASS; 14 pitch/spelling contexts plus notation and the 17-value volume sweep.",
+        "Semantic inventory: 466/466 public fields, 277/277 wire fields, 54/54 dispatches and 214/214 enum obligations assigned; two new native cases.",
+        "Final capability probe: 377 fixtures; reviewed raw spelling resolution and corrected quarter-note offsets; the two canon audio-track exports are no longer rejected."
+      ],
+      "evidence": [
+        "conformance/capabilities/evidence/guitar-pro-repair.json",
+        "conformance/capabilities/evidence/native-repair-acceptance.json",
+        "Native first staff has a slashed beat with staff Slash=false; separate track requests Slash=true with beat Slashed=false. Both remain independent.",
+        "Mixed track groups retain exact PartConfiguration flags 1/14; first track has two staves. Same-track conflicts have explicit per-field target-limit reports.",
+        "Public edits and pinned consumer checks pass. Native save retains all 3 ordered occurrences, tuning and note values; MIDI 58 and duration 1920 remain exact on each staff."
       ]
     }
   ],

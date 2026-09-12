@@ -5,8 +5,8 @@
   "title": "Read and preserve per-staff part notation settings",
   "kind": "implementation",
   "priority": 2,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp3",
     "gp4",
@@ -159,6 +159,24 @@
         "https://github.com/CaliLuke/go-guitar-pro/issues/86#issuecomment-5642175822",
         "conformance/capabilities/evidence/guitar-pro-native.json",
         "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
+    },
+    {
+      "commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and the 80% coverage floor.",
+        "Native evidence verification: 5 tests PASS; 14 pitch/spelling contexts plus notation and the 17-value volume sweep.",
+        "Semantic inventory: 466/466 public fields, 277/277 wire fields, 54/54 dispatches and 214/214 enum obligations assigned; two new native cases.",
+        "Final capability probe: 377 fixtures; reviewed raw spelling resolution and corrected quarter-note offsets; the two canon audio-track exports are no longer rejected."
+      ],
+      "evidence": [
+        "conformance/capabilities/evidence/guitar-pro-repair.json",
+        "conformance/capabilities/evidence/native-repair-acceptance.json",
+        "Grand-staff track uses standard-only flags 1; a separate hidden track uses tab/slash/numbered flags 14. Native and pinned consumers retain their distinct staff ownership.",
+        "Staff settings own edits; field-specific Track.Settings compatibility precedence is documented and tested, including clearing and conflicts.",
+        "Native PartConfiguration views remain [[1,14],[1],[14]], tuning and all 3 note occurrences survive, and malformed-length regressions pass. Same-track conflicting flags are a native track-group format limit, not an unstated acceptance prerequisite."
       ]
     }
   ],

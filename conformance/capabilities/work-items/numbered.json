@@ -5,8 +5,8 @@
   "title": "Preserve numbered notation per staff",
   "kind": "implementation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "codex",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp8"
   ],
@@ -129,6 +129,24 @@
         "https://github.com/CaliLuke/go-guitar-pro/issues/106#issuecomment-5642176141",
         "conformance/capabilities/evidence/guitar-pro-native.json",
         "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
+    },
+    {
+      "commit": "c48f8d7a1b36fb23d0847e55390a460cb210d4ac",
+      "commands": [
+        "ALPHATAB_CONFORMANCE=1 go test -count=1 ./...: PASS.",
+        "./conformance/check.sh: PASS; all 81 sensitivity mutations detected.",
+        "prek run --all-files: PASS; build, vet, goimports, tidy drift, golangci-lint, duplication, conformance, race tests and the 80% coverage floor.",
+        "Native evidence verification: 5 tests PASS; 14 pitch/spelling contexts plus notation and the 17-value volume sweep.",
+        "Semantic inventory: 466/466 public fields, 277/277 wire fields, 54/54 dispatches and 214/214 enum obligations assigned; two new native cases.",
+        "Final capability probe: 377 fixtures; reviewed raw spelling resolution and corrected quarter-note offsets; the two canon audio-track exports are no longer rejected."
+      ],
+      "evidence": [
+        "conformance/capabilities/evidence/guitar-pro-repair.json",
+        "conformance/capabilities/evidence/native-repair-acceptance.json",
+        "First track staff group requests Numbered=false; second track requests true. Native flags 1/14 and public ownership remain distinct.",
+        "Native PartConfiguration views remain [[1,14],[1],[14]]; all 3 notes retain string 3, fret 3, MIDI 58 and native duration 1920 at 480PPQ.",
+        "All 15 nonzero notation combinations have pinned-consumer tests. Native standard/tab/slash/numbered flags remain independent across track groups. Differing same-track requests retain exact format-limit reports."
       ]
     }
   ],
