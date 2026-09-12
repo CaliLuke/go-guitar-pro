@@ -63,17 +63,17 @@ func runConformancePercussionIdentity(run *conformanceRun) {
 	run.Wire("gpifInstrumentSet.Name", wireTrack.InstrumentSet.Name, "Drums")
 	run.Wire("gpifInstrumentSet.Type", wireTrack.InstrumentSet.Type, "drumKit")
 	run.Wire("gpifInstrumentSet.LineCount", wireTrack.InstrumentSet.LineCount, 7)
-	run.Wire("gpifInstrumentSet.Elements", len(wireTrack.InstrumentSet.Elements), 4)
-	run.Wire("gpifElements.Elements", len(wireTrack.InstrumentSet.Elements), 4)
+	run.Wire("gpifInstrumentSet.Elements", len(wireTrack.InstrumentSet.Elements), 3)
+	run.Wire("gpifElements.Elements", len(wireTrack.InstrumentSet.Elements), 3)
 	flat := flattenPercussionWireArticulations(wireTrack.InstrumentSet.Elements)
-	if len(flat) != 4 {
-		t.Fatalf("wire articulations = %#v, want three custom and one builtin fallback", flat)
+	if len(flat) != 3 {
+		t.Fatalf("wire articulations = %#v, want three custom definitions", flat)
 	}
-	run.Wire("gpifElement.Name", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.Name }), []string{"Metal", "Skin", "Metal", "Charley"})
-	run.Wire("gpifElement.Type", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.Type }), []string{"cymbal", "drum", "cymbal", "hiHat"})
-	run.Wire("gpifElement.SoundbankName", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.SoundbankName }), []string{"SB-A", "SB-B", "SB-A", "Master-Hihat"})
-	run.Wire("gpifElement.Articulations", len(flat), 4)
-	run.Wire("gpifArticulations.Articulations", len(flat), 4)
+	run.Wire("gpifElement.Name", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.Name }), []string{"Metal", "Skin", "Metal"})
+	run.Wire("gpifElement.Type", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.Type }), []string{"cymbal", "drum", "cymbal"})
+	run.Wire("gpifElement.SoundbankName", conformancePercussionElementStrings(wireTrack.InstrumentSet.Elements, func(element conformancePercussionWireElement) string { return element.SoundbankName }), []string{"SB-A", "SB-B", "SB-A"})
+	run.Wire("gpifElement.Articulations", len(flat), 3)
+	run.Wire("gpifArticulations.Articulations", len(flat), 3)
 	firstThree := flat[:3]
 	run.Wire("gpifArticulation.Name", conformancePercussionArticulationStrings(firstThree, func(articulation conformancePercussionWireArticulation) string { return articulation.Name }), []string{"Edge", "Center", "Bell"})
 	run.Wire("gpifArticulation.StaffLine", conformancePercussionArticulationInts(firstThree, func(articulation conformancePercussionWireArticulation) int { return articulation.StaffLine }), []int{-3, 3, -1})
@@ -86,17 +86,17 @@ func runConformancePercussionIdentity(run *conformanceRun) {
 	run.Wire("gpifArticulation.OutputRSESound", conformancePercussionArticulationStrings(firstThree, func(articulation conformancePercussionWireArticulation) string { return articulation.OutputRSESound }), []string{"edge.hit", "center.hit", "bell.hit"})
 	run.Wire("gpifArticulation.OutputMIDINumber", conformancePercussionArticulationInts(firstThree, func(articulation conformancePercussionWireArticulation) int { return articulation.OutputMIDINumber }), []int{56, 38, 56})
 	identities := conformancePercussionWireNoteIdentities(wire.notes)
-	run.Wire("gpifNote.InstrumentArticulation", identities, []int{0, 3, 0, 2, 1})
+	run.Wire("gpifNote.InstrumentArticulation", identities, []int{0, 1, 0, 2, 1})
 	run.Wire("gpifNote.Properties", len(wire.notes), 5)
-	run.Wire("gpifProperty.Number", conformancePercussionWireNoteMIDIs(wire.notes), []int{91, 46, 91, 46, 40})
+	run.Wire("gpifProperty.Number", conformancePercussionWireNoteMIDIs(wire.notes), []int{91, 38, 91, 46, 40})
 
 	roundTrip, err := Parse(data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	gotTrack := roundTrip.Tracks[0]
-	if len(gotTrack.PercussionArticulations) < 4 {
-		t.Fatalf("round-trip definitions = %#v, want three custom and one builtin fallback", gotTrack.PercussionArticulations)
+	if len(gotTrack.PercussionArticulations) != 3 {
+		t.Fatalf("round-trip definitions = %#v, want three custom definitions", gotTrack.PercussionArticulations)
 	}
 	if !slices.EqualFunc(gotTrack.PercussionArticulations[:3], wantDefinitions, func(a, b PercussionArticulation) bool { return gpifSamePercussionArticulation(a, b) }) {
 		t.Fatalf("round-trip custom definitions = %#v, want %#v", gotTrack.PercussionArticulations[:3], wantDefinitions)
@@ -105,8 +105,8 @@ func runConformancePercussionIdentity(run *conformanceRun) {
 	if gotNotes[0].PercussionArticulation != 0 || gotNotes[1].PercussionArticulation != 2 || gotNotes[2].PercussionArticulation != 1 {
 		t.Fatalf("round-trip main identities = %d/%d/%d, want 0/2/1", gotNotes[0].PercussionArticulation, gotNotes[1].PercussionArticulation, gotNotes[2].PercussionArticulation)
 	}
-	if gotNotes[0].Effect.Graces[0].PercussionArticulation != 0 || gotNotes[1].Effect.Graces[0].PercussionArticulation != 3 {
-		t.Fatalf("round-trip grace identities = %d/%d, want 0/3", gotNotes[0].Effect.Graces[0].PercussionArticulation, gotNotes[1].Effect.Graces[0].PercussionArticulation)
+	if gotNotes[0].Effect.Graces[0].PercussionArticulation != 0 || gotNotes[1].Effect.Graces[0].PercussionArticulation != 1 || gotNotes[1].Effect.Graces[0].Fret != 38 {
+		t.Fatalf("round-trip grace identities = %#v/%#v, want 0 then 1 at fret 38", gotNotes[0].Effect.Graces, gotNotes[1].Effect.Graces)
 	}
 	if gotTrack.PercussionArticulations[0].OutputMIDINumber != 56 || gotTrack.PercussionArticulations[2].OutputMIDINumber != 56 || gotTrack.PercussionArticulations[0].Name == gotTrack.PercussionArticulations[2].Name {
 		t.Fatal("duplicate sounding MIDI collapsed distinct articulation identities")
@@ -612,12 +612,12 @@ func conformancePercussionSong(t *testing.T) *Song {
 		{ElementName: "Metal", ElementType: "cymbal", ElementSoundbankName: "SB-A", Name: "Bell", StaffLine: -1, NoteheadDefault: "noteheadXBlack", NoteheadHalf: "noteheadXHalf", NoteheadWhole: "noteheadXWhole", TechniquePlacement: "below", TechniqueSymbol: "stringsDownBow", InputMIDINumbers: []int{93}, OutputRSESound: "bell.hit", OutputMIDINumber: 56},
 	}
 	exact91, _ := NewFret(91)
-	exact46, _ := NewFret(46)
+	exact38, _ := NewFret(38)
 	track.Measures[0].Voices = []Voice{{Beats: []Beat{{
 		Duration: defaultDuration(), Status: BeatStatusNormal, Dynamics: Forte,
 		Notes: []Note{
 			{Value: 91, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1, HasPercussionArticulation: true, PercussionArticulation: 0, Effect: NoteEffect{Graces: []GraceEffect{{Fret: 91, ExactFret: &exact91, Duration: DurationThirtySecond, Velocity: Forte, HasPercussionArticulation: true, PercussionArticulation: 0}}}},
-			{Value: 46, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1, HasPercussionArticulation: true, PercussionArticulation: 2, Effect: NoteEffect{Graces: []GraceEffect{{Fret: 46, ExactFret: &exact46, Duration: DurationThirtySecond, Velocity: Forte}}}},
+			{Value: 46, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1, HasPercussionArticulation: true, PercussionArticulation: 2, Effect: NoteEffect{Graces: []GraceEffect{{Fret: 38, ExactFret: &exact38, Duration: DurationThirtySecond, Velocity: Forte}}}},
 			{Value: 40, Kind: NoteTypeNormal, Velocity: Forte, DurationPercent: 1},
 		},
 	}}}}

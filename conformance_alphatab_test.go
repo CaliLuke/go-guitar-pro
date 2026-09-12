@@ -432,6 +432,48 @@ func TestAlphaTabPreservesNativePercussionFallbacks(t *testing.T) {
 	}
 }
 
+func TestAlphaTabPreservesCrossInstrumentPercussionGrace(t *testing.T) {
+	requireAlphaTabConformance(t)
+	source := conformancePercussionBuiltinPercussionSong(t, 46)
+	exact, err := NewFret(38)
+	if err != nil {
+		t.Fatal(err)
+	}
+	note := &source.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Effect.Graces = []GraceEffect{{
+		Duration:  DurationThirtySecond,
+		ExactFret: &exact,
+		Fret:      38,
+		Velocity:  Forte,
+	}}
+	source.Tracks[0].Staves[0].Measures = source.Tracks[0].Measures
+	if finalizeErr := FinalizeSong(source); finalizeErr != nil {
+		t.Fatal(finalizeErr)
+	}
+	data, err := Export(source, ExportFormatGP8)
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip, err := Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	gotGrace := roundTrip.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].Effect.Graces
+	if len(gotGrace) != 1 || gotGrace[0].Fret != 38 {
+		t.Fatalf("Go cross-instrument percussion grace = %#v, want fret 38", gotGrace)
+	}
+	score := readAlphaTabScore(t, writeConformanceFixture(t, data)).(map[string]any)
+	track := score["tracks"].([]any)[0].(map[string]any)
+	staff := track["staves"].([]any)[0].(map[string]any)
+	bar := staff["bars"].([]any)[0].(map[string]any)
+	voice := bar["voices"].([]any)[0].(map[string]any)
+	beat := voice["beats"].([]any)[0].(map[string]any)
+	alphaNote := beat["notes"].([]any)[0].(map[string]any)
+	if graces := alphaNote["graces"].([]any); len(graces) != 1 {
+		t.Fatalf("AlphaTab cross-instrument percussion graces = %#v, want one", graces)
+	}
+}
+
 func TestAlphaTabGPIFCapoPrecedence(t *testing.T) {
 	requireAlphaTabConformance(t)
 	gpif := strings.Replace(multiStaffFollowedByTrackGPIF, "<Name>Piano</Name>",

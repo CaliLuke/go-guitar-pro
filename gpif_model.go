@@ -87,7 +87,16 @@ func gpifGraceTarget(target *Beat, grace *Note, percussion bool) int {
 				return index
 			}
 		}
-		return -1
+		if len(target.Notes) == 0 {
+			return -1
+		}
+		result := 0
+		for index := 1; index < len(target.Notes); index++ {
+			if len(target.Notes[index].Effect.Graces) < len(target.Notes[result].Effect.Graces) {
+				result = index
+			}
+		}
+		return result
 	}
 	for index := range target.Notes {
 		if target.Notes[index].String == grace.String {
