@@ -5,8 +5,8 @@
   "title": "Acquire partial-capo fixtures with verified string ordering",
   "kind": "investigation",
   "priority": 3,
-  "status": "in_progress",
-  "owner": "review_acceptance",
+  "status": "done",
+  "owner": null,
   "formats": [
     "gp7",
     "gp8"
@@ -16,7 +16,7 @@
     "model",
     "export"
   ],
-  "scope": "Acquire controlled native fixtures that establish partial-capo string order, fret units and note pitches. The native evidence package is available. Implementation and final acceptance review remain in progress.",
+  "scope": "Acquire controlled native partial-capo fixtures and establish string order, fret units and note pitches. Acquisition, retaining library implementation and final acceptance review are complete.",
   "acceptance": [
     "Provide an authorized native-saved control and asymmetric partial-capo fixture from the same minimal six-string score. Use partial fret 3 on named strings 1 and 4. Give each string one identifiable open note. Record application version, hashes, UI values and experimental seed provenance. State the actual authoring version within the shared GP7/GP8 GPIF family.",
     "Provide a native combined-capo variant with whole capo 2 and partial absolute fret 5. Record exact wire offsets and native MIDI pitches. Record the native response to a partial fret less than the whole capo. If the application refuses that value, provide its refusal and a zero-offset control instead of an invented valid fixture.",
@@ -57,7 +57,7 @@
         "reference": "conformance/capabilities/evidence/partial-capo-native.json"
       }
     ],
-    "reviewed_commit": "8d729442b6d2a7f56d304e34b279c143a15ddf1f"
+    "reviewed_commit": "bbe8204a4e0334ca055deed6726c2879d119365a"
   },
   "evidence": [
     {
@@ -140,6 +140,11 @@
       "kind": "source",
       "reference": "conformance/capabilities/test_partial_capo_native.py",
       "detail": "Four executable checks cover artifact integrity, exact native wire/MIDI values, named UI/boundary facts and old public/pinned limitations."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/release-acceptance.json",
+      "detail": "Final current-commit acceptance review, matching independent production hashes and full gate log."
     }
   ],
   "shared_files": [
@@ -147,7 +152,7 @@
     "conformance/oracle.mjs",
     "track.go"
   ],
-  "resolution": "The finite acquisition package is complete. Guitar Pro 8.1.5 build 31 independently establishes high-to-low public string ownership, reversed wire flags and offsets relative to the whole capo. Only selected open notes receive the partial offset. Native UI refuses a partial fret less than the whole capo. The zero-offset boundary provides its valid control. All seven valid files have native MIDI, source fields, hashes and public/pinned baseline receipts. Experimental XML seeds and unsuccessful variants remain explicitly labeled. No Guitar Pro 7 application session is claimed. The retaining public API and exporter are under implementation and final review in the same release work. Historical missing-input reports retain their original commits and wording.",
+  "resolution": "Native Guitar Pro 8.1.5 build 31 validates seven source fixtures and six library exports. Public Staff.PartialCapo retains a nonnegative offset relative to the whole capo and high-first string flags. Only selected open notes receive the offset. Parser inheritance, explicit clearing, direct edits, grace notes, pitch bounds and compatibility tuning validation are covered. Pinned AlphaTab loss is a separate reference defect. All five current acceptance criteria and dependency #43 pass at bbe8204a4e0334ca055deed6726c2879d119365a. Historical receipts retain their original context.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",
@@ -192,6 +197,21 @@
         "https://github.com/CaliLuke/go-guitar-pro/issues/115#issuecomment-5642176480",
         "conformance/capabilities/evidence/guitar-pro-native.json",
         "Native acceptance remains incomplete. Sound text is fixed; pitched-note loss, sound timing and the documented fixture/notation evidence gaps remain open. No support rating is promoted."
+      ]
+    },
+    {
+      "commit": "bbe8204a4e0334ca055deed6726c2879d119365a",
+      "commands": [
+        "prek run --all-files --verbose: PASS; executes ./conformance/check.sh and all prescribed gates.",
+        "node conformance/capabilities/probe.mjs: PASS; 384 fixture receipts."
+      ],
+      "evidence": [
+        "PASS: Seven native-saved source fixtures include the control, strings 1 and 4 at partial fret 3, exact UI values, hashes and transparent XML-seed provenance. Native application: Guitar Pro 8.1.5 build 31.",
+        "PASS: Whole capo 2 plus partial absolute 5 yields wire offset 3 and native pitches [69,61,57,55,47,42]. Native refusal of below-whole input and accepted zero-offset control are recorded.",
+        "PASS: Independent single-string siblings establish high-first public order and reversed wire bits; UI labels and native MIDI pitches agree.",
+        "PASS: Every valid source has public Go and pinned AlphaTab receipts. Native playback is separate; AlphaTab discards the partial capo.",
+        "PASS: Corpus fixtures, database, native receipts, public API, parser, exporter, edit contract and regression tests are committed. Exact final source matches independent review hashes; the prescribed full gate passes.",
+        "conformance/capabilities/evidence/release-acceptance.json"
       ]
     }
   ],

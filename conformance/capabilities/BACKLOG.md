@@ -87,5 +87,5 @@ GitHub tracking issue: [#40](https://github.com/CaliLuke/go-guitar-pro/issues/40
 | [Preserve explicit string-number display requests](work-items/show-string.json) | implementation | 3 | done | — | [#107](https://github.com/CaliLuke/go-guitar-pro/issues/107) |
 | [Preserve supported score bracket, track-name and display policies](work-items/stylesheet.json) | implementation | 3 | done | [#109](https://github.com/CaliLuke/go-guitar-pro/issues/109) | [#117](https://github.com/CaliLuke/go-guitar-pro/issues/117) |
 | [Preserve authored timer marks and visibility](work-items/timer.json) | implementation | 3 | done | — | [#108](https://github.com/CaliLuke/go-guitar-pro/issues/108) |
-| [Acquire partial-capo fixtures with verified string ordering](work-items/partial-capo.json) | investigation | 3 | in_progress | [#43](https://github.com/CaliLuke/go-guitar-pro/issues/43) | [#115](https://github.com/CaliLuke/go-guitar-pro/issues/115) |
+| [Acquire partial-capo fixtures with verified string ordering](work-items/partial-capo.json) | investigation | 3 | done | [#43](https://github.com/CaliLuke/go-guitar-pro/issues/43) | [#115](https://github.com/CaliLuke/go-guitar-pro/issues/115) |
 | [Acquire owned GP8 protection-mode fixtures and error receipts](work-items/password.json) | investigation | 3 | done | — | [#116](https://github.com/CaliLuke/go-guitar-pro/issues/116) |
