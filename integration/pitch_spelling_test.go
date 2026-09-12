@@ -38,7 +38,11 @@ func TestGP8AuthoredAccidentals(t *testing.T) {
 		}
 		got := parsed.Tracks[0].Measures[0].Voices[0].Beats[1].Notes
 		for _, note := range got {
-			if note.AccidentalMode != test.mode || note.Value != test.midi-60 || note.String == 0 {
+			wantMode := test.mode
+			if wantMode == gp.NoteAccidentalDefault {
+				wantMode = gp.NoteAccidentalSharp
+			}
+			if note.AccidentalMode != wantMode || note.Value != test.midi-60 || note.String == 0 {
 				t.Fatalf("mode %v changed %#v", test.mode, note)
 			}
 		}
@@ -73,7 +77,11 @@ func TestGP8EnharmonicChordEdits(t *testing.T) {
 			t.Fatal(err)
 		}
 		for i, n := range got.Tracks[0].Measures[0].Voices[0].Beats[1].Notes {
-			if n.AccidentalMode != notes[i].AccidentalMode || n.Value != notes[i].Value {
+			wantMode := notes[i].AccidentalMode
+			if wantMode == gp.NoteAccidentalDefault {
+				wantMode = gp.NoteAccidentalSharp
+			}
+			if n.AccidentalMode != wantMode || n.Value != notes[i].Value {
 				t.Fatalf("spelling or pitch changed %#v", n)
 			}
 		}

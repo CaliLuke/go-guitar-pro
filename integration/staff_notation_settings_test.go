@@ -5,10 +5,10 @@ package integration_test
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"reflect"
 	"strings"
 	"testing"
 
@@ -61,7 +61,11 @@ func TestStaffNotationPublicOwnership(t *testing.T) {
 	if !parsed.Tracks[0].Staves[0].NotationSettings.Slash || !parsed.Tracks[0].Staves[1].NotationSettings.Slash || parsed.Tracks[0].Staves[0].Measures[0].Voices[0].Beats[0].Slashed {
 		t.Fatal("edited beat and staff flags changed")
 	}
-	if !reflect.DeepEqual(parsed.Tracks[1].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0], secondBefore) {
+	// The fixture's automatic A-sharp becomes a concrete native pitch record.
+	secondBefore.AccidentalMode = gp.NoteAccidentalSharp
+	wantPublic, _ := json.Marshal(secondBefore)
+	gotPublic, _ := json.Marshal(parsed.Tracks[1].Staves[0].Measures[0].Voices[0].Beats[0].Notes[0])
+	if !bytes.Equal(gotPublic, wantPublic) {
 		t.Fatal("display edit changed note data")
 	}
 }

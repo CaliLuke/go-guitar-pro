@@ -17,7 +17,7 @@ func runConformanceSoundPreroll(run *conformanceRun) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantSource := []SoundAutomation{{Bar: 0, Position: -0.125, Sound: 0}}
+	wantSource := []SoundAutomation{{Bar: 0, Position: -0.03125, Sound: 0}}
 	wantSounds := []TrackSound{{Name: "Acoustic Guitar (Steel)", Label: "Acoustic Guitar (Steel)", Path: "Stringed/Acoustic Guitars/Steel Guitar", Role: "User", Program: 25}}
 	run.Preserved("Track.SoundAutomations", source.Tracks[0].SoundAutomations, wantSource)
 	run.Preserved("Track.Sounds", source.Tracks[0].Sounds, wantSounds)
@@ -52,7 +52,7 @@ func runConformanceSoundPreroll(run *conformanceRun) {
 	for index, event := range wire {
 		run.Wire("gpifAutomation.Type", event.Type, "Sound")
 		run.Wire("gpifAutomation.Bar", event.Bar, want[index].Bar)
-		run.Wire("gpifAutomation.Position", event.Position, want[index].Position)
+		run.Wire("gpifAutomation.Position", event.Position, want[index].Position*4)
 		sound := song.Tracks[0].Sounds[want[index].Sound]
 		run.Wire("gpifAutomation.Value", event.Value.Text, sound.Path+";"+sound.Name+";"+sound.Role)
 	}
@@ -92,13 +92,13 @@ func TestAlphaTabSoundPreroll(t *testing.T) {
 	}
 	readAlphaTabOracleFacts(t, "--midi-bank", writeConformanceFixture(t, data), &facts)
 	wantOrdered := []conformanceAlphaTabMIDIBankAutomation{
-		{Bar: 0, Position: -0.125, Type: "instrument", Value: 25},
+		{Bar: 0, Position: -0.5, Type: "instrument", Value: 25},
 		{Bar: 0, Position: 0, Type: "bank", Value: 77},
 		{Bar: 0, Position: 0, Type: "instrument", Value: 26},
-		{Bar: 0, Position: -0.125, Type: "bank", Value: 256},
-		{Bar: 0, Position: -0.125, Type: "instrument", Value: 27, Linear: true},
-		{Bar: 0, Position: -0.125, Type: "bank", Value: 77},
-		{Bar: 0, Position: -0.125, Type: "instrument", Value: 26},
+		{Bar: 0, Position: -0.5, Type: "bank", Value: 256},
+		{Bar: 0, Position: -0.5, Type: "instrument", Value: 27, Linear: true},
+		{Bar: 0, Position: -0.5, Type: "bank", Value: 77},
+		{Bar: 0, Position: -0.5, Type: "instrument", Value: 26},
 	}
 	assertSoundPrerollConsumer(t, facts, wantOrdered)
 }
@@ -180,7 +180,7 @@ func runSoundSelectionIdentity(run *conformanceRun, oracle bool) {
 		}
 		for i, event := range wire.Automations.Automations {
 			run.Wire("gpifAutomation.Value", event.Value.Text, expectedReferences[i])
-			run.Wire("gpifAutomation.Position", event.Position, song.Tracks[0].SoundAutomations[i].Position)
+			run.Wire("gpifAutomation.Position", event.Position, song.Tracks[0].SoundAutomations[i].Position*4)
 		}
 		parsed, err := Parse(data)
 		if err != nil {
@@ -205,9 +205,9 @@ func assertSoundIdentityConsumer(t *testing.T, data []byte) {
 	readAlphaTabOracleFacts(t, "--automations", writeConformanceFixture(t, data), &facts)
 	want := []conformanceSoundEvent{
 		{Track: 0, Bar: 0, Position: 0, Type: "instrument", Value: 27, Text: "opening", Visible: true},
-		{Track: 0, Bar: 0, Position: 0.75, Type: "instrument", Value: 27, Text: "later", Visible: true},
-		{Track: 0, Bar: 0, Position: 0.25, Type: "instrument", Value: 27, Text: "first at quarter", Visible: true},
-		{Track: 0, Bar: 0, Position: 0.25, Type: "instrument", Value: 27, Text: "second at quarter", Visible: true, Linear: true},
+		{Track: 0, Bar: 0, Position: 3, Type: "instrument", Value: 27, Text: "later", Visible: true},
+		{Track: 0, Bar: 0, Position: 1, Type: "instrument", Value: 27, Text: "first at quarter", Visible: true},
+		{Track: 0, Bar: 0, Position: 1, Type: "instrument", Value: 27, Text: "second at quarter", Visible: true, Linear: true},
 	}
 	if !slices.Equal(facts.Sound, want) {
 		t.Fatalf("retained AlphaTab same-program events = %#v, want %#v", facts.Sound, want)

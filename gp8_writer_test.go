@@ -712,8 +712,8 @@ func TestExportGP8DefaultPitchedNotesHaveNumericMetadata(t *testing.T) {
 		properties[property.Name] = property
 	}
 	for _, name := range []string{"ConcertPitch", "TransposedPitch"} {
-		if pitch := properties[name].Pitch; pitch != nil {
-			t.Errorf("default spelling invented %s = %#v", name, pitch)
+		if pitch := properties[name].Pitch; pitch == nil || pitch.Step != "G" || pitch.Accidental == nil || *pitch.Accidental != "" || pitch.Octave != 5 {
+			t.Errorf("required native %s does not spell MIDI 67: %#v", name, pitch)
 		}
 	}
 	if number := properties["Midi"].Number; number == nil || *number != 67 {

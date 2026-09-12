@@ -37,8 +37,8 @@ func TestConformanceMixTableProjection(t *testing.T) {
 func runConformanceMixTableProjection(run *conformanceRun) {
 	assertMixTableControllerReports(run)
 	song := parseTestFixture(run.t, "testdata/gp3/mix-table-events.gp3")
-	run.Preserved("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: .25, Value: .75, Linear: true}})
-	run.Preserved("Song.PanAutomations", song.PanAutomations, []PanAutomation{{Track: 0, Bar: 0, Position: .25, Value: .3125, Linear: true}})
+	run.Preserved("Song.VolumeAutomations", song.VolumeAutomations, []VolumeAutomation{{Track: 0, Bar: 0, Position: .25, Value: .56, Linear: false}})
+	run.Preserved("Song.PanAutomations", song.PanAutomations, []PanAutomation{{Track: 0, Bar: 0, Position: .25, Value: .3125, Linear: false}})
 	before := conformanceContractSnapshot(song, false)
 	output, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
 	if err != nil {
@@ -57,10 +57,10 @@ func runConformanceMixTableProjection(run *conformanceRun) {
 	}
 	run.Preserved("TempoAutomation.Position", out.TempoAutomations[1].Position, .25)
 	run.Preserved("TempoAutomation.Tempo", out.TempoAutomations[1].Tempo, float64(173))
-	run.Preserved("TempoAutomation.Linear", out.TempoAutomations[1].Linear, true)
+	run.Preserved("TempoAutomation.Linear", out.TempoAutomations[1].Linear, false)
 	a := out.Tracks[0].SoundAutomations[0]
 	run.Preserved("SoundAutomation.Position", a.Position, .25)
-	run.Preserved("SoundAutomation.Linear", a.Linear, true)
+	run.Preserved("SoundAutomation.Linear", a.Linear, false)
 	run.Preserved("TrackSound.Program", out.Tracks[0].Sounds[a.Sound].Program, int32(73))
 	run.Preserved("TrackSound.Bank", out.Tracks[0].Sounds[a.Sound].Bank, int32(0))
 	run.Preserved("Song.VolumeAutomations", out.VolumeAutomations, song.VolumeAutomations)
@@ -71,10 +71,10 @@ func runConformanceMixTableProjection(run *conformanceRun) {
 	run.Wire("gpifAutomation.Type", tempo.Type, "Tempo")
 	run.Wire("gpifAutomation.Position", tempo.Position, .25)
 	run.Wire("gpifAutomation.Value", tempo.Value.Text, "173 2")
-	run.Wire("gpifAutomation.Linear", tempo.Linear, true)
+	run.Wire("gpifAutomation.Linear", tempo.Linear, false)
 	track := doc.Tracks.Tracks[0]
-	run.Wire("gpifTrack.Automations", track.Automations.Automations[0].Position, .25)
-	run.Wire("gpifChannelStrip.Automations", track.RSE.ChannelStrip.Automations.Automations, []gpifAutomation{{Type: "DSPParam_12", Bar: 0, Position: .25, Linear: true, Value: gpifAutomationValue{Text: "0.75"}}, {Type: "DSPParam_11", Bar: 0, Position: .25, Linear: true, Value: gpifAutomationValue{Text: "0.3125"}}})
+	run.Wire("gpifTrack.Automations", track.Automations.Automations[0].Position, float64(1))
+	run.Wire("gpifChannelStrip.Automations", track.RSE.ChannelStrip.Automations.Automations, []gpifAutomation{{Type: "DSPParam_12", Bar: 0, Position: .25, Linear: false, Value: gpifAutomationValue{Text: "0.56"}}, {Type: "DSPParam_11", Bar: 0, Position: .25, Linear: false, Value: gpifAutomationValue{Text: "0.3125"}}})
 	if !reflect.DeepEqual(before, conformanceContractSnapshot(song, false)) {
 		run.t.Fatal("input mutated")
 	}
@@ -102,8 +102,8 @@ func TestAlphaTabMixTableProjection(t *testing.T) {
 	// The raw consumer moves nonzero-position program changes to beat zero and
 	// ignores channel-strip events. These exact losses have separate policy codes.
 	want := mixConsumerFacts{
-		Tempo:    []mixTempoFact{{Value: 120, Visible: true, Text: "Moderate"}, {Position: .25, Value: 173, Linear: true, Visible: true}, {Bar: 4, Value: 120, Linear: true, Visible: true}},
-		Beats:    []mixBeatFact{{Position: .25, Type: "Instrument", Value: 73, Linear: true}, {Bar: 4, Type: "Bank"}, {Bar: 4, Type: "Instrument", Value: 25, Linear: true}},
+		Tempo:    []mixTempoFact{{Value: 120, Visible: true, Text: "Moderate"}, {Position: .25, Value: 173, Linear: false, Visible: true}, {Bar: 4, Value: 120, Linear: false, Visible: true}},
+		Beats:    []mixBeatFact{{Position: 1, Type: "Instrument", Value: 73, Linear: false}, {Bar: 4, Type: "Bank"}, {Bar: 4, Type: "Instrument", Value: 25, Linear: false}},
 		Programs: slices.Clone(wantSource.Programs),
 	}
 	want.Programs[2].Tick = 0
@@ -129,10 +129,10 @@ func TestMixTableAllTracksAndEqualPositionOrder(t *testing.T) {
 	if len(conflicts) != 1 || conflicts[0].controller != "volume" {
 		t.Fatal(conflicts)
 	}
-	if !reflect.DeepEqual(projected.VolumeAutomations, []VolumeAutomation{{Track: 0, Value: .1}, {Track: 0, Value: .2, Linear: true}, {Track: 1, Value: .75, Linear: true}}) {
+	if !reflect.DeepEqual(projected.VolumeAutomations, []VolumeAutomation{{Track: 0, Value: .1}, {Track: 0, Value: .2, Linear: true}, {Track: 1, Value: .56}}) {
 		t.Fatal(projected.VolumeAutomations)
 	}
-	if !reflect.DeepEqual(projected.PanAutomations, []PanAutomation{{Track: 0, Value: .3125, Linear: true}, {Track: 1, Value: .3125, Linear: true}}) {
+	if !reflect.DeepEqual(projected.PanAutomations, []PanAutomation{{Track: 0, Value: .3125}, {Track: 1, Value: .3125}}) {
 		t.Fatal(projected.PanAutomations)
 	}
 	for i := range projected.Tracks {

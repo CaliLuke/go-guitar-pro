@@ -16,7 +16,7 @@ func TestSoundAutomationOpeningPreroll(t *testing.T) {
 	song := soundPrerollFixture(t)
 	track := &song.Tracks[0]
 	wantSound := guitarpro.TrackSound{Name: "Acoustic Guitar (Steel)", Label: "Acoustic Guitar (Steel)", Path: "Stringed/Acoustic Guitars/Steel Guitar", Role: "User", Program: 25}
-	if !slices.Equal(track.SoundAutomations, []guitarpro.SoundAutomation{{Bar: 0, Position: -0.125, Sound: 0}}) || track.Sounds[0] != wantSound {
+	if !slices.Equal(track.SoundAutomations, []guitarpro.SoundAutomation{{Bar: 0, Position: -0.03125, Sound: 0}}) || track.Sounds[0] != wantSound {
 		t.Fatalf("source sound event = %#v, sounds = %#v", track.SoundAutomations, track.Sounds)
 	}
 	assertSoundPrerollExport(t, song)

@@ -61,20 +61,20 @@ func TestGP8BendRoleFixture(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		data, _, originalErr := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
-		if originalErr == nil || len(data) != 0 || !strings.Contains(originalErr.Error(), "sound automation 1 has bar 179 position 2") {
-			t.Fatalf("original source must retain its separate sound-position rejection: %v", originalErr)
+		data, _, exportErr := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
+		if exportErr != nil {
+			t.Fatal(exportErr)
 		}
-		wantEvent := gp.SoundAutomation{Bar: 179, Position: 2, Sound: 1}
+		wantEvent := gp.SoundAutomation{Bar: 179, Position: 1.0 / 3, Sound: 1}
 		if len(song.Tracks[2].SoundAutomations) != 3 || song.Tracks[2].SoundAutomations[1] != wantEvent {
 			t.Fatalf("unexpected source sound events %#v", song.Tracks[2].SoundAutomations)
 		}
-		// Isolate only the independently invalid event, preserving the sound domain.
-		events := song.Tracks[2].SoundAutomations
-		song.Tracks[2].SoundAutomations = append(events[:1:1], events[2:]...)
-		_, _, err = gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
+		parsed, err := gp.Parse(data)
 		if err != nil {
-			t.Fatalf("%s: %v", path, err)
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(parsed.Tracks[2].SoundAutomations, song.Tracks[2].SoundAutomations) {
+			t.Fatal("valid sound events were lost during bend export")
 		}
 	}
 }

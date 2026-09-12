@@ -99,7 +99,7 @@ func runConformanceNoteRepresentation(run *conformanceRun) {
 	run.Wire("gpifNotes.Notes", len(wireNotes.ids), 6)
 	run.Wire("gpifNote.ID", wireNotes.ids, []string{"0", "1", "2", "3", "4", "5"})
 	run.Wire("gpifNote.Properties", len(wireNotes.propertyNames) > 0, true)
-	run.Wire("gpifProperties.Properties", len(wireNotes.propertyNames), 18)
+	run.Wire("gpifProperties.Properties", len(wireNotes.propertyNames), 30)
 	run.Wire("gpifProperty.Name", slices.Contains(wireNotes.propertyNames, "Muted"), true)
 	run.Wire("gpifProperty.Fret", values["GPIF/Notes/Note/Properties/Property/Fret"], "00001275")
 	run.ClaimSerialization(claimSite("absolute-pitch", "export", "M09-NOTE-REPRESENTATION", "open and fretted end strings")).Wire("gpifProperty.Number", values["GPIF/Notes/Note/Properties/Property/Number"], "646464012745")

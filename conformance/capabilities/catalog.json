@@ -2287,7 +2287,7 @@
         "model": "supported",
         "export": "partial"
       },
-      "finding": "Public collections retain legacy events, but native Guitar Pro 8.1.5 validation exposes wrong sound-position units and unresolved legacy volume/interpolation differences, plus pitched-note loss tracked by #118. Sound names and labels now use CDATA and retain exact native text. Pinned AlphaTab differences remain separate reference limits; passing the oracle does not establish native correctness.",
+      "finding": "GP3\u20135 beat-local tempo, program, volume and balance changes project into editable public automation collections. GP8 uses native Sound quarter-note positions, measured legacy gain conversion and step interpolation. Native reopening preserves all12 regression notes, sound tick481, tempo173, gain0.56 and pan0.3125. Pinned AlphaTab timing/gain/pan defects remain explicit consumer reports. Other controllers, nonzero transitions and RSE metadata retain individual omissions.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [],
       "evidence": [
@@ -2320,6 +2320,11 @@
           "kind": "source",
           "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
           "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+          "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
         }
       ]
     },
@@ -4644,7 +4649,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits. Native Guitar Pro drops default-spelled exported notes because both required pitch records are absent; #118 tracks the complete repair and default-spelling contract.",
+      "finding": "GP8 emits both native-required pitch records for every pitched note. Default spelling resolves from key context to a concrete accidental on reimport, without changing numeric pitch. Native evidence covers explicit flats, capo, independent staves, display/clef/beat octaves, natural harmonics, absolute and grace notes. Unrepresentable pitch records reject export. Context-specific authored spelling and sounding-transposition limits remain explicit.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Note.accidentalMode",
@@ -4705,6 +4710,11 @@
           "kind": "source",
           "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
           "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+          "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
         }
       ]
     },
@@ -4949,7 +4959,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.",
+      "finding": "Beat.Slashed and staff slash requests remain independent. Native Guitar Pro and pinned AlphaTab preserve different track-group configurations and all notes. Native GP8 shares one notation configuration across a track; differing later-staff requests remain explicit target limitations.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Beat.slashed",
@@ -4980,6 +4990,11 @@
           "kind": "source",
           "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
           "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+          "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
         }
       ]
     },
@@ -4997,7 +5012,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.",
+      "finding": "Numbered requests retain exact GP8 track-group bits independently from standard/tab/slash flags, tuning and note values. Native reopening and pinned AlphaTab retain distinct flags on separate track groups. Native GP8 shares configuration across staves within a track; conflicting later-staff requests remain individually reported.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Staff.showNumbered"
@@ -5017,6 +5032,11 @@
           "kind": "source",
           "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
           "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+          "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
         }
       ]
     },
@@ -5305,7 +5325,7 @@
         "model": "partial",
         "export": "partial"
       },
-      "finding": "GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.",
+      "finding": "PartConfiguration standard/tab flags and independent hidden-track state survive pinned AlphaTab and native Guitar Pro reopening with all notes retained. Public staff requests own edits; field-specific Track.Settings compatibility overrides are documented. Native GP8 uses one notation configuration per track, including grand staves. Different requests within the same track retain exact per-field target-limit reports.",
       "acceptance": "Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.",
       "upstream": [
         "Track.isVisibleOnMultiTrack",
@@ -5342,6 +5362,11 @@
           "kind": "source",
           "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
           "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+        },
+        {
+          "kind": "source",
+          "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+          "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
         }
       ],
       "completion": "Add a claim-scoped PartConfiguration serialization assertion and pinned-consumer evidence or a validated consumer limit."

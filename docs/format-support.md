@@ -307,8 +307,8 @@ Every field also has one target conversion disposition. The gate compares this p
 
 | Target disposition | Fields |
 | --- | --- |
-| `preserved` | 290 |
-| `normalized` | 69 |
+| `preserved` | 289 |
+| `normalized` | 70 |
 | `omitted` | 93 |
 | `rejected` | 0 |
 | `derived` | 14 |
@@ -318,7 +318,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 144 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 146 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -479,8 +479,8 @@ Each represented feature has a public-API test and pinned independent-consumer e
 | `beat-timer` | `note-and-beat-semantics` | `TestConformanceBeatTimer` | `TestAlphaTabBeatTimer` | no | Exact ordinary-beat timer states survive export without calculating playback time; the grace-timer contract covers attached occurrences. |
 | `slash-notation` | `note-and-beat-semantics` | `TestConformanceSlashNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
 | `staff-notation` | `score-core` | `TestConformanceStaffNotation` | `TestAlphaTabStaffNotation` | yes | Exact public fields, part bytes, separate staff/beat flags, final consumer evidence and scoped later-staff loss policy. |
-| `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently exposes consumer mode0 and the numeric pitch limit. |
-| `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling stays absent. |
+| `pitch-spelling-context-limits` | `note-and-beat-semantics` | `TestPitchSpellingContextPolicies` | `TestAlphaTabPitchSpellingContexts` | no | Each contextual omission requires its exact policy allowance, preserves the authored model and independently records the exact consumer mode and numeric pitch for each limited context. |
+| `pitch-spelling-preservation` | `note-and-beat-semantics` | `TestConformancePitchSpelling` | `TestAlphaTabPitchSpelling` | no | Non-default natural, sharp, flat and double accidental modes survive exact GPIF and pinned consumer import without changing sounding pitch; automatic spelling resolves to native-required concrete records without changing numeric pitch. |
 | `system-layout-and-scales` | `score-core` | `TestConformanceSystemLayout` | `TestAlphaTabSystemLayout` | no | Exact original fixtures and direct edits preserve arrays and positive scales without changing notes. Unspecified track scopes inherit score counts with an explicit target normalization. An explicit empty scope emits an empty array with a precise normalization; two raw consumer exports retain track precedence. |
 | `score-barlines` | `score-core` | `TestConformanceScoreBarlines` | `TestAlphaTabScoreBarlines` | no | Global flags and numbering values retain exact typed records, defaults and other consumer styles; malformed sources and undefined authored enums are rejected. |
 | `multi-rest` | `score-core` | `TestConformanceMultiRest` | `TestAlphaTabMultiRest` | no | Separate global and individual view preferences preserve false and true; absence defaults to false without changing measures or notation. |

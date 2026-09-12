@@ -26,7 +26,9 @@ type Note struct {
 	SwapAccidentals  bool
 
 	// AccidentalMode is the authored spelling preference. GPIF TransposedPitch
-	// takes precedence over ConcertPitch. Default clears an authored preference.
+	// takes precedence over ConcertPitch. Default requests automatic spelling.
+	// GP8 resolves Default to concrete pitch records; reimport returns that mode.
+	// Set Default after a pitch-context edit to request automatic respelling.
 	// This field does not rewrite Value or reinterpret SwapAccidentals.
 	// Imported spelling retains its source coordinates until the mode or numeric
 	// pitch context changes; then validation uses the edited written pitch.

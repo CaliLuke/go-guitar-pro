@@ -27,61 +27,61 @@ Raw consumer differences require review. Default-only cases do not prove feature
 
 | Capability | Non-default source | Default-only | Differences | Source blocked | Target blocked |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Stylesheet, brackets and track-name policies | 366 | 8 | 113 | 3 | 6 |
-| Concert and display transposition | 349 | 24 | 112 | 3 | 6 |
-| Track visibility and standard/tab flags | 79 | 241 | 71 | 3 | 6 |
-| Authored pitch spelling and accidentals | 158 | 213 | 20 | 3 | 6 |
-| Separate section marker and text | 32 | 338 | 18 | 3 | 6 |
-| Double bar lines | 32 | 337 | 12 | 3 | 6 |
-| Extended barline and bar-number controls | 32 | 337 | 12 | 3 | 6 |
-| Bend curves and styles | 27 | 344 | 11 | 3 | 6 |
-| MIDI bank selection and bank changes | 8 | 351 | 11 | 3 | 6 |
-| Beam grouping, direction and stem overrides | 201 | 171 | 9 | 3 | 6 |
-| Chord diagrams, barres and fingering | 35 | 332 | 9 | 3 | 6 |
-| Volume automation events | 9 | 360 | 8 | 3 | 6 |
-| Authored note duration percentage | 6 | 362 | 6 | 3 | 6 |
-| Left and right hand fingering | 13 | 355 | 5 | 3 | 6 |
-| Pan and balance automation events | 2 | 366 | 2 | 3 | 6 |
-| Pick stroke direction | 11 | 357 | 1 | 3 | 6 |
-| Alternate endings | 16 | 352 | 0 | 3 | 6 |
-| Authored timer marks | 5 | 363 | 0 | 3 | 6 |
-| Beat barre fret and shape | 2 | 366 | 0 | 3 | 6 |
-| Beat octave shifts | 10 | 359 | 0 | 3 | 6 |
-| Brush and arpeggio timing | 21 | 348 | 0 | 3 | 6 |
-| Chord name, diagram and fingering visibility | 4 | 364 | 0 | 3 | 6 |
-| Common and per-staff capo | 1 | 367 | 0 | 3 | 6 |
-| Common-time and cut-time notation | 0 | 368 | 0 | 3 | 6 |
-| Dead-slapped beats | 2 | 366 | 0 | 3 | 6 |
-| Explicit note string-number display | 2 | 366 | 0 | 3 | 6 |
-| Fade in | 18 | 353 | 0 | 3 | 6 |
-| Fade out and volume swell | 1 | 367 | 0 | 3 | 6 |
-| Fermata placement, kind and length | 4 | 364 | 0 | 3 | 6 |
-| Free-time bars | 1 | 367 | 0 | 3 | 6 |
-| Golpe thumb and finger marks | 2 | 366 | 0 | 3 | 6 |
-| Key signatures and key mode spelling | 44 | 326 | 0 | 3 | 6 |
-| Left-hand tapping identity | 1 | 367 | 0 | 3 | 6 |
-| Legato and authored slurs | 2 | 366 | 0 | 3 | 6 |
-| Lyrics authored directly on a beat | 3 | 365 | 0 | 3 | 6 |
-| Multiple-bar rest preferences | 5 | 363 | 0 | 3 | 6 |
-| Navigation targets and jumps | 8 | 360 | 0 | 3 | 6 |
-| Note vibrato strength | 21 | 351 | 0 | 3 | 6 |
-| Note visibility and notehead overrides | 0 | 368 | 0 | 3 | 6 |
-| Numbered staff notation | 5 | 363 | 0 | 3 | 6 |
-| Octave shifts attached to clefs | 2 | 366 | 0 | 3 | 6 |
-| One-bar and two-bar simile marks | 4 | 364 | 0 | 3 | 6 |
-| Rasgueado patterns | 1 | 367 | 0 | 3 | 6 |
-| Repeat starts and displayed pass counts | 28 | 340 | 0 | 3 | 6 |
-| Slashed beats and slash staff notation | 10 | 358 | 0 | 3 | 6 |
-| String tuning and tuning labels | 366 | 7 | 0 | 3 | 6 |
-| Sustain pedal markers | 1 | 367 | 0 | 3 | 6 |
-| System layout and forced line breaks | 251 | 121 | 0 | 3 | 6 |
-| Tap, slap and pop distinctions | 14 | 354 | 0 | 3 | 6 |
-| Tenuto accent | 1 | 367 | 0 | 3 | 6 |
-| Track short names | 374 | 0 | 0 | 3 | 6 |
-| Tremolo picking and stroke styles | 14 | 355 | 0 | 3 | 6 |
-| Turns and mordents | 1 | 367 | 0 | 3 | 6 |
-| Wah pedal state | 11 | 357 | 0 | 3 | 6 |
-| Whammy-bar vibrato strength | 17 | 351 | 0 | 3 | 6 |
+| Authored pitch spelling and accidentals | 158 | 90 | 138 | 3 | 4 |
+| Stylesheet, brackets and track-name policies | 366 | 8 | 113 | 3 | 4 |
+| Concert and display transposition | 349 | 24 | 112 | 3 | 4 |
+| Track visibility and standard/tab flags | 79 | 241 | 71 | 3 | 4 |
+| Separate section marker and text | 32 | 340 | 18 | 3 | 4 |
+| Double bar lines | 32 | 339 | 12 | 3 | 4 |
+| Extended barline and bar-number controls | 32 | 339 | 12 | 3 | 4 |
+| Bend curves and styles | 27 | 344 | 11 | 3 | 4 |
+| MIDI bank selection and bank changes | 8 | 351 | 11 | 3 | 4 |
+| Beam grouping, direction and stem overrides | 201 | 171 | 9 | 3 | 4 |
+| Chord diagrams, barres and fingering | 35 | 334 | 9 | 3 | 4 |
+| Volume automation events | 9 | 362 | 8 | 3 | 4 |
+| Authored note duration percentage | 6 | 364 | 6 | 3 | 4 |
+| Left and right hand fingering | 13 | 357 | 5 | 3 | 4 |
+| Pan and balance automation events | 2 | 368 | 2 | 3 | 4 |
+| Pick stroke direction | 11 | 359 | 1 | 3 | 4 |
+| Alternate endings | 16 | 354 | 0 | 3 | 4 |
+| Authored timer marks | 5 | 365 | 0 | 3 | 4 |
+| Beat barre fret and shape | 2 | 368 | 0 | 3 | 4 |
+| Beat octave shifts | 10 | 361 | 0 | 3 | 4 |
+| Brush and arpeggio timing | 21 | 350 | 0 | 3 | 4 |
+| Chord name, diagram and fingering visibility | 4 | 366 | 0 | 3 | 4 |
+| Common and per-staff capo | 1 | 369 | 0 | 3 | 4 |
+| Common-time and cut-time notation | 0 | 370 | 0 | 3 | 4 |
+| Dead-slapped beats | 2 | 368 | 0 | 3 | 4 |
+| Explicit note string-number display | 2 | 368 | 0 | 3 | 4 |
+| Fade in | 18 | 353 | 0 | 3 | 4 |
+| Fade out and volume swell | 1 | 369 | 0 | 3 | 4 |
+| Fermata placement, kind and length | 4 | 366 | 0 | 3 | 4 |
+| Free-time bars | 1 | 369 | 0 | 3 | 4 |
+| Golpe thumb and finger marks | 2 | 368 | 0 | 3 | 4 |
+| Key signatures and key mode spelling | 44 | 328 | 0 | 3 | 4 |
+| Left-hand tapping identity | 1 | 369 | 0 | 3 | 4 |
+| Legato and authored slurs | 2 | 368 | 0 | 3 | 4 |
+| Lyrics authored directly on a beat | 3 | 367 | 0 | 3 | 4 |
+| Multiple-bar rest preferences | 5 | 365 | 0 | 3 | 4 |
+| Navigation targets and jumps | 8 | 362 | 0 | 3 | 4 |
+| Note vibrato strength | 21 | 351 | 0 | 3 | 4 |
+| Note visibility and notehead overrides | 0 | 370 | 0 | 3 | 4 |
+| Numbered staff notation | 5 | 365 | 0 | 3 | 4 |
+| Octave shifts attached to clefs | 2 | 368 | 0 | 3 | 4 |
+| One-bar and two-bar simile marks | 4 | 366 | 0 | 3 | 4 |
+| Rasgueado patterns | 1 | 369 | 0 | 3 | 4 |
+| Repeat starts and displayed pass counts | 28 | 342 | 0 | 3 | 4 |
+| Slashed beats and slash staff notation | 10 | 360 | 0 | 3 | 4 |
+| String tuning and tuning labels | 366 | 7 | 0 | 3 | 4 |
+| Sustain pedal markers | 1 | 369 | 0 | 3 | 4 |
+| System layout and forced line breaks | 251 | 121 | 0 | 3 | 4 |
+| Tap, slap and pop distinctions | 14 | 356 | 0 | 3 | 4 |
+| Tenuto accent | 1 | 369 | 0 | 3 | 4 |
+| Track short names | 374 | 0 | 0 | 3 | 4 |
+| Tremolo picking and stroke styles | 14 | 357 | 0 | 3 | 4 |
+| Turns and mordents | 1 | 369 | 0 | 3 | 4 |
+| Wah pedal state | 11 | 359 | 0 | 3 | 4 |
+| Whammy-bar vibrato strength | 17 | 353 | 0 | 3 | 4 |
 
 ## Reviewed capabilities
 
@@ -543,7 +543,7 @@ Notation. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-GP6 and ZIP import bounded PartConfiguration standard/tab flags into independently owned staff settings, separate from track visibility. Field-specific legacy edit precedence is documented. Distinct track groups survive exact consumer loading; differing staves within one track receive individual losses because the pinned consumer applies one group to all track staves. Same-track acceptance remains open under #86. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
+PartConfiguration standard/tab flags and independent hidden-track state survive pinned AlphaTab and native Guitar Pro reopening with all notes retained. Public staff requests own edits; field-specific Track.Settings compatibility overrides are documented. Native GP8 uses one notation configuration per track, including grand staves. Different requests within the same track retain exact per-field target-limit reports.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -555,7 +555,7 @@ Notation. Priority 2. Formats: gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Beat.Slashed preserves the independent authored GPIF beat mark without changing notes. Staff slash preferences are retained through track groups with explicit later-staff mismatch reports. The pinned consumer cannot retain divergent same-track staff settings, so the #86 prerequisite and remaining #92 staff acceptance stay open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
+Beat.Slashed and staff slash requests remain independent. Native Guitar Pro and pinned AlphaTab preserve different track-group configurations and all notes. Native GP8 shares one notation configuration across a track; differing later-staff requests remain explicit target limitations.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -591,7 +591,7 @@ Notation. Priority 3. Formats: gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Staff.NotationSettings.Numbered retains the independent requested preference and exact GP8 track-group bit. Distinct tracks can retain different flags without changes to notes, tuning or other display requests. The pinned consumer applies the first staff configuration across its track; divergent later-staff numbered preferences are reported and #106 remains open. Native Guitar Pro also presents notation at track level. Current native note loss is a separate library defect tracked by #118; native correctness, not AlphaTab parity alone, controls closure.
+Numbered requests retain exact GP8 track-group bits independently from standard/tab/slash flags, tuning and note values. Native reopening and pinned AlphaTab retain distinct flags on separate track groups. Native GP8 shares configuration across staves within a track; conflicting later-staff requests remain individually reported.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -683,7 +683,7 @@ Notes. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-pro.
 
 Import: **partial**. Model: **partial**. GP8 export: **partial**.
 
-Note.AccidentalMode preserves automatic, natural, sharp, flat and double accidental choices in supported GPIF string/fret contexts. TransposedPitch wins over ConcertPitch. GP8 keeps numeric pitch and reports contextual spelling limits and legacy SwapAccidentals omission. Harmonic spelling, absolute notes, percussion, omitted sounding transposition and ordered grace spelling remain bounded limits. Native Guitar Pro drops default-spelled exported notes because both required pitch records are absent; #118 tracks the complete repair and default-spelling contract.
+GP8 emits both native-required pitch records for every pitched note. Default spelling resolves from key context to a concrete accidental on reimport, without changing numeric pitch. Native evidence covers explicit flats, capo, independent staves, display/clef/beat octaves, natural harmonics, absolute and grace notes. Unrepresentable pitch records reject export. Context-specific authored spelling and sounding-transposition limits remain explicit.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 
@@ -947,7 +947,7 @@ Playback data. Priority 2. Formats: gp3, gp4, gp5, gp6, gp7, gp8. Scope: guitar-
 
 Import: **supported**. Model: **supported**. GP8 export: **partial**.
 
-Public collections retain legacy events, but native Guitar Pro 8.1.5 validation exposes wrong sound-position units and unresolved legacy volume/interpolation differences, plus pitched-note loss tracked by #118. Sound names and labels now use CDATA and retain exact native text. Pinned AlphaTab differences remain separate reference limits; passing the oracle does not establish native correctness.
+GP3–5 beat-local tempo, program, volume and balance changes project into editable public automation collections. GP8 uses native Sound quarter-note positions, measured legacy gain conversion and step interpolation. Native reopening preserves all12 regression notes, sound tick481, tempo173, gain0.56 and pan0.3125. Pinned AlphaTab timing/gain/pan defects remain explicit consumer reports. Other controllers, nonzero transitions and RSE metadata retain individual omissions.
 
 Completion criterion: Add non-default public API assertions for the remaining variants and compare GP8 output with pinned AlphaTab. Classify each loss explicitly.
 

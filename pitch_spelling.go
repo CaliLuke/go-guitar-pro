@@ -9,7 +9,8 @@ import "slices"
 type NoteAccidentalMode uint8
 
 const (
-	// NoteAccidentalDefault leaves spelling to the notation consumer.
+	// NoteAccidentalDefault selects spelling from the key during export.
+	// GPIF stores concrete pitch names; reparsing returns the resolved mode.
 	NoteAccidentalDefault NoteAccidentalMode = iota
 	// NoteAccidentalNatural requests a natural note name.
 	NoteAccidentalNatural

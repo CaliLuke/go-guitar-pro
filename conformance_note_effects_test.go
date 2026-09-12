@@ -123,7 +123,7 @@ func runConformanceTechniqueDispositions(run *conformanceRun) {
 	run.ClaimSerialization(claimSite("note-vibrato", "export", "M11-TECHNIQUE-DISPOSITIONS", "all note-accent and vibrato-strength variants")).Wire("gpifNote.Vibrato", values["GPIF/Notes/Note/Vibrato"], "Slight")
 	run.Wire("gpifNote.Trill", values["GPIF/Notes/Note/Trill"], "7")
 	run.Wire("gpifTrill.Fret", values["GPIF/Notes/Note/Trill"], "7")
-	run.ClaimSerialization(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Wire("gpifProperty.Name", wire.propertyNames(), []string{"Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
+	run.ClaimSerialization(claimSite("dead-ghost", "export", "M11-TECHNIQUE-DISPOSITIONS", "dead and ghost notes")).Wire("gpifProperty.Name", wire.propertyNames(), []string{"ConcertPitch", "TransposedPitch", "Fret", "Midi", "String", "HarmonicType", "Muted", "PalmMuted", "HopoOrigin", "Slide"})
 	run.ClaimSerialization(claimSite("tapping", "export", "M11-TECHNIQUE-DISPOSITIONS", "hammer, tap, and left-hand-tap origins")).Wire("gpifProperty.Enable", wire.allEnabled("Muted", "PalmMuted", "HopoOrigin"), true)
 	run.ClaimSerialization(claimSite("slides", "export", "M11-TECHNIQUE-DISPOSITIONS", "all slide kinds including both pick-slide directions and combined flags")).Wire("gpifProperty.Flags", wire.propertyText("Slide", "flags"), "63")
 	run.Wire("gpifProperty.HType", wire.propertyText("HarmonicType", "type"), "Natural")

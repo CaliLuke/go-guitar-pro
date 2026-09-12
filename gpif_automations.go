@@ -90,6 +90,10 @@ func gpifAuditSyncPointAutomation(automation gpifAutomation, index int, context 
 	}
 }
 
+func barQuarterNotes(signature TimeSignature) float64 {
+	return float64(signature.Numerator) * 4 / float64(signature.Denominator.Value)
+}
+
 func gpifAuditTrackAutomations(track gpifTrack, measureCount int, context *parseContext) {
 	lastSustainPosition := make(map[int]float64)
 	hasSustainPosition := make(map[int]bool)

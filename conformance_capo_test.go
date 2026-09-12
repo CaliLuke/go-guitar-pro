@@ -67,6 +67,10 @@ func runConformanceStaffCapo(run *conformanceRun) {
 	// A changed legacy scalar applies uniformly. If both views change, the legacy edit wins.
 	legacySource := conformanceParseCapoExport(t, data)
 	legacyTrack := &legacySource.Tracks[0]
+	// Imported GPIF has concrete spelling. Request respelling for the capo edit.
+	for si := range legacyTrack.Staves {
+		legacyTrack.Staves[si].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode = NoteAccidentalDefault
+	}
 	legacyTrack.CapoFret = 4
 	legacyTrack.Staves[1].CapoFret = 7
 	legacyData, err := Export(legacySource, ExportFormatGP8)
@@ -91,6 +95,14 @@ func runConformanceStaffCapo(run *conformanceRun) {
 	maximum := int32(1<<31 - 1)
 	boundary := conformanceStaffCapoSong(t, maximum, maximum)
 	boundary.Tracks[0].CapoFret = maximum
+	if _, boundaryErr := Export(boundary, ExportFormatGP8); boundaryErr == nil {
+		t.Fatal("unrepresentable native note pitch must be rejected")
+	}
+	// A capo scalar can retain its complete wire range on an empty staff.
+	for si := range boundary.Tracks[0].Staves {
+		beat := &boundary.Tracks[0].Staves[si].Measures[0].Voices[0].Beats[0]
+		beat.Notes, beat.Status = nil, BeatStatusRest
+	}
 	boundaryData, err := Export(boundary, ExportFormatGP8)
 	if err != nil {
 		t.Fatal(err)

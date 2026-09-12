@@ -123,7 +123,7 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 	run.Wire("gpifTrack.Automations", len(wire.trackAutomations), 3)
 	run.Wire("gpifTrack.Sounds", len(wire.sounds), 2)
 	run.Wire("gpifAutomation.Value", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Value }), []string{"factory/a;Lead;main", "factory/b;Lead;solo", "factory/b;Lead;solo"})
-	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.trackAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 0.5, 0.5})
+	run.Wire("gpifAutomation.Position", conformanceAutomationFloats(wire.trackAutomations, func(item conformanceAutomationWireAutomation) float64 { return item.Position }), []float64{0, 2, 2})
 	run.Wire("gpifAutomation.Linear", conformanceAutomationBools(wire.trackAutomations, func(item conformanceAutomationWireAutomation) bool { return item.Linear }), []bool{false, false, true})
 	run.Wire("gpifAutomation.Visible", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Visible }), []string{"true", "true", "false"})
 	run.Wire("gpifAutomation.Text", conformanceAutomationStrings(wire.trackAutomations, func(item conformanceAutomationWireAutomation) string { return item.Text }), []string{"", "step sound", "linear sound"})
@@ -145,9 +145,9 @@ func runConformanceAutomationSemantics(run *conformanceRun) {
 			},
 			"sound": []any{
 				map[string]any{"track": float64(0), "bar": float64(0), "position": float64(0), "type": "instrument", "value": float64(27), "linear": false, "text": "", "visible": true},
-				map[string]any{"track": float64(0), "bar": float64(0), "position": 0.5, "type": "instrument", "value": float64(81), "linear": false, "text": "step sound", "visible": true},
+				map[string]any{"track": float64(0), "bar": float64(0), "position": float64(2), "type": "instrument", "value": float64(81), "linear": false, "text": "step sound", "visible": true},
 				// AlphaTab does not copy hidden visibility from the Sound record to its instrument automation.
-				map[string]any{"track": float64(0), "bar": float64(0), "position": 0.5, "type": "instrument", "value": float64(81), "linear": true, "text": "linear sound", "visible": true},
+				map[string]any{"track": float64(0), "bar": float64(0), "position": float64(2), "type": "instrument", "value": float64(81), "linear": true, "text": "linear sound", "visible": true},
 			},
 		}
 		if differences := semanticDifferences(got, want); len(differences) != 0 {
@@ -288,7 +288,7 @@ func runConformanceSourceDispatchAndDiagnostics(run *conformanceRun) {
 	if len(track.SoundAutomations) != 2 {
 		t.Fatalf("sound automations = %#v, want two resolved records", track.SoundAutomations)
 	}
-	run.ClaimPrimary(claimSite("automation-detail", "import", "M17-SOURCE-DISPATCH", "linear and step changes with the same value and position")).Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: 1, Sound: 1, Linear: true, Text: "source sound", Hidden: true}})
+	run.ClaimPrimary(claimSite("automation-detail", "import", "M17-SOURCE-DISPATCH", "linear and step changes with the same value and position")).Dispatch("parseGPIFWithContext:automation.Type", track.SoundAutomations, []SoundAutomation{{Bar: 0, Position: 0, Sound: 0}, {Bar: 0, Position: .25, Sound: 1, Linear: true, Text: "source sound", Hidden: true}})
 	if len(result.Song.VolumeAutomations) != 1 {
 		t.Fatalf("volume automations = %#v, want one valid record", result.Song.VolumeAutomations)
 	}

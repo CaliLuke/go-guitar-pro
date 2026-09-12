@@ -88,9 +88,14 @@ func runConformanceFreeTime(run *conformanceRun) {
 	falsePayload := rewriteConformanceGPIF(t, edited, func(gpif string) string {
 		return strings.Replace(gpif, "<FreeTime></FreeTime>", "<FreeTime>false</FreeTime>", 1)
 	})
-	result, strictErr := ParseWithOptions(falsePayload, ParseOptions{Strict: true})
+	result, strictErr := ParseWithOptions(falsePayload, ParseOptions{Strict: true, StrictKinds: []ParseDiagnosticKind{ParseDiagnosticInvalidData, ParseDiagnosticUnknownSyntax}})
 	if strictErr != nil || result == nil {
 		t.Fatalf("FreeTime payload parse = %#v, %v", result, strictErr)
+	}
+	for _, diagnostic := range result.Diagnostics {
+		if diagnostic.Code != "GPIF.Note.Pitch.Context" || !strings.Contains(diagnostic.Reason, "ordered GraceEffect") {
+			t.Fatalf("FreeTime introduced a diagnostic: %#v", diagnostic)
+		}
 	}
 	run.ClaimPrimary(claimSite("free-time", "export", "M07-FREE-TIME", "present")).Preserved("MeasureHeader.FreeTime", conformanceFreeTimeFlags(result.Song), wantEdited)
 }

@@ -437,20 +437,13 @@ func (builder *gp8Builder) addNote(trackIndex int, staffStrings []GuitarString, 
 		}
 		properties = append(properties, gpifProperty{Name: "String", String: &stringValue})
 	}
-	if note.AccidentalMode != NoteAccidentalDefault && builder.spellingStaff != nil && accidentalContextLimit(builder.spellingStaff, note) == "" {
-		if source := note.sourceAccidental(builder.spellingStaff, builder.spellingMeasure, builder.spellingBeat); source != nil {
-			authored := []gpifProperty{{Name: source.propertyName, Pitch: source.pitch.gpif()}}
-			if source.concert != nil {
-				authored = append([]gpifProperty{{Name: "ConcertPitch", Pitch: source.concert.gpif()}}, authored...)
-			}
-			properties = append(authored, properties...)
-		} else {
-			pitch, ok := spelledPitch(writtenNoteMIDI(builder.spellingStaff, builder.spellingMeasure, builder.spellingBeat, note), note.AccidentalMode)
-			if !ok {
-				return "", fmt.Errorf("accidental mode %d cannot spell written note pitch", note.AccidentalMode)
-			}
-			properties = append([]gpifProperty{{Name: "TransposedPitch", Pitch: &pitch}}, properties...)
+	if !track.PercussionTrack && builder.spellingStaff != nil {
+		pitches, nativeMIDI, err := builder.nativeNotePitch(note)
+		if err != nil {
+			return "", fmt.Errorf("note %s: %w", noteID, err)
 		}
+		midi = nativeMIDI
+		properties = append(pitches, properties...)
 	}
 
 	articulation := 0

@@ -28,8 +28,8 @@ func runConformanceMIDIBank(run *conformanceRun) {
 	}
 	wantAutomations := []SoundAutomation{
 		{Bar: 0, Position: 0, Sound: 0},
-		{Bar: 1, Position: 0.5, Sound: 1},
-		{Bar: 1, Position: 0.5, Sound: 2},
+		{Bar: 1, Position: 0.125, Sound: 1},
+		{Bar: 1, Position: 0.125, Sound: 2},
 	}
 	run.Preserved("Track.Sounds", track.Sounds, wantSounds)
 	run.Preserved("TrackSound.Bank", []int32{track.Sounds[0].Bank, track.Sounds[1].Bank, track.Sounds[2].Bank}, []int32{0, 77, 256})
@@ -194,10 +194,10 @@ func TestAlphaTabPreservesMIDIBanks(t *testing.T) {
 	readAlphaTabOracleFacts(t, "--midi-bank", writeConformanceFixture(t, programmaticData), &facts)
 	want = []conformanceAlphaTabMIDIBankAutomation{
 		{Bar: 0, Position: 0, Type: "instrument", Value: 25},
-		{Bar: 1, Position: 0.5, Type: "bank", Value: 77},
-		{Bar: 1, Position: 0.5, Type: "instrument", Value: 26},
-		{Bar: 1, Position: 0.5, Type: "bank", Value: 256},
-		{Bar: 1, Position: 0.5, Type: "instrument", Value: 27, Linear: true},
+		{Bar: 1, Position: 1.5, Type: "bank", Value: 77},
+		{Bar: 1, Position: 1.5, Type: "instrument", Value: 26},
+		{Bar: 1, Position: 1.5, Type: "bank", Value: 256},
+		{Bar: 1, Position: 1.5, Type: "instrument", Value: 27, Linear: true},
 	}
 	if len(facts) != 1 || !slices.Equal(facts[0].Automations, want) {
 		t.Fatalf("AlphaTab duplicate-position bank/program order = %#v, want %#v", facts, want)

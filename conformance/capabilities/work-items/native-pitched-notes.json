@@ -5,8 +5,8 @@
   "title": "Preserve pitched notes when GP8 exports reopen in Guitar Pro",
   "kind": "implementation",
   "priority": 1,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -43,6 +43,11 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
       "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+      "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
     }
   ],
   "shared_files": [
@@ -50,7 +55,7 @@
     "gpif_pitch.go",
     "pitch_spelling.go"
   ],
-  "resolution": "Confirmed native exporter defect. The isolated both-pitch-record experiment retains all 12 notes; its naive integration also changes default spelling semantics and breaks existing edit/context tests, so it is not a complete fix.",
+  "resolution": "GP8 emits both native-required pitch records for every pitched note. Default spelling resolves from key context to a concrete accidental on reimport, without changing numeric pitch. Native evidence covers explicit flats, capo, independent staves, display/clef/beat octaves, natural harmonics, absolute and grace notes. Unrepresentable pitch records reject export. Context-specific authored spelling and sounding-transposition limits remain explicit.",
   "verification": [
     {
       "commit": "fdf14d3963bfa9bc0d789786a9e5ec5f045455a2",

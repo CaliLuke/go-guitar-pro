@@ -46,7 +46,8 @@ type Song struct {
 	// changes. Edits and clearing after import take precedence over raw records.
 	TempoAutomations []TempoAutomation
 	// VolumeAutomations owns gain events, including promoted GP3-5 mix-table
-	// values divided by 16. Edits and clearing control export after import.
+	// values converted to native Guitar Pro channel-strip gain. Edits and clearing
+	// control export after import.
 	VolumeAutomations []VolumeAutomation
 	// PanAutomations owns track pan events independently from initial channel balance.
 	PanAutomations       []PanAutomation

@@ -212,9 +212,14 @@ limitation remains explicit.
 
 `SoundAutomation.Position` supports finite values from 0 through 1 in every
 bar. Bar zero also supports opening preroll from -0.125 up to zero. This
-bounded contract follows the GP7 grace fixture; it does not define a universal
+bounded public contract includes the GP7 grace fixture; it does not define a universal
 GPIF limit. Validation and GP8 preflight reject earlier preroll, negative
 positions in later bars, and non-finite positions.
+
+Positions are bar ratios in the public API. GPIF Sound positions use quarter-note
+units: multiply the ratio by numerator × 4 / denominator on export and divide
+on import. Other automation types retain their existing wire units. The GP7
+grace fixture has wire position -0.125 and public position -0.03125 in 4/4.
 
 Direct edits to the position and sound reference control GP8 output. Export
 retains each value and the slice order, including equal positions and preroll
@@ -262,8 +267,11 @@ GP3–5 import promotes beat-local mix-table tempo, program, volume, and balance
 changes into `TempoAutomations`, `Track.SoundAutomations`, `VolumeAutomations`,
 and `PanAutomations`. These collections own later edits and clearing. Retained
 raw records do not replay cleared events. Program changes retain the selected
-MIDI bank and use explicit generated sound definitions. Volume and balance
-values use the legacy 0..16 scale and become normalized values divided by 16.
+MIDI bank and use explicit generated sound definitions. Balance values use the legacy 0..16 scale and become values divided by 16.
+Volume uses Guitar Pro’s native channel-strip conversion table for all 17 values;
+for example, legacy volume 12 becomes gain 0.56. The native sweep is recorded in
+`conformance/capabilities/evidence/guitar-pro-repair.json`. Instantaneous legacy
+changes use step interpolation (`Linear=false`).
 All-tracks volume, balance, and program changes expand to each target track.
 Tempo changes are score-wide.
 
@@ -275,14 +283,11 @@ Explicit tempo and sound slice order remains intact; raw events follow score
 traversal order. Gain and pan events stay chronological within each track, with
 stable order at equal positions. The exporter never changes the input score.
 
-The current writer retains numeric event positions, values, and interpolation flags.
-Native Guitar Pro validation exposes incorrect sound-position units: the original
-event appears at native tick 481, but the Go export appears at tick 121.
-Native conversion also differs for legacy volume and zero-duration interpolation.
-Sound timing is a library defect under #85. The other differences need controlled
-native checks, including audio-engine state, before closure.
-Native pitched-note loss is a prerequisite defect under #118.
-The pinned
+Guitar Pro reopening preserves the simultaneous regression events at their
+authored positions. Its sound dialog shows tick 481, one quarter note into the
+bar. The repaired export retains all 12 notes, and native MIDI preserves their
+onsets, pitches and durations. Native saves confirm step interpolation and
+volume 0.56. The pinned
 consumer retains tempo timing, ignores channel-strip gain and pan events, and
 attaches positive-position sound events to the first beat of their bar.
 `gp8.normalize.sound-automation-consumer-position` reports that timing change
@@ -300,7 +305,7 @@ tempo labels have explicit omissions. These limits keep mix-table export partial
 `Song.PanAutomations` owns authored pan events independently from static channel
 balance. `Value` uses 0 for left, 0.5 for center, and 1 for right. GPIF
 `DSPParam_11` uses these units. Legacy mix-table balance values use 0 through
-16; import divides them by 16 and marks interpolation as linear.
+16; import divides them by 16 and uses step interpolation.
 
 Events must use valid track and bar indexes and finite positions and values
 within 0 through 1. Each track's events must be chronological. Equal positions
@@ -1032,12 +1037,17 @@ These beats retain their timer in `Beat.Timer` and have zero ordinary duration d
 Groups without timers keep the existing attachment behavior.
 
 `Note.AccidentalMode` owns an authored accidental choice independently of numeric
-pitch. Its zero value, `NoteAccidentalDefault`, leaves spelling to the consumer.
+pitch. Its zero value, `NoteAccidentalDefault`, requests automatic spelling.
+GP8 resolves it against the measure key and emits both `ConcertPitch` and
+`TransposedPitch`. Guitar Pro requires both records to retain pitched notes.
+Reimport returns the resolved concrete accidental mode. This is an explicit
+normalization of an unspecified choice; it does not change numeric pitch.
+Set the mode to Default after a pitch-context edit to request automatic respelling.
 The other modes request natural, sharp, double sharp, flat, or double flat.
-For a new or edited pitched string note, GP8 derives the compatible step and
-octave from its written numeric pitch. It emits one `TransposedPitch` property. An
-explicit natural emits an empty `Accidental` child. Default emits no pitch
-property.
+An explicit natural emits an empty `Accidental` child. Concert pitch includes
+tuning, fret and capo. Written pitch also accounts for display and octave context.
+Native Guitar Pro can rewrite written octave coordinates while retaining the
+notation marks and exact sounding pitch.
 
 GPIF octave zero starts at MIDI zero. Contradictory modes and undefined
 enum values fail validation without changing pitch or mutating the song.
@@ -1067,8 +1077,8 @@ GP8 reports `gp8.omit.note-accidental-context` for an authored mode on percussio
 or an absolute note without string context. The same report covers natural
 harmonics and staves with omitted sounding transposition. Strict export rejects that omission unless
 the export policy explicitly allows it. These limits do not change the existing
-numeric pitch contract. In particular, the pinned consumer does not read absolute pitch from
-the writer's `Midi` property alone. Harmonic pitch and octave metadata remain
+numeric pitch contract. In particular, absolute notes also receive the native-required pitch records;
+the writer does not rely on `Midi` alone. Harmonic pitch and octave metadata remain
 separate fields with their existing omission reports.
 
 GPIF import reports `GPIF.Note.Pitch.Context` when context prevents supported

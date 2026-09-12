@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"os"
 	"reflect"
+	"regexp"
 	"slices"
 	"strings"
 	"testing"
@@ -20,7 +21,7 @@ type accidentalCase struct {
 
 func accidentalCases() []accidentalCase {
 	return []accidentalCase{
-		{NoteAccidentalDefault, "NoteAccidentalDefault", "", "", 61, 0, 0},
+		{NoteAccidentalDefault, "NoteAccidentalDefault", "C", "#", 61, 5, 3},
 		{NoteAccidentalNatural, "NoteAccidentalNatural", "C", "", 60, 5, 2},
 		{NoteAccidentalSharp, "NoteAccidentalSharp", "C", "#", 61, 5, 3},
 		{NoteAccidentalDoubleSharp, "NoteAccidentalDoubleSharp", "C", "x", 62, 5, 4},
@@ -47,7 +48,7 @@ func runConformancePitchSpelling(run *conformanceRun) {
 	for _, test := range accidentalCases() {
 		song := accidentalSong(t, test.mode, test.midi)
 		note := song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
-		run.Preserved("Note.AccidentalMode", note.AccidentalMode, test.mode)
+		run.Field("Note.AccidentalMode", note.AccidentalMode, test.mode)
 		data, report := assertConsumerLossPolicy(t, song, []string{})
 		run.Report("M09-PITCH-SPELLING", reportCodes(report), []string{})
 		var doc struct {
@@ -71,9 +72,6 @@ func runConformancePitchSpelling(run *conformanceRun) {
 		}
 		found := false
 		for _, p := range doc.Notes.Notes[0].Properties.Properties {
-			if p.Name == "ConcertPitch" {
-				t.Fatal("writer invented a second spelling authority")
-			}
 			if p.Name != "TransposedPitch" {
 				continue
 			}
@@ -86,7 +84,7 @@ func runConformancePitchSpelling(run *conformanceRun) {
 			run.Wire("gpifPitch.Accidental", *p.Pitch.Accidental, test.token)
 			run.Wire("gpifPitch.Octave", p.Pitch.Octave, test.octave)
 		}
-		if found != (test.mode != NoteAccidentalDefault) {
+		if !found {
 			t.Fatalf("mode %v wire presence %v", test.mode, found)
 		}
 		parsed, err := ParseWithOptions(data, ParseOptions{})
@@ -97,7 +95,12 @@ func runConformancePitchSpelling(run *conformanceRun) {
 			t.Fatalf("authored output parse diagnostics %#v", parsed.Diagnostics)
 		}
 		got := parsed.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
-		run.Enum("NoteAccidentalMode."+test.enum, got.AccidentalMode, test.mode)
+		wantMode := test.mode
+		if wantMode == NoteAccidentalDefault {
+			wantMode = NoteAccidentalSharp
+		}
+		run.Normalized("Note.AccidentalMode", got.AccidentalMode, wantMode)
+		run.Enum("NoteAccidentalMode."+test.enum, got.AccidentalMode, wantMode)
 		run.Field("Note.Value", got.Value, test.midi-60)
 	}
 	for _, reverse := range []bool{false, true} {
@@ -144,8 +147,12 @@ func TestGPIFPitchSpellingAuthority(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if got := parsed.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode; got != mode {
-				t.Fatalf("edited mode %v want %v", got, mode)
+			want := mode
+			if want == NoteAccidentalDefault {
+				want = NoteAccidentalSharp
+			}
+			if got := parsed.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode; got != want {
+				t.Fatalf("edited mode %v want %v", got, want)
 			}
 		}
 	}
@@ -161,7 +168,7 @@ func pitchSpellingSource(t *testing.T, reverse bool) []byte {
 	if reverse {
 		concert, transposed = transposed, concert
 	}
-	return rewriteConformanceGPIF(t, base, func(gpif string) string { return insertFirstNoteProperty(t, gpif, concert+transposed) })
+	return rewriteConformanceGPIF(t, base, func(gpif string) string { return replaceFirstNotePitch(t, gpif, concert+transposed) })
 }
 
 type accidentalFact struct{ Track, Staff, Bar, Voice, Beat, Note, Mode, MIDI, Display, Fret, String, Articulation, PercussionMIDI int }
@@ -198,7 +205,7 @@ func TestAlphaTabPitchSpelling(t *testing.T) {
 	var before, after []accidentalFact
 	readAlphaTabOracleFacts(t, "--accidental-facts", "testdata/gp5/No Wah.gp5", &before)
 	readAlphaTabOracleFacts(t, "--accidental-facts", writeConformanceFixture(t, data), &after)
-	if len(before) == 0 || len(after) == 0 || before[0].Mode != 0 || after[0].Mode != 0 || before[0].MIDI != after[0].MIDI {
+	if len(before) == 0 || len(after) == 0 || before[0].Mode != 0 || after[0].Mode != 2 || before[0].MIDI != after[0].MIDI {
 		t.Fatalf("No Wah default spelling source %#v output %#v", before, after)
 	}
 }
@@ -213,7 +220,7 @@ func runConformancePitchSpellingContexts(run *conformanceRun) {
 		note := &s.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
 		data, report := assertConsumerLossPolicy(t, s, want)
 		run.Report("M09-PITCH-CONTEXT", reportCodes(report), want)
-		run.Wire("gpifProperty.Pitch", strings.Contains(string(readCurveGPIF(t, data)), "TransposedPitch"), false)
+		run.Wire("gpifProperty.Pitch", strings.Contains(string(readCurveGPIF(t, data)), "TransposedPitch"), kind != "percussion")
 		run.Field("Note.AccidentalMode", note.AccidentalMode, NoteAccidentalNatural)
 		if report.Entries[len(report.Entries)-1].Location != (ScoreLocation{}) {
 			t.Fatalf("context loss location %#v", report)
@@ -255,7 +262,14 @@ func TestAlphaTabPitchSpellingContexts(t *testing.T) {
 		data, _ := assertConsumerLossPolicy(t, song, codes)
 		var facts []accidentalFact
 		readAlphaTabOracleFacts(t, "--accidental-facts", writeConformanceFixture(t, data), &facts)
-		if len(facts) != 1 || facts[0].Mode != 0 || facts[0].MIDI != midi || (kind == "percussion" && (facts[0].Articulation != 0 || facts[0].PercussionMIDI != 38)) {
+		wantMode := 2
+		if kind == "absolute note" {
+			wantMode = 3
+		}
+		if kind == "percussion" {
+			wantMode = 0
+		}
+		if len(facts) != 1 || facts[0].Mode != wantMode || facts[0].MIDI != midi || (kind == "percussion" && (facts[0].Articulation != 0 || facts[0].PercussionMIDI != 38)) {
 			t.Fatalf("context %s raw consumer %#v", kind, facts)
 		}
 	}
@@ -273,9 +287,11 @@ func TestPitchSpellingDisplayContext(t *testing.T) {
 	if err != nil || len(data) == 0 {
 		t.Fatalf("display spelling %#v", report)
 	}
-	wire := extractGPIFLeafText(t, data)
-	if wire["GPIF/Notes/Note/Properties/Property/Pitch/Step"] != "E" || wire["GPIF/Notes/Note/Properties/Property/Pitch/Accidental"] != "b" {
-		t.Fatalf("written spelling %#v", wire)
+	doc := conformanceWireDocument(t, data)
+	for _, p := range doc.Notes.Notes[0].Properties.Properties {
+		if p.Name == "TransposedPitch" && (p.Pitch.Step != "E" || *p.Pitch.Accidental != "b") {
+			t.Fatalf("written spelling %#v", p.Pitch)
+		}
 	}
 	requireAlphaTabConformance(t)
 	var facts []accidentalFact
@@ -304,7 +320,7 @@ func TestPitchSpellingGraceIsolation(t *testing.T) {
 	requireAlphaTabConformance(t)
 	var facts []accidentalFact
 	readAlphaTabOracleFacts(t, "--accidental-facts", writeConformanceFixture(t, data), &facts)
-	if len(facts) != 2 || facts[0].Mode != 0 || facts[0].MIDI != 60 || facts[1].Mode != 5 || facts[1].MIDI != 61 {
+	if len(facts) != 2 || facts[0].Mode != 2 || facts[0].MIDI != 60 || facts[1].Mode != 5 || facts[1].MIDI != 61 {
 		t.Fatalf("owner spelling leaked to grace %#v", facts)
 	}
 }
@@ -355,7 +371,7 @@ func TestGPIFAbsentAccidentalAuthority(t *testing.T) {
 			want, rawMode = NoteAccidentalNatural, 2
 		}
 		source := rewriteConformanceGPIF(t, base, func(gpif string) string {
-			return insertFirstNoteProperty(t, gpif, `<Property name="ConcertPitch"><Pitch><Step>D</Step><Accidental>bb</Accidental><Octave>5</Octave></Pitch></Property><Property name="TransposedPitch"><Pitch><Step>C</Step>`+accidental+`<Octave>5</Octave></Pitch></Property>`)
+			return replaceFirstNotePitch(t, gpif, `<Property name="ConcertPitch"><Pitch><Step>D</Step><Accidental>bb</Accidental><Octave>5</Octave></Pitch></Property><Property name="TransposedPitch"><Pitch><Step>C</Step>`+accidental+`<Octave>5</Octave></Pitch></Property>`)
 		})
 		result, err := ParseWithOptions(source, ParseOptions{})
 		if err != nil || result.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode != want || len(result.Diagnostics) != 1 || result.Diagnostics[0].Code != "GPIF.Note.Pitch.Authority" {
@@ -474,7 +490,7 @@ func TestPitchSpellingImportedContextEdits(t *testing.T) {
 				switch edit {
 				case "unchanged":
 					expected = 77
-				case "mode":
+				case "mode", "clear":
 					expected = 75
 				}
 				actual, valid := gpifPitchMIDI(p.Pitch)
@@ -484,9 +500,6 @@ func TestPitchSpellingImportedContextEdits(t *testing.T) {
 			}
 		}
 		expectedCount := 1
-		if edit == "clear" {
-			expectedCount = 0
-		}
 		if pitchCount != expectedCount {
 			t.Fatalf("edit%s pitch count%d want%d", edit, pitchCount, expectedCount)
 		}
@@ -502,7 +515,7 @@ func runConformancePitchSourceContext(run *conformanceRun) {
 	s.Tracks[0].Staves[0].DisplayTranspositionPitch = -12
 	base, _ := assertConsumerLossPolicy(t, s, []string{})
 	data := rewriteConformanceGPIF(t, base, func(raw string) string {
-		return insertFirstNoteProperty(t, raw, `<Property name="ConcertPitch"><Pitch><Step>D</Step><Accidental>#</Accidental><Octave>5</Octave></Pitch></Property><Property name="TransposedPitch"><Pitch><Step>F</Step><Accidental></Accidental><Octave>6</Octave></Pitch></Property>`)
+		return replaceFirstNotePitch(t, raw, `<Property name="ConcertPitch"><Pitch><Step>D</Step><Accidental>#</Accidental><Octave>5</Octave></Pitch></Property><Property name="TransposedPitch"><Pitch><Step>F</Step><Accidental></Accidental><Octave>6</Octave></Pitch></Property>`)
 	})
 	p, e := Parse(data)
 	if e != nil {
@@ -544,7 +557,7 @@ func assertPitchSpellingBounds(run *conformanceRun) {
 		if err != nil {
 			run.t.Fatal(err)
 		}
-		run.Preserved("Note.AccidentalMode", parsed.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode, NoteAccidentalNatural)
+		run.Normalized("Note.AccidentalMode", parsed.Song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0].AccidentalMode, NoteAccidentalNatural)
 		if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
 			var facts []accidentalFact
 			readAlphaTabOracleFacts(run.t, "--accidental-facts", writeConformanceFixture(run.t, data), &facts)
@@ -553,4 +566,22 @@ func assertPitchSpellingBounds(run *conformanceRun) {
 			}
 		}
 	}
+}
+
+// Replace the two required native pitch records instead of introducing duplicate
+// properties when a source test authors a distinct spelling or coordinate.
+func replaceFirstNotePitch(t *testing.T, raw, properties string) string {
+	t.Helper()
+	start := strings.Index(raw, "<Note id=")
+	if start < 0 {
+		t.Fatal("missing note")
+	}
+	end := strings.Index(raw[start:], "</Note>")
+	if end < 0 {
+		t.Fatal("missing note terminator")
+	}
+	end += start
+	pattern := regexp.MustCompile(`(?s)<Property name="(?:ConcertPitch|TransposedPitch)">.*?</Property>`)
+	raw = raw[:start] + pattern.ReplaceAllString(raw[start:end], "") + raw[end:]
+	return insertFirstNoteProperty(t, raw, properties)
 }

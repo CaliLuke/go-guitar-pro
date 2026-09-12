@@ -5,8 +5,8 @@
   "title": "Preserve slashed beats and slash staff notation separately",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp6",
     "gp7",
@@ -93,13 +93,18 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
       "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+      "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
     }
   ],
   "shared_files": [
     "gpif_types.go",
     "track.go"
   ],
-  "resolution": "Native Guitar Pro exposes notation selection at track level, including a grand staff, and independent hidden-track state. The blanket per-staff AlphaTab blocker needs scope correction. Current export loses notes in Guitar Pro, so native note-preservation acceptance remains blocked by #118; no closure or support promotion.",
+  "resolution": "Beat.Slashed and staff slash requests remain independent. Native Guitar Pro and pinned AlphaTab preserve different track-group configurations and all notes. Native GP8 shares one notation configuration across a track; differing later-staff requests remain explicit target limitations. The published checklist does not require conflicting settings within one track. Native evidence confirms distinct track groups; earlier same-track review suggestions describe a target limit, not an additional acceptance requirement.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",

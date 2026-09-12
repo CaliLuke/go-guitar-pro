@@ -1,0 +1,18 @@
+testdata/gp8/staff-notation-settings.gp
+track 0 visible true
+ staff0 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedtrue note3
+ staff1 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3
+track 1 visible false
+ staff0 flags{Standard:false Tablature:true Slash:true Numbered:true} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3
+conformance/capabilities/evidence/guitar-pro-repair/notation/export.gp
+track 0 visible true
+ staff0 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedtrue note3
+ staff1 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3
+track 1 visible false
+ staff0 flags{Standard:false Tablature:true Slash:true Numbered:true} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3
+conformance/capabilities/evidence/guitar-pro-repair/notation/notation-native.gp
+track 0 visible true
+ staff0 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedtrue note3
+ staff1 flags{Standard:true Tablature:false Slash:false Numbered:false} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3
+track 1 visible false
+ staff0 flags{Standard:false Tablature:true Slash:true Numbered:true} tuning[{1 64} {2 59} {3 55} {4 50} {5 45} {6 40}] slashedfalse note3

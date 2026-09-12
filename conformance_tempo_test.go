@@ -125,14 +125,14 @@ func TestAlphaTabPreservesOpeningTempoVisibility(t *testing.T) {
 		t.Fatalf("GP5 hidden source = %#v, hidden %v, automations %#v", legacy.Version, legacy.HideTempo, legacy.TempoAutomations)
 	}
 	wantChanges := []TempoAutomation{
-		{Bar: 88, Position: 0.625, Tempo: 85, Linear: true, Hidden: true},
-		{Bar: 89, Tempo: 90, Linear: true, Hidden: true},
-		{Bar: 92, Tempo: 80, Linear: true, Hidden: true},
-		{Bar: 93, Tempo: 80, Linear: true, Hidden: true},
-		{Bar: 93, Position: 0.875, Tempo: 60, Linear: true, Hidden: true},
-		{Bar: 94, Tempo: 80, Linear: true, Hidden: true},
-		{Bar: 85, Tempo: 90, Linear: true},
-		{Bar: 93, Position: 0.75, Tempo: 70, Linear: true},
+		{Bar: 88, Position: 0.625, Tempo: 85, Linear: false, Hidden: true},
+		{Bar: 89, Tempo: 90, Linear: false, Hidden: true},
+		{Bar: 92, Tempo: 80, Linear: false, Hidden: true},
+		{Bar: 93, Tempo: 80, Linear: false, Hidden: true},
+		{Bar: 93, Position: 0.875, Tempo: 60, Linear: false, Hidden: true},
+		{Bar: 94, Tempo: 80, Linear: false, Hidden: true},
+		{Bar: 85, Tempo: 90, Linear: false},
+		{Bar: 93, Position: 0.75, Tempo: 70, Linear: false},
 	}
 	if !reflect.DeepEqual(legacy.TempoAutomations, wantChanges) {
 		t.Fatalf("legacy tempo events = %#v, want %#v", legacy.TempoAutomations, wantChanges)

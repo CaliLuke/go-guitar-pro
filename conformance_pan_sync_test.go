@@ -66,7 +66,7 @@ func runConformancePanAutomations(run *conformanceRun) {
 			legacy = append(legacy, a)
 		}
 	}
-	run.Field("Song.PanAutomations", legacy, []PanAutomation{{Track: 2, Bar: 143, Value: 0, Linear: true}, {Track: 3, Bar: 143, Value: 1, Linear: true}})
+	run.Field("Song.PanAutomations", legacy, []PanAutomation{{Track: 2, Bar: 143, Value: 0, Linear: false}, {Track: 3, Bar: 143, Value: 1, Linear: false}})
 	if os.Getenv("ALPHATAB_CONFORMANCE") == "1" {
 		var balances []int
 		readAlphaTabOracleFacts(t, "--pan-initial-balances", writeConformanceFixture(t, data), &balances)

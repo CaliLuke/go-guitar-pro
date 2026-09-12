@@ -392,7 +392,7 @@ func (builder *gp8Builder) buildTrack(trackIndex int) gpifTrack {
 		result.Automations.Automations = append(result.Automations.Automations, gpifAutomation{
 			Type: "Sound", Value: gpifAutomationValue{Text: sound.Path + ";" + sound.Name + ";" + sound.Role, cdata: true},
 			Linear: automation.Linear, Text: automation.Text, Visible: strconv.FormatBool(!automation.Hidden),
-			Bar: automation.Bar, Position: automation.Position,
+			Bar: automation.Bar, Position: automation.Position * barQuarterNotes(builder.song.MeasureHeaders[automation.Bar].TimeSignature),
 		})
 	}
 	staves := gp8ExportStaves(track)

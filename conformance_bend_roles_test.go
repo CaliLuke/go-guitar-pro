@@ -103,15 +103,10 @@ func conformanceCanonRoleSong(t *testing.T, path string) *Song {
 	if err != nil {
 		t.Fatal(err)
 	}
-	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
-	if err == nil || len(data) != 0 || !strings.Contains(err.Error(), "sound automation 1 has bar 179 position 2") {
-		t.Fatalf("full source must retain sound-domain rejection: %v", err)
-	}
 	events := song.Tracks[2].SoundAutomations
-	if len(events) != 3 || events[1] != (SoundAutomation{Bar: 179, Position: 2, Sound: 1}) {
-		t.Fatalf("source sound events %#v", events)
+	if len(events) != 3 || events[1] != (SoundAutomation{Bar: 179, Position: 1.0 / 3, Sound: 1}) {
+		t.Fatalf("source quarter-note sound position must import as a bar ratio: %#v", events)
 	}
-	song.Tracks[2].SoundAutomations = append(events[:1:1], events[2:]...)
 	return song
 }
 func conformanceNoteBendWire(t *testing.T, data []byte, id string) map[string]string {

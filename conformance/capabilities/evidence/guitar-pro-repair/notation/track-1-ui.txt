@@ -1,0 +1,117 @@
+Window: "notation-native", App: Guitar Pro 8.
+0 standard window notation-native, Secondary Actions: Raise (showing 47-147 of 147 items)
+	1 text not…ive wit…ive wit…ive mix…ive sou…ive lab…ive pro…ted abs…ive po…be mix…ive v00 v01 v02 v03 v04 v05 v06 v07 v08 v09 v10 v11 v12 v13 v14 v15 v16 def…ive flat…tive cap…ive dis…ive clef…tive oct…ive har…ive abs…ive gra…ive har…ive oct…ive clef…tive def…ive flat…tive cap…ive dis…ive abs…ive gra…ive sou…ive ind…ive mix…ive not…ive
+	2 checkbox Song, Description: Song (F5), Value: 0
+	3 checkbox Track, Description: Track (F6), Value: 1
+	4 container
+		5 text Information
+		6 button Track color
+		7 button Track icon
+		8 text field (settable) Description: Full name, Value: Track 1, Secondary Actions: Raise
+		9 text field (settable) Description: Abbreviated name, Secondary Actions: Raise
+		10 text Musical notation Notation:
+		11 checkbox Description: Tablature notation, Value: 0
+		12 checkbox Description: Standard notation, Value: 1
+		13 checkbox Description: Slash notation, Value: 0
+		14 checkbox Description: Numbered notation, Value: 0
+		15 checkbox Description: Single staff, Value: 0
+		16 checkbox Description: Grand staff, Value: 1
+		17 text Tuning:
+		18 button E A D G B E, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr>No partial capo</nobr>
+		19 checkbox 0
+		20 button E A D G B E, Description: <nobr><b>Name:</b> </nobr><br><nobr><b>Pitches:</b> E2 A2 D3 G3 B3 E4</nobr><br><nobr>No partial capo</nobr>
+		21 checkbox 0
+		22 button More
+		23 text Sounds
+		24 checkbox Description: Switch track to RSE, Value: 0
+		25 checkbox Description: Switch track to MIDI, Value: 1
+		26 menu button Add a sound
+		27 button Open sound automations dialog
+		28 menu button 1. [25] - Acoustic Guitar (steel), Description: Sounds library
+		29 menu button Sound options
+		30 checkbox 1
+		31 checkbox MSB: 0 - LSB: 0, Description: Show/Hide sound details, Value: 0
+		32 text Interpretation Playing style: Palm mute:
+		33 slider (settable) Description: 0%, Value: 0
+		34 text Accentuation:
+		35 slider (settable) Description: 0%, Value: 0
+		36 text Auto let ring:
+		37 checkbox 0
+		38 text Off Auto brush:
+		39 checkbox 0
+		40 text Off Stringed:
+		41 checkbox 0
+		42 text Off
+		43 combo box Default, Description: Playing style
+			44 list
+				45 text Default
+				46 text Pick
+		47 menu button 2
+		48 text 2nd channel:
+		49 menu button 1
+		50 text MIDI Settings Port:
+		51 menu button Port Software Synthesizer
+		52 text Force 11-16:
+		53 checkbox 0
+		54 text Off
+		55 button Use a channel by string
+		56 text 1st channel:
+	57 button Add Track
+	58 text Tracks
+	59 menu button Global view options
+	60 button Move current track down
+	61 button Move current track up
+	62 checkbox Description: Switch single track / multitrack, Value: 0
+	63 button Reset mute
+	64 button Reset solo
+	65 text Vol. Pan. Eq.
+	66 button
+	67 text 1. Track 1
+	68 checkbox Description: Visibility, Value: 1
+	69 checkbox Description: Mute, Value: 0
+	70 checkbox Description: Solo, Value: 0
+	71 slider (settable) Description: 1.0dB, Value: 81
+	72 button
+	73 checkbox Description: Volume automation, Value: 0
+	74 container (settable) Description: Center, Value: 50
+	75 checkbox Description: Pan automation, Value: 0
+	76 checkbox Description: Equalizer, Value: 0
+	77 button
+	78 text 2. Track 2
+	79 checkbox Description: Visibility, Value: 0
+	80 checkbox Description: Mute, Value: 0
+	81 checkbox Description: Solo, Value: 0
+	82 slider (settable) Description: 1.0dB, Value: 81
+	83 button
+	84 checkbox Description: Volume automation, Value: 0
+	85 container (settable) Description: Center, Value: 50
+	86 checkbox Description: Pan automation, Value: 0
+	87 checkbox Description: Equalizer, Value: 0
+	88 text Master
+	89 button
+	90 container (settable) Description: Focus / Unfocus Current Track, Value: 50
+	91 slider (settable) Description: 0 dB, Value: 75
+	92 button
+	93 checkbox Description: Master volume automation, Value: 0
+	94 container (settable) Description: Center, Value: 50
+	95 checkbox Description: Master pan automation, Value: 0
+	96 button
+	97 close button
+	98 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	99 minimize button
+	100 text notation-native
+101 menu bar
+	102 Guitar Pro 8
+	103 File
+	104 Edit
+	105 Track
+	106 Bar
+	107 Note
+	108 Effects
+	109 Section
+	110 Tools
+	111 Sound
+	112 View
+	113 Window
+	114 Help
+

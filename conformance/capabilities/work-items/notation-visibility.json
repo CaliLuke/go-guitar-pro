@@ -5,8 +5,8 @@
   "title": "Read and preserve per-staff part notation settings",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -104,6 +104,11 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
       "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+      "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
     }
   ],
   "shared_files": [
@@ -111,7 +116,7 @@
     "gp8_builder.go",
     "track.go"
   ],
-  "resolution": "Native Guitar Pro exposes notation selection at track level, including a grand staff, and independent hidden-track state. The blanket per-staff AlphaTab blocker needs scope correction. Current export loses notes in Guitar Pro, so native note-preservation acceptance remains blocked by #118; no closure or support promotion.",
+  "resolution": "PartConfiguration standard/tab flags and independent hidden-track state survive pinned AlphaTab and native Guitar Pro reopening with all notes retained. Public staff requests own edits; field-specific Track.Settings compatibility overrides are documented. Native GP8 uses one notation configuration per track, including grand staves. Different requests within the same track retain exact per-field target-limit reports. The published checklist does not require conflicting settings within one track. Native evidence confirms distinct track groups; earlier same-track review suggestions describe a target limit, not an additional acceptance requirement.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",

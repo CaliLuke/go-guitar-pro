@@ -76,7 +76,7 @@ func projectMixTableAutomations(song *Song) (*Song, []legacyMixConflict) {
 		mt := event.change
 		location := event.location
 		if mt.Tempo != nil && mt.Tempo.Value > 0 {
-			a := TempoAutomation{Bar: location.Measure, Position: event.position, Tempo: float64(mt.Tempo.Value), Linear: true, Text: mt.TempoName, Hidden: mt.HideTempo}
+			a := TempoAutomation{Bar: location.Measure, Position: event.position, Tempo: float64(mt.Tempo.Value), Linear: false, Text: mt.TempoName, Hidden: mt.HideTempo}
 			found := false
 			equal := false
 			for _, existing := range song.TempoAutomations {
@@ -132,7 +132,7 @@ func projectMixTableInstrument(source, result *Song, target int, event legacyMix
 		if a.Bar == event.location.Measure && a.Position == event.position {
 			found = true
 			if a.Sound >= 0 && a.Sound < len(source.Tracks[target].Sounds) {
-				equal = equal || (source.Tracks[target].Sounds[a.Sound].Program == event.change.Instrument.Value && a.Linear && a.Text == "" && !a.Hidden)
+				equal = equal || (source.Tracks[target].Sounds[a.Sound].Program == event.change.Instrument.Value && !a.Linear && a.Text == "" && !a.Hidden)
 			}
 		}
 	}
@@ -161,7 +161,7 @@ func projectMixTableInstrument(source, result *Song, target int, event legacyMix
 		index = len(track.Sounds)
 		track.Sounds = append(track.Sounds, sound)
 	}
-	track.SoundAutomations = append(track.SoundAutomations, SoundAutomation{Bar: event.location.Measure, Position: event.position, Sound: index, Linear: true})
+	track.SoundAutomations = append(track.SoundAutomations, SoundAutomation{Bar: event.location.Measure, Position: event.position, Sound: index, Linear: false})
 	return false
 }
 
@@ -220,9 +220,10 @@ func projectMixTableLevels(song, result *Song, target int, event legacyMixEvent)
 		if item == nil || item.Value < 0 || item.Value > 16 || (target != event.location.Track && !item.AllTracks) {
 			continue
 		}
-		value := VolumeAutomation{Track: target, Bar: event.location.Measure, Position: event.position, Value: float64(item.Value) / 16, Linear: true}
+		value := VolumeAutomation{Track: target, Bar: event.location.Measure, Position: event.position, Value: float64(item.Value) / 16, Linear: false}
 		var conflict bool
 		if control.name == "volume" {
+			value.Value = legacyVolumeGain[item.Value]
 			conflict = appendMixTableControl(song.VolumeAutomations, &result.VolumeAutomations, value)
 		} else {
 			conflict = appendMixTableControl(song.PanAutomations, &result.PanAutomations, PanAutomation(value))
@@ -233,3 +234,9 @@ func projectMixTableLevels(song, result *Song, target int, event legacyMixEvent)
 	}
 	return conflicts
 }
+
+// legacyVolumeGain is Guitar Pro 8's conversion from legacy 0..16 mix-table
+// volume to channel-strip gain. Each value was measured by changing only the
+// volume byte in the GP3 regression and saving it with native Guitar Pro.
+// See conformance/capabilities/evidence/guitar-pro-repair.json.
+var legacyVolumeGain = [...]float64{0, .05, .10, .14, .20, .25, .31, .37, .43, .48, .50, .53, .56, .58, .61, .64, .66}

@@ -5,8 +5,8 @@
   "title": "Project supported legacy mix-table events into GP8 automation",
   "kind": "implementation",
   "priority": 2,
-  "status": "todo",
-  "owner": null,
+  "status": "in_progress",
+  "owner": "codex",
   "formats": [
     "gp3",
     "gp4",
@@ -77,13 +77,18 @@
       "kind": "source",
       "reference": "conformance/capabilities/evidence/guitar-pro-native.json",
       "detail": "Guitar Pro 8.1.5 build 31 native saves and UI facts, bound to exact input/output hashes. Separates the fixed sound-text bug from unresolved native pitch, position, volume and interpolation failures."
+    },
+    {
+      "kind": "source",
+      "reference": "conformance/capabilities/evidence/guitar-pro-repair.json",
+      "detail": "Guitar Pro 8.1.5 build31 native saves, UI facts and MIDI note-on/off events with hashes; exact native note retention, sound timing, 17-value gain sweep and notation flags."
     }
   ],
   "shared_files": [
     "gp8_builder.go",
     "mix_table.go"
   ],
-  "resolution": "Native Guitar Pro validation disproves an AlphaTab-only blocker: all 12 notes disappear and the sound event displays tick 121 instead of 481. Legacy volume and interpolation differ from native conversion and need controlled checks, including audio-engine state. Sound names now use CDATA and survive native reopening. Native pitch repair is #118; this ticket remains open.",
+  "resolution": "GP3\u20135 beat-local tempo, program, volume and balance changes project into editable public automation collections. GP8 uses native Sound quarter-note positions, measured legacy gain conversion and step interpolation. Native reopening preserves all12 regression notes, sound tick481, tempo173, gain0.56 and pan0.3125. Pinned AlphaTab timing/gain/pan defects remain explicit consumer reports. Other controllers, nonzero transitions and RSE metadata retain individual omissions.",
   "verification": [
     {
       "commit": "7789ca791d8d322ed23332876cc47ec324992995",

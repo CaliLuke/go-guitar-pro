@@ -544,6 +544,15 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 		return nil, fmt.Errorf("finalizing GPIF timing: %w", err)
 	}
 
+	// Sound positions use quarter notes in GPIF; the public API uses bar ratios.
+	for ti := range song.Tracks {
+		for ai := range song.Tracks[ti].SoundAutomations {
+			a := &song.Tracks[ti].SoundAutomations[ai]
+			if a.Bar >= 0 && a.Bar < len(song.MeasureHeaders) {
+				a.Position /= barQuarterNotes(song.MeasureHeaders[a.Bar].TimeSignature)
+			}
+		}
+	}
 	return song, nil
 }
 

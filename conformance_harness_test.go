@@ -279,6 +279,8 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceExactTiming":                        runConformanceExactTiming,
 	"TestPitchSpellingContextPolicies":                  runConformancePitchSpellingContexts,
 	"TestConformancePitchSourceContext":                 runConformancePitchSourceContext,
+	"TestConformanceNativePitch":                        runConformanceNativePitch,
+	"TestConformanceNativeVolume":                       runConformanceNativeVolume,
 	"TestConformancePitchSpelling":                      runConformancePitchSpelling,
 	"TestConformanceNoteRepresentation":                 runConformanceNoteRepresentation,
 	"TestConformanceNoteValidation":                     runConformanceNoteValidation,

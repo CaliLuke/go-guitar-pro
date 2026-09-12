@@ -90,25 +90,14 @@
       "diagnostics": [],
       "differences": [
         {
-          "path": "/tempo-automations/0/value/0/linear",
-          "feature": "tempo-automations",
-          "go": true,
-          "alphaTab": false,
-          "semanticPath": "/tempoAutomations/0/linear",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
-          "issues": [
-            85
-          ]
-        },
-        {
           "path": "/tempo-automations/0/value/0/position",
           "feature": "tempo-automations",
           "go": 0.25,
           "alphaTab": 0,
           "semanticPath": "/tempoAutomations/0/position",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         },
         {
@@ -117,9 +106,9 @@
           "go": 173,
           "alphaTab": 120,
           "semanticPath": "/tempoAutomations/0/value",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         },
         {
@@ -128,9 +117,20 @@
           "go": 4,
           "alphaTab": 0,
           "semanticPath": "/tempoAutomations/1/bar",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
+          ]
+        },
+        {
+          "path": "/tempo-automations/0/value/1/linear",
+          "feature": "tempo-automations",
+          "go": false,
+          "alphaTab": true,
+          "semanticPath": "/tempoAutomations/1/linear",
+          "reason": "Native Guitar Pro converts instantaneous legacy tempo changes to step events. Go preserves that behavior; pinned AlphaTab imports this legacy event as linear. Native evidence is in guitar-pro-repair.json; this is a reference discrepancy, not a library failure.",
+          "issues": [
+            40
           ]
         },
         {
@@ -139,9 +139,9 @@
           "go": 0,
           "alphaTab": 0.25,
           "semanticPath": "/tempoAutomations/1/position",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         },
         {
@@ -150,9 +150,9 @@
           "go": 120,
           "alphaTab": 173,
           "semanticPath": "/tempoAutomations/1/value",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         },
         {
@@ -166,9 +166,9 @@
             "value": 120
           },
           "semanticPath": "/tempoAutomations/2",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         },
         {
@@ -182,9 +182,9 @@
             "value": 120
           },
           "semanticPath": "/tempoAutomations/3",
-          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; the remaining timing criterion is tracked in issue 85.",
+          "reason": "This complete GP3 record retains explicit tempo events in Song.TempoAutomations and the opening tempo separately in Song.InitialTempo. The pinned binary consumer inserts two initial 120 BPM events at bar 0 among its master-bar event list, shifting these exact compared positions. Raw event and GP8 consumer evidence is in TestAlphaTabMixTableProjection; native sound timing is fixed; the remaining pinned-reference event discrepancies are tracked separately in issue 40.",
           "issues": [
-            85
+            40
           ]
         }
       ]
@@ -5258,12 +5258,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/PalmMute",
           "objectId": "0",
           "locationsSha256": "d83300f25ddccc88f1f657985622f8f9f9a4494c50caf1fc96e570d3ff5c4209"
-        },
-        {
-          "code": "score.sound-automation.location",
-          "kind": "invalid-data",
-          "count": 1,
-          "locationsSha256": "50de2078c9c0e52795e7f3c1beb81219b45b9ea7e4961c84e66fc70a05d31008"
         }
       ],
       "differences": null
@@ -13424,12 +13418,6 @@
           "sourcePath": "/GPIF/Tracks/Track[@id=\"0\"]/PalmMute",
           "objectId": "0",
           "locationsSha256": "d83300f25ddccc88f1f657985622f8f9f9a4494c50caf1fc96e570d3ff5c4209"
-        },
-        {
-          "code": "score.sound-automation.location",
-          "kind": "invalid-data",
-          "count": 1,
-          "locationsSha256": "50de2078c9c0e52795e7f3c1beb81219b45b9ea7e4961c84e66fc70a05d31008"
         }
       ],
       "differences": null
@@ -13951,7 +13939,7 @@
       "importFailure": {
         "goError": {
           "type": "*goguitarpro.ParseError",
-          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity \u0026�� (no semicolon)",
+          "message": "unparseable Guitar Pro file: parsing GPIF XML: XML syntax error on line 1: invalid character entity &\ufffd\ufffd (no semicolon)",
           "messageHex": "756e706172736561626c65204775697461722050726f2066696c653a2070617273696e67204750494620584d4c3a20584d4c2073796e746178206572726f72206f6e206c696e6520313a20696e76616c69642063686172616374657220656e746974792026f28a20286e6f2073656d69636f6c6f6e29"
         },
         "alphaTabError": {

@@ -81,7 +81,7 @@ func TestLegacyPanEvents(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := []gp.PanAutomation{{Track: 2, Bar: 143, Value: 0, Linear: true}, {Track: 3, Bar: 143, Value: 1, Linear: true}}
+	want := []gp.PanAutomation{{Track: 2, Bar: 143, Value: 0, Linear: false}, {Track: 3, Bar: 143, Value: 1, Linear: false}}
 	if !reflect.DeepEqual(song.PanAutomations, want) {
 		t.Fatalf("events %#v", song.PanAutomations)
 	}

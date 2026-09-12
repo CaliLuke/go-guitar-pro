@@ -48,16 +48,16 @@ func TestLegacyMixTableSimultaneousEvents(t *testing.T) {
 	}
 	tempo, program, volume, pan := false, false, false, false
 	for _, a := range out.TempoAutomations {
-		tempo = tempo || (a.Bar == 0 && a.Position == .25 && a.Tempo == 173)
+		tempo = tempo || (a.Bar == 0 && a.Position == .25 && a.Tempo == 173 && !a.Linear)
 	}
 	for _, a := range out.Tracks[0].SoundAutomations {
-		program = program || (a.Bar == 0 && a.Position == .25 && out.Tracks[0].Sounds[a.Sound].Program == 73)
+		program = program || (a.Bar == 0 && a.Position == .25 && out.Tracks[0].Sounds[a.Sound].Program == 73 && !a.Linear)
 	}
 	for _, a := range out.VolumeAutomations {
-		volume = volume || (a.Track == 0 && a.Bar == 0 && a.Position == .25 && a.Value == .75)
+		volume = volume || (a.Track == 0 && a.Bar == 0 && a.Position == .25 && a.Value == .56 && !a.Linear)
 	}
 	for _, a := range out.PanAutomations {
-		pan = pan || (a.Track == 0 && a.Bar == 0 && a.Position == .25 && a.Value == .3125)
+		pan = pan || (a.Track == 0 && a.Bar == 0 && a.Position == .25 && a.Value == .3125 && !a.Linear)
 	}
 	if !tempo || !program || !volume || !pan {
 		t.Fatalf("events lost: tempo=%t program=%t volume=%t pan=%t", tempo, program, volume, pan)
