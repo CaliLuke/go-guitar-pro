@@ -17,6 +17,7 @@ func TestConformanceTechniqueDispositions(t *testing.T) {
 }
 
 func runConformanceTechniqueDispositions(run *conformanceRun) {
+	runGhostNoteSpellings(run)
 	t := run.t
 	graces := []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}}
 	run.Preserved("NoteEffect.Graces", graces, []GraceEffect{{Duration: DurationThirtySecond, Fret: 2, Velocity: Forte}})

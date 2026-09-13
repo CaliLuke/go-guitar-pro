@@ -559,7 +559,7 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 	}
 
 	// Ghost note (AntiAccent)
-	if n.AntiAccent == "Normal" {
+	if strings.EqualFold(n.AntiAccent, "normal") {
 		note.Effect.GhostNote = true
 	}
 

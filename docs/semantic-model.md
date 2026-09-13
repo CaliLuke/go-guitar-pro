@@ -739,6 +739,9 @@ therefore reports an unsupported subdivision separately from an unsupported
 style. A supported rate is still emitted when only the style is omitted. GP3
 has no tremolo-picking source record.
 
+GPIF imports the AntiAccent value `normal` without case sensitivity, including
+AlphaTab exports. GP8 writes the canonical `Normal` spelling.
+
 GP8 preserves accents, ghost notes, staccato, palm mute, dead notes, let ring,
 hammer origin, tapping flags, slide flags, harmonic kind, and trill fret.
 
