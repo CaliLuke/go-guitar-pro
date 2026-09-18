@@ -337,6 +337,7 @@ var conformanceExecutors = map[string]func(*conformanceRun){
 	"TestConformanceGraceAuthorityAndLoss":              runConformanceGraceAuthorityAndLoss,
 	"TestConformanceBinaryGraceSource":                  runConformanceBinaryGraceSource,
 	"TestConformanceCombinedGraceEffects":               runConformanceCombinedGraceEffects,
+	"TestConformanceGP6Percussion":                      runConformanceGP6Percussion,
 	"TestConformancePercussionIdentity":                 runConformancePercussionIdentity,
 	"TestConformanceSourceAndValidation":                runConformanceSourceAndValidation,
 	"TestConformanceNativePercussionFallbacks":          runConformanceNativePercussionFallbacks,

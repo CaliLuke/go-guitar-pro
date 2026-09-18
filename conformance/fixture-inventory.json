@@ -1436,6 +1436,17 @@
       "semanticSnapshot": false
     },
     {
+      "path": "testdata/gp6/percussion-elements.gpx",
+      "sha256": "777a822edba0515c848f04512e72e26efe9effc7be3aa3add0e1b41609bad600",
+      "format": "gp6",
+      "disposition": "partial",
+      "reason": "Native Guitar Pro 8.1.5 conversion of all 51 GP6 element/variation combinations establishes notation and playback. Pinned AlphaTab GP6 input differences are tracked under issue 40.",
+      "features": [
+        "percussion-articulations"
+      ],
+      "semanticSnapshot": false
+    },
+    {
       "path": "testdata/gp6/ranges.gpx",
       "sha256": "d388a2ff35904f8893443205ac1e5ec771830194e3492c0301864052c6a49a72",
       "format": "gp6",
@@ -3425,6 +3436,17 @@
       "reason": "Whole-corpus receipt covers score-core and records 5 exact issue-linked differences.",
       "features": [
         "score-core"
+      ],
+      "semanticSnapshot": false
+    },
+    {
+      "path": "testdata/gp8/gp6-percussion-elements.gp",
+      "sha256": "57156194ac4c005d396d50dc024dd1f6bd1645533f59e513d198cebe00d56a2b",
+      "format": "gp8",
+      "disposition": "supported",
+      "reason": "Native Guitar Pro reference for TestGP6PercussionNativeConversion; explicit GP8 articulation definitions agree with the pinned consumer.",
+      "features": [
+        "percussion-articulations"
       ],
       "semanticSnapshot": false
     },

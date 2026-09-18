@@ -212,7 +212,7 @@ func TestGPIFNormalizesFallbacksAgainstOriginalTable(t *testing.T) {
 		{PercussionArticulation: 35, HasPercussionArticulation: true},
 	}
 	for index := range notes {
-		gpifNormalizePercussionArticulation(&track, &notes[index], &fallbacks)
+		gpifNormalizePercussionArticulation(&track, &notes[index], &fallbacks, false)
 	}
 	if notes[0].PercussionArticulation != 34 || notes[1].PercussionArticulation != 35 || notes[2].PercussionArticulation != 34 {
 		t.Fatalf("normalized fallback indices = %d, %d, %d; want 34, 35, 34", notes[0].PercussionArticulation, notes[1].PercussionArticulation, notes[2].PercussionArticulation)

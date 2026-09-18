@@ -433,6 +433,12 @@ func gp8DrumElement(value int16, options GP8ExportOptions) gpifElement {
 		setNative("Surdo", "surdo", "Surdo-Percu", "Surdo (mute)", 35, x, "brush.hit.mute", 87)
 		articulation.TechniquePlacement = "inside"
 		articulation.TechniqueSymbol = "noteheadParenthesis"
+	case 91:
+		setNative("Snare", "snare", "Master-Snare", "Snare (rim shot)", 3, "noteheadDiamondWhite noteheadDiamondWhite noteheadDiamondWhite", "stick.hit.rimshot", 38)
+	case 93:
+		setNative("Ride", "ride", "Master-Ride", "Ride (edge)", 0, x, "stick.hit.edge", 51)
+		articulation.TechniquePlacement = "above"
+		articulation.TechniqueSymbol = "pictEdgeOfCymbal"
 	case 92:
 		element.Name = "Charley"
 		element.Type = "hiHat"

@@ -329,8 +329,8 @@ type gpifPercussionFallbacks struct {
 	ids         map[int]int
 }
 
-func gpifNormalizePercussionArticulation(track *Track, note *Note, fallbacks *gpifPercussionFallbacks) {
-	if !note.HasPercussionArticulation || note.PercussionArticulation < fallbacks.tableLength {
+func gpifNormalizePercussionArticulation(track *Track, note *Note, fallbacks *gpifPercussionFallbacks, builtin bool) {
+	if !note.HasPercussionArticulation || (!builtin && note.PercussionArticulation < fallbacks.tableLength) {
 		return
 	}
 	sourceID := note.PercussionArticulation
@@ -534,6 +534,11 @@ func gpifNoteToNote(n *gpifNote, stringCount int, percussion bool) (Note, error)
 					}
 				}
 			}
+		}
+	}
+	if percussion && !note.HasPercussionArticulation {
+		if err := gpifApplyPercussionElement(n.Properties.Properties, &note); err != nil {
+			return Note{}, err
 		}
 	}
 	if harmonicFret != nil && note.Effect.Harmonic != nil {

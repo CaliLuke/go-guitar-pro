@@ -612,8 +612,8 @@ var gpifNotePropertySources = map[string]parseDiagnosticSource{
 	"BendMiddleValue":       diagnosticSource("GPIF.Note.Property.BendMiddleValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BendDestinationOffset": diagnosticSource("GPIF.Note.Property.BendDestinationOffset.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
 	"BendDestinationValue":  diagnosticSource("GPIF.Note.Property.BendDestinationValue.MissingPayload", "note-and-beat-semantics", ParseDiagnosticInvalidData),
-	"Element":               diagnosticSource("GPIF.Note.Property.Element", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
-	"Variation":             diagnosticSource("GPIF.Note.Property.Variation", "percussion-articulations", ParseDiagnosticUnsupportedFeature),
+	"Element":               diagnosticSource("GPIF.Note.Property.Element", "percussion-articulations", ParseDiagnosticInvalidData),
+	"Variation":             diagnosticSource("GPIF.Note.Property.Variation", "percussion-articulations", ParseDiagnosticInvalidData),
 	"Tone":                  diagnosticSource("GPIF.Note.Property.Tone", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 	"Octave":                diagnosticSource("GPIF.Note.Property.Octave", "note-and-beat-semantics", ParseDiagnosticUnsupportedFeature),
 }
@@ -753,11 +753,11 @@ func gpifAuditNoteProperty(context *parseContext, noteID, path string, property 
 			}
 		}
 	case "Element", "Variation":
-		context.add(gpifNotePropertySources[property.Name], ParseDiagnostic{
-			Kind: ParseDiagnosticUnsupportedFeature, SourcePath: propertyPath, ObjectID: noteID,
-			Location: ParseLocation{NoteID: noteID}, Feature: "percussion-articulations",
-			Reason: fmt.Sprintf("recognized GPIF percussion property %q has no destination in Song", property.Name),
-		})
+		payload := property.Element
+		if property.Name == "Variation" {
+			payload = property.Variation
+		}
+		gpifAuditPropertyPayload(context, gpifNotePropertySources[property.Name], payload != nil, propertyPath, noteID, "percussion-articulations", property.Name)
 	case "ConcertPitch", "TransposedPitch":
 		gpifAuditPitchPayload(context, noteID, propertyPath, property)
 	case "Tone", "Octave":

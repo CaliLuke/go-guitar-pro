@@ -918,6 +918,21 @@ Matching absence in the pinned consumer proves this omission policy only.
 Future preservation requires independently verified curve semantics, not a
 curve inferred from adjacent frets.
 
+GP6 Element/Variation pairs resolve all 17 kit elements and three variations
+to builtin input identities, then independent track-local notation/playback
+definitions. Missing or out-of-range pairs are errors. An explicit GP7/8
+InstrumentArticulation remains authoritative when both encodings occur.
+Builtin identities never alias an existing custom table index.
+Guitar Pro 8.1.5 native conversion is the mapping authority: GP6 kick uses
+input 36 on staff line 7; ride bell uses input 53. Unused in-range variants
+resolve to kick 36, matching native conversion. AlphaTab 1.8.4 differs for
+these pairs, so consumer verification uses the exported explicit definitions.
+`testdata/gp8/gp6-percussion-elements.gp` records native conversion of the
+51 synthetic GP6 element/variation cases, including noteheads and playback.
+These source-import differences are pinned-reference defects tracked under
+[the reference-difference backlog](https://github.com/CaliLuke/go-guitar-pro/issues/40),
+not limits of the exported explicit GP8 definitions.
+
 Percussion articulations retain separate notation and playback identities even
 when two definitions use the same output MIDI value. GP8 also creates builtin
 fallback definitions for identity-free main and grace notes. Import and public

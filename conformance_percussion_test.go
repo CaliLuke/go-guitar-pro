@@ -248,7 +248,7 @@ func runConformanceSourceAndValidation(run *conformanceRun) {
 	track.PercussionArticulations[0] = PercussionArticulation{ElementName: "Acoustic Kick Drum", ElementType: "kickDrum", Name: "Custom", InputMIDINumbers: []int{35}, OutputMIDINumber: 42}
 	fallbacks := gpifPercussionFallbacks{tableLength: len(track.PercussionArticulations)}
 	note := Note{PercussionArticulation: 35, HasPercussionArticulation: true}
-	gpifNormalizePercussionArticulation(&track, &note, &fallbacks)
+	gpifNormalizePercussionArticulation(&track, &note, &fallbacks, false)
 	run.Dispatch("gpifNormalizePercussionArticulation:element.Type", note.PercussionArticulation, 34)
 	if track.PercussionArticulations[34].OutputMIDINumber != 35 {
 		t.Fatal("builtin fallback collided with the custom definition")

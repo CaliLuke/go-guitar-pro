@@ -534,6 +534,8 @@ type gpifProperties struct {
 }
 
 type gpifProperty struct {
+	Element   *int       `xml:"Element"`
+	Variation *int       `xml:"Variation"`
 	Rasgueado *string    `xml:"Rasgueado"`
 	Fret      *int       `xml:"Fret"`
 	String    *float64   `xml:"String"`

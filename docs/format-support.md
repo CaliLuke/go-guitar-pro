@@ -172,7 +172,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.BendMiddleValue.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendOriginOffset.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.BendOriginValue.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
-| `GPIF.Note.Property.Element` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Note.Property.Element` | `percussion-articulations` | `invalid-data` | The GP6 percussion property requires its integer payload. |
 | `GPIF.Note.Property.Fret.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.HarmonicFret.Invalid` | `harmonics` | `invalid-data` | A harmonic fret must be finite and within the public harmonic-fret range. |
 | `GPIF.Note.Property.HarmonicFret.MissingPayload` | `harmonics` | `invalid-data` | The property must contain its required typed payload. |
@@ -184,7 +184,7 @@ Each diagnostic receipt names one source construct. Its feature value uses an ID
 | `GPIF.Note.Property.String.MissingPayload` | `note-and-beat-semantics` | `invalid-data` | The property must contain its required typed payload. |
 | `GPIF.Note.Property.Tone` | `note-and-beat-semantics` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
 | `GPIF.Note.Property.Unknown` | `note-and-beat-semantics` | `unknown-syntax` | The GPIF audit does not recognize this source construct. |
-| `GPIF.Note.Property.Variation` | `percussion-articulations` | `unsupported-feature` | Song has no lossless destination for this recognized source construct. |
+| `GPIF.Note.Property.Variation` | `percussion-articulations` | `invalid-data` | The GP6 percussion property requires its integer payload. |
 | `GPIF.Note.LeftFingering.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source left-hand fingering token is not one of P, I, M, A, or C. |
 | `GPIF.Note.RightFingering.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source right-hand fingering token is not one of P, I, M, A, or C. |
 | `GPIF.Note.Vibrato.InvalidValue` | `note-and-beat-semantics` | `unsupported-feature` | The source note vibrato token is not one of None, Slight, or Wide. |
@@ -320,7 +320,7 @@ Each public field has disposition-bearing runtime evidence in the semantic matri
 
 ## Semantic matrix obligations
 
-The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 148 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
+The matrix traces formats, stages, value shapes, evidence roles, and typed evidence sources. Structural schema evidence cannot satisfy a semantic leaf or behavior obligation. The current ledger has 149 behavior cases, 1 structural cases, 31 justified structural wire wrappers, and 214 discovered public enum members.
 
 ## Wire inventory
 
@@ -328,7 +328,7 @@ The schema inventory records every decoded GPIF field and each explicitly tagged
 
 | Wire role | Fields |
 | --- | --- |
-| `schema` | 279 |
+| `schema` | 281 |
 
 ## Source dispatch inventory
 
@@ -336,6 +336,7 @@ The gate compares these cases with the source switches. Each default has an expl
 
 | Dispatch | Feature | Cases | Evidence | Default | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `gpifApplyPercussionElement:property.Name` | `percussion-articulations` | 2 | `gp6-percussion-elements` | `delegated-to-audit` | Resolve the GP6 kit element and variation into the canonical builtin input identity before creating a track-local articulation. |
 | `buildTrack:track.Name` | `score-core` | 1 | `section-track-names` | `unsupported-feature` | An authored empty short name remains empty in the final consumer only when the full name is also empty; a nonempty full name produces a scoped consumer-loss report. |
 | `gpifAuditOwnedStaffProperty:property.Name` | `staff-ownership` | 6 | `tuning-label-preservation` | `unknown-syntax` | The audit classifies each track and staff property before import. |
 | `gpifAuditBeatProperty:property.Name` | `note-and-beat-semantics` | 19 | `gpif-property-dispatch` | `unknown-syntax` | The audit classifies each named beat property before import. |
@@ -399,6 +400,7 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `gp6-percussion-elements` | `percussion-articulations` | `TestConformanceGP6Percussion` | `TestAlphaTabGP6PercussionElementVariations` | no | All 51 GP6 pairs retain input identity and GP8 playback; malformed pairs are rejected. |
 | `sync-tempo-strict-preservation` | `timing` | `TestConformanceDenseSyncTempoExport` | `TestAlphaTabDenseSyncTempoExport` | no | Issue #119: all 136 repeat-aware points retain exact tempo metadata and produce no loss reports. Pinned AlphaTab omissions remain independently asserted reference limitations. |
 | `pick-stroke-preservation` | `note-and-beat-semantics` | `TestConformancePickStroke` | `TestAlphaTabPreservesPickStroke` | no | Up, down, and absent pick marks retain their exact direction independently from brush through strict GP8 export, Go reimport, and pinned AlphaTab. |
 | `chord-rest-dynamic-policy` | `note-and-beat-semantics` | `TestConformanceChordAndRestDynamics` | `TestAlphaTabChordAndRestDynamics` | no | Two-note velocities 47/95 and explicit beat/rest dynamics 47/48 preserve authored values, emit P, and report exact target losses; strict export requires each applicable code. |

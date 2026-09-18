@@ -518,7 +518,7 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 											if noteErr != nil {
 												return nil, fmt.Errorf("note %q: %w", n.ID, noteErr)
 											}
-											gpifNormalizePercussionArticulation(track, &note, &fallbackArticulations[trackIdx])
+											gpifNormalizePercussionArticulation(track, &note, &fallbackArticulations[trackIdx], n.InstrumentArticulation == nil || *n.InstrumentArticulation < 0)
 											gpifAuditNoteSpelling(context, n, &note, staff, &m, &beat)
 											note.Velocity = velocity
 											beat.Notes = append(beat.Notes, note)
