@@ -3,8 +3,10 @@
 package goguitarpro
 
 import (
+	"cmp"
 	"fmt"
 	"slices"
+	"strings"
 )
 
 // ExportDisposition describes how one source value is handled by a target writer.
@@ -34,6 +36,46 @@ type ExportReport struct {
 	Entries []ExportReportEntry
 }
 
+// ExportReportSummary counts report entries with the same code, feature, and disposition.
+// It omits occurrence locations and reasons, which remain available in ExportReport.Entries.
+type ExportReportSummary struct {
+	Code        string
+	Feature     string
+	Disposition ExportDisposition
+	Count       int
+}
+
+// Summary returns a fresh count sorted lexically by Code, Feature, then Disposition.
+// Entries are grouped by their exact Code, Feature, and Disposition values.
+// Location and Reason are omitted; use Entries when occurrence details matter.
+func (report ExportReport) Summary() []ExportReportSummary {
+	type key struct {
+		code        string
+		feature     string
+		disposition ExportDisposition
+	}
+	counts := make(map[key]int)
+	for _, entry := range report.Entries {
+		counts[key{entry.Code, entry.Feature, entry.Disposition}]++
+	}
+	summary := make([]ExportReportSummary, 0, len(counts))
+	for item, count := range counts {
+		summary = append(summary, ExportReportSummary{
+			Code: item.code, Feature: item.feature, Disposition: item.disposition, Count: count,
+		})
+	}
+	slices.SortFunc(summary, func(a, b ExportReportSummary) int {
+		if order := cmp.Compare(a.Code, b.Code); order != 0 {
+			return order
+		}
+		if order := cmp.Compare(a.Feature, b.Feature); order != 0 {
+			return order
+		}
+		return cmp.Compare(a.Disposition, b.Disposition)
+	})
+	return summary
+}
+
 // ExportLossPolicy controls opt-in refusal of normalized or omitted content.
 type ExportLossPolicy struct {
 	RequirePreservation bool
@@ -48,7 +90,24 @@ type ExportLossError struct {
 
 // Error returns a concise export-policy failure message.
 func (e *ExportLossError) Error() string {
-	return fmt.Sprintf("export loss policy rejected %d conversion(s)", len(e.Entries))
+	prefix := fmt.Sprintf("export loss policy rejected %d conversion(s)", len(e.Entries))
+	if len(e.Entries) == 0 {
+		return prefix
+	}
+	counts := make(map[string]int)
+	for _, entry := range e.Entries {
+		counts[entry.Code]++
+	}
+	codes := make([]string, 0, len(counts))
+	for code := range counts {
+		codes = append(codes, code)
+	}
+	slices.Sort(codes)
+	parts := make([]string, 0, len(codes))
+	for _, code := range codes {
+		parts = append(parts, fmt.Sprintf("%s=%d", code, counts[code]))
+	}
+	return prefix + " (codes: " + strings.Join(parts, ", ") + ")"
 }
 
 // PreflightExport reports target-specific rejections, normalizations, and omissions.

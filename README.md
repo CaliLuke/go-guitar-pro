@@ -115,6 +115,10 @@ Use `ExportWithReport` when the report and output must use one conversion path.
 Set `ExportOptions.LossPolicy.RequirePreservation` to reject lossy conversions.
 Add accepted report codes to `AllowedCodes` to permit a bounded set of changes.
 The exporter returns no bytes when the loss policy rejects a conversion.
+`ExportReport.Entries` retains every occurrence with its location and reason;
+`ExportReport.Summary()` provides a fresh, sorted count grouped by exact code,
+feature, and disposition. `ExportLossError.Error()` includes deterministic
+refused-code counts while its `Entries` retain the full occurrence details.
 
 ```go
 options := guitarpro.ExportOptions{

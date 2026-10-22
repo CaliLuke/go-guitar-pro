@@ -475,7 +475,12 @@ keeps its permissive behavior.
 
 `PreflightExport` reports target changes before serialization. A strict export
 policy rejects normalized or omitted values unless its code is in the explicit
-allowlist.
+allowlist. `ExportReport.Entries` remains occurrence-level and keeps locations
+and reasons. `ExportReport.Summary()` returns a fresh slice sorted by code,
+feature, and disposition, grouping only exact matches of those three fields;
+locations and reasons are intentionally omitted from counts. A strict-policy
+`ExportLossError` keeps refused occurrences in `Entries` and includes stable
+refused-code counts in its error text.
 
 `Song.Author` is the GPIF `Music` value. `Song.Writer` is the separate legacy
 binary writer value. GP8 export preserves `Author` and reports a nonempty

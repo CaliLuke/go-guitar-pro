@@ -400,6 +400,8 @@ Each represented feature has a public-API test and pinned independent-consumer e
 
 | Contract | Feature | Public API test | Independent test | Mutation check | Reason |
 | --- | --- | --- | --- | --- | --- |
+| `export-report-summary` | `score-core` | `TestExportReportSummaryPreservesOccurrenceEntries` | none | no | Summary groups exact code, feature, and disposition in deterministic order while occurrence entries remain authoritative. |
+| `export-loss-error-code-counts` | `score-core` | `TestExportLossErrorSummarizesOnlyRefusedCodes` | none | no | Strict-loss errors summarize only refused codes while retaining each refused occurrence in Entries. |
 | `legacy-dead-grace-validation` | `grace-relationships` | `TestValidateSongAllowsLegacyDeadGraceSentinel` | none | no | The GP3/GP4 legacy Fret=-1, IsDead=true, ExactFret=nil sentinel is an unspecified dead fret, not an authored negative pitch. |
 | `legacy-dead-grace-export` | `grace-relationships` | `TestGP8ExportsLegacyDeadGraceSentinel` | `TestAlphaTabLegacyDeadGraceSentinel` | no | A legacy dead-grace sentinel passes preflight and retains its dead marker through GP8 export and independent consumption. |
 | `negative-dead-grace-rejection` | `grace-relationships` | `TestValidateSongRejectsOtherNegativeDeadGraceFrets` | none | no | The dead-grace sentinel exception does not admit other negative legacy frets or any negative ExactFret. |
