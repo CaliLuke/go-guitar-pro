@@ -13,7 +13,11 @@ import (
 	"strings"
 )
 
-const maxGPIFXMLSize = 16 << 20
+const (
+	maxGPIFXMLSize             = 16 << 20
+	maxBackingTrackSize        = 256 << 20
+	maxLayoutConfigurationSize = 1 << 20
+)
 
 func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	r, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
@@ -24,23 +28,9 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	var song *Song
 	for _, f := range r.File {
 		if filepath.Base(f.Name) == "score.gpif" {
-			if f.UncompressedSize64 > maxGPIFXMLSize {
-				return nil, fmt.Errorf("score.gpif size %d exceeds %d-byte limit", f.UncompressedSize64, maxGPIFXMLSize)
-			}
-			rc, err := f.Open()
-			if err != nil {
-				return nil, fmt.Errorf("opening score.gpif: %w", err)
-			}
-			gpifData, err := io.ReadAll(io.LimitReader(rc, maxGPIFXMLSize+1))
-			if err != nil {
-				_ = rc.Close()
-				return nil, fmt.Errorf("reading score.gpif: %w", err)
-			}
-			if closeErr := rc.Close(); closeErr != nil {
-				return nil, fmt.Errorf("closing score.gpif: %w", closeErr)
-			}
-			if len(gpifData) > maxGPIFXMLSize {
-				return nil, fmt.Errorf("score.gpif exceeds %d-byte limit", maxGPIFXMLSize)
+			gpifData, readErr := readGP7Member(f, maxGPIFXMLSize)
+			if readErr != nil {
+				return nil, readErr
 			}
 			song, err = parseGPIFWithContext(gpifData, context)
 			if err != nil {
@@ -66,20 +56,12 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 	}
 
 	for _, f := range r.File {
-		if filepath.Base(f.Name) != "LayoutConfiguration" || f.UncompressedSize64 > 1<<20 {
+		if filepath.Base(f.Name) != "LayoutConfiguration" {
 			continue
 		}
-		rc, openErr := f.Open()
-		if openErr != nil {
-			return nil, fmt.Errorf("opening LayoutConfiguration: %w", openErr)
-		}
-		layout, readErr := io.ReadAll(io.LimitReader(rc, 1<<20))
-		closeErr := rc.Close()
+		layout, readErr := readGP7Member(f, maxLayoutConfigurationSize)
 		if readErr != nil {
-			return nil, fmt.Errorf("reading LayoutConfiguration: %w", readErr)
-		}
-		if closeErr != nil {
-			return nil, fmt.Errorf("closing LayoutConfiguration: %w", closeErr)
+			return nil, readErr
 		}
 		if len(layout) >= 6+len(song.Tracks) && binary.BigEndian.Uint32(layout[:4]) == 4 {
 			for index := range song.Tracks {
@@ -112,17 +94,9 @@ func parseGP7ZipWithContext(data []byte, context *parseContext) (*Song, error) {
 			continue
 		}
 		foundBackingTrack = true
-		rc, err := f.Open()
+		song.BackingTrack.AudioData, err = readGP7Member(f, maxBackingTrackSize)
 		if err != nil {
-			return nil, fmt.Errorf("opening backing track %q: %w", f.Name, err)
-		}
-		song.BackingTrack.AudioData, err = io.ReadAll(rc)
-		if err != nil {
-			_ = rc.Close()
-			return nil, fmt.Errorf("reading backing track %q: %w", f.Name, err)
-		}
-		if err := rc.Close(); err != nil {
-			return nil, fmt.Errorf("closing backing track %q: %w", f.Name, err)
+			return nil, err
 		}
 		if len(song.BackingTrack.AudioData) == 0 {
 			context.add(diagnosticSource("GPIF.BackingTrack.EmbeddedFile.Empty", "score-core", ParseDiagnosticInvalidData), ParseDiagnostic{
@@ -149,22 +123,35 @@ func applyGP7Configuration(archive *zip.Reader, song *Song, name string, limit i
 		if filepath.Base(file.Name) != name {
 			continue
 		}
-		if file.UncompressedSize64 > uint64(limit) {
-			return fmt.Errorf("%s size %d exceeds %d-byte limit", name, file.UncompressedSize64, limit)
-		}
-		stream, err := file.Open()
+		data, err := readGP7Member(file, limit)
 		if err != nil {
-			return fmt.Errorf("opening %s: %w", name, err)
-		}
-		data, readErr := io.ReadAll(io.LimitReader(stream, int64(limit)+1))
-		closeErr := stream.Close()
-		if readErr != nil {
-			return fmt.Errorf("reading %s: %w", name, readErr)
-		}
-		if closeErr != nil {
-			return fmt.Errorf("closing %s: %w", name, closeErr)
+			return err
 		}
 		return apply(song, data)
 	}
 	return nil
+}
+
+// readGP7Member enforces the same allocation and integrity boundary for every
+// ZIP payload the parser consumes, including optional metadata and audio.
+func readGP7Member(file *zip.File, limit int) ([]byte, error) {
+	if file.UncompressedSize64 > uint64(limit) {
+		return nil, fmt.Errorf("%s size %d exceeds %d-byte limit", file.Name, file.UncompressedSize64, limit)
+	}
+	stream, err := file.Open()
+	if err != nil {
+		return nil, fmt.Errorf("opening %s: %w", file.Name, err)
+	}
+	data, readErr := io.ReadAll(io.LimitReader(stream, int64(limit)+1))
+	closeErr := stream.Close()
+	if readErr != nil {
+		return nil, fmt.Errorf("reading %s: %w", file.Name, readErr)
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("closing %s: %w", file.Name, closeErr)
+	}
+	if len(data) > limit {
+		return nil, fmt.Errorf("%s exceeds %d-byte limit", file.Name, limit)
+	}
+	return data, nil
 }

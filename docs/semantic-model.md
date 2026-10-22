@@ -40,6 +40,30 @@ timing change.
 `ValidateSong` checks format-independent invariants. GP8 export uses a separate
 capability check because a valid score can exceed one target format.
 
+String tuning pitches must be within MIDI 0 through 127, and the number of
+strings must fit the public signed string-number field. GPIF import rejects
+malformed tuning tokens instead of returning a shortened tuning. Validation
+checks main-note and grace-note pitches with their effective tuning, fret,
+capo, and sounding transposition. GP8 preflight also checks the target pitch
+after omitting an independent sounding transposition.
+
+Authored string and grace frets must be nonnegative. The GP3/GP4 legacy dead-grace
+marker is an exception: `Fret == -1`, `IsDead == true`, and `ExactFret == nil`
+represent an unspecified dead fret, not a pitched note. This marker remains
+accepted. Other negative legacy grace frets and negative `ExactFret` values are
+invalid, including on dead graces.
+
+The GP7/GP8 ZIP reader bounds the uncompressed data it reads: `score.gpif` is
+limited to 16 MiB; `BinaryStylesheet`, `PartConfiguration`, and
+`LayoutConfiguration` are each limited to 1 MiB; and an enabled local backing
+audio member is limited to 256 MiB. Oversized members return an error, including
+an oversized layout configuration. These are parser resource limits, not Guitar
+Pro format limits.
+
+The GPX reader also limits BCFZ decompression output to 256 MiB and caps the
+aggregate extracted file data at 256 MiB. Both limits apply to the container's
+uncompressed data.
+
 ## Ownership and compatibility
 
 The hierarchy is `Score -> Track -> Staff -> Measure -> Voice -> Beat -> Note`.
@@ -681,8 +705,9 @@ exact stroke timing from 0 through 2147483647 ticks. `BeatStroke.Duration` is a
 note-value-denominator compatibility view, while `ExactDuration` retains the
 authored tick value and source absence. Imported exact timing owns export until
 `Duration` is edited; clearing exact timing also falls back to `Duration`.
-Fractional or larger exact values receive a scoped omission report. GP8 also
-reports rasgueado and slap effects because the writer does not emit them.
+Fractional or larger exact values receive a scoped omission report. GP8 emits
+rasgueado patterns and independent slap/pop beat properties. Beat tap follows
+the consumer-specific normalization and rest omission described below.
 
 `BeatEffects.PickStroke` is the authority for an authored pick direction.
 GP8 preserves up, down, and absent marks independently from `BeatEffects.Stroke`.

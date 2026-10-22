@@ -5,6 +5,7 @@ package goguitarpro
 import (
 	"fmt"
 	"math"
+	"sort"
 )
 
 // ScoreDiagnosticKind classifies a format-independent score invariant.
@@ -35,6 +36,10 @@ type ScoreDiagnostic struct {
 	Kind     ScoreDiagnosticKind
 	Location ScoreLocation
 	Reason   string
+}
+
+func isLegacyDeadGraceSentinel(grace GraceEffect) bool {
+	return grace.Fret == -1 && grace.IsDead && grace.ExactFret == nil
 }
 
 // FinalizeSong deterministically derives exact and legacy timing fields.
@@ -91,7 +96,18 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		if channel.Bank < 0 || channel.Bank > 16383 {
 			add("score.channel.bank", ScoreDiagnosticValue, ScoreLocation{}, "channel %d bank %d is outside 0..16383", channelIndex, channel.Bank)
 		}
-		for name, value := range map[string]int8{"volume": channel.Volume, "balance": channel.Balance, "chorus": channel.Chorus, "reverb": channel.Reverb, "phaser": channel.Phaser, "tremolo": channel.Tremolo} {
+		for _, control := range []struct {
+			name  string
+			value int8
+		}{
+			{name: "volume", value: channel.Volume},
+			{name: "balance", value: channel.Balance},
+			{name: "chorus", value: channel.Chorus},
+			{name: "reverb", value: channel.Reverb},
+			{name: "phaser", value: channel.Phaser},
+			{name: "tremolo", value: channel.Tremolo},
+		} {
+			name, value := control.name, control.value
 			if value < 0 {
 				add("score.channel."+name, ScoreDiagnosticValue, ScoreLocation{}, "channel %d %s %d is outside 0..127", channelIndex, name, value)
 			}
@@ -182,6 +198,14 @@ func ValidateSong(song *Song) []ScoreDiagnostic {
 		}
 		staves := gp8ExportStaves(track)
 		for staffIndex := range staves {
+			if len(staves[staffIndex].Strings) > math.MaxInt8 {
+				add("score.staff.string-count", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "string count %d exceeds the public string-number range 0..%d", len(staves[staffIndex].Strings), math.MaxInt8)
+			}
+			for stringIndex, guitarString := range staves[staffIndex].Strings {
+				if guitarString.Value < 0 {
+					add("score.staff.string-tuning", ScoreDiagnosticValue, ScoreLocation{Track: trackIndex, Staff: staffIndex}, "string %d tuning pitch %d is outside 0..127", stringIndex+1, guitarString.Value)
+				}
+			}
 			validatePartialCapo(&staves[staffIndex], ScoreLocation{Track: trackIndex, Staff: staffIndex}, &diagnostics)
 			tiedNotes := make(map[int]map[int8]int16)
 			pedalDown := false
@@ -495,13 +519,50 @@ func validateScoreVoices(track *Track, staff *Staff, measure *Measure, base Scor
 				if !percussion && (note.String < 0 || int(note.String) > len(staff.Strings)) {
 					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.string", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("string %d is outside 0..%d", note.String, len(staff.Strings))})
 				}
+				if !percussion && note.String > 0 && note.Value < 0 {
+					*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.fret", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("fret %d on string %d must be non-negative", note.Value, note.String)})
+				}
+				if !percussion && note.String > 0 {
+					for graceIndex, grace := range note.Effect.Graces {
+						graceFret := int16(grace.Fret)
+						if grace.ExactFret != nil {
+							graceFret = int16(*grace.ExactFret)
+						}
+						if graceFret < 0 && !isLegacyDeadGraceSentinel(grace) {
+							*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.grace.fret", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("grace %d fret %d must be non-negative", graceIndex, graceFret)})
+						}
+					}
+				}
 				if !percussion {
 					validatePartialCapoPitches(staff, &note, noteLocation, diagnostics)
 				}
-				if !percussion && staff.TranspositionPitch != 0 && note.String >= 0 && int(note.String) <= len(staff.Strings) {
-					midi := soundingNoteMIDI(staff, &note)
-					if midi < 0 || midi > 127 {
-						*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.sounding-midi", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("sounding MIDI value %d after staff transposition %d is outside 0..127", midi, staff.TranspositionPitch)})
+				if !percussion && note.String >= 0 && int(note.String) <= len(staff.Strings) {
+					if partialCapoOffset(staff, &note) == 0 {
+						midi := soundingNoteMIDI(staff, &note)
+						if midi < 0 || midi > 127 {
+							*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.note.sounding-midi", Kind: ScoreDiagnosticValue, Location: noteLocation, Reason: fmt.Sprintf("sounding MIDI value %d after staff transposition %d is outside 0..127", midi, staff.TranspositionPitch)})
+						}
+					}
+					for graceIndex, grace := range note.Effect.Graces {
+						if isLegacyDeadGraceSentinel(grace) {
+							continue
+						}
+						graceFret := int16(grace.Fret)
+						if grace.ExactFret != nil {
+							graceFret = int16(*grace.ExactFret)
+						}
+						graceNote := Note{String: note.String, Value: graceFret}
+						// Open-string grace notes with an active partial capo are
+						// already checked by validatePartialCapoPitches, which keeps
+						// its established, more specific diagnostic code.
+						if graceFret == 0 && partialCapoOffset(staff, &graceNote) != 0 {
+							continue
+						}
+						graceMIDI := soundingNoteMIDI(staff, &graceNote)
+						if graceMIDI < 0 || graceMIDI > 127 {
+							graceLocation := noteLocation
+							*diagnostics = append(*diagnostics, ScoreDiagnostic{Code: "score.grace.sounding-midi", Kind: ScoreDiagnosticValue, Location: graceLocation, Reason: fmt.Sprintf("grace %d sounding MIDI value %d after staff transposition %d is outside 0..127", graceIndex, graceMIDI, staff.TranspositionPitch)})
+						}
 					}
 				}
 				if !percussion && note.Kind == NoteTypeTie {
@@ -593,7 +654,18 @@ func validateGP8ChordDiagram(chord *Chord) error {
 			key := gpifChordBarreKey{finger: finger, fret: chord.Strings[index]}
 			groups[key] = append(groups[key], index+1)
 		}
-		for key, positions := range groups {
+		keys := make([]gpifChordBarreKey, 0, len(groups))
+		for key := range groups {
+			keys = append(keys, key)
+		}
+		sort.Slice(keys, func(i, j int) bool {
+			if keys[i].finger != keys[j].finger {
+				return keys[i].finger < keys[j].finger
+			}
+			return keys[i].fret < keys[j].fret
+		})
+		for _, key := range keys {
+			positions := groups[key]
 			if len(positions) < 2 {
 				continue
 			}

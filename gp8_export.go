@@ -375,6 +375,9 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 					return fmt.Errorf("track %d staff %d measure %d voice %d beat %d has unsupported duration value %d", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, beat.Duration.Value)
 				}
 				for noteIndex, note := range beat.Notes {
+					if !track.PercussionTrack && note.String > 0 && note.Value < 0 {
+						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d has negative fret %d on string %d", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.Value, note.String)
+					}
 					if track.PercussionTrack && note.HasPercussionArticulation && (note.PercussionArticulation < 0 || note.PercussionArticulation >= len(track.PercussionArticulations)) {
 						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d uses percussion articulation %d with %d definitions", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, note.PercussionArticulation, len(track.PercussionArticulations))
 					}
@@ -394,10 +397,33 @@ func validateGP8Staff(track *Track, trackIndex, staffIndex int, staff *Staff) er
 								}
 							}
 						}
+					} else {
+						for graceIndex, grace := range note.Effect.Graces {
+							graceNote := Note{Value: int16(grace.Fret), String: note.String}
+							if grace.ExactFret != nil {
+								graceNote.Value = int16(*grace.ExactFret)
+							}
+							if isLegacyDeadGraceSentinel(grace) {
+								continue
+							}
+							if graceNote.Value < 0 {
+								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d has negative fret %d", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, graceNote.Value)
+							}
+							midi := soundingNoteMIDI(staff, &graceNote) + int64(staff.TranspositionPitch)
+							if midi < 0 || midi > 127 {
+								return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d grace %d has exported MIDI value %d outside 0..127", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, graceIndex, midi)
+							}
+						}
 					}
-					midi := gp8NoteMIDI(track, staff.Strings, &note)
+					midi := int64(note.Value)
+					if !track.PercussionTrack {
+						// GP8 stores tuning and capo in the staff and omits the
+						// independent sounding transposition. Validate the pitch the
+						// target will play, including any selected partial capo.
+						midi = soundingNoteMIDI(staff, &note) + int64(staff.TranspositionPitch)
+					}
 					if midi < 0 || midi > 127 {
-						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d has MIDI value %d outside 0..127", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
+						return fmt.Errorf("track %d staff %d measure %d voice %d beat %d note %d has exported MIDI value %d outside 0..127", trackIndex, staffIndex, measureIndex, voiceIndex, beatIndex, noteIndex, midi)
 					}
 					if track.PercussionTrack {
 						if _, ok := gp8PercussionArticulationIndex(track, &note); !ok {

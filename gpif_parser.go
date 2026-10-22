@@ -185,8 +185,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 					lineCount = t.NotationPatch.LineCount
 				}
 				trackStrings := append([]GuitarString(nil), track.Strings...)
-				if parsed := gpifReadStaffStrings(gpifStaff{Properties: t.Properties}); parsed != nil {
-					trackStrings = parsed
+				parsedTrackStrings, tuningErr := gpifReadStaffStrings(gpifStaff{Properties: t.Properties})
+				if tuningErr != nil {
+					return nil, fmt.Errorf("track %s tuning: %w", trackID, tuningErr)
+				}
+				if parsedTrackStrings != nil {
+					trackStrings = parsedTrackStrings
 				}
 				trackTuningName, _ := gpifReadTuningName(gpifStaff{Properties: t.Properties})
 				track.Staves = make([]Staff, staffCount)
@@ -194,8 +198,12 @@ func parseGPIFWithContext(data []byte, context *parseContext) (*Song, error) {
 					strings := append([]GuitarString(nil), trackStrings...)
 					tuningName := trackTuningName
 					if staffIndex < len(t.Staves.Staff) {
-						if parsed := gpifReadStaffStrings(t.Staves.Staff[staffIndex]); parsed != nil {
-							strings = parsed
+						parsedStaffStrings, staffTuningErr := gpifReadStaffStrings(t.Staves.Staff[staffIndex])
+						if staffTuningErr != nil {
+							return nil, fmt.Errorf("track %s staff %d tuning: %w", trackID, staffIndex, staffTuningErr)
+						}
+						if parsedStaffStrings != nil {
+							strings = parsedStaffStrings
 						}
 						if parsed, found := gpifReadTuningName(t.Staves.Staff[staffIndex]); found {
 							tuningName = parsed

@@ -11,14 +11,27 @@ import (
 	"testing"
 )
 
+type alphaTabTuningFact struct {
+	Track  int   `json:"track"`
+	Staff  int   `json:"staff"`
+	Tuning []int `json:"tuning"`
+}
+
 func TestConformanceInstrumentContext(t *testing.T) {
 	runConformanceInstrumentContext(newConformanceRun(t))
+}
+
+func TestAlphaTabTuningBoundaries(t *testing.T) {
+	conformanceInstrumentTuningOracle(t)
 }
 
 func runConformanceInstrumentContext(run *conformanceRun) {
 	t := run.t
 	for _, pitches := range []string{"64", "40 45 50 55 59 64", "35 40 45 50 55 59 64"} {
-		strings := gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: pitches}}})
+		strings, err := gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: pitches}}})
+		if err != nil {
+			t.Fatalf("read valid tuning %q: %v", pitches, err)
+		}
 		run.Normalized("GuitarString.Number", strings[0].Number, int8(1))
 		run.Preserved("GuitarString.Value", strings[0].Value, int8(64))
 		run.Field("Track.Strings", len(strings), len(splitIDs(pitches)))
@@ -31,7 +44,14 @@ func runConformanceInstrumentContext(run *conformanceRun) {
 			}
 		}
 	}
-	run.Dispatch("gpifReadStaffStrings:property.Name", gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 64"}}}), []GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 40}})
+	boundaryTuning, boundaryErr := gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "0 127"}}})
+	if boundaryErr != nil || !slices.Equal(boundaryTuning, []GuitarString{{Number: 1, Value: 127}, {Number: 2, Value: 0}}) {
+		t.Fatalf("boundary tuning = %#v, %v", boundaryTuning, boundaryErr)
+	}
+	run.Preserved("GuitarString.Value", []int8{boundaryTuning[0].Value, boundaryTuning[1].Value}, []int8{127, 0})
+	run.Field("Track.Strings", []int8{boundaryTuning[0].Value, boundaryTuning[1].Value}, []int8{127, 0})
+	tuning, tuningErr := gpifReadStaffStrings(gpifStaff{Properties: []gpifStaffProperty{{Name: "Tuning", Pitches: "40 64"}}})
+	run.Dispatch("gpifReadStaffStrings:property.Name", []any{tuning, tuningErr}, []any{[]GuitarString{{Number: 1, Value: 64}, {Number: 2, Value: 40}}, error(nil)})
 	capoValue := 4
 	readCapo, foundCapo, readCapoErr := gpifReadCapo([]gpifStaffProperty{{Name: "CapoFret", Fret: &capoValue}})
 	run.Dispatch("gpifReadCapo:property.Name", []any{readCapo, foundCapo, readCapoErr}, []any{int32(4), true, error(nil)})
@@ -122,4 +142,22 @@ func runConformanceInstrumentContext(run *conformanceRun) {
 	run.Wire("gpifStaffProperty.Name", strings.Contains(string(readZipMember(t, archive, "Content/score.gpif")), `name="CapoFret"`), true)
 	run.Wire("gpifStaffProperty.Fret", roundTrip.Tracks[0].CapoFret, int32(4))
 	run.Wire("gpifStaffProperty.Pitches", roundTrip.Tracks[0].Strings, track.Strings)
+}
+
+func conformanceInstrumentTuningOracle(t *testing.T) {
+	t.Helper()
+	requireAlphaTabConformance(t)
+	song := semanticExportProbeSong(t)
+	song.Tracks[0].Strings[0].Value = 0
+	song.Tracks[0].Strings[5].Value = 127
+	data, report, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+	if err != nil || len(data) == 0 {
+		t.Fatalf("boundary tuning export = %d bytes, %#v, %v", len(data), report.Entries, err)
+	}
+	fixture := writeConformanceFixture(t, data)
+	var got []alphaTabTuningFact
+	readAlphaTabOracleFacts(t, "--tuning-labels", fixture, &got)
+	if len(got) != 1 || got[0].Track != 0 || got[0].Staff != 0 || !slices.Equal(got[0].Tuning, []int{0, 59, 55, 50, 45, 127}) {
+		t.Fatalf("AlphaTab boundary tuning = %#v, want staff tuning [0 59 55 50 45 127]", got)
+	}
 }

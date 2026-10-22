@@ -14,47 +14,7 @@ fi
 
 FAILED=()
 
-run_gate() {
-  local name="$1"
-  shift
-  echo ""
-  echo "▶ $name"
-  if "$@"; then
-    return
-  fi
-  FAILED+=("$name")
-}
-
-check_goimports() {
-  local output
-  output="$(goimports -l .)"
-  if [[ -n "$output" ]]; then
-    echo "$output"
-    return 1
-  fi
-}
-
-check_duplication() {
-  local output
-  output="$(dupl -threshold 75 .)"
-  echo "$output"
-  if grep -q '^found ' <<<"$output"; then
-    return 1
-  fi
-}
-
-test_with_coverage() {
-  local report coverage
-  report="$(mktemp /tmp/go-guitar-pro-coverage.XXXXXX)"
-  if ! go test -race -count=1 -timeout=600s -covermode=atomic -coverprofile="$report" ./...; then
-    rm -f "$report"
-    return 1
-  fi
-  coverage="$(go tool cover -func="$report" | awk '/^total:/ {gsub(/%/, "", $3); print $3}')"
-  echo "total coverage: ${coverage}% (minimum 80.0%)"
-  rm -f "$report"
-  awk -v coverage="$coverage" 'BEGIN { exit !(coverage + 0 >= 80.0) }'
-}
+source "$ROOT/check-helpers.sh"
 
 run_gate "go build" go build ./...
 run_gate "go vet" go vet ./...
@@ -74,6 +34,7 @@ else
 fi
 
 run_gate "duplication" check_duplication
+run_gate "quality gate helper tests" ./check-helpers_test.sh
 run_gate "AlphaTab semantic conformance" ./conformance/check.sh
 run_gate "race tests and coverage" test_with_coverage
 

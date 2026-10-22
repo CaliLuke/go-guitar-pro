@@ -148,26 +148,29 @@ func gpifVersion(value string) Version {
 	return version
 }
 
-func gpifReadStaffStrings(staff gpifStaff) []GuitarString {
+func gpifReadStaffStrings(staff gpifStaff) ([]GuitarString, error) {
 	for _, property := range staff.Properties {
 		if property.Name != "Tuning" || property.Pitches == "" {
 			continue
 		}
 		values := splitIDs(property.Pitches)
+		if len(values) > math.MaxInt8 {
+			return nil, fmt.Errorf("tuning has %d strings; maximum is %d", len(values), math.MaxInt8)
+		}
 		strings := make([]GuitarString, 0, len(values))
 		for sourceIndex := len(values) - 1; sourceIndex >= 0; sourceIndex-- {
-			value, err := strconv.ParseInt(values[sourceIndex], 10, 8)
-			if err != nil {
-				continue
+			value, err := strconv.ParseInt(values[sourceIndex], 10, 64)
+			if err != nil || value < 0 || value > 127 {
+				return nil, fmt.Errorf("tuning pitch %q is not a MIDI value in 0..127", values[sourceIndex])
 			}
 			strings = append(strings, GuitarString{
 				Number: int8(len(strings) + 1),
 				Value:  int8(value),
 			})
 		}
-		return strings
+		return strings, nil
 	}
-	return nil
+	return nil, nil
 }
 
 func gpifReadTuningName(staff gpifStaff) (string, bool) {

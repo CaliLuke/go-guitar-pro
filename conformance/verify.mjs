@@ -192,9 +192,11 @@ for (const contract of ledger.semanticContracts.sourceDispatches) {
 }
 
 const goTests = new Set();
-for (const file of fs.readdirSync(root).filter(file => file.endsWith('_test.go'))) {
-  const contents = fs.readFileSync(path.join(root, file), 'utf8');
-  for (const match of contents.matchAll(/func\s+(Test[A-Za-z0-9_]+)\s*\(/g)) goTests.add(match[1]);
+for (const directory of [root, path.join(root, 'integration')]) {
+  for (const file of fs.readdirSync(directory).filter(file => file.endsWith('_test.go'))) {
+    const contents = fs.readFileSync(path.join(directory, file), 'utf8');
+    for (const match of contents.matchAll(/func\s+(Test[A-Za-z0-9_]+)\s*\(/g)) goTests.add(match[1]);
+  }
 }
 const behaviorContracts = new Set();
 const behavioralFeatures = new Map([...features.keys()].map(feature => [feature, { publicAPI: false, independent: false }]));

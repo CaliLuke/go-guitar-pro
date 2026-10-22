@@ -20,11 +20,11 @@ func gpxReadFiles(data []byte) (map[string][]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("decompressing BCFZ: %w", err)
 		}
-		// Decompressed data starts with "BCFS" header — skip it
-		if len(decompressed) >= 4 {
-			decompressed = decompressed[4:]
+		if len(decompressed) < 4 || string(decompressed[:4]) != "BCFS" {
+			return nil, fmt.Errorf("invalid BCFZ payload: missing BCFS header")
 		}
-		return gpxReadUncompressedBlock(decompressed)
+		// Decompressed data starts with "BCFS" header — skip it.
+		return gpxReadUncompressedBlock(decompressed[4:])
 	case "BCFS":
 		return gpxReadUncompressedBlock(data[4:])
 	default:
@@ -35,6 +35,8 @@ func gpxReadFiles(data []byte) (map[string][]byte, error) {
 const maxGPXDecompressedSize = 256 << 20
 
 const initialGPXDecompressCapacity = 1 << 20
+
+const maxGPXExtractedFilesSize = maxGPXDecompressedSize
 
 // gpxDecompress decompresses BCFZ data using GPX's custom bit-based compression.
 func gpxDecompress(data []byte) ([]byte, error) {
@@ -80,6 +82,7 @@ func gpxDecompressPayload(data []byte, expectedLength int) []byte {
 				toRead = int(size)
 			}
 			if sourcePos >= 0 && sourcePos+toRead <= len(result) {
+				toRead = min(toRead, expectedLength-len(result))
 				result = append(result, result[sourcePos:sourcePos+toRead]...)
 			}
 		} else {
@@ -88,7 +91,7 @@ func gpxDecompressPayload(data []byte, expectedLength int) []byte {
 			if err != nil {
 				break
 			}
-			for i := 0; i < int(size); i++ {
+			for i := 0; i < int(size) && len(result) < expectedLength; i++ {
 				b, err := br.readByte()
 				if err != nil {
 					break
@@ -105,6 +108,7 @@ func gpxDecompressPayload(data []byte, expectedLength int) []byte {
 func gpxReadUncompressedBlock(data []byte) (map[string][]byte, error) {
 	const sectorSize = 0x1000
 	files := make(map[string][]byte)
+	var totalFileDataSize uint64
 	offset := sectorSize // First sector is padding
 
 	for offset+3 < len(data) {
@@ -126,38 +130,55 @@ func gpxReadUncompressedBlock(data []byte) (map[string][]byte, error) {
 			if offset+0x90 > len(data) {
 				break
 			}
-			fileSize := int(binary.LittleEndian.Uint32(data[offset+0x8c : offset+0x90]))
+			fileSize := uint64(binary.LittleEndian.Uint32(data[offset+0x8c : offset+0x90]))
+			if fileSize > maxGPXExtractedFilesSize-totalFileDataSize {
+				return nil, fmt.Errorf("GPX extracted file data exceeds the %d-byte limit", maxGPXExtractedFilesSize)
+			}
+			totalFileDataSize += fileSize
 
 			// Read sector indices starting at offset+0x94
 			dataPointerOffset := offset + 0x94
 			var fileData []byte
 			sectorCount := 0
+			maxSectorCount := int((fileSize + sectorSize - 1) / sectorSize)
+			nextEntryOffset := offset
 			for {
 				ptrOff := dataPointerOffset + 4*sectorCount
 				if ptrOff+4 > len(data) {
 					break
 				}
-				sector := int(binary.LittleEndian.Uint32(data[ptrOff : ptrOff+4]))
+				sector := binary.LittleEndian.Uint32(data[ptrOff : ptrOff+4])
 				if sector == 0 {
 					break
 				}
-				sectorStart := sector * sectorSize
-				sectorEnd := sectorStart + sectorSize
-				if sectorEnd > len(data) {
-					sectorEnd = len(data)
+				if sectorCount >= maxSectorCount {
+					return nil, fmt.Errorf("file %q has more sectors than its declared size %d requires", fileName, fileSize)
 				}
-				if sectorStart < len(data) {
-					fileData = append(fileData, data[sectorStart:sectorEnd]...)
+				sectorStart64 := uint64(sector) * sectorSize
+				if sectorStart64 >= uint64(len(data)) {
+					return nil, fmt.Errorf("file %q references sector %d outside the GPX block", fileName, sector)
 				}
-				offset = sectorStart // Track last sector for advancing
+				sectorStart := int(sectorStart64)
+				sectorEnd := len(data)
+				if len(data)-sectorStart > sectorSize {
+					sectorEnd = sectorStart + sectorSize
+				}
+				if uint64(len(fileData)) < fileSize {
+					remainingFileSize := fileSize - uint64(len(fileData))
+					sectorDataSize := min(uint64(sectorEnd-sectorStart), remainingFileSize)
+					fileData = append(fileData, data[sectorStart:sectorStart+int(sectorDataSize)]...)
+				}
+				if sectorStart > nextEntryOffset {
+					nextEntryOffset = sectorStart
+				}
 				sectorCount++
 			}
-
-			// Trim to file size
-			if len(fileData) > fileSize {
-				fileData = fileData[:fileSize]
+			if uint64(len(fileData)) != fileSize {
+				return nil, fmt.Errorf("file %q contains %d of %d declared bytes", fileName, len(fileData), fileSize)
 			}
+
 			files[fileName] = fileData
+			offset = nextEntryOffset
 		}
 		offset += sectorSize
 	}

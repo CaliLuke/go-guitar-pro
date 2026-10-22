@@ -211,7 +211,9 @@ func TestGP8AutomaticPitchKeyAndBounds(t *testing.T) {
 		})
 	}
 	song := accidentalPublicSong(t)
-	song.Tracks[0].Staves[0].CapoFret = 2147483647
+	// Keep the sounding pitch valid while forcing the written octave beyond
+	// GPIF's pitch-record range.
+	song.Tracks[0].Staves[0].DisplayTranspositionPitch = -1000
 	data, report, err := gp.ExportWithReport(song, gp.ExportFormatGP8, gp.ExportOptions{})
 	if err == nil || len(data) != 0 || !strings.Contains(err.Error(), "native pitch records cannot represent") {
 		t.Fatalf("unrepresentable pitch accepted: %v %#v", err, report)

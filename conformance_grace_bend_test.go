@@ -111,3 +111,52 @@ func TestAlphaTabGraceBendPolicy(t *testing.T) {
 		}
 	}
 }
+
+func TestAlphaTabLegacyDeadGraceSentinel(t *testing.T) {
+	requireAlphaTabConformance(t)
+	song := semanticExportProbeSong(t)
+	note := &song.Tracks[0].Measures[0].Voices[0].Beats[0].Notes[0]
+	note.Effect.Graces = []GraceEffect{{Fret: -1, IsDead: true, Duration: 32, Velocity: 47}}
+
+	data, _, err := ExportWithReport(song, ExportFormatGP8, ExportOptions{})
+	if err != nil || len(data) == 0 {
+		t.Fatalf("dead-grace sentinel export = %d bytes, %v", len(data), err)
+	}
+	fixture := writeConformanceFixture(t, data)
+	var output []struct {
+		Score struct {
+			Tracks []struct {
+				Staves []struct {
+					Bars []struct {
+						Voices []struct {
+							Beats []struct {
+								Notes []struct {
+									String int `json:"string"`
+									Graces []struct {
+										Dead bool `json:"dead"`
+									} `json:"graces"`
+								} `json:"notes"`
+							} `json:"beats"`
+						} `json:"voices"`
+					} `json:"bars"`
+				} `json:"staves"`
+			} `json:"tracks"`
+		} `json:"score"`
+	}
+	readAlphaTabOracleFacts(t, "--batch", fixture, &output)
+	if len(output) != 1 || len(output[0].Score.Tracks) != 1 || len(output[0].Score.Tracks[0].Staves) != 1 {
+		t.Fatalf("AlphaTab score hierarchy = %#v", output)
+	}
+	bars := output[0].Score.Tracks[0].Staves[0].Bars
+	if len(bars) != 1 || len(bars[0].Voices) != 1 {
+		t.Fatalf("AlphaTab bar/voice hierarchy = %#v", bars)
+	}
+	beats := bars[0].Voices[0].Beats
+	if len(beats) != 1 || len(beats[0].Notes) != 1 {
+		t.Fatalf("AlphaTab beat structure = %#v", beats)
+	}
+	got := beats[0].Notes[0]
+	if got.String != 1 || len(got.Graces) != 1 || !got.Graces[0].Dead {
+		t.Fatalf("AlphaTab dead grace ownership/string = %#v", got)
+	}
+}
